@@ -28,7 +28,7 @@ public class PlayerController : MonoBehaviour
         _characterController = GetComponentInChildren<CharacterController>();
         _simulatedCamera = new GameObject();
         _body = _characterController.transform;
-        MapGeneration.Instance.OnMapGenerated.AddListener(TeleportPlayer);
+        MapGeneration.Instance.OnMapGenerateEnd.AddListener(TeleportPlayer);
 
         // calculate the correct vertical position
         float correctHeight = _characterController.center.y + _characterController.skinWidth;

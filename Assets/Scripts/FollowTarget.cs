@@ -9,8 +9,11 @@ public class FollowTarget : MonoBehaviour
     public Transform target;
     public Vector3 _offset;
 
+    [Header("Snap to long distance?")]
+    public bool snapToFarDistance = false;
 
     private Vector3 velocity;
+    
 
     // Start is called before the first frame update
     void Awake()
@@ -39,6 +42,10 @@ public class FollowTarget : MonoBehaviour
         {
             transform.position = goalPosition;
         }
+
+        if (snapToFarDistance && Vector3.Distance(transform.position, goalPosition) > 10f) 
+            transform.position = goalPosition;
+
     }
 
 

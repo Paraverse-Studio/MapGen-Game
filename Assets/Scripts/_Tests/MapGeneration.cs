@@ -105,9 +105,11 @@ public class MapGeneration : MonoBehaviour
     public int treeSpawnOffset = 2;
     public float treeChanceGrowthRate = 5.0f;
 
-    [Space(20)]
-    public UnityEvent OnMapGenerated = new UnityEvent();
-
+    [Space(25)]
+    public UnityEvent OnMapGenerateStart = new UnityEvent();
+    public UnityEvent OnMapGenerateEnd = new UnityEvent();
+    public UnityEvent OnScreenReady = new UnityEvent();
+    
 
     #region SETTINGS_VARIABLES
     private int gridSize = 1000;
@@ -157,6 +159,8 @@ public class MapGeneration : MonoBehaviour
     private void GenerateMap() => StartCoroutine(EnumeratorGenerateMap());
     private IEnumerator EnumeratorGenerateMap()
     {
+        OnMapGenerateStart?.Invoke();
+
         // Grass base series
         currentPaintingBlock = blocks.grass;
 
@@ -185,11 +189,12 @@ public class MapGeneration : MonoBehaviour
         {
             AddProps();
             yield return null;
-
         }
 
-        OnMapGenerated?.Invoke();
-        yield return new WaitForSeconds(0.1f);
+
+        OnMapGenerateEnd?.Invoke();
+        yield return new WaitForSeconds(0.6f);
+        OnScreenReady?.Invoke();
 
     }
 
