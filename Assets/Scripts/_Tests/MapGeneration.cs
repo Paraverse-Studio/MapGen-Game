@@ -7,12 +7,17 @@ public class MapGeneration : MonoBehaviour
 {
     public enum Side
     {
-        up, down
+        north, south
     }
 
-    public enum Elevation
+    public enum ElevationLevel
     {
         highest, lowest
+    }
+
+    public enum ElevateObject
+    {
+        up, down
     }
 
 
@@ -54,18 +59,22 @@ public class MapGeneration : MonoBehaviour
     [Header("   PATH THICKNESS ")]
     public int thickenFrequency = 8;
 
-    [MinMaxSlider(0f, 15f)]
+    [MinMaxSlider(0f, 50f)]
     public Vector2 grassFillRadius;
 
-    [MinMaxSlider(0f, 15f)]
+    [MinMaxSlider(0f, 40f)]
     public Vector2 dirtFillRadius;
 
     [Space(5)]
     [Header("   LUMP DENSITY ")]
     public int lumpDensity = 10;
 
+    [Space(5)]
+    [Header("   LUMP APPLICATION ROUNDS ")]
+    public int lumpRounds = 4;
+
     [Header("   LUMP RADIUS ")]
-    [MinMaxSlider(0f, 9f)]
+    [MinMaxSlider(0f, 100f)]
     public Vector2 lumpRadius;
 
     [Space(5)]
@@ -144,7 +153,8 @@ public class MapGeneration : MonoBehaviour
     }
 
 
-    private void GenerateMap()
+    private void GenerateMap() => StartCoroutine(EnumeratorGenerateMap());
+    private IEnumerator EnumeratorGenerateMap()
     {
         // Grass base series
         currentPaintingBlock = blocks.grass;
@@ -160,11 +170,14 @@ public class MapGeneration : MonoBehaviour
         //Dirt series
         currentPaintingBlock = blocks.dirt;
 
-        //PaintDirtPath();
+        PaintDirtPath();
 
         //ApplyRandomElevation();
 
         //AddProps();
+
+        yield return new WaitForSeconds(0.1f);
+
     }
 
     [Button]
@@ -313,11 +326,10 @@ public class MapGeneration : MonoBehaviour
     private void AddRandomLumps()
     {
         //// By default, lumps will spawn in a grid fashion
-
         // Spread determines how far lumps are apart (spread = 2, means a tree will appear every 2 blocks)
         int spread = lumpDensity;
 
-        for (int upOrDown = 0; upOrDown < 4; ++upOrDown)
+        for (int upOrDown = 0; upOrDown < lumpRounds; ++upOrDown)
         {
             for (int x = (int)xBoundary.x; x < xBoundary.y; x += spread)
             {
@@ -331,13 +343,13 @@ public class MapGeneration : MonoBehaviour
                     if (checkingBlock == null) continue;
 
                     // if we're currently adding the top-side lumps, and this object is on bottom side of block, then continue
-                    if (upOrDown % 2 == 0 && IsOnSideOfBlock(false, firstSpawnedBlock, checkingBlock))
+                    if (upOrDown % 2 == 0 && IsOnSideOfBlock(Side.south, firstSpawnedBlock, checkingBlock))
                     {
-                        //continue;
+                        continue;
                     }
-                    else if (upOrDown % 2 != 0 && IsOnSideOfBlock(true, firstSpawnedBlock, checkingBlock))
+                    else if (upOrDown % 2 != 0 && IsOnSideOfBlock(Side.north, firstSpawnedBlock, checkingBlock))
                     {
-                        //continue;
+                        continue;
                     }
                     ///////////////////////
 
@@ -372,12 +384,10 @@ public class MapGeneration : MonoBehaviour
                     {
                         alreadyElevated.Add(potentialObj);
                         float extremeY;
-                        if (upOrDown) extremeY = GetAdjacentLowest(potentialObj);
-                        else extremeY = GetAdjacentHighest(potentialObj);
+                        extremeY = GetAdjacentElevation( upOrDown? ElevationLevel.lowest : ElevationLevel.highest, potentialObj);
 
-                        potentialObj.transform.position = new Vector3(potentialObj.transform.position.x, 
-                                                                        extremeY + (upOrDown ? 1 : -1),
-                                                                        potentialObj.transform.position.z);
+                        potentialObj.transform.position = 
+                            new Vector3(potentialObj.transform.position.x, extremeY + (upOrDown ? 1 : -1), potentialObj.transform.position.z);
                     }
                 }
             }
@@ -385,7 +395,7 @@ public class MapGeneration : MonoBehaviour
         alreadyElevated.Clear();
     }
 
-    private GameObject Spawn(Vector3 vec, bool replace = false)
+    private GameObject Spawn(Vector3 vec)
     {
         GameObject objectAtVec = gridOccupants[(int)vec.x, (int)vec.z];
         if (null != objectAtVec)
@@ -394,8 +404,11 @@ public class MapGeneration : MonoBehaviour
             return null;
         }
 
-        GameObject obj = Instantiate(blockPrefab, new Vector3((int)vec.x, (int)vec.y, (int)vec.z), Quaternion.identity);
+        Vector3 spawnSpot = new Vector3((int)vec.x, (int)vec.y, (int)vec.z);
+
+        GameObject obj = Instantiate(blockPrefab, spawnSpot, Quaternion.identity);
         obj.GetComponent<TestBlock>().type = currentPaintingBlock;
+        obj.GetComponent<TestBlock>().TargetPosition = spawnSpot;
         obj.transform.SetParent(objFolder);
         gridOccupants[(int)vec.x, (int)vec.z] = obj;
 
@@ -425,18 +438,18 @@ public class MapGeneration : MonoBehaviour
         }
     }
 
-    private bool IsOnSideOfBlock(bool northOrSouth, GameObject src, GameObject subject)
+    private bool IsOnSideOfBlock(Side side, GameObject src, GameObject subject)
     {
         Vector3 angle45 = new Vector3(-1, 0, 1);
         Vector3 angleToSubject = subject.transform.position - src.transform.position;
 
         float thisAngle = Vector3.Angle(angle45, angleToSubject);
-        return (northOrSouth ? thisAngle <= 90f : thisAngle > 90f);
+        return (side == Side.north ? thisAngle <= 90f : thisAngle > 90f);
     }
 
-    private float GetAdjacentHighest(GameObject src)
+    private float GetAdjacentElevation(ElevationLevel level, GameObject src)
     {
-        float highest = src.transform.position.y;
+        float extremestY = src.transform.position.y;
 
         for (int x = -1; x < 2; ++x)
         {
@@ -446,30 +459,18 @@ public class MapGeneration : MonoBehaviour
                 GameObject objectToCheck = gridOccupants[(int)areaToCheck.x, (int)areaToCheck.z];
                 if (objectToCheck != null)
                 {
-                    if (objectToCheck.transform.position.y > highest) highest = objectToCheck.transform.position.y;
+                    if (level == ElevationLevel.highest && objectToCheck.transform.position.y > extremestY)
+                    {
+                        extremestY = objectToCheck.transform.position.y;
+                    }
+                    else if (level == ElevationLevel.lowest && objectToCheck.transform.position.y < extremestY)
+                    {
+                        extremestY = objectToCheck.transform.position.y;
+                    }
                 }
             }
         }
-        return highest;
-    }
-
-    private float GetAdjacentLowest(GameObject src)
-    {
-        float lowest = src.transform.position.y;
-
-        for (int x = -1; x < 2; ++x)
-        {
-            for (int z = -1; z < 2; ++z)
-            {
-                Vector3 areaToCheck = new Vector3(src.transform.position.x + x, 0, src.transform.position.z + z);
-                GameObject objectToCheck = gridOccupants[(int)areaToCheck.x, (int)areaToCheck.z];
-                if (objectToCheck != null)
-                {
-                    if (objectToCheck.transform.position.y < lowest) lowest = objectToCheck.transform.position.y;
-                }
-            }
-        }
-        return lowest;
+        return extremestY;
     }
 
     private float Rounded(float v)

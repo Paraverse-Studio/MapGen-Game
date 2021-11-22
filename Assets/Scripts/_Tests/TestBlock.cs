@@ -20,6 +20,14 @@ public class TestBlock : MonoBehaviour
     private Renderer _renderer;
     private MaterialPropertyBlock _propBlock;
 
+    private Vector3 _targetPosition;
+    public Vector3 TargetPosition
+    {
+        get { return _targetPosition; }
+        set { _targetPosition = value; }
+    }
+    private bool reached = false;
+    private Vector3 velocity;
 
     private void Awake()
     {
@@ -37,6 +45,13 @@ public class TestBlock : MonoBehaviour
     // Start is called before the first frame update
     void Start()
     {        
+        // SetupHudText();
+
+        UpdateType();
+    }
+
+    private void SetupHudText()
+    {
         GameObject displayObject = Instantiate(Resources.Load("HUDText", typeof(GameObject))) as GameObject;
         displayObject.transform.SetParent(GlobalSettings.Instance.uiFolder);
         displayObject.transform.localPosition = Vector3.zero;
@@ -44,8 +59,6 @@ public class TestBlock : MonoBehaviour
         display = displayObject.GetComponent<TextMeshPro>();
 
         GlobalSettings.Instance.OnToggleHudText.AddListener(ToggleText);
-
-        UpdateType();
     }
 
     // Update is called once per frame
