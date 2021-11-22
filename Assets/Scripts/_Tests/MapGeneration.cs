@@ -59,8 +59,6 @@ public class MapGeneration : MonoBehaviour
     [MinMaxSlider(0f, 50f)]
     public Vector2 grassFillRadius;
 
-    [MinMaxSlider(0f, 40f)]
-    public Vector2 dirtFillRadius;
 
     [Header("   LUMPS ")]
     [Space(10)]
@@ -77,6 +75,9 @@ public class MapGeneration : MonoBehaviour
     [Header("   DIRT PATH CUT-OFF ")]
     [Space(10)]
     public int dirtPathThickenFrequency = 8;
+
+    [MinMaxSlider(0f, 40f)]
+    public Vector2 dirtFillRadius;
 
     public int dirtCutoffFrequency;
 
