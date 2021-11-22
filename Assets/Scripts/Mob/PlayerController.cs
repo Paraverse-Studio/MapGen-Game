@@ -14,33 +14,39 @@ public class PlayerController : MonoBehaviour
     public float jumpSpeed = 8.0f;
     public float gravity = 9.8f;
 
-    private CharacterController characterController;    
+    private CharacterController _characterController;    
 
-    private Vector3 moveDirection = Vector3.zero;
+    private Vector3 _moveDirection = Vector3.zero;
     private GameObject _simulatedCamera;
 
-    private Vector3 lastSafePosition = Vector3.zero;
-    private float failingSafePositionCounter = 0f;
+    private Vector3 _lastSafePosition = Vector3.zero;
+    private float _failingSafePositionCounter = 0f;
     private Transform _body;
 
     void Start()
     {
-        characterController = GetComponentInChildren<CharacterController>();
+        _characterController = GetComponentInChildren<CharacterController>();
         _simulatedCamera = new GameObject();
-        _body = characterController.transform;
+        _body = _characterController.transform;
+        MapGeneration.Instance.OnMapGenerated.AddListener(TeleportPlayer);
+
+        // calculate the correct vertical position
+        float correctHeight = _characterController.center.y + _characterController.skinWidth;
+        // set the controller center vector
+        _characterController.center = new Vector3(0, correctHeight, 0);
     }
 
     void Update()
     {
         //  TIMERS   //////
-        failingSafePositionCounter = Mathf.Max(0, failingSafePositionCounter - Time.deltaTime);
+        _failingSafePositionCounter = Mathf.Max(0, _failingSafePositionCounter - Time.deltaTime);
 
         ///////////////////
 
 
-        if (characterController.isGrounded)
+        if (_characterController.isGrounded)
         {
-            moveDirection.y = 0;
+            _moveDirection.y = 0;
         }
 
         GetMovement();
@@ -48,10 +54,10 @@ public class PlayerController : MonoBehaviour
         GetJump();
 
         // Gravity
-        moveDirection.y -= gravity * Time.deltaTime;
+        _moveDirection.y -= gravity * Time.deltaTime;
 
         // Move the controller
-        characterController.Move(moveDirection * Time.deltaTime);
+        _characterController.Move(_moveDirection * Time.deltaTime);
 
 
         SafetyNet();
@@ -60,9 +66,9 @@ public class PlayerController : MonoBehaviour
 
     void GetJump()
     {
-        if (Input.GetButton("Jump") && characterController.isGrounded)
+        if (Input.GetButton("Jump") && _characterController.isGrounded)
         {
-            moveDirection.y = jumpSpeed;
+            _moveDirection.y = jumpSpeed;
         }
     }
 
@@ -71,12 +77,12 @@ public class PlayerController : MonoBehaviour
         // Using camera's forward
         _simulatedCamera.transform.eulerAngles = new Vector3(0, Camera.main.transform.eulerAngles.y, Camera.main.transform.eulerAngles.z);
 
-        float currentY = moveDirection.y;
-        moveDirection = _simulatedCamera.transform.forward * Input.GetAxis("Vertical") + _simulatedCamera.transform.right * Input.GetAxis("Horizontal");
+        float currentY = _moveDirection.y;
+        _moveDirection = _simulatedCamera.transform.forward * Input.GetAxis("Vertical") + _simulatedCamera.transform.right * Input.GetAxis("Horizontal");
 
-        moveDirection *= speed;
+        _moveDirection *= speed;
 
-        moveDirection.y = currentY;
+        _moveDirection.y = currentY;
     }
 
     void SafetyNet()
@@ -84,26 +90,35 @@ public class PlayerController : MonoBehaviour
         if (Time.frameCount % 50 == 0)
         {            
             RaycastHit hitInfo;
-            if (Physics.Raycast(_body.transform.position, Vector3.down, out hitInfo, LayerMask.NameToLayer("Solid")))
+            if (Physics.Raycast(_body.transform.position + new Vector3(0, 0.2f, 0), Vector3.down, out hitInfo, LayerMask.NameToLayer("Solid")))
             {
-                lastSafePosition = _body.transform.position;
+                if (_characterController.isGrounded) _lastSafePosition = _body.transform.position;
             }
-            else
+            else if (_moveDirection.y < 0)
             {
-                failingSafePositionCounter += 1.2f;
+                _failingSafePositionCounter += 1.2f;
 
-                if (failingSafePositionCounter >= 1.6f && lastSafePosition != Vector3.zero)
+                if (_failingSafePositionCounter >= 1.6f )
                 {
-                    _body.position = lastSafePosition;
-                }
-                else
-                {
-                    _body.position = MapGeneration.Instance.CenterPoint + new Vector3(0, 3, 0);
+                    _moveDirection.y = 0;
+                    if (_lastSafePosition != Vector3.zero) TeleportPlayer(_lastSafePosition);                    
+                    else TeleportPlayer(MapGeneration.Instance.CenterPoint + new Vector3(0, 2, 0));                    
                 }
             }            
         }        
     }
 
+    private void TeleportPlayer(Vector3 pos)
+    {
+        _characterController.enabled = false;
+        _body.position = pos;
+        _characterController.enabled = true;
+    }
+    private void TeleportPlayer()
+    {
+        _moveDirection.y = 0;
+        TeleportPlayer(MapGeneration.Instance.CenterPoint + new Vector3(0, 4, 0));
+    }
 
 
 }

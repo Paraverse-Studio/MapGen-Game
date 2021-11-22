@@ -2,6 +2,7 @@ using NaughtyAttributes;
 using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
+using UnityEngine.Events;
 
 [System.Serializable]
 public class PropItem
@@ -105,6 +106,8 @@ public class MapGeneration : MonoBehaviour
     public float treeChanceGrowthRate = 5.0f;
 
     [Space(20)]
+    public UnityEvent OnMapGenerated = new UnityEvent();
+
 
     #region SETTINGS_VARIABLES
     private int gridSize = 1000;
@@ -185,6 +188,7 @@ public class MapGeneration : MonoBehaviour
 
         }
 
+        OnMapGenerated?.Invoke();
         yield return new WaitForSeconds(0.1f);
 
     }

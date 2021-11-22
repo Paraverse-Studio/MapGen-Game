@@ -6,21 +6,27 @@ using TMPro;
 
 public class Block : MonoBehaviour
 {
+    [System.Serializable]
+    public struct BlockOverrideSettings
+    {
+        public bool useOverrideColor;
+        public SO_Color overrideSOColor;
+        public Color overrideColor;
+        public Vector3 overrideScale;
+    }
+
     [Header("Block Item: ")]
     public SO_BlockItem type;
 
     [Header("Override Settings: ")]
-    public bool useOverrideColor = false;
-    public SO_Color overrideSOColor;
-    public Color overrideColor;
-    public Vector3 overrideScale;
+    public BlockOverrideSettings overrideSettings;    
 
-    private TextMeshPro display;
+    private TextMeshPro _display;
 
-    private string textToDisplay = "";
+    private string _textToDisplay = "";
     public string TextToDisplay
     {
-        set { textToDisplay = value; }
+        set { _textToDisplay = value; }
     }
 
     // private MeshRenderer;
@@ -34,8 +40,7 @@ public class Block : MonoBehaviour
         get { return _targetPosition; }
         set { _targetPosition = value; }
     }
-    private bool reached = false;
-    private Vector3 velocity;
+
 
     private void Awake()
     {
@@ -66,7 +71,7 @@ public class Block : MonoBehaviour
         displayObject.transform.SetParent(GlobalSettings.Instance.uiFolder);
         displayObject.transform.localPosition = Vector3.zero;
         displayObject.GetComponent<FollowTarget>().target = transform;
-        display = displayObject.GetComponent<TextMeshPro>();
+        _display = displayObject.GetComponent<TextMeshPro>();
 
         GlobalSettings.Instance.OnToggleHudText.AddListener(ToggleText);
     }
@@ -77,16 +82,16 @@ public class Block : MonoBehaviour
         if (Time.frameCount % 60 == 0)
         {
             if (type) UpdateBlock();
-            if (display)
+            if (_display)
             {
-                display.text = textToDisplay;
+                _display.text = _textToDisplay;
             }
         }
     }
 
     private void ToggleText()
     {
-        display.enabled = !display.enabled;
+        _display.enabled = !_display.enabled;
     }
 
     private void UpdateBlockItem()
@@ -99,13 +104,13 @@ public class Block : MonoBehaviour
         // Assign our new value
         _propBlock.SetColor("_BaseColor", type.blockColour);
 
-        if (useOverrideColor)
+        if (overrideSettings.useOverrideColor)
         {
-            if (overrideSOColor != null)
+            if (overrideSettings.overrideSOColor != null)
             {
-                _propBlock.SetColor("_BaseColor", overrideSOColor.color);
+                _propBlock.SetColor("_BaseColor", overrideSettings.overrideSOColor.color);
             }
-            else _propBlock.SetColor("_BaseColor", overrideColor);
+            else _propBlock.SetColor("_BaseColor", overrideSettings.overrideColor);
         }
 
         // Apply the edited values to the renderer
@@ -115,9 +120,9 @@ public class Block : MonoBehaviour
     private void UpdateSize()
     {
         transform.localScale = type.defaultScale;
-        if (overrideScale != Vector3.zero)
+        if (overrideSettings.overrideScale != Vector3.zero)
         {
-            transform.localScale = overrideScale;
+            transform.localScale = overrideSettings.overrideScale;
         }
     }
 }
