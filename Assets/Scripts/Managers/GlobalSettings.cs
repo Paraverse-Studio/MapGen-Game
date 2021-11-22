@@ -23,6 +23,8 @@ public class GlobalSettings : MonoBehaviour
     [Header("Folders for objects: ")]
     public Transform uiFolder;
 
+    public GameObject playerPrefab;
+
     [Space(10)]
     [Header("Backup Safe Position: ")]
     public Vector3 backupSafePosition;

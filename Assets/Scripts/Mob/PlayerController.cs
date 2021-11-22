@@ -59,6 +59,11 @@ public class PlayerController : MonoBehaviour
         // Move the controller
         _characterController.Move(_moveDirection * Time.deltaTime);
 
+        if ((Mathf.Abs(_moveDirection.x) + Mathf.Abs(_moveDirection.z)) > 0.1f)
+        {
+            _body.transform.forward = Vector3.Lerp(_body.transform.forward, _moveDirection, Time.deltaTime * 2f);
+        }
+
 
         SafetyNet();
     }
