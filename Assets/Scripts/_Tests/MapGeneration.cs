@@ -54,7 +54,7 @@ public class MapGeneration : MonoBehaviour
     public float turningAngleMax;
 
     [Header("   PATH THICKNESS ")]
-    public int thickenFrequency = 8;
+    public int pathThickenFrequency = 8;
 
     [MinMaxSlider(0f, 50f)]
     public Vector2 grassFillRadius;
@@ -63,8 +63,9 @@ public class MapGeneration : MonoBehaviour
     public Vector2 dirtFillRadius;
 
     [Header("   LUMPS ")]
-    [Space(15)]
-    public int lumpDensity = 10;
+    [Space(10)]
+    [Range(0, 40)]
+    public int lumpDensity;
 
     public int lumpApplicationRounds = 4;
 
@@ -74,7 +75,9 @@ public class MapGeneration : MonoBehaviour
     public int lumpOffset = 2;
 
     [Header("   DIRT PATH CUT-OFF ")]
-    [Space(15)]
+    [Space(10)]
+    public int dirtPathThickenFrequency = 8;
+
     public int dirtCutoffFrequency;
 
     [MinMaxSlider(0f, 12f)]
@@ -85,18 +88,11 @@ public class MapGeneration : MonoBehaviour
     [Space(25)]
     public bool showProps;
 
-    [Space(5)]
-    [Header("   TREE DENSITY ")]
-    public int treeDensity = 4;
-
-    [Space(5)]
-    [Header("   SPAWN-OFFSET ")]
-    public int treeOffset = 2;
-
-    [Space(5)]
-    [Header("   SPAWN CHANCE GROWTH ")]
+    [Header("   TREE SPAWNING ")]
+    [Range(0,10)]
+    public int treeSpawnDensity = 4;
+    public int treeSpawnOffset = 2;
     public float treeChanceGrowthRate = 5.0f;
-
 
     [Space(20)]
 
@@ -164,9 +160,9 @@ public class MapGeneration : MonoBehaviour
 
         PaintDirtPath();
 
-        //ApplyRandomElevation();
+        ApplyRandomElevation();
 
-        //AddProps();
+        //if (showProps) AddProps();
 
         yield return new WaitForSeconds(0.1f);
 
@@ -282,7 +278,7 @@ public class MapGeneration : MonoBehaviour
     {
         // Determining what type of circle fill
         float thickness;
-        if (i % thickenFrequency != 0)
+        if (i % pathThickenFrequency != 0)
         {
             thickness = fillRadius.x;
         }
@@ -540,8 +536,10 @@ public class MapGeneration : MonoBehaviour
         for (int i = 0; i < allObjects.Count; i++)
         {
             float elevation = Random.Range(-randomElevation, randomElevation);
-            allObjects[i].transform.position += new Vector3(0,
-                allObjects[i].transform.position.y + elevation, 0);
+            float xRandom = Random.Range(-randomElevation/2f, randomElevation/2f);
+            float zRandom = Random.Range(-randomElevation/2f, randomElevation/2f);
+
+            allObjects[i].transform.position += new Vector3(xRandom, elevation, zRandom);
         }
     }
 
@@ -550,7 +548,7 @@ public class MapGeneration : MonoBehaviour
         //// By default, props will spawn in a grid fashion
 
         // Spread determines how stretched that grid is (spread = 2, means a tree will appear every 2 blocks)
-        int spread = treeDensity;
+        int spread = treeSpawnDensity;
 
         for (int x = (int)xBoundary.x; x < xBoundary.y; x += spread)
         {
@@ -560,8 +558,8 @@ public class MapGeneration : MonoBehaviour
 
                 // Offset: by default, a tree would be placed in its spot in the grid
                 // with an offset of 1, the tree could appear 1 block away from the center, 2 would be more
-                int randomXOffset = Random.Range(-treeOffset, treeOffset);
-                int randomZOffset = Random.Range(-treeOffset, treeOffset);
+                int randomXOffset = Random.Range(-treeSpawnOffset, treeSpawnOffset);
+                int randomZOffset = Random.Range(-treeSpawnOffset, treeSpawnOffset);
 
                 Vector3 spawnSpot = new Vector3(
                     Mathf.Round(x) + randomXOffset,
