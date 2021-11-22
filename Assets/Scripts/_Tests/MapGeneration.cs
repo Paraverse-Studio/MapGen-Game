@@ -47,6 +47,18 @@ public class MapGeneration : MonoBehaviour
     public Vector2 dirtFillRadius;
 
     [Space(5)]
+    [Header("   LUMP DENSITY ")]
+    public int lumpDensity = 10;
+
+    [Header("   LUMP RADIUS ")]
+    [MinMaxSlider(0f, 9f)]
+    public Vector2 lumpRadius;
+
+    [Space(5)]
+    [Header("   LUMP-OFFSET ")]
+    public int lumpOffset = 2;
+
+    [Space(5)]
     [Header("   DIRT CUT-OFF ")]
     public int dirtCutoffFrequency;
 
@@ -121,10 +133,10 @@ public class MapGeneration : MonoBehaviour
 
         ThickenAroundObject(pathObjects[pathObjects.Count - 1], 0, grassFillRadius);
 
-        //RandomizePathElevation();
+        AddRandomLumps();
 
-        // Dirt series
-        //currentPaintingBlock = blocks.dirt;
+        //Dirt series
+        currentPaintingBlock = blocks.dirt;
 
         //PaintDirtPath();
 
@@ -282,7 +294,7 @@ public class MapGeneration : MonoBehaviour
                     GameObject latestSpawnedBlock = allObjects[index];
                     if (latestSpawnedBlock.transform.position.x < firstSpawnedBlock.transform.position.x ||
                         latestSpawnedBlock.transform.position.z > firstSpawnedBlock.transform.position.z)
-                    {                       
+                    {
                         //if (!alreadyElevated)
                         //{
                         //    currentElevation = latestSpawnedBlock.transform.position.y + 1;
@@ -291,11 +303,11 @@ public class MapGeneration : MonoBehaviour
                         //latestSpawnedBlock.transform.position = new Vector3(latestSpawnedBlock.transform.position.x, currentElevation, latestSpawnedBlock.transform.position.z);
 
                         float lowestAround = GetAdjacentLowest(allObjects[index]);
-                        latestSpawnedBlock.transform.position = new Vector3(latestSpawnedBlock.transform.position.x, lowestAround + 1f, latestSpawnedBlock.transform.position.z);                     
-                    }                    
+                        latestSpawnedBlock.transform.position = new Vector3(latestSpawnedBlock.transform.position.x, lowestAround + 1f, latestSpawnedBlock.transform.position.z);
+                    }
                 }
             }
-            alreadyElevated = false; 
+            alreadyElevated = false;
         }
 
         alreadyElevated = false;
@@ -313,7 +325,7 @@ public class MapGeneration : MonoBehaviour
                         latestSpawnedBlock.transform.position.z < firstSpawnedBlock.transform.position.z)
                     {
                         float highestAround = GetAdjacentHighest(allObjects[index]);
-                        latestSpawnedBlock.transform.position = new Vector3(latestSpawnedBlock.transform.position.x, highestAround-1f, latestSpawnedBlock.transform.position.z);
+                        latestSpawnedBlock.transform.position = new Vector3(latestSpawnedBlock.transform.position.x, highestAround - 1f, latestSpawnedBlock.transform.position.z);
                     }
                 }
             }
@@ -326,55 +338,73 @@ public class MapGeneration : MonoBehaviour
         //// By default, lumps will spawn in a grid fashion
 
         // Spread determines how far lumps are apart (spread = 2, means a tree will appear every 2 blocks)
-        int spread = 15;
+        int spread = lumpDensity;
 
-        for (int x = (int)xBoundary.x; x < xBoundary.y; x += spread)
+        for (int upOrDown = 0; upOrDown < 4; ++upOrDown)
         {
-            for (int z = (int)zBoundary.x; z < zBoundary.y; z += spread)
+            for (int x = (int)xBoundary.x; x < xBoundary.y; x += spread)
             {
-                int xShifted = x + (int)(gridSize / 2);
-                int zShifted = z + (int)(gridSize / 2);
-                if (null == gridOccupied[xShifted, zShifted]) continue;
+                for (int z = (int)zBoundary.x; z < zBoundary.y; z += spread)
+                {
+                    int xShifted = x + (int)(gridSize / 2);
+                    int zShifted = z + (int)(gridSize / 2);
+                    if (null == gridOccupied[xShifted, zShifted]) continue;
 
-                // Offset: by default, a tree would be placed in its spot in the grid
-                // with an offset of 1, the tree could appear 1 block away from the center, 2 would be more
-                int randomXOffset = Random.Range(-treeOffset, treeOffset);
-                int randomZOffset = Random.Range(-treeOffset, treeOffset);
+                    // Any other conditions
+                    GameObject firstSpawnedBlock = allObjects[0];
+                    GameObject latestSpawnedBlock = gridOccupied[xShifted, zShifted];
 
-                Vector3 spawnSpot = new Vector3(
-                    Mathf.Round(x) + 0.5f + randomXOffset,
-                    gridOccupied[xShifted, zShifted].transform.position.y,
-                    Mathf.Round(z) + 0.5f + randomZOffset);
+                    // if we're currently adding the top-side lumps, and this object is on bottom side of block, then continue
+                    if (upOrDown % 2 == 0 && IsOnSideOfBlock(false, firstSpawnedBlock, latestSpawnedBlock))
+                    {
+                        continue;
+                    }
+                    else if (upOrDown % 2 != 0 && IsOnSideOfBlock(true, firstSpawnedBlock, latestSpawnedBlock))
+                    {
+                        continue;
+                    }
+                    ///////////////////////
+
+                    int randomXOffset = Random.Range(-lumpOffset, lumpOffset + 1);
+                    int randomZOffset = Random.Range(-lumpOffset, lumpOffset + 1);
+
+                    x += randomXOffset;
+                    z += randomZOffset;
+
+                    ElevateCircle(upOrDown % 2 == 0 ? true : false, new Vector3(x, 0, z), Random.Range(lumpRadius.x, lumpRadius.y));
+                }
             }
         }
     }
 
-    private void ElevateCircle(bool upOrDown, GameObject obj, float radius)
+    private void ElevateCircle(bool upOrDown, Vector3 area, float radius)
     {
-        // Randomizing the circle radius' off-set a bit
-        int randomizingCap = (int)(Mathf.Min(0, 3));
-        int randomizedX = Random.Range(-randomizingCap, randomizingCap);
-        int randomizedZ = Random.Range(-randomizingCap, randomizingCap);
-        Vector3 centerObjectOffsetted = obj.transform.position + new Vector3(randomizedX, 0, randomizedZ);
+        List<GameObject> alreadyElevated = new List<GameObject>();
 
         // Looping through all areas in the circle, and spawning another block
         for (float x = -radius; x < radius; x += 0.5f)
         {
             for (float z = -radius; z < radius; z += 0.5f)
             {
-                Vector3 newSpot = centerObjectOffsetted + new Vector3(x, 0, z);
-                if (Vector3.Distance(centerObjectOffsetted, newSpot) < radius)
-                {
-                    GameObject newObj = Spawn(newSpot);
-                    if (newObj)
-                    {
-                        allObjects.Add(newObj);
-                    }
+                Vector3 newSpot = area + new Vector3(x, 0, z);
 
-                    
+                if (Vector3.Distance(area, newSpot) < radius)
+                {
+                    Vector2 gridPos = GetGridCoordsOfBlock(newSpot);
+                    GameObject potentialObj = gridOccupied[(int)gridPos.x, (int)gridPos.y];
+                    if (potentialObj != null && !alreadyElevated.Contains(potentialObj))
+                    {
+                        alreadyElevated.Add(potentialObj);
+                        float extremeY;
+                        if (upOrDown) extremeY = GetAdjacentLowest(potentialObj);
+                        else extremeY = GetAdjacentHighest(potentialObj);
+
+                        potentialObj.transform.position += new Vector3(0, extremeY + (upOrDown ? 0.5f : -0.5f), 0);
+                    }
                 }
             }
         }
+        alreadyElevated.Clear();
     }
 
     private GameObject Spawn(Vector3 vec, bool replace = false)
@@ -384,7 +414,7 @@ public class MapGeneration : MonoBehaviour
         int x = (int)simplePosition.x + (int)(gridSize / 2);
         int z = (int)simplePosition.z + (int)(gridSize / 2);
 
-        if (null != gridOccupied[x, z] && gridOccupied[x,z].transform.position.y == vec.y)
+        if (null != gridOccupied[x, z] && gridOccupied[x, z].transform.position.y == vec.y)
         {
             gridOccupied[x, z].GetComponent<TestBlock>().type = currentPaintingBlock;
             return null;
@@ -414,7 +444,7 @@ public class MapGeneration : MonoBehaviour
         if (allObjects.Count == 0) return;
         Vector3 firstSpawnedObject = allObjects[0].transform.position;
         float lastSpawnedObjectDistance = Vector2.Distance(firstSpawnedObject, pos);
-        if (lastSpawnedObjectDistance > 
+        if (lastSpawnedObjectDistance >
             Vector2.Distance(firstSpawnedObject, furthestBlock))
         {
             furthestBlock = new Vector2(pos.x, pos.z);
@@ -422,10 +452,30 @@ public class MapGeneration : MonoBehaviour
         }
     }
 
+    private Vector2 GetGridCoordsOfBlock(Vector3 obj)
+    {
+        int x = (int)(obj.x - 0.5f);
+        int z = (int)(obj.z - 0.5f);
+
+        x += (int)(gridSize / 2);
+        z += (int)(gridSize / 2);
+
+        return new Vector2(x, z);
+    }
+
+    private bool IsOnSideOfBlock(bool northOrSouth, GameObject src, GameObject subject)
+    {
+        Vector3 angle45 = new Vector3(-1, 0, 1);
+        Vector3 angleToSubject = subject.transform.position - src.transform.position;
+
+        float thisAngle = Vector3.Angle(angle45, angleToSubject);
+        return (northOrSouth ? thisAngle <= 90f : thisAngle > 90f);
+    }
+
     private float GetAdjacentHighest(GameObject src)
     {
         float highest = src.transform.position.y;
-        int xShifted = (int)(src.transform.position.x -0.5f) + (int)(gridSize / 2);
+        int xShifted = (int)(src.transform.position.x - 0.5f) + (int)(gridSize / 2);
         int zShifted = (int)(src.transform.position.z - 0.5f) + (int)(gridSize / 2);
 
         for (int x = -1; x < 2; ++x)
@@ -461,6 +511,7 @@ public class MapGeneration : MonoBehaviour
         }
         return lowest;
     }
+
     private float Rounded(float v)
     {
         return (((int)(v * 100.0f)) / 100.0f);
@@ -561,7 +612,7 @@ public class MapGeneration : MonoBehaviour
 
                 Vector3 spawnSpot = new Vector3(
                     Mathf.Round(x) + 0.5f + randomXOffset,
-                    gridOccupied[xShifted, zShifted].transform.position.y, 
+                    gridOccupied[xShifted, zShifted].transform.position.y,
                     Mathf.Round(z) + 0.5f + randomZOffset);
 
                 // Lastly, distance from path: by default, the chance to spawn a tree is 0%, but increases by
