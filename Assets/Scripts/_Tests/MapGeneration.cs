@@ -36,7 +36,9 @@ public class MapGeneration : MonoBehaviour
     public GameObject[] treePrefabs;
     public LineRenderer line;
     public bool drawLine = true;
-
+    [Range(0f, 1f)]
+    public float lineSmoothLevel = 1.0f;
+    public int huh = 2;
     public static MapGeneration Instance;
 
 
@@ -90,7 +92,7 @@ public class MapGeneration : MonoBehaviour
     public bool showProps;
 
     [Header("   TREE SPAWNING ")]
-    [Range(0,10)]
+    [Range(0, 10)]
     public int treeSpawnDensity = 4;
     public int treeSpawnOffset = 2;
     public float treeChanceGrowthRate = 5.0f;
@@ -163,7 +165,7 @@ public class MapGeneration : MonoBehaviour
 
         ApplyRandomElevation();
 
-        //if (showProps) AddProps();
+        if (showProps) AddProps();
 
         yield return new WaitForSeconds(0.1f);
 
@@ -373,9 +375,9 @@ public class MapGeneration : MonoBehaviour
                     {
                         alreadyElevated.Add(potentialObj);
                         float extremeY;
-                        extremeY = GetAdjacentElevation( upOrDown? ElevationLevel.lowest : ElevationLevel.highest, potentialObj);
+                        extremeY = GetAdjacentElevation(upOrDown ? ElevationLevel.lowest : ElevationLevel.highest, potentialObj);
 
-                        potentialObj.transform.position = 
+                        potentialObj.transform.position =
                             new Vector3(potentialObj.transform.position.x, extremeY + (upOrDown ? 1 : -1), potentialObj.transform.position.z);
                     }
                 }
@@ -404,7 +406,7 @@ public class MapGeneration : MonoBehaviour
         UpdateBoundaryStats(obj.transform.position);
 
         return obj;
-    }    
+    }
 
     private bool IsOnSideOfBlock(Side side, GameObject src, GameObject subject)
     {
@@ -466,8 +468,8 @@ public class MapGeneration : MonoBehaviour
         for (int i = 0; i < allObjects.Count; i++)
         {
             float elevation = Random.Range(-randomElevation, randomElevation);
-            float xRandom = Random.Range(-randomElevation/2f, randomElevation/2f);
-            float zRandom = Random.Range(-randomElevation/2f, randomElevation/2f);
+            float xRandom = Random.Range(-randomElevation / 2f, randomElevation / 2f);
+            float zRandom = Random.Range(-randomElevation / 2f, randomElevation / 2f);
 
             allObjects[i].transform.position += new Vector3(xRandom, elevation, zRandom);
         }
@@ -550,11 +552,57 @@ public class MapGeneration : MonoBehaviour
             return;
         }
 
-        line.positionCount = pathObjects.Count;
+        Vector3 raiseLevel = new Vector3(0, 0.0f, 0);
+        int size = pathObjects.Count;
 
-        for (int i = 0; i < pathObjects.Count; i++)
+        line.positionCount = size;
+        Vector3[] lineSpots = new Vector3[size];
+        Vector3[] lines2 = new Vector3[size];
+
+        for (int i = 0; i < size; i += 1)
         {
-            line.SetPosition(i, pathObjects[i].transform.position + new Vector3(0, 0.6f, 0));
+            Vector3 goalPosition = pathObjects[i].transform.position;
+
+            if (size > (i + 1) && i > 0 && lineSmoothLevel > 0)
+            {
+                Vector3 nextPosition = pathObjects[i + 1].transform.position;
+                Vector3 nextNormalized = Vector3.Project(goalPosition, nextPosition);
+                Vector3 middleSpot = Vector3.Lerp(goalPosition, nextNormalized, lineSmoothLevel);
+
+                Vector3 intermediatePosition = Vector3.Project(goalPosition, middleSpot);
+
+                line.SetPosition(i, intermediatePosition + raiseLevel);
+                lineSpots[i] = intermediatePosition + raiseLevel;
+                lines2[i] = intermediatePosition + raiseLevel;
+            }
+            else
+            {
+                lines2[i] = goalPosition + raiseLevel;
+                lineSpots[i] = goalPosition + raiseLevel;
+                line.SetPosition(i, goalPosition + raiseLevel);
+            }
+        }
+
+        if (huh >= 2)
+        {
+            for (int i = 1; i < size; i += 2)
+            {
+                if (i > 0 && i < size - 2)
+                    lines2[i] = Vector3.Lerp(lineSpots[i - 1], lineSpots[i + 1], 0.5f);
+            }
+
+            lines2[line.positionCount - 1] = lineSpots[size - 1];
+        }
+
+        if (huh >= 2)
+        {
+            for (int i = 1; i < size; i += 2)
+            {
+                if (i > 0 && i < size - 2)
+                    line.SetPosition(i, Vector3.Lerp(lines2[i - 1], lines2[i + 1], 0.5f));
+            }
+
+            line.SetPosition(line.positionCount - 1, lineSpots[size - 1]);
         }
     }
 

@@ -133,7 +133,8 @@ GameObject:
   m_Component:
   - component: {fileID: 95149206}
   - component: {fileID: 95149205}
-  m_Layer: 0
+  - component: {fileID: 95149207}
+  m_Layer: 5
   m_Name: PathingLine
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -189,23 +190,50 @@ LineRenderer:
       m_Curve:
       - serializedVersion: 3
         time: 0
-        value: 1
-        inSlope: -0.92533237
-        outSlope: -0.92533237
+        value: 0.7938938
+        inSlope: -0.04249171
+        outSlope: -0.04249171
         tangentMode: 0
         weightedMode: 0
         inWeight: 0.33333334
-        outWeight: 0.9324324
+        outWeight: 1
+      - serializedVersion: 3
+        time: 0.39243323
+        value: 1
+        inSlope: -0.027590267
+        outSlope: -0.027590267
+        tangentMode: 0
+        weightedMode: 0
+        inWeight: 0.42301628
+        outWeight: 0
+      - serializedVersion: 3
+        time: 0.65781534
+        value: 1
+        inSlope: -0.070836134
+        outSlope: -0.070836134
+        tangentMode: 0
+        weightedMode: 0
+        inWeight: 0.64971846
+        outWeight: 0.48576635
+      - serializedVersion: 3
+        time: 1
+        value: 0.7755722
+        inSlope: -0.11944238
+        outSlope: -0.11944238
+        tangentMode: 0
+        weightedMode: 0
+        inWeight: 0.675059
+        outWeight: 0
       m_PreInfinity: 2
       m_PostInfinity: 2
       m_RotationOrder: 4
     colorGradient:
       serializedVersion: 2
-      key0: {r: 0.27735847, g: 0.8841397, b: 1, a: 1}
-      key1: {r: 0.9248001, g: 0.40701312, b: 0.9716981, a: 1}
-      key2: {r: 1, g: 0.18753722, b: 0, a: 0}
-      key3: {r: 0, g: 0, b: 0, a: 0}
-      key4: {r: 0, g: 0, b: 0, a: 0}
+      key0: {r: 0.27735847, g: 0.8841397, b: 1, a: 0.7058824}
+      key1: {r: 0.71224415, g: 0.40784314, b: 0.972549, a: 1}
+      key2: {r: 1, g: 0.18753722, b: 0, a: 1}
+      key3: {r: 0, g: 0, b: 0, a: 0.67058825}
+      key4: {r: 0, g: 0, b: 0, a: 1}
       key5: {r: 0, g: 0, b: 0, a: 0}
       key6: {r: 0, g: 0, b: 0, a: 0}
       key7: {r: 0, g: 0, b: 0, a: 0}
@@ -218,16 +246,16 @@ LineRenderer:
       ctime6: 0
       ctime7: 0
       atime0: 0
-      atime1: 65535
-      atime2: 65535
-      atime3: 0
-      atime4: 0
+      atime1: 9252
+      atime2: 55512
+      atime3: 65535
+      atime4: 65535
       atime5: 0
       atime6: 0
       atime7: 0
       m_Mode: 0
       m_NumColorKeys: 3
-      m_NumAlphaKeys: 2
+      m_NumAlphaKeys: 4
     numCornerVertices: 0
     numCapVertices: 0
     alignment: 0
@@ -250,6 +278,20 @@ Transform:
   m_Father: {fileID: 0}
   m_RootOrder: 4
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
+--- !u!114 &95149207
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 95149204}
+  m_Enabled: 0
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: d3270b4363b38434983f495a0a5db713, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  controlPoints: []
+  lineRenderer: {fileID: 0}
 --- !u!1 &331079146
 GameObject:
   m_ObjectHideFlags: 0
@@ -546,18 +588,20 @@ MonoBehaviour:
   - {fileID: 1685143661818995403, guid: 7079793d712930848bc115dd27cffaac, type: 3}
   line: {fileID: 95149205}
   drawLine: 1
+  lineSmoothLevel: 0.5
+  huh: 2
   randomElevation: 0.025
   distanceOfPath: 100
   distanceBeforeTurningPath: {x: 3, y: 10}
   turningAngleMax: 45
   pathThickenFrequency: 8
   grassFillRadius: {x: 5, y: 12}
-  dirtFillRadius: {x: 1, y: 4}
   lumpDensity: 20
   lumpApplicationRounds: 4
   lumpRadius: {x: 0, y: 16}
   lumpOffset: 7
   dirtPathThickenFrequency: 3
+  dirtFillRadius: {x: 1, y: 4}
   dirtCutoffFrequency: 8
   dirtCutoffLength: {x: 0, y: 3}
   showProps: 1
