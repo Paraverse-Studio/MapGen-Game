@@ -40,22 +40,19 @@ public class MapGeneration : MonoBehaviour
     public static MapGeneration Instance;
 
 
-    [Space(5)]
-    [Header("    ———————   BASE GRID   ———————")]
     [Space(15)]
+    [Header("      ——————————  MAP BASE  ——————————")]
+    [Space(25)]
     public float randomElevation;
 
-    [Space(5)]
     [Header("   PATH SIZE ")]
     public float distanceOfPath = 40f;
 
-    [Space(5)]
     [Header("   PATH TWISTING ")]
     [MinMaxSlider(0f, 30f)]
     public Vector2 distanceBeforeTurningPath;
     public float turningAngleMax;
 
-    [Space(5)]
     [Header("   PATH THICKNESS ")]
     public int thickenFrequency = 8;
 
@@ -65,32 +62,27 @@ public class MapGeneration : MonoBehaviour
     [MinMaxSlider(0f, 40f)]
     public Vector2 dirtFillRadius;
 
-    [Space(5)]
-    [Header("   LUMP DENSITY ")]
+    [Header("   LUMPS ")]
+    [Space(15)]
     public int lumpDensity = 10;
 
-    [Space(5)]
-    [Header("   LUMP APPLICATION ROUNDS ")]
-    public int lumpRounds = 4;
+    public int lumpApplicationRounds = 4;
 
-    [Header("   LUMP RADIUS ")]
     [MinMaxSlider(0f, 100f)]
     public Vector2 lumpRadius;
 
-    [Space(5)]
-    [Header("   LUMP-OFFSET ")]
     public int lumpOffset = 2;
 
-    [Space(5)]
-    [Header("   DIRT CUT-OFF ")]
+    [Header("   DIRT PATH CUT-OFF ")]
+    [Space(15)]
     public int dirtCutoffFrequency;
 
     [MinMaxSlider(0f, 12f)]
     public Vector2 dirtCutoffLength;
 
-    [Space(5)]
-    [Header("    ———————   MAP PROPS   ———————")]
     [Space(15)]
+    [Header("      ——————————  MAP PROPS  ——————————")]
+    [Space(25)]
     public bool showProps;
 
     [Space(5)]
@@ -181,7 +173,7 @@ public class MapGeneration : MonoBehaviour
     }
 
     [Button]
-    private void RegeneratePath()
+    public void RegeneratePath()
     {
         ResetGeneration();
 
@@ -329,7 +321,7 @@ public class MapGeneration : MonoBehaviour
         // Spread determines how far lumps are apart (spread = 2, means a tree will appear every 2 blocks)
         int spread = lumpDensity;
 
-        for (int upOrDown = 0; upOrDown < lumpRounds; ++upOrDown)
+        for (int upOrDown = 0; upOrDown < lumpApplicationRounds; ++upOrDown)
         {
             for (int x = (int)xBoundary.x; x < xBoundary.y; x += spread)
             {
