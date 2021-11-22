@@ -27,5 +27,6 @@ public class GlobalSettings : MonoBehaviour
     [Header("Backup Safe Position: ")]
     public Vector3 backupSafePosition;
 
-    
+
+
 }

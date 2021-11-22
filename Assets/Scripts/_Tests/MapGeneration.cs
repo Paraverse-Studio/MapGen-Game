@@ -40,8 +40,8 @@ public class MapGeneration : MonoBehaviour
     public static MapGeneration Instance;
 
 
-    [Space(15)]
-    [Header("      ——————————  MAP BASE  ——————————")]
+    [Space(20)]
+    [Header("   ——————————  MAP BASE  ——————————")]
     [Space(25)]
     [MinMaxSlider(-1f,1f)]
     public Vector2 randomElevation;
@@ -85,8 +85,8 @@ public class MapGeneration : MonoBehaviour
     [MinMaxSlider(0f, 12f)]
     public Vector2 dirtCutoffLength;
 
-    [Space(15)]
-    [Header("      ——————————  MAP PROPS  ——————————")]
+    [Space(20)]
+    [Header("   ——————————  MAP PROPS  ——————————")]
     [Space(25)]
     public bool showProps;
 
@@ -150,21 +150,32 @@ public class MapGeneration : MonoBehaviour
         currentPaintingBlock = blocks.grass;
 
         SpawnPath();
+        yield return null;
 
         ThickenPath();
+        yield return null;
 
         ThickenAroundObject(pathObjects[pathObjects.Count - 1], 0, grassFillRadius);
+        yield return null;
 
         AddRandomLumps();
+        yield return null;
 
         //Dirt series
         currentPaintingBlock = blocks.dirt;
 
         PaintDirtPath();
+        yield return null;
 
         ApplyRandomElevation();
+        yield return null;
 
-        if (showProps) AddProps();
+        if (showProps)
+        {
+            AddProps();
+            yield return null;
+
+        }
 
         yield return new WaitForSeconds(0.1f);
 

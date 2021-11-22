@@ -11,7 +11,7 @@ public enum BlockType
     props
 }
 
-[CreateAssetMenu(fileName = "TestBlockType", menuName = "TEST/TestBlockType")]
+[CreateAssetMenu(fileName = "TestBlockType", menuName = "SOs/Block/TestBlockType")]
 public class TestBlockType : ScriptableObject
 {
     public BlockType blockType;
