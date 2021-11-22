@@ -36,9 +36,7 @@ public class MapGeneration : MonoBehaviour
     public GameObject[] treePrefabs;
     public LineRenderer line;
     public bool drawLine = true;
-    [Range(0f, 1f)]
-    public float lineSmoothLevel = 1.0f;
-    public int huh = 2;
+    public bool lineSmoothening = true;
     public static MapGeneration Instance;
 
 
@@ -566,11 +564,11 @@ public class MapGeneration : MonoBehaviour
         {
             Vector3 goalPosition = pathObjects[i].transform.position;
 
-            if (size > (i + 1) && i > 0 && lineSmoothLevel > 0)
+            if (size > (i + 1) && i > 0 && lineSmoothening)
             {
                 Vector3 nextPosition = pathObjects[i + 1].transform.position;
                 Vector3 nextNormalized = Vector3.Project(goalPosition, nextPosition);
-                Vector3 middleSpot = Vector3.Lerp(goalPosition, nextNormalized, lineSmoothLevel);
+                Vector3 middleSpot = Vector3.Lerp(goalPosition, nextNormalized, 0.5f);
 
                 Vector3 intermediatePosition = Vector3.Project(goalPosition, middleSpot);
 
@@ -586,7 +584,7 @@ public class MapGeneration : MonoBehaviour
             }
         }
 
-        if (huh >= 2)
+        if (lineSmoothening)
         {
             for (int i = 1; i < size; i += 2)
             {
@@ -597,7 +595,7 @@ public class MapGeneration : MonoBehaviour
             lines2[line.positionCount - 1] = lineSpots[size - 1];
         }
 
-        if (huh >= 2)
+        if (lineSmoothening)
         {
             for (int i = 1; i < size; i += 2)
             {
