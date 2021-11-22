@@ -80,7 +80,7 @@ public class PlayerTest : MonoBehaviour
             failingSafePositionCounter += 1f;
             _body.position = lastSafePosition;
 
-            if (failingSafePositionCounter > 1) _body.position = new Vector3(0, 2, 0);
+            if (failingSafePositionCounter > 1) _body.position = MapGeneration.Instance.CenterPoint + new Vector3(0, 2, 0);
         }
 
     }

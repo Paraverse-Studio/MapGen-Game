@@ -5,6 +5,17 @@ using UnityEngine;
 
 public class MapGeneration : MonoBehaviour
 {
+    public enum Side
+    {
+        up, down
+    }
+
+    public enum Elevation
+    {
+        highest, lowest
+    }
+
+
     [System.Serializable]
     public struct Blocks
     {
@@ -20,6 +31,9 @@ public class MapGeneration : MonoBehaviour
     public GameObject[] treePrefabs;
     public LineRenderer line;
     public bool drawLine = true;
+
+    public static MapGeneration Instance;
+
 
     [Space(5)]
     [Header("    ———————   BASE GRID   ———————")]
@@ -87,6 +101,8 @@ public class MapGeneration : MonoBehaviour
 
     #region SETTINGS_VARIABLES
     private int gridSize = 1000;
+    private Vector3 centerPoint;
+    public Vector3 CenterPoint => centerPoint;
 
     private TestBlockType currentPaintingBlock;
     #endregion
@@ -94,18 +110,24 @@ public class MapGeneration : MonoBehaviour
     #region RUNTIME_VARIABLES
     private float pathingAngle;
     private float distanceCreated = 0;
-    private GameObject[,] gridOccupied;
+    private GameObject[,] gridOccupants;
 
     private List<GameObject> allObjects = new List<GameObject>();
     private List<GameObject> pathObjects = new List<GameObject>();
     private List<GameObject> treeObjects = new List<GameObject>();
 
+    // Need to be initialized
     private Vector2 xBoundary;
     private Vector2 zBoundary;
-    private Vector2 furthestBlock = Vector2.zero;
+    private Vector2 furthestBlock;
     private float furthestDistance = 0f;
     #endregion
 
+
+    private void Awake()
+    {
+        Instance = this;
+    }
 
     // Start is called before the first frame update
     void Start()
@@ -155,11 +177,24 @@ public class MapGeneration : MonoBehaviour
 
     private void ResetGeneration()
     {
+        centerPoint = new Vector3(gridSize / 2, 0, gridSize / 2);
+        Vector2 centerPoint2D = new Vector3(centerPoint.x, centerPoint.z);
+        xBoundary = centerPoint2D;
+        zBoundary = centerPoint2D;
+        furthestBlock = centerPoint2D;
+        furthestDistance = 0;
+
         distanceCreated = 0;
         pathingAngle = Random.Range(0f, 360f);
 
-        gridOccupied = new GameObject[1000, 1000];
-        for (int i = 0; i < 1000; ++i) gridOccupied[i, i] = null;
+        gridOccupants = new GameObject[gridSize, gridSize];
+        for (int x = 0; x < 1000; ++x)
+        {
+            for (int z = 0; z < 1000; ++z)
+            {
+                gridOccupants[x, z] = null;
+            }
+        }
 
         line.positionCount = 0;
 
@@ -195,7 +230,7 @@ public class MapGeneration : MonoBehaviour
 
             if (allObjects.Count == 0)
             {
-                GameObject obj = Spawn(Vector3.zero);
+                GameObject obj = Spawn(centerPoint);
                 if (obj)
                 {
                     allObjects.Add(obj);
@@ -207,7 +242,6 @@ public class MapGeneration : MonoBehaviour
                 SpawnThroughPath(allObjects[allObjects.Count - 1], newAngle, randomDistance);
             }
         }
-
     }
 
     private void SpawnThroughPath(GameObject turningPointObj, float newAngle, float scale)
@@ -263,7 +297,7 @@ public class MapGeneration : MonoBehaviour
         {
             for (float z = -thickness; z < thickness; z += 0.5f)
             {
-                Vector3 newSpot = centerObjectOffsetted + new Vector3(x, 0, z);
+                Vector3 newSpot = centerObjectOffsetted + new Vector3((int)x, 0, (int)z);
                 if (Vector3.Distance(centerObjectOffsetted, newSpot) < thickness)
                 {
                     GameObject newObj = Spawn(newSpot);
@@ -273,63 +307,6 @@ public class MapGeneration : MonoBehaviour
                     }
                 }
             }
-        }
-    }
-
-    private void RandomizePathElevation()
-    {
-        int size = allObjects.Count;
-        float currentElevation = 0f;
-
-        bool alreadyElevated = false;
-
-        for (int i = 0; i < (int)furthestDistance; i += 5)
-        {
-            // Randomize slight elevation
-            for (int index = 0; index < size; ++index)
-            {
-                if (Vector3.Distance(allObjects[0].transform.position, allObjects[index].transform.position) >= i)
-                {
-                    GameObject firstSpawnedBlock = allObjects[0];
-                    GameObject latestSpawnedBlock = allObjects[index];
-                    if (latestSpawnedBlock.transform.position.x < firstSpawnedBlock.transform.position.x ||
-                        latestSpawnedBlock.transform.position.z > firstSpawnedBlock.transform.position.z)
-                    {
-                        //if (!alreadyElevated)
-                        //{
-                        //    currentElevation = latestSpawnedBlock.transform.position.y + 1;
-                        //    alreadyElevated = true;
-                        //}
-                        //latestSpawnedBlock.transform.position = new Vector3(latestSpawnedBlock.transform.position.x, currentElevation, latestSpawnedBlock.transform.position.z);
-
-                        float lowestAround = GetAdjacentLowest(allObjects[index]);
-                        latestSpawnedBlock.transform.position = new Vector3(latestSpawnedBlock.transform.position.x, lowestAround + 1f, latestSpawnedBlock.transform.position.z);
-                    }
-                }
-            }
-            alreadyElevated = false;
-        }
-
-        alreadyElevated = false;
-
-        for (int i = 0; i < (int)furthestDistance; i += 5)
-        {
-            // Randomize slight elevation
-            for (int index = 0; index < size; ++index)
-            {
-                if (Vector3.Distance(allObjects[0].transform.position, allObjects[index].transform.position) >= i)
-                {
-                    GameObject firstSpawnedBlock = allObjects[0];
-                    GameObject latestSpawnedBlock = allObjects[index];
-                    if (latestSpawnedBlock.transform.position.x > firstSpawnedBlock.transform.position.x &&
-                        latestSpawnedBlock.transform.position.z < firstSpawnedBlock.transform.position.z)
-                    {
-                        float highestAround = GetAdjacentHighest(allObjects[index]);
-                        latestSpawnedBlock.transform.position = new Vector3(latestSpawnedBlock.transform.position.x, highestAround - 1f, latestSpawnedBlock.transform.position.z);
-                    }
-                }
-            }
-            alreadyElevated = false;
         }
     }
 
@@ -346,22 +323,21 @@ public class MapGeneration : MonoBehaviour
             {
                 for (int z = (int)zBoundary.x; z < zBoundary.y; z += spread)
                 {
-                    int xShifted = x + (int)(gridSize / 2);
-                    int zShifted = z + (int)(gridSize / 2);
-                    if (null == gridOccupied[xShifted, zShifted]) continue;
+                    if (null == gridOccupants[x, z]) continue;
 
                     // Any other conditions
                     GameObject firstSpawnedBlock = allObjects[0];
-                    GameObject latestSpawnedBlock = gridOccupied[xShifted, zShifted];
+                    GameObject checkingBlock = gridOccupants[x, z];
+                    if (checkingBlock == null) continue;
 
                     // if we're currently adding the top-side lumps, and this object is on bottom side of block, then continue
-                    if (upOrDown % 2 == 0 && IsOnSideOfBlock(false, firstSpawnedBlock, latestSpawnedBlock))
+                    if (upOrDown % 2 == 0 && IsOnSideOfBlock(false, firstSpawnedBlock, checkingBlock))
                     {
-                        continue;
+                        //continue;
                     }
-                    else if (upOrDown % 2 != 0 && IsOnSideOfBlock(true, firstSpawnedBlock, latestSpawnedBlock))
+                    else if (upOrDown % 2 != 0 && IsOnSideOfBlock(true, firstSpawnedBlock, checkingBlock))
                     {
-                        continue;
+                        //continue;
                     }
                     ///////////////////////
 
@@ -390,8 +366,8 @@ public class MapGeneration : MonoBehaviour
 
                 if (Vector3.Distance(area, newSpot) < radius)
                 {
-                    Vector2 gridPos = GetGridCoordsOfBlock(newSpot);
-                    GameObject potentialObj = gridOccupied[(int)gridPos.x, (int)gridPos.y];
+                    GameObject potentialObj = gridOccupants[(int)newSpot.x, (int)newSpot.z];
+
                     if (potentialObj != null && !alreadyElevated.Contains(potentialObj))
                     {
                         alreadyElevated.Add(potentialObj);
@@ -399,7 +375,9 @@ public class MapGeneration : MonoBehaviour
                         if (upOrDown) extremeY = GetAdjacentLowest(potentialObj);
                         else extremeY = GetAdjacentHighest(potentialObj);
 
-                        potentialObj.transform.position += new Vector3(0, extremeY + (upOrDown ? 0.5f : -0.5f), 0);
+                        potentialObj.transform.position = new Vector3(potentialObj.transform.position.x, 
+                                                                        extremeY + (upOrDown ? 1 : -1),
+                                                                        potentialObj.transform.position.z);
                     }
                 }
             }
@@ -409,31 +387,24 @@ public class MapGeneration : MonoBehaviour
 
     private GameObject Spawn(Vector3 vec, bool replace = false)
     {
-        Vector3 simplePosition = new Vector3(Mathf.Round(vec.x), vec.y, Mathf.Round(vec.z));
-
-        int x = (int)simplePosition.x + (int)(gridSize / 2);
-        int z = (int)simplePosition.z + (int)(gridSize / 2);
-
-        if (null != gridOccupied[x, z] && gridOccupied[x, z].transform.position.y == vec.y)
+        GameObject objectAtVec = gridOccupants[(int)vec.x, (int)vec.z];
+        if (null != objectAtVec)
         {
-            gridOccupied[x, z].GetComponent<TestBlock>().type = currentPaintingBlock;
+            objectAtVec.GetComponent<TestBlock>().type = currentPaintingBlock;
             return null;
         }
 
-        Vector3 gridPosition = new Vector3(Mathf.Round(simplePosition.x) + 0.5f,
-        Mathf.Round(simplePosition.y) + 0.5f, Mathf.Round(simplePosition.z) + 0.5f);
-
-        GameObject obj = Instantiate(blockPrefab, gridPosition, Quaternion.identity);
+        GameObject obj = Instantiate(blockPrefab, new Vector3((int)vec.x, (int)vec.y, (int)vec.z), Quaternion.identity);
         obj.GetComponent<TestBlock>().type = currentPaintingBlock;
-        obj.transform.parent = objFolder;
-        gridOccupied[x, z] = obj;
+        obj.transform.SetParent(objFolder);
+        gridOccupants[(int)vec.x, (int)vec.z] = obj;
 
-        UpdateBoundaries(obj.transform.position);
+        UpdateBoundaryStats(obj.transform.position);
 
         return obj;
     }
 
-    private void UpdateBoundaries(Vector3 pos)
+    private void UpdateBoundaryStats(Vector3 pos)
     {
         if (pos.x < xBoundary.x) xBoundary = new Vector2(pos.x, xBoundary.y);
         if (pos.x > xBoundary.y) xBoundary = new Vector2(xBoundary.x, pos.x);
@@ -441,26 +412,17 @@ public class MapGeneration : MonoBehaviour
         if (pos.z < zBoundary.x) zBoundary = new Vector2(pos.z, zBoundary.y);
         if (pos.z > zBoundary.y) zBoundary = new Vector2(zBoundary.x, pos.z);
 
+        // Furthest block from center
         if (allObjects.Count == 0) return;
+
         Vector3 firstSpawnedObject = allObjects[0].transform.position;
         float lastSpawnedObjectDistance = Vector2.Distance(firstSpawnedObject, pos);
-        if (lastSpawnedObjectDistance >
-            Vector2.Distance(firstSpawnedObject, furthestBlock))
+
+        if (lastSpawnedObjectDistance > Vector2.Distance(firstSpawnedObject, furthestBlock))
         {
             furthestBlock = new Vector2(pos.x, pos.z);
             furthestDistance = lastSpawnedObjectDistance;
         }
-    }
-
-    private Vector2 GetGridCoordsOfBlock(Vector3 obj)
-    {
-        int x = (int)(obj.x - 0.5f);
-        int z = (int)(obj.z - 0.5f);
-
-        x += (int)(gridSize / 2);
-        z += (int)(gridSize / 2);
-
-        return new Vector2(x, z);
     }
 
     private bool IsOnSideOfBlock(bool northOrSouth, GameObject src, GameObject subject)
@@ -475,14 +437,13 @@ public class MapGeneration : MonoBehaviour
     private float GetAdjacentHighest(GameObject src)
     {
         float highest = src.transform.position.y;
-        int xShifted = (int)(src.transform.position.x - 0.5f) + (int)(gridSize / 2);
-        int zShifted = (int)(src.transform.position.z - 0.5f) + (int)(gridSize / 2);
 
         for (int x = -1; x < 2; ++x)
         {
             for (int z = -1; z < 2; ++z)
             {
-                GameObject objectToCheck = gridOccupied[xShifted + x, zShifted + z];
+                Vector3 areaToCheck = new Vector3(src.transform.position.x + x, 0, src.transform.position.z + z);
+                GameObject objectToCheck = gridOccupants[(int)areaToCheck.x, (int)areaToCheck.z];
                 if (objectToCheck != null)
                 {
                     if (objectToCheck.transform.position.y > highest) highest = objectToCheck.transform.position.y;
@@ -495,14 +456,13 @@ public class MapGeneration : MonoBehaviour
     private float GetAdjacentLowest(GameObject src)
     {
         float lowest = src.transform.position.y;
-        int xShifted = (int)(src.transform.position.x - 0.5f) + (int)(gridSize / 2);
-        int zShifted = (int)(src.transform.position.z - 0.5f) + (int)(gridSize / 2);
 
         for (int x = -1; x < 2; ++x)
         {
             for (int z = -1; z < 2; ++z)
             {
-                GameObject objectToCheck = gridOccupied[xShifted + x, zShifted + z];
+                Vector3 areaToCheck = new Vector3(src.transform.position.x + x, 0, src.transform.position.z + z);
+                GameObject objectToCheck = gridOccupants[(int)areaToCheck.x, (int)areaToCheck.z];
                 if (objectToCheck != null)
                 {
                     if (objectToCheck.transform.position.y < lowest) lowest = objectToCheck.transform.position.y;
@@ -566,6 +526,7 @@ public class MapGeneration : MonoBehaviour
     {
         for (int i = 0; i < pathObjects.Count; i++)
         {
+            // Cuts dirt path - if a cut is too happen (frequency met), then skip i to dirtCutLength
             if (i % dirtCutoffFrequency == 0)
             {
                 int dirtCutLength = (int)Random.Range(dirtCutoffLength.x, dirtCutoffLength.y);
@@ -580,6 +541,7 @@ public class MapGeneration : MonoBehaviour
 
     // Goes through all ground blocks and raises/lowers their y-value by a small amount
     // to give that blocky/cubica look
+    // THIS NEEDS TO HAPPEN LAST (in steps of Map Generation)
     private void ApplyRandomElevation()
     {
         for (int i = 0; i < allObjects.Count; i++)
@@ -601,9 +563,7 @@ public class MapGeneration : MonoBehaviour
         {
             for (int z = (int)zBoundary.x; z < zBoundary.y; z += spread)
             {
-                int xShifted = x + (int)(gridSize / 2);
-                int zShifted = z + (int)(gridSize / 2);
-                if (null == gridOccupied[xShifted, zShifted]) continue;
+                if (null == gridOccupants[x, z]) continue;
 
                 // Offset: by default, a tree would be placed in its spot in the grid
                 // with an offset of 1, the tree could appear 1 block away from the center, 2 would be more
@@ -611,9 +571,9 @@ public class MapGeneration : MonoBehaviour
                 int randomZOffset = Random.Range(-treeOffset, treeOffset);
 
                 Vector3 spawnSpot = new Vector3(
-                    Mathf.Round(x) + 0.5f + randomXOffset,
-                    gridOccupied[xShifted, zShifted].transform.position.y,
-                    Mathf.Round(z) + 0.5f + randomZOffset);
+                    Mathf.Round(x) + randomXOffset,
+                    gridOccupants[x, z].transform.position.y,
+                    Mathf.Round(z) + randomZOffset);
 
                 // Lastly, distance from path: by default, the chance to spawn a tree is 0%, but increases by
                 // 5% for every distance unit away from the closest path block 
@@ -627,7 +587,7 @@ public class MapGeneration : MonoBehaviour
                     GameObject obj = Instantiate(treePrefabs[Random.Range(0, treePrefabs.Length)], spawnSpot, Quaternion.identity);
                     treeObjects.Add(obj);
                     obj.transform.position += new Vector3(0, 1, 0);
-                    obj.transform.parent = objFolder;
+                    obj.transform.SetParent(objFolder);
 
                     if (GlobalSettings.Instance.showHudText || true)
                     {

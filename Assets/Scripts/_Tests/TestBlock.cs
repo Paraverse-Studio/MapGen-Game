@@ -38,7 +38,7 @@ public class TestBlock : MonoBehaviour
     void Start()
     {        
         GameObject displayObject = Instantiate(Resources.Load("HUDText", typeof(GameObject))) as GameObject;
-        displayObject.transform.parent = GlobalSettings.Instance.uiFolder;
+        displayObject.transform.SetParent(GlobalSettings.Instance.uiFolder);
         displayObject.transform.localPosition = Vector3.zero;
         displayObject.GetComponent<FollowTarget>().target = transform;
         display = displayObject.GetComponent<TextMeshPro>();
