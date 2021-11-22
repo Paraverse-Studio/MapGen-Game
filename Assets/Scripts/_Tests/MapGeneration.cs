@@ -45,7 +45,8 @@ public class MapGeneration : MonoBehaviour
     [Space(15)]
     [Header("      ——————————  MAP BASE  ——————————")]
     [Space(25)]
-    public float randomElevation;
+    [MinMaxSlider(-1f,1f)]
+    public Vector2 randomElevation;
 
     [Header("   PATH SIZE ")]
     public float distanceOfPath = 40f;
@@ -469,9 +470,9 @@ public class MapGeneration : MonoBehaviour
         {
             if (allObjects[i].GetComponent<TestBlock>().type != blocks.dirt) continue;
 
-            float elevation = Random.Range(-randomElevation, randomElevation);
-            float xRandom = Random.Range(-randomElevation / 2f, randomElevation / 2f);
-            float zRandom = Random.Range(-randomElevation / 2f, randomElevation / 2f);
+            float elevation = Random.Range(randomElevation.x, randomElevation.y);
+            float xRandom = Random.Range(-randomElevation.x / 2f, randomElevation.x / 2f);
+            float zRandom = Random.Range(-randomElevation.x / 2f, randomElevation.x / 2f);
 
             allObjects[i].transform.position += new Vector3(xRandom, elevation, zRandom);
         }
