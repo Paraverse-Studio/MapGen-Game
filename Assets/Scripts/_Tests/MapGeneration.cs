@@ -3,6 +3,12 @@ using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 
+[System.Serializable]
+public class PropItem
+{
+
+}
+
 public class MapGeneration : MonoBehaviour
 {
     public enum Side
@@ -24,11 +30,13 @@ public class MapGeneration : MonoBehaviour
     [System.Serializable]
     public struct Blocks
     {
-        public TestBlockType grass;
-        public TestBlockType dirt;
-        public TestBlockType treeTrunk;
-        public TestBlockType treeLeaves;
-        public TestBlockType props;
+        public SO_BlockItem grass;
+        public SO_BlockItem dirt;
+        public SO_BlockItem water;
+    }
+    public struct Props
+    {
+        public GameObject[] props;
     }
     public Blocks blocks;
     public Transform objFolder;
@@ -42,7 +50,7 @@ public class MapGeneration : MonoBehaviour
 
     [Space(20)]
     [Header("   ——————————  MAP BASE  ——————————")]
-    [Space(25)]
+    [Space(10)]
     [MinMaxSlider(-1f,1f)]
     public Vector2 randomElevation;
 
@@ -73,7 +81,7 @@ public class MapGeneration : MonoBehaviour
 
     public int lumpOffset = 2;
 
-    [Header("   DIRT PATH CUT-OFF ")]
+    [Header("   DIRT PATH ")]
     [Space(10)]
     public int dirtPathThickenFrequency = 8;
 
@@ -103,7 +111,7 @@ public class MapGeneration : MonoBehaviour
     private Vector3 centerPoint;
     public Vector3 CenterPoint => centerPoint;
 
-    private TestBlockType currentPaintingBlock;
+    private SO_BlockItem currentPaintingBlock;
     #endregion
 
     #region RUNTIME_VARIABLES
@@ -401,20 +409,22 @@ public class MapGeneration : MonoBehaviour
         GameObject objectAtVec = gridOccupants[(int)vec.x, (int)vec.z];
         if (null != objectAtVec)
         {
-            objectAtVec.GetComponent<TestBlock>().type = currentPaintingBlock;
+            objectAtVec.GetComponentInChildren<Block>().type = currentPaintingBlock;
             return null;
         }
 
         Vector3 spawnSpot = new Vector3((int)vec.x, (int)vec.y, (int)vec.z);
 
         GameObject obj = Instantiate(blockPrefab, spawnSpot, Quaternion.identity);
-        obj.GetComponent<TestBlock>().type = currentPaintingBlock;
-        obj.GetComponent<TestBlock>().TargetPosition = spawnSpot;
         obj.transform.SetParent(objFolder);
+
+        Block block = obj.GetComponentInChildren<Block>();
+        block.type = currentPaintingBlock;
+        block.TargetPosition = spawnSpot;
+
         gridOccupants[(int)vec.x, (int)vec.z] = obj;
 
         UpdateBoundaryStats(obj.transform.position);
-
         return obj;
     }
 
@@ -465,7 +475,7 @@ public class MapGeneration : MonoBehaviour
                 if (i >= pathObjects.Count) return;
             }
 
-            pathObjects[i].GetComponent<TestBlock>().type = blocks.dirt;
+            pathObjects[i].GetComponent<Block>().type = blocks.dirt;
             ThickenAroundObject(pathObjects[i], i, dirtFillRadius);
         }
     }
@@ -477,7 +487,7 @@ public class MapGeneration : MonoBehaviour
     {
         for (int i = 0; i < allObjects.Count; i++)
         {
-            if (allObjects[i].GetComponent<TestBlock>().type != blocks.dirt) continue;
+            if (allObjects[i].GetComponentInChildren<Block>().type != blocks.dirt) continue;
 
             float elevation = Random.Range(randomElevation.x, randomElevation.y);
             float xRandom = Random.Range(-randomElevation.x / 2f, randomElevation.x / 2f);
@@ -526,7 +536,7 @@ public class MapGeneration : MonoBehaviour
 
                     if (GlobalSettings.Instance.showHudText || true)
                     {
-                        obj.GetComponentInChildren<TestBlock>().TextToDisplay =
+                        obj.GetComponentInChildren<Block>().TextToDisplay =
                             Rounded(Vector3.Distance(spawnSpot, closestPathPosition.transform.position)) + " (" + Rounded(chanceOfSpawn) + "%)";
                     }
                 }
@@ -558,6 +568,8 @@ public class MapGeneration : MonoBehaviour
 
     private void UpdateLine()
     {
+        if (Time.frameCount % 60 != 0) return;
+
         if (!drawLine)
         {
             line.positionCount = 0;

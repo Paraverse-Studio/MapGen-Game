@@ -4,9 +4,16 @@ using UnityEngine;
 using TMPro;
 
 
-public class TestBlock : MonoBehaviour
+public class Block : MonoBehaviour
 {
-    public TestBlockType type;
+    [Header("Block Item: ")]
+    public SO_BlockItem type;
+
+    [Header("Override Settings: ")]
+    public bool useOverrideColor = false;
+    public SO_Color overrideSOColor;
+    public Color overrideColor;
+    public Vector3 overrideScale;
 
     private TextMeshPro display;
 
@@ -18,6 +25,7 @@ public class TestBlock : MonoBehaviour
 
     // private MeshRenderer;
     private Renderer _renderer;
+    private Collider _collider;
     private MaterialPropertyBlock _propBlock;
 
     private Vector3 _targetPosition;
@@ -32,24 +40,26 @@ public class TestBlock : MonoBehaviour
     private void Awake()
     {
         _propBlock = new MaterialPropertyBlock();
-        _renderer = GetComponent<Renderer>();
-    }
-
-    private void UpdateType()
-    {
-        UpdateColour();
-        UpdateSize();
-        gameObject.layer = type.layer.LayerIndex;
+        _renderer = GetComponentInChildren<Renderer>();
+        _collider = GetComponentInChildren<Collider>();
     }
 
     // Start is called before the first frame update
-    void Start()
-    {        
+    void OnEnable()
+    {
         // SetupHudText();
-
-        UpdateType();
+        if (type)
+        {
+            UpdateBlock();
+        }
     }
-
+    private void UpdateBlock()
+    {
+        UpdateBlockItem();
+        UpdateSize();
+        gameObject.layer = type.layer.LayerIndex;
+        if (_collider) _collider.gameObject.layer = type.layer.LayerIndex;
+    }
     private void SetupHudText()
     {
         GameObject displayObject = Instantiate(Resources.Load("HUDText", typeof(GameObject))) as GameObject;
@@ -64,9 +74,13 @@ public class TestBlock : MonoBehaviour
     // Update is called once per frame
     void Update()
     {
-        if (display)
+        if (Time.frameCount % 60 == 0)
         {
-            display.text = textToDisplay;
+            if (type) UpdateBlock();
+            if (display)
+            {
+                display.text = textToDisplay;
+            }
         }
     }
 
@@ -75,13 +89,24 @@ public class TestBlock : MonoBehaviour
         display.enabled = !display.enabled;
     }
 
-    private void UpdateColour()
+    private void UpdateBlockItem()
     {        
+        // Once models are in, 
+
         // Get the current value of the material properties in the renderer
         _renderer.GetPropertyBlock(_propBlock);
 
         // Assign our new value
         _propBlock.SetColor("_BaseColor", type.blockColour);
+
+        if (useOverrideColor)
+        {
+            if (overrideSOColor != null)
+            {
+                _propBlock.SetColor("_BaseColor", overrideSOColor.color);
+            }
+            else _propBlock.SetColor("_BaseColor", overrideColor);
+        }
 
         // Apply the edited values to the renderer
         _renderer.SetPropertyBlock(_propBlock);
@@ -90,5 +115,9 @@ public class TestBlock : MonoBehaviour
     private void UpdateSize()
     {
         transform.localScale = type.defaultScale;
+        if (overrideScale != Vector3.zero)
+        {
+            transform.localScale = overrideScale;
+        }
     }
 }

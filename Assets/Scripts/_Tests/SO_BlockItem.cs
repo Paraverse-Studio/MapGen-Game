@@ -2,17 +2,16 @@ using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 
-public enum BlockType 
-{ 
+public enum BlockType
+{
     grass,
     dirt,
-    treeTrunk,
-    treeLeaves,
-    props
+    water,
+    propPart
 }
 
-[CreateAssetMenu(fileName = "TestBlockType", menuName = "SOs/Block/TestBlockType")]
-public class TestBlockType : ScriptableObject
+[CreateAssetMenu(fileName = "SO_BlockItem", menuName = "SOs/Block/SO_BlockItem")]
+public class SO_BlockItem : ScriptableObject
 {
     public BlockType blockType;
     public Color blockColour;
