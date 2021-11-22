@@ -336,11 +336,11 @@ public class MapGeneration : MonoBehaviour
                     // if we're currently adding the top-side lumps, and this object is on bottom side of block, then continue
                     if (upOrDown % 2 == 0 && IsOnSideOfBlock(Side.south, firstSpawnedBlock, checkingBlock))
                     {
-                        continue;
+                        //continue;
                     }
                     else if (upOrDown % 2 != 0 && IsOnSideOfBlock(Side.north, firstSpawnedBlock, checkingBlock))
                     {
-                        continue;
+                        //continue;
                     }
                     ///////////////////////
 
@@ -414,7 +414,7 @@ public class MapGeneration : MonoBehaviour
         Vector3 angleToSubject = subject.transform.position - src.transform.position;
 
         float thisAngle = Vector3.Angle(angle45, angleToSubject);
-        return (side == Side.north ? thisAngle <= 90f : thisAngle > 90f);
+        return (side == Side.north ? thisAngle <= 70f : thisAngle > 110f);
     }
 
     private float GetAdjacentElevation(ElevationLevel level, GameObject src)
@@ -467,6 +467,8 @@ public class MapGeneration : MonoBehaviour
     {
         for (int i = 0; i < allObjects.Count; i++)
         {
+            if (allObjects[i].GetComponent<TestBlock>().type != blocks.dirt) continue;
+
             float elevation = Random.Range(-randomElevation, randomElevation);
             float xRandom = Random.Range(-randomElevation / 2f, randomElevation / 2f);
             float zRandom = Random.Range(-randomElevation / 2f, randomElevation / 2f);
@@ -552,7 +554,7 @@ public class MapGeneration : MonoBehaviour
             return;
         }
 
-        Vector3 raiseLevel = new Vector3(0, 0.0f, 0);
+        Vector3 raiseLevel = new Vector3(0, 0.9f, 0);
         int size = pathObjects.Count;
 
         line.positionCount = size;
