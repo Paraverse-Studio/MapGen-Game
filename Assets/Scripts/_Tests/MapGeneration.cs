@@ -403,28 +403,7 @@ public class MapGeneration : MonoBehaviour
         UpdateBoundaryStats(obj.transform.position);
 
         return obj;
-    }
-
-    private void UpdateBoundaryStats(Vector3 pos)
-    {
-        if (pos.x < xBoundary.x) xBoundary = new Vector2(pos.x, xBoundary.y);
-        if (pos.x > xBoundary.y) xBoundary = new Vector2(xBoundary.x, pos.x);
-
-        if (pos.z < zBoundary.x) zBoundary = new Vector2(pos.z, zBoundary.y);
-        if (pos.z > zBoundary.y) zBoundary = new Vector2(zBoundary.x, pos.z);
-
-        // Furthest block from center
-        if (allObjects.Count == 0) return;
-
-        Vector3 firstSpawnedObject = allObjects[0].transform.position;
-        float lastSpawnedObjectDistance = Vector2.Distance(firstSpawnedObject, pos);
-
-        if (lastSpawnedObjectDistance > Vector2.Distance(firstSpawnedObject, furthestBlock))
-        {
-            furthestBlock = new Vector2(pos.x, pos.z);
-            furthestDistance = lastSpawnedObjectDistance;
-        }
-    }
+    }    
 
     private bool IsOnSideOfBlock(Side side, GameObject src, GameObject subject)
     {
@@ -460,56 +439,6 @@ public class MapGeneration : MonoBehaviour
         }
         return extremestY;
     }
-
-    private float Rounded(float v)
-    {
-        return (((int)(v * 100.0f)) / 100.0f);
-    }
-
-    // Given a source vector, a direction and a scalar, return new vector
-    // from source vector in the direction of direction scaled by scalar...
-    private Vector3 GetPointOnCircle(Vector3 origin, float radius, float angle)
-    {
-        float angleInRadians = angle * Mathf.Deg2Rad;
-        float x = origin.x + radius * Mathf.Sin(angleInRadians);
-        float z = origin.z + radius * Mathf.Cos(angleInRadians);
-        return new Vector3(x, origin.y, z);
-    }
-
-    private GameObject GetClosestObject(Vector3 src, List<GameObject> list)
-    {
-        GameObject closest = null;
-        float closestDistanceSqr = Mathf.Infinity;
-        Vector3 srcPosition = src;
-        foreach (GameObject obj in list)
-        {
-            Vector3 directionToTarget = obj.transform.position - srcPosition;
-            float dSqrToTarget = directionToTarget.sqrMagnitude;
-            if (dSqrToTarget < closestDistanceSqr)
-            {
-                closestDistanceSqr = dSqrToTarget;
-                closest = obj;
-            }
-        }
-        return closest;
-    }
-
-    private void UpdateLine()
-    {
-        if (!drawLine)
-        {
-            line.positionCount = 0;
-            return;
-        }
-
-        line.positionCount = pathObjects.Count;
-
-        for (int i = 0; i < pathObjects.Count; i++)
-        {
-            line.SetPosition(i, pathObjects[i].transform.position + new Vector3(0, 0.6f, 0));
-        }
-    }
-
 
     private void PaintDirtPath()
     {
@@ -589,6 +518,80 @@ public class MapGeneration : MonoBehaviour
             }
         }
     }
+
+
+    private void UpdateBoundaryStats(Vector3 pos)
+    {
+        if (pos.x < xBoundary.x) xBoundary = new Vector2(pos.x, xBoundary.y);
+        if (pos.x > xBoundary.y) xBoundary = new Vector2(xBoundary.x, pos.x);
+
+        if (pos.z < zBoundary.x) zBoundary = new Vector2(pos.z, zBoundary.y);
+        if (pos.z > zBoundary.y) zBoundary = new Vector2(zBoundary.x, pos.z);
+
+        // Furthest block from center
+        if (allObjects.Count == 0) return;
+
+        Vector3 firstSpawnedObject = allObjects[0].transform.position;
+        float lastSpawnedObjectDistance = Vector2.Distance(firstSpawnedObject, pos);
+
+        if (lastSpawnedObjectDistance > Vector2.Distance(firstSpawnedObject, furthestBlock))
+        {
+            furthestBlock = new Vector2(pos.x, pos.z);
+            furthestDistance = lastSpawnedObjectDistance;
+        }
+    }
+
+    private void UpdateLine()
+    {
+        if (!drawLine)
+        {
+            line.positionCount = 0;
+            return;
+        }
+
+        line.positionCount = pathObjects.Count;
+
+        for (int i = 0; i < pathObjects.Count; i++)
+        {
+            line.SetPosition(i, pathObjects[i].transform.position + new Vector3(0, 0.6f, 0));
+        }
+    }
+
+
+    private float Rounded(float v)
+    {
+        return (((int)(v * 100.0f)) / 100.0f);
+    }
+
+    // Given a source vector, a direction and a scalar, return new vector
+    // from source vector in the direction of direction scaled by scalar...
+    private Vector3 GetPointOnCircle(Vector3 origin, float radius, float angle)
+    {
+        float angleInRadians = angle * Mathf.Deg2Rad;
+        float x = origin.x + radius * Mathf.Sin(angleInRadians);
+        float z = origin.z + radius * Mathf.Cos(angleInRadians);
+        return new Vector3(x, origin.y, z);
+    }
+
+    private GameObject GetClosestObject(Vector3 src, List<GameObject> list)
+    {
+        GameObject closest = null;
+        float closestDistanceSqr = Mathf.Infinity;
+        Vector3 srcPosition = src;
+        foreach (GameObject obj in list)
+        {
+            Vector3 directionToTarget = obj.transform.position - srcPosition;
+            float dSqrToTarget = directionToTarget.sqrMagnitude;
+            if (dSqrToTarget < closestDistanceSqr)
+            {
+                closestDistanceSqr = dSqrToTarget;
+                closest = obj;
+            }
+        }
+        return closest;
+    }
+
+
 
 
 }
