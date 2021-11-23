@@ -112,7 +112,7 @@ public class MapGeneration : MonoBehaviour
     
 
     #region SETTINGS_VARIABLES
-    private int gridSize = 1000;
+    private static int _GRIDSIZE = 1000;
     private Vector3 centerPoint;
     public Vector3 CenterPoint => centerPoint;
 
@@ -161,8 +161,8 @@ public class MapGeneration : MonoBehaviour
     {
         OnMapGenerateStart?.Invoke();
 
-        // Grass base series
-        currentPaintingBlock = blocks.grass;
+        //Grass base series
+       currentPaintingBlock = blocks.grass;
 
         SpawnPath();
         yield return null;
@@ -210,7 +210,7 @@ public class MapGeneration : MonoBehaviour
     {
         OnMapGenerateStart?.Invoke();
 
-        centerPoint = new Vector3(gridSize / 2, 0, gridSize / 2);
+        centerPoint = new Vector3(_GRIDSIZE / 2, 0, _GRIDSIZE / 2);
         Vector2 centerPoint2D = new Vector3(centerPoint.x, centerPoint.z);
         xBoundary = centerPoint2D;
         zBoundary = centerPoint2D;
@@ -220,10 +220,10 @@ public class MapGeneration : MonoBehaviour
         distanceCreated = 0;
         pathingAngle = Random.Range(0f, 360f);
 
-        gridOccupants = new GameObject[gridSize, gridSize];
-        for (int x = 0; x < 1000; ++x)
+        gridOccupants = new GameObject[_GRIDSIZE, _GRIDSIZE];
+        for (int x = 0; x < _GRIDSIZE; ++x)
         {
-            for (int z = 0; z < 1000; ++z)
+            for (int z = 0; z < _GRIDSIZE; ++z)
             {
                 gridOccupants[x, z] = null;
             }
@@ -235,15 +235,26 @@ public class MapGeneration : MonoBehaviour
 
         if (allObjects.Count > 0)
         {
-            for (int i = allObjects.Count - 1; i >= 0; --i) Destroy(allObjects[i]);
+            for (int i = allObjects.Count - 1; i >= 0; --i)
+            {
+                allObjects[i].SetActive(false);
+                allObjects[i] = null;
+            }
         }
         if (pathObjects.Count > 0)
         {
-            for (int i = pathObjects.Count - 1; i >= 0; --i) Destroy(pathObjects[i]);
+            for (int i = pathObjects.Count - 1; i >= 0; --i)
+            {
+                pathObjects[i].SetActive(false);
+                pathObjects[i] = null;
+            }
         }
         if (treeObjects.Count > 0)
         {
-            for (int i = treeObjects.Count - 1; i >= 0; --i) Destroy(treeObjects[i]);
+            for (int i = treeObjects.Count - 1; i >= 0; --i)
+            {
+                Destroy(treeObjects[i]);
+            }
         }
 
         pathObjects = new List<GameObject>();
@@ -428,8 +439,8 @@ public class MapGeneration : MonoBehaviour
 
         Vector3 spawnSpot = new Vector3((int)vec.x, (int)vec.y, (int)vec.z);
 
-        GameObject obj = Instantiate(blockPrefab, spawnSpot, Quaternion.identity);
-        obj.transform.SetParent(objFolder);
+        GameObject obj = Pool.Instance.Instantiate(blockPrefab.name, spawnSpot, Quaternion.identity);
+        //obj.transform.SetParent(objFolder);
 
         Block block = obj.GetComponentInChildren<Block>();
         block.type = currentPaintingBlock;

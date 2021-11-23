@@ -103,23 +103,26 @@ public class Block : MonoBehaviour
         // Once models are in
         UpdateReferences();
 
-        // Get the current value of the material properties in the renderer
-        _renderer.GetPropertyBlock(_propBlock);
-
-        // Assign our new value
-        _propBlock.SetColor("_BaseColor", type.blockColour);
-
-        if (overrideSettings.useOverrideColor)
+        if (_renderer)
         {
-            if (overrideSettings.overrideSOColor != null)
+            // Get the current value of the material properties in the renderer
+            _renderer.GetPropertyBlock(_propBlock);
+
+            // Assign our new value
+            _propBlock.SetColor("_BaseColor", type.blockColour);
+
+            if (overrideSettings.useOverrideColor)
             {
-                _propBlock.SetColor("_BaseColor", overrideSettings.overrideSOColor.color);
+                if (overrideSettings.overrideSOColor != null)
+                {
+                    _propBlock.SetColor("_BaseColor", overrideSettings.overrideSOColor.color);
+                }
+                else _propBlock.SetColor("_BaseColor", overrideSettings.overrideColor);
             }
-            else _propBlock.SetColor("_BaseColor", overrideSettings.overrideColor);
+            // Apply the edited values to the renderer
+            _renderer.SetPropertyBlock(_propBlock);
         }
 
-        // Apply the edited values to the renderer
-        _renderer.SetPropertyBlock(_propBlock);
 
         if (overrideSettings.overridePrefab)
         {
@@ -147,7 +150,6 @@ public class Block : MonoBehaviour
             _currentPrefab.transform.localRotation = Quaternion.identity;
             _currentPrefab.transform.localScale = Vector3.one;
         }       
-
 
     }
 
