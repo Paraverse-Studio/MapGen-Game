@@ -116,24 +116,30 @@ public class PlayerController : MonoBehaviour
 
     void SafetyNet()
     {
-        if (Time.frameCount % 50 == 0)
-        {
+        if (Time.frameCount % 60 == 0)
+        {   
             RaycastHit hitInfo;
             if (Physics.Raycast(_body.transform.position + new Vector3(0, 0.2f, 0), Vector3.down, out hitInfo, LayerMask.NameToLayer("Solid")))
             {
                 if (_characterController.isGrounded) _lastSafePosition = _body.transform.position;
             }
-            else if (_moveDirection.y < 0)
-            {
-                _failingSafePositionCounter += 1.2f;
 
-                if (_failingSafePositionCounter >= 1.6f)
-                {
-                    _moveDirection.y = 0;
-                    if (_lastSafePosition != Vector3.zero) TeleportPlayer(_lastSafePosition);
-                    else if (MapGeneration.Instance) TeleportPlayer(MapGeneration.Instance.CenterPoint + new Vector3(0, 2, 0));
-                }
+            if (MapGeneration.Instance && _body.transform.position.y < ((MapGeneration.Instance.lumpApplicationRounds / 2.0f)-2.0f))
+            {
+                TeleportPlayer(_lastSafePosition);
             }
+
+            //else if (_moveDirection.y < 0)
+            //{
+            //    _failingSafePositionCounter += 1.2f;
+
+            //    if (_failingSafePositionCounter >= 1.6f)
+            //    {
+            //        _moveDirection.y = 0;
+            //        if (_lastSafePosition != Vector3.zero) TeleportPlayer(_lastSafePosition);
+            //        else if (MapGeneration.Instance) TeleportPlayer(MapGeneration.Instance.CenterPoint + new Vector3(0, 2, 0));
+            //    }
+            //}
         }
     }
 
