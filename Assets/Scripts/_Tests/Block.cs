@@ -13,6 +13,7 @@ public class Block : MonoBehaviour
         public SO_Color overrideSOColor;
         public Color overrideColor;
         public Vector3 overrideScale;
+        public GameObject overridePrefab;
     }
 
     [Header("Block Item: ")]
@@ -34,6 +35,8 @@ public class Block : MonoBehaviour
     private Collider _collider;
     private MaterialPropertyBlock _propBlock;
 
+    private GameObject _currentPrefab = null;
+
     private Vector3 _targetPosition;
     public Vector3 TargetPosition
     {
@@ -45,6 +48,11 @@ public class Block : MonoBehaviour
     private void Awake()
     {
         _propBlock = new MaterialPropertyBlock();
+        UpdateReferences();
+    }
+
+    private void UpdateReferences()
+    {
         _renderer = GetComponentInChildren<Renderer>();
         _collider = GetComponentInChildren<Collider>();
     }
@@ -58,7 +66,7 @@ public class Block : MonoBehaviour
             UpdateBlock();
         }
     }
-    private void UpdateBlock()
+    public void UpdateBlock()
     {
         UpdateBlockItem();
         UpdateSize();
@@ -78,15 +86,11 @@ public class Block : MonoBehaviour
 
     // Update is called once per frame
     void Update()
-    {
-        if (Time.frameCount % 60 == 0)
+    {        
+        if (_display)
         {
-            if (type) UpdateBlock();
-            if (_display)
-            {
-                _display.text = _textToDisplay;
-            }
-        }
+            _display.text = _textToDisplay;
+        }        
     }
 
     private void ToggleText()
@@ -95,8 +99,9 @@ public class Block : MonoBehaviour
     }
 
     private void UpdateBlockItem()
-    {        
-        // Once models are in, 
+    {
+        // Once models are in
+        UpdateReferences();
 
         // Get the current value of the material properties in the renderer
         _renderer.GetPropertyBlock(_propBlock);
@@ -115,6 +120,35 @@ public class Block : MonoBehaviour
 
         // Apply the edited values to the renderer
         _renderer.SetPropertyBlock(_propBlock);
+
+        if (overrideSettings.overridePrefab)
+        {
+            if (transform.childCount > 0) Destroy(transform.GetChild(0).gameObject);
+            if (_currentPrefab) Destroy(_currentPrefab);
+
+            _currentPrefab = GameObject.Instantiate(overrideSettings.overridePrefab, Vector3.zero, Quaternion.identity);
+
+            _currentPrefab.transform.SetParent(transform);
+
+            _currentPrefab.transform.localPosition = new Vector3(0, 0.5f, 0);
+            _currentPrefab.transform.localRotation = Quaternion.identity;
+            _currentPrefab.transform.localScale = Vector3.one;
+        }
+        else if (type.prefabVariations.Length > 0)
+        {
+            if (transform.childCount > 0) Destroy(transform.GetChild(0).gameObject);
+            if (_currentPrefab) Destroy(_currentPrefab);
+
+            _currentPrefab = GameObject.Instantiate(type.prefabVariations[Random.Range(0, type.prefabVariations.Length)], Vector3.zero, Quaternion.identity);
+
+            _currentPrefab.transform.SetParent(transform);
+
+            _currentPrefab.transform.localPosition = new Vector3(0, 0.5f, 0);
+            _currentPrefab.transform.localRotation = Quaternion.identity;
+            _currentPrefab.transform.localScale = Vector3.one;
+        }       
+
+
     }
 
     private void UpdateSize()
@@ -122,7 +156,14 @@ public class Block : MonoBehaviour
         transform.localScale = type.defaultScale;
         if (overrideSettings.overrideScale != Vector3.zero)
         {
-            transform.localScale = overrideSettings.overrideScale;
+            if (transform.childCount > 0) 
+            {
+                transform.GetChild(0).localScale = overrideSettings.overrideScale;
+            }
+            else
+            {
+                transform.localScale = overrideSettings.overrideScale;
+            }
         }
     }
 }

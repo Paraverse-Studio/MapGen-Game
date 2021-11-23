@@ -144,15 +144,15 @@ public class MapGeneration : MonoBehaviour
     // Start is called before the first frame update
     void Start()
     {
-        ResetGeneration();
-
-        GenerateMap();
+        RegeneratePath();
     }
 
     // Update is called once per frame
     void Update()
     {
         UpdateLine();
+
+        if (Input.GetKeyDown(KeyCode.P)) RegeneratePath();
     }
 
 
@@ -193,7 +193,7 @@ public class MapGeneration : MonoBehaviour
 
 
         OnMapGenerateEnd?.Invoke();
-        yield return new WaitForSeconds(0.6f);
+        yield return new WaitForSeconds(0.8f);
         OnScreenReady?.Invoke();
 
     }
@@ -208,6 +208,8 @@ public class MapGeneration : MonoBehaviour
 
     private void ResetGeneration()
     {
+        OnMapGenerateStart?.Invoke();
+
         centerPoint = new Vector3(gridSize / 2, 0, gridSize / 2);
         Vector2 centerPoint2D = new Vector3(centerPoint.x, centerPoint.z);
         xBoundary = centerPoint2D;
@@ -418,7 +420,9 @@ public class MapGeneration : MonoBehaviour
         GameObject objectAtVec = gridOccupants[(int)vec.x, (int)vec.z];
         if (null != objectAtVec)
         {
-            objectAtVec.GetComponentInChildren<Block>().type = currentPaintingBlock;
+            Block blockAtVec = objectAtVec.GetComponentInChildren<Block>();
+            blockAtVec.type = currentPaintingBlock;
+            blockAtVec.UpdateBlock();
             return null;
         }
 
@@ -429,7 +433,7 @@ public class MapGeneration : MonoBehaviour
 
         Block block = obj.GetComponentInChildren<Block>();
         block.type = currentPaintingBlock;
-        block.TargetPosition = spawnSpot;
+        block.UpdateBlock();
 
         gridOccupants[(int)vec.x, (int)vec.z] = obj;
 

@@ -17,6 +17,7 @@ public class SO_BlockItem : ScriptableObject
     public Color blockColour;
     public SingleLayer layer;
     public Vector3 defaultScale = Vector3.one;
+    public GameObject[] prefabVariations;
 
 
 }
