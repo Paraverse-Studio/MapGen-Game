@@ -36,7 +36,7 @@ public class Pool : MonoBehaviour
         pooledObjects = new List<GameObject>(); //list that holds all pooleable objects
 
         int size = itemsToPool.Count;
-        for (int x = size-1; x >= 0; --x) //for each pooleable object
+        for (int x = size - 1; x >= 0; --x) //for each pooleable object
         {
             if (itemsToPool[x] == null) continue;
             if (itemsToPool[x].objectToPool == null) continue;
@@ -54,12 +54,14 @@ public class Pool : MonoBehaviour
     }
 
     //   Retrieving an object from the pool by its name
-    public GameObject Instantiate(string nom, Vector3 position, Quaternion rotation, bool usePoolsFolder = true)
+    public GameObject Instantiate(string nom, Vector3 position, Quaternion rotation, bool usePoolsFolder = true, bool ignoreActive = false)
     {
         // 1.0  First, search for unused item in pool to re-use it
         for (int i = 0; i < pooledObjects.Count; i++)
         {
-            if (pooledObjects[i] != null && (!pooledObjects[i].activeInHierarchy && !pooledObjects[i].activeSelf) && pooledObjects[i].name.Contains(nom))
+            if (pooledObjects[i] != null   &&
+                (  ignoreActive   ||   (!pooledObjects[i].activeInHierarchy && !pooledObjects[i].activeSelf)  )   &&
+                pooledObjects[i].name.Contains(nom))
             {
                 pooledObjects[i].gameObject.transform.position = position;
                 pooledObjects[i].gameObject.transform.rotation = rotation;
@@ -71,10 +73,10 @@ public class Pool : MonoBehaviour
         }
 
         // 2.0 Being here means we were out of amount, so we search for that PoolItem through list and expand it
-        return MoreNeeded(nom, usePoolsFolder);        
+        return MoreNeeded(nom, usePoolsFolder);
     }
 
-    
+
     // Polymorphism
     //public GameObject Instantiate(string nom, Transform parent)
     //{

@@ -204,7 +204,7 @@ public class MapGeneration : MonoBehaviour
         PartitionProgress("Finalizing . . .");
 
         //Foundation series
-        AddFoundationLayer();
+        //AddFoundationLayer();
 
         OnMapGenerateEnd?.Invoke();
         yield return new WaitForSeconds(0.5f);
@@ -283,15 +283,16 @@ public class MapGeneration : MonoBehaviour
             treeObjects = new List<GameObject>();
         }
 
-        if (foundationObjects.Count > 0)
-        {
-            for (int i = foundationObjects.Count - 1; i >= 0; --i)
-            {
-                foundationObjects[i].SetActive(false);
-                foundationObjects.RemoveAt(i);
-            }
-            foundationObjects = new List<GameObject>();
-        }
+        //if (foundationObjects.Count > 0)
+        //{
+        //    for (int i = foundationObjects.Count - 1; i >= 0; --i)
+        //    {
+        //        //foundationObjects[i].SetActive(false);
+        //        foundationObjects[i].transform.position -= new Vector3(0, 50000, 0);
+        //        foundationObjects.RemoveAt(i);
+        //    }
+        //    //foundationObjects = new List<GameObject>();
+        //}
     }
 
 
@@ -634,7 +635,7 @@ public class MapGeneration : MonoBehaviour
 
             GameObject foundationBlock = Pool.Instance.Instantiate(foundationPrefabs[Random.Range(0, foundationPrefabs.Length)].name,
                 new Vector3(allObjects[i].transform.position.x,
-                yLevel - 0.5f, allObjects[i].transform.position.z), Quaternion.identity);          
+                yLevel - 0.5f, allObjects[i].transform.position.z), Quaternion.identity, true, true);          
 
             if (foundationBlock) foundationObjects.Add(foundationBlock);            
         }
