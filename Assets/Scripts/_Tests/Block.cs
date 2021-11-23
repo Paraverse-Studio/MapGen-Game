@@ -123,9 +123,7 @@ public class Block : MonoBehaviour
                 _renderer.SetPropertyBlock(_propBlock);
             }            
         }
-
-        if (Pool.Instance == null) Debug.Log("It shouldn't be null here");
-
+        
         if (overrideSettings.overridePrefab || type.prefabVariations.Length > 0)
         {
             if (transform.childCount > 0)
@@ -150,7 +148,7 @@ public class Block : MonoBehaviour
 
             _currentPrefab.transform.SetParent(transform);
 
-            _currentPrefab.transform.localPosition = new Vector3(0, 0.5f - 0.03f, 0);
+            _currentPrefab.transform.localPosition = new Vector3(0, 0.5f - 0.1f, 0);
             _currentPrefab.transform.localRotation = Quaternion.identity;
             _currentPrefab.transform.localScale = Vector3.one;
         }       
