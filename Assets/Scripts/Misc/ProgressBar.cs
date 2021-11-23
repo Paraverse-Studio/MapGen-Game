@@ -29,9 +29,9 @@ public class ProgressBar : MonoBehaviour
     {
         bar.fillAmount = Mathf.SmoothDamp(bar.fillAmount, _progress / _total, ref _velocity, 0.2f);
 
-        if (Time.frameCount % 2 == 0)
+        if (Time.frameCount % 3 == 0)
         {
-            if (_progress != _total && wholeBar.gameObject.activeSelf == false) wholeBar.gameObject.SetActive(true);                    
+            if (_progress != _total && wholeBar.gameObject.activeSelf == false) wholeBar.gameObject.SetActive(true);
         }
 
         if (texts.Length > 1)
@@ -39,7 +39,7 @@ public class ProgressBar : MonoBehaviour
             texts[0].text = !string.IsNullOrEmpty(_specificText) ? _specificText : "Loading . . .";
             texts[1].text = ((int)((_progress / _total) * 100.0f)) + "%";
 
-            if (_progress == _total && bar.fillAmount >= 0.99f)
+            if (_total > 0 && _progress == _total && bar.fillAmount >= 0.99f)
             {
                 texts[0].text = "";
                 texts[1].text = "";
@@ -52,6 +52,13 @@ public class ProgressBar : MonoBehaviour
 
     }
 
+    public void OnProgressStartBar()
+    {
+        wholeBar.gameObject.SetActive(true);
+        _progress = 0f;
+        _total = 0.001f;
+        bar.fillAmount = 0f;
+    }
 
     public void OnProgressSetText(string progressText)
     {
