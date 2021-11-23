@@ -34,7 +34,7 @@ public class PlayerController : MonoBehaviour
         _characterController = GetComponentInChildren<CharacterController>();
         _simulatedCamera = new GameObject();
         _body = _characterController.transform;
-        MapGeneration.Instance.OnMapGenerateEnd.AddListener(TeleportPlayer);
+        if (MapGeneration.Instance) MapGeneration.Instance.OnMapGenerateEnd.AddListener(TeleportPlayer);
 
         // calculate the correct vertical position
         float correctHeight = _characterController.center.y + _characterController.skinWidth;
@@ -131,7 +131,7 @@ public class PlayerController : MonoBehaviour
                 {
                     _moveDirection.y = 0;
                     if (_lastSafePosition != Vector3.zero) TeleportPlayer(_lastSafePosition);
-                    else TeleportPlayer(MapGeneration.Instance.CenterPoint + new Vector3(0, 2, 0));
+                    else if (MapGeneration.Instance) TeleportPlayer(MapGeneration.Instance.CenterPoint + new Vector3(0, 2, 0));
                 }
             }
         }

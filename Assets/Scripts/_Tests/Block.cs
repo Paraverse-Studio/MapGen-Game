@@ -63,11 +63,11 @@ public class Block : MonoBehaviour
     void OnEnable()
     {
         // SetupHudText();
-        
-        //if (type)
-        //{
-        //    UpdateBlock();
-        //}
+
+        if (type)
+        {
+            UpdateBlock();
+        }
     }
     public void UpdateBlock()
     {
@@ -105,23 +105,26 @@ public class Block : MonoBehaviour
 
         if (_renderer && (type.prefabVariations.Length == 0) && overrideSettings.overridePrefab == null)
         {
-            // Get the current value of the material properties in the renderer
-            _renderer.GetPropertyBlock(_propBlock);
-
-            // Assign our new value
-            _propBlock.SetColor("_BaseColor", type.blockColour);
-
             if (overrideSettings.useOverrideColor)
             {
+                // Get the current value of the material properties in the renderer
+                _renderer.GetPropertyBlock(_propBlock);
+
+                // Assign our new value
+                _propBlock.SetColor("_BaseColor", type.blockColour);
+
                 if (overrideSettings.overrideSOColor != null)
                 {
                     _propBlock.SetColor("_BaseColor", overrideSettings.overrideSOColor.color);
                 }
                 else _propBlock.SetColor("_BaseColor", overrideSettings.overrideColor);
-            }
-            // Apply the edited values to the renderer
-            _renderer.SetPropertyBlock(_propBlock);
+
+                // Apply the edited values to the renderer
+                _renderer.SetPropertyBlock(_propBlock);
+            }            
         }
+
+        if (Pool.Instance == null) Debug.Log("It shouldn't be null here");
 
         if (overrideSettings.overridePrefab || type.prefabVariations.Length > 0)
         {
@@ -147,7 +150,7 @@ public class Block : MonoBehaviour
 
             _currentPrefab.transform.SetParent(transform);
 
-            _currentPrefab.transform.localPosition = new Vector3(0, 0.5f, 0);
+            _currentPrefab.transform.localPosition = new Vector3(0, 0.5f - 0.03f, 0);
             _currentPrefab.transform.localRotation = Quaternion.identity;
             _currentPrefab.transform.localScale = Vector3.one;
         }       

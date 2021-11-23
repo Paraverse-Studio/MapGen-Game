@@ -44,6 +44,7 @@ public class MapGeneration : MonoBehaviour
     public Transform objFolder;
     public GameObject blockPrefab;
     public GameObject[] treePrefabs;
+    public GameObject[] foundationPrefabs;
     public LineRenderer line;
     public bool drawLine = true;
     public bool lineSmoothening = true;
@@ -129,6 +130,7 @@ public class MapGeneration : MonoBehaviour
     private List<GameObject> allObjects = new List<GameObject>();
     private List<GameObject> pathObjects = new List<GameObject>();
     private List<GameObject> treeObjects = new List<GameObject>();
+    private List<GameObject> foundationObjects = new List<GameObject>();
 
     private float progressValue;
     private float progressTotal = 8f;
@@ -193,7 +195,6 @@ public class MapGeneration : MonoBehaviour
         PartitionProgress("Finalizing . . .");
 
         // Foundation series
-        currentPaintingBlock = blocks.foundation;
         AddFoundationLayer();
 
         OnMapGenerateEnd?.Invoke();
@@ -267,7 +268,16 @@ public class MapGeneration : MonoBehaviour
                 Destroy(treeObjects[i]);
             }
         }
+        if (foundationObjects.Count > 0)
+        {
+            for (int i = foundationObjects.Count - 1; i >=0; --i)
+            {
+                foundationObjects[i].SetActive(false);
+                foundationObjects[i] = null;
+            }
+        }
 
+        foundationObjects = new List<GameObject>();
         pathObjects = new List<GameObject>();
         allObjects = new List<GameObject>();
         treeObjects = new List<GameObject>();
@@ -458,7 +468,7 @@ public class MapGeneration : MonoBehaviour
 
         Block block = obj.GetComponentInChildren<Block>();
         block.type = currentPaintingBlock;
-        block.UpdateBlock();
+        //block.UpdateBlock(); // don't need to call this both times (it already gets called on block's OnEnable() )
 
         if (utilizeY) return obj;
 
@@ -586,33 +596,16 @@ public class MapGeneration : MonoBehaviour
 
     private void AddFoundationLayer()
     {
-        // Go through all x-boundary to boundary,
-        // if any grid[x,z] is not null (has a block), check what y-level it has
-        //for (int x = (int)xBoundary.x; x < xBoundary.y; x += 1)
-        //{
-        //    for (int z = (int)zBoundary.x; z < zBoundary.y; z += 1)
-        //    {
-        //        if (null == gridOccupants[x, z]) continue;
-
-        //        // This grid[x, z] has a block
-        //        int yLevel = (int)(gridOccupants[x, z].transform.position.y);
-
-        //        GameObject foundationBlock = Spawn(new Vector3(x, yLevel-3, z));
-        //    }
-        //}
-
         int size = allObjects.Count;
         for (int i = 0; i < size; ++i) 
         {              
-            // This grid[x, z] has a block
             int yLevel = (int)(allObjects[i].transform.position.y);
 
-            int randomNumOfLayers = Random.Range(3, 4);
-            for (int layerIndex = 0; layerIndex < randomNumOfLayers; ++layerIndex)
-            {
-                GameObject foundationBlock = Spawn(new Vector3(allObjects[i].transform.position.x,
-                    yLevel - layerIndex - 1, allObjects[i].transform.position.z), true);
-            }
+            GameObject foundationBlock = Pool.Instance.Instantiate(foundationPrefabs[Random.Range(0, foundationPrefabs.Length)].name,
+                new Vector3(allObjects[i].transform.position.x,
+                yLevel - 0.5f, allObjects[i].transform.position.z), Quaternion.identity);          
+
+            if (foundationBlock) foundationObjects.Add(foundationBlock);            
         }
     }
 
