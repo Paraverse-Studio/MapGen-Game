@@ -35,10 +35,12 @@ public class Fader : MonoBehaviour
         if (_fadeIn)
         {
             cg.alpha += Time.deltaTime * currentSpeed;
+            if (cg.alpha >= 1f) _fadeIn = false;
         }
         else if (_fadeOut)
         {
             cg.alpha -= Time.deltaTime * currentSpeed;
+            if (cg.alpha == 0f) _fadeOut = false;
         }
     }
 }

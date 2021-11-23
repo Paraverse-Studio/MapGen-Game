@@ -53,15 +53,15 @@ public class Pool : MonoBehaviour
     }
 
     //   Retrieving an object from the pool by its name
-    public GameObject Instantiate(string nom, Vector3 position, Quaternion rotation)
+    public GameObject Instantiate(string nom, Vector3 position, Quaternion rotation, bool usePoolsFolder = true)
     {
         // 1.0  First, search for unused item in pool to re-use it
         for (int i = 0; i < pooledObjects.Count; i++)
         {
             if (pooledObjects[i] != null && (!pooledObjects[i].activeInHierarchy && !pooledObjects[i].activeSelf) && pooledObjects[i].name.Contains(nom))
             {
-                pooledObjects[i].gameObject.transform.localPosition = position;
-                pooledObjects[i].gameObject.transform.localRotation = rotation;
+                pooledObjects[i].gameObject.transform.position = position;
+                pooledObjects[i].gameObject.transform.rotation = rotation;
                 pooledObjects[i].SetActive(true);
 
                 spawned++;
@@ -69,7 +69,7 @@ public class Pool : MonoBehaviour
             }
         }
         // 2.0 Being here means we were out of amount, so we search for that PoolItem through list and expand it
-        return MoreNeeded(nom);        
+        return MoreNeeded(nom, usePoolsFolder);        
     }
 
     
@@ -93,7 +93,7 @@ public class Pool : MonoBehaviour
         return MoreNeeded(nom);
     }
 
-    private GameObject MoreNeeded(string nom)
+    private GameObject MoreNeeded(string nom, bool usePoolFolder = true)
     {
         Debug.Log("System: More amount of " + nom + " was needed than pooler currently holds.");
         foreach (PoolItem item in itemsToPool)
@@ -103,7 +103,7 @@ public class Pool : MonoBehaviour
                 GameObject obj = (GameObject)Instantiate(item.objectToPool);
                 obj.transform.position = Vector3.zero;
                 obj.transform.rotation = Quaternion.identity;
-                obj.transform.SetParent(item.parentObj.transform);
+                if (usePoolFolder) obj.transform.SetParent(item.parentObj.transform);
                 obj.SetActive(true); pooledObjects.Add(obj); return obj;
             }
         }

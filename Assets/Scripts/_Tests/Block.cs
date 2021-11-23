@@ -18,10 +18,13 @@ public class Block : MonoBehaviour
 
     [Header("Block Item: ")]
     public SO_BlockItem type;
+    private SO_BlockItem oldType = null;
 
     [Header("Override Settings: ")]
-    public BlockOverrideSettings overrideSettings;    
+    public BlockOverrideSettings overrideSettings;
 
+
+    // PRIVATE //////////////////////////
     private TextMeshPro _display;
 
     private string _textToDisplay = "";
@@ -30,7 +33,6 @@ public class Block : MonoBehaviour
         set { _textToDisplay = value; }
     }
 
-    // private MeshRenderer;
     private Renderer _renderer;
     private Collider _collider;
     private MaterialPropertyBlock _propBlock;
@@ -61,17 +63,24 @@ public class Block : MonoBehaviour
     void OnEnable()
     {
         // SetupHudText();
-        if (type)
-        {
-            UpdateBlock();
-        }
+        
+        //if (type)
+        //{
+        //    UpdateBlock();
+        //}
     }
     public void UpdateBlock()
     {
+        if (!type) return;
+
+        if (oldType != null && type == oldType) return;
+
         UpdateBlockItem();
         UpdateSize();
         gameObject.layer = type.layer.LayerIndex;
         if (_collider) _collider.gameObject.layer = type.layer.LayerIndex;
+
+        oldType = type;
     }
     private void SetupHudText()
     {
@@ -84,15 +93,6 @@ public class Block : MonoBehaviour
         GlobalSettings.Instance.OnToggleHudText.AddListener(ToggleText);
     }
 
-    // Update is called once per frame
-    void Update()
-    {        
-        if (_display)
-        {
-            _display.text = _textToDisplay;
-        }        
-    }
-
     private void ToggleText()
     {
         _display.enabled = !_display.enabled;
@@ -103,7 +103,7 @@ public class Block : MonoBehaviour
         // Once models are in
         UpdateReferences();
 
-        if (_renderer)
+        if (_renderer && (type.prefabVariations.Length == 0) && overrideSettings.overridePrefab == null)
         {
             // Get the current value of the material properties in the renderer
             _renderer.GetPropertyBlock(_propBlock);
@@ -123,26 +123,27 @@ public class Block : MonoBehaviour
             _renderer.SetPropertyBlock(_propBlock);
         }
 
-
-        if (overrideSettings.overridePrefab)
+        if (overrideSettings.overridePrefab || type.prefabVariations.Length > 0)
         {
-            if (transform.childCount > 0) Destroy(transform.GetChild(0).gameObject);
-            if (_currentPrefab) Destroy(_currentPrefab);
+            if (transform.childCount > 0)
+            {
+                transform.GetChild(0).gameObject.SetActive(false);
+                transform.GetChild(0).parent = Pool.Instance.gameObject.transform;
+            }
+            if (_currentPrefab)
+            {
+                _currentPrefab.SetActive(false);
+                _currentPrefab = null;
+            }
 
-            _currentPrefab = GameObject.Instantiate(overrideSettings.overridePrefab, Vector3.zero, Quaternion.identity);
-
-            _currentPrefab.transform.SetParent(transform);
-
-            _currentPrefab.transform.localPosition = new Vector3(0, 0.5f, 0);
-            _currentPrefab.transform.localRotation = Quaternion.identity;
-            _currentPrefab.transform.localScale = Vector3.one;
-        }
-        else if (type.prefabVariations.Length > 0)
-        {
-            if (transform.childCount > 0) Destroy(transform.GetChild(0).gameObject);
-            if (_currentPrefab) Destroy(_currentPrefab);
-
-            _currentPrefab = GameObject.Instantiate(type.prefabVariations[Random.Range(0, type.prefabVariations.Length)], Vector3.zero, Quaternion.identity);
+            if (overrideSettings.overridePrefab)
+            {
+                _currentPrefab = Pool.Instance.Instantiate(overrideSettings.overridePrefab.name, Vector3.zero, Quaternion.identity, false);
+            }
+            else if (type.prefabVariations.Length > 0)
+            {
+                _currentPrefab = Pool.Instance.Instantiate(type.prefabVariations[Random.Range(0, type.prefabVariations.Length)].name, Vector3.zero, Quaternion.identity, false);
+            }
 
             _currentPrefab.transform.SetParent(transform);
 

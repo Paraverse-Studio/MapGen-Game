@@ -193,7 +193,7 @@ public class MapGeneration : MonoBehaviour
 
 
         OnMapGenerateEnd?.Invoke();
-        yield return new WaitForSeconds(0.8f);
+        yield return new WaitForSeconds(0.5f);
         OnScreenReady?.Invoke();
 
     }
