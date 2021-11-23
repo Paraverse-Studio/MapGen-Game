@@ -7,6 +7,7 @@ public enum BlockType
     grass,
     dirt,
     water,
+    foundation,
     propPart
 }
 

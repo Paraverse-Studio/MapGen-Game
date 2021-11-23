@@ -34,6 +34,7 @@ public class MapGeneration : MonoBehaviour
         public SO_BlockItem grass;
         public SO_BlockItem dirt;
         public SO_BlockItem water;
+        public SO_BlockItem foundation;
     }
     public struct Props
     {
@@ -168,35 +169,32 @@ public class MapGeneration : MonoBehaviour
        currentPaintingBlock = blocks.grass;
 
         SpawnPath();        
-        yield return null;
         PartitionProgress("Propagating base . . .");
 
         ThickenPath();
-        yield return null;
         PartitionProgress("Generating area . . .");
 
         ThickenAroundObject(pathObjects[pathObjects.Count - 1], 0, grassFillRadius);
-        yield return null;
         PartitionProgress("Building depth . . .");
 
         AddRandomLumps();
-        yield return null;
         PartitionProgress("");
 
         //Dirt series
         currentPaintingBlock = blocks.dirt;
 
         PaintDirtPath();
-        yield return null;
         PartitionProgress("");
 
         ApplyRandomElevation();
-        yield return null;
         PartitionProgress("Placing props/items . . .");
 
         AddProps();
-        yield return null;
         PartitionProgress("Finalizing . . .");
+
+        // Foundation series
+        currentPaintingBlock = blocks.foundation;
+        AddFoundationLayer();
 
         OnMapGenerateEnd?.Invoke();
         yield return new WaitForSecondsRealtime(0.9f);
@@ -439,15 +437,18 @@ public class MapGeneration : MonoBehaviour
         alreadyElevated.Clear();
     }
 
-    private GameObject Spawn(Vector3 vec)
+    private GameObject Spawn(Vector3 vec, bool utilizeY = false)
     {
-        GameObject objectAtVec = gridOccupants[(int)vec.x, (int)vec.z];
-        if (null != objectAtVec)
+        if (!utilizeY) // majority of the time you use Spawn(), you ignore y, cause you're affecting grid[x,z]
         {
-            Block blockAtVec = objectAtVec.GetComponentInChildren<Block>();
-            blockAtVec.type = currentPaintingBlock;
-            blockAtVec.UpdateBlock();
-            return null;
+            GameObject objectAtVec = gridOccupants[(int)vec.x, (int)vec.z];
+            if (null != objectAtVec)
+            {
+                Block blockAtVec = objectAtVec.GetComponentInChildren<Block>();
+                blockAtVec.type = currentPaintingBlock;
+                blockAtVec.UpdateBlock();
+                return null;
+            }
         }
 
         Vector3 spawnSpot = new Vector3((int)vec.x, (int)vec.y, (int)vec.z);
@@ -458,6 +459,8 @@ public class MapGeneration : MonoBehaviour
         Block block = obj.GetComponentInChildren<Block>();
         block.type = currentPaintingBlock;
         block.UpdateBlock();
+
+        if (utilizeY) return obj;
 
         gridOccupants[(int)vec.x, (int)vec.z] = obj;
 
@@ -577,6 +580,38 @@ public class MapGeneration : MonoBehaviour
                             Rounded(Vector3.Distance(spawnSpot, closestPathPosition.transform.position)) + " (" + Rounded(chanceOfSpawn) + "%)";
                     }
                 }
+            }
+        }
+    }
+
+    private void AddFoundationLayer()
+    {
+        // Go through all x-boundary to boundary,
+        // if any grid[x,z] is not null (has a block), check what y-level it has
+        //for (int x = (int)xBoundary.x; x < xBoundary.y; x += 1)
+        //{
+        //    for (int z = (int)zBoundary.x; z < zBoundary.y; z += 1)
+        //    {
+        //        if (null == gridOccupants[x, z]) continue;
+
+        //        // This grid[x, z] has a block
+        //        int yLevel = (int)(gridOccupants[x, z].transform.position.y);
+
+        //        GameObject foundationBlock = Spawn(new Vector3(x, yLevel-3, z));
+        //    }
+        //}
+
+        int size = allObjects.Count;
+        for (int i = 0; i < size; ++i) 
+        {              
+            // This grid[x, z] has a block
+            int yLevel = (int)(allObjects[i].transform.position.y);
+
+            int randomNumOfLayers = Random.Range(3, 4);
+            for (int layerIndex = 0; layerIndex < randomNumOfLayers; ++layerIndex)
+            {
+                GameObject foundationBlock = Spawn(new Vector3(allObjects[i].transform.position.x,
+                    yLevel - layerIndex - 1, allObjects[i].transform.position.z), true);
             }
         }
     }
