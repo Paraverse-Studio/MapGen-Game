@@ -14,9 +14,15 @@ public class PlayerController : MonoBehaviour
     public float jumpSpeed = 8.0f;
     public float gravity = 9.8f;
 
-    private CharacterController _characterController;    
+    public float moveX;
+    public float moveZ;
+    public Vector3 moveVector;
+
+    private CharacterController _characterController;
 
     private Vector3 _moveDirection = Vector3.zero;
+    private Vector3 _moveNormal = Vector3.zero;
+
     private GameObject _simulatedCamera;
 
     private Vector3 _lastSafePosition = Vector3.zero;
@@ -56,14 +62,14 @@ public class PlayerController : MonoBehaviour
         // Gravity
         _moveDirection.y -= gravity * Time.deltaTime;
 
-        // Move the controller
-        _characterController.Move(_moveDirection * Time.deltaTime);
-
         if ((Mathf.Abs(_moveDirection.x) + Mathf.Abs(_moveDirection.z)) > 0.1f)
         {
-            _body.transform.forward = Vector3.Lerp(_body.transform.forward, _moveDirection, Time.deltaTime * 2f);
+            Vector3 _direction = new Vector3(_moveDirection.x, 0, _moveDirection.z);
+            _body.transform.forward = _direction;
         }
 
+        // Move the controller
+        _characterController.Move(_moveDirection * Time.deltaTime);
 
         SafetyNet();
     }
@@ -82,8 +88,20 @@ public class PlayerController : MonoBehaviour
         // Using camera's forward
         _simulatedCamera.transform.eulerAngles = new Vector3(0, Camera.main.transform.eulerAngles.y, Camera.main.transform.eulerAngles.z);
 
+        moveX = Input.GetAxis("Vertical");
+        moveZ = Input.GetAxis("Horizontal");
+
+        Vector3 moveVectorNow = new Vector3(moveX, 0, moveZ);
+        if (moveVectorNow.magnitude < (moveVector.magnitude * 0.85f))
+        {
+            moveVectorNow = Vector3.zero;
+        }
+        moveVector = moveVectorNow;
+
         float currentY = _moveDirection.y;
-        _moveDirection = _simulatedCamera.transform.forward * Input.GetAxis("Vertical") + _simulatedCamera.transform.right * Input.GetAxis("Horizontal");
+        _moveDirection = (_simulatedCamera.transform.forward * (moveX * 3f)) + (_simulatedCamera.transform.right * (moveZ * 3f));        
+
+        _moveDirection.y = 0;
 
         _moveDirection *= speed;
 
@@ -91,9 +109,9 @@ public class PlayerController : MonoBehaviour
     }
 
     void SafetyNet()
-    {        
+    {
         if (Time.frameCount % 50 == 0)
-        {            
+        {
             RaycastHit hitInfo;
             if (Physics.Raycast(_body.transform.position + new Vector3(0, 0.2f, 0), Vector3.down, out hitInfo, LayerMask.NameToLayer("Solid")))
             {
@@ -103,14 +121,14 @@ public class PlayerController : MonoBehaviour
             {
                 _failingSafePositionCounter += 1.2f;
 
-                if (_failingSafePositionCounter >= 1.6f )
+                if (_failingSafePositionCounter >= 1.6f)
                 {
                     _moveDirection.y = 0;
-                    if (_lastSafePosition != Vector3.zero) TeleportPlayer(_lastSafePosition);                    
-                    else TeleportPlayer(MapGeneration.Instance.CenterPoint + new Vector3(0, 2, 0));                    
+                    if (_lastSafePosition != Vector3.zero) TeleportPlayer(_lastSafePosition);
+                    else TeleportPlayer(MapGeneration.Instance.CenterPoint + new Vector3(0, 2, 0));
                 }
-            }            
-        }        
+            }
+        }
     }
 
     private void TeleportPlayer(Vector3 pos)
