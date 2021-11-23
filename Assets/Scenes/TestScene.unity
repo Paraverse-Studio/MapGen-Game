@@ -389,7 +389,7 @@ RectTransform:
   m_AnchorMin: {x: 0, y: 0}
   m_AnchorMax: {x: 1, y: 0}
   m_AnchoredPosition: {x: 0, y: 0}
-  m_SizeDelta: {x: 0, y: 290.77}
+  m_SizeDelta: {x: 0, y: 306.65}
   m_Pivot: {x: 0.5, y: 0}
 --- !u!114 &148118914
 MonoBehaviour:
@@ -837,12 +837,12 @@ MonoBehaviour:
   m_faceColor:
     serializedVersion: 2
     rgba: 4294967295
-  m_fontSize: 45
+  m_fontSize: 35
   m_fontSizeBase: 50
   m_fontWeight: 400
   m_enableAutoSizing: 1
   m_fontSizeMin: 18
-  m_fontSizeMax: 45
+  m_fontSizeMax: 35
   m_fontStyle: 0
   m_HorizontalAlignment: 1
   m_VerticalAlignment: 1024
@@ -944,7 +944,7 @@ MonoBehaviour:
   m_OnCullStateChanged:
     m_PersistentCalls:
       m_Calls: []
-  m_text: 45%
+  m_text: 0%
   m_isRightToLeft: 0
   m_fontAsset: {fileID: 11400000, guid: 8f586378b4e144a9851e7b34d9b748ee, type: 2}
   m_sharedMaterial: {fileID: 2180264, guid: 8f586378b4e144a9851e7b34d9b748ee, type: 2}
@@ -971,13 +971,13 @@ MonoBehaviour:
   m_faceColor:
     serializedVersion: 2
     rgba: 4294967295
-  m_fontSize: 45
+  m_fontSize: 40
   m_fontSizeBase: 50
   m_fontWeight: 400
   m_enableAutoSizing: 1
   m_fontSizeMin: 18
-  m_fontSizeMax: 45
-  m_fontStyle: 0
+  m_fontSizeMax: 40
+  m_fontStyle: 1
   m_HorizontalAlignment: 4
   m_VerticalAlignment: 1024
   m_textAlignment: 65535
@@ -1204,7 +1204,7 @@ MonoBehaviour:
   OnProgressChange:
     m_PersistentCalls:
       m_Calls:
-      - m_Target: {fileID: 2060608430}
+      - m_Target: {fileID: 1786725987}
         m_TargetAssemblyTypeName: ProgressBar, Assembly-CSharp
         m_MethodName: OnProgressChange
         m_Mode: 0
@@ -1219,7 +1219,7 @@ MonoBehaviour:
   OnProgressChangeText:
     m_PersistentCalls:
       m_Calls:
-      - m_Target: {fileID: 2060608430}
+      - m_Target: {fileID: 1786725987}
         m_TargetAssemblyTypeName: ProgressBar, Assembly-CSharp
         m_MethodName: OnProgressSetText
         m_Mode: 0
@@ -1631,6 +1631,7 @@ GameObject:
   - component: {fileID: 1786725984}
   - component: {fileID: 1786725985}
   - component: {fileID: 1786725986}
+  - component: {fileID: 1786725987}
   m_Layer: 5
   m_Name: BlackScreenFade
   m_TagString: Untagged
@@ -1685,6 +1686,23 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   cg: {fileID: 1786725985}
   currentSpeed: 1.5
+--- !u!114 &1786725987
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1786725983}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 76468ec0c59890a4b8d7c0d2e02dd1ca, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  bar: {fileID: 1983681602}
+  wholeBar: {fileID: 2060608428}
+  texts:
+  - {fileID: 1009052645}
+  - {fileID: 1035238907}
 --- !u!1 &1910069006
 GameObject:
   m_ObjectHideFlags: 0
@@ -1813,7 +1831,7 @@ MonoBehaviour:
   m_PreserveAspect: 0
   m_FillCenter: 1
   m_FillMethod: 0
-  m_FillAmount: 0.136
+  m_FillAmount: 0.267
   m_FillClockwise: 1
   m_FillOrigin: 0
   m_UseSpriteMesh: 0
@@ -1871,7 +1889,6 @@ GameObject:
   - component: {fileID: 2060608427}
   - component: {fileID: 2060608429}
   - component: {fileID: 2060608428}
-  - component: {fileID: 2060608430}
   m_Layer: 5
   m_Name: BG
   m_TagString: Untagged
@@ -1899,7 +1916,7 @@ RectTransform:
   m_AnchorMin: {x: 0, y: 0}
   m_AnchorMax: {x: 0, y: 0}
   m_AnchoredPosition: {x: 0, y: 0}
-  m_SizeDelta: {x: 1000, y: 30}
+  m_SizeDelta: {x: 750, y: 25}
   m_Pivot: {x: 0.5, y: 0.5}
 --- !u!114 &2060608428
 MonoBehaviour:
@@ -1914,7 +1931,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   m_Material: {fileID: 0}
-  m_Color: {r: 0, g: 0.17502028, b: 0.3962264, a: 1}
+  m_Color: {r: 0, g: 0.46242142, b: 1, a: 0.13333334}
   m_RaycastTarget: 0
   m_RaycastPadding: {x: 0, y: 0, z: 0, w: 0}
   m_Maskable: 1
@@ -1939,22 +1956,6 @@ CanvasRenderer:
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 2060608426}
   m_CullTransparentMesh: 1
---- !u!114 &2060608430
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 2060608426}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 76468ec0c59890a4b8d7c0d2e02dd1ca, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: 
-  bar: {fileID: 1983681602}
-  texts:
-  - {fileID: 1009052645}
-  - {fileID: 1035238907}
 --- !u!1 &2097455777
 GameObject:
   m_ObjectHideFlags: 0

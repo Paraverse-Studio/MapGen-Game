@@ -7,6 +7,7 @@ using TMPro;
 public class ProgressBar : MonoBehaviour
 {
     public Image bar;
+    public Image wholeBar;
     public TextMeshProUGUI[] texts;
 
     private float _total;
@@ -18,18 +19,19 @@ public class ProgressBar : MonoBehaviour
     // Start is called before the first frame update
     void Start()
     {
-
+         _progress = 0f;
+        _total = 0.001f;
+        bar.fillAmount = 0f;
     }
 
     // Update is called once per frame
     void Update()
     {
-        bar.fillAmount = Mathf.SmoothDamp(bar.fillAmount, _progress / _total, ref _velocity, 0.25f);
+        bar.fillAmount = Mathf.SmoothDamp(bar.fillAmount, _progress / _total, ref _velocity, 0.2f);
 
-        if (Time.deltaTime % 10 == 0)
+        if (Time.frameCount % 2 == 0)
         {
-            if (_progress != _total && bar.gameObject.activeSelf == false)
-                bar.gameObject.SetActive(true);
+            if (_progress != _total && wholeBar.gameObject.activeSelf == false) wholeBar.gameObject.SetActive(true);                    
         }
 
         if (texts.Length > 1)
@@ -42,7 +44,7 @@ public class ProgressBar : MonoBehaviour
                 texts[0].text = "";
                 texts[1].text = "";
                 _specificText = "";
-                bar.gameObject.SetActive(false);
+                wholeBar.gameObject.SetActive(false);
 
             }
         }

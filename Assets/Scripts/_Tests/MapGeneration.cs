@@ -149,7 +149,7 @@ public class MapGeneration : MonoBehaviour
     // Start is called before the first frame update
     void Start()
     {
-        RegeneratePath();
+        StartCoroutine(RegeneratePath());
     }
 
     // Update is called once per frame
@@ -157,7 +157,7 @@ public class MapGeneration : MonoBehaviour
     {
         UpdateLine();
 
-        if (Input.GetKeyDown(KeyCode.P)) RegeneratePath();
+        if (Input.GetKeyDown(KeyCode.P)) StartCoroutine(RegeneratePath());
     }
 
 
@@ -181,14 +181,14 @@ public class MapGeneration : MonoBehaviour
 
         AddRandomLumps();
         yield return null;
-        PartitionProgress("Drawing path . . .");
+        PartitionProgress("");
 
         //Dirt series
         currentPaintingBlock = blocks.dirt;
 
         PaintDirtPath();
         yield return null;
-        PartitionProgress("Updating materials . . .");
+        PartitionProgress("");
 
         ApplyRandomElevation();
         yield return null;
@@ -199,28 +199,30 @@ public class MapGeneration : MonoBehaviour
         PartitionProgress("Finalizing . . .");
 
         OnMapGenerateEnd?.Invoke();
-        yield return new WaitForSecondsRealtime(0.85f);
+        yield return new WaitForSecondsRealtime(0.9f);
         OnScreenReady?.Invoke();
 
     }
 
     [Button]
-    public void RegeneratePath()
+    public IEnumerator RegeneratePath()
     {
+        OnMapGenerateStart?.Invoke();
+
+        yield return new WaitForSecondsRealtime(0.02f);
+
         progressValue = -1f;
-        PartitionProgress("Clearing cache . . ."); // will increment above to 0 
+        PartitionProgress("Initiating engine . . ."); // will increment above to 0 
 
         ResetGeneration();
 
-        PartitionProgress("Initiating engine . . .");
+        PartitionProgress("");
 
         GenerateMap();
     }
 
     private void ResetGeneration()
     {
-        OnMapGenerateStart?.Invoke();
-
         centerPoint = new Vector3(_GRIDSIZE / 2, 0, _GRIDSIZE / 2);
         Vector2 centerPoint2D = new Vector3(centerPoint.x, centerPoint.z);
         xBoundary = centerPoint2D;
