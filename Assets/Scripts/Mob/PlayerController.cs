@@ -92,11 +92,17 @@ public class PlayerController : MonoBehaviour
         moveZ = Input.GetAxis("Horizontal");
 
         Vector3 moveVectorNow = new Vector3(moveX, 0, moveZ);
-        if (moveVectorNow.magnitude < (moveVector.magnitude * 0.85f))
+        if (moveVectorNow.magnitude <= (moveVector.magnitude * 0.9f))
         {
-            moveVectorNow = Vector3.zero;
+            moveX = 0;
+            moveZ = 0;
+            moveVector = moveVectorNow;
+
+            _moveDirection = new Vector3(0, _moveDirection.y, 0);
+            return;
         }
         moveVector = moveVectorNow;
+
 
         float currentY = _moveDirection.y;
         _moveDirection = (_simulatedCamera.transform.forward * (moveX * 3f)) + (_simulatedCamera.transform.right * (moveZ * 3f));        
