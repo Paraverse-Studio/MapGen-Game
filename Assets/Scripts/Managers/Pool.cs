@@ -70,8 +70,6 @@ public class Pool : MonoBehaviour
             }
         }
 
-        Debug.Log("Wtf? ");
-
         // 2.0 Being here means we were out of amount, so we search for that PoolItem through list and expand it
         return MoreNeeded(nom, usePoolsFolder);        
     }
