@@ -115,10 +115,10 @@ public class MapGeneration : MonoBehaviour
     public StringEvent OnProgressChangeText = new StringEvent();
 
     #region SETTINGS_VARIABLES
-    private static int _GRIDSIZE = 1000;
+    private static int _GRIDSIZE = 750;
     private Vector3 centerPoint;
     public Vector3 CenterPoint => centerPoint;
-
+    private Vector2 centerPoint2D;
     private SO_BlockItem currentPaintingBlock;
     #endregion
 
@@ -141,17 +141,24 @@ public class MapGeneration : MonoBehaviour
     private Vector2 zBoundary;
     private Vector2 furthestBlock;
     private float furthestDistance = 0f;
+    private Camera mainCamera;
     #endregion
 
 
     private void Awake()
     {
         Instance = this;
+        
     }
 
     // Start is called before the first frame update
     void Start()
     {
+        gridOccupants = new GameObject[_GRIDSIZE, _GRIDSIZE];
+        centerPoint = new Vector3(_GRIDSIZE / 2, 0, _GRIDSIZE / 2);
+        centerPoint2D = new Vector3(centerPoint.x, centerPoint.z);
+        mainCamera = Camera.main;
+
         StartCoroutine(RegeneratePath());
     }
 
@@ -208,22 +215,20 @@ public class MapGeneration : MonoBehaviour
     {
         OnMapGenerateStart?.Invoke();
 
-        yield return new WaitForSecondsRealtime(0.02f);
-
         progressValue = -1f;
-        PartitionProgress("Initiating engine . . ."); // will increment above to 0 
+        PartitionProgress("Clearing engine . . ."); // will increment above to 0 
+
+        yield return null;
 
         ResetGeneration();
 
-        PartitionProgress("");
+        PartitionProgress("Designing grid . . .");
 
         GenerateMap();
     }
 
     private void ResetGeneration()
-    {
-        centerPoint = new Vector3(_GRIDSIZE / 2, 0, _GRIDSIZE / 2);
-        Vector2 centerPoint2D = new Vector3(centerPoint.x, centerPoint.z);
+    {                
         xBoundary = centerPoint2D;
         zBoundary = centerPoint2D;
         furthestBlock = centerPoint2D;
@@ -232,55 +237,59 @@ public class MapGeneration : MonoBehaviour
         distanceCreated = 0;
         pathingAngle = Random.Range(0f, 360f);
 
-        gridOccupants = new GameObject[_GRIDSIZE, _GRIDSIZE];
         for (int x = 0; x < _GRIDSIZE; ++x)
         {
             for (int z = 0; z < _GRIDSIZE; ++z)
             {
-                gridOccupants[x, z] = null;
+                if (gridOccupants[x, z] != null)
+                {
+                    gridOccupants[x, z].gameObject.SetActive(false);
+                    gridOccupants[x, z] = null;
+                }
             }
         }
 
         line.positionCount = 0;
-
         currentPaintingBlock = blocks.grass;
 
         if (allObjects.Count > 0)
         {
             for (int i = allObjects.Count - 1; i >= 0; --i)
             {
-                allObjects[i].SetActive(false);
-                allObjects[i] = null;
+                //allObjects[i].SetActive(false);
+                allObjects.RemoveAt(i);
             }
+            allObjects = new List<GameObject>();
         }
+
         if (pathObjects.Count > 0)
         {
             for (int i = pathObjects.Count - 1; i >= 0; --i)
             {
-                pathObjects[i].SetActive(false);
-                pathObjects[i] = null;
+                //pathObjects[i].SetActive(false);
+                pathObjects.RemoveAt(i);
             }
+            pathObjects = new List<GameObject>();
         }
+
         if (treeObjects.Count > 0)
         {
             for (int i = treeObjects.Count - 1; i >= 0; --i)
             {
                 Destroy(treeObjects[i]);
             }
-        }
-        if (foundationObjects.Count > 0)
-        {
-            for (int i = foundationObjects.Count - 1; i >=0; --i)
-            {
-                foundationObjects[i].SetActive(false);
-                foundationObjects[i] = null;
-            }
+            treeObjects = new List<GameObject>();
         }
 
-        foundationObjects = new List<GameObject>();
-        pathObjects = new List<GameObject>();
-        allObjects = new List<GameObject>();
-        treeObjects = new List<GameObject>();
+        if (foundationObjects.Count > 0)
+        {
+            for (int i = foundationObjects.Count - 1; i >= 0; --i)
+            {
+                foundationObjects[i].SetActive(false);
+                foundationObjects.RemoveAt(i);
+            }
+            foundationObjects = new List<GameObject>();
+        }
     }
 
 
@@ -513,6 +522,24 @@ public class MapGeneration : MonoBehaviour
         return extremestY;
     }
 
+    private bool IsAdjacentOccupied(Vector3 src)
+    {
+        for (int x = -1; x < 2; ++x)
+        {
+            for (int z = -1; z < 2; ++z)
+            {
+                Vector3 areaToCheck = new Vector3(src.x + x, 0, src.z + z);
+                GameObject objectToCheck = gridOccupants[(int)areaToCheck.x, (int)areaToCheck.z];
+
+                if (objectToCheck == null)
+                {
+                    return false;
+                }
+            }
+        }
+        return true;
+    }
+
     private void PaintDirtPath()
     {
         for (int i = 0; i < pathObjects.Count; i++)
@@ -598,7 +625,9 @@ public class MapGeneration : MonoBehaviour
     {
         int size = allObjects.Count;
         for (int i = 0; i < size; ++i) 
-        {              
+        {
+            if (IsAdjacentOccupied(allObjects[i].gameObject.transform.position)) continue;
+
             int yLevel = (int)(allObjects[i].transform.position.y);
 
             GameObject foundationBlock = Pool.Instance.Instantiate(foundationPrefabs[Random.Range(0, foundationPrefabs.Length)].name,
@@ -622,9 +651,10 @@ public class MapGeneration : MonoBehaviour
         if (allObjects.Count == 0) return;
 
         Vector3 firstSpawnedObject = allObjects[0].transform.position;
-        float lastSpawnedObjectDistance = Vector2.Distance(firstSpawnedObject, pos);
+        Vector2 firstSpawnedObject2D = new Vector2(firstSpawnedObject.x, firstSpawnedObject.z);
+        float lastSpawnedObjectDistance = Vector2.Distance(firstSpawnedObject2D, pos);
 
-        if (lastSpawnedObjectDistance > Vector2.Distance(firstSpawnedObject, furthestBlock))
+        if (lastSpawnedObjectDistance > Vector2.Distance(firstSpawnedObject2D, furthestBlock))
         {
             furthestBlock = new Vector2(pos.x, pos.z);
             furthestDistance = lastSpawnedObjectDistance;
