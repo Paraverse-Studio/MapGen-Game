@@ -126,7 +126,8 @@ public class PlayerController : MonoBehaviour
 
             if (MapGeneration.Instance && _body.transform.position.y < ((MapGeneration.Instance.lumpApplicationRounds / 2.0f)-2.0f))
             {
-                TeleportPlayer(_lastSafePosition);
+                if (_lastSafePosition != Vector3.zero) TeleportPlayer(_lastSafePosition);
+                else TeleportPlayer();
             }
 
             //else if (_moveDirection.y < 0)

@@ -174,10 +174,12 @@ public class MapGeneration : MonoBehaviour
     private void GenerateMap() => StartCoroutine(EnumeratorGenerateMap());
     private IEnumerator EnumeratorGenerateMap()
     {
-        //Grass base series
-       currentPaintingBlock = blocks.grass;
+        yield return null;
 
-        SpawnPath();        
+        //Grass base series
+        currentPaintingBlock = blocks.grass;
+
+        SpawnPath();
         PartitionProgress("Propagating base . . .");
 
         ThickenPath();
@@ -201,11 +203,11 @@ public class MapGeneration : MonoBehaviour
         AddProps();
         PartitionProgress("Finalizing . . .");
 
-        // Foundation series
+        //Foundation series
         AddFoundationLayer();
 
         OnMapGenerateEnd?.Invoke();
-        yield return new WaitForSecondsRealtime(0.9f);
+        yield return new WaitForSeconds(0.5f);
         OnScreenReady?.Invoke();
 
     }
@@ -224,7 +226,7 @@ public class MapGeneration : MonoBehaviour
 
         PartitionProgress("Designing grid . . .");
 
-        GenerateMap();
+        StartCoroutine(EnumeratorGenerateMap());
     }
 
     private void ResetGeneration()
