@@ -109,7 +109,8 @@ public class MapGeneration : MonoBehaviour
     public UnityEvent OnMapGenerateStart = new UnityEvent();
     public UnityEvent OnMapGenerateEnd = new UnityEvent();
     public UnityEvent OnScreenReady = new UnityEvent();
-    
+    public FloatFloatEvent OnProgressChange = new FloatFloatEvent();
+    public StringEvent OnProgressChangeText = new StringEvent();
 
     #region SETTINGS_VARIABLES
     private static int _GRIDSIZE = 1000;
@@ -127,6 +128,10 @@ public class MapGeneration : MonoBehaviour
     private List<GameObject> allObjects = new List<GameObject>();
     private List<GameObject> pathObjects = new List<GameObject>();
     private List<GameObject> treeObjects = new List<GameObject>();
+
+    private float progressValue;
+    private float progressTotal = 8f;
+    private float waitTime = 0.1f;
 
     // Need to be initialized
     private Vector2 xBoundary;
@@ -159,41 +164,42 @@ public class MapGeneration : MonoBehaviour
     private void GenerateMap() => StartCoroutine(EnumeratorGenerateMap());
     private IEnumerator EnumeratorGenerateMap()
     {
-        OnMapGenerateStart?.Invoke();
-
         //Grass base series
        currentPaintingBlock = blocks.grass;
 
-        SpawnPath();
+        SpawnPath();        
         yield return null;
+        PartitionProgress("Propagating base . . .");
 
         ThickenPath();
         yield return null;
+        PartitionProgress("Generating area . . .");
 
         ThickenAroundObject(pathObjects[pathObjects.Count - 1], 0, grassFillRadius);
         yield return null;
+        PartitionProgress("Building depth . . .");
 
         AddRandomLumps();
         yield return null;
+        PartitionProgress("Drawing path . . .");
 
         //Dirt series
         currentPaintingBlock = blocks.dirt;
 
         PaintDirtPath();
         yield return null;
+        PartitionProgress("Updating materials . . .");
 
         ApplyRandomElevation();
         yield return null;
+        PartitionProgress("Placing props/items . . .");
 
-        if (showProps)
-        {
-            AddProps();
-            yield return null;
-        }
-
+        AddProps();
+        yield return null;
+        PartitionProgress("Finalizing . . .");
 
         OnMapGenerateEnd?.Invoke();
-        yield return new WaitForSeconds(0.5f);
+        yield return new WaitForSecondsRealtime(0.85f);
         OnScreenReady?.Invoke();
 
     }
@@ -201,7 +207,12 @@ public class MapGeneration : MonoBehaviour
     [Button]
     public void RegeneratePath()
     {
+        progressValue = -1f;
+        PartitionProgress("Clearing cache . . ."); // will increment above to 0 
+
         ResetGeneration();
+
+        PartitionProgress("Initiating engine . . .");
 
         GenerateMap();
     }
@@ -688,7 +699,12 @@ public class MapGeneration : MonoBehaviour
         return closest;
     }
 
-
+    private void PartitionProgress(string va)
+    {
+        progressValue++;
+        OnProgressChange?.Invoke(progressValue, progressTotal);
+        OnProgressChangeText?.Invoke(va);
+    }
 
 
 }
