@@ -1,2 +1,2 @@
 # MapGen-Game
- Studying/experimenting with procedurally generating maps for a game
+ Untitled (November 2021). Developing a game based around studying/experimenting with procedurally generating maps.
