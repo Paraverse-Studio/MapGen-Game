@@ -77,7 +77,7 @@ public class MapGeneration : MonoBehaviour
     [Range(0, 40)]
     public int lumpDensity;
 
-    public int lumpApplicationRounds = 4;
+    public int lumpApplicationRounds = 3;
 
     [MinMaxSlider(0f, 100f)]
     public Vector2 lumpRadius;
@@ -117,7 +117,7 @@ public class MapGeneration : MonoBehaviour
     public StringEvent OnProgressChangeText = new StringEvent();
 
     #region SETTINGS_VARIABLES
-    private static int _GRIDSIZE = 220; // should be double of distance
+    private int _GRIDSIZE; // should be double of distance
     private Vector3 centerPoint;
     public Vector3 CenterPoint => centerPoint;
     private Vector2 centerPoint2D;
@@ -144,7 +144,7 @@ public class MapGeneration : MonoBehaviour
     // Need to be initialized
     private Vector2 xBoundary;
     private Vector2 zBoundary;
-    private Vector2 yBoundary =>
+    public Vector2 yBoundary =>
     new Vector2(lumpApplicationRounds / 2.0f, -lumpApplicationRounds / 2.0f);        
     
     private Vector2 furthestBlock;
@@ -155,7 +155,8 @@ public class MapGeneration : MonoBehaviour
 
     private void Awake()
     {
-        Instance = this;        
+        Instance = this;
+        _GRIDSIZE = (int)(distanceOfPath * 2.1f);
     }
 
     // Start is called before the first frame update
@@ -530,8 +531,11 @@ public class MapGeneration : MonoBehaviour
                         float extremeY;
                         extremeY = GetAdjacentElevation(upOrDown ? ElevationLevel.lowest : ElevationLevel.highest, potentialObj);
 
+                        float yValue = extremeY + (upOrDown ? 1 : -1);
+                        yValue = Mathf.Clamp(yValue, yBoundary.y, yBoundary.x);
+
                         potentialObj.transform.position =
-                            new Vector3(potentialObj.transform.position.x, extremeY + (upOrDown ? 1 : -1), potentialObj.transform.position.z);
+                            new Vector3(potentialObj.transform.position.x, yValue, potentialObj.transform.position.z);
                     }
                 }
             }
@@ -659,11 +663,11 @@ public class MapGeneration : MonoBehaviour
 
     private void AddWaterToDips()
     {
-        float yLevelToMeasure = Mathf.Round(yBoundary.y); 
+        float yLevelToMeasure = -1; // Mathf.Round(yBoundary.y); 
 
         for (int i = 0; i < allObjects.Count; ++i)
         {
-            if (Mathf.Round(allObjects[i].transform.position.y) == yLevelToMeasure)
+            if ((int)(Mathf.Round(allObjects[i].transform.position.y)) == (int)yLevelToMeasure)
             {
                 Vector3 spawnSpot = new Vector3(allObjects[i].transform.position.x, 
                                                     yLevelToMeasure + 1,
