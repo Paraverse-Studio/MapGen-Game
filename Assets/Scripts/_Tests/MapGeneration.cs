@@ -145,7 +145,8 @@ public class MapGeneration : MonoBehaviour
     private Vector2 xBoundary;
     private Vector2 zBoundary;
     public Vector2 yBoundary =>
-    new Vector2(lumpApplicationRounds / 2.0f, -lumpApplicationRounds / 2.0f);        
+    new Vector2(Mathf.Ceil(lumpApplicationRounds / 2.0f), 
+                Mathf.Ceil(-lumpApplicationRounds / 2.0f));        
     
     private Vector2 furthestBlock;
     private float furthestDistance = 0f;
@@ -163,7 +164,7 @@ public class MapGeneration : MonoBehaviour
     void Start()
     {
         gridOccupants = new GameObject[_GRIDSIZE, _GRIDSIZE];
-        centerPoint = new Vector3(_GRIDSIZE / 2, 0, _GRIDSIZE / 2);
+        centerPoint = new Vector3((int)(_GRIDSIZE / 2), 0, (int)(_GRIDSIZE / 2));
         centerPoint2D = new Vector3(centerPoint.x, centerPoint.z);
 
         RegeneratePath();
