@@ -133,6 +133,7 @@ public class MapGeneration : MonoBehaviour
     private List<GameObject> foundationObjects = new List<GameObject>();
 
     private float progressValue;
+    private int progressTotalCounter = 0;
     private float progressTotal = 10f;
     private float waitTime = 0.1f;
 
@@ -185,18 +186,18 @@ public class MapGeneration : MonoBehaviour
         yield return new WaitForSeconds(processesDelay);
 
         ThickenAroundObject(pathObjects[pathObjects.Count - 1], 0, grassFillRadius);
-        PartitionProgress("");
+        PartitionProgress();
         yield return new WaitForSeconds(processesDelay);
 
         AddRandomLumps();
-        PartitionProgress("");
+        PartitionProgress();
         yield return new WaitForSeconds(processesDelay);
 
         //Dirt series
         currentPaintingBlock = blocks.dirt;
 
         PaintDirtPath();
-        PartitionProgress("");
+        PartitionProgress();
         yield return new WaitForSeconds(processesDelay);
 
         ApplyRandomElevation();
@@ -204,7 +205,7 @@ public class MapGeneration : MonoBehaviour
         yield return new WaitForSeconds(processesDelay);
 
         AddProps();
-        PartitionProgress("");
+        PartitionProgress();
         yield return new WaitForSeconds(processesDelay);
 
         AddFoundationLayer();
@@ -239,6 +240,7 @@ public class MapGeneration : MonoBehaviour
         zBoundary = centerPoint2D;
         furthestBlock = centerPoint2D;
         furthestDistance = 0;
+        progressTotalCounter = 0;
 
         distanceCreated = 0;
         pathingAngle = Random.Range(0f, 360f);
@@ -288,7 +290,51 @@ public class MapGeneration : MonoBehaviour
         PartitionProgress("Initiating map engine...");
         yield return new WaitForSeconds(processesDelay);
 
-        StartCoroutine(GenerateMap());
+        //Grass base series
+        currentPaintingBlock = blocks.grass;
+
+        SpawnPath();
+        PartitionProgress("Adding base...");
+        yield return new WaitForSeconds(processesDelay);
+
+        ThickenPath();
+        PartitionProgress("Generating area...");
+        yield return new WaitForSeconds(processesDelay);
+
+        ThickenAroundObject(pathObjects[pathObjects.Count - 1], 0, grassFillRadius);
+        PartitionProgress();
+        yield return new WaitForSeconds(processesDelay);
+
+        AddRandomLumps();
+        PartitionProgress();
+        yield return new WaitForSeconds(processesDelay);
+
+        //Dirt series
+        currentPaintingBlock = blocks.dirt;
+
+        PaintDirtPath();
+        PartitionProgress();
+        yield return new WaitForSeconds(processesDelay);
+
+        ApplyRandomElevation();
+        PartitionProgress("Placing props/items...");
+        yield return new WaitForSeconds(processesDelay);
+
+        AddProps();
+        PartitionProgress();
+        yield return new WaitForSeconds(processesDelay);
+
+        AddFoundationLayer();
+        PartitionProgress("Finalizing...");
+        yield return new WaitForSeconds(processesDelay);
+
+        progressTotal = progressTotalCounter;
+
+        OnMapGenerateEnd?.Invoke();
+
+        yield return new WaitForSeconds(0.8f);
+
+        OnScreenReady?.Invoke();
     }
 
 
@@ -342,7 +388,7 @@ public class MapGeneration : MonoBehaviour
     {
         for (int i = 0; i < pathObjects.Count; i++)
         {
-            ThickenAroundObject(pathObjects[i], i, grassFillRadius);
+            ThickenAroundObject(pathObjects[i], i, grassFillRadius);  
         }
     }
 
@@ -763,8 +809,9 @@ public class MapGeneration : MonoBehaviour
         return closest;
     }
 
-    private void PartitionProgress(string va)
+    private void PartitionProgress(string va = "")
     {
+        progressTotalCounter++;
         progressValue++;
         OnProgressChange?.Invoke(progressValue, progressTotal);
         OnProgressChangeText?.Invoke(va);

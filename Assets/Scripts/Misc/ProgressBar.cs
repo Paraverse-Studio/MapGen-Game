@@ -28,11 +28,6 @@ public class ProgressBar : MonoBehaviour
     void Update()
     {
         bar.fillAmount = _progress / _total; // Mathf.SmoothDamp(bar.fillAmount, _progress / _total, ref _velocity, 0.2f);
-
-        if (Time.frameCount % 3 == 0)
-        {
-            if (_progress != _total && wholeBar.gameObject.activeSelf == false) wholeBar.gameObject.SetActive(true);
-        }
         
         texts[0].text = !string.IsNullOrEmpty(_specificText) ? _specificText : "Loading . . .";
         texts[1].text = ((int)((_progress / _total) * 100.0f)) + "%";        
