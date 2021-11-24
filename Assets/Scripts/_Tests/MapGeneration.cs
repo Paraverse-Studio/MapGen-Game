@@ -108,9 +108,11 @@ public class MapGeneration : MonoBehaviour
     public float treeChanceGrowthRate = 5.0f;
 
     [Space(25)]
+    public UnityEvent OnScreenStart = new UnityEvent();
     public UnityEvent OnMapGenerateStart = new UnityEvent();
     public UnityEvent OnMapGenerateEnd = new UnityEvent();
     public UnityEvent OnScreenReady = new UnityEvent();
+
     public FloatFloatEvent OnProgressChange = new FloatFloatEvent();
     public StringEvent OnProgressChangeText = new StringEvent();
 
@@ -225,11 +227,12 @@ public class MapGeneration : MonoBehaviour
     [Button]
     public IEnumerator ERegeneratePath()
     {
-        OnMapGenerateStart?.Invoke();
+        OnScreenStart?.Invoke();           
         progressValue = -1f;
 
-        PartitionProgress("Cache cleared."); // will increment above to 0 
         yield return new WaitForSeconds(0.8f);
+
+        OnMapGenerateStart?.Invoke();
 
         StartCoroutine(ResetGeneration());
     }
@@ -260,11 +263,6 @@ public class MapGeneration : MonoBehaviour
             }
         }
 
-
-        PartitionProgress("Object lists loaded.");
-        yield return new WaitForSeconds(processesDelay);
-
-
         allObjects.Clear();
         pathObjects.Clear();
 
@@ -277,6 +275,9 @@ public class MapGeneration : MonoBehaviour
         }
         treeObjects.Clear();
 
+        PartitionProgress();
+        yield return null;
+
         if (foundationObjects.Count > 0)
         {
             for (int i = foundationObjects.Count - 1; i >= 0; --i)
@@ -287,14 +288,16 @@ public class MapGeneration : MonoBehaviour
         foundationObjects.Clear();
 
 
+
         PartitionProgress("Initiating map engine...");
         yield return new WaitForSeconds(processesDelay);
+
 
         //Grass base series
         currentPaintingBlock = blocks.grass;
 
         SpawnPath();
-        PartitionProgress("Adding base...");
+        PartitionProgress("Forming baseline...");
         yield return new WaitForSeconds(processesDelay);
 
         ThickenPath();
@@ -306,18 +309,18 @@ public class MapGeneration : MonoBehaviour
         yield return new WaitForSeconds(processesDelay);
 
         AddRandomLumps();
-        PartitionProgress();
+        PartitionProgress("Modeling beziers...");
         yield return new WaitForSeconds(processesDelay);
 
         //Dirt series
         currentPaintingBlock = blocks.dirt;
 
         PaintDirtPath();
-        PartitionProgress();
+        PartitionProgress("Shaping map...");
         yield return new WaitForSeconds(processesDelay);
 
         ApplyRandomElevation();
-        PartitionProgress("Placing props/items...");
+        PartitionProgress("Spawning props...");
         yield return new WaitForSeconds(processesDelay);
 
         AddProps();
@@ -328,7 +331,7 @@ public class MapGeneration : MonoBehaviour
         PartitionProgress("Finalizing...");
         yield return new WaitForSeconds(processesDelay);
 
-        progressTotal = progressTotalCounter;
+        progressTotal = progressTotalCounter-1;
 
         OnMapGenerateEnd?.Invoke();
 
