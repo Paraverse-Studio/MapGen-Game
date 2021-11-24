@@ -117,7 +117,7 @@ public class MapGeneration : MonoBehaviour
     public StringEvent OnProgressChangeText = new StringEvent();
 
     #region SETTINGS_VARIABLES
-    private static int _GRIDSIZE = 200; // should be double of distance
+    private static int _GRIDSIZE = 220; // should be double of distance
     private Vector3 centerPoint;
     public Vector3 CenterPoint => centerPoint;
     private Vector2 centerPoint2D;
@@ -659,11 +659,15 @@ public class MapGeneration : MonoBehaviour
 
     private void AddWaterToDips()
     {
+        float yLevelToMeasure = Mathf.Round(yBoundary.y); 
+
         for (int i = 0; i < allObjects.Count; ++i)
         {
-            if (Mathf.Round(allObjects[i].transform.position.y) == Mathf.Ceil(yBoundary.y))
+            if (Mathf.Round(allObjects[i].transform.position.y) == yLevelToMeasure)
             {
-                Vector3 spawnSpot = allObjects[i].transform.position + new Vector3(0, 1, 0);
+                Vector3 spawnSpot = new Vector3(allObjects[i].transform.position.x, 
+                                                    yLevelToMeasure + 1,
+                                                allObjects[i].transform.position.z);
 
                 GameObject waterObj = Spawn(spawnSpot, true);
 
