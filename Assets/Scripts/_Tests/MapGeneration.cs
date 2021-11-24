@@ -173,7 +173,6 @@ public class MapGeneration : MonoBehaviour
 
     private void GenerateMap() 
     {
-
         //Grass base series
         currentPaintingBlock = blocks.grass;
 
@@ -204,11 +203,9 @@ public class MapGeneration : MonoBehaviour
         //Foundation series
         AddFoundationLayer();
 
-        OnMapGenerateEnd?.Invoke();
-
-        
-
+        OnMapGenerateEnd?.Invoke(); 
     }
+
 
     public void RegeneratePath() => StartCoroutine(ERegeneratePath());
 
@@ -220,7 +217,7 @@ public class MapGeneration : MonoBehaviour
         progressValue = -1f;
         PartitionProgress("Commencing engine . . ."); // will increment above to 0 
 
-        yield return null;
+        yield return new WaitForSeconds(0.8f);
 
         PartitionProgress("Clearing engine . . ."); // will increment above to 0 
 
@@ -230,7 +227,7 @@ public class MapGeneration : MonoBehaviour
 
         GenerateMap();
 
-        yield return new WaitForSeconds(0.3f);
+        yield return new WaitForSeconds(0.8f);
 
         OnScreenReady?.Invoke();
     }
@@ -607,10 +604,12 @@ public class MapGeneration : MonoBehaviour
                 int randomXOffset = Random.Range(-treeSpawnOffset, treeSpawnOffset);
                 int randomZOffset = Random.Range(-treeSpawnOffset, treeSpawnOffset);
 
-                Vector3 spawnSpot = new Vector3(
-                    Mathf.Round(x) + randomXOffset,
-                    gridOccupants[x, z].transform.position.y,
-                    Mathf.Round(z) + randomZOffset);
+                int newX = (int)Mathf.Round(x + randomXOffset);
+                int newZ = (int)Mathf.Round(z + randomZOffset);
+
+                if (null == gridOccupants[newX, newZ]) continue;
+
+                Vector3 spawnSpot = new Vector3(newX, gridOccupants[newX, newZ].transform.position.y, newZ);
 
                 // Lastly, distance from path: by default, the chance to spawn a tree is 0%, but increases by
                 // 5% for every distance unit away from the closest path block 
@@ -676,15 +675,18 @@ public class MapGeneration : MonoBehaviour
         }
     }
 
+
     private void UpdateLine()
     {
-        if (Time.frameCount % 60 != 0) return;
+        if (Time.frameCount % 120 != 0) return;
 
         if (!drawLine)
         {
             line.positionCount = 0;
             return;
         }
+
+        if (allObjects.Count == 0) return;
 
         Vector3 raiseLevel = new Vector3(0, 0.9f, 0);
         int size = pathObjects.Count;

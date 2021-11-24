@@ -51,9 +51,9 @@ public class ProgressBar : MonoBehaviour
 
         if (wholeBar.gameObject.activeSelf == true)
         {
-            bar.fillAmount += (Time.deltaTime / 4.0f);
+            //bar.fillAmount += (Time.deltaTime / 4.0f);
             texts[0].text = "Generating map . . .";
-            texts[1].text = ((int)((bar.fillAmount)*100.0f)) + "%";
+            //texts[1].text = ((int)((bar.fillAmount)*100.0f)) + "%";
 
             if (bar.fillAmount > 0.99f) wholeBar.gameObject.SetActive(false);
             
@@ -68,6 +68,13 @@ public class ProgressBar : MonoBehaviour
         _progress = 0f;
         _total = 0.001f;
         bar.fillAmount = 0f;
+        texts[0].text = ""; 
+        texts[1].text = "";
+    }
+
+    public void OnProgressEndBar()
+    {
+        wholeBar.gameObject.SetActive(false);
     }
 
     public void OnProgressSetText(string progressText)

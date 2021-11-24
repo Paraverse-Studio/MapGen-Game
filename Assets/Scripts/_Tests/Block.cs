@@ -69,6 +69,7 @@ public class Block : MonoBehaviour
             UpdateBlock();
         }
     }
+
     public void UpdateBlock()
     {
         if (!type) return;
@@ -121,9 +122,9 @@ public class Block : MonoBehaviour
 
                 // Apply the edited values to the renderer
                 _renderer.SetPropertyBlock(_propBlock);
-            }            
+            }
         }
-        
+
         if (overrideSettings.overridePrefab || type.prefabVariations.Length > 0)
         {
             if (transform.childCount > 0)
@@ -151,7 +152,9 @@ public class Block : MonoBehaviour
             _currentPrefab.transform.localPosition = new Vector3(0, 0.5f - 0.1f, 0);
             _currentPrefab.transform.localRotation = Quaternion.identity;
             _currentPrefab.transform.localScale = Vector3.one;
-        }       
+        }
+
+        UpdateReferences();
 
     }
 
@@ -160,7 +163,7 @@ public class Block : MonoBehaviour
         transform.localScale = type.defaultScale;
         if (overrideSettings.overrideScale != Vector3.zero)
         {
-            if (transform.childCount > 0) 
+            if (transform.childCount > 0)
             {
                 transform.GetChild(0).localScale = overrideSettings.overrideScale;
             }
@@ -170,4 +173,6 @@ public class Block : MonoBehaviour
             }
         }
     }
+
+
 }
