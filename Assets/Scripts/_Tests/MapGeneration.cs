@@ -115,7 +115,7 @@ public class MapGeneration : MonoBehaviour
     public StringEvent OnProgressChangeText = new StringEvent();
 
     #region SETTINGS_VARIABLES
-    private static int _GRIDSIZE = 750;
+    private static int _GRIDSIZE = 200; //750
     private Vector3 centerPoint;
     public Vector3 CenterPoint => centerPoint;
     private Vector2 centerPoint2D;
@@ -202,20 +202,26 @@ public class MapGeneration : MonoBehaviour
         PartitionProgress("Finalizing . . .");
 
         //Foundation series
-        //AddFoundationLayer();
+        AddFoundationLayer();
 
         OnMapGenerateEnd?.Invoke();
 
-        OnScreenReady?.Invoke();
+        
 
     }
 
-    [Button]
-    public void RegeneratePath()
-    {
-        OnMapGenerateStart?.Invoke();
+    public void RegeneratePath() => StartCoroutine(ERegeneratePath());
 
+    [Button]
+    public IEnumerator ERegeneratePath()
+    {
+
+        OnMapGenerateStart?.Invoke();
         progressValue = -1f;
+        PartitionProgress("Commencing engine . . ."); // will increment above to 0 
+
+        yield return null;
+
         PartitionProgress("Clearing engine . . ."); // will increment above to 0 
 
         ResetGeneration();
@@ -223,6 +229,10 @@ public class MapGeneration : MonoBehaviour
         PartitionProgress("Designing grid . . .");
 
         GenerateMap();
+
+        yield return new WaitForSeconds(0.3f);
+
+        OnScreenReady?.Invoke();
     }
 
     private void ResetGeneration()
@@ -241,7 +251,6 @@ public class MapGeneration : MonoBehaviour
             {
                 if (gridOccupants[x, z] != null)
                 {
-                    gridOccupants[x, z].gameObject.SetActive(false);
                     gridOccupants[x, z] = null;
                 }
             }
@@ -254,7 +263,7 @@ public class MapGeneration : MonoBehaviour
         {
             for (int i = allObjects.Count - 1; i >= 0; --i)
             {
-                //allObjects[i].SetActive(false);
+                allObjects[i].SetActive(false);
                 allObjects.RemoveAt(i);
             }
             allObjects = new List<GameObject>();
@@ -264,7 +273,7 @@ public class MapGeneration : MonoBehaviour
         {
             for (int i = pathObjects.Count - 1; i >= 0; --i)
             {
-                //pathObjects[i].SetActive(false);
+                pathObjects[i].SetActive(false);
                 pathObjects.RemoveAt(i);
             }
             pathObjects = new List<GameObject>();
@@ -279,16 +288,15 @@ public class MapGeneration : MonoBehaviour
             treeObjects = new List<GameObject>();
         }
 
-        //if (foundationObjects.Count > 0)
-        //{
-        //    for (int i = foundationObjects.Count - 1; i >= 0; --i)
-        //    {
-        //        //foundationObjects[i].SetActive(false);
-        //        foundationObjects[i].transform.position -= new Vector3(0, 50000, 0);
-        //        foundationObjects.RemoveAt(i);
-        //    }
-        //    //foundationObjects = new List<GameObject>();
-        //}
+        if (foundationObjects.Count > 0)
+        {
+            for (int i = foundationObjects.Count - 1; i >= 0; --i)
+            {
+                foundationObjects[i].SetActive(false);
+                foundationObjects.RemoveAt(i);
+            }
+            foundationObjects = new List<GameObject>();
+        }
     }
 
 
@@ -631,7 +639,7 @@ public class MapGeneration : MonoBehaviour
 
             GameObject foundationBlock = Pool.Instance.Instantiate(foundationPrefabs[Random.Range(0, foundationPrefabs.Length)].name,
                 new Vector3(allObjects[i].transform.position.x,
-                yLevel - 0.5f, allObjects[i].transform.position.z), Quaternion.identity, true, true);          
+                yLevel - 0.5f, allObjects[i].transform.position.z), Quaternion.identity);          
 
             if (foundationBlock) foundationObjects.Add(foundationBlock);            
         }
