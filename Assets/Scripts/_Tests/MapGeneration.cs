@@ -245,58 +245,66 @@ public class MapGeneration : MonoBehaviour
         distanceCreated = 0;
         pathingAngle = Random.Range(0f, 360f);
 
+        line.positionCount = 0;
+        currentPaintingBlock = blocks.grass;
+
         for (int x = 0; x < _GRIDSIZE; ++x)
         {
             for (int z = 0; z < _GRIDSIZE; ++z)
             {
                 if (gridOccupants[x, z] != null)
                 {
+                    gridOccupants[x, z].gameObject.SetActive(false);
                     gridOccupants[x, z] = null;
                 }
             }
         }
 
-        line.positionCount = 0;
-        currentPaintingBlock = blocks.grass;
+        //gridOccupants = new GameObject[_GRIDSIZE, _GRIDSIZE];
 
-        if (allObjects.Count > 0)
-        {
-            for (int i = allObjects.Count - 1; i >= 0; --i)
-            {
-                allObjects[i].SetActive(false);
-                allObjects.RemoveAt(i);
-            }
-            allObjects = new List<GameObject>();
-        }
+        allObjects.Clear();
+        pathObjects.Clear();
 
-        if (pathObjects.Count > 0)
-        {
-            for (int i = pathObjects.Count - 1; i >= 0; --i)
-            {
-                pathObjects[i].SetActive(false);
-                pathObjects.RemoveAt(i);
-            }
-            pathObjects = new List<GameObject>();
-        }
+
+        //if (allObjects.Count > 0)
+        //{
+        //    for (int i = allObjects.Count - 1; i >= 0; --i)
+        //    {
+        //        allObjects[i].SetActive(false);
+        //        allObjects.RemoveAt(i);
+        //    }
+        //    allObjects = new List<GameObject>();
+        //}
+
+
+        //if (pathObjects.Count > 0)
+        //{
+        //    for (int i = pathObjects.Count - 1; i >= 0; --i)
+        //    {
+        //        pathObjects[i].SetActive(false);
+        //        pathObjects.RemoveAt(i);
+        //    }
+        //    pathObjects = new List<GameObject>();
+        //}
 
         if (treeObjects.Count > 0)
         {
             for (int i = treeObjects.Count - 1; i >= 0; --i)
             {
                 Destroy(treeObjects[i]);
-            }
-            treeObjects = new List<GameObject>();
+            }            
         }
+        treeObjects.Clear();
 
         if (foundationObjects.Count > 0)
         {
             for (int i = foundationObjects.Count - 1; i >= 0; --i)
             {
                 foundationObjects[i].SetActive(false);
-                foundationObjects.RemoveAt(i);
             }
-            foundationObjects = new List<GameObject>();
         }
+        foundationObjects.Clear();
+
     }
 
 
