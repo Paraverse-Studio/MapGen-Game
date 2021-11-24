@@ -30,7 +30,17 @@ public class ProgressBar : MonoBehaviour
         bar.fillAmount = _progress / _total; // Mathf.SmoothDamp(bar.fillAmount, _progress / _total, ref _velocity, 0.2f);
         
         texts[0].text = !string.IsNullOrEmpty(_specificText) ? _specificText : "Loading . . .";
-        texts[1].text = ((int)((_progress / _total) * 100.0f)) + "%";        
+
+        float val = (_progress / _total);
+        if (val != 0)
+        {
+            texts[1].text = ((int)(val * 100.0f)) + "%";
+        }
+        else
+        {
+            texts[1].text = "";
+        }
+
     }
 
     public void OnProgressStartBar()

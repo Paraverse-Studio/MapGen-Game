@@ -117,7 +117,7 @@ public class MapGeneration : MonoBehaviour
     public StringEvent OnProgressChangeText = new StringEvent();
 
     #region SETTINGS_VARIABLES
-    private static int _GRIDSIZE = 200; //750
+    private static int _GRIDSIZE = 200; // should be double of distance
     private Vector3 centerPoint;
     public Vector3 CenterPoint => centerPoint;
     private Vector2 centerPoint2D;
@@ -134,6 +134,7 @@ public class MapGeneration : MonoBehaviour
     private List<GameObject> pathObjects = new List<GameObject>();
     private List<GameObject> treeObjects = new List<GameObject>();
     private List<GameObject> foundationObjects = new List<GameObject>();
+    private List<GameObject> waterObjects = new List<GameObject>();
 
     private float progressValue;
     private int progressTotalCounter = 0;
@@ -143,16 +144,18 @@ public class MapGeneration : MonoBehaviour
     // Need to be initialized
     private Vector2 xBoundary;
     private Vector2 zBoundary;
+    private Vector2 yBoundary =>
+    new Vector2(lumpApplicationRounds / 2.0f, -lumpApplicationRounds / 2.0f);        
+    
     private Vector2 furthestBlock;
     private float furthestDistance = 0f;
-    private Camera mainCamera;
+
     #endregion
 
 
     private void Awake()
     {
-        Instance = this;
-        
+        Instance = this;        
     }
 
     // Start is called before the first frame update
@@ -161,7 +164,6 @@ public class MapGeneration : MonoBehaviour
         gridOccupants = new GameObject[_GRIDSIZE, _GRIDSIZE];
         centerPoint = new Vector3(_GRIDSIZE / 2, 0, _GRIDSIZE / 2);
         centerPoint2D = new Vector3(centerPoint.x, centerPoint.z);
-        mainCamera = Camera.main;
 
         RegeneratePath();
     }
@@ -221,14 +223,13 @@ public class MapGeneration : MonoBehaviour
     //    OnScreenReady?.Invoke();
     //}
     
-    [Button]
     public void RegeneratePath() => StartCoroutine(ERegeneratePath());
-
     
     public IEnumerator ERegeneratePath()
     {
-        OnScreenStart?.Invoke();           
-        progressValue = -1f;
+        OnScreenStart?.Invoke();
+
+        ResetVariables();
 
         yield return new WaitForSeconds(0.9f);
 
@@ -237,8 +238,10 @@ public class MapGeneration : MonoBehaviour
         StartCoroutine(ResetGeneration());
     }
 
-    private IEnumerator ResetGeneration()
-    {      
+    private void ResetVariables()
+    {
+        progressValue = -1f;
+
         xBoundary = centerPoint2D;
         zBoundary = centerPoint2D;
         furthestBlock = centerPoint2D;
@@ -250,7 +253,11 @@ public class MapGeneration : MonoBehaviour
 
         line.positionCount = 0;
         currentPaintingBlock = blocks.grass;
+    }
 
+    private IEnumerator ResetGeneration()
+    {             
+        // Resetting object lists
         for (int x = 0; x < _GRIDSIZE; ++x)
         {
             for (int z = 0; z < _GRIDSIZE; ++z)
@@ -275,8 +282,8 @@ public class MapGeneration : MonoBehaviour
         }
         treeObjects.Clear();
 
-        PartitionProgress();
-        yield return null;
+        //PartitionProgress();
+        //yield return null;
 
         if (foundationObjects.Count > 0)
         {
@@ -287,13 +294,23 @@ public class MapGeneration : MonoBehaviour
         }
         foundationObjects.Clear();
 
+        if (waterObjects.Count > 0)
+        {
+            for (int i = waterObjects.Count - 1; i >= 0; --i)
+            {
+                waterObjects[i].SetActive(false);
+            }
+        }
+        waterObjects.Clear();
+
 
 
         PartitionProgress("Initiating map engine...");
         yield return new WaitForSeconds(processesDelay);
 
 
-        //Grass base series
+        /* * * * * CREATION OF MAP * * * * */
+
         currentPaintingBlock = blocks.grass;
 
         SpawnPath();
@@ -308,11 +325,15 @@ public class MapGeneration : MonoBehaviour
         PartitionProgress();
         yield return new WaitForSeconds(processesDelay);
 
+        /* * * * * SHAPE MODIFICATION OF MAP * * * * */
+
         AddRandomLumps();
         PartitionProgress("Modeling beziers...");
         yield return new WaitForSeconds(processesDelay);
 
-        //Dirt series
+
+        /* * * * * * DECALS ON SHAPE OF MAP * * * * * */
+
         currentPaintingBlock = blocks.dirt;
 
         PaintDirtPath();
@@ -323,22 +344,34 @@ public class MapGeneration : MonoBehaviour
         PartitionProgress("Spawning props...");
         yield return new WaitForSeconds(processesDelay);
 
+        /* * * * * IMPORTANT PROPS ON MAP * * * * * * */
+
+
+        /* * * * * DECORATIVE PROPS ON MAP * * * * * * */
+        currentPaintingBlock = blocks.water;
+
+        AddWaterToDips();
+        //PartitionProgress();
+        //yield return new WaitForSeconds(processesDelay);
+
         AddProps();
         PartitionProgress();
         yield return new WaitForSeconds(processesDelay);
+
+        /* * * * MISC STEPS (NO ORDER REQUIRED) * * */
 
         AddFoundationLayer();
         PartitionProgress("Finalizing...");
         yield return new WaitForSeconds(processesDelay);
 
+        
         progressTotal = progressTotalCounter-1;
 
         centerPointWithY = new Vector3(centerPoint.x, gridOccupants[(int)centerPoint.x, 
             (int)centerPoint.z].transform.position.y,centerPoint.z);
+        
         OnMapGenerateEnd?.Invoke();
-
         yield return new WaitForSeconds(0.9f);
-
         OnScreenReady?.Invoke();
     }
 
@@ -527,7 +560,7 @@ public class MapGeneration : MonoBehaviour
 
         Block block = obj.GetComponentInChildren<Block>();
         block.type = currentPaintingBlock;
-        //block.UpdateBlock(); // don't need to call this both times (it already gets called on block's OnEnable() )
+        block.UpdateBlock(); // don't need to call this both times (it already gets called on block's OnEnable() )
 
         if (utilizeY) return obj;
 
@@ -621,6 +654,21 @@ public class MapGeneration : MonoBehaviour
             float zRandom = Random.Range(-randomElevation.x / 2f, randomElevation.x / 2f);
 
             allObjects[i].transform.position += new Vector3(xRandom, elevation, zRandom);
+        }
+    }
+
+    private void AddWaterToDips()
+    {
+        for (int i = 0; i < allObjects.Count; ++i)
+        {
+            if (Mathf.Round(allObjects[i].transform.position.y) == Mathf.Ceil(yBoundary.y))
+            {
+                Vector3 spawnSpot = allObjects[i].transform.position + new Vector3(0, 1, 0);
+
+                GameObject waterObj = Spawn(spawnSpot, true);
+
+                if (waterObj) waterObjects.Add(waterObj);
+            }
         }
     }
 
