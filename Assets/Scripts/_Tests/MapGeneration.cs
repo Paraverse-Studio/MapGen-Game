@@ -48,8 +48,8 @@ public class MapGeneration : MonoBehaviour
     public LineRenderer line;
     public bool drawLine = true;
     public bool lineSmoothening = true;
-    public static MapGeneration Instance;
-
+    public float processesDelay = 0.02f;
+    public static MapGeneration Instance;    
 
     [Space(20)]
     [Header("   ——————————  MAP BASE  ——————————")]
@@ -108,14 +108,16 @@ public class MapGeneration : MonoBehaviour
     public float treeChanceGrowthRate = 5.0f;
 
     [Space(25)]
+    public UnityEvent OnScreenStart = new UnityEvent();
     public UnityEvent OnMapGenerateStart = new UnityEvent();
     public UnityEvent OnMapGenerateEnd = new UnityEvent();
     public UnityEvent OnScreenReady = new UnityEvent();
+
     public FloatFloatEvent OnProgressChange = new FloatFloatEvent();
     public StringEvent OnProgressChangeText = new StringEvent();
 
     #region SETTINGS_VARIABLES
-    private static int _GRIDSIZE = 750;
+    private static int _GRIDSIZE = 200; //750
     private Vector3 centerPoint;
     public Vector3 CenterPoint => centerPoint;
     private Vector2 centerPoint2D;
@@ -133,7 +135,8 @@ public class MapGeneration : MonoBehaviour
     private List<GameObject> foundationObjects = new List<GameObject>();
 
     private float progressValue;
-    private float progressTotal = 8f;
+    private int progressTotalCounter = 0;
+    private float progressTotal = 10f;
     private float waitTime = 0.1f;
 
     // Need to be initialized
@@ -159,7 +162,7 @@ public class MapGeneration : MonoBehaviour
         centerPoint2D = new Vector3(centerPoint.x, centerPoint.z);
         mainCamera = Camera.main;
 
-        StartCoroutine(RegeneratePath());
+        RegeneratePath();
     }
 
     // Update is called once per frame
@@ -167,77 +170,86 @@ public class MapGeneration : MonoBehaviour
     {
         UpdateLine();
 
-        if (Input.GetKeyDown(KeyCode.P)) StartCoroutine(RegeneratePath());
+        if (Input.GetKeyDown(KeyCode.P)) RegeneratePath();
     }
 
 
-    private void GenerateMap() => StartCoroutine(EnumeratorGenerateMap());
-    private IEnumerator EnumeratorGenerateMap()
+    private IEnumerator GenerateMap() 
     {
-        yield return null;
-
         //Grass base series
         currentPaintingBlock = blocks.grass;
 
         SpawnPath();
-        PartitionProgress("Propagating base . . .");
+        PartitionProgress("Adding base...");
+        yield return new WaitForSeconds(processesDelay);
 
         ThickenPath();
-        PartitionProgress("Generating area . . .");
+        PartitionProgress("Generating area...");
+        yield return new WaitForSeconds(processesDelay);
 
         ThickenAroundObject(pathObjects[pathObjects.Count - 1], 0, grassFillRadius);
-        PartitionProgress("Building depth . . .");
+        PartitionProgress();
+        yield return new WaitForSeconds(processesDelay);
 
         AddRandomLumps();
-        PartitionProgress("");
+        PartitionProgress();
+        yield return new WaitForSeconds(processesDelay);
 
         //Dirt series
         currentPaintingBlock = blocks.dirt;
 
         PaintDirtPath();
-        PartitionProgress("");
+        PartitionProgress();
+        yield return new WaitForSeconds(processesDelay);
 
         ApplyRandomElevation();
-        PartitionProgress("Placing props/items . . .");
+        PartitionProgress("Placing props/items...");
+        yield return new WaitForSeconds(processesDelay);
 
         AddProps();
-        PartitionProgress("Finalizing . . .");
+        PartitionProgress();
+        yield return new WaitForSeconds(processesDelay);
 
-        //Foundation series
-        //AddFoundationLayer();
+        AddFoundationLayer();
+        PartitionProgress("Finalizing...");
+        yield return new WaitForSeconds(processesDelay);
 
         OnMapGenerateEnd?.Invoke();
-        yield return new WaitForSeconds(0.5f);
-        OnScreenReady?.Invoke();
 
+        yield return new WaitForSeconds(0.8f);
+
+        OnScreenReady?.Invoke();
     }
+
+
+    public void RegeneratePath() => StartCoroutine(ERegeneratePath());
 
     [Button]
-    public IEnumerator RegeneratePath()
+    public IEnumerator ERegeneratePath()
     {
+        OnScreenStart?.Invoke();           
+        progressValue = -1f;
+
+        yield return new WaitForSeconds(0.8f);
+
         OnMapGenerateStart?.Invoke();
 
-        progressValue = -1f;
-        PartitionProgress("Clearing engine . . ."); // will increment above to 0 
-
-        yield return null;
-
-        ResetGeneration();
-
-        PartitionProgress("Designing grid . . .");
-
-        StartCoroutine(EnumeratorGenerateMap());
+        StartCoroutine(ResetGeneration());
     }
 
-    private void ResetGeneration()
-    {                
+    private IEnumerator ResetGeneration()
+    {      
         xBoundary = centerPoint2D;
         zBoundary = centerPoint2D;
         furthestBlock = centerPoint2D;
         furthestDistance = 0;
+        progressTotalCounter = 0;
 
         distanceCreated = 0;
         pathingAngle = Random.Range(0f, 360f);
+
+        line.positionCount = 0;
+        currentPaintingBlock = blocks.grass;
 
         for (int x = 0; x < _GRIDSIZE; ++x)
         {
@@ -251,48 +263,81 @@ public class MapGeneration : MonoBehaviour
             }
         }
 
-        line.positionCount = 0;
-        currentPaintingBlock = blocks.grass;
-
-        if (allObjects.Count > 0)
-        {
-            for (int i = allObjects.Count - 1; i >= 0; --i)
-            {
-                //allObjects[i].SetActive(false);
-                allObjects.RemoveAt(i);
-            }
-            allObjects = new List<GameObject>();
-        }
-
-        if (pathObjects.Count > 0)
-        {
-            for (int i = pathObjects.Count - 1; i >= 0; --i)
-            {
-                //pathObjects[i].SetActive(false);
-                pathObjects.RemoveAt(i);
-            }
-            pathObjects = new List<GameObject>();
-        }
+        allObjects.Clear();
+        pathObjects.Clear();
 
         if (treeObjects.Count > 0)
         {
             for (int i = treeObjects.Count - 1; i >= 0; --i)
             {
                 Destroy(treeObjects[i]);
-            }
-            treeObjects = new List<GameObject>();
+            }            
         }
+        treeObjects.Clear();
 
-        //if (foundationObjects.Count > 0)
-        //{
-        //    for (int i = foundationObjects.Count - 1; i >= 0; --i)
-        //    {
-        //        //foundationObjects[i].SetActive(false);
-        //        foundationObjects[i].transform.position -= new Vector3(0, 50000, 0);
-        //        foundationObjects.RemoveAt(i);
-        //    }
-        //    //foundationObjects = new List<GameObject>();
-        //}
+        PartitionProgress();
+        yield return null;
+
+        if (foundationObjects.Count > 0)
+        {
+            for (int i = foundationObjects.Count - 1; i >= 0; --i)
+            {
+                foundationObjects[i].SetActive(false);
+            }
+        }
+        foundationObjects.Clear();
+
+
+
+        PartitionProgress("Initiating map engine...");
+        yield return new WaitForSeconds(processesDelay);
+
+
+        //Grass base series
+        currentPaintingBlock = blocks.grass;
+
+        SpawnPath();
+        PartitionProgress("Forming baseline...");
+        yield return new WaitForSeconds(processesDelay);
+
+        ThickenPath();
+        PartitionProgress("Generating area...");
+        yield return new WaitForSeconds(processesDelay);
+
+        ThickenAroundObject(pathObjects[pathObjects.Count - 1], 0, grassFillRadius);
+        PartitionProgress();
+        yield return new WaitForSeconds(processesDelay);
+
+        AddRandomLumps();
+        PartitionProgress("Modeling beziers...");
+        yield return new WaitForSeconds(processesDelay);
+
+        //Dirt series
+        currentPaintingBlock = blocks.dirt;
+
+        PaintDirtPath();
+        PartitionProgress("Shaping map...");
+        yield return new WaitForSeconds(processesDelay);
+
+        ApplyRandomElevation();
+        PartitionProgress("Spawning props...");
+        yield return new WaitForSeconds(processesDelay);
+
+        AddProps();
+        PartitionProgress();
+        yield return new WaitForSeconds(processesDelay);
+
+        AddFoundationLayer();
+        PartitionProgress("Finalizing...");
+        yield return new WaitForSeconds(processesDelay);
+
+        progressTotal = progressTotalCounter-1;
+
+        OnMapGenerateEnd?.Invoke();
+
+        yield return new WaitForSeconds(0.8f);
+
+        OnScreenReady?.Invoke();
     }
 
 
@@ -346,7 +391,7 @@ public class MapGeneration : MonoBehaviour
     {
         for (int i = 0; i < pathObjects.Count; i++)
         {
-            ThickenAroundObject(pathObjects[i], i, grassFillRadius);
+            ThickenAroundObject(pathObjects[i], i, grassFillRadius);  
         }
     }
 
@@ -595,10 +640,12 @@ public class MapGeneration : MonoBehaviour
                 int randomXOffset = Random.Range(-treeSpawnOffset, treeSpawnOffset);
                 int randomZOffset = Random.Range(-treeSpawnOffset, treeSpawnOffset);
 
-                Vector3 spawnSpot = new Vector3(
-                    Mathf.Round(x) + randomXOffset,
-                    gridOccupants[x, z].transform.position.y,
-                    Mathf.Round(z) + randomZOffset);
+                int newX = (int)Mathf.Round(x + randomXOffset);
+                int newZ = (int)Mathf.Round(z + randomZOffset);
+
+                if (null == gridOccupants[newX, newZ]) continue;
+
+                Vector3 spawnSpot = new Vector3(newX, gridOccupants[newX, newZ].transform.position.y, newZ);
 
                 // Lastly, distance from path: by default, the chance to spawn a tree is 0%, but increases by
                 // 5% for every distance unit away from the closest path block 
@@ -635,7 +682,7 @@ public class MapGeneration : MonoBehaviour
 
             GameObject foundationBlock = Pool.Instance.Instantiate(foundationPrefabs[Random.Range(0, foundationPrefabs.Length)].name,
                 new Vector3(allObjects[i].transform.position.x,
-                yLevel - 0.5f, allObjects[i].transform.position.z), Quaternion.identity, true, true);          
+                yLevel - 0.5f, allObjects[i].transform.position.z), Quaternion.identity);          
 
             if (foundationBlock) foundationObjects.Add(foundationBlock);            
         }
@@ -664,15 +711,18 @@ public class MapGeneration : MonoBehaviour
         }
     }
 
+
     private void UpdateLine()
     {
-        if (Time.frameCount % 60 != 0) return;
+        if (Time.frameCount % 120 != 0) return;
 
         if (!drawLine)
         {
             line.positionCount = 0;
             return;
         }
+
+        if (allObjects.Count == 0) return;
 
         Vector3 raiseLevel = new Vector3(0, 0.9f, 0);
         int size = pathObjects.Count;
@@ -762,8 +812,9 @@ public class MapGeneration : MonoBehaviour
         return closest;
     }
 
-    private void PartitionProgress(string va)
+    private void PartitionProgress(string va = "")
     {
+        progressTotalCounter++;
         progressValue++;
         OnProgressChange?.Invoke(progressValue, progressTotal);
         OnProgressChangeText?.Invoke(va);
