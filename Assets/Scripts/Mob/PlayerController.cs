@@ -150,10 +150,10 @@ public class PlayerController : MonoBehaviour
         _body.position = pos;
         _characterController.enabled = true;
     }
-    private void TeleportPlayer()
+    public void TeleportPlayer()
     {
-        _moveDirection.y = 0;
-        TeleportPlayer(MapGeneration.Instance.CenterPoint + new Vector3(0, 4, 0));
+        _moveDirection.y = -1f;
+        TeleportPlayer(MapGeneration.Instance.centerPointWithY + new Vector3(0, 0.5f, 0));
     }
 
 

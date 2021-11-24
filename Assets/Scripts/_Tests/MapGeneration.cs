@@ -121,6 +121,7 @@ public class MapGeneration : MonoBehaviour
     private Vector3 centerPoint;
     public Vector3 CenterPoint => centerPoint;
     private Vector2 centerPoint2D;
+    public Vector3 centerPointWithY;
     private SO_BlockItem currentPaintingBlock;
     #endregion
 
@@ -333,6 +334,8 @@ public class MapGeneration : MonoBehaviour
 
         progressTotal = progressTotalCounter-1;
 
+        centerPointWithY = new Vector3(centerPoint.x, gridOccupants[(int)centerPoint.x, 
+            (int)centerPoint.z].transform.position.y,centerPoint.z);
         OnMapGenerateEnd?.Invoke();
 
         yield return new WaitForSeconds(0.8f);
