@@ -174,64 +174,63 @@ public class MapGeneration : MonoBehaviour
         if (Input.GetKeyDown(KeyCode.P)) RegeneratePath();
     }
 
+    // private IEnumerator GenerateMap() 
+    //{
+    //    //Grass base series
+    //    currentPaintingBlock = blocks.grass;
 
-    private IEnumerator GenerateMap() 
-    {
-        //Grass base series
-        currentPaintingBlock = blocks.grass;
+    //    SpawnPath();
+    //    PartitionProgress("Adding base...");
+    //    yield return new WaitForSeconds(processesDelay);
 
-        SpawnPath();
-        PartitionProgress("Adding base...");
-        yield return new WaitForSeconds(processesDelay);
+    //    ThickenPath();
+    //    PartitionProgress("Generating area...");
+    //    yield return new WaitForSeconds(processesDelay);
 
-        ThickenPath();
-        PartitionProgress("Generating area...");
-        yield return new WaitForSeconds(processesDelay);
+    //    ThickenAroundObject(pathObjects[pathObjects.Count - 1], 0, grassFillRadius);
+    //    PartitionProgress();
+    //    yield return new WaitForSeconds(processesDelay);
 
-        ThickenAroundObject(pathObjects[pathObjects.Count - 1], 0, grassFillRadius);
-        PartitionProgress();
-        yield return new WaitForSeconds(processesDelay);
+    //    AddRandomLumps();
+    //    PartitionProgress();
+    //    yield return new WaitForSeconds(processesDelay);
 
-        AddRandomLumps();
-        PartitionProgress();
-        yield return new WaitForSeconds(processesDelay);
+    //    //Dirt series
+    //    currentPaintingBlock = blocks.dirt;
 
-        //Dirt series
-        currentPaintingBlock = blocks.dirt;
+    //    PaintDirtPath();
+    //    PartitionProgress();
+    //    yield return new WaitForSeconds(processesDelay);
 
-        PaintDirtPath();
-        PartitionProgress();
-        yield return new WaitForSeconds(processesDelay);
+    //    ApplyRandomElevation();
+    //    PartitionProgress("Placing props/items...");
+    //    yield return new WaitForSeconds(processesDelay);
 
-        ApplyRandomElevation();
-        PartitionProgress("Placing props/items...");
-        yield return new WaitForSeconds(processesDelay);
+    //    AddProps();
+    //    PartitionProgress();
+    //    yield return new WaitForSeconds(processesDelay);
 
-        AddProps();
-        PartitionProgress();
-        yield return new WaitForSeconds(processesDelay);
+    //    AddFoundationLayer();
+    //    PartitionProgress("Finalizing...");
+    //    yield return new WaitForSeconds(processesDelay);
 
-        AddFoundationLayer();
-        PartitionProgress("Finalizing...");
-        yield return new WaitForSeconds(processesDelay);
+    //    OnMapGenerateEnd?.Invoke();
 
-        OnMapGenerateEnd?.Invoke();
+    //    yield return new WaitForSeconds(0.8f);
 
-        yield return new WaitForSeconds(0.8f);
-
-        OnScreenReady?.Invoke();
-    }
-
-
+    //    OnScreenReady?.Invoke();
+    //}
+    
+    [Button]
     public void RegeneratePath() => StartCoroutine(ERegeneratePath());
 
-    [Button]
+    
     public IEnumerator ERegeneratePath()
     {
         OnScreenStart?.Invoke();           
         progressValue = -1f;
 
-        yield return new WaitForSeconds(0.8f);
+        yield return new WaitForSeconds(0.9f);
 
         OnMapGenerateStart?.Invoke();
 
@@ -338,7 +337,7 @@ public class MapGeneration : MonoBehaviour
             (int)centerPoint.z].transform.position.y,centerPoint.z);
         OnMapGenerateEnd?.Invoke();
 
-        yield return new WaitForSeconds(0.8f);
+        yield return new WaitForSeconds(0.9f);
 
         OnScreenReady?.Invoke();
     }
