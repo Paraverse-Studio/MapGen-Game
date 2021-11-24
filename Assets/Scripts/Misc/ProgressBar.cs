@@ -27,45 +27,22 @@ public class ProgressBar : MonoBehaviour
     // Update is called once per frame
     void Update()
     {
-        //bar.fillAmount = Mathf.SmoothDamp(bar.fillAmount, _progress / _total, ref _velocity, 0.2f);
+        bar.fillAmount = _progress / _total; // Mathf.SmoothDamp(bar.fillAmount, _progress / _total, ref _velocity, 0.2f);
 
-        //if (Time.frameCount % 3 == 0)
-        //{
-        //    if (_progress != _total && wholeBar.gameObject.activeSelf == false) wholeBar.gameObject.SetActive(true);
-        //}
-
-        //if (texts.Length > 1)
-        //{
-        //    texts[0].text = !string.IsNullOrEmpty(_specificText) ? _specificText : "Loading . . .";
-        //    texts[1].text = ((int)((_progress / _total) * 100.0f)) + "%";
-
-        //    if (_total > 0 && _progress == _total && bar.fillAmount >= 0.99f)
-        //    {
-        //        texts[0].text = "";
-        //        texts[1].text = "";
-        //        _specificText = "";
-        //        wholeBar.gameObject.SetActive(false);
-
-        //    }
-        //}
-
-        if (wholeBar.gameObject.activeSelf == true)
+        if (Time.frameCount % 3 == 0)
         {
-            //bar.fillAmount += (Time.deltaTime / 4.0f);
-            texts[0].text = "Generating map . . .";
-            //texts[1].text = ((int)((bar.fillAmount)*100.0f)) + "%";
-
-            if (bar.fillAmount > 0.99f) wholeBar.gameObject.SetActive(false);
-            
+            if (_progress != _total && wholeBar.gameObject.activeSelf == false) wholeBar.gameObject.SetActive(true);
         }
-
-
+        
+        texts[0].text = !string.IsNullOrEmpty(_specificText) ? _specificText : "Loading . . .";
+        texts[1].text = ((int)((_progress / _total) * 100.0f)) + "%";        
     }
 
     public void OnProgressStartBar()
     {
         wholeBar.gameObject.SetActive(true);
         _progress = 0f;
+        _specificText = "";
         _total = 0.001f;
         bar.fillAmount = 0f;
         texts[0].text = ""; 
