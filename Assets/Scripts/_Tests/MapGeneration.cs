@@ -159,7 +159,7 @@ public class MapGeneration : MonoBehaviour
         centerPoint2D = new Vector3(centerPoint.x, centerPoint.z);
         mainCamera = Camera.main;
 
-        StartCoroutine(RegeneratePath());
+        RegeneratePath();
     }
 
     // Update is called once per frame
@@ -167,14 +167,12 @@ public class MapGeneration : MonoBehaviour
     {
         UpdateLine();
 
-        if (Input.GetKeyDown(KeyCode.P)) StartCoroutine(RegeneratePath());
+        if (Input.GetKeyDown(KeyCode.P)) RegeneratePath();
     }
 
 
-    private void GenerateMap() => StartCoroutine(EnumeratorGenerateMap());
-    private IEnumerator EnumeratorGenerateMap()
+    private void GenerateMap() 
     {
-        yield return null;
 
         //Grass base series
         currentPaintingBlock = blocks.grass;
@@ -207,26 +205,24 @@ public class MapGeneration : MonoBehaviour
         //AddFoundationLayer();
 
         OnMapGenerateEnd?.Invoke();
-        yield return new WaitForSeconds(0.5f);
+
         OnScreenReady?.Invoke();
 
     }
 
     [Button]
-    public IEnumerator RegeneratePath()
+    public void RegeneratePath()
     {
         OnMapGenerateStart?.Invoke();
 
         progressValue = -1f;
         PartitionProgress("Clearing engine . . ."); // will increment above to 0 
 
-        yield return null;
-
         ResetGeneration();
 
         PartitionProgress("Designing grid . . .");
 
-        StartCoroutine(EnumeratorGenerateMap());
+        GenerateMap();
     }
 
     private void ResetGeneration()
