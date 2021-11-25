@@ -21,12 +21,17 @@ public class Block : MonoBehaviour
     private SO_BlockItem oldType = null;
 
     [Header("Override Settings: ")]
-    public BlockOverrideSettings overrideSettings;
+    public BlockOverrideSettings overrideSettings;   
 
 
     // PRIVATE //////////////////////////
     private string blockName = "";
     public string BlockName => blockName;
+
+    [Space(20)]
+    [TextArea(6, 10)]
+    public string blockHistory = "";
+
 
     private TextMeshPro _display;
 
@@ -54,6 +59,7 @@ public class Block : MonoBehaviour
     {
         _propBlock = new MaterialPropertyBlock();
         UpdateReferences();
+        blockHistory = "Awake.";
     }
 
     private void UpdateReferences()
@@ -166,6 +172,8 @@ public class Block : MonoBehaviour
             _currentPrefab.transform.localPosition = new Vector3(0, 0.5f - 0.1f, 0);
             _currentPrefab.transform.localRotation = Quaternion.identity;
             _currentPrefab.transform.localScale = Vector3.one;
+
+            UpdateHistory("Type changed to " + System.Enum.GetName(typeof(BlockType), (int)type.blockType));
         }
 
         UpdateReferences();
@@ -187,6 +195,14 @@ public class Block : MonoBehaviour
             }
         }
     }
+
+    public void UpdateHistory(string msg)
+    {       
+        string time = System.DateTime.Now.ToString("hh:mm:ss");
+        blockHistory += "\n" + time + "  " + msg;
+        
+    }
+
 
 
 }

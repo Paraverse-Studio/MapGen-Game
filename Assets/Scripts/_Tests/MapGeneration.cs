@@ -49,12 +49,12 @@ public class MapGeneration : MonoBehaviour
     public bool drawLine = true;
     public bool lineSmoothening = true;
     public float processesDelay = 0.02f;
-    public static MapGeneration Instance;    
+    public static MapGeneration Instance;
 
     [Space(20)]
     [Header("   ——————————  MAP BASE  ——————————")]
     [Space(10)]
-    [MinMaxSlider(-1f,1f)]
+    [MinMaxSlider(-1f, 1f)]
     public Vector2 randomElevation;
 
     [Header("   PATH SIZE ")]
@@ -148,9 +148,9 @@ public class MapGeneration : MonoBehaviour
     private Vector2 zBoundary;
     private Vector2 yBoundary;
     public Vector2 YBoundary =>
-    new Vector2(Mathf.Ceil(lumpApplicationRounds / 2.0f), 
-                Mathf.Ceil(-lumpApplicationRounds / 2.0f));        
-    
+    new Vector2(Mathf.Ceil(lumpApplicationRounds / 2.0f),
+                Mathf.Ceil(-lumpApplicationRounds / 2.0f));
+
     private Vector2 furthestBlock;
     private float furthestDistance = 0f;
 
@@ -227,9 +227,9 @@ public class MapGeneration : MonoBehaviour
 
     //    OnScreenReady?.Invoke();
     //}
-    
+
     public void RegeneratePath() => StartCoroutine(ERegeneratePath());
-    
+
     public IEnumerator ERegeneratePath()
     {
         OnScreenStart?.Invoke();
@@ -261,7 +261,7 @@ public class MapGeneration : MonoBehaviour
     }
 
     private IEnumerator ResetGeneration()
-    {             
+    {
         // Resetting object lists
         for (int x = 0; x < _GRIDSIZE; ++x)
         {
@@ -283,7 +283,7 @@ public class MapGeneration : MonoBehaviour
             for (int i = treeObjects.Count - 1; i >= 0; --i)
             {
                 Destroy(treeObjects[i]);
-            }            
+            }
         }
         treeObjects.Clear();
 
@@ -369,12 +369,12 @@ public class MapGeneration : MonoBehaviour
         PartitionProgress("Finalizing...");
         yield return new WaitForSeconds(processesDelay);
 
-        
-        progressTotal = progressTotalCounter-1;
 
-        centerPointWithY = new Vector3(centerPoint.x, gridOccupants[(int)centerPoint.x, 
-            (int)centerPoint.z].transform.position.y,centerPoint.z);
-        
+        progressTotal = progressTotalCounter - 1;
+
+        centerPointWithY = new Vector3(centerPoint.x, gridOccupants[(int)centerPoint.x,
+            (int)centerPoint.z].transform.position.y, centerPoint.z);
+
         OnMapGenerateEnd?.Invoke();
         yield return new WaitForSeconds(0.9f);
         OnScreenReady?.Invoke();
@@ -431,7 +431,7 @@ public class MapGeneration : MonoBehaviour
     {
         for (int i = 0; i < pathObjects.Count; i++)
         {
-            ThickenAroundObject(pathObjects[i], i, grassFillRadius);  
+            ThickenAroundObject(pathObjects[i], i, grassFillRadius);
         }
     }
 
@@ -540,6 +540,10 @@ public class MapGeneration : MonoBehaviour
 
                         potentialObj.transform.position =
                             new Vector3(potentialObj.transform.position.x, yValue, potentialObj.transform.position.z);
+
+                        Block block = potentialObj.GetComponentInChildren<Block>();
+                        if (block) block.UpdateHistory( (upOrDown ? "Raised" : "Lowered") + " to " + potentialObj.transform.position);
+                        
                     }
                 }
             }
@@ -557,6 +561,7 @@ public class MapGeneration : MonoBehaviour
                 Block blockAtVec = objectAtVec.GetComponentInChildren<Block>();
                 blockAtVec.type = currentPaintingBlock;
                 blockAtVec.UpdateBlock();
+                //blockAtVec.UpdateHistory("Type changed to " + System.Enum.GetName(typeof(BlockType), (int)blockAtVec.type.blockType));
                 return null;
             }
         }
@@ -568,7 +573,8 @@ public class MapGeneration : MonoBehaviour
 
         Block block = obj.GetComponentInChildren<Block>();
         block.type = currentPaintingBlock;
-        block.UpdateBlock(); // don't need to call this both times (it already gets called on block's OnEnable() )
+        block.UpdateBlock();
+        block.UpdateHistory("Spawned at " + spawnSpot);
 
         if (utilizeY) return block;
 
@@ -667,13 +673,13 @@ public class MapGeneration : MonoBehaviour
 
     private void AddWaterToDips()
     {
-        float yLevelToMeasure = Mathf.Round(YBoundary.y); 
+        float yLevelToMeasure = Mathf.Round(YBoundary.y);
 
         for (int i = 0; i < allObjects.Count; ++i)
         {
             if (Mathf.Abs((Mathf.Round(allObjects[i].transform.position.y)) - yLevelToMeasure) < _EPSILON)
             {
-                Vector3 spawnSpot = new Vector3(allObjects[i].transform.position.x, 
+                Vector3 spawnSpot = new Vector3(allObjects[i].transform.position.x,
                                                     yLevelToMeasure + 1,
                                                 allObjects[i].transform.position.z);
 
@@ -736,7 +742,7 @@ public class MapGeneration : MonoBehaviour
     private void AddFoundationLayer()
     {
         int size = allObjects.Count;
-        for (int i = 0; i < size; ++i) 
+        for (int i = 0; i < size; ++i)
         {
             if (IsAdjacentOccupied(allObjects[i].gameObject.transform.position)) continue;
 
@@ -744,9 +750,9 @@ public class MapGeneration : MonoBehaviour
 
             GameObject foundationBlock = Pool.Instance.Instantiate(foundationPrefabs[Random.Range(0, foundationPrefabs.Length)].name,
                 new Vector3(allObjects[i].transform.position.x,
-                yLevel - 0.5f, allObjects[i].transform.position.z), Quaternion.identity);          
+                yLevel - 0.5f, allObjects[i].transform.position.z), Quaternion.identity);
 
-            if (foundationBlock) foundationObjects.Add(foundationBlock);            
+            if (foundationBlock) foundationObjects.Add(foundationBlock);
         }
     }
 
