@@ -10,7 +10,7 @@ public enum TickDelayOption
 
 
 [System.Serializable]
-public struct TickElement
+public class TickElement
 {
     public Block block;
     public int frameDelay;
@@ -44,7 +44,10 @@ public class TickManager : MonoBehaviour
 
         for (int i = 0; i < size; ++i)
         {
-            tickElements[i].block.Tick();
+            if (null != tickElements[i] && tickElements[i].block)
+            {
+                tickElements[i].block.Tick();
+            }
         }
     }
 

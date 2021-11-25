@@ -314,7 +314,7 @@ public class MapGeneration : MonoBehaviour
 
 
 
-        PartitionProgress("Initiated generation engine");
+        PartitionProgress("Initiating building engine...");
         yield return new WaitForSeconds(processesDelay);
 
 
@@ -323,7 +323,7 @@ public class MapGeneration : MonoBehaviour
         currentPaintingBlock = blocks.grass;
 
         SpawnPath();
-        PartitionProgress("Building base map...");
+        PartitionProgress("Adding procedural base map...");
         yield return new WaitForSeconds(processesDelay);
 
         //ThickenPath();
@@ -356,7 +356,7 @@ public class MapGeneration : MonoBehaviour
         yield return new WaitForSeconds(processesDelay);
 
         ApplyRandomElevation();
-        PartitionProgress("Spawning props...");
+        PartitionProgress("Activating props...");
         yield return new WaitForSeconds(processesDelay);
 
         /* * * * * IMPORTANT PROPS ON MAP * * * * * * */
@@ -397,7 +397,7 @@ public class MapGeneration : MonoBehaviour
     {
         Pool.Instance.waterVolume.gameObject.GetComponent<WaterVolumeTransforms>().Rebuild();
         Pool.Instance.waterVolume.gameObject.GetComponent<WaterVolumeTransforms>().Validate();
-        Pool.Instance.waterVolume.gameObject.transform.position = new Vector3(0, -0.65f, 0);
+        Pool.Instance.waterVolume.gameObject.transform.position = new Vector3(0, -0.7f, 0);
     }
 
     private void SpawnPath()
