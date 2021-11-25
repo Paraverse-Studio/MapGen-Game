@@ -25,6 +25,9 @@ public class Block : MonoBehaviour
 
 
     // PRIVATE //////////////////////////
+    private string blockName = "";
+    public string BlockName => blockName;
+
     private TextMeshPro _display;
 
     private string _textToDisplay = "";
@@ -70,6 +73,11 @@ public class Block : MonoBehaviour
         }
     }
 
+    private void Start()
+    {
+        ChangeName();
+    }
+
     public void UpdateBlock()
     {
         if (!type) return;
@@ -81,8 +89,14 @@ public class Block : MonoBehaviour
         gameObject.layer = type.layer.LayerIndex;
         if (_collider) _collider.gameObject.layer = type.layer.LayerIndex;
 
-        oldType = type;
+        oldType = type;    
     }
+
+    private void ChangeName()
+    {
+        blockName = "Object " + Random.Range(1111, 9999);
+    }
+
     private void SetupHudText()
     {
         GameObject displayObject = Instantiate(Resources.Load("HUDText", typeof(GameObject))) as GameObject;
