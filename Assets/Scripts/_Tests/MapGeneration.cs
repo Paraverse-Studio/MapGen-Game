@@ -479,12 +479,10 @@ public class MapGeneration : MonoBehaviour
     private void ApplyBlockElevationRestrictions(Block block)
     {
         GameObject newObj = block.gameObject;
-        // This function won't get invoked because the above function's Spawn() returns null (since dirt replaces grass, not create its own)
  
         if (Mathf.Abs(Mathf.Round(newObj.transform.position.y) - YBoundary.y) < _EPSILON)
         {
-            Debug.Log("CALLED 22");
-            ElevateCircle(true, newObj.transform.position, 0.1f);
+            ElevateBlock(true, newObj);
         }
     }
 
@@ -547,23 +545,26 @@ public class MapGeneration : MonoBehaviour
 
                     if (potentialObj != null && !alreadyElevated.Contains(potentialObj))
                     {
-                        alreadyElevated.Add(potentialObj);
-                        float extremeY;
-                        extremeY = GetAdjacentElevation(upOrDown ? ElevationLevel.lowest : ElevationLevel.highest, potentialObj);
-
-                        float yValue = extremeY + (upOrDown ? 1 : -1);
-                        yValue = Mathf.Clamp(yValue, YBoundary.y, YBoundary.x);
-
-                        potentialObj.transform.position =
-                            new Vector3(potentialObj.transform.position.x, yValue, potentialObj.transform.position.z);
-
-                        Block block = potentialObj.GetComponentInChildren<Block>();
-                        if (block) block.UpdateHistory((upOrDown ? "Raised" : "Lowered") + " to " + potentialObj.transform.position);
+                        ElevateBlock(upOrDown, potentialObj);
                     }
                 }
             }
         }
         alreadyElevated.Clear();
+    }
+
+    private void ElevateBlock(bool upOrDown, GameObject obj)
+    {
+        float extremeY;
+        extremeY = GetAdjacentElevation(upOrDown ? ElevationLevel.lowest : ElevationLevel.highest, obj);
+
+        float yValue = extremeY + (upOrDown ? 1 : -1);
+        yValue = Mathf.Clamp(yValue, YBoundary.y, YBoundary.x);
+
+        obj.transform.position = new Vector3(obj.transform.position.x, yValue, obj.transform.position.z);
+
+        Block block = obj.GetComponentInChildren<Block>();
+        if (block) block.UpdateHistory((upOrDown ? "Raised" : "Lowered") + " to " + obj.transform.position);
     }
 
     private Block Spawn(Vector3 vec, bool utilizeY = false)
