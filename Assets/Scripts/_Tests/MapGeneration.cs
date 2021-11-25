@@ -542,8 +542,8 @@ public class MapGeneration : MonoBehaviour
                             new Vector3(potentialObj.transform.position.x, yValue, potentialObj.transform.position.z);
 
                         Block block = potentialObj.GetComponentInChildren<Block>();
-                        if (block) block.UpdateHistory( (upOrDown ? "Raised" : "Lowered") + " to " + potentialObj.transform.position);
-                        
+                        if (block) block.UpdateHistory((upOrDown ? "Raised" : "Lowered") + " to " + potentialObj.transform.position);
+
                     }
                 }
             }
@@ -677,13 +677,19 @@ public class MapGeneration : MonoBehaviour
 
         for (int i = 0; i < allObjects.Count; ++i)
         {
-            if (Mathf.Abs((Mathf.Round(allObjects[i].transform.position.y)) - yLevelToMeasure) < _EPSILON)
-            {
-                Vector3 spawnSpot = new Vector3(allObjects[i].transform.position.x,
-                                                    yLevelToMeasure + 1,
-                                                allObjects[i].transform.position.z);
+            Transform thisObject = allObjects[i].transform;
 
-                GameObject waterObj = Spawn(spawnSpot, true)?.gameObject;
+            if (Mathf.Abs((Mathf.Round(thisObject.position.y)) - yLevelToMeasure) < _EPSILON)
+            {
+                Vector3 spawnSpot = new Vector3(thisObject.position.x, yLevelToMeasure + 1, thisObject.transform.position.z);
+
+                GameObject waterObj = Pool.Instance.Instantiate(blockPrefab.name, spawnSpot, Quaternion.identity);
+                if (waterObj)
+                {
+                    Block waterBlock = waterObj.GetComponent<Block>();
+                    waterBlock.type = blocks.water;
+                    waterBlock.UpdateBlock();
+                }
 
                 if (waterObj) waterObjects.Add(waterObj);
             }

@@ -29,7 +29,7 @@ public class Block : MonoBehaviour
     public string BlockName => blockName;
 
     [Space(20)]
-    [TextArea(6, 10)]
+    [TextArea(6, 15)]
     public string blockHistory = "";
 
 
@@ -101,6 +101,7 @@ public class Block : MonoBehaviour
     private void ChangeName()
     {
         blockName = "Object " + Random.Range(1111, 9999);
+        UpdateHistory("Name: " + blockName);
     }
 
     private void SetupHudText()
@@ -199,8 +200,7 @@ public class Block : MonoBehaviour
     public void UpdateHistory(string msg)
     {       
         string time = System.DateTime.Now.ToString("hh:mm:ss");
-        blockHistory += "\n" + time + "  " + msg;
-        
+        blockHistory += "\n" + time + "  " + msg;        
     }
 
 
