@@ -117,6 +117,8 @@ public class MapGeneration : MonoBehaviour
     public StringEvent OnProgressChangeText = new StringEvent();
 
     #region SETTINGS_VARIABLES
+    private float _EPSILON = 0.002f;
+
     private int _GRIDSIZE; // should be double of distance
     private Vector3 centerPoint;
     public Vector3 CenterPoint => centerPoint;
@@ -144,7 +146,8 @@ public class MapGeneration : MonoBehaviour
     // Need to be initialized
     private Vector2 xBoundary;
     private Vector2 zBoundary;
-    public Vector2 yBoundary =>
+    private Vector2 yBoundary;
+    public Vector2 YBoundary =>
     new Vector2(Mathf.Ceil(lumpApplicationRounds / 2.0f), 
                 Mathf.Ceil(-lumpApplicationRounds / 2.0f));        
     
@@ -389,7 +392,7 @@ public class MapGeneration : MonoBehaviour
 
             if (allObjects.Count == 0)
             {
-                GameObject obj = Spawn(centerPoint);
+                GameObject obj = Spawn(centerPoint)?.gameObject;
                 if (obj)
                 {
                     allObjects.Add(obj);
@@ -407,7 +410,7 @@ public class MapGeneration : MonoBehaviour
     {
         for (float i = 0.25f; i <= scale; i += 0.25f)
         {
-            GameObject newObj = Spawn(GetPointOnCircle(turningPointObj.transform.position, i, newAngle));
+            GameObject newObj = Spawn(GetPointOnCircle(turningPointObj.transform.position, i, newAngle))?.gameObject;
 
             if (newObj)
             {
@@ -459,7 +462,7 @@ public class MapGeneration : MonoBehaviour
                 Vector3 newSpot = centerObjectOffsetted + new Vector3((int)x, 0, (int)z);
                 if (Vector3.Distance(centerObjectOffsetted, newSpot) < thickness)
                 {
-                    GameObject newObj = Spawn(newSpot);
+                    GameObject newObj = Spawn(newSpot)?.gameObject;
                     if (newObj)
                     {
                         allObjects.Add(newObj);
@@ -533,7 +536,7 @@ public class MapGeneration : MonoBehaviour
                         extremeY = GetAdjacentElevation(upOrDown ? ElevationLevel.lowest : ElevationLevel.highest, potentialObj);
 
                         float yValue = extremeY + (upOrDown ? 1 : -1);
-                        yValue = Mathf.Clamp(yValue, yBoundary.y, yBoundary.x);
+                        yValue = Mathf.Clamp(yValue, YBoundary.y, YBoundary.x);
 
                         potentialObj.transform.position =
                             new Vector3(potentialObj.transform.position.x, yValue, potentialObj.transform.position.z);
@@ -544,7 +547,7 @@ public class MapGeneration : MonoBehaviour
         alreadyElevated.Clear();
     }
 
-    private GameObject Spawn(Vector3 vec, bool utilizeY = false)
+    private Block Spawn(Vector3 vec, bool utilizeY = false)
     {
         if (!utilizeY) // majority of the time you use Spawn(), you ignore y, cause you're affecting grid[x,z]
         {
@@ -567,12 +570,12 @@ public class MapGeneration : MonoBehaviour
         block.type = currentPaintingBlock;
         block.UpdateBlock(); // don't need to call this both times (it already gets called on block's OnEnable() )
 
-        if (utilizeY) return obj;
+        if (utilizeY) return block;
 
         gridOccupants[(int)vec.x, (int)vec.z] = obj;
 
         UpdateBoundaryStats(obj.transform.position);
-        return obj;
+        return block;
     }
 
     private bool IsOnSideOfBlock(Side side, GameObject src, GameObject subject)
@@ -664,17 +667,17 @@ public class MapGeneration : MonoBehaviour
 
     private void AddWaterToDips()
     {
-        float yLevelToMeasure = -1; // Mathf.Round(yBoundary.y); 
+        float yLevelToMeasure = Mathf.Round(YBoundary.y); 
 
         for (int i = 0; i < allObjects.Count; ++i)
         {
-            if ((int)(Mathf.Round(allObjects[i].transform.position.y)) == (int)yLevelToMeasure)
+            if (Mathf.Abs((Mathf.Round(allObjects[i].transform.position.y)) - yLevelToMeasure) < _EPSILON)
             {
                 Vector3 spawnSpot = new Vector3(allObjects[i].transform.position.x, 
                                                     yLevelToMeasure + 1,
                                                 allObjects[i].transform.position.z);
 
-                GameObject waterObj = Spawn(spawnSpot, true);
+                GameObject waterObj = Spawn(spawnSpot, true)?.gameObject;
 
                 if (waterObj) waterObjects.Add(waterObj);
             }
