@@ -310,7 +310,7 @@ public class MapGeneration : MonoBehaviour
 
 
 
-        PartitionProgress("Initiating map engine...");
+        PartitionProgress("Initiated generation engine");
         yield return new WaitForSeconds(processesDelay);
 
 
@@ -319,11 +319,17 @@ public class MapGeneration : MonoBehaviour
         currentPaintingBlock = blocks.grass;
 
         SpawnPath();
-        PartitionProgress("Forming baseline...");
+        PartitionProgress("Building base map...");
         yield return new WaitForSeconds(processesDelay);
 
-        ThickenPath();
-        PartitionProgress("Generating area...");
+        //ThickenPath();
+        for (int i = 0; i < pathObjects.Count; i++)
+        {
+            ThickenAroundObject(pathObjects[i], i, grassFillRadius);
+            PartitionProgress();
+            yield return null;
+        }
+        PartitionProgress("Expanding area...");
         yield return new WaitForSeconds(processesDelay);
 
         ThickenAroundObject(pathObjects[pathObjects.Count - 1], 0, grassFillRadius);
@@ -356,8 +362,8 @@ public class MapGeneration : MonoBehaviour
         currentPaintingBlock = blocks.water;
 
         AddWaterToDips();
-        //PartitionProgress();
-        //yield return new WaitForSeconds(processesDelay);
+        PartitionProgress("Finalizing post processing...");
+        yield return new WaitForSeconds(processesDelay);
 
         AddProps();
         PartitionProgress();
@@ -366,7 +372,7 @@ public class MapGeneration : MonoBehaviour
         /* * * * MISC STEPS (NO ORDER REQUIRED) * * */
 
         AddFoundationLayer();
-        PartitionProgress("Finalizing...");
+        PartitionProgress("Completed");
         yield return new WaitForSeconds(processesDelay);
 
 

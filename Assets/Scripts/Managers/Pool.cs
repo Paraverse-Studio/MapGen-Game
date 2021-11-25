@@ -49,8 +49,6 @@ public class Pool : MonoBehaviour
                 obj.transform.position = Vector3.zero;
                 obj.transform.rotation = Quaternion.identity;
                 obj.transform.parent = itemsToPool[x].parentObj.transform; obj.SetActive(false); pooledObjects.Add(obj);
-
-                totalSpawned += 1;
             }
         }
     }
@@ -68,6 +66,7 @@ public class Pool : MonoBehaviour
                 pooledObjects[i].gameObject.transform.position = position;
                 pooledObjects[i].gameObject.transform.rotation = rotation;
                 pooledObjects[i].SetActive(true);
+                totalSpawned += 1;
 
                 return pooledObjects[i];
             }

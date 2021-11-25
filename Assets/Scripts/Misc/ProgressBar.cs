@@ -27,14 +27,14 @@ public class ProgressBar : MonoBehaviour
     // Update is called once per frame
     void Update()
     {
-        bar.fillAmount = _progress / _total; // Mathf.SmoothDamp(bar.fillAmount, _progress / _total, ref _velocity, 0.2f);
+        bar.fillAmount = Mathf.SmoothDamp(bar.fillAmount, _progress / _total, ref _velocity, 0.05f);
         
         texts[0].text = !string.IsNullOrEmpty(_specificText) ? _specificText : "Loading . . .";
 
         float val = (_progress / _total);
         if (val != 0)
         {
-            texts[1].text = ((int)(val * 100.0f)) + "%";
+            texts[1].text = (int)(Mathf.Clamp((val * 100.0f), 0.0f, 100.0f)) + "%";
         }
         else
         {
@@ -46,17 +46,23 @@ public class ProgressBar : MonoBehaviour
     public void OnProgressStartBar()
     {
         wholeBar.gameObject.SetActive(true);
+        ResetUI();
+    }
+
+    private void ResetUI()
+    {
         _progress = 0f;
         _specificText = "";
-        _total = 0.001f;
+        _total = 0.0001f;
         bar.fillAmount = 0f;
-        texts[0].text = ""; 
+        texts[0].text = "";
         texts[1].text = "";
     }
 
     public void OnProgressEndBar()
     {
         wholeBar.gameObject.SetActive(false);
+        ResetUI();
     }
 
     public void OnProgressSetText(string progressText)
