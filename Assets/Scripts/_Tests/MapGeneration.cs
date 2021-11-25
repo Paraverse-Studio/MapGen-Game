@@ -71,6 +71,9 @@ public class MapGeneration : MonoBehaviour
     [MinMaxSlider(0f, 50f)]
     public Vector2 grassFillRadius;
 
+    [Header("The higher, the more squar-ish")]
+    [Range(1.0f, 1.5f)]
+    public float circularity = 1.0f;
 
     [Header("   LUMPS ")]
     [Space(10)]
@@ -466,7 +469,7 @@ public class MapGeneration : MonoBehaviour
             for (float z = -thickness; z < thickness; z += 0.5f)
             {
                 Vector3 newSpot = centerObjectOffsetted + new Vector3((int)x, 0, (int)z);
-                if (Vector3.Distance(centerObjectOffsetted, newSpot) < thickness)
+                if (Vector3.Distance(centerObjectOffsetted, newSpot) < (thickness* circularity)) // tags: circular
                 {
                     Block replacedBlock = null;
                     Block block = SpawnAdvanced(newSpot, ref replacedBlock);
@@ -545,7 +548,7 @@ public class MapGeneration : MonoBehaviour
             {
                 Vector3 newSpot = area + new Vector3(x, 0, z);
 
-                if (Vector3.Distance(area, newSpot) < radius)
+                if (Vector3.Distance(area, newSpot) < (radius*circularity)) // tags: circular
                 {
                     GameObject potentialObj = gridOccupants[(int)newSpot.x, (int)newSpot.z];
 
