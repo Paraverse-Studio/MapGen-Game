@@ -72,6 +72,7 @@ public class Block : MonoBehaviour
     void OnEnable()
     {
         // SetupHudText();
+        TickManager.Instance?.Unsubscribe(this);
 
         if (type)
         {
@@ -97,6 +98,16 @@ public class Block : MonoBehaviour
 
         oldType = type;    
     }
+
+    // Not using Update(), because there's way too many blocks to have update on,
+    // instead, if a block needs update, it'll subscribe to TickManager and get 
+    // its tick called every frame
+    public void Tick()
+    {
+        Vector3 newSpot = new Vector3(transform.position.x, 0, transform.position.z);
+        _currentPrefab.transform.position = newSpot;
+    }
+
 
     private void ChangeName()
     {
@@ -152,8 +163,10 @@ public class Block : MonoBehaviour
             }
         }
 
+
         if (overrideSettings.overridePrefab || type.prefabVariations.Length > 0)
         {
+            // 1.0    Remove current block 
             if (transform.childCount > 0)
             {
                 transform.GetChild(0).gameObject.SetActive(false);
@@ -165,6 +178,8 @@ public class Block : MonoBehaviour
                 _currentPrefab = null;
             }
 
+
+            // 2.0    Add new block
             if (overrideSettings.overridePrefab)
             {
                 _currentPrefab = Pool.Instance.Instantiate(overrideSettings.overridePrefab.name, Vector3.zero, Quaternion.identity, false);
@@ -174,11 +189,24 @@ public class Block : MonoBehaviour
                 _currentPrefab = Pool.Instance.Instantiate(type.prefabVariations[Random.Range(0, type.prefabVariations.Length)].name, Vector3.zero, Quaternion.identity, false);
             }
 
-            _currentPrefab.transform.SetParent(transform);
+
+            // 3.0    New block's Settings
+            bool isWaterType = false;
+            if (MapGeneration.Instance) isWaterType = (type == MapGeneration.Instance.blocks.water);
+
+            if (!isWaterType)
+            {
+                _currentPrefab.transform.SetParent(transform);
+            }
+            else
+            {
+                TickManager.Instance?.Subscribe(this);
+            }
 
             _currentPrefab.transform.localPosition = new Vector3(0, 0.5f - 0.1f, 0);
             _currentPrefab.transform.localRotation = Quaternion.identity;
             _currentPrefab.transform.localScale = Vector3.one;
+
 
             UpdateHistory("Type changed to " + System.Enum.GetName(typeof(BlockType), (int)type.blockType));
         }
