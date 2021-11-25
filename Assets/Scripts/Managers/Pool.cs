@@ -7,8 +7,9 @@ public class PoolItem  // a single instance of "List<ObjectPoolItem> itemsToPool
 {
     public GameObject objectToPool;
     public GameObject parentObj;
+    public GameObject customFolder;
     public int amount;
-    public int currentlyActive = 0;
+    public bool doSpawn = true;
     public bool canExpand;
     public string notes;
 }
@@ -17,6 +18,7 @@ public class Pool : MonoBehaviour
 {
     public int totalSpawned = 0;
     public Transform folder;
+    public Transform waterVolume;
     // list that describes each object pooled object
     public List<PoolItem> itemsToPool;
 
@@ -40,12 +42,15 @@ public class Pool : MonoBehaviour
         {
             if (itemsToPool[x] == null) continue;
             if (itemsToPool[x].objectToPool == null) continue;
+            if (itemsToPool[x].doSpawn == false) continue;
             GameObject go = new GameObject(); go.name = "[Object Pool - " + itemsToPool[x].objectToPool.name + "]";
             go.transform.position = Vector3.zero; go.transform.rotation = Quaternion.identity;
             if (folder != null) go.transform.parent = folder;
             for (int i = 0; i < itemsToPool[x].amount; i++)
             {
-                GameObject obj = (GameObject)Instantiate(itemsToPool[x].objectToPool); itemsToPool[x].parentObj = go;
+                GameObject obj = (GameObject)Instantiate(itemsToPool[x].objectToPool);
+                if (!itemsToPool[x].customFolder) itemsToPool[x].parentObj = go;
+                else itemsToPool[x].parentObj = itemsToPool[x].customFolder;
                 obj.transform.position = Vector3.zero;
                 obj.transform.rotation = Quaternion.identity;
                 obj.transform.parent = itemsToPool[x].parentObj.transform; obj.SetActive(false); pooledObjects.Add(obj);
