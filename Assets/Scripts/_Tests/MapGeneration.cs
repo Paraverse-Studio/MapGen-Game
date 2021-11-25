@@ -610,7 +610,6 @@ public class MapGeneration : MonoBehaviour
         Vector3 spawnSpot = new Vector3((int)vec.x, (int)vec.y, (int)vec.z);
 
         GameObject obj = Pool.Instance.Instantiate(blockPrefab.name, spawnSpot, Quaternion.identity);
-        //obj.transform.SetParent(objFolder);
 
         Block block = obj.GetComponentInChildren<Block>();
         block.type = currentPaintingBlock;
