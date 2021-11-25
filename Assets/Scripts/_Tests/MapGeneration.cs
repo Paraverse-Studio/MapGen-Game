@@ -397,7 +397,7 @@ public class MapGeneration : MonoBehaviour
     {
         Pool.Instance.waterVolume.gameObject.GetComponent<WaterVolumeTransforms>().Rebuild();
         Pool.Instance.waterVolume.gameObject.GetComponent<WaterVolumeTransforms>().Validate();
-        Pool.Instance.waterVolume.gameObject.transform.position = new Vector3(100, -0.65f, 100);
+        Pool.Instance.waterVolume.gameObject.transform.position = new Vector3(0, -0.65f, 0);
     }
 
     private void SpawnPath()
