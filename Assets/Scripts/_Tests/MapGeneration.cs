@@ -462,13 +462,29 @@ public class MapGeneration : MonoBehaviour
                 Vector3 newSpot = centerObjectOffsetted + new Vector3((int)x, 0, (int)z);
                 if (Vector3.Distance(centerObjectOffsetted, newSpot) < thickness)
                 {
-                    GameObject newObj = Spawn(newSpot)?.gameObject;
-                    if (newObj)
+                    Block replacedBlock = null;
+                    Block block = SpawnAdvanced(newSpot, ref replacedBlock);
+
+                    if (block) allObjects.Add(block.gameObject);
+
+                    if (null != replacedBlock && replacedBlock.type == blocks.dirt)
                     {
-                        allObjects.Add(newObj);
-                    }
+                        ApplyBlockElevationRestrictions(replacedBlock);
+                    }      
                 }
             }
+        }
+    }
+
+    private void ApplyBlockElevationRestrictions(Block block)
+    {
+        GameObject newObj = block.gameObject;
+        // This function won't get invoked because the above function's Spawn() returns null (since dirt replaces grass, not create its own)
+ 
+        if (Mathf.Abs(Mathf.Round(newObj.transform.position.y) - YBoundary.y) < _EPSILON)
+        {
+            Debug.Log("CALLED 22");
+            ElevateCircle(true, newObj.transform.position, 0.1f);
         }
     }
 
@@ -543,7 +559,6 @@ public class MapGeneration : MonoBehaviour
 
                         Block block = potentialObj.GetComponentInChildren<Block>();
                         if (block) block.UpdateHistory((upOrDown ? "Raised" : "Lowered") + " to " + potentialObj.transform.position);
-
                     }
                 }
             }
@@ -553,15 +568,21 @@ public class MapGeneration : MonoBehaviour
 
     private Block Spawn(Vector3 vec, bool utilizeY = false)
     {
+        Block replacementBlock = null;
+        return SpawnAdvanced(vec, ref replacementBlock, utilizeY);
+    }
+
+    private Block SpawnAdvanced(Vector3 vec, ref Block replacedBlock, bool utilizeY = false )
+    {
         if (!utilizeY) // majority of the time you use Spawn(), you ignore y, cause you're affecting grid[x,z]
         {
             GameObject objectAtVec = gridOccupants[(int)vec.x, (int)vec.z];
             if (null != objectAtVec)
             {
                 Block blockAtVec = objectAtVec.GetComponentInChildren<Block>();
+                replacedBlock = blockAtVec;
                 blockAtVec.type = currentPaintingBlock;
                 blockAtVec.UpdateBlock();
-                //blockAtVec.UpdateHistory("Type changed to " + System.Enum.GetName(typeof(BlockType), (int)blockAtVec.type.blockType));
                 return null;
             }
         }
