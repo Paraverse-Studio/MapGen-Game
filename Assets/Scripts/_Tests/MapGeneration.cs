@@ -883,7 +883,6 @@ public class MapGeneration : MonoBehaviour
         }
     }
 
-
     private float Rounded(float v)
     {
         return (((int)(v * 100.0f)) / 100.0f);
@@ -923,6 +922,21 @@ public class MapGeneration : MonoBehaviour
         progressValue++;
         OnProgressChange?.Invoke(progressValue, progressTotal);
         OnProgressChangeText?.Invoke(va);
+    }
+
+    public void RenderBlocks() => StartCoroutine(ERenderBlocks());
+    public IEnumerator ERenderBlocks()
+    {
+        for (int i = 0; i < allObjects.Count; ++i)
+        {
+            allObjects[i].GetComponent<Block>().ToggleRenderer(true); // UpdateBlockItem();
+            yield return null;
+        }
+        for (int i = 0; i < waterObjects.Count; ++i)
+        {
+            waterObjects[i].GetComponent<Block>().ToggleRenderer(true); //    UpdateBlockItem();
+            yield return null;
+        }
     }
 
 

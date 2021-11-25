@@ -27,7 +27,7 @@ public class ProgressBar : MonoBehaviour
     // Update is called once per frame
     void Update()
     {
-        bar.fillAmount = Mathf.SmoothDamp(bar.fillAmount, _progress / _total, ref _velocity, 0.05f);
+        bar.fillAmount = Mathf.SmoothDamp(bar.fillAmount, _progress / _total, ref _velocity, 0.1f);
         
         texts[0].text = !string.IsNullOrEmpty(_specificText) ? _specificText : "Loading . . .";
 
