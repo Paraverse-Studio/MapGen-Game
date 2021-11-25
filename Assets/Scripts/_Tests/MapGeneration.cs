@@ -3,6 +3,7 @@ using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.Events;
+using Bitgem.VFX.StylisedWater;
 
 [System.Serializable]
 public class PropItem
@@ -366,10 +367,11 @@ public class MapGeneration : MonoBehaviour
 
         AddWaterToDips();
         PartitionProgress("Finalizing post processing...");
+        UpdateWater();
         yield return new WaitForSeconds(processesDelay);
 
         AddProps();
-        PartitionProgress();
+        PartitionProgress(); UpdateWater();
         yield return new WaitForSeconds(processesDelay);
 
         /* * * * MISC STEPS (NO ORDER REQUIRED) * * */
@@ -378,17 +380,25 @@ public class MapGeneration : MonoBehaviour
         PartitionProgress("Completed");
         yield return new WaitForSeconds(processesDelay);
 
-
         progressTotal = progressTotalCounter - 1;
 
         centerPointWithY = new Vector3(centerPoint.x, gridOccupants[(int)centerPoint.x,
             (int)centerPoint.z].transform.position.y, centerPoint.z);
 
+        UpdateWater(); 
+
         OnMapGenerateEnd?.Invoke();
         yield return new WaitForSeconds(0.9f);
+        UpdateWater();
         OnScreenReady?.Invoke();
     }
 
+    public void UpdateWater()
+    {
+        Pool.Instance.waterVolume.gameObject.GetComponent<WaterVolumeTransforms>().Rebuild();
+        Pool.Instance.waterVolume.gameObject.GetComponent<WaterVolumeTransforms>().Validate();
+        Pool.Instance.waterVolume.gameObject.transform.position = new Vector3(100, -0.65f, 100);
+    }
 
     private void SpawnPath()
     {
