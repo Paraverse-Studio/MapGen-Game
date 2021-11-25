@@ -6,9 +6,14 @@ using TMPro;
 
 public class ProgressBar : MonoBehaviour
 {
+    [Header("References: ")]
     public Image bar;
     public Image wholeBar;
     public TextMeshProUGUI[] texts;
+
+    [Header("Lerp speed (smoothStep):")]
+    [SerializeField]
+    private float _lerpSpeed;
 
     private float _total;
     private float _progress;
@@ -27,7 +32,7 @@ public class ProgressBar : MonoBehaviour
     // Update is called once per frame
     void Update()
     {
-        bar.fillAmount = Mathf.SmoothDamp(bar.fillAmount, _progress / _total, ref _velocity, 0.1f);
+        bar.fillAmount = Mathf.SmoothDamp(bar.fillAmount, _progress / _total, ref _velocity, _lerpSpeed);
         
         texts[0].text = !string.IsNullOrEmpty(_specificText) ? _specificText : "Loading . . .";
 
