@@ -15,7 +15,7 @@ public class PoolItem  // a single instance of "List<ObjectPoolItem> itemsToPool
 
 public class Pool : MonoBehaviour
 {
-    public int spawned = 0;
+    public int totalSpawned = 0;
     public Transform folder;
     // list that describes each object pooled object
     public List<PoolItem> itemsToPool;
@@ -66,8 +66,8 @@ public class Pool : MonoBehaviour
                 pooledObjects[i].gameObject.transform.position = position;
                 pooledObjects[i].gameObject.transform.rotation = rotation;
                 pooledObjects[i].SetActive(true);
+                totalSpawned += 1;
 
-                spawned++;
                 return pooledObjects[i];
             }
         }

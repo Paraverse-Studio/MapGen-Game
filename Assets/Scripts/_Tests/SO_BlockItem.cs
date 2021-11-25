@@ -20,5 +20,4 @@ public class SO_BlockItem : ScriptableObject
     public Vector3 defaultScale = Vector3.one;
     public GameObject[] prefabVariations;
 
-
 }

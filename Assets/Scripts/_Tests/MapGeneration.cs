@@ -49,12 +49,12 @@ public class MapGeneration : MonoBehaviour
     public bool drawLine = true;
     public bool lineSmoothening = true;
     public float processesDelay = 0.02f;
-    public static MapGeneration Instance;    
+    public static MapGeneration Instance;
 
     [Space(20)]
     [Header("   ——————————  MAP BASE  ——————————")]
     [Space(10)]
-    [MinMaxSlider(-1f,1f)]
+    [MinMaxSlider(-1f, 1f)]
     public Vector2 randomElevation;
 
     [Header("   PATH SIZE ")]
@@ -117,6 +117,8 @@ public class MapGeneration : MonoBehaviour
     public StringEvent OnProgressChangeText = new StringEvent();
 
     #region SETTINGS_VARIABLES
+    private float _EPSILON = 0.002f;
+
     private int _GRIDSIZE; // should be double of distance
     private Vector3 centerPoint;
     public Vector3 CenterPoint => centerPoint;
@@ -144,9 +146,11 @@ public class MapGeneration : MonoBehaviour
     // Need to be initialized
     private Vector2 xBoundary;
     private Vector2 zBoundary;
-    public Vector2 yBoundary =>
-    new Vector2(lumpApplicationRounds / 2.0f, -lumpApplicationRounds / 2.0f);        
-    
+    private Vector2 yBoundary;
+    public Vector2 YBoundary =>
+    new Vector2(Mathf.Ceil(lumpApplicationRounds / 2.0f),
+                Mathf.Ceil(-lumpApplicationRounds / 2.0f));
+
     private Vector2 furthestBlock;
     private float furthestDistance = 0f;
 
@@ -163,7 +167,7 @@ public class MapGeneration : MonoBehaviour
     void Start()
     {
         gridOccupants = new GameObject[_GRIDSIZE, _GRIDSIZE];
-        centerPoint = new Vector3(_GRIDSIZE / 2, 0, _GRIDSIZE / 2);
+        centerPoint = new Vector3((int)(_GRIDSIZE / 2), 0, (int)(_GRIDSIZE / 2));
         centerPoint2D = new Vector3(centerPoint.x, centerPoint.z);
 
         RegeneratePath();
@@ -223,9 +227,9 @@ public class MapGeneration : MonoBehaviour
 
     //    OnScreenReady?.Invoke();
     //}
-    
+
     public void RegeneratePath() => StartCoroutine(ERegeneratePath());
-    
+
     public IEnumerator ERegeneratePath()
     {
         OnScreenStart?.Invoke();
@@ -257,7 +261,7 @@ public class MapGeneration : MonoBehaviour
     }
 
     private IEnumerator ResetGeneration()
-    {             
+    {
         // Resetting object lists
         for (int x = 0; x < _GRIDSIZE; ++x)
         {
@@ -279,7 +283,7 @@ public class MapGeneration : MonoBehaviour
             for (int i = treeObjects.Count - 1; i >= 0; --i)
             {
                 Destroy(treeObjects[i]);
-            }            
+            }
         }
         treeObjects.Clear();
 
@@ -306,7 +310,7 @@ public class MapGeneration : MonoBehaviour
 
 
 
-        PartitionProgress("Initiating map engine...");
+        PartitionProgress("Initiated generation engine");
         yield return new WaitForSeconds(processesDelay);
 
 
@@ -315,11 +319,17 @@ public class MapGeneration : MonoBehaviour
         currentPaintingBlock = blocks.grass;
 
         SpawnPath();
-        PartitionProgress("Forming baseline...");
+        PartitionProgress("Building base map...");
         yield return new WaitForSeconds(processesDelay);
 
-        ThickenPath();
-        PartitionProgress("Generating area...");
+        //ThickenPath();
+        for (int i = 0; i < pathObjects.Count; i++)
+        {
+            ThickenAroundObject(pathObjects[i], i, grassFillRadius);
+            PartitionProgress();
+            yield return null;
+        }
+        PartitionProgress("Expanding area...");
         yield return new WaitForSeconds(processesDelay);
 
         ThickenAroundObject(pathObjects[pathObjects.Count - 1], 0, grassFillRadius);
@@ -352,8 +362,8 @@ public class MapGeneration : MonoBehaviour
         currentPaintingBlock = blocks.water;
 
         AddWaterToDips();
-        //PartitionProgress();
-        //yield return new WaitForSeconds(processesDelay);
+        PartitionProgress("Finalizing post processing...");
+        yield return new WaitForSeconds(processesDelay);
 
         AddProps();
         PartitionProgress();
@@ -362,15 +372,15 @@ public class MapGeneration : MonoBehaviour
         /* * * * MISC STEPS (NO ORDER REQUIRED) * * */
 
         AddFoundationLayer();
-        PartitionProgress("Finalizing...");
+        PartitionProgress("Completed");
         yield return new WaitForSeconds(processesDelay);
 
-        
-        progressTotal = progressTotalCounter-1;
 
-        centerPointWithY = new Vector3(centerPoint.x, gridOccupants[(int)centerPoint.x, 
-            (int)centerPoint.z].transform.position.y,centerPoint.z);
-        
+        progressTotal = progressTotalCounter - 1;
+
+        centerPointWithY = new Vector3(centerPoint.x, gridOccupants[(int)centerPoint.x,
+            (int)centerPoint.z].transform.position.y, centerPoint.z);
+
         OnMapGenerateEnd?.Invoke();
         yield return new WaitForSeconds(0.9f);
         OnScreenReady?.Invoke();
@@ -388,7 +398,7 @@ public class MapGeneration : MonoBehaviour
 
             if (allObjects.Count == 0)
             {
-                GameObject obj = Spawn(centerPoint);
+                GameObject obj = Spawn(centerPoint)?.gameObject;
                 if (obj)
                 {
                     allObjects.Add(obj);
@@ -406,7 +416,7 @@ public class MapGeneration : MonoBehaviour
     {
         for (float i = 0.25f; i <= scale; i += 0.25f)
         {
-            GameObject newObj = Spawn(GetPointOnCircle(turningPointObj.transform.position, i, newAngle));
+            GameObject newObj = Spawn(GetPointOnCircle(turningPointObj.transform.position, i, newAngle))?.gameObject;
 
             if (newObj)
             {
@@ -427,7 +437,7 @@ public class MapGeneration : MonoBehaviour
     {
         for (int i = 0; i < pathObjects.Count; i++)
         {
-            ThickenAroundObject(pathObjects[i], i, grassFillRadius);  
+            ThickenAroundObject(pathObjects[i], i, grassFillRadius);
         }
     }
 
@@ -458,13 +468,27 @@ public class MapGeneration : MonoBehaviour
                 Vector3 newSpot = centerObjectOffsetted + new Vector3((int)x, 0, (int)z);
                 if (Vector3.Distance(centerObjectOffsetted, newSpot) < thickness)
                 {
-                    GameObject newObj = Spawn(newSpot);
-                    if (newObj)
+                    Block replacedBlock = null;
+                    Block block = SpawnAdvanced(newSpot, ref replacedBlock);
+
+                    if (block) allObjects.Add(block.gameObject);
+
+                    if (null != replacedBlock && replacedBlock.type == blocks.dirt)
                     {
-                        allObjects.Add(newObj);
-                    }
+                        ApplyBlockElevationRestrictions(replacedBlock);
+                    }      
                 }
             }
+        }
+    }
+
+    private void ApplyBlockElevationRestrictions(Block block)
+    {
+        GameObject newObj = block.gameObject;
+ 
+        if (Mathf.Abs(Mathf.Round(newObj.transform.position.y) - YBoundary.y) < _EPSILON)
+        {
+            ElevateBlock(true, newObj);
         }
     }
 
@@ -527,15 +551,7 @@ public class MapGeneration : MonoBehaviour
 
                     if (potentialObj != null && !alreadyElevated.Contains(potentialObj))
                     {
-                        alreadyElevated.Add(potentialObj);
-                        float extremeY;
-                        extremeY = GetAdjacentElevation(upOrDown ? ElevationLevel.lowest : ElevationLevel.highest, potentialObj);
-
-                        float yValue = extremeY + (upOrDown ? 1 : -1);
-                        yValue = Mathf.Clamp(yValue, yBoundary.y, yBoundary.x);
-
-                        potentialObj.transform.position =
-                            new Vector3(potentialObj.transform.position.x, yValue, potentialObj.transform.position.z);
+                        ElevateBlock(upOrDown, potentialObj);
                     }
                 }
             }
@@ -543,7 +559,27 @@ public class MapGeneration : MonoBehaviour
         alreadyElevated.Clear();
     }
 
-    private GameObject Spawn(Vector3 vec, bool utilizeY = false)
+    private void ElevateBlock(bool upOrDown, GameObject obj)
+    {
+        float extremeY;
+        extremeY = GetAdjacentElevation(upOrDown ? ElevationLevel.lowest : ElevationLevel.highest, obj);
+
+        float yValue = extremeY + (upOrDown ? 1 : -1);
+        yValue = Mathf.Clamp(yValue, YBoundary.y, YBoundary.x);
+
+        obj.transform.position = new Vector3(obj.transform.position.x, yValue, obj.transform.position.z);
+
+        Block block = obj.GetComponentInChildren<Block>();
+        if (block) block.UpdateHistory((upOrDown ? "Raised" : "Lowered") + " to " + obj.transform.position);
+    }
+
+    private Block Spawn(Vector3 vec, bool utilizeY = false)
+    {
+        Block replacementBlock = null;
+        return SpawnAdvanced(vec, ref replacementBlock, utilizeY);
+    }
+
+    private Block SpawnAdvanced(Vector3 vec, ref Block replacedBlock, bool utilizeY = false )
     {
         if (!utilizeY) // majority of the time you use Spawn(), you ignore y, cause you're affecting grid[x,z]
         {
@@ -551,6 +587,7 @@ public class MapGeneration : MonoBehaviour
             if (null != objectAtVec)
             {
                 Block blockAtVec = objectAtVec.GetComponentInChildren<Block>();
+                replacedBlock = blockAtVec;
                 blockAtVec.type = currentPaintingBlock;
                 blockAtVec.UpdateBlock();
                 return null;
@@ -564,14 +601,15 @@ public class MapGeneration : MonoBehaviour
 
         Block block = obj.GetComponentInChildren<Block>();
         block.type = currentPaintingBlock;
-        block.UpdateBlock(); // don't need to call this both times (it already gets called on block's OnEnable() )
+        block.UpdateBlock();
+        block.UpdateHistory("Spawned at " + spawnSpot);
 
-        if (utilizeY) return obj;
+        if (utilizeY) return block;
 
         gridOccupants[(int)vec.x, (int)vec.z] = obj;
 
         UpdateBoundaryStats(obj.transform.position);
-        return obj;
+        return block;
     }
 
     private bool IsOnSideOfBlock(Side side, GameObject src, GameObject subject)
@@ -663,17 +701,23 @@ public class MapGeneration : MonoBehaviour
 
     private void AddWaterToDips()
     {
-        float yLevelToMeasure = -1; // Mathf.Round(yBoundary.y); 
+        float yLevelToMeasure = Mathf.Round(YBoundary.y);
 
         for (int i = 0; i < allObjects.Count; ++i)
         {
-            if ((int)(Mathf.Round(allObjects[i].transform.position.y)) == (int)yLevelToMeasure)
-            {
-                Vector3 spawnSpot = new Vector3(allObjects[i].transform.position.x, 
-                                                    yLevelToMeasure + 1,
-                                                allObjects[i].transform.position.z);
+            Transform thisObject = allObjects[i].transform;
 
-                GameObject waterObj = Spawn(spawnSpot, true);
+            if (Mathf.Abs((Mathf.Round(thisObject.position.y)) - yLevelToMeasure) < _EPSILON)
+            {
+                Vector3 spawnSpot = new Vector3(thisObject.position.x, yLevelToMeasure + 1, thisObject.transform.position.z);
+
+                GameObject waterObj = Pool.Instance.Instantiate(blockPrefab.name, spawnSpot, Quaternion.identity);
+                if (waterObj)
+                {
+                    Block waterBlock = waterObj.GetComponent<Block>();
+                    waterBlock.type = blocks.water;
+                    waterBlock.UpdateBlock();
+                }
 
                 if (waterObj) waterObjects.Add(waterObj);
             }
@@ -732,7 +776,7 @@ public class MapGeneration : MonoBehaviour
     private void AddFoundationLayer()
     {
         int size = allObjects.Count;
-        for (int i = 0; i < size; ++i) 
+        for (int i = 0; i < size; ++i)
         {
             if (IsAdjacentOccupied(allObjects[i].gameObject.transform.position)) continue;
 
@@ -740,9 +784,9 @@ public class MapGeneration : MonoBehaviour
 
             GameObject foundationBlock = Pool.Instance.Instantiate(foundationPrefabs[Random.Range(0, foundationPrefabs.Length)].name,
                 new Vector3(allObjects[i].transform.position.x,
-                yLevel - 0.5f, allObjects[i].transform.position.z), Quaternion.identity);          
+                yLevel - 0.5f, allObjects[i].transform.position.z), Quaternion.identity);
 
-            if (foundationBlock) foundationObjects.Add(foundationBlock);            
+            if (foundationBlock) foundationObjects.Add(foundationBlock);
         }
     }
 

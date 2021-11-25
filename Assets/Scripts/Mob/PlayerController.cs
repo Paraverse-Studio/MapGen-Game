@@ -124,7 +124,7 @@ public class PlayerController : MonoBehaviour
                 if (_characterController.isGrounded) _lastSafePosition = _body.transform.position;
             }
 
-            if (MapGeneration.Instance && _body.transform.position.y < (MapGeneration.Instance.yBoundary.y-3.0f))
+            if (MapGeneration.Instance && _body.transform.position.y < (MapGeneration.Instance.YBoundary.y-3.0f))
             {
                 if (_lastSafePosition != Vector3.zero) TeleportPlayer(_lastSafePosition);
                 else TeleportPlayer();
