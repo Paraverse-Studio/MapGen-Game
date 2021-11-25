@@ -15,6 +15,11 @@ public class MapGenerationEditor : Editor
             script.RegeneratePath();
         }
 
+        if (GUILayout.Button("Render Blocks", GUILayout.Height(30)))
+        {
+            script.RenderBlocks();
+        }
+
         EditorGUILayout.Space();
         EditorGUILayout.Space();
 

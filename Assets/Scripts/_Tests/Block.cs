@@ -120,7 +120,13 @@ public class Block : MonoBehaviour
         _display.enabled = !_display.enabled;
     }
 
-    private void UpdateBlockItem()
+    public void ToggleRenderer(bool onOrOff)
+    {
+        if (_renderer) _renderer.enabled = onOrOff;
+    }
+
+
+    public void UpdateBlockItem()
     {
         // Once models are in
         UpdateReferences();
@@ -178,7 +184,7 @@ public class Block : MonoBehaviour
         }
 
         UpdateReferences();
-
+        //if (_renderer) _renderer.enabled = false;
     }
 
     private void UpdateSize()
