@@ -72,9 +72,13 @@ public class WaterVolumeFollowTarget : MonoBehaviour
             child.transform.position += oppositeDirection;
         }
 
+        UpdateWater();
+    }
+
+    public void UpdateWater()
+    {
         waterVolume.Rebuild();
         waterVolume.Validate();
     }
-
 
 }

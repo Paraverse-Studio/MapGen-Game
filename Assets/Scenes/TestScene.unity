@@ -735,7 +735,7 @@ MonoBehaviour:
   - objectToPool: {fileID: 191310894738300439, guid: ac4429f39fa00f4478f2559540ccbc39, type: 3}
     parentObj: {fileID: 0}
     customFolder: {fileID: 0}
-    amount: 3000
+    amount: 4000
     doSpawn: 1
     canExpand: 1
     notes: 
@@ -777,14 +777,14 @@ MonoBehaviour:
   - objectToPool: {fileID: 1649120835736521301, guid: 904ba6b175e9a894d86f0e24c72b4aaa, type: 3}
     parentObj: {fileID: 0}
     customFolder: {fileID: 0}
-    amount: 1500
+    amount: 2000
     doSpawn: 1
     canExpand: 1
     notes: previously 1000
   - objectToPool: {fileID: 3397581580957406494, guid: 10123678ea2bd964d9a85c2310ce1a5c, type: 3}
     parentObj: {fileID: 0}
     customFolder: {fileID: 991567765}
-    amount: 1000
+    amount: 2500
     doSpawn: 1
     canExpand: 1
     notes: water
@@ -1297,9 +1297,9 @@ MonoBehaviour:
   lineSmoothening: 1
   processesDelay: 0.017
   randomElevation: {x: 0.01, y: 0.05}
-  distanceOfPath: 70
-  distanceBeforeTurningPath: {x: 5, y: 8}
-  turningAngleRange: {x: 20, y: 45}
+  distanceOfPath: 100
+  distanceBeforeTurningPath: {x: 4, y: 8}
+  turningAngleRange: {x: 10, y: 45}
   pathThickenFrequency: 8
   grassFillRadius: {x: 5, y: 12}
   circularity: 1.096
@@ -1351,6 +1351,18 @@ MonoBehaviour:
       - m_Target: {fileID: 1434833512}
         m_TargetAssemblyTypeName: PlayerController, Assembly-CSharp
         m_MethodName: TeleportPlayer
+        m_Mode: 1
+        m_Arguments:
+          m_ObjectArgument: {fileID: 0}
+          m_ObjectArgumentAssemblyTypeName: UnityEngine.Object, UnityEngine
+          m_IntArgument: 0
+          m_FloatArgument: 0
+          m_StringArgument: 
+          m_BoolArgument: 0
+        m_CallState: 2
+      - m_Target: {fileID: 991567770}
+        m_TargetAssemblyTypeName: WaterVolumeFollowTarget, Assembly-CSharp
+        m_MethodName: UpdateWater
         m_Mode: 1
         m_Arguments:
           m_ObjectArgument: {fileID: 0}
@@ -1417,7 +1429,6 @@ MonoBehaviour:
           m_StringArgument: 
           m_BoolArgument: 0
         m_CallState: 2
-  centerPointWithY: {x: 0, y: 0, z: 0}
 --- !u!4 &1197659344
 Transform:
   m_ObjectHideFlags: 0

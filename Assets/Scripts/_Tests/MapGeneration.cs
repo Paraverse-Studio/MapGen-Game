@@ -128,7 +128,8 @@ public class MapGeneration : MonoBehaviour
     private Vector3 centerPoint;
     public Vector3 CenterPoint => centerPoint;
     private Vector2 centerPoint2D;
-    public Vector3 centerPointWithY;
+    private Vector3 centerPointWithY;
+    public Vector3 CenterPointWithY => centerPointWithY;
     private SO_BlockItem currentPaintingBlock;
     #endregion
 

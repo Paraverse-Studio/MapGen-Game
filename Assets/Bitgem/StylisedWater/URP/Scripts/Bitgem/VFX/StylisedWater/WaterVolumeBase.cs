@@ -123,7 +123,7 @@ namespace Bitgem.VFX.StylisedWater
 
         public void Rebuild()
         {
-            Debug.Log("rebuilding water volume \"" + gameObject.name + "\"");
+            Debug.Log("Rebuilding water volume.");
 
             // ensure references to components before trying to use them
             ensureReferences();

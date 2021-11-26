@@ -129,18 +129,7 @@ public class PlayerController : MonoBehaviour
                 if (_lastSafePosition != Vector3.zero) TeleportPlayer(_lastSafePosition);
                 else TeleportPlayer();
             }
-
-            //else if (_moveDirection.y < 0)
-            //{
-            //    _failingSafePositionCounter += 1.2f;
-
-            //    if (_failingSafePositionCounter >= 1.6f)
-            //    {
-            //        _moveDirection.y = 0;
-            //        if (_lastSafePosition != Vector3.zero) TeleportPlayer(_lastSafePosition);
-            //        else if (MapGeneration.Instance) TeleportPlayer(MapGeneration.Instance.CenterPoint + new Vector3(0, 2, 0));
-            //    }
-            //}
+           
         }
     }
 
@@ -153,7 +142,7 @@ public class PlayerController : MonoBehaviour
     public void TeleportPlayer()
     {
         _moveDirection.y = -1f;
-        TeleportPlayer(MapGeneration.Instance.centerPointWithY + new Vector3(0, 0.5f, 0));
+        TeleportPlayer(MapGeneration.Instance.CenterPointWithY + new Vector3(0, 0.5f, 0));
     }
 
 
