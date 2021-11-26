@@ -39,16 +39,17 @@ public class TickManager : MonoBehaviour
     {
         if (Time.frameCount % 60 == 0)
         {
-            size = tickElements.Count;            
-        }
+            size = tickElements.Count;
 
-        for (int i = 0; i < size; ++i)
-        {
-            if (null != tickElements[i] && tickElements[i].block)
+            for (int i = 0; i < size; ++i)
             {
-                tickElements[i].block.Tick();
+                if (null != tickElements[i] && tickElements[i].block)
+                {
+                    tickElements[i].block.Tick();
+                }
             }
         }
+
     }
 
     public void Unsubscribe(Block block)

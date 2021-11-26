@@ -142,7 +142,7 @@ public class MapGeneration : MonoBehaviour
     private List<GameObject> pathObjects = new List<GameObject>();
     private List<GameObject> treeObjects = new List<GameObject>();
     private List<GameObject> foundationObjects = new List<GameObject>();
-    private List<GameObject> waterObjects = new List<GameObject>();
+    private List<Block> waterObjects = new List<Block>();
 
     private float progressValue;
     private int progressTotalCounter = 0;
@@ -309,7 +309,8 @@ public class MapGeneration : MonoBehaviour
         if (waterObjects.Count > 0)
         {
             for (int i = waterObjects.Count - 1; i >= 0; --i)
-            {                 
+            {
+                waterObjects[i].CurrentPrefab.transform.parent = Pool.Instance.gameObject.transform;
                 waterObjects[i].gameObject.SetActive(false);
             }
         }
@@ -737,9 +738,8 @@ public class MapGeneration : MonoBehaviour
                     Block waterBlock = waterObj.GetComponent<Block>();
                     waterBlock.type = blocks.water;
                     waterBlock.UpdateBlock();
+                    waterObjects.Add(waterBlock);
                 }
-
-                if (waterObj) waterObjects.Add(waterObj);
             }
         }
     }
