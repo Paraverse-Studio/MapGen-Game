@@ -301,6 +301,9 @@ public class MapGeneration : MonoBehaviour
         PartitionProgress("Modeling beziers...");
         yield return new WaitForSeconds(processesDelay);
 
+        SmoothenElevation();
+        PartitionProgress();
+        yield return new WaitForSeconds(processesDelay);
 
         /* * * * * * DECALS ON SHAPE OF MAP * * * * * */
 
@@ -607,8 +610,9 @@ public class MapGeneration : MonoBehaviour
         return extremestY;
     }
 
-    private bool IsAdjacentOccupied(Vector3 src)
+    private int IsAdjacentOccupied(Vector3 src, bool sameElevationNeeded = false)
     {
+        int sidesCovered = 0;
         for (int x = -1; x < 2; ++x)
         {
             for (int z = -1; z < 2; ++z)
@@ -616,13 +620,20 @@ public class MapGeneration : MonoBehaviour
                 Vector3 areaToCheck = new Vector3(src.x + x, 0, src.z + z);
                 GameObject objectToCheck = gridOccupants[(int)areaToCheck.x, (int)areaToCheck.z];
 
-                if (objectToCheck == null)
+                if (objectToCheck != null)
                 {
-                    return false;
+                    if (sameElevationNeeded)
+                    {
+                        if (Mathf.Abs(src.y - objectToCheck.transform.position.y) < _EPSILON)
+                        {
+                            sidesCovered++;
+                        }
+                    }
+                    else sidesCovered++;
                 }
             }
         }
-        return true;
+        return sidesCovered;
     }
 
     private void PaintDirtPath()
@@ -732,12 +743,31 @@ public class MapGeneration : MonoBehaviour
         }
     }
 
+    private void SmoothenElevation()
+    {
+        for (int i = 0; i < allObjects.Count; ++i)
+        {
+            GameObject obj = allObjects[i];
+            if (IsAdjacentOccupied(obj.transform.position, true) < M.flattenIfSurroundedByLessThan)
+            {
+                if (Mathf.Abs(obj.transform.position.y - YBoundary.x) < Mathf.Abs(obj.transform.position.y - YBoundary.y))
+                {
+                    ElevateBlock(false, obj);
+                }
+                else
+                {
+                    ElevateBlock(true, obj);
+                }
+            }
+        }
+    }
+
     private void AddFoundationLayer()
     {
         int size = allObjects.Count;
         for (int i = 0; i < size; ++i)
         {
-            if (IsAdjacentOccupied(allObjects[i].gameObject.transform.position)) continue;
+            if (9 == IsAdjacentOccupied(allObjects[i].gameObject.transform.position)) continue;
 
             int yLevel = (int)(allObjects[i].transform.position.y);
 
