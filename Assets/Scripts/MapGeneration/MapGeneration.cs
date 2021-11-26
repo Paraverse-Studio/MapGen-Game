@@ -99,8 +99,7 @@ public class MapGeneration : MonoBehaviour
 
     private float progressValue;
     private int progressTotalCounter = 0;
-    private float progressTotal = 10f;
-    private float waitTime = 0.1f;
+    private float progressTotal = 100f;
 
     // Need to be initialized
     private Vector2 xBoundary;
