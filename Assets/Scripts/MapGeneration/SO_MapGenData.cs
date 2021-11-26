@@ -42,6 +42,10 @@ public class SO_MapGenData : ScriptableObject
 
     public int lumpOffset = 2;
 
+    [Header("Elevation smoothening (flatten)")]
+    [Range(0, 9)]
+    public int flattenIfSurroundedByLessThan = 3;
+
     [Header("        DIRT PATH ")]
     [Space(10)]
     public int dirtPathThickenFrequency = 8;
