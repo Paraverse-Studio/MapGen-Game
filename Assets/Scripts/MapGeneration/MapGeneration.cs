@@ -36,23 +36,34 @@ public class MapGeneration : MonoBehaviour
         public SO_BlockItem water;
         public SO_BlockItem foundation;
     }
-    public struct Props
-    {
-        public GameObject[] props;
-    }
-    public Blocks blocks;
-    public Transform objFolder;
+    
+    [Header("Map Generation Data ")]    
+    public SO_MapGenData M;
+    [Space(20)]
+
     public GameObject blockPrefab;
+    
+    [Header("Block SOs")]    
+    public Blocks blocks;
+    [Space(20)]
+
+    public Transform objFolder;    
     public GameObject[] treePrefabs;
     public GameObject[] foundationPrefabs;
+
+    [Header("Line (GPS)")]
     public LineRenderer line;
     public bool drawLine = true;
     public bool lineSmoothening = true;
+    [Space(20)]
+
+    [Header("Processing Delay")]
     public float processesDelay = 0.02f;
+    [Space(20)]
+
     public static MapGeneration Instance;
     
-    [Header("Map Generation Data: ")]
-    public SO_MapGenData M;
+    
 
     [Space(25)]
     public UnityEvent OnScreenStart = new UnityEvent();

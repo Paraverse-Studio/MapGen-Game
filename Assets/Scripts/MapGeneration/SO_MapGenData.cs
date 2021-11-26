@@ -4,9 +4,9 @@ using NaughtyAttributes;
 [CreateAssetMenu(fileName = "SO_MapGenData", menuName = "SOs/MapGen/SO_MapGenData")]
 public class SO_MapGenData : ScriptableObject
 {
-    [Space(20)]
-    [Header("       ---------------  MAP BASE  ---------------")]
-    [Space(10)]
+    [Space(30)]
+    [Header("    _____________  MAP BASE  _____________")]
+    [Space(5)]
     [MinMaxSlider(-1f, 1f)]
     public Vector2 randomElevation;
 
@@ -54,9 +54,9 @@ public class SO_MapGenData : ScriptableObject
     [MinMaxSlider(0f, 12f)]
     public Vector2 dirtCutoffLength;
 
-    [Space(20)]
-    [Header("       ---------------  MAP PROPS  ---------------")]
-    [Space(25)]
+    [Space(30)]
+    [Header("    _____________  MAP PROPS  _____________")]
+    [Space(30)]
     public bool showProps;
 
     [Header("        TREE SPAWNING ")]
