@@ -3,7 +3,6 @@ using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.Events;
-using Bitgem.VFX.StylisedWater;
 
 [System.Serializable]
 public class PropItem
@@ -166,7 +165,7 @@ public class MapGeneration : MonoBehaviour
     private void Awake()
     {
         Instance = this;
-        _GRIDSIZE = (int)(distanceOfPath * 2.1f);
+        _GRIDSIZE = (int)((distanceOfPath*2.0f) + (grassFillRadius.y * 2.0f) + 1);
     }
 
     // Start is called before the first frame update
@@ -370,11 +369,10 @@ public class MapGeneration : MonoBehaviour
 
         AddWaterToDips();
         PartitionProgress("Finalizing post processing...");
-        UpdateWater();
         yield return new WaitForSeconds(processesDelay);
 
         AddProps();
-        PartitionProgress(); UpdateWater();
+        PartitionProgress(); 
         yield return new WaitForSeconds(processesDelay);
 
         /* * * * MISC STEPS (NO ORDER REQUIRED) * * */
@@ -388,22 +386,9 @@ public class MapGeneration : MonoBehaviour
         centerPointWithY = new Vector3(centerPoint.x, gridOccupants[(int)centerPoint.x,
             (int)centerPoint.z].transform.position.y, centerPoint.z);
 
-        UpdateWater(); 
-
         OnMapGenerateEnd?.Invoke();
         yield return new WaitForSeconds(0.9f);
-        UpdateWater();
         OnScreenReady?.Invoke();
-    }
-
-    public void UpdateWater()
-    {
-        return; 
-        Pool.Instance.waterVolume.gameObject.GetComponent<WaterVolumeTransforms>().Rebuild();
-        Pool.Instance.waterVolume.gameObject.GetComponent<WaterVolumeTransforms>().Validate();
-
-        Vector3 closestBottomLeftSpot = new Vector3(xBoundary.x, -0.7f, zBoundary.x);
-        Pool.Instance.waterVolume.gameObject.transform.position = closestBottomLeftSpot;
     }
 
     private void SpawnPath()

@@ -20,11 +20,6 @@ public class MapGenerationEditor : Editor
             script.RenderBlocks();
         }
 
-        if (GUILayout.Button("Update Water", GUILayout.Height(30)))
-        {
-            script.UpdateWater();
-        }
-
         EditorGUILayout.Space();
         EditorGUILayout.Space();
 
