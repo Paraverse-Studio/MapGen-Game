@@ -45,15 +45,13 @@ public class Block : MonoBehaviour
     private Collider _collider;
     private MaterialPropertyBlock _propBlock;
 
+
     private GameObject _currentPrefab = null;
-
-    private Vector3 _targetPosition;
-    public Vector3 TargetPosition
+    public GameObject CurrentPrefab
     {
-        get { return _targetPosition; }
-        set { _targetPosition = value; }
+        get { return _currentPrefab; }
+        set { _currentPrefab = value; }
     }
-
 
     private void Awake()
     {
@@ -71,7 +69,6 @@ public class Block : MonoBehaviour
     // Start is called before the first frame update
     void OnEnable()
     {
-        // SetupHudText();
         TickManager.Instance?.Unsubscribe(this);
 
         if (type)
@@ -200,6 +197,7 @@ public class Block : MonoBehaviour
             }
             else
             {
+                _currentPrefab.transform.SetParent(Pool.Instance.waterVolume.transform);
                 TickManager.Instance?.Subscribe(this);
             }
 
@@ -236,7 +234,6 @@ public class Block : MonoBehaviour
         string time = System.DateTime.Now.ToString("hh:mm:ss");
         blockHistory += "\n" + time + "  " + msg;        
     }
-
 
 
 }

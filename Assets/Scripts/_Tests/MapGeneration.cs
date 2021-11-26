@@ -53,30 +53,32 @@ public class MapGeneration : MonoBehaviour
     public static MapGeneration Instance;
 
     [Space(20)]
-    [Header("   ——————————  MAP BASE  ——————————")]
+    [Header("       ---------------  MAP BASE  ---------------")]
     [Space(10)]
     [MinMaxSlider(-1f, 1f)]
     public Vector2 randomElevation;
 
-    [Header("   PATH SIZE ")]
+    [Header("        PATH SIZE ")]
     public float distanceOfPath = 40f;
 
-    [Header("   PATH TWISTING ")]
+    [Header("        PATH TWISTING ")]
     [MinMaxSlider(0f, 30f)]
     public Vector2 distanceBeforeTurningPath;
-    public float turningAngleMax;
 
-    [Header("   PATH THICKNESS ")]
+    [MinMaxSlider(0f, 100f)]
+    public Vector2 turningAngleRange;
+
+    [Header("        PATH THICKNESS ")]
     public int pathThickenFrequency = 8;
 
     [MinMaxSlider(0f, 50f)]
     public Vector2 grassFillRadius;
 
-    [Header("The higher, the more squar-ish")]
+    [Header("The higher, the more square-ish")]
     [Range(1.0f, 1.5f)]
     public float circularity = 1.0f;
 
-    [Header("   LUMPS ")]
+    [Header("        LUMPS ")]
     [Space(10)]
     [Range(0, 40)]
     public int lumpDensity;
@@ -88,7 +90,7 @@ public class MapGeneration : MonoBehaviour
 
     public int lumpOffset = 2;
 
-    [Header("   DIRT PATH ")]
+    [Header("        DIRT PATH ")]
     [Space(10)]
     public int dirtPathThickenFrequency = 8;
 
@@ -101,11 +103,11 @@ public class MapGeneration : MonoBehaviour
     public Vector2 dirtCutoffLength;
 
     [Space(20)]
-    [Header("   ——————————  MAP PROPS  ——————————")]
+    [Header("       ---------------  MAP PROPS  ---------------")]
     [Space(25)]
     public bool showProps;
 
-    [Header("   TREE SPAWNING ")]
+    [Header("        TREE SPAWNING ")]
     [Range(0, 10)]
     public int treeSpawnDensity = 4;
     public int treeSpawnOffset = 2;
@@ -140,7 +142,7 @@ public class MapGeneration : MonoBehaviour
     private List<GameObject> pathObjects = new List<GameObject>();
     private List<GameObject> treeObjects = new List<GameObject>();
     private List<GameObject> foundationObjects = new List<GameObject>();
-    private List<GameObject> waterObjects = new List<GameObject>();
+    private List<Block> waterObjects = new List<Block>();
 
     private float progressValue;
     private int progressTotalCounter = 0;
@@ -170,6 +172,7 @@ public class MapGeneration : MonoBehaviour
     // Start is called before the first frame update
     void Start()
     {
+        // Can't and shouldn't change these 2 variables mid-play, only one time per play session
         gridOccupants = new GameObject[_GRIDSIZE, _GRIDSIZE];
         centerPoint = new Vector3((int)(_GRIDSIZE / 2), 0, (int)(_GRIDSIZE / 2));
         centerPoint2D = new Vector3(centerPoint.x, centerPoint.z);
@@ -307,11 +310,11 @@ public class MapGeneration : MonoBehaviour
         {
             for (int i = waterObjects.Count - 1; i >= 0; --i)
             {
-                waterObjects[i].SetActive(false);
+                waterObjects[i].CurrentPrefab.transform.parent = Pool.Instance.gameObject.transform;
+                waterObjects[i].gameObject.SetActive(false);
             }
         }
         waterObjects.Clear();
-
 
 
         PartitionProgress("Initiating building engine...");
@@ -397,14 +400,20 @@ public class MapGeneration : MonoBehaviour
     {
         Pool.Instance.waterVolume.gameObject.GetComponent<WaterVolumeTransforms>().Rebuild();
         Pool.Instance.waterVolume.gameObject.GetComponent<WaterVolumeTransforms>().Validate();
-        Pool.Instance.waterVolume.gameObject.transform.position = new Vector3(0, -0.7f, 0);
+
+        Vector3 closestBottomLeftSpot = new Vector3(xBoundary.x, -0.7f, zBoundary.x);
+        Pool.Instance.waterVolume.gameObject.transform.position = closestBottomLeftSpot;
     }
 
     private void SpawnPath()
     {
+        int index = 0;
         while (distanceCreated < distanceOfPath)
         {
-            float randomAngle = Random.Range(-turningAngleMax, turningAngleMax);
+            float randomAngle = Random.Range(turningAngleRange.x, turningAngleRange.y);
+
+            randomAngle *= ((Random.value > 0.5f) ? 1.0f : -1.0f);              
+            
             float newAngle = pathingAngle + randomAngle;
 
             float randomDistance = Random.Range(distanceBeforeTurningPath.x, distanceBeforeTurningPath.y);
@@ -729,9 +738,8 @@ public class MapGeneration : MonoBehaviour
                     Block waterBlock = waterObj.GetComponent<Block>();
                     waterBlock.type = blocks.water;
                     waterBlock.UpdateBlock();
+                    waterObjects.Add(waterBlock);
                 }
-
-                if (waterObj) waterObjects.Add(waterObj);
             }
         }
     }
