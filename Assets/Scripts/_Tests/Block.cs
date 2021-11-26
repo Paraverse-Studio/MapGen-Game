@@ -72,7 +72,11 @@ public class Block : MonoBehaviour
     void OnEnable()
     {
         // SetupHudText();
-        TickManager.Instance?.Unsubscribe(this);
+        if (type && MapGeneration.Instance && type == MapGeneration.Instance.blocks.water)
+        {
+            _currentPrefab?.transform.SetParent(Pool.Instance.gameObject.transform);
+            TickManager.Instance?.Unsubscribe(this);
+        }
 
         if (type)
         {
@@ -200,6 +204,7 @@ public class Block : MonoBehaviour
             }
             else
             {
+                _currentPrefab.transform.SetParent(Pool.Instance.waterVolume.transform);
                 TickManager.Instance?.Subscribe(this);
             }
 
@@ -236,7 +241,6 @@ public class Block : MonoBehaviour
         string time = System.DateTime.Now.ToString("hh:mm:ss");
         blockHistory += "\n" + time + "  " + msg;        
     }
-
 
 
 }

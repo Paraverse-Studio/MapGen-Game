@@ -64,7 +64,9 @@ public class MapGeneration : MonoBehaviour
     [Header("        PATH TWISTING ")]
     [MinMaxSlider(0f, 30f)]
     public Vector2 distanceBeforeTurningPath;
-    public float turningAngleMax;
+
+    [MinMaxSlider(0f, 100f)]
+    public Vector2 turningAngleRange;
 
     [Header("        PATH THICKNESS ")]
     public int pathThickenFrequency = 8;
@@ -307,12 +309,11 @@ public class MapGeneration : MonoBehaviour
         if (waterObjects.Count > 0)
         {
             for (int i = waterObjects.Count - 1; i >= 0; --i)
-            {
-                waterObjects[i].SetActive(false);
+            {                 
+                waterObjects[i].gameObject.SetActive(false);
             }
         }
         waterObjects.Clear();
-
 
 
         PartitionProgress("Initiating building engine...");
@@ -405,9 +406,13 @@ public class MapGeneration : MonoBehaviour
 
     private void SpawnPath()
     {
+        int index = 0;
         while (distanceCreated < distanceOfPath)
         {
-            float randomAngle = Random.Range(-turningAngleMax, turningAngleMax);
+            float randomAngle = Random.Range(turningAngleRange.x, turningAngleRange.y);
+
+            randomAngle *= ((Random.value > 0.5f) ? 1.0f : -1.0f);              
+            
             float newAngle = pathingAngle + randomAngle;
 
             float randomDistance = Random.Range(distanceBeforeTurningPath.x, distanceBeforeTurningPath.y);
