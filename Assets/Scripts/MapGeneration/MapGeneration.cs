@@ -50,67 +50,9 @@ public class MapGeneration : MonoBehaviour
     public bool lineSmoothening = true;
     public float processesDelay = 0.02f;
     public static MapGeneration Instance;
-
-    [Space(20)]
-    [Header("       ---------------  MAP BASE  ---------------")]
-    [Space(10)]
-    [MinMaxSlider(-1f, 1f)]
-    public Vector2 randomElevation;
-
-    [Header("        PATH SIZE ")]
-    public float distanceOfPath = 40f;
-
-    [Header("        PATH TWISTING ")]
-    [MinMaxSlider(0f, 30f)]
-    public Vector2 distanceBeforeTurningPath;
-
-    [MinMaxSlider(0f, 100f)]
-    public Vector2 turningAngleRange;
-
-    [Header("        PATH THICKNESS ")]
-    public int pathThickenFrequency = 8;
-
-    [MinMaxSlider(0f, 50f)]
-    public Vector2 grassFillRadius;
-
-    [Header("The higher, the more square-ish")]
-    [Range(1.0f, 1.5f)]
-    public float circularity = 1.0f;
-
-    [Header("        LUMPS ")]
-    [Space(10)]
-    [Range(0, 40)]
-    public int lumpDensity;
-
-    public int lumpApplicationRounds = 3;
-
-    [MinMaxSlider(0f, 100f)]
-    public Vector2 lumpRadius;
-
-    public int lumpOffset = 2;
-
-    [Header("        DIRT PATH ")]
-    [Space(10)]
-    public int dirtPathThickenFrequency = 8;
-
-    [MinMaxSlider(0f, 40f)]
-    public Vector2 dirtFillRadius;
-
-    public int dirtCutoffFrequency;
-
-    [MinMaxSlider(0f, 12f)]
-    public Vector2 dirtCutoffLength;
-
-    [Space(20)]
-    [Header("       ---------------  MAP PROPS  ---------------")]
-    [Space(25)]
-    public bool showProps;
-
-    [Header("        TREE SPAWNING ")]
-    [Range(0, 10)]
-    public int treeSpawnDensity = 4;
-    public int treeSpawnOffset = 2;
-    public float treeChanceGrowthRate = 5.0f;
+    
+    [Header("Map Generation Data: ")]
+    public SO_MapGenData M;
 
     [Space(25)]
     public UnityEvent OnScreenStart = new UnityEvent();
@@ -154,8 +96,8 @@ public class MapGeneration : MonoBehaviour
     private Vector2 zBoundary;
     private Vector2 yBoundary;
     public Vector2 YBoundary =>
-    new Vector2(Mathf.Ceil(lumpApplicationRounds / 2.0f),
-                Mathf.Ceil(-lumpApplicationRounds / 2.0f));
+    new Vector2(Mathf.Ceil(M.lumpApplicationRounds / 2.0f),
+                Mathf.Ceil(-M.lumpApplicationRounds / 2.0f));
 
     private Vector2 furthestBlock;
     private float furthestDistance = 0f;
@@ -166,7 +108,7 @@ public class MapGeneration : MonoBehaviour
     private void Awake()
     {
         Instance = this;
-        _GRIDSIZE = (int)((distanceOfPath*2.0f) + (grassFillRadius.y * 2.0f) + 1);
+        _GRIDSIZE = (int)((M.distanceOfPath *2.0f) + (M.grassFillRadius.y * 2.0f) + 1);
     }
 
     // Start is called before the first frame update
@@ -332,14 +274,14 @@ public class MapGeneration : MonoBehaviour
         //ThickenPath();
         for (int i = 0; i < pathObjects.Count; i++)
         {
-            ThickenAroundObject(pathObjects[i], i, grassFillRadius);
+            ThickenAroundObject(pathObjects[i], i, M.grassFillRadius);
             PartitionProgress();
             yield return null;
         }
         PartitionProgress("Expanding area...");
         yield return new WaitForSeconds(processesDelay);
 
-        ThickenAroundObject(pathObjects[pathObjects.Count - 1], 0, grassFillRadius);
+        ThickenAroundObject(pathObjects[pathObjects.Count - 1], 0, M.grassFillRadius);
         PartitionProgress();
         yield return new WaitForSeconds(processesDelay);
 
@@ -395,15 +337,15 @@ public class MapGeneration : MonoBehaviour
     private void SpawnPath()
     {
         int index = 0;
-        while (distanceCreated < distanceOfPath)
+        while (distanceCreated < M.distanceOfPath)
         {
-            float randomAngle = Random.Range(turningAngleRange.x, turningAngleRange.y);
+            float randomAngle = Random.Range(M.turningAngleRange.x, M.turningAngleRange.y);
 
             randomAngle *= ((Random.value > 0.5f) ? 1.0f : -1.0f);              
             
             float newAngle = pathingAngle + randomAngle;
 
-            float randomDistance = Random.Range(distanceBeforeTurningPath.x, distanceBeforeTurningPath.y);
+            float randomDistance = Random.Range(M.distanceBeforeTurningPath.x, M.distanceBeforeTurningPath.y);
 
             if (allObjects.Count == 0)
             {
@@ -446,7 +388,7 @@ public class MapGeneration : MonoBehaviour
     {
         for (int i = 0; i < pathObjects.Count; i++)
         {
-            ThickenAroundObject(pathObjects[i], i, grassFillRadius);
+            ThickenAroundObject(pathObjects[i], i, M.grassFillRadius);
         }
     }
 
@@ -454,7 +396,7 @@ public class MapGeneration : MonoBehaviour
     {
         // Determining what type of circle fill
         float thickness;
-        if (i % pathThickenFrequency != 0)
+        if (i % M.pathThickenFrequency != 0)
         {
             thickness = fillRadius.x;
         }
@@ -475,7 +417,7 @@ public class MapGeneration : MonoBehaviour
             for (float z = -thickness; z < thickness; z += 0.5f)
             {
                 Vector3 newSpot = centerObjectOffsetted + new Vector3((int)x, 0, (int)z);
-                if (Vector3.Distance(centerObjectOffsetted, newSpot) < (thickness* circularity)) // tags: circular
+                if (Vector3.Distance(centerObjectOffsetted, newSpot) < (thickness* M.circularity)) // tags: circular
                 {
                     Block replacedBlock = null;
                     Block block = SpawnAdvanced(newSpot, ref replacedBlock);
@@ -505,9 +447,9 @@ public class MapGeneration : MonoBehaviour
     {
         //// By default, lumps will spawn in a grid fashion
         // Spread determines how far lumps are apart (spread = 2, means a tree will appear every 2 blocks)
-        int spread = lumpDensity;
+        int spread = M.lumpDensity;
 
-        for (int upOrDown = 0; upOrDown < lumpApplicationRounds; ++upOrDown)
+        for (int upOrDown = 0; upOrDown < M.lumpApplicationRounds; ++upOrDown)
         {
             for (int x = (int)xBoundary.x; x < xBoundary.y; x += spread)
             {
@@ -531,13 +473,13 @@ public class MapGeneration : MonoBehaviour
                     }
                     ///////////////////////
 
-                    int randomXOffset = Random.Range(-lumpOffset, lumpOffset + 1);
-                    int randomZOffset = Random.Range(-lumpOffset, lumpOffset + 1);
+                    int randomXOffset = Random.Range(-M.lumpOffset, M.lumpOffset + 1);
+                    int randomZOffset = Random.Range(-M.lumpOffset, M.lumpOffset + 1);
 
                     x += randomXOffset;
                     z += randomZOffset;
 
-                    ElevateCircle(upOrDown % 2 == 0 ? true : false, new Vector3(x, 0, z), Random.Range(lumpRadius.x, lumpRadius.y));
+                    ElevateCircle(upOrDown % 2 == 0 ? true : false, new Vector3(x, 0, z), Random.Range(M.lumpRadius.x, M.lumpRadius.y));
                 }
             }
         }
@@ -554,7 +496,7 @@ public class MapGeneration : MonoBehaviour
             {
                 Vector3 newSpot = area + new Vector3(x, 0, z);
 
-                if (Vector3.Distance(area, newSpot) < (radius*circularity)) // tags: circular
+                if (Vector3.Distance(area, newSpot) < (radius* M.circularity)) // tags: circular
                 {
                     GameObject potentialObj = gridOccupants[(int)newSpot.x, (int)newSpot.z];
 
@@ -678,15 +620,15 @@ public class MapGeneration : MonoBehaviour
         for (int i = 0; i < pathObjects.Count; i++)
         {
             // Cuts dirt path - if a cut is too happen (frequency met), then skip i to dirtCutLength
-            if (i % dirtCutoffFrequency == 0)
+            if (i % M.dirtCutoffFrequency == 0)
             {
-                int dirtCutLength = (int)Random.Range(dirtCutoffLength.x, dirtCutoffLength.y);
+                int dirtCutLength = (int)Random.Range(M.dirtCutoffLength.x, M.dirtCutoffLength.y);
                 i += dirtCutLength;
                 if (i >= pathObjects.Count) return;
             }
 
             pathObjects[i].GetComponent<Block>().type = blocks.dirt;
-            ThickenAroundObject(pathObjects[i], i, dirtFillRadius);
+            ThickenAroundObject(pathObjects[i], i, M.dirtFillRadius);
         }
     }
 
@@ -699,9 +641,9 @@ public class MapGeneration : MonoBehaviour
         {
             if (allObjects[i].GetComponentInChildren<Block>().type != blocks.dirt) continue;
 
-            float elevation = Random.Range(randomElevation.x, randomElevation.y);
-            float xRandom = Random.Range(-randomElevation.x / 2f, randomElevation.x / 2f);
-            float zRandom = Random.Range(-randomElevation.x / 2f, randomElevation.x / 2f);
+            float elevation = Random.Range(M.randomElevation.x, M.randomElevation.y);
+            float xRandom = Random.Range(-M.randomElevation.x / 2f, M.randomElevation.x / 2f);
+            float zRandom = Random.Range(-M.randomElevation.x / 2f, M.randomElevation.x / 2f);
 
             allObjects[i].transform.position += new Vector3(xRandom, elevation, zRandom);
         }
@@ -736,7 +678,7 @@ public class MapGeneration : MonoBehaviour
         //// By default, props will spawn in a grid fashion
 
         // Spread determines how stretched that grid is (spread = 2, means a tree will appear every 2 blocks)
-        int spread = treeSpawnDensity;
+        int spread = M.treeSpawnDensity;
 
         for (int x = (int)xBoundary.x; x < xBoundary.y; x += spread)
         {
@@ -746,8 +688,8 @@ public class MapGeneration : MonoBehaviour
 
                 // Offset: by default, a tree would be placed in its spot in the grid
                 // with an offset of 1, the tree could appear 1 block away from the center, 2 would be more
-                int randomXOffset = Random.Range(-treeSpawnOffset, treeSpawnOffset);
-                int randomZOffset = Random.Range(-treeSpawnOffset, treeSpawnOffset);
+                int randomXOffset = Random.Range(-M.treeSpawnOffset, M.treeSpawnOffset);
+                int randomZOffset = Random.Range(-M.treeSpawnOffset, M.treeSpawnOffset);
 
                 int newX = (int)Mathf.Round(x + randomXOffset);
                 int newZ = (int)Mathf.Round(z + randomZOffset);
@@ -761,7 +703,7 @@ public class MapGeneration : MonoBehaviour
                 GameObject closestPathPosition = GetClosestObject(spawnSpot, pathObjects);
 
                 float chanceOfSpawn = -10.0f;
-                chanceOfSpawn += (treeChanceGrowthRate * Mathf.Pow(Vector3.Distance(spawnSpot, closestPathPosition.transform.position), 1.35f));
+                chanceOfSpawn += (M.treeChanceGrowthRate * Mathf.Pow(Vector3.Distance(spawnSpot, closestPathPosition.transform.position), 1.35f));
 
                 if (Random.Range(0f, 100f) < chanceOfSpawn)
                 {
