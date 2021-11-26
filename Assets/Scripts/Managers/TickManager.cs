@@ -8,7 +8,6 @@ public enum TickDelayOption
     t0, t2, t5, t10, t20, t30, t60, t120
 }
 
-
 [System.Serializable]
 public class TickElement
 {
@@ -28,25 +27,21 @@ public class TickManager : MonoBehaviour
         Instance = this;
     }
 
-    // Start is called before the first frame update
-    void Start()
-    {
-        
-    }
-
     // Update is called once per frame
     void LateUpdate()
     {
         if (Time.frameCount % 60 == 0)
         {
-            size = tickElements.Count;
+            
+        }
 
-            for (int i = 0; i < size; ++i)
+        size = tickElements.Count;
+
+        for (int i = 0; i < size; ++i)
+        {
+            if (null != tickElements[i] && tickElements[i].block)
             {
-                if (null != tickElements[i] && tickElements[i].block)
-                {
-                    tickElements[i].block.Tick();
-                }
+                tickElements[i].block.Tick();
             }
         }
 
@@ -56,7 +51,7 @@ public class TickManager : MonoBehaviour
     {
         for (int i = 0; i < tickElements.Count; ++i)
         {
-            if (tickElements[i].block == block) tickElements.RemoveAt(i);
+            if (null != tickElements[i] && tickElements[i].block == block) tickElements.RemoveAt(i);
         }
     }
 
