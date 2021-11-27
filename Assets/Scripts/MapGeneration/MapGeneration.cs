@@ -372,7 +372,7 @@ public class MapGeneration : MonoBehaviour
         }
 
         // Randomizing the circle radius' off-set a bit
-        int randomizingCap = (int)(Mathf.Min(fillRadius.x - 1, 2));
+        int randomizingCap = (int)(System.Math.Min(fillRadius.x - 1, 2));
         int randomizedX = Random.Range(-randomizingCap, randomizingCap);
         int randomizedZ = Random.Range(-randomizingCap, randomizingCap);
         Vector3 centerObjectOffsetted = obj.transform.position + new Vector3(randomizedX, 0, randomizedZ);
@@ -383,7 +383,9 @@ public class MapGeneration : MonoBehaviour
             for (float z = -thickness; z < thickness; z += 0.5f)
             {
                 Vector3 newSpot = centerObjectOffsetted + new Vector3((int)x, 0, (int)z);
-                if (Vector3.Distance(centerObjectOffsetted, newSpot) < (thickness* M.circularity)) // tags: circular
+
+                //if (Vector3.Distance(centerObjectOffsetted, newSpot) < (thickness* M.circularity)) // tags: circular
+                if (IsDistanceLessThan(centerObjectOffsetted, newSpot, (thickness * M.circularity)))
                 {
                     Block replacedBlock = null;
                     Block block = SpawnAdvanced(newSpot, ref replacedBlock);
@@ -462,7 +464,8 @@ public class MapGeneration : MonoBehaviour
             {
                 Vector3 newSpot = area + new Vector3(x, 0, z);
 
-                if (Vector3.Distance(area, newSpot) < (radius* M.circularity)) // tags: circular
+                //if (Vector3.Distance(area, newSpot) < (radius* M.circularity)) // tags: circular
+                if (IsDistanceLessThan(area, newSpot, (radius * M.circularity)))
                 {
                     GameObject potentialObj = gridOccupants[(int)newSpot.x, (int)newSpot.z];
 
@@ -685,12 +688,6 @@ public class MapGeneration : MonoBehaviour
                     treeObjects.Add(obj);
                     obj.transform.position += new Vector3(0, 1, 0);
                     obj.transform.SetParent(objFolder);
-
-                    if (GlobalSettings.Instance.showHudText || true)
-                    {
-                        obj.GetComponentInChildren<Block>().TextToDisplay =
-                            Rounded(Vector3.Distance(spawnSpot, closestPathPosition.transform.position)) + " (" + Rounded(chanceOfSpawn) + "%)";
-                    }
                 }
             }
         }
@@ -835,6 +832,13 @@ public class MapGeneration : MonoBehaviour
         float x = origin.x + radius * Mathf.Sin(angleInRadians);
         float z = origin.z + radius * Mathf.Cos(angleInRadians);
         return new Vector3(x, origin.y, z);
+    }
+
+    private bool IsDistanceLessThan(Vector3 a, Vector3 b, float compareValue)
+    {
+        float dist = (a - b).sqrMagnitude;
+        if (dist < (compareValue * compareValue)) return true;
+        else return false;
     }
 
     private GameObject GetClosestObject(Vector3 src, List<GameObject> list)
