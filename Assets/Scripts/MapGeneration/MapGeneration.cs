@@ -140,53 +140,6 @@ public class MapGeneration : MonoBehaviour
         if (Input.GetKeyDown(KeyCode.P)) RegeneratePath();
     }
 
-    // private IEnumerator GenerateMap() 
-    //{
-    //    //Grass base series
-    //    currentPaintingBlock = blocks.grass;
-
-    //    SpawnPath();
-    //    PartitionProgress("Adding base...");
-    //    yield return new WaitForSeconds(processesDelay);
-
-    //    ThickenPath();
-    //    PartitionProgress("Generating area...");
-    //    yield return new WaitForSeconds(processesDelay);
-
-    //    ThickenAroundObject(pathObjects[pathObjects.Count - 1], 0, grassFillRadius);
-    //    PartitionProgress();
-    //    yield return new WaitForSeconds(processesDelay);
-
-    //    AddRandomLumps();
-    //    PartitionProgress();
-    //    yield return new WaitForSeconds(processesDelay);
-
-    //    //Dirt series
-    //    currentPaintingBlock = blocks.dirt;
-
-    //    PaintDirtPath();
-    //    PartitionProgress();
-    //    yield return new WaitForSeconds(processesDelay);
-
-    //    ApplyRandomElevation();
-    //    PartitionProgress("Placing props/items...");
-    //    yield return new WaitForSeconds(processesDelay);
-
-    //    AddProps();
-    //    PartitionProgress();
-    //    yield return new WaitForSeconds(processesDelay);
-
-    //    AddFoundationLayer();
-    //    PartitionProgress("Finalizing...");
-    //    yield return new WaitForSeconds(processesDelay);
-
-    //    OnMapGenerateEnd?.Invoke();
-
-    //    yield return new WaitForSeconds(0.8f);
-
-    //    OnScreenReady?.Invoke();
-    //}
-
     public void RegeneratePath() => StartCoroutine(ERegeneratePath());
 
     public IEnumerator ERegeneratePath()
