@@ -36,18 +36,18 @@ public class MapGeneration : MonoBehaviour
         public SO_BlockItem water;
         public SO_BlockItem foundation;
     }
-    
-    [Header("Map Generation Data ")]    
+
+    [Header("Map Generation Data ")]
     public SO_MapGenData M;
     [Space(20)]
 
     public GameObject blockPrefab;
-    
-    [Header("Block SOs")]    
+
+    [Header("Block SOs")]
     public Blocks blocks;
     [Space(20)]
 
-    public Transform objFolder;    
+    public Transform objFolder;
     public GameObject[] treePrefabs;
     public GameObject[] foundationPrefabs;
 
@@ -62,8 +62,8 @@ public class MapGeneration : MonoBehaviour
     [Space(20)]
 
     public static MapGeneration Instance;
-    
-    
+
+
 
     [Space(25)]
     public UnityEvent OnScreenStart = new UnityEvent();
@@ -118,7 +118,7 @@ public class MapGeneration : MonoBehaviour
     private void Awake()
     {
         Instance = this;
-        _GRIDSIZE = (int)((M.distanceOfPath *2.0f) + (M.grassFillRadius.y * 2.0f) + 1);
+        _GRIDSIZE = (int)((M.distanceOfPath * 2.0f) + (M.grassFillRadius.y * 2.0f) + 1);
     }
 
     // Start is called before the first frame update
@@ -270,6 +270,10 @@ public class MapGeneration : MonoBehaviour
         PartitionProgress("Activating props...");
         yield return new WaitForSeconds(processesDelay);
 
+        AddFoundationAndEdgeWork();
+        PartitionProgress("Finalizing post processing...");
+        yield return new WaitForSeconds(processesDelay);
+
         /* * * * * IMPORTANT PROPS ON MAP * * * * * * */
 
 
@@ -277,18 +281,16 @@ public class MapGeneration : MonoBehaviour
         currentPaintingBlock = blocks.water;
 
         AddWaterToDips();
-        PartitionProgress("Finalizing post processing...");
+        PartitionProgress("Completed!");
         yield return new WaitForSeconds(processesDelay);
 
         AddProps();
-        PartitionProgress(); 
+        PartitionProgress();
         yield return new WaitForSeconds(processesDelay);
 
         /* * * * MISC STEPS (NO ORDER REQUIRED) * * */
 
-        AddFoundationLayer();
-        PartitionProgress("Completed");
-        yield return new WaitForSeconds(processesDelay);
+
 
         progressTotal = progressTotalCounter - 1;
 
@@ -307,8 +309,8 @@ public class MapGeneration : MonoBehaviour
         {
             float randomAngle = Random.Range(M.turningAngleRange.x, M.turningAngleRange.y);
 
-            randomAngle *= ((Random.value > 0.5f) ? 1.0f : -1.0f);              
-            
+            randomAngle *= ((Random.value > 0.5f) ? 1.0f : -1.0f);
+
             float newAngle = pathingAngle + randomAngle;
 
             float randomDistance = Random.Range(M.distanceBeforeTurningPath.x, M.distanceBeforeTurningPath.y);
@@ -395,7 +397,7 @@ public class MapGeneration : MonoBehaviour
                     if (null != replacedBlock && replacedBlock.type == blocks.dirt)
                     {
                         ApplyBlockElevationRestrictions(replacedBlock);
-                    }      
+                    }
                 }
             }
         }
@@ -404,7 +406,7 @@ public class MapGeneration : MonoBehaviour
     private void ApplyBlockElevationRestrictions(Block block)
     {
         GameObject newObj = block.gameObject;
- 
+
         if (Mathf.Abs(Mathf.Round(newObj.transform.position.y) - YBoundary.y) < _EPSILON)
         {
             ElevateBlock(true, newObj);
@@ -499,7 +501,7 @@ public class MapGeneration : MonoBehaviour
         return SpawnAdvanced(vec, ref replacementBlock, utilizeY);
     }
 
-    private Block SpawnAdvanced(Vector3 vec, ref Block replacedBlock, bool utilizeY = false )
+    private Block SpawnAdvanced(Vector3 vec, ref Block replacedBlock, bool utilizeY = false)
     {
         if (!utilizeY) // majority of the time you use Spawn(), you ignore y, cause you're affecting grid[x,z]
         {
@@ -712,13 +714,14 @@ public class MapGeneration : MonoBehaviour
         }
     }
 
-    private void AddFoundationLayer()
+    private void AddFoundationAndEdgeWork()
     {
         int size = allObjects.Count;
         for (int i = 0; i < size; ++i)
         {
             if (9 == IsAdjacentOccupied(allObjects[i].gameObject.transform.position)) continue;
 
+            // Adding foundation layer blocks underneath map
             int yLevel = (int)(allObjects[i].transform.position.y);
 
             GameObject foundationBlock = Pool.Instance.Instantiate(foundationPrefabs[Random.Range(0, foundationPrefabs.Length)].name,
@@ -726,6 +729,15 @@ public class MapGeneration : MonoBehaviour
                 yLevel - 0.5f, allObjects[i].transform.position.z), Quaternion.identity);
 
             if (foundationBlock) foundationObjects.Add(foundationBlock);
+
+            // RAISING edge blocks (so that anything, ie. water blocks, don't look awkward at edges)
+            Vector3 objPos = allObjects[i].transform.position;
+            GameObject obj = gridOccupants[(int)objPos.x, (int)objPos.z];
+            if (null != obj && Mathf.Abs(objPos.y - YBoundary.y) < _EPSILON)
+            {
+                ElevateBlock(true, obj);
+            }
+
         }
     }
 
