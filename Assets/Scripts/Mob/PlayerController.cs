@@ -142,7 +142,7 @@ public class PlayerController : MonoBehaviour
     public void TeleportPlayer()
     {
         _moveDirection.y = -1f;
-        TeleportPlayer(MapGeneration.Instance.CenterPointWithY + new Vector3(0, 0.5f, 0));
+        TeleportPlayer(MapGeneration.Instance.CenterPointWithY + new Vector3(0, 1f, 0));
     }
 
 
