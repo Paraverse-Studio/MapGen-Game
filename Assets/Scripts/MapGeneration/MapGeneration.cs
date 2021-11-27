@@ -39,13 +39,13 @@ public class MapGeneration : MonoBehaviour
 
     [Header("Map Generation Data ")]
     public SO_MapGenData M;
-    [Space(20)]
+    [Space(10)]
 
     public GameObject blockPrefab;
 
     [Header("Block SOs")]
     public Blocks blocks;
-    [Space(20)]
+    [Space(10)]
 
     public Transform objFolder;
     public GameObject[] treePrefabs;
@@ -55,11 +55,10 @@ public class MapGeneration : MonoBehaviour
     public LineRenderer line;
     public bool drawLine = true;
     public bool lineSmoothening = true;
-    [Space(20)]
+    [Space(10)]
 
     [Header("Processing Delay")]
     public float processesDelay = 0.02f;
-    [Space(20)]
 
     public static MapGeneration Instance;
 
