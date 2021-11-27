@@ -1,6 +1,7 @@
 using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
+using UnityEngine.Events;
 
 [System.Serializable]
 public class PoolItem  // a single instance of "List<ObjectPoolItem> itemsToPool" means all this info
@@ -25,6 +26,10 @@ public class Pool : MonoBehaviour
     // list that holds all pooledobject lists
     public List<GameObject> pooledObjects;
 
+    [Space(20)]
+    public UnityEvent OnPoolCreateStart = new UnityEvent();
+    public UnityEvent OnPoolCreateEnd = new UnityEvent();
+
     ////// SINGLE INSTANCE ////////////
     public static Pool Instance;
     //void Awake() { instance = this; }
@@ -34,6 +39,8 @@ public class Pool : MonoBehaviour
     void Awake()
     {
         Instance = this;
+
+        OnPoolCreateStart?.Invoke();
 
         pooledObjects = new List<GameObject>(); //list that holds all pooleable objects
 
@@ -56,6 +63,8 @@ public class Pool : MonoBehaviour
                 obj.transform.parent = itemsToPool[x].parentObj.transform; obj.SetActive(false); pooledObjects.Add(obj);
             }
         }
+
+        OnPoolCreateEnd?.Invoke();
     }
 
     //   Retrieving an object from the pool by its name
