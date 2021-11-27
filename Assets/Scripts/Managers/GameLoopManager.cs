@@ -1,14 +1,17 @@
 using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
+using UnityEngine.Events;
 
 public class GameLoopManager : MonoBehaviour
 {
     public static GameLoopManager Instance;
 
 
+    private bool _isPaused = false;
+    public bool IsPaused => _isPaused;
 
-
+    public UnityEvent OnPlay = new UnityEvent();
 
 
     private void Awake()
@@ -27,8 +30,27 @@ public class GameLoopManager : MonoBehaviour
     // Update is called once per frame
     void Update()
     {
-        
+        if (Input.GetKeyDown(KeyCode.O))
+        {
+            PauseGame();
+        }
     }
 
+    public void StartGame()
+    {
+        OnPlay?.Invoke();
+    }
+
+    public void QuitGame()
+    {
+        Application.Quit();
+    }
+
+    public void PauseGame()
+    {
+        _isPaused = !_isPaused;
+        if (_isPaused) Time.timeScale = 0.01f;
+        else Time.timeScale = 1.0f;
+    }
 
 }

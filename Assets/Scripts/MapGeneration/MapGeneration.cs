@@ -129,7 +129,7 @@ public class MapGeneration : MonoBehaviour
         centerPoint = new Vector3((int)(_GRIDSIZE / 2), 0, (int)(_GRIDSIZE / 2));
         centerPoint2D = new Vector3(centerPoint.x, centerPoint.z);
 
-        RegeneratePath();
+        //RegeneratePath();
     }
 
     // Update is called once per frame
