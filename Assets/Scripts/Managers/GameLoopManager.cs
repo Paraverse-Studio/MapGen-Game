@@ -39,6 +39,9 @@ public class GameLoopManager : MonoBehaviour
         
     }
 
+
+    #region MAIN_MENU
+
     public void StartGame()
     {
         OnPlay?.Invoke();
@@ -56,5 +59,21 @@ public class GameLoopManager : MonoBehaviour
 
         OnPause?.Invoke(_isPaused);
     }
+    #endregion
+
+    #region PLAY_SESSION
+    public void CompleteLevel()
+    {
+        // Calculate Stats()
+        // Save/Store Stats in database ()
+        // Display stats to player + score ()
+
+        // Start next round:
+        MapGeneration.Instance.RegeneratePath();
+    }
+
+
+    #endregion
+
 
 }
