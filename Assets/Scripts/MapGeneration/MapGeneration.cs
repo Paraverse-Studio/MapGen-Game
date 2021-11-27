@@ -136,7 +136,6 @@ public class MapGeneration : MonoBehaviour
     void Update()
     {
         UpdateLine();
-
         if (Input.GetKeyDown(KeyCode.P)) RegeneratePath();
     }
 
@@ -144,6 +143,8 @@ public class MapGeneration : MonoBehaviour
 
     public IEnumerator ERegeneratePath()
     {
+        yield return null;
+
         OnScreenStart?.Invoke();
 
         ResetVariables();
