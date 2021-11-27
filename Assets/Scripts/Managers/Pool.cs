@@ -35,12 +35,21 @@ public class Pool : MonoBehaviour
     //void Awake() { instance = this; }
     ///////////////////////////////////
 
-    // Start is called before the first frame update
-    void Awake()
+    private void Awake()
     {
-        Instance = this;
+        Instance = this;        
+    }
 
+    private void Start()
+    {
+        StartCoroutine(EAwake());
+    }
+
+    // Start is called before the first frame update
+    IEnumerator EAwake()
+    {
         OnPoolCreateStart?.Invoke();
+        yield return null;
 
         pooledObjects = new List<GameObject>(); //list that holds all pooleable objects
 
@@ -62,6 +71,7 @@ public class Pool : MonoBehaviour
                 obj.transform.rotation = Quaternion.identity;
                 obj.transform.parent = itemsToPool[x].parentObj.transform; obj.SetActive(false); pooledObjects.Add(obj);
             }
+            yield return null;
         }
 
         OnPoolCreateEnd?.Invoke();
