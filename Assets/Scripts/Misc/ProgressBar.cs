@@ -34,7 +34,7 @@ public class ProgressBar : MonoBehaviour
     {
         bar.fillAmount = Mathf.SmoothDamp(bar.fillAmount, _progress / _total, ref _velocity, _lerpSpeed);
         
-        texts[0].text = !string.IsNullOrEmpty(_specificText) ? _specificText : "Loading . . .";
+        texts[0].text = !string.IsNullOrEmpty(_specificText) ? _specificText : "Loading...";
 
         float val = (_progress / _total);
         if (val != 0)

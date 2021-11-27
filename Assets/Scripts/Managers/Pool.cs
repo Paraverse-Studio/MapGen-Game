@@ -18,6 +18,11 @@ public class PoolItem  // a single instance of "List<ObjectPoolItem> itemsToPool
 public class Pool : MonoBehaviour
 {
     public int totalSpawned = 0;
+    public int totalProgress = 0;
+
+    public int delayAfterEverySet = 1000;
+    private int delaySetCounter = 0;
+
     public Transform folder;
     public Transform waterVolume;
     // list that describes each object pooled object
@@ -29,6 +34,10 @@ public class Pool : MonoBehaviour
     [Space(20)]
     public UnityEvent OnPoolCreateStart = new UnityEvent();
     public UnityEvent OnPoolCreateEnd = new UnityEvent();
+
+    public FloatFloatEvent OnProgressChange = new FloatFloatEvent();
+    public StringEvent OnProgressChangeText = new StringEvent();
+
 
     ////// SINGLE INSTANCE ////////////
     public static Pool Instance;
@@ -42,6 +51,14 @@ public class Pool : MonoBehaviour
 
     private void Start()
     {
+        // Get total number of items to spawn (this is only for the loading bar to know total progress)
+        totalSpawned = 0;
+        totalProgress = 0;
+        for (int i = 0; i < itemsToPool.Count; ++i)
+        {
+            totalProgress += itemsToPool[i].amount;
+        }
+
         StartCoroutine(EAwake());
     }
 
@@ -62,6 +79,7 @@ public class Pool : MonoBehaviour
             GameObject go = new GameObject(); go.name = "[Object Pool - " + itemsToPool[x].objectToPool.name + "]";
             go.transform.position = Vector3.zero; go.transform.rotation = Quaternion.identity;
             if (folder != null) go.transform.parent = folder;
+
             for (int i = 0; i < itemsToPool[x].amount; i++)
             {
                 GameObject obj = (GameObject)Instantiate(itemsToPool[x].objectToPool);
@@ -70,8 +88,20 @@ public class Pool : MonoBehaviour
                 obj.transform.position = Vector3.zero;
                 obj.transform.rotation = Quaternion.identity;
                 obj.transform.parent = itemsToPool[x].parentObj.transform; obj.SetActive(false); pooledObjects.Add(obj);
+
+                // Progress bar stuff (purely)
+                totalSpawned += 1;
+                delaySetCounter += 1;
+                if (delaySetCounter >= delayAfterEverySet)
+                {
+                    delaySetCounter = 0;
+                    OnProgressChange?.Invoke(totalSpawned, totalProgress);
+                    OnProgressChangeText?.Invoke("Loading game... " + itemsToPool[x].objectToPool.name);
+                    yield return null;
+                }
+                ///////////////////////////////
+
             }
-            yield return null;
         }
 
         OnPoolCreateEnd?.Invoke();
@@ -90,7 +120,6 @@ public class Pool : MonoBehaviour
                 pooledObjects[i].gameObject.transform.position = position;
                 pooledObjects[i].gameObject.transform.rotation = rotation;
                 pooledObjects[i].SetActive(true);
-                totalSpawned += 1;
 
                 return pooledObjects[i];
             }
