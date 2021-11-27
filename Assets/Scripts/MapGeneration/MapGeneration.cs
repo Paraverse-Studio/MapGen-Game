@@ -37,6 +37,12 @@ public class MapGeneration : MonoBehaviour
         public SO_BlockItem foundation;
     }
 
+    [System.Serializable]
+    public struct ImportantProps
+    {
+        public GameObject endPoint;        
+    }
+
     [Header("Map Generation Data ")]
     public SO_MapGenData M;
     [Space(10)]
@@ -45,7 +51,9 @@ public class MapGeneration : MonoBehaviour
 
     [Header("Block SOs")]
     public Blocks blocks;
-    [Space(10)]
+
+    [Header("Important Props")]
+    public ImportantProps importantProps;
 
     public Transform objFolder;
     public GameObject[] treePrefabs;
@@ -221,6 +229,9 @@ public class MapGeneration : MonoBehaviour
         }
         waterObjects.Clear();
 
+        // Important Props
+
+
 
         PartitionProgress("Initiating building engine...");
         yield return new WaitForSeconds(processesDelay);
@@ -275,7 +286,7 @@ public class MapGeneration : MonoBehaviour
         yield return new WaitForSeconds(processesDelay);
 
         /* * * * * IMPORTANT PROPS ON MAP * * * * * * */
-
+        AddImportantProps();
 
         /* * * * * DECORATIVE PROPS ON MAP * * * * * * */
         currentPaintingBlock = blocks.water;
@@ -650,6 +661,15 @@ public class MapGeneration : MonoBehaviour
                 }
             }
         }
+    }
+
+    private void AddImportantProps()
+    {
+        // EndPoint
+        Vector3 spawnSpot = pathObjects[pathObjects.Count - 1].transform.position + new Vector3(0, 1, 0);
+        GameObject obj = Instantiate(importantProps.endPoint, spawnSpot, Quaternion.identity);
+        treeObjects.Add(obj);
+        
     }
 
     private void AddProps()
