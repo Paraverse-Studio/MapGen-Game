@@ -13,6 +13,8 @@ public class GameLoopManager : MonoBehaviour
 
     public UnityEvent OnPlay = new UnityEvent();
 
+    public BoolEvent OnPause = new BoolEvent();
+
 
     private void Awake()
     {
@@ -51,6 +53,8 @@ public class GameLoopManager : MonoBehaviour
     {
         _isPaused = !_isPaused;
         Time.timeScale = _isPaused? 1f:0f;
+
+        OnPause?.Invoke(_isPaused);
     }
 
 }

@@ -13,6 +13,11 @@ public class StringEvent : UnityEvent<string>
 {
 }
 
+[System.Serializable]
+public class BoolEvent : UnityEvent<bool>
+{
+}
+
 
 
 public class CustomUnityEvents : MonoBehaviour
