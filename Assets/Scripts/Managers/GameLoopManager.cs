@@ -34,6 +34,7 @@ public class GameLoopManager : MonoBehaviour
         {
             PauseGame();
         }
+        
     }
 
     public void StartGame()
@@ -49,8 +50,7 @@ public class GameLoopManager : MonoBehaviour
     public void PauseGame()
     {
         _isPaused = !_isPaused;
-        if (_isPaused) Time.timeScale = 0.01f;
-        else Time.timeScale = 1.0f;
+        Time.timeScale = _isPaused? 1f:0f;
     }
 
 }

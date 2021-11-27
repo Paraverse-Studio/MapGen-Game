@@ -159,7 +159,7 @@ public class PlayerController : MonoBehaviour
     public void TogglePlayer(bool onOrOff)
     {
         _active = onOrOff;
-        _renderer.enabled = onOrOff;
+        _body.gameObject.SetActive(onOrOff);
     }
 
 
