@@ -54,10 +54,8 @@ public class Block : MonoBehaviour
     }
 
     private void Awake()
-    {
-        _propBlock = new MaterialPropertyBlock();
-        UpdateReferences();
-        blockHistory = "Awake.";
+    {        
+        UpdateHistory("Created");
     }
 
     private void UpdateReferences()
@@ -79,6 +77,7 @@ public class Block : MonoBehaviour
 
     private void Start()
     {
+        _propBlock = new MaterialPropertyBlock();
         ChangeName();
     }
 

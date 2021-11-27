@@ -236,7 +236,6 @@ public class MapGeneration : MonoBehaviour
         PartitionProgress("Initiating building engine...");
         yield return new WaitForSeconds(processesDelay);
 
-
         /* * * * * CREATION OF MAP * * * * */
 
         currentPaintingBlock = blocks.grass;

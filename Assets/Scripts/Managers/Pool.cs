@@ -94,6 +94,7 @@ public class Pool : MonoBehaviour
                 delaySetCounter += 1;
                 if (delaySetCounter >= delayAfterEverySet)
                 {
+                    yield return null;
                     delaySetCounter = 0;
                     OnProgressChange?.Invoke(totalSpawned, totalProgress);
                     OnProgressChangeText?.Invoke("Loading game... " + itemsToPool[x].objectToPool.name);
