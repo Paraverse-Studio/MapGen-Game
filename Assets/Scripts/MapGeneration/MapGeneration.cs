@@ -460,9 +460,9 @@ public class MapGeneration : MonoBehaviour
         List<GameObject> alreadyElevated = new List<GameObject>();
 
         // Looping through all areas in the circle, and spawning another block
-        for (float x = -radius; x < radius; x += 0.5f)
+        for (float x = -radius; x < radius; x += 1f)
         {
-            for (float z = -radius; z < radius; z += 0.5f)
+            for (float z = -radius; z < radius; z += 1f)
             {
                 Vector3 newSpot = area + new Vector3(x, 0, z);
 
