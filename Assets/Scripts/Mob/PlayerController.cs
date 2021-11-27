@@ -19,19 +19,28 @@ public class PlayerController : MonoBehaviour
     public Vector3 moveVector;
 
     private CharacterController _characterController;
+    private Renderer _renderer;
 
     private Vector3 _moveDirection = Vector3.zero;
-    private Vector3 _moveNormal = Vector3.zero;
 
     private GameObject _simulatedCamera;
 
     private Vector3 _lastSafePosition = Vector3.zero;
-    private float _failingSafePositionCounter = 0f;
     private Transform _body;
+
+    // For disabling player movement, gravity, input, all
+    private bool _active;
+    public bool Active => _active;
+
+
+    private void Awake()
+    {
+        _characterController = GetComponentInChildren<CharacterController>();
+        _renderer = GetComponentInChildren<Renderer>();
+    }
 
     void Start()
     {
-        _characterController = GetComponentInChildren<CharacterController>();
         _simulatedCamera = new GameObject();
         _body = _characterController.transform;
         if (MapGeneration.Instance) MapGeneration.Instance.OnMapGenerateEnd.AddListener(TeleportPlayer);
@@ -45,9 +54,11 @@ public class PlayerController : MonoBehaviour
     void Update()
     {
         //  TIMERS   //////
-        _failingSafePositionCounter = Mathf.Max(0, _failingSafePositionCounter - Time.deltaTime);
 
         ///////////////////
+        
+        // Conditions /////
+        if (!_active) return;
 
 
         if (_characterController.isGrounded)
@@ -143,6 +154,12 @@ public class PlayerController : MonoBehaviour
     {
         _moveDirection.y = -1f;
         TeleportPlayer(MapGeneration.Instance.CenterPointWithY + new Vector3(0, 1f, 0));
+    }
+
+    public void TogglePlayer(bool onOrOff)
+    {
+        _active = onOrOff;
+        _renderer.enabled = onOrOff;
     }
 
 
