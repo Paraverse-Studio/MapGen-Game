@@ -378,9 +378,9 @@ public class MapGeneration : MonoBehaviour
         Vector3 centerObjectOffsetted = obj.transform.position + new Vector3(randomizedX, 0, randomizedZ);
 
         // Looping through all areas in the circle, and spawning another block
-        for (float x = -thickness; x < thickness; x += 0.5f)
+        for (float x = -thickness; x < thickness; x += 1f)
         {
-            for (float z = -thickness; z < thickness; z += 0.5f)
+            for (float z = -thickness; z < thickness; z += 1f)
             {
                 Vector3 newSpot = centerObjectOffsetted + new Vector3((int)x, 0, (int)z);
 
