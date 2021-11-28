@@ -45,7 +45,6 @@ public class UIManager : MonoBehaviour
         {
             if (menus[i] == menu)
             {
-                Debug.Log("Set active: " + menu.gameObject.name);
                 menu.gameObject.SetActive(true);
                 menu.Show();
             }
