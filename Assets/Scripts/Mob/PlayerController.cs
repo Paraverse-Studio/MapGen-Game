@@ -29,7 +29,7 @@ public class PlayerController : MonoBehaviour
     private Transform _body;
 
     // For disabling player movement, gravity, input, all
-    private bool _active;
+    private bool _active = true;
     public bool Active => _active;
 
 
@@ -37,12 +37,13 @@ public class PlayerController : MonoBehaviour
     {
         _characterController = GetComponentInChildren<CharacterController>();
         _renderer = GetComponentInChildren<Renderer>();
+        _body = _characterController.transform;
     }
 
     void Start()
     {
         _simulatedCamera = new GameObject();
-        _body = _characterController.transform;
+        
         if (MapGeneration.Instance) MapGeneration.Instance.OnMapGenerateEnd.AddListener(TeleportPlayer);
 
         // calculate the correct vertical position
@@ -144,12 +145,13 @@ public class PlayerController : MonoBehaviour
         }
     }
 
-    private void TeleportPlayer(Vector3 pos)
+    public void TeleportPlayer(Vector3 pos)
     {
         _characterController.enabled = false;
         _body.position = pos;
         _characterController.enabled = true;
     }
+
     public void TeleportPlayer()
     {
         _moveDirection.y = -1f;

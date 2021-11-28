@@ -41,7 +41,6 @@ public class Pool : MonoBehaviour
 
     ////// SINGLE INSTANCE ////////////
     public static Pool Instance;
-    //void Awake() { instance = this; }
     ///////////////////////////////////
 
     private void Awake()
@@ -49,8 +48,9 @@ public class Pool : MonoBehaviour
         Instance = this;        
     }
 
-    private void Start()
+    public void StartPool()
     {
+        Debug.Log("HUHHHHHHHHHHHHHHHHHHHHHHH");
         // Get total number of items to spawn (this is only for the loading bar to know total progress)
         totalSpawned = 0;
         totalProgress = 0;
