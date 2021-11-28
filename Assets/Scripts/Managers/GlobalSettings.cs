@@ -12,6 +12,7 @@ public class GlobalSettings : MonoBehaviour
     [Header("Show HUD Text: ")]
     public bool showHudText = true;
     public UnityEvent OnToggleHudText = new UnityEvent();
+
     [Button]
     public void ToggleHudText()
     {
@@ -22,6 +23,8 @@ public class GlobalSettings : MonoBehaviour
     [Space(20)]
     [Header("Folders for objects: ")]
     public Transform uiFolder;
+    public Transform healthBarFolder;
+
 
     public GameObject playerPrefab;
 

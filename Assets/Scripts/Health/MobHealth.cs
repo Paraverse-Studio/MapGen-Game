@@ -53,7 +53,7 @@ public class MobHealth : MonoBehaviour
         screenPoint.z = 0;
 
         _healthBar = GameObject.Instantiate(healthBarPrefab, screenPoint, Quaternion.identity);
-        _healthBar.transform.SetParent(healthBarFolder);
+        _healthBar.transform.SetParent(GlobalSettings.Instance.healthBarFolder);
         FollowTarget2D ft = _healthBar.GetComponent<FollowTarget2D>();
         ft.target = _mobController.Body;
         ft._offset = new Vector3(0, healthBarHeight, 0);        

@@ -59,7 +59,7 @@ MeshRenderer:
   m_RenderingLayerMask: 1
   m_RendererPriority: 0
   m_Materials:
-  - {fileID: 2100002, guid: bae110eee250e4b418b188f4ae4e3170, type: 3}
+  - {fileID: 2100000, guid: f512705d99f2a4f40b97df9f186aab41, type: 2}
   m_StaticBatchInfo:
     firstSubMesh: 0
     subMeshCount: 0
@@ -143,7 +143,7 @@ MeshRenderer:
   m_RenderingLayerMask: 1
   m_RendererPriority: 0
   m_Materials:
-  - {fileID: 2100000, guid: e64eeb02fedbaf343a4021e80f1eaff7, type: 2}
+  - {fileID: 2100000, guid: f512705d99f2a4f40b97df9f186aab41, type: 2}
   m_StaticBatchInfo:
     firstSubMesh: 0
     subMeshCount: 0
@@ -208,9 +208,10 @@ GameObject:
   - component: {fileID: 7129288949800645050}
   - component: {fileID: 7129288947830770517}
   - component: {fileID: 7129288947830770518}
+  - component: {fileID: 8871648213102102281}
   m_Layer: 0
-  m_Name: Player
-  m_TagString: Player
+  m_Name: Enemy1
+  m_TagString: Enemy
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
@@ -242,7 +243,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: f19403b78b3bdb848b4cd4b13419fbe7, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  isPlayer: 1
+  isPlayer: 0
   speed: 1.6
   jumpSpeed: 8
   gravity: 25
@@ -263,4 +264,19 @@ MonoBehaviour:
   healthBarPrefab: {fileID: 7249944015458361103, guid: 8166d5f8a3eadbd4cb060ec34d11f842, type: 3}
   healthBarFolder: {fileID: 0}
   healthBarHeight: 1.5
-  _totalHealth: 3
+  _totalHealth: 1
+--- !u!114 &8871648213102102281
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 7129288949800645051}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 3faa870ba78e1d542b990908f3643fac, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  detectRadius: 4
+  chaseRadius: 6
+  attackRadius: 1

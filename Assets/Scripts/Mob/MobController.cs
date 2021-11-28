@@ -10,18 +10,25 @@ using System.Collections;
 public class MobController : MonoBehaviour
 {
     [Header("Automotion: ")]
+    public bool isPlayer = false;
     public float speed = 6.0f;
     public float jumpSpeed = 8.0f;
     public float gravity = 9.8f;
 
     public float moveX;
     public float moveZ;
-    public Vector3 moveVector;
 
     private CharacterController _characterController;
     private Renderer _renderer;
 
     private Vector3 _moveDirection = Vector3.zero;
+    public Vector3 MoveDirection
+    {
+        get { return _moveDirection; }
+        set { _moveDirection = value; }
+    }
+
+    private Vector3 moveVector;
 
     private GameObject _simulatedCamera;
 
@@ -68,13 +75,19 @@ public class MobController : MonoBehaviour
             _moveDirection.y = 0;
         }
 
-        GetMovement();
+        if (isPlayer)
+        {
+            GetMovement();
 
-        GetJump();
+            GetJump();
+
+            GetAttack();
+        }
 
         // Gravity
         _moveDirection.y -= gravity * Time.deltaTime;
 
+        // Facing the direction you're moving
         if ((Mathf.Abs(_moveDirection.x) + Mathf.Abs(_moveDirection.z)) > 0.1f)
         {
             Vector3 _direction = new Vector3(_moveDirection.x, 0, _moveDirection.z);
@@ -83,14 +96,21 @@ public class MobController : MonoBehaviour
 
         // Move the controller
         _characterController.Move(_moveDirection * Time.deltaTime);
-
-        SafetyNet();
+        
     }
 
 
-    void GetJump()
+    private void GetJump()
     {
-        if (Input.GetButton("Jump") && _characterController.isGrounded)
+        if (Input.GetButton("Jump"))
+        {
+            Jump();
+        }
+    }
+
+    public void Jump()
+    {
+        if (_characterController.isGrounded)
         {
             _moveDirection.y = jumpSpeed;
         }
@@ -126,6 +146,25 @@ public class MobController : MonoBehaviour
 
         _moveDirection.y = currentY;
     }
+
+    private void GetAttack()
+    {
+        if (Input.GetKeyDown(KeyCode.K))
+        {
+            
+        }
+    }
+
+    public void Attack()
+    {
+        _moveDirection = Vector3.zero;
+
+        Debug.Log(gameObject.name + " attacked!");
+        // wind up attack animation
+
+        // perhaps use animation event to trigger the box on the sword for better accuracy 
+    }
+
 
     void SafetyNet()
     {

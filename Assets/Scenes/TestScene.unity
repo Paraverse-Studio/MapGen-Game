@@ -872,10 +872,10 @@ MonoBehaviour:
     OnDeveloperMode:
       m_PersistentCalls:
         m_Calls:
-        - m_Target: {fileID: 1396636632}
-          m_TargetAssemblyTypeName: UnityEngine.GameObject, UnityEngine
-          m_MethodName: SetActive
-          m_Mode: 6
+        - m_Target: {fileID: 1396636634}
+          m_TargetAssemblyTypeName: TestingEnvironment, Assembly-CSharp
+          m_MethodName: DeveloperMap
+          m_Mode: 1
           m_Arguments:
             m_ObjectArgument: {fileID: 0}
             m_ObjectArgumentAssemblyTypeName: UnityEngine.Object, UnityEngine
@@ -4586,7 +4586,7 @@ GameObject:
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
-  m_IsActive: 0
+  m_IsActive: 1
 --- !u!4 &1396636633
 Transform:
   m_ObjectHideFlags: 0
@@ -6498,6 +6498,7 @@ MonoBehaviour:
     m_PersistentCalls:
       m_Calls: []
   uiFolder: {fileID: 469482920}
+  healthBarFolder: {fileID: 1558995724}
   playerPrefab: {fileID: 7129288949800645051, guid: 66dc7eecdecc14d429dd36eac90f4e0a, type: 3}
   backupSafePosition: {x: 0, y: 0, z: 0}
 --- !u!4 &2104392425 stripped
@@ -6645,10 +6646,10 @@ PrefabInstance:
   m_Modification:
     m_TransformParent: {fileID: 774220668}
     m_Modifications:
-    - target: {fileID: 7129288949800645049, guid: 66dc7eecdecc14d429dd36eac90f4e0a, type: 3}
-      propertyPath: gravity
-      value: 15
-      objectReference: {fileID: 0}
+    - target: {fileID: 7129288947830770518, guid: 66dc7eecdecc14d429dd36eac90f4e0a, type: 3}
+      propertyPath: healthBarFolder
+      value: 
+      objectReference: {fileID: 1558995724}
     - target: {fileID: 7129288949800645050, guid: 66dc7eecdecc14d429dd36eac90f4e0a, type: 3}
       propertyPath: m_RootOrder
       value: 0
@@ -6697,45 +6698,16 @@ PrefabInstance:
       propertyPath: m_Name
       value: Player
       objectReference: {fileID: 0}
-    m_RemovedComponents:
-    - {fileID: 7129288949800645049, guid: 66dc7eecdecc14d429dd36eac90f4e0a, type: 3}
+    m_RemovedComponents: []
   m_SourcePrefab: {fileID: 100100000, guid: 66dc7eecdecc14d429dd36eac90f4e0a, type: 3}
---- !u!1 &7129288947830770516 stripped
-GameObject:
-  m_CorrespondingSourceObject: {fileID: 7129288949800645051, guid: 66dc7eecdecc14d429dd36eac90f4e0a, type: 3}
+--- !u!114 &7129288947830770517 stripped
+MonoBehaviour:
+  m_CorrespondingSourceObject: {fileID: 7129288947830770517, guid: 66dc7eecdecc14d429dd36eac90f4e0a, type: 3}
   m_PrefabInstance: {fileID: 7129288947830770515}
   m_PrefabAsset: {fileID: 0}
---- !u!114 &7129288947830770517
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 7129288947830770516}
+  m_GameObject: {fileID: 0}
   m_Enabled: 1
   m_EditorHideFlags: 0
   m_Script: {fileID: 11500000, guid: f19403b78b3bdb848b4cd4b13419fbe7, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  speed: 1.6
-  jumpSpeed: 8
-  gravity: 25
-  moveX: 0
-  moveZ: 0
-  moveVector: {x: 0, y: 0, z: 0}
---- !u!114 &7129288947830770518
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 7129288947830770516}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: d2a82acb80154724a985ee44a10bb54c, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: 
-  healthBarPrefab: {fileID: 7249944015458361103, guid: 8166d5f8a3eadbd4cb060ec34d11f842, type: 3}
-  healthBarFolder: {fileID: 1558995724}
-  healthBarHeight: 1.5
-  _totalHealth: 1

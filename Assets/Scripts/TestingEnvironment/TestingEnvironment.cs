@@ -11,7 +11,7 @@ public class TestingEnvironment : MonoBehaviour
     private List<List<GameObject>> list;
 
     // Start is called before the first frame update
-    void Start()
+    public void DeveloperMap()
     {
         list = new List<List<GameObject>>();
 
