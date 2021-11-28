@@ -71,8 +71,7 @@ public class MobAI : MonoBehaviour
     private void UpdateDistances()
     {
         if (_target) _distanceToTarget = Vector3.Distance(_body.position, _target.position);        
-        _distanceToPlayer = Vector3.Distance(_body.position, _playerBody.position);
-        
+        _distanceToPlayer = Vector3.Distance(_body.position, _playerBody.position);        
     }
 
 
