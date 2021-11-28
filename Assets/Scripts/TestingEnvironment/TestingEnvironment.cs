@@ -6,7 +6,7 @@ public class TestingEnvironment : MonoBehaviour
 {
     public int radius = 5;
     public GameObject blockPrefab;
-    public PlayerController player;
+    public MobController player;
     public Transform blockFolder;
     private List<List<GameObject>> list;
 

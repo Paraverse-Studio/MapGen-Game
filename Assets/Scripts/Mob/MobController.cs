@@ -7,7 +7,7 @@ using System.Collections;
 // Make sure to attach a character controller to the same game object.
 // It is recommended that you make only one call to Move or SimpleMove per frame.
 
-public class PlayerController : MonoBehaviour
+public class MobController : MonoBehaviour
 {
     [Header("Automotion: ")]
     public float speed = 6.0f;
@@ -27,6 +27,7 @@ public class PlayerController : MonoBehaviour
 
     private Vector3 _lastSafePosition = Vector3.zero;
     private Transform _body;
+    public Transform Body => _body;
 
     // For disabling player movement, gravity, input, all
     private bool _active = true;
