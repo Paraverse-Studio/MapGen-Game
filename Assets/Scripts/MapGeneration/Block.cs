@@ -142,6 +142,8 @@ public class Block : MonoBehaviour
         {
             if (overrideSettings.useOverrideColor)
             {
+                if (_propBlock == null) _propBlock = new MaterialPropertyBlock();
+
                 // Get the current value of the material properties in the renderer
                 _renderer.GetPropertyBlock(_propBlock);
 

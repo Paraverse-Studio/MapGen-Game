@@ -5,27 +5,40 @@ using UnityEngine.Events;
 
 public class GameLoopManager : MonoBehaviour
 {
+    [System.Serializable]
+    public struct GameEvents
+    {
+        public UnityEvent OnBootupGame;
+        public UnityEvent OnDeveloperMode;
+        public UnityEvent OnPlay;
+        public BoolEvent OnPause;
+    }
+    
     public static GameLoopManager Instance;
 
+    public bool developerMode = false;
 
     private bool _isPaused = false;
     public bool IsPaused => _isPaused;
 
-    public UnityEvent OnPlay = new UnityEvent();
-
-    public BoolEvent OnPause = new BoolEvent();
-
+    public GameEvents GameLoopEvents;
 
     private void Awake()
     {
         Instance = this;
     }
 
-
     // Start is called before the first frame update
     void Start()
     {
-        
+        if (!developerMode) 
+        {
+            GameLoopEvents.OnBootupGame?.Invoke();
+        }
+        else
+        {
+            GameLoopEvents.OnDeveloperMode?.Invoke();
+        }
     }
 
 
@@ -44,7 +57,7 @@ public class GameLoopManager : MonoBehaviour
 
     public void StartGame()
     {
-        OnPlay?.Invoke();
+        GameLoopEvents.OnPlay?.Invoke();
     }
 
     public void QuitGame()
@@ -57,7 +70,7 @@ public class GameLoopManager : MonoBehaviour
         _isPaused = !_isPaused;
         Time.timeScale = _isPaused? 1f:0f;
 
-        OnPause?.Invoke(_isPaused);
+        GameLoopEvents.OnPause?.Invoke(_isPaused);
     }
     #endregion
 
