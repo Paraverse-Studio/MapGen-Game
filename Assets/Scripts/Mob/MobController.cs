@@ -81,7 +81,8 @@ public class MobController : MonoBehaviour
         if (_characterController.isGrounded)
         {
             _moveDirection.y = 0;
-        }
+        }       
+        
 
         if (isPlayer)
         {

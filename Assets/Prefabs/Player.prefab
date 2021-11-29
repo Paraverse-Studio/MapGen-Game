@@ -11,7 +11,7 @@ GameObject:
   - component: {fileID: 1234977242839645339}
   - component: {fileID: 4971424259011055857}
   - component: {fileID: 1700548002041460777}
-  m_Layer: 0
+  m_Layer: 10
   m_Name: Cube
   m_TagString: Player
   m_Icon: {fileID: 0}
@@ -94,7 +94,7 @@ GameObject:
   - component: {fileID: 7129288948142675645}
   - component: {fileID: 1587026299197081639}
   - component: {fileID: 340408659}
-  m_Layer: 0
+  m_Layer: 10
   m_Name: Body
   m_TagString: Player
   m_Icon: {fileID: 0}
@@ -208,7 +208,7 @@ GameObject:
   - component: {fileID: 7129288949800645050}
   - component: {fileID: 7129288947830770517}
   - component: {fileID: 7129288947830770518}
-  m_Layer: 0
+  m_Layer: 10
   m_Name: Player
   m_TagString: Player
   m_Icon: {fileID: 0}
@@ -244,6 +244,9 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   isPlayer: 1
   speed: 1.6
+  jumpLayerMask:
+    serializedVersion: 2
+    m_Bits: 0
   jumpSpeed: 8
   jumpCD: 0.5
   gravity: 25
