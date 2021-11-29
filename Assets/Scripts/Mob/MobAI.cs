@@ -7,6 +7,10 @@ public class MobAI : MonoBehaviour
     public int detectRadius = 5;
     public int chaseRadius = 7; // longer than detect
     public int attackRadius = 1;
+
+    [Header("Movement rotation: ")]
+    public float rotationSpeed;
+
     private MobController _controller;
     private Transform _body;
     private Transform _playerBody;
@@ -14,6 +18,7 @@ public class MobAI : MonoBehaviour
 
     private float _distanceToTarget = 0;
     private float _distanceToPlayer = 0;
+    private float _distanceToOriginalPosition = 0;
     private Vector3 _originalPosition;
 
     // Start is called before the first frame update
@@ -28,19 +33,16 @@ public class MobAI : MonoBehaviour
     // Update is called once per frame
     void Update()
     {
-        if (Time.frameCount % 3 == 0)
+        if (Time.frameCount % 10 == 0)
         {
-            if (_target) _distanceToTarget = Vector3.Distance(_body.position, _target.position);
-            if (Time.frameCount % 6 == 0)
-            {
-                _distanceToPlayer = Vector3.Distance(_body.position, _playerBody.position);
-            }
+            UpdateDistances();            
         }
 
         if (!_target)
         {
             // Go back to original spot, and patrol around
-            _controller.MoveDirection = (_originalPosition - _body.position).normalized * 2.5f; // *2 to match player
+            if (_distanceToOriginalPosition > 0.5f) SendMovement(_originalPosition);
+            else _controller.MoveDirection = Vector3.zero;
 
             if (_distanceToPlayer <= detectRadius)
             {
@@ -58,7 +60,7 @@ public class MobAI : MonoBehaviour
             }
             else if (_distanceToTarget <= chaseRadius)
             {
-                _controller.MoveDirection = (_target.position - _body.position).normalized * 2.5f;
+                SendMovement(_target.position);
             }
             else if (_distanceToTarget > chaseRadius)
             {
@@ -71,8 +73,19 @@ public class MobAI : MonoBehaviour
     private void UpdateDistances()
     {
         if (_target) _distanceToTarget = Vector3.Distance(_body.position, _target.position);        
-        _distanceToPlayer = Vector3.Distance(_body.position, _playerBody.position);        
+        _distanceToPlayer = Vector3.Distance(_body.position, _playerBody.position);
+        _distanceToOriginalPosition = Vector3.Distance(_body.position, _originalPosition);
     }
 
+    private void SendMovement(Vector3 t)
+    {
+        Vector3 tPosition = new Vector3(t.x, _body.transform.position.y, t.z);
+        Quaternion lookDirection = Quaternion.LookRotation(tPosition - _body.transform.position);
+        _body.transform.rotation = Quaternion.Slerp(_body.transform.rotation, lookDirection, Time.deltaTime * rotationSpeed);
+
+        Vector3 forward = (_body.transform.forward).normalized * 2.5f;
+        forward.y = _controller.MoveDirection.y;
+        _controller.MoveDirection = forward;
+    }
 
 }
