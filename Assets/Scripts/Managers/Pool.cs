@@ -50,7 +50,6 @@ public class Pool : MonoBehaviour
 
     public void StartPool()
     {
-        Debug.Log("HUHHHHHHHHHHHHHHHHHHHHHHH");
         // Get total number of items to spawn (this is only for the loading bar to know total progress)
         totalSpawned = 0;
         totalProgress = 0;

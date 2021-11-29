@@ -178,7 +178,7 @@ CharacterController:
   serializedVersion: 2
   m_Height: 2
   m_Radius: 0.5
-  m_SlopeLimit: 45
+  m_SlopeLimit: 30
   m_StepOffset: 0.3
   m_SkinWidth: 0.08
   m_MinMoveDistance: 0.001
@@ -245,6 +245,7 @@ MonoBehaviour:
   isPlayer: 1
   speed: 1.6
   jumpSpeed: 8
+  jumpCD: 0.5
   gravity: 25
   moveX: 0
   moveZ: 0
@@ -264,3 +265,6 @@ MonoBehaviour:
   healthBarFolder: {fileID: 0}
   healthBarHeight: 1.5
   _totalHealth: 3
+  OnHealthChange:
+    m_PersistentCalls:
+      m_Calls: []

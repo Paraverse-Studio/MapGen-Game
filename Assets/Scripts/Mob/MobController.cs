@@ -12,7 +12,13 @@ public class MobController : MonoBehaviour
     [Header("Automotion: ")]
     public bool isPlayer = false;
     public float speed = 6.0f;
+
+    [Header("Jump")]
+    public LayerMask jumpLayerMask;
     public float jumpSpeed = 8.0f;
+    public float jumpCD = 0.5f;
+    private float jumpTimer = 0.0f;
+
     public float gravity = 9.8f;
 
     public float moveX;
@@ -41,6 +47,8 @@ public class MobController : MonoBehaviour
     public bool Active => _active;
 
 
+
+
     private void Awake()
     {
         _characterController = GetComponentInChildren<CharacterController>();
@@ -63,9 +71,9 @@ public class MobController : MonoBehaviour
     void Update()
     {
         //  TIMERS   //////
-
+        jumpTimer += Time.deltaTime;
         ///////////////////
-        
+
         // Conditions /////
         if (!_active) return;
 
@@ -82,6 +90,10 @@ public class MobController : MonoBehaviour
             GetJump();
 
             GetAttack();
+        }
+        else
+        {
+            DetectAhead();
         }
 
         // Gravity
@@ -110,9 +122,10 @@ public class MobController : MonoBehaviour
 
     public void Jump()
     {
-        if (_characterController.isGrounded)
+        if (jumpTimer >= jumpCD && _characterController.isGrounded)
         {
             _moveDirection.y = jumpSpeed;
+            jumpTimer = 0.0f;
         }
     }
 
@@ -163,6 +176,25 @@ public class MobController : MonoBehaviour
         // wind up attack animation
 
         // perhaps use animation event to trigger the box on the sword for better accuracy 
+    }
+
+
+    private void DetectAhead()
+    {
+        if (Time.frameCount % 20 == 0)
+        {
+            Debug.DrawRay(_body.transform.position, _body.transform.forward * 1.25f, Color.red, 0.2f);
+            RaycastHit[] hits;
+            hits = Physics.RaycastAll(_body.transform.position, _body.transform.forward, 1.25f);
+            
+            for (int i = 0; i < hits.Length; ++i) { 
+            
+                if (hits[i].collider.gameObject.layer == LayerMask.NameToLayer("Solid"))
+                {
+                    Jump();
+                }
+            }                     
+        }
     }
 
 
