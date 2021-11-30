@@ -7,11 +7,14 @@ using UnityEngine.Events;
 
 public class MobHealth : MonoBehaviour
 {
+    [Header("Health Bar UI")]
+    public bool useHealthBar = true;
     public GameObject healthBarPrefab;
-    public Transform healthBarFolder;
-
-    [Header("Health Bar settings")]
     public float healthBarHeight = 2.0f;
+
+    [Header("Health Bar Settings")]
+    [SerializeField]
+    private int _totalHealth;
 
     private GameObject _healthBar;
     private Transform _healthBarGroup;
@@ -24,8 +27,7 @@ public class MobHealth : MonoBehaviour
         get { return _health; }
         set { _health = Mathf.Clamp(value, 0, _totalHealth); }
     }
-    [SerializeField]
-    private int _totalHealth;
+    
 
     private List<Image> _healthBars;
     private int _healthBarMarker = 0;
@@ -41,11 +43,16 @@ public class MobHealth : MonoBehaviour
 
     // Start is called before the first frame update
     void Start()
-    {
-        CreateHealthBar();
-        _healthBarGroup = _healthBar.transform.GetChild(0);
+    {        
         _health = _totalHealth;
-        _healthBarMarker = _health;
+
+        if (useHealthBar)
+        {
+            CreateHealthBar();
+            _healthBarGroup = _healthBar.transform.GetChild(0);
+            _healthBarMarker = _health;
+        }
+
         SetTotalHealth(_totalHealth);       
         OnHealthChange.AddListener(UpdateHealthBars);
     }
@@ -76,16 +83,6 @@ public class MobHealth : MonoBehaviour
         if (Input.GetKeyDown(KeyCode.L)) TakeDamage(-1);
         if (Input.GetKeyDown(KeyCode.J)) IncreaseTotalHealth(-1);
     }
-
-    private IEnumerator ELerpMarker(bool upOrDown, Image image)
-    {
-        for (int i = 0; i < 80; ++i)
-        {
-            image.fillAmount += Time.deltaTime * (upOrDown ? 1 : -1);
-            yield return new WaitForSeconds(0.016666f);
-        }
-    }
-
 
     private void UpdateHealthBars()
     {
@@ -129,31 +126,35 @@ public class MobHealth : MonoBehaviour
         _totalHealth = val;
         _health = Mathf.Min(_health, _totalHealth);
 
-        int size = _healthBarGroup.childCount;
-
-        if (size > _totalHealth)
+        if (useHealthBar)
         {
-            for (int i = size - 1; i > 0; --i)
+            int size = _healthBarGroup.childCount;
+        
+            if (size > _totalHealth)
             {
-                if ((i + 1) > _totalHealth)
+                for (int i = size - 1; i > 0; --i)
                 {
-                    Destroy(_healthBarGroup.GetChild(i).gameObject);
+                    if ((i + 1) > _totalHealth)
+                    {
+                        Destroy(_healthBarGroup.GetChild(i).gameObject);
+                    }
                 }
             }
-        }
-        else
-        {
-            for (int i = size; i < _totalHealth; ++i)
+            else
             {
-                Instantiate(_healthBarGroup.GetChild(0), _healthBarGroup);
+                for (int i = size; i < _totalHealth; ++i)
+                {
+                    Instantiate(_healthBarGroup.GetChild(0), _healthBarGroup);
+                }
             }
+            RefreshHealthBarWidth();
+            RefreshHealthBarsList();
+            UpdateHealthBars();
         }
-        RefreshBarWidthFromHealth();
-        RefreshHealthBarsList();
-        UpdateHealthBars();
+
     }
 
-    public void RefreshBarWidthFromHealth()
+    public void RefreshHealthBarWidth()
     {
         int width = (int)Mathf.Min((_totalHealth * Mathf.Max(35 - (_totalHealth * 1.65f), 16f)) + 50, 170 + (_totalHealth * 6));
 

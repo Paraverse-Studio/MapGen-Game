@@ -46,8 +46,7 @@ public class MobAI : MonoBehaviour
 
             if (_distanceToPlayer <= detectRadius)
             {
-                _target = _playerBody;
-                UpdateDistances();
+                SetTarget(_playerBody);
             }
         }
 
@@ -64,10 +63,16 @@ public class MobAI : MonoBehaviour
             }
             else if (_distanceToTarget > chaseRadius)
             {
-                _target = null;
+                SetTarget(null);
             }
         }
 
+    }
+
+    public void SetTarget(Transform t)
+    {
+        _target = t;
+        UpdateDistances();
     }
 
     private void UpdateDistances()
