@@ -2,18 +2,34 @@ using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 
+public interface ITickElement
+{
+    void Tick();
+}
+
+
+
 [System.Serializable]
 public enum TickDelayOption
 {
-    t0, t2, t5, t10, t20, t30, t60, t120
+    t0 = 1, 
+    t2 = 2,
+    t3 = 3,
+    t4 = 4,
+    t5 = 5,
+    t6 = 6,
+    t10 = 10, 
+    t20 = 20, 
+    t30 = 30, 
+    t60 = 60, 
+    t120 = 120
 }
 
 [System.Serializable]
 public class TickElement
 {
-    public Block block;
-    public MonoBehaviour script;
-    public int frameDelay;
+    public ITickElement script;
+    public TickDelayOption frameDelay;
 }
 
 public class TickManager : MonoBehaviour
@@ -40,26 +56,30 @@ public class TickManager : MonoBehaviour
 
         for (int i = 0; i < size; ++i)
         {
-            if (null != tickElements[i] && tickElements[i].block)
+            if (null != tickElements[i] && null != tickElements[i].script)
             {
-                tickElements[i].block.Tick();
+                if (Time.frameCount % (int)tickElements[i].frameDelay == 0) tickElements[i].script.Tick();
             }
         }
 
     }
 
-    public void Unsubscribe(Block block)
+    public void Unsubscribe(ITickElement unlisteningScript)
     {
         for (int i = 0; i < tickElements.Count; ++i)
         {
-            if (null != tickElements[i] && tickElements[i].block == block) tickElements.RemoveAt(i);
+            if (null != tickElements[i] && tickElements[i].script == unlisteningScript)
+            {
+                tickElements.RemoveAt(i);
+            }
         }
     }
 
-    public void Subscribe(Block block)
+    public void Subscribe(ITickElement listeningScript, TickDelayOption delayOption = TickDelayOption.t0)
     {
         TickElement newTickElement = new TickElement();
-        newTickElement.block = block;
+        newTickElement.script = listeningScript;
+        newTickElement.frameDelay = delayOption;
 
         tickElements.Add(newTickElement);
     }

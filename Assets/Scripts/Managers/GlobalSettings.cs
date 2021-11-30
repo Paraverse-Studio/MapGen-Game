@@ -8,15 +8,14 @@ public enum LayerEnum {
     def = 0,
     TransparentFX = 1,
     IgnoreRaycast = 2,
-    Water = 3,
-    UI, 
-    Ground,
-    Wall,
-    Solid,
-    Breakable,
-    MobNormal1,
-    MobNormal2,
-    MobCollision
+    Water = 4,
+    UI = 5, 
+    Ground = 6,
+    Wall = 7,
+    Solid = 8,
+    Breakable = 9,
+    MobNormal = 10,
+    MobCollision = 11
 }
 
 
