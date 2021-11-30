@@ -47,6 +47,7 @@ public class MobAI : MonoBehaviour
             if (_distanceToPlayer <= detectRadius)
             {
                 _target = _playerBody;
+                UpdateDistances();
             }
         }
 
