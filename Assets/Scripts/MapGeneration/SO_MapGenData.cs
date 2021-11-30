@@ -68,4 +68,9 @@ public class SO_MapGenData : ScriptableObject
     public int treeSpawnDensity = 4;
     public int treeSpawnOffset = 2;
     public float treeChanceGrowthRate = 5.0f;
+
+    [Space(30)]
+    [Header("    _____________  ENEMIES  _____________")]
+    [Space(30)]
+    public GameObject[] enemies;
 }
