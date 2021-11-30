@@ -7,11 +7,14 @@ using UnityEngine.Events;
 
 public class MobHealth : MonoBehaviour
 {
+    [Header("Health Bar UI")]
+    public bool useHealthBar = true;
     public GameObject healthBarPrefab;
-    public Transform healthBarFolder;
-
-    [Header("Health Bar settings")]
     public float healthBarHeight = 2.0f;
+
+    [Header("Health Bar Settings")]
+    [SerializeField]
+    private int _totalHealth;
 
     private GameObject _healthBar;
     private Transform _healthBarGroup;
@@ -24,8 +27,7 @@ public class MobHealth : MonoBehaviour
         get { return _health; }
         set { _health = Mathf.Clamp(value, 0, _totalHealth); }
     }
-    [SerializeField]
-    private int _totalHealth;
+    
 
     private List<Image> _healthBars;
     private int _healthBarMarker = 0;
