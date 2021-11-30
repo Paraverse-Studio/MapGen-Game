@@ -26,7 +26,7 @@ public class MobAI : MonoBehaviour
     {
         _controller = GetComponent<MobController>();
         _body = _controller.Body;
-        _playerBody = GameObject.FindGameObjectWithTag("Player").GetComponent<MobController>().Body.transform;
+        _playerBody = GameObject.FindGameObjectWithTag("Player").GetComponentInParent<MobComponents>().body;
         _originalPosition = _body.transform.position;
     }
 
@@ -44,7 +44,7 @@ public class MobAI : MonoBehaviour
             if (_distanceToOriginalPosition > 0.8f) SendMovement(_originalPosition);
             else _controller.MoveDirection = Vector3.zero;
 
-            if (_distanceToPlayer <= detectRadius)
+            if (_distanceToPlayer <= detectRadius && _playerBody.gameObject.activeInHierarchy)
             {
                 SetTarget(_playerBody);
             }
@@ -65,6 +65,9 @@ public class MobAI : MonoBehaviour
             {
                 SetTarget(null);
             }
+
+            if (Time.frameCount % 10 == 0 && _target && !_target.gameObject.activeInHierarchy) 
+                SetTarget(null);
         }
 
     }

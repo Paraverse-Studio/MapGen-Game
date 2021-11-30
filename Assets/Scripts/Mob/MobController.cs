@@ -57,12 +57,11 @@ public class MobController : MonoBehaviour
 
 
 
-
     private void Awake()
     {
         _characterController = GetComponentInChildren<CharacterController>();
         _renderer = GetComponentInChildren<Renderer>();
-        _body = _characterController.transform;
+        _body = GetComponentInChildren<CharacterController>().transform;
     }
 
     void Start()

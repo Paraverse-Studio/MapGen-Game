@@ -1,4 +1,3 @@
-using NaughtyAttributes;
 using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
@@ -28,7 +27,6 @@ public class GlobalSettings : MonoBehaviour
     public bool showHudText = true;
     public UnityEvent OnToggleHudText = new UnityEvent();
 
-    [Button]
     public void ToggleHudText()
     {
         showHudText = !showHudText;
