@@ -14,10 +14,13 @@ public class MobController : MonoBehaviour
     public float speed = 6.0f;
 
     [Header("Jump")]
-    public LayerMask jumpLayerMask;
     public float jumpSpeed = 8.0f;
     public float jumpCD = 0.5f;
     private float jumpTimer = 0.0f;
+
+    [Header("Attack")]
+    public float attackCD = 1f;
+    private float attackTimer = 0.0f;
 
     public float gravity = 9.8f;
 
@@ -183,6 +186,9 @@ public class MobController : MonoBehaviour
 
     public void Attack()
     {
+        if (attackTimer < attackCD) return;
+        attackTimer = 0f;
+
         _moveDirection = Vector3.zero;
 
         Debug.Log(gameObject.name + " attacked!");
