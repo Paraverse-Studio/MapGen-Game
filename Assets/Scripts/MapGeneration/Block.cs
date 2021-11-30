@@ -4,7 +4,7 @@ using UnityEngine;
 using TMPro;
 
 
-public class Block : MonoBehaviour
+public class Block : MonoBehaviour, ITickElement
 {
     [System.Serializable]
     public struct BlockOverrideSettings

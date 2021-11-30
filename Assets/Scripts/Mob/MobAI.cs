@@ -41,7 +41,7 @@ public class MobAI : MonoBehaviour
         if (!_target)
         {
             // Go back to original spot, and patrol around
-            if (_distanceToOriginalPosition > 0.5f) SendMovement(_originalPosition);
+            if (_distanceToOriginalPosition > 0.8f) SendMovement(_originalPosition);
             else _controller.MoveDirection = Vector3.zero;
 
             if (_distanceToPlayer <= detectRadius)
