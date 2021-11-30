@@ -4,6 +4,22 @@ using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.Events;
 
+public enum LayerEnum {
+    def = 0,
+    TransparentFX = 1,
+    IgnoreRaycast = 2,
+    Water = 3,
+    UI, 
+    Ground,
+    Wall,
+    Solid,
+    Breakable,
+    MobNormal1,
+    MobNormal2,
+    MobCollision
+}
+
+
 public class GlobalSettings : MonoBehaviour
 {
     public static GlobalSettings Instance;

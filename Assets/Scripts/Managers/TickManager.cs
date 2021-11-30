@@ -12,6 +12,7 @@ public enum TickDelayOption
 public class TickElement
 {
     public Block block;
+    public MonoBehaviour script;
     public int frameDelay;
 }
 

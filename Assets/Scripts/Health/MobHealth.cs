@@ -81,7 +81,7 @@ public class MobHealth : MonoBehaviour
 
         if (Input.GetKeyDown(KeyCode.K)) TakeDamage(1);
         if (Input.GetKeyDown(KeyCode.L)) TakeDamage(-1);
-        if (Input.GetKeyDown(KeyCode.J)) IncreaseTotalHealth(-1);
+        if (Input.GetKeyDown(KeyCode.J)) IncreaseTotalHealth(1);
     }
 
     private void UpdateHealthBars()

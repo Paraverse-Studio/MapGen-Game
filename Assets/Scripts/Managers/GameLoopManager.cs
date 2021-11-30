@@ -82,6 +82,7 @@ public class GameLoopManager : MonoBehaviour
         // Display stats to player + score ()
 
         // Start next round:
+
         MapGeneration.Instance.RegeneratePath();
     }
 

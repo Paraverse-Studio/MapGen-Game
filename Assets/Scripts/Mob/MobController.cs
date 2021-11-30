@@ -21,13 +21,19 @@ public class MobController : MonoBehaviour
 
     public float gravity = 9.8f;
 
-    public float moveX;
-    public float moveZ;
-
     private CharacterController _characterController;
     private Renderer _renderer;
 
+    private Vector3 _changeDirection = Vector3.zero;
+    public Vector3 ChangeDirection
+    {
+        get { return _changeDirection; }
+        set { _changeDirection = value; }
+    }
+
     private Vector3 _moveDirection = Vector3.zero;
+
+    private Vector3 _finalDirection;
     public Vector3 MoveDirection
     {
         get { return _moveDirection; }
@@ -41,6 +47,9 @@ public class MobController : MonoBehaviour
     private Vector3 _lastSafePosition = Vector3.zero;
     private Transform _body;
     public Transform Body => _body;
+
+
+
 
     // For disabling player movement, gravity, input, all
     private bool _active = true;
@@ -59,7 +68,7 @@ public class MobController : MonoBehaviour
     void Start()
     {
         _simulatedCamera = new GameObject();
-        
+
         if (MapGeneration.Instance) MapGeneration.Instance.OnMapGenerateEnd.AddListener(TeleportPlayer);
 
         // calculate the correct vertical position
@@ -72,7 +81,10 @@ public class MobController : MonoBehaviour
     {
         //  TIMERS   //////
         jumpTimer += Time.deltaTime;
-        ///////////////////
+
+        _changeDirection = Vector3.Lerp(_changeDirection, Vector3.zero, Time.deltaTime * 2f);
+        ///////////////////       
+
 
         // Conditions /////
         if (!_active) return;
@@ -81,8 +93,8 @@ public class MobController : MonoBehaviour
         if (_characterController.isGrounded)
         {
             _moveDirection.y = 0;
-        }       
-        
+        }
+
 
         if (isPlayer)
         {
@@ -100,6 +112,10 @@ public class MobController : MonoBehaviour
         // Gravity
         _moveDirection.y -= gravity * Time.deltaTime;
 
+        // Move the controller
+        _finalDirection = (_moveDirection + _changeDirection);
+        _characterController.Move(_finalDirection * Time.deltaTime);
+
         // Facing the direction you're moving
         if ((Mathf.Abs(_moveDirection.x) + Mathf.Abs(_moveDirection.z)) > 0.1f)
         {
@@ -107,9 +123,6 @@ public class MobController : MonoBehaviour
             _body.transform.forward = _direction;
         }
 
-        // Move the controller
-        _characterController.Move(_moveDirection * Time.deltaTime);
-        
     }
 
 
@@ -135,8 +148,8 @@ public class MobController : MonoBehaviour
         // Using camera's forward
         _simulatedCamera.transform.eulerAngles = new Vector3(0, Camera.main.transform.eulerAngles.y, Camera.main.transform.eulerAngles.z);
 
-        moveX = Input.GetAxis("Vertical");
-        moveZ = Input.GetAxis("Horizontal");
+        float moveX = Input.GetAxis("Vertical");
+        float moveZ = Input.GetAxis("Horizontal");
 
         Vector3 moveVectorNow = new Vector3(moveX, 0, moveZ);
         if (moveVectorNow.magnitude <= (moveVector.magnitude * 0.9f))
@@ -152,7 +165,7 @@ public class MobController : MonoBehaviour
 
 
         float currentY = _moveDirection.y;
-        _moveDirection = (_simulatedCamera.transform.forward * (moveX * 3f)) + (_simulatedCamera.transform.right * (moveZ * 3f));        
+        _moveDirection = (_simulatedCamera.transform.forward * (moveX * 3f)) + (_simulatedCamera.transform.right * (moveZ * 3f));
 
         _moveDirection.y = 0;
 
@@ -165,7 +178,7 @@ public class MobController : MonoBehaviour
     {
         if (Input.GetKeyDown(KeyCode.K))
         {
-            
+            Attack();
         }
     }
 
@@ -187,14 +200,15 @@ public class MobController : MonoBehaviour
             Debug.DrawRay(_body.transform.position, _body.transform.forward * 1.25f, Color.red, 0.2f);
             RaycastHit[] hits;
             hits = Physics.RaycastAll(_body.transform.position, _body.transform.forward, 1.25f);
-            
-            for (int i = 0; i < hits.Length; ++i) { 
-            
+
+            for (int i = 0; i < hits.Length; ++i)
+            {
+
                 if (hits[i].collider.gameObject.layer == LayerMask.NameToLayer("Solid"))
                 {
                     Jump();
                 }
-            }                     
+            }
         }
     }
 
@@ -202,19 +216,19 @@ public class MobController : MonoBehaviour
     void SafetyNet()
     {
         if (Time.frameCount % 60 == 0)
-        {   
+        {
             RaycastHit hitInfo;
             if (Physics.Raycast(_body.transform.position + new Vector3(0, 0.2f, 0), Vector3.down, out hitInfo, LayerMask.NameToLayer("Solid")))
             {
                 if (_characterController.isGrounded) _lastSafePosition = _body.transform.position;
             }
 
-            if (MapGeneration.Instance && _body.transform.position.y < (MapGeneration.Instance.YBoundary.y-3.0f))
+            if (MapGeneration.Instance && _body.transform.position.y < (MapGeneration.Instance.YBoundary.y - 3.0f))
             {
                 if (_lastSafePosition != Vector3.zero) TeleportPlayer(_lastSafePosition);
                 else TeleportPlayer();
             }
-           
+
         }
     }
 
