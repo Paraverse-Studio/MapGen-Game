@@ -1,7 +1,6 @@
 using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
-using NaughtyAttributes;
 using UnityEngine.UI;
 using UnityEngine.Events;
 
@@ -19,7 +18,7 @@ public class MobHealth : MonoBehaviour
     private GameObject _healthBar;
     private Transform _healthBarGroup;
 
-    private MobController _mobController;
+    private MobComponents _mobComponents;
 
     private int _health;
     public int Health
@@ -36,7 +35,7 @@ public class MobHealth : MonoBehaviour
 
     private void Awake()
     {
-        _mobController = GetComponent<MobController>();
+        _mobComponents = GetComponent<MobComponents>();
         _healthBars = new List<Image>();
     }
 
@@ -48,13 +47,23 @@ public class MobHealth : MonoBehaviour
 
         if (useHealthBar)
         {
-            CreateHealthBar();
-            _healthBarGroup = _healthBar.transform.GetChild(0);
-            _healthBarMarker = _health;
+            if (null == _healthBar)
+            {
+                CreateHealthBar();
+                _healthBarGroup = _healthBar.transform.GetChild(0);
+                _healthBarMarker = _health;
+            }
+            else
+            {
+                _healthBar.SetActive(true);
+            }
         }
 
-        SetTotalHealth(_totalHealth);       
+        SetTotalHealth(_totalHealth);
+
+        OnHealthChange.RemoveAllListeners();
         OnHealthChange.AddListener(UpdateHealthBars);
+        OnHealthChange.AddListener(CheckForDeath);
     }
 
 
@@ -79,9 +88,10 @@ public class MobHealth : MonoBehaviour
         //    }
         //}
 
-        if (Input.GetKeyDown(KeyCode.K)) TakeDamage(1);
-        if (Input.GetKeyDown(KeyCode.L)) TakeDamage(-1);
-        if (Input.GetKeyDown(KeyCode.J)) IncreaseTotalHealth(1);
+        if (Input.GetKeyDown(KeyCode.K)) TakeDamage(-1);
+        if (Input.GetKeyDown(KeyCode.L)) TakeDamage(1);
+        if (Input.GetKeyDown(KeyCode.O)) IncreaseTotalHealth(1);
+        if (Input.GetKeyDown(KeyCode.P)) IncreaseTotalHealth(-1);
     }
 
     private void UpdateHealthBars()
@@ -102,19 +112,20 @@ public class MobHealth : MonoBehaviour
     }
 
 
+
     private void CreateHealthBar()
     {
-        Vector3 screenPoint = Camera.main.WorldToScreenPoint(_mobController.Body.position + new Vector3(0, healthBarHeight, 0));
+        Vector3 screenPoint = Camera.main.WorldToScreenPoint(_mobComponents.body.position + new Vector3(0, healthBarHeight, 0));
         screenPoint.z = 0;
 
         _healthBar = GameObject.Instantiate(healthBarPrefab, screenPoint, Quaternion.identity);
         _healthBar.transform.SetParent(GlobalSettings.Instance.healthBarFolder);
         FollowTarget2D ft = _healthBar.GetComponent<FollowTarget2D>();
-        ft.target = _mobController.Body;
+        ft.target = _mobComponents.body;
         ft._offset = new Vector3(0, healthBarHeight, 0);
     }
 
-    [Button]
+
     public void IncreaseTotalHealth(int i = 1)
     {
         _totalHealth += i;
@@ -168,6 +179,33 @@ public class MobHealth : MonoBehaviour
         {
             _healthBars.Add(_healthBarGroup.GetChild(i).transform.GetChild(1).gameObject.GetComponent<Image>());
         }
+    }
+
+    private void CheckForDeath()
+    {
+        Debug.Log("Checked for deatch!");
+        if (Health <= 0)
+        {
+            Die();
+        }
+    }
+
+    public void Die()
+    {
+        // Other stuff
+
+        gameObject.SetActive(false);
+    }
+
+    private void OnDisable()
+    {
+        Start();
+        if (_healthBar) _healthBar.SetActive(false);
+    }
+
+    private void OnEnable()
+    {
+        if (null != _healthBar) _healthBar.SetActive(true);
     }
 
 }
