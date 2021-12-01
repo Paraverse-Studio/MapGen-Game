@@ -30,6 +30,12 @@ public class MobAI : MonoBehaviour
         _originalPosition = _body.transform.position;
     }
 
+    public void OnEnable()
+    {
+        _originalPosition = transform.position;
+        GetComponent<MobComponents>().body.transform.localPosition = Vector3.zero;
+    }
+
     // Update is called once per frame
     void Update()
     {
@@ -80,10 +86,21 @@ public class MobAI : MonoBehaviour
 
     private void UpdateDistances()
     {
-        if (_target) _distanceToTarget = Vector3.Distance(_body.position, _target.position);        
-        _distanceToPlayer = Vector3.Distance(_body.position, _playerBody.position);
-        _distanceToOriginalPosition = Vector3.Distance(_body.position, _originalPosition);
+        Vector3 bodyPosition = _body.position; bodyPosition.y = 0;
+        Vector3 playerBodyPosition = _playerBody.position; playerBodyPosition.y = 0;
+        Vector3 originalPosition = _originalPosition; originalPosition.y = 0;
+
+        _distanceToPlayer = Vector3.Distance(bodyPosition, playerBodyPosition);
+        _distanceToOriginalPosition = Vector3.Distance(bodyPosition, originalPosition);
+
+        if (_target)
+        {
+            Vector3 targetPosition = _target.position; targetPosition.y = 0;
+            _distanceToTarget = Vector3.Distance(bodyPosition, targetPosition);
+        }        
     }
+
+
 
     private void SendMovement(Vector3 t)
     {
@@ -95,5 +112,6 @@ public class MobAI : MonoBehaviour
         forward.y = _controller.MoveDirection.y;
         _controller.MoveDirection = forward;
     }
+
 
 }

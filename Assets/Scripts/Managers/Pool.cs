@@ -3,6 +3,12 @@ using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.Events;
 
+public interface IPoolItem
+{
+    void Restart();
+}
+
+
 [System.Serializable]
 public class PoolItem  // a single instance of "List<ObjectPoolItem> itemsToPool" means all this info
 {
