@@ -15,9 +15,13 @@ public class MobAI : MonoBehaviour
     private Transform _body;
     private Transform _playerBody;
     private Transform _target;
+    public Transform Target => _target;
 
     private float _distanceToTarget = 0;
+    public float DistanceToTarget => _distanceToTarget;
+
     private float _distanceToPlayer = 0;
+
     private float _distanceToOriginalPosition = 0;
     private Vector3 _originalPosition;
 

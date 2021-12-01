@@ -8,6 +8,7 @@ public class MobCollisionAvoidance : MonoBehaviour, ITickElement
     public LayerMask layerMask;
 
     private MobController _controller;
+    private MobAI _ai;
     private Transform _body;
     private float force = 0.4f;
     private CapsuleCollider _thisCapsule;
@@ -22,6 +23,7 @@ public class MobCollisionAvoidance : MonoBehaviour, ITickElement
     {
         _contacts = new List<Collider>();
         _controller = GetComponentInParent<MobController>();
+        _ai = GetComponentInParent<MobAI>();
         if (_controller) _body = _controller.Body;
 
         _thisCapsule = GetComponent<CapsuleCollider>();
@@ -34,7 +36,7 @@ public class MobCollisionAvoidance : MonoBehaviour, ITickElement
 
     public void Tick()
     {
-        force = Mathf.Clamp(force, 0f, 1.0f); 
+        force = Mathf.Clamp(force, 0f, 1.5f); 
 
         ApplyPhysicsAvoidanceForce();
 
@@ -85,8 +87,13 @@ public class MobCollisionAvoidance : MonoBehaviour, ITickElement
 
         if (averageVector != Vector3.zero)
         {
-            Vector3 goalDirection = (-averageVector).normalized * force;
-            _controller.ChangeDirection = Vector3.SmoothDamp(_controller.ChangeDirection, goalDirection, ref velocity, 0.005f);
+            float factor = 1f;
+            if (_ai && _ai.Target && _ai.DistanceToTarget < 10)
+            {
+                factor = 10f - _ai.DistanceToTarget;
+            }
+            Vector3 goalDirection = (-averageVector).normalized * force * (factor / 8.5f) ;
+            _controller.ChangeDirection =  goalDirection;
 
             //Vector3 moveDir = Vector3.zero;
             //_controller.MoveDirection = new Vector3(moveDir.x, _controller.MoveDirection.y, moveDir.z);
