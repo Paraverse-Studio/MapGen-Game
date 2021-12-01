@@ -71,7 +71,7 @@ public class MobController : MonoBehaviour
     {
         _simulatedCamera = new GameObject();
 
-        if (MapGeneration.Instance) MapGeneration.Instance.OnMapGenerateEnd.AddListener(TeleportPlayer);
+        if (MapGeneration.Instance && isPlayer) MapGeneration.Instance.OnMapGenerateEnd.AddListener(TeleportPlayer);
 
         // calculate the correct vertical position
         float correctHeight = _characterController.center.y + _characterController.skinWidth;

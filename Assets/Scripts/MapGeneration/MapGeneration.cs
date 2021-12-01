@@ -102,6 +102,7 @@ public class MapGeneration : MonoBehaviour
     private List<GameObject> treeObjects = new List<GameObject>();
     private List<GameObject> foundationObjects = new List<GameObject>();
     private List<Block> waterObjects = new List<Block>();
+    private List<GameObject> enemyObjects = new List<GameObject>();
 
     private float progressValue;
     private int progressTotalCounter = 0;
@@ -285,6 +286,8 @@ public class MapGeneration : MonoBehaviour
 
         /* * * * * IMPORTANT PROPS ON MAP * * * * * * */
         AddImportantProps();
+
+        AddEnemies();
 
         /* * * * * DECORATIVE PROPS ON MAP * * * * * * */
         currentPaintingBlock = blocks.water;
@@ -666,8 +669,26 @@ public class MapGeneration : MonoBehaviour
         // EndPoint
         Vector3 spawnSpot = pathObjects[pathObjects.Count - 1].transform.position + new Vector3(0, 1, 0);
         GameObject obj = Instantiate(importantProps.endPoint, spawnSpot, Quaternion.identity);
-        treeObjects.Add(obj);
-        
+        treeObjects.Add(obj);        
+    }
+
+    private void AddEnemies()
+    {
+        for (int i = 0; i < pathObjects.Count; ++i)
+        {
+            if (i % 10 != 0) continue;
+
+            int xOffset = Random.Range(-2, 3);
+            int zOffset = Random.Range(-2, 3);
+
+            Vector3 spawnSpot = pathObjects[i].transform.position + new Vector3(xOffset, 5f, zOffset);
+
+            GameObject enemy = Pool.Instance.Instantiate(M.enemies[Random.Range(0, M.enemies.Length)].name, spawnSpot, Quaternion.identity);
+            if (enemy)
+            {
+                enemyObjects.Add(enemy);
+            }
+        }
     }
 
     private void AddProps()

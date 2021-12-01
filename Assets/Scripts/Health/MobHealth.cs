@@ -201,6 +201,7 @@ public class MobHealth : MonoBehaviour
     {
         Start();
         if (_healthBar) _healthBar.SetActive(false);
+        
     }
 
     private void OnEnable()
