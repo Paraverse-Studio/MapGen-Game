@@ -48,7 +48,7 @@ public class MobAI : MonoBehaviour
         {
             // Go back to original spot, and patrol around
             if (_distanceToOriginalPosition > 0.8f) SendMovement(_originalPosition);
-            else _controller.MoveDirection = Vector3.zero;
+            else SendMovement(Vector3.zero);
 
             if (_distanceToPlayer <= detectRadius && _playerBody.gameObject.activeInHierarchy)
             {
@@ -60,7 +60,7 @@ public class MobAI : MonoBehaviour
         {
             if (_distanceToTarget <= attackRadius)
             {
-                _controller.MoveDirection = Vector3.zero;
+                SendMovement(Vector3.zero);
                 _controller.Attack();
             }
             else if (_distanceToTarget <= chaseRadius)
@@ -104,13 +104,16 @@ public class MobAI : MonoBehaviour
 
     private void SendMovement(Vector3 t)
     {
-        Vector3 tPosition = new Vector3(t.x, _body.transform.position.y, t.z);
-        Quaternion lookDirection = Quaternion.LookRotation(tPosition - _body.transform.position);
-        _body.transform.rotation = Quaternion.Slerp(_body.transform.rotation, lookDirection, Time.deltaTime * rotationSpeed);
-
-        Vector3 forward = (_body.transform.forward).normalized * 2.5f;
-        forward.y = _controller.MoveDirection.y;
-        _controller.MoveDirection = forward;
+        Vector3 forward;
+        if (t != Vector3.zero)
+        {
+            Vector3 tPosition = new Vector3(t.x, _body.transform.position.y, t.z);
+            Quaternion lookDirection = Quaternion.LookRotation(tPosition - _body.transform.position);
+            _body.transform.rotation = Quaternion.Slerp(_body.transform.rotation, lookDirection, Time.deltaTime * rotationSpeed);
+            forward = (_body.transform.forward).normalized * 2.5f;
+        }
+        else forward = Vector3.zero;
+        _controller.MoveDirection = new Vector3(forward.x, _controller.MoveDirection.y, forward.z);
     }
 
 
