@@ -34,14 +34,15 @@ public class MobController : MonoBehaviour
         set { _changeDirection = value; }
     }
 
-    private Vector3 _moveDirection = Vector3.zero;
-
-    private Vector3 _finalDirection;
+    private Vector3 _moveDirection = Vector3.zero;    
     public Vector3 MoveDirection
     {
         get { return _moveDirection; }
         set { _moveDirection = value; }
     }
+
+    private Vector3 _finalDirection;
+    public Vector3 FinalDirection => _finalDirection;
 
     private Vector3 moveVector;
 
@@ -52,7 +53,7 @@ public class MobController : MonoBehaviour
     public Transform Body => _body;
 
 
-    
+
 
     // For disabling player movement, gravity, input, all
     private bool _active = true;
@@ -61,7 +62,7 @@ public class MobController : MonoBehaviour
 
 
     private void Awake()
-    {        
+    {
         _characterController = GetComponentInChildren<CharacterController>();
         _renderer = GetComponentInChildren<Renderer>();
         _body = GetComponentInChildren<CharacterController>().transform;
@@ -92,9 +93,8 @@ public class MobController : MonoBehaviour
 
         if (_characterController.isGrounded)
         {
-            _moveDirection.y = 0;
+            if (_moveDirection.y < 0) _moveDirection.y = 0;
         }
-
 
         if (isPlayer)
         {
@@ -104,25 +104,35 @@ public class MobController : MonoBehaviour
 
             GetAttack();
         }
-        else
-        {
-            DetectAhead();
-        }
+
 
         // Gravity
         _moveDirection.y -= gravity * Time.deltaTime;
 
         // Move the controller
         _finalDirection = (_moveDirection + _changeDirection);
-        _characterController.Move(_finalDirection * Time.deltaTime);
 
+        // AI jitter prevention
+        if (!isPlayer)
+        {
+            if (_finalDirection.sqrMagnitude < 1f) { _finalDirection.x = 0; _finalDirection.z = 0; }
+        }
+
+        _characterController.Move(_finalDirection * Time.deltaTime);
+        
         // Facing the direction you're moving
         if ((Mathf.Abs(_moveDirection.x) + Mathf.Abs(_moveDirection.z)) > 0.1f)
         {
-            Vector3 _direction = new Vector3(_moveDirection.x, 0, _moveDirection.z);
-            _body.transform.forward = _direction;
-        }
+            TurnTo(_moveDirection);
+        }               
 
+    }
+
+
+    public void TurnTo(Vector3 direction)
+    {
+        Vector3 _direction = new Vector3(direction.x, 0, direction.z);
+        _body.transform.forward = _direction;
     }
 
 
@@ -138,6 +148,7 @@ public class MobController : MonoBehaviour
     {
         if (jumpTimer >= jumpCD && _characterController.isGrounded)
         {
+            Debug.Log("Called2");
             _moveDirection.y = jumpSpeed;
             jumpTimer = 0.0f;
         }
@@ -195,24 +206,7 @@ public class MobController : MonoBehaviour
     }
 
 
-    private void DetectAhead()
-    {
-        if (Time.frameCount % 20 == 0)
-        {
-            Debug.DrawRay(_body.transform.position, _body.transform.forward * 1.25f, Color.red, 0.2f);
-            RaycastHit[] hits;
-            hits = Physics.RaycastAll(_body.transform.position, _body.transform.forward, 1.25f);
 
-            for (int i = 0; i < hits.Length; ++i)
-            {
-
-                if (hits[i].collider.gameObject.layer == LayerMask.NameToLayer("Solid"))
-                {
-                    Jump();
-                }
-            }
-        }
-    }
 
 
     void SafetyNet()

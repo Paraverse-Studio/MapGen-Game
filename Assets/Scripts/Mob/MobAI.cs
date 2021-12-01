@@ -15,9 +15,13 @@ public class MobAI : MonoBehaviour
     private Transform _body;
     private Transform _playerBody;
     private Transform _target;
+    public Transform Target => _target;
 
     private float _distanceToTarget = 0;
+    public float DistanceToTarget => _distanceToTarget;
+
     private float _distanceToPlayer = 0;
+
     private float _distanceToOriginalPosition = 0;
     private Vector3 _originalPosition;
 
@@ -44,6 +48,8 @@ public class MobAI : MonoBehaviour
             UpdateDistances();            
         }
 
+        DetectAhead();
+
         if (!_target)
         {
             // Go back to original spot, and patrol around
@@ -62,6 +68,7 @@ public class MobAI : MonoBehaviour
             {
                 SendMovement(Vector3.zero);
                 _controller.Attack();
+                _controller.TurnTo(_target.position - _body.position);
             }
             else if (_distanceToTarget <= chaseRadius)
             {
@@ -75,6 +82,7 @@ public class MobAI : MonoBehaviour
             if (Time.frameCount % 10 == 0 && _target && !_target.gameObject.activeInHierarchy) 
                 SetTarget(null);
         }
+
 
     }
 
@@ -101,7 +109,6 @@ public class MobAI : MonoBehaviour
     }
 
 
-
     private void SendMovement(Vector3 t)
     {
         Vector3 forward;
@@ -110,11 +117,28 @@ public class MobAI : MonoBehaviour
             Vector3 tPosition = new Vector3(t.x, _body.transform.position.y, t.z);
             Quaternion lookDirection = Quaternion.LookRotation(tPosition - _body.transform.position);
             _body.transform.rotation = Quaternion.Slerp(_body.transform.rotation, lookDirection, Time.deltaTime * rotationSpeed);
-            forward = (_body.transform.forward).normalized * 2.5f;
+            forward = (_body.transform.forward).normalized * 4f;
         }
         else forward = Vector3.zero;
         _controller.MoveDirection = new Vector3(forward.x, _controller.MoveDirection.y, forward.z);
     }
 
+    public void DetectAhead()
+    {
+        if (Time.frameCount % 20 == 0)
+        {
+            Debug.DrawRay(_body.transform.position, _body.transform.forward * 1.25f, Color.red, 0.2f);
+            RaycastHit[] hits;
+            hits = Physics.RaycastAll(_body.transform.position, _body.transform.forward, 1.25f);
 
+            for (int i = 0; i < hits.Length; ++i)
+            {
+                if (hits[i].collider.gameObject.layer == (int)LayerEnum.Solid)
+                {
+                    if (_controller.FinalDirection.sqrMagnitude > 1f)
+                        _controller.Jump();
+                }
+            }
+        }
+    }
 }

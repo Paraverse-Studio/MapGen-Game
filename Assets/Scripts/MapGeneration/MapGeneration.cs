@@ -229,6 +229,8 @@ public class MapGeneration : MonoBehaviour
         }
         waterObjects.Clear();
 
+        enemyObjects.Clear();
+
         // Important Props
 
 

@@ -43,7 +43,10 @@ public class TestingEnvironment : MonoBehaviour
 
         for (int i = 0; i < numOfEnemies; ++i)
         {
-            GameObject obj = Instantiate(enemyPrefab, list[4][4].transform.position + new Vector3(0,1.5f,0), Quaternion.identity);
+            float xOffset = Random.Range(-0.5f, 0.5f);
+            float zOffset = Random.Range(-0.5f, 0.5f);
+
+            GameObject obj = Instantiate(enemyPrefab, list[4][4].transform.position + new Vector3(xOffset,1.5f,zOffset), Quaternion.identity);
         }
 
         Vector3 spawnSpot = list[radius-2][radius+2].transform.position;

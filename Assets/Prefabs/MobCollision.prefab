@@ -13,7 +13,7 @@ GameObject:
   - component: {fileID: 1114200092888335735}
   - component: {fileID: 2935164029956783105}
   - component: {fileID: 2635700027223513779}
-  m_Layer: 12
+  m_Layer: 11
   m_Name: MobCollision
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -91,7 +91,7 @@ CapsuleCollider:
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 135017009762887669}
   m_Material: {fileID: 0}
-  m_IsTrigger: 0
+  m_IsTrigger: 1
   m_Enabled: 1
   m_Radius: 1.49
   m_Height: 3
@@ -109,4 +109,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 4007bdf6ff83b3d4bae880e700d9b4ae, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  radius: 1.499
+  radius: 1.5
+  layerMask:
+    serializedVersion: 2
+    m_Bits: 1024
