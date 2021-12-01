@@ -26,14 +26,14 @@ public class MobCollisionAvoidance : MonoBehaviour, ITickElement
         _thisCapsule = GetComponent<CapsuleCollider>();
         _thisCapsule.radius = radius;
 
-        TickManager.Instance.Subscribe(this, TickDelayOption.t2);
+        TickManager.Instance.Subscribe(this, TickDelayOption.t0);
         
         hitColliders = new Collider[maxColliders];
     }
 
     public void Tick()
     {
-        force = Mathf.Clamp(force -= 0.02f, 0f, 4f); 
+        force = Mathf.Clamp(force -= 0.01f, 0f, 1f); 
 
         ApplyPhysicsAvoidanceForce();
 

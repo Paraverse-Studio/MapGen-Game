@@ -44,6 +44,8 @@ public class MobAI : MonoBehaviour
             UpdateDistances();            
         }
 
+        DetectAhead();
+
         if (!_target)
         {
             // Go back to original spot, and patrol around
@@ -62,6 +64,7 @@ public class MobAI : MonoBehaviour
             {
                 SendMovement(Vector3.zero);
                 _controller.Attack();
+                _controller.TurnTo(_target.position - _body.position);
             }
             else if (_distanceToTarget <= chaseRadius)
             {
@@ -75,6 +78,7 @@ public class MobAI : MonoBehaviour
             if (Time.frameCount % 10 == 0 && _target && !_target.gameObject.activeInHierarchy) 
                 SetTarget(null);
         }
+
 
     }
 
@@ -101,7 +105,6 @@ public class MobAI : MonoBehaviour
     }
 
 
-
     private void SendMovement(Vector3 t)
     {
         Vector3 forward;
@@ -116,5 +119,22 @@ public class MobAI : MonoBehaviour
         _controller.MoveDirection = new Vector3(forward.x, _controller.MoveDirection.y, forward.z);
     }
 
+    public void DetectAhead()
+    {
+        if (Time.frameCount % 20 == 0)
+        {
+            Debug.DrawRay(_body.transform.position, _body.transform.forward * 1.25f, Color.red, 0.2f);
+            RaycastHit[] hits;
+            hits = Physics.RaycastAll(_body.transform.position, _body.transform.forward, 1.25f);
 
+            for (int i = 0; i < hits.Length; ++i)
+            {
+                if (hits[i].collider.gameObject.layer == (int)LayerEnum.Solid)
+                {
+                    if (_controller.FinalDirection.sqrMagnitude > 1f)
+                        _controller.Jump();
+                }
+            }
+        }
+    }
 }
