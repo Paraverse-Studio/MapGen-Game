@@ -42,8 +42,8 @@ public class MobHealth : MonoBehaviour
 
     // Start is called before the first frame update
     void Start()
-    {        
-        _health = _totalHealth;
+    {
+        Restart();
 
         if (useHealthBar)
         {
@@ -65,6 +65,13 @@ public class MobHealth : MonoBehaviour
         OnHealthChange.AddListener(UpdateHealthBars);
         OnHealthChange.AddListener(CheckForDeath);
     }
+
+    private void Restart()
+    {
+        _health = _totalHealth;
+        if (null != _healthBars) UpdateHealthBars();
+    }
+
 
 
     // Update is called once per frame
@@ -183,7 +190,6 @@ public class MobHealth : MonoBehaviour
 
     private void CheckForDeath()
     {
-        Debug.Log("Checked for deatch!");
         if (Health <= 0)
         {
             Die();
@@ -199,14 +205,17 @@ public class MobHealth : MonoBehaviour
 
     private void OnDisable()
     {
-        Start();
         if (_healthBar) _healthBar.SetActive(false);
         
     }
 
     private void OnEnable()
     {
-        if (null != _healthBar) _healthBar.SetActive(true);
+        Restart();
+        if (null != _healthBar)
+        {
+            _healthBar.SetActive(true);
+        }
     }
 
 }
