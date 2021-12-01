@@ -129,10 +129,11 @@ public class MobController : MonoBehaviour
     }
 
 
-    public void TurnTo(Vector3 direction)
+    public void TurnTo(Vector3 direction, float lerpValue = 100f)
     {
-        Vector3 _direction = new Vector3(direction.x, 0, direction.z);
-        _body.transform.forward = _direction;
+        Vector3 _direction = new Vector3(direction.x, 0, direction.z);        
+
+        _body.transform.forward = Vector3.RotateTowards(_body.transform.forward, _direction, Time.deltaTime * lerpValue, 0.0f);
     }
 
 

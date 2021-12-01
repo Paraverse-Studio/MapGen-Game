@@ -30,13 +30,13 @@ public class MobCollisionAvoidance : MonoBehaviour, ITickElement
         _thisCapsule.radius = radius;
 
         TickManager.Instance.Subscribe(this, TickDelayOption.t0);
-        
+
         hitColliders = new Collider[maxColliders];
     }
 
     public void Tick()
     {
-        force = Mathf.Clamp(force, 0f, 1.5f); 
+        force = Mathf.Clamp(force, 0f, 1.5f);
 
         ApplyPhysicsAvoidanceForce();
 
@@ -88,17 +88,21 @@ public class MobCollisionAvoidance : MonoBehaviour, ITickElement
         if (averageVector != Vector3.zero)
         {
             float factor = 1f;
-            if (_ai && _ai.Target && _ai.DistanceToTarget < 10)
+            if (_ai && _ai.Target && _ai.DistanceToTarget < 8)
             {
-                factor = 10f - _ai.DistanceToTarget;
+                factor = 8f - _ai.DistanceToTarget;
+
+                factor = 1.0f + (factor / 15f);
+
+                if (_ai.DistanceToTarget < _ai.createDistanceRadius) averageVector = ((_ai.Target.position - _body.transform.position).normalized);
             }
-            Vector3 goalDirection = (-averageVector).normalized * force * (factor / 8.5f) ;
-            _controller.ChangeDirection =  goalDirection;
+            Vector3 goalDirection = (-averageVector).normalized * force * (factor);
+            _controller.ChangeDirection = goalDirection;
 
             //Vector3 moveDir = Vector3.zero;
             //_controller.MoveDirection = new Vector3(moveDir.x, _controller.MoveDirection.y, moveDir.z);
         }
-        else 
+        else
         {
             force = Mathf.Clamp(force -= 0.1f, 0f, 1.0f);
         }
