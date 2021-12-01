@@ -45,14 +45,14 @@ public class MobController : MonoBehaviour
 
     private Vector3 moveVector;
 
-    private GameObject _simulatedCamera;
+    private readonly Vector3 referenceAngleVector = new Vector3(-1, 0, 1);
 
     private Vector3 _lastSafePosition = Vector3.zero;
     private Transform _body;
     public Transform Body => _body;
 
 
-
+    
 
     // For disabling player movement, gravity, input, all
     private bool _active = true;
@@ -61,7 +61,7 @@ public class MobController : MonoBehaviour
 
 
     private void Awake()
-    {
+    {        
         _characterController = GetComponentInChildren<CharacterController>();
         _renderer = GetComponentInChildren<Renderer>();
         _body = GetComponentInChildren<CharacterController>().transform;
@@ -69,8 +69,6 @@ public class MobController : MonoBehaviour
 
     void Start()
     {
-        _simulatedCamera = new GameObject();
-
         if (MapGeneration.Instance && isPlayer) MapGeneration.Instance.OnMapGenerateEnd.AddListener(TeleportPlayer);
 
         // calculate the correct vertical position
@@ -147,9 +145,6 @@ public class MobController : MonoBehaviour
 
     void GetMovement()
     {
-        // Using camera's forward
-        _simulatedCamera.transform.eulerAngles = new Vector3(0, Camera.main.transform.eulerAngles.y, Camera.main.transform.eulerAngles.z);
-
         float moveX = Input.GetAxis("Vertical");
         float moveZ = Input.GetAxis("Horizontal");
 
@@ -167,7 +162,9 @@ public class MobController : MonoBehaviour
 
 
         float currentY = _moveDirection.y;
-        _moveDirection = (_simulatedCamera.transform.forward * (moveX * 3f)) + (_simulatedCamera.transform.right * (moveZ * 3f));
+
+        Vector3 rightOfReference = new Vector3(referenceAngleVector.z, referenceAngleVector.y, -referenceAngleVector.x);
+        _moveDirection = (referenceAngleVector * (moveX * 3f)) + (rightOfReference * (moveZ * 3f));
 
         _moveDirection.y = 0;
 

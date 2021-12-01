@@ -9,6 +9,8 @@ public class TestingEnvironment : MonoBehaviour
     public MobController player;
     public Transform blockFolder;
     private List<List<GameObject>> list;
+    public GameObject enemyPrefab;
+    public int numOfEnemies = 4;
 
     // Start is called before the first frame update
     public void DeveloperMap()
@@ -37,6 +39,11 @@ public class TestingEnvironment : MonoBehaviour
                 obj.transform.SetParent(blockFolder);
             }
             list.Add(xList);
+        }
+
+        for (int i = 0; i < numOfEnemies; ++i)
+        {
+            GameObject obj = Instantiate(enemyPrefab, list[4][4].transform.position + new Vector3(0,1.5f,0), Quaternion.identity);
         }
 
         Vector3 spawnSpot = list[radius-2][radius+2].transform.position;
