@@ -4,17 +4,20 @@ using UnityEngine;
 
 public class MobCollisionAvoidance : MonoBehaviour, ITickElement
 {
+    public float radius = 1.5f;
+
     private MobController _controller;
     private Transform _body;
-
     private float force = 0.4f;
+    private CapsuleCollider _thisCapsule;
 
     // Start is called before the first frame update
     void Start()
     {
         _controller = GetComponentInParent<MobController>();
         if (_controller) _body = _controller.Body;
-
+        _thisCapsule = GetComponent<CapsuleCollider>();
+        _thisCapsule.radius = radius;
         TickManager.Instance.Subscribe(this, TickDelayOption.t4);
     }
 
@@ -32,6 +35,7 @@ public class MobCollisionAvoidance : MonoBehaviour, ITickElement
 
         Vector3 directionToMob = other.gameObject.transform.position - _body.position;
 
+        if (directionToMob == Vector3.zero) directionToMob = Random.insideUnitSphere;
         force += 0.05f;
 
         _controller.ChangeDirection = (-directionToMob).normalized * force;
