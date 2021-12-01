@@ -4,9 +4,9 @@ using UnityEngine;
 
 public class MobAI : MonoBehaviour
 {
-    public int detectRadius = 5;
-    public int chaseRadius = 7; // longer than detect
-    public int attackRadius = 1;
+    public float detectRadius = 5;
+    public float chaseRadius = 7; // longer than detect
+    public float attackRadius = 1;
 
     [Header("Movement rotation: ")]
     public float rotationSpeed;
