@@ -52,7 +52,7 @@ public class MobController : MonoBehaviour
     public Transform Body => _body;
 
 
-    
+
 
     // For disabling player movement, gravity, input, all
     private bool _active = true;
@@ -61,7 +61,7 @@ public class MobController : MonoBehaviour
 
 
     private void Awake()
-    {        
+    {
         _characterController = GetComponentInChildren<CharacterController>();
         _renderer = GetComponentInChildren<Renderer>();
         _body = GetComponentInChildren<CharacterController>().transform;
@@ -114,6 +114,13 @@ public class MobController : MonoBehaviour
 
         // Move the controller
         _finalDirection = (_moveDirection + _changeDirection);
+
+        // AI jitter prevention
+        if (!isPlayer)
+        {
+            if (_finalDirection.sqrMagnitude < 1f) { _finalDirection.x = 0; _finalDirection.z = 0; }
+        }
+
         _characterController.Move(_finalDirection * Time.deltaTime);
 
         // Facing the direction you're moving
