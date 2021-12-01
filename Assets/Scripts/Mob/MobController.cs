@@ -148,7 +148,6 @@ public class MobController : MonoBehaviour
     {
         if (jumpTimer >= jumpCD && _characterController.isGrounded)
         {
-            Debug.Log("Called2");
             _moveDirection.y = jumpSpeed;
             jumpTimer = 0.0f;
         }
