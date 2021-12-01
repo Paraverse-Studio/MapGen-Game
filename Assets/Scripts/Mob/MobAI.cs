@@ -2,14 +2,32 @@ using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 
+public enum EnemyMoveState
+{
+    idle,
+    backToSpawn,
+    inDetect,
+    inChaseRange,
+    inAttackRange,
+    inRetreatRange
+}
+
+public enum EnemyMoveDirection
+{
+    Towards, Reverse
+}
+
 public class MobAI : MonoBehaviour
 {
     public float detectRadius = 5;
     public float chaseRadius = 7; // longer than detect
     public float attackRadius = 1;
+    public float createDistanceRadius = 0.6f;
 
     [Header("Movement rotation: ")]
-    public float rotationSpeed;
+    private float rotationSpeed = 10f;
+
+    private EnemyMoveState enemyMoveState = EnemyMoveState.idle;
 
     private MobController _controller;
     private Transform _body;
@@ -45,16 +63,24 @@ public class MobAI : MonoBehaviour
     {
         if (Time.frameCount % 10 == 0)
         {
-            UpdateDistances();            
+            UpdateDistances();
         }
 
         DetectAhead();
 
+
+        // Transitions
         if (!_target)
         {
             // Go back to original spot, and patrol around
-            if (_distanceToOriginalPosition > 0.8f) SendMovement(_originalPosition);
-            else SendMovement(Vector3.zero);
+            if (_distanceToOriginalPosition > 0.8f)
+            {
+                enemyMoveState = EnemyMoveState.backToSpawn;
+            }
+            else
+            {
+                enemyMoveState = EnemyMoveState.idle;
+            }
 
             if (_distanceToPlayer <= detectRadius && _playerBody.gameObject.activeInHierarchy)
             {
@@ -64,23 +90,72 @@ public class MobAI : MonoBehaviour
 
         if (_target)
         {
-            if (_distanceToTarget <= attackRadius)
+            if (_distanceToTarget <= createDistanceRadius)
             {
-                SendMovement(Vector3.zero);
-                _controller.Attack();
-                _controller.TurnTo(_target.position - _body.position);
+                enemyMoveState = EnemyMoveState.inRetreatRange;
+            }
+            else if (_distanceToTarget <= attackRadius)
+            {
+                enemyMoveState = EnemyMoveState.inAttackRange;
             }
             else if (_distanceToTarget <= chaseRadius)
             {
+                enemyMoveState = EnemyMoveState.inChaseRange;
                 SendMovement(_target.position);
             }
             else if (_distanceToTarget > chaseRadius)
             {
                 SetTarget(null);
+                enemyMoveState = EnemyMoveState.backToSpawn;
             }
 
-            if (Time.frameCount % 10 == 0 && _target && !_target.gameObject.activeInHierarchy) 
+            if (Time.frameCount % 10 == 0 && _target && !_target.gameObject.activeInHierarchy)
+            {
                 SetTarget(null);
+                enemyMoveState = EnemyMoveState.backToSpawn;
+            }
+        }
+
+
+        switch (enemyMoveState)
+        {
+            case EnemyMoveState.idle:
+
+                SendMovement(Vector3.zero);
+
+                break;
+
+
+            case EnemyMoveState.backToSpawn:
+
+                SendMovement(_originalPosition);
+
+                break;
+
+
+            case EnemyMoveState.inDetect:
+
+                break;
+
+
+            case EnemyMoveState.inChaseRange:
+
+                SendMovement(_target.position);
+
+                break;
+
+
+            case EnemyMoveState.inAttackRange:
+                SendMovement(Vector3.zero);
+                _controller.Attack();
+                _controller.TurnTo(_target.position - _body.position, 5f);
+
+                break;
+
+            case EnemyMoveState.inRetreatRange:
+                SendMovement(_target.position, EnemyMoveDirection.Reverse);
+
+                break;
         }
 
 
@@ -105,19 +180,37 @@ public class MobAI : MonoBehaviour
         {
             Vector3 targetPosition = _target.position; targetPosition.y = 0;
             _distanceToTarget = Vector3.Distance(bodyPosition, targetPosition);
-        }        
+        }
     }
 
 
-    private void SendMovement(Vector3 t)
+    private void SendMovement(Vector3 t, EnemyMoveDirection directionEnum = EnemyMoveDirection.Towards)
     {
         Vector3 forward;
         if (t != Vector3.zero)
         {
             Vector3 tPosition = new Vector3(t.x, _body.transform.position.y, t.z);
-            Quaternion lookDirection = Quaternion.LookRotation(tPosition - _body.transform.position);
-            _body.transform.rotation = Quaternion.Slerp(_body.transform.rotation, lookDirection, Time.deltaTime * rotationSpeed);
-            forward = (_body.transform.forward).normalized * 4f;
+
+            Quaternion lookAngle; Vector3 lookDirection;
+            if (directionEnum == EnemyMoveDirection.Towards)
+            {
+                lookDirection = tPosition - _body.transform.position;
+                lookAngle = Quaternion.LookRotation(lookDirection);
+            }
+            else
+            {
+                lookDirection =  _body.transform.position - tPosition;
+                lookAngle = Quaternion.LookRotation(lookDirection);
+            }
+
+            //_body.transform.rotation = Quaternion.Slerp(_body.transform.rotation, lookAngle, Time.deltaTime * rotationSpeed);
+
+
+            Vector3 newDirection = Vector3.RotateTowards(_body.transform.forward, lookDirection, Time.deltaTime * rotationSpeed, 0.0f);
+            _body.transform.rotation = Quaternion.LookRotation(newDirection);
+
+
+            forward = (_body.transform.forward).normalized * (directionEnum == EnemyMoveDirection.Towards? 4f: 2.5f);
         }
         else forward = Vector3.zero;
         _controller.MoveDirection = new Vector3(forward.x, _controller.MoveDirection.y, forward.z);

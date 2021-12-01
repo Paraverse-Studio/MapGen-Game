@@ -10,6 +10,7 @@ public class TestingEnvironment : MonoBehaviour
     public Transform blockFolder;
     private List<List<GameObject>> list;
     public GameObject enemyPrefab;
+    public GameObject enemy2Prefab;
     public int numOfEnemies = 4;
 
     // Start is called before the first frame update
@@ -41,12 +42,19 @@ public class TestingEnvironment : MonoBehaviour
             list.Add(xList);
         }
 
-        for (int i = 0; i < numOfEnemies; ++i)
+        for (int i = 0; i < numOfEnemies/2; ++i)
         {
-            float xOffset = Random.Range(-0.5f, 0.5f);
-            float zOffset = Random.Range(-0.5f, 0.5f);
+            float xOffset = Random.Range(-1.5f, 1.5f);
+            float zOffset = Random.Range(-1.5f, 1.5f);
 
-            GameObject obj = Instantiate(enemyPrefab, list[4][4].transform.position + new Vector3(xOffset,1.5f,zOffset), Quaternion.identity);
+            GameObject obj = Instantiate(enemyPrefab, list[6][6].transform.position + new Vector3(xOffset,1.5f,zOffset), Quaternion.identity);
+        }
+        for (int i = 0; i < numOfEnemies/2; ++i)
+        {
+            float xOffset = Random.Range(-1.5f, 1.5f);
+            float zOffset = Random.Range(-1.5f, 1.5f);
+
+            GameObject obj = Instantiate(enemy2Prefab, list[6][6].transform.position + new Vector3(xOffset, 1.5f, zOffset), Quaternion.identity);
         }
 
         Vector3 spawnSpot = list[radius-2][radius+2].transform.position;
