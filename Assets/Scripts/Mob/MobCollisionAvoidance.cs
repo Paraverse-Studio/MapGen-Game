@@ -15,6 +15,7 @@ public class MobCollisionAvoidance : MonoBehaviour, ITickElement
     private List<Collider> _contacts;
     private readonly int maxColliders = 10;
     Collider[] hitColliders;
+    private Vector3 velocity;
 
     // Start is called before the first frame update
     void Start()
@@ -33,7 +34,7 @@ public class MobCollisionAvoidance : MonoBehaviour, ITickElement
 
     public void Tick()
     {
-        force = Mathf.Clamp(force -= 0.01f, 0f, 1.9f); 
+        force = Mathf.Clamp(force, 0f, 1.0f); 
 
         ApplyPhysicsAvoidanceForce();
 
@@ -80,14 +81,19 @@ public class MobCollisionAvoidance : MonoBehaviour, ITickElement
 
         averageVector /= numColliders;
 
-        force += 0.03f;
+        force += 0.01f;
 
         if (averageVector != Vector3.zero)
         {
-            _controller.ChangeDirection = (-averageVector).normalized * force;
+            Vector3 goalDirection = (-averageVector).normalized * force;
+            _controller.ChangeDirection = Vector3.SmoothDamp(_controller.ChangeDirection, goalDirection, ref velocity, 0.005f);
 
-            Vector3 moveDir = Vector3.zero;
-            _controller.MoveDirection = new Vector3(moveDir.x, _controller.MoveDirection.y, moveDir.z);
+            //Vector3 moveDir = Vector3.zero;
+            //_controller.MoveDirection = new Vector3(moveDir.x, _controller.MoveDirection.y, moveDir.z);
+        }
+        else 
+        {
+            force = Mathf.Clamp(force -= 0.1f, 0f, 1.0f);
         }
 
     }
