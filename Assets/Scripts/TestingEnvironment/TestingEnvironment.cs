@@ -43,8 +43,8 @@ public class TestingEnvironment : MonoBehaviour
 
         for (int i = 0; i < numOfEnemies; ++i)
         {
-            float xOffset = Random.Range(-0.2f, 0.2f);
-            float zOffset = Random.Range(-0.2f, 0.2f);
+            float xOffset = Random.Range(-0.5f, 0.5f);
+            float zOffset = Random.Range(-0.5f, 0.5f);
 
             GameObject obj = Instantiate(enemyPrefab, list[4][4].transform.position + new Vector3(xOffset,1.5f,zOffset), Quaternion.identity);
         }

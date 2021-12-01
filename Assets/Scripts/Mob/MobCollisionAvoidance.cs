@@ -33,7 +33,7 @@ public class MobCollisionAvoidance : MonoBehaviour, ITickElement
 
     public void Tick()
     {
-        force = Mathf.Clamp(force -= 0.01f, 0f, 1f); 
+        force = Mathf.Clamp(force -= 0.01f, 0f, 1.9f); 
 
         ApplyPhysicsAvoidanceForce();
 
@@ -80,14 +80,14 @@ public class MobCollisionAvoidance : MonoBehaviour, ITickElement
 
         averageVector /= numColliders;
 
-        force += 0.05f;
+        force += 0.03f;
 
         if (averageVector != Vector3.zero)
         {
             _controller.ChangeDirection = (-averageVector).normalized * force;
 
-            //Vector3 moveDir = Vector3.zero;
-            //_controller.MoveDirection = new Vector3(-_controller.MoveDirection.x, _controller.MoveDirection.y, -_controller.MoveDirection.z);
+            Vector3 moveDir = Vector3.zero;
+            _controller.MoveDirection = new Vector3(moveDir.x, _controller.MoveDirection.y, moveDir.z);
         }
 
     }
