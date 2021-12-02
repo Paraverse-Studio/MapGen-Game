@@ -678,17 +678,23 @@ public class MapGeneration : MonoBehaviour
     {
         for (int i = 1; i < pathObjects.Count; ++i)
         {
-            if (i % M.enemyFrequency != 0) continue;
+            if (i % M.enemyFrequency != 0) continue;            
 
-            int xOffset = Random.Range(-M.enemySpawnOffset, M.enemySpawnOffset+1);
-            int zOffset = Random.Range(-M.enemySpawnOffset, M.enemySpawnOffset+1);
+            int amountToSpawn = 1;
+            if (i % M.spawnDoubleEveryFrequency == 0) amountToSpawn = 2;
 
-            Vector3 spawnSpot = pathObjects[i].transform.position + new Vector3(xOffset, 5f, zOffset);
-
-            GameObject enemy = Pool.Instance.Instantiate(M.enemies[Random.Range(0, M.enemies.Length)].name, spawnSpot, Quaternion.identity);
-            if (enemy)
+            for (int amount = 0; amount < amountToSpawn; ++amount)
             {
-                enemyObjects.Add(enemy);
+                int xOffset = Random.Range(-M.enemySpawnOffset, M.enemySpawnOffset + 1);
+                int zOffset = Random.Range(-M.enemySpawnOffset, M.enemySpawnOffset + 1);
+
+                Vector3 spawnSpot = pathObjects[i].transform.position + new Vector3(xOffset, 5f, zOffset);
+
+                GameObject enemy = Pool.Instance.Instantiate(M.enemies[Random.Range(0, M.enemies.Length)].name, spawnSpot, Quaternion.identity);
+                if (enemy)
+                {
+                    enemyObjects.Add(enemy);
+                }
             }
         }
     }
