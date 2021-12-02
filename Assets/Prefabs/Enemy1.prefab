@@ -13,7 +13,7 @@ GameObject:
   - component: {fileID: 1700548002041460777}
   m_Layer: 10
   m_Name: Cube
-  m_TagString: Player
+  m_TagString: Enemy
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
@@ -95,7 +95,7 @@ GameObject:
   - component: {fileID: 1587026299197081639}
   m_Layer: 10
   m_Name: Body
-  m_TagString: Player
+  m_TagString: Enemy
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
@@ -246,7 +246,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   isPlayer: 0
-  speed: 1
+  speed: 0.8
   jumpSpeed: 8
   jumpCD: 0.5
   attackCD: 1
@@ -283,10 +283,9 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   detectRadius: 5.5
-  chaseRadius: 25
+  chaseRadius: 7
   attackRadius: 3.5
   createDistanceRadius: 1
-  rotationSpeed: 10
 --- !u!1001 &6458969732565752086
 PrefabInstance:
   m_ObjectHideFlags: 0
@@ -305,6 +304,10 @@ PrefabInstance:
     - target: {fileID: 135017009762887669, guid: 7b6c85a23b90ea5448e3d706bec02a8f, type: 3}
       propertyPath: m_IsActive
       value: 1
+      objectReference: {fileID: 0}
+    - target: {fileID: 135017009762887669, guid: 7b6c85a23b90ea5448e3d706bec02a8f, type: 3}
+      propertyPath: m_TagString
+      value: Enemy
       objectReference: {fileID: 0}
     - target: {fileID: 2935164029956783105, guid: 7b6c85a23b90ea5448e3d706bec02a8f, type: 3}
       propertyPath: m_Enabled

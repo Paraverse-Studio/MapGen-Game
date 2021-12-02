@@ -73,4 +73,6 @@ public class SO_MapGenData : ScriptableObject
     [Header("    _____________  ENEMIES  _____________")]
     [Space(30)]
     public GameObject[] enemies;
+    public int enemyFrequency;
+    public int enemySpawnOffset;
 }
