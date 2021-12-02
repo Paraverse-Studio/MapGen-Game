@@ -676,7 +676,7 @@ public class MapGeneration : MonoBehaviour
 
     private void AddEnemies()
     {
-        for (int i = 0; i < pathObjects.Count; ++i)
+        for (int i = 1; i < pathObjects.Count; ++i)
         {
             if (i % M.enemyFrequency != 0) continue;
 
