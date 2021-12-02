@@ -9,7 +9,7 @@ using System.Collections;
 
 public class MobController : MonoBehaviour
 {
-    [Header("Automotion: ")]
+    [Header("Automotion ")]
     public bool isPlayer = false;
     public float speed = 6.0f;
 
