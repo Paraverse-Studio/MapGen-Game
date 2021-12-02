@@ -75,4 +75,5 @@ public class SO_MapGenData : ScriptableObject
     public GameObject[] enemies;
     public int enemyFrequency;
     public int enemySpawnOffset;
+    public int spawnDoubleEveryFrequency;
 }
