@@ -23,15 +23,6 @@ public class GlobalSettings : MonoBehaviour
     public static GlobalSettings Instance;
     private void Awake() => Instance = this;
 
-    [Header("Show HUD Text: ")]
-    public bool showHudText = true;
-    public UnityEvent OnToggleHudText = new UnityEvent();
-
-    public void ToggleHudText()
-    {
-        showHudText = !showHudText;
-        OnToggleHudText?.Invoke();
-    }
 
     [Space(20)]
     [Header("Folders for objects: ")]
