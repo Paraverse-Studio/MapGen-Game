@@ -19,13 +19,14 @@ public enum EnemyMoveDirection
 
 public class MobAI : MonoBehaviour
 {
+    [Header("Movement state radiuses: ")]
     public float detectRadius = 5;
     public float chaseRadius = 7; // longer than detect
     public float attackRadius = 1;
     public float createDistanceRadius = 0.6f;
 
     [Header("Movement rotation: ")]
-    private float rotationSpeed = 10f;
+    private float rotationSpeed = 8f;
 
     private EnemyMoveState enemyMoveState = EnemyMoveState.idle;
 
@@ -148,7 +149,7 @@ public class MobAI : MonoBehaviour
             case EnemyMoveState.inAttackRange:
                 SendMovement(Vector3.zero);
                 _controller.Attack();
-                _controller.TurnTo(_target.position - _body.position, 5f);
+                _controller.TurnTo(_target.position - _body.position, 8f);
 
                 break;
 
@@ -228,7 +229,7 @@ public class MobAI : MonoBehaviour
             {
                 if (hits[i].collider.gameObject.layer == (int)LayerEnum.Solid)
                 {
-                    if (_controller.FinalDirection.sqrMagnitude > 1f)
+                    if (_controller.FinalDirection.sqrMagnitude > 2f)
                         _controller.Jump();
                 }
             }
