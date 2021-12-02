@@ -111,21 +111,6 @@ public class Block : MonoBehaviour, ITickElement
         UpdateHistory("Name: " + blockName);
     }
 
-    private void SetupHudText()
-    {
-        GameObject displayObject = Instantiate(Resources.Load("HUDText", typeof(GameObject))) as GameObject;
-        displayObject.transform.SetParent(GlobalSettings.Instance.uiFolder);
-        displayObject.transform.localPosition = Vector3.zero;
-        displayObject.GetComponent<FollowTarget>().target = transform;
-        _display = displayObject.GetComponent<TextMeshPro>();
-
-        GlobalSettings.Instance.OnToggleHudText.AddListener(ToggleText);
-    }
-
-    private void ToggleText()
-    {
-        _display.enabled = !_display.enabled;
-    }
 
     public void ToggleRenderer(bool onOrOff)
     {
