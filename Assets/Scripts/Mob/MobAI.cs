@@ -55,6 +55,7 @@ public class MobAI : MonoBehaviour
 
     public void OnEnable()
     {
+        _target = null; _distanceToTarget = Mathf.Infinity; _distanceToPlayer = Mathf.Infinity;
         _originalPosition = transform.position;
         GetComponent<MobComponents>().body.transform.localPosition = Vector3.zero;
     }

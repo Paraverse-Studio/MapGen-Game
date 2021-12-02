@@ -678,10 +678,10 @@ public class MapGeneration : MonoBehaviour
     {
         for (int i = 0; i < pathObjects.Count; ++i)
         {
-            if (i % 10 != 0) continue;
+            if (i % M.enemyFrequency != 0) continue;
 
-            int xOffset = Random.Range(-2, 3);
-            int zOffset = Random.Range(-2, 3);
+            int xOffset = Random.Range(-M.enemySpawnOffset, M.enemySpawnOffset+1);
+            int zOffset = Random.Range(-M.enemySpawnOffset, M.enemySpawnOffset+1);
 
             Vector3 spawnSpot = pathObjects[i].transform.position + new Vector3(xOffset, 5f, zOffset);
 
