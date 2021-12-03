@@ -463,7 +463,7 @@ public class MapGeneration : MonoBehaviour
                     x += randomXOffset;
                     z += randomZOffset;
 
-                    ElevateCircle(upOrDown % 2 == 0 ? true : false, new Vector3(x, 0, z), Random.Range(M.lumpRadius.x, M.lumpRadius.y));
+                    ElevateCircle(upOrDown % 2 != 0 ? true : false, new Vector3(x, 0, z), Random.Range(M.lumpRadius.x, M.lumpRadius.y));
                 }
             }
         }
