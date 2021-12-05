@@ -282,9 +282,9 @@ public class MapGeneration : MonoBehaviour
         PartitionProgress("Activating props...");
         yield return new WaitForSeconds(processesDelay);
 
-        AddFoundationAndEdgeWork();
-        PartitionProgress("Finalizing post processing...");
-        yield return new WaitForSeconds(processesDelay);
+        //AddFoundationAndEdgeWork();
+        //PartitionProgress("Finalizing post processing...");
+        //yield return new WaitForSeconds(processesDelay);
 
         /* * * * * IMPORTANT PROPS ON MAP * * * * * * */
         AddImportantProps();
