@@ -190,6 +190,9 @@ public class Block : MonoBehaviour, ITickElement
 
             _currentPrefab.transform.localPosition = new Vector3(0, 0, 0);
             _currentPrefab.transform.localRotation = Quaternion.identity;
+
+            ApplyRandomRotation(_currentPrefab);
+
             _currentPrefab.transform.localScale = Vector3.one;
 
 
@@ -223,13 +226,36 @@ public class Block : MonoBehaviour, ITickElement
     }
 
 
-    public void CheckBoxCollider(GameObject obj)
+    private void CheckBoxCollider(GameObject obj)
     {        
         if (!obj.GetComponent<BoxCollider>())
         {
             obj.AddComponent<BoxCollider>();
         }
     }
+
+
+    private void ApplyRandomRotation(GameObject obj)
+    {
+        int x = 0, y = 0, z = 0;
+        if (type.rotationRandomization.x)
+        {
+            int random = Random.Range(0, 4);
+            x = (random * 90);
+        }
+        if (type.rotationRandomization.x)
+        {
+            int random = Random.Range(0, 4);
+            y = (random * 90);
+        }
+        if (type.rotationRandomization.x)
+        {
+            int random = Random.Range(0, 4);
+            z = (random * 90);
+        }
+        obj.transform.localRotation = Quaternion.Euler(x,y,z);
+    }
+
 
 
 }

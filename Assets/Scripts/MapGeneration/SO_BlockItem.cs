@@ -11,13 +11,25 @@ public enum BlockType
     propPart
 }
 
+
 [CreateAssetMenu(fileName = "SO_BlockItem", menuName = "SOs/Block/SO_BlockItem")]
 public class SO_BlockItem : ScriptableObject
 {
+    [System.Serializable]
+    public struct RandomizeRotation 
+    {
+        public bool x;
+        public bool y;
+        public bool z;
+    }
+
     public BlockType blockType;
     public Color blockColour;
     public SingleLayer layer;
     public Vector3 defaultScale = Vector3.one;
+
+    public RandomizeRotation rotationRandomization = new RandomizeRotation();
+
     public GameObject[] prefabVariations;
 
 }
