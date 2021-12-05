@@ -724,14 +724,18 @@ public class MapGeneration : MonoBehaviour
 
                 if (null == gridOccupants[newX, newZ]) continue;
 
+                // NEW* - don't put normal props on lowest level (where water is, only put water props there)
+                float yLevelToMeasure = Mathf.Round(YBoundary.y);
+                if (Mathf.Abs((Mathf.Round(gridOccupants[newX, newZ].transform.position.y)) - yLevelToMeasure) < _EPSILON) continue;
+
                 Vector3 spawnSpot = new Vector3(newX, gridOccupants[newX, newZ].transform.position.y, newZ);
 
                 // Lastly, distance from path: by default, the chance to spawn a tree is 0%, but increases by
                 // 5% for every distance unit away from the closest path block 
                 GameObject closestPathPosition = GetClosestObject(spawnSpot, pathObjects);
 
-                float chanceOfSpawn = -10.0f;
-                chanceOfSpawn += (M.treeChanceGrowthRate * Mathf.Pow(Vector3.Distance(spawnSpot, closestPathPosition.transform.position), 1.35f));
+                float chanceOfSpawn = 0.0f;
+                chanceOfSpawn += (M.treeChanceGrowthRate * Mathf.Pow(Vector3.Distance(spawnSpot, closestPathPosition.transform.position), 1.15f)); //1.35f
 
                 if (Random.Range(0f, 100f) < chanceOfSpawn)
                 {
