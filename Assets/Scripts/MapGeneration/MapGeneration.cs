@@ -278,13 +278,13 @@ public class MapGeneration : MonoBehaviour
         PartitionProgress("Shaping map...");
         yield return new WaitForSeconds(processesDelay);
 
-        ApplyRandomElevation();
-        PartitionProgress("Activating props...");
-        yield return new WaitForSeconds(processesDelay);
-
-        //AddFoundationAndEdgeWork();
-        //PartitionProgress("Finalizing post processing...");
+        //ApplyRandomElevation();
+        //PartitionProgress("Activating props...");
         //yield return new WaitForSeconds(processesDelay);
+
+        AddFoundationAndEdgeWork();
+        PartitionProgress("Finalizing post processing...");
+        yield return new WaitForSeconds(processesDelay);
 
         /* * * * * IMPORTANT PROPS ON MAP * * * * * * */
         AddImportantProps();
@@ -634,11 +634,11 @@ public class MapGeneration : MonoBehaviour
     {
         for (int i = 0; i < allObjects.Count; i++)
         {
-            if (allObjects[i].GetComponentInChildren<Block>().type != blocks.dirt) continue;
+            //if (allObjects[i].GetComponentInChildren<Block>().type != blocks.dirt) continue;
 
             float elevation = Random.Range(M.randomElevation.x, M.randomElevation.y);
-            float xRandom = Random.Range(-M.randomElevation.x / 2f, M.randomElevation.x / 2f);
-            float zRandom = Random.Range(-M.randomElevation.x / 2f, M.randomElevation.x / 2f);
+            float xRandom = 0; // Random.Range(-M.randomElevation.x / 2f, M.randomElevation.x / 2f);
+            float zRandom = 0; // Random.Range(-M.randomElevation.x / 2f, M.randomElevation.x / 2f);
 
             allObjects[i].transform.position += new Vector3(xRandom, elevation, zRandom);
         }
@@ -771,13 +771,13 @@ public class MapGeneration : MonoBehaviour
             if (9 == IsAdjacentOccupied(allObjects[i].gameObject.transform.position)) continue;
 
             // Adding foundation layer blocks underneath map
-            int yLevel = (int)(allObjects[i].transform.position.y);
+            //int yLevel = (int)(allObjects[i].transform.position.y);
 
-            GameObject foundationBlock = Pool.Instance.Instantiate(foundationPrefabs[Random.Range(0, foundationPrefabs.Length)].name,
-                new Vector3(allObjects[i].transform.position.x,
-                yLevel - 0.5f, allObjects[i].transform.position.z), Quaternion.identity);
+            //GameObject foundationBlock = Pool.Instance.Instantiate(foundationPrefabs[Random.Range(0, foundationPrefabs.Length)].name,
+            //    new Vector3(allObjects[i].transform.position.x,
+            //    yLevel - 0.5f, allObjects[i].transform.position.z), Quaternion.identity);
 
-            if (foundationBlock) foundationObjects.Add(foundationBlock);
+            //if (foundationBlock) foundationObjects.Add(foundationBlock);
 
             // RAISING edge blocks (so that anything, ie. water blocks, don't look awkward at edges)
             Vector3 objPos = allObjects[i].transform.position;
