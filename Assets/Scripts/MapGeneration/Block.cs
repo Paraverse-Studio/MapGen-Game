@@ -161,9 +161,8 @@ public class Block : MonoBehaviour, ITickElement
                 _currentPrefab = null;
             }
 
-
             // 2.0    Add new block
-            if (overrideSettings.overridePrefab)
+            if (overrideSettings.overridePrefab) // for premade like trees, stones, etc.
             {
                 _currentPrefab = Pool.Instance.Instantiate(overrideSettings.overridePrefab.name, Vector3.zero, Quaternion.identity, false);
             }
@@ -180,6 +179,8 @@ public class Block : MonoBehaviour, ITickElement
             if (!isWaterType)
             {
                 _currentPrefab.transform.SetParent(transform);
+
+                CheckBoxCollider(_currentPrefab);
             }
             else
             {
@@ -187,7 +188,7 @@ public class Block : MonoBehaviour, ITickElement
                 TickManager.Instance?.Subscribe(this);
             }
 
-            _currentPrefab.transform.localPosition = new Vector3(0, 0.5f - 0.1f, 0);
+            _currentPrefab.transform.localPosition = new Vector3(0, 0, 0);
             _currentPrefab.transform.localRotation = Quaternion.identity;
             _currentPrefab.transform.localScale = Vector3.one;
 
@@ -219,6 +220,15 @@ public class Block : MonoBehaviour, ITickElement
     {       
         string time = System.DateTime.Now.ToString("hh:mm:ss");
         blockHistory += "\n" + time + "  " + msg;        
+    }
+
+
+    public void CheckBoxCollider(GameObject obj)
+    {        
+        if (!obj.GetComponent<BoxCollider>())
+        {
+            obj.AddComponent<BoxCollider>();
+        }
     }
 
 

@@ -289,7 +289,7 @@ public class MapGeneration : MonoBehaviour
         /* * * * * IMPORTANT PROPS ON MAP * * * * * * */
         AddImportantProps();
 
-        AddEnemies();
+        //AddEnemies();
 
         /* * * * * DECORATIVE PROPS ON MAP * * * * * * */
         currentPaintingBlock = blocks.water;
@@ -400,14 +400,16 @@ public class MapGeneration : MonoBehaviour
             {
                 Vector3 newSpot = centerObjectOffsetted + new Vector3((int)x, 0, (int)z);
 
-                //if (Vector3.Distance(centerObjectOffsetted, newSpot) < (thickness* M.circularity)) // tags: circular
-                if (IsDistanceLessThan(centerObjectOffsetted, newSpot, (thickness * M.circularity)))
+                if (IsDistanceLessThan(centerObjectOffsetted, newSpot, (thickness * M.circularity))) // tags: circular
                 {
                     Block replacedBlock = null;
                     Block block = SpawnAdvanced(newSpot, ref replacedBlock);
 
                     if (block) allObjects.Add(block.gameObject);
 
+                    // This part here is because we have a special condition to apply to dirt paths
+                    // which is to never have them on the lowest elevation layer, and if they are, elevate them
+                    // (design choice: don't want dirt to be covered with water - dirt paths should always be clear to walk on)
                     if (null != replacedBlock && replacedBlock.type == blocks.dirt)
                     {
                         ApplyBlockElevationRestrictions(replacedBlock);
