@@ -289,7 +289,7 @@ public class MapGeneration : MonoBehaviour
         /* * * * * IMPORTANT PROPS ON MAP * * * * * * */
         AddImportantProps();
 
-        AddEnemies();
+        //AddEnemies();
 
         /* * * * * DECORATIVE PROPS ON MAP * * * * * * */
         currentPaintingBlock = blocks.water;

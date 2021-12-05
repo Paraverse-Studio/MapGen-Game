@@ -187,7 +187,7 @@ public class Block : MonoBehaviour, ITickElement
                 TickManager.Instance?.Subscribe(this);
             }
 
-            _currentPrefab.transform.localPosition = new Vector3(0, 0.5f - 0.1f, 0);
+            //_currentPrefab.transform.localPosition = new Vector3(0, 0.5f - 0.1f, 0);
             _currentPrefab.transform.localRotation = Quaternion.identity;
             _currentPrefab.transform.localScale = Vector3.one;
 
