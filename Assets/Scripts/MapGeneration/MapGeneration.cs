@@ -55,7 +55,7 @@ public class MapGeneration : MonoBehaviour
     public ImportantProps importantProps;
 
     public Transform objFolder;
-    public GameObject[] treePrefabs;
+    public GameObject[] propPrefabs;
     public GameObject[] foundationPrefabs;
 
     [Header("Line (GPS)")]
@@ -735,9 +735,9 @@ public class MapGeneration : MonoBehaviour
 
                 if (Random.Range(0f, 100f) < chanceOfSpawn)
                 {
-                    GameObject obj = Instantiate(treePrefabs[Random.Range(0, treePrefabs.Length)], spawnSpot, Quaternion.identity);
+                    GameObject obj = Instantiate(propPrefabs[Random.Range(0, propPrefabs.Length)], spawnSpot, Quaternion.identity);
                     treeObjects.Add(obj);
-                    obj.transform.position += new Vector3(0, 1, 0);
+                    obj.transform.position += new Vector3(0, 0.5f, 0);
                     obj.transform.SetParent(objFolder);
                 }
             }
