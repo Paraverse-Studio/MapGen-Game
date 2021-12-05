@@ -243,12 +243,12 @@ public class Block : MonoBehaviour, ITickElement
             int random = Random.Range(0, 4);
             x = (random * 90);
         }
-        if (type.rotationRandomization.x)
+        if (type.rotationRandomization.y)
         {
             int random = Random.Range(0, 4);
             y = (random * 90);
         }
-        if (type.rotationRandomization.x)
+        if (type.rotationRandomization.z)
         {
             int random = Random.Range(0, 4);
             z = (random * 90);
