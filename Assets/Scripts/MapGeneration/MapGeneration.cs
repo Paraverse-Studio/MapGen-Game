@@ -731,7 +731,7 @@ public class MapGeneration : MonoBehaviour
                 int newX = (int)Mathf.Round(x + randomXOffset);
                 int newZ = (int)Mathf.Round(z + randomZOffset);
 
-                if (null == gridOccupants[newX, newZ].gameObject) continue;
+                if (null == gridOccupants[newX, newZ].gameObject && false == gridOccupants[newX, newZ].hasProp) continue;
 
                 // NEW* - don't put normal props on lowest level (where water is, only put water props there)
                 float yLevelToMeasure = Mathf.Round(YBoundary.y);
@@ -746,12 +746,15 @@ public class MapGeneration : MonoBehaviour
                 float chanceOfSpawn = 0.0f;
                 chanceOfSpawn += (M.treeChanceGrowthRate * Mathf.Pow(Vector3.Distance(spawnSpot, closestPathPosition.transform.position), 1.15f)); //1.35f
 
+                // Actually placing the prop
                 if (Random.Range(0f, 100f) < chanceOfSpawn)
                 {
                     GameObject obj = Instantiate(propPrefabs[Random.Range(0, propPrefabs.Length)], spawnSpot, Quaternion.identity);
                     treeObjects.Add(obj);
                     obj.transform.position += new Vector3(0, 0.5f, 0);
                     obj.transform.SetParent(objFolder);
+
+                    gridOccupants[newX, newZ].hasProp = true;
                 }
             }
         }
