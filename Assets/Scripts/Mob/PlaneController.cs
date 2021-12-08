@@ -8,16 +8,6 @@ public class PlaneController : MonoBehaviour
     public bool isPlayer = false;
     public float speed = 6.0f;
 
-    [Header("Jump")]
-    public float jumpSpeed = 8.0f;
-    public float jumpCD = 0.5f;
-    private float jumpTimer = 0.0f;
-
-    [Header("Attack")]
-    public float attackCD = 1f;
-    private float attackTimer = 0.0f;
-
-    public float gravity = 9.8f;
 
     private CharacterController _characterController;
     private Renderer _renderer;
@@ -29,19 +19,17 @@ public class PlaneController : MonoBehaviour
         set { _changeDirection = value; }
     }
 
-    private Vector3 _moveDirection = Vector3.zero;
+    private Vector3 _moveVector = Vector3.zero;
     public Vector3 MoveDirection
     {
-        get { return _moveDirection; }
-        set { _moveDirection = value; }
+        get { return _moveVector; }
+        set { _moveVector = value; }
     }
 
     private Vector3 _finalDirection;
     public Vector3 FinalDirection => _finalDirection;
 
     private Vector3 moveVector;
-
-    private readonly Vector3 referenceAngleVector = new Vector3(-1, 0, 1);
 
     private Vector3 _lastSafePosition = Vector3.zero;
     private Transform _body;
@@ -75,7 +63,6 @@ public class PlaneController : MonoBehaviour
     void Update()
     {
         //  TIMERS   //////
-        jumpTimer += Time.deltaTime;
 
         _changeDirection = Vector3.Lerp(_changeDirection, Vector3.zero, Time.deltaTime * 2f);
         ///////////////////       
@@ -85,42 +72,18 @@ public class PlaneController : MonoBehaviour
         if (!_active) return;
 
 
-        if (_characterController.isGrounded)
-        {
-            if (_moveDirection.y < 0) _moveDirection.y = 0;
-        }
-
         if (isPlayer)
         {
             GetMovement();
-
-            GetJump();
-
-            GetAttack();
         }
 
+        _characterController.Move(_moveVector * Time.deltaTime);
 
-        // Gravity
-        _moveDirection.y -= gravity * Time.deltaTime;
-
-        // Move the controller
-        _finalDirection = (_moveDirection + _changeDirection);
-
-        // AI jitter prevention
-        if (!isPlayer)
-        {
-            if (_finalDirection.sqrMagnitude < 1f) { _finalDirection.x = 0; _finalDirection.z = 0; }
-        }
-
-        _characterController.Move(_finalDirection * Time.deltaTime);
-
-        // Facing the direction you're moving
-        if ((Mathf.Abs(_moveDirection.x) + Mathf.Abs(_moveDirection.z)) > 0.1f)
-        {
-            TurnTo(_moveDirection);
-        }
-
-
+        //// Facing the direction you're moving
+        //if ((Mathf.Abs(_moveDirection.x) + Mathf.Abs(_moveDirection.z)) > 0.1f)
+        //{
+        //    TurnTo(_moveDirection);
+        //}
 
     }
 
@@ -133,96 +96,15 @@ public class PlaneController : MonoBehaviour
     }
 
 
-    private void GetJump()
-    {
-        if (Input.GetButton("Jump"))
-        {
-            Jump();
-        }
-    }
-
-    public void Jump()
-    {
-        if (jumpTimer >= jumpCD && _characterController.isGrounded)
-        {
-            _moveDirection.y = jumpSpeed;
-            jumpTimer = 0.0f;
-        }
-    }
-
     void GetMovement()
     {
         float moveX = Input.GetAxis("Vertical");
         float moveZ = Input.GetAxis("Horizontal");
 
-        Vector3 moveVectorNow = new Vector3(moveX, 0, moveZ);
-        if (moveVectorNow.magnitude <= (moveVector.magnitude * 0.9f))
-        {
-            moveX = 0;
-            moveZ = 0;
-            moveVector = moveVectorNow;
-
-            _moveDirection = new Vector3(0, _moveDirection.y, 0);
-            return;
-        }
-        moveVector = moveVectorNow;
-
-
-        float currentY = _moveDirection.y;
-
-        Vector3 rightOfReference = new Vector3(referenceAngleVector.z, referenceAngleVector.y, -referenceAngleVector.x);
-        _moveDirection = (referenceAngleVector * (moveX * 3f)) + (rightOfReference * (moveZ * 3f));
-
-        _moveDirection.y = 0;
-
-        _moveDirection *= speed;
-
-        _moveDirection.y = currentY;
+        _moveVector = (transform.forward * moveX * speed) + (transform.forward * moveZ * speed);
+        
     }
 
-    private void GetAttack()
-    {
-        if (Input.GetKeyDown(KeyCode.K))
-        {
-            Attack();
-        }
-    }
-
-    public void Attack()
-    {
-        if (attackTimer < attackCD) return;
-        attackTimer = 0f;
-
-        _moveDirection = Vector3.zero;
-
-        Debug.Log(gameObject.name + " attacked!");
-        // wind up attack animation
-
-        // perhaps use animation event to trigger the box on the sword for better accuracy 
-    }
-
-
-
-
-
-    void SafetyNet()
-    {
-        if (Time.frameCount % 60 == 0)
-        {
-            RaycastHit hitInfo;
-            if (Physics.Raycast(_body.transform.position + new Vector3(0, 0.2f, 0), Vector3.down, out hitInfo, LayerMask.NameToLayer("Solid")))
-            {
-                if (_characterController.isGrounded) _lastSafePosition = _body.transform.position;
-            }
-
-            if (MapGeneration.Instance && _body.transform.position.y < (MapGeneration.Instance.YBoundary.y - 3.0f))
-            {
-                if (_lastSafePosition != Vector3.zero) TeleportPlayer(_lastSafePosition);
-                else TeleportPlayer();
-            }
-
-        }
-    }
 
     public void TeleportPlayer(Vector3 pos)
     {
@@ -233,7 +115,7 @@ public class PlaneController : MonoBehaviour
 
     public void TeleportPlayer()
     {
-        _moveDirection.y = -1f;
+        _moveVector.y = -1f;
         TeleportPlayer(MapGeneration.Instance.CenterPointWithY + new Vector3(0, 1f, 0));
     }
 
