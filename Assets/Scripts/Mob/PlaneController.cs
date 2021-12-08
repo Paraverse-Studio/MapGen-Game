@@ -48,12 +48,9 @@ public class PlaneController : MonoBehaviour
     public Transform Body => _body;
 
 
-
-
     // For disabling player movement, gravity, input, all
     private bool _active = true;
     public bool Active => _active;
-
 
 
     private void Awake()
@@ -62,6 +59,7 @@ public class PlaneController : MonoBehaviour
         _renderer = GetComponentInChildren<Renderer>();
         _body = GetComponentInChildren<CharacterController>().transform;
     }
+
 
     void Start()
     {
@@ -72,6 +70,7 @@ public class PlaneController : MonoBehaviour
         // set the controller center vector
         _characterController.center = new Vector3(0, correctHeight, 0);
     }
+
 
     void Update()
     {
@@ -120,6 +119,8 @@ public class PlaneController : MonoBehaviour
         {
             TurnTo(_moveDirection);
         }
+
+
 
     }
 
