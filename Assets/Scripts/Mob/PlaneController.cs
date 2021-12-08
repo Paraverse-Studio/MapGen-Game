@@ -124,7 +124,7 @@ public class PlaneController : MonoBehaviour
 
     public void TeleportPlayer()
     {
-        _currentYvalue = -1f;
-        TeleportPlayer(MapGeneration.Instance.CenterPointWithY + new Vector3(0, 1f, 0));
+        _currentYvalue = 0f;
+        TeleportPlayer(MapGeneration.Instance.CenterPointWithY + new Vector3(0, 5f, 0));
     }
 }
