@@ -42,20 +42,20 @@ public class TestingEnvironment : MonoBehaviour
             list.Add(xList);
         }
 
-        for (int i = 0; i < numOfEnemies/2; ++i)
-        {
-            float xOffset = Random.Range(-1.5f, 1.5f);
-            float zOffset = Random.Range(-1.5f, 1.5f);
+        //for (int i = 0; i < numOfEnemies/2; ++i)
+        //{
+        //    float xOffset = Random.Range(-1.5f, 1.5f);
+        //    float zOffset = Random.Range(-1.5f, 1.5f);
 
-            GameObject obj = Instantiate(enemyPrefab, list[6][6].transform.position + new Vector3(xOffset,1.5f,zOffset), Quaternion.identity);
-        }
-        for (int i = 0; i < numOfEnemies/2; ++i)
-        {
-            float xOffset = Random.Range(-1.5f, 1.5f);
-            float zOffset = Random.Range(-1.5f, 1.5f);
+        //    GameObject obj = Instantiate(enemyPrefab, list[6][6].transform.position + new Vector3(xOffset,1.5f,zOffset), Quaternion.identity);
+        //}
+        //for (int i = 0; i < numOfEnemies/2; ++i)
+        //{
+        //    float xOffset = Random.Range(-1.5f, 1.5f);
+        //    float zOffset = Random.Range(-1.5f, 1.5f);
 
-            GameObject obj = Instantiate(enemy2Prefab, list[6][6].transform.position + new Vector3(xOffset, 1.5f, zOffset), Quaternion.identity);
-        }
+        //    GameObject obj = Instantiate(enemy2Prefab, list[6][6].transform.position + new Vector3(xOffset, 1.5f, zOffset), Quaternion.identity);
+        //}
 
         Vector3 spawnSpot = list[radius-2][radius+2].transform.position;
         player.TeleportPlayer(spawnSpot + new Vector3(0, 2, 0));

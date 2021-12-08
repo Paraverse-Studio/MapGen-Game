@@ -7,7 +7,7 @@ public class PlaneController : MonoBehaviour
     [Header("Automotion ")]
     public bool isPlayer = false;
     public float speed = 6.0f;
-
+    public Camera camera;
 
     private CharacterController _characterController;
     private Renderer _renderer;
@@ -41,6 +41,12 @@ public class PlaneController : MonoBehaviour
     public bool Active => _active;
 
 
+    private Vector2 screenCenter;
+
+    public float lookRateSpeed = 50f;
+    private Vector2 lookInput;
+    private Vector2 mouseDistance;
+
     private void Awake()
     {
         _characterController = GetComponentInChildren<CharacterController>();
@@ -57,33 +63,32 @@ public class PlaneController : MonoBehaviour
         float correctHeight = _characterController.center.y + _characterController.skinWidth;
         // set the controller center vector
         _characterController.center = new Vector3(0, correctHeight, 0);
+
+        screenCenter.x = Screen.width * 0.5f;
+        screenCenter.y = Screen.height * 0.5f;
     }
 
 
     void Update()
     {
-        //  TIMERS   //////
-
-        _changeDirection = Vector3.Lerp(_changeDirection, Vector3.zero, Time.deltaTime * 2f);
-        ///////////////////       
-
-
         // Conditions /////
         if (!_active) return;
 
 
         if (isPlayer)
         {
+            GetCameraMovement();
             GetMovement();
         }
 
         _characterController.Move(_moveVector * Time.deltaTime);
 
-        //// Facing the direction you're moving
-        //if ((Mathf.Abs(_moveDirection.x) + Mathf.Abs(_moveDirection.z)) > 0.1f)
-        //{
-        //    TurnTo(_moveDirection);
-        //}
+        //_characterController.transform.rotation = Quaternion.Slerp(
+        //    _characterController.transform.rotation,
+        //    Quaternion.LookRotation(new Vector3(camera.transform.forward.x, 0, camera.transform.forward.z)),
+        //    Time.deltaTime * 1f);
+
+        transform.Rotate(-mouseDistance.y * lookRateSpeed * Time.deltaTime, mouseDistance.x * lookRateSpeed * Time.deltaTime, 0f, Space.Self);
 
     }
 
@@ -96,8 +101,21 @@ public class PlaneController : MonoBehaviour
     }
 
 
+    void GetCameraMovement()
+    {
+        lookInput.x = Input.mousePosition.x;
+        lookInput.y = Input.mousePosition.y;
+
+        mouseDistance.x = (lookInput.x - screenCenter.x) / screenCenter.y;
+        mouseDistance.y = (lookInput.y - screenCenter.y) / screenCenter.y;
+
+        mouseDistance = Vector2.ClampMagnitude(mouseDistance, 1f);
+    }
+
     void GetMovement()
     {
+
+
         float moveX = Input.GetAxis("Vertical");
         float moveZ = Input.GetAxis("Horizontal");
 
