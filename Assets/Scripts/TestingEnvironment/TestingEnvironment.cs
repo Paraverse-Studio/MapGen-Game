@@ -6,7 +6,7 @@ public class TestingEnvironment : MonoBehaviour
 {
     public int radius = 5;
     public GameObject blockPrefab;
-    public MobController player;
+    public GameObject player;
     public Transform blockFolder;
     private List<List<GameObject>> list;
     public GameObject enemyPrefab;
@@ -58,7 +58,7 @@ public class TestingEnvironment : MonoBehaviour
         //}
 
         Vector3 spawnSpot = list[radius-2][radius+2].transform.position;
-        player.TeleportPlayer(spawnSpot + new Vector3(0, 2, 0));
+        player.transform.position = (spawnSpot + new Vector3(0, 2, 0));
     }
 
 
