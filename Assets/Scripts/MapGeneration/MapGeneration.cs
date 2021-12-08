@@ -2,6 +2,9 @@ using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.Events;
+using UnityEngine.Rendering;
+using UnityEngine.Rendering.PostProcessing;
+
 
 [System.Serializable]
 public class PropItem
@@ -51,6 +54,8 @@ public class MapGeneration : MonoBehaviour
 
     [Header("Map Generation Data ")]
     public SO_MapGenData M;
+    [Header("Post Processing Data ")]
+    public Volume globalVolume;
     [Space(10)]
 
     public GameObject blockPrefab;
@@ -312,8 +317,9 @@ public class MapGeneration : MonoBehaviour
         yield return new WaitForSeconds(processesDelay);
 
         /* * * * MISC STEPS (NO ORDER REQUIRED) * * */
+        globalVolume.profile = M.ppProfile;
 
-
+        /* * * * * * * * * * * * * * * * * * * * * * */
 
         progressTotal = progressTotalCounter - 1;
 

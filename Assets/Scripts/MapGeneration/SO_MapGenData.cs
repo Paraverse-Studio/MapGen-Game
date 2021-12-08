@@ -1,12 +1,18 @@
 using UnityEngine;
 using NaughtyAttributes;
+using UnityEngine.Rendering;
 
 [CreateAssetMenu(fileName = "SO_MapGenData", menuName = "SOs/MapGen/SO_MapGenData")]
 public class SO_MapGenData : ScriptableObject
 {
     [Space(30)]
-    [Header("    _____________  MAP BASE  _____________")]
+    [Header("    _____________  MAP SET-UP  _____________")]
     [Space(5)]
+    public VolumeProfile ppProfile;
+
+    [Space(30)]
+    [Header("    _____________  MAP BASE  _____________")]
+    [Space(30)]
     [MinMaxSlider(-1f, 1f)]
     public Vector2 randomElevation;
 
