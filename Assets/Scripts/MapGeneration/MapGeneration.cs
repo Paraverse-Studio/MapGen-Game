@@ -12,6 +12,15 @@ public class PropItem
 
 }
 
+[System.Serializable]
+public struct BlockSet
+{
+    public SO_BlockItem grass;
+    public SO_BlockItem dirt;
+    public SO_BlockItem water;
+    public SO_BlockItem foundation;
+}
+
 public class MapGeneration : MonoBehaviour
 {
     public enum Side
@@ -30,14 +39,7 @@ public class MapGeneration : MonoBehaviour
     }
 
 
-    [System.Serializable]
-    public struct Blocks
-    {
-        public SO_BlockItem grass;
-        public SO_BlockItem dirt;
-        public SO_BlockItem water;
-        public SO_BlockItem foundation;
-    }
+
 
     [System.Serializable]
     public struct ImportantProps
@@ -58,10 +60,7 @@ public class MapGeneration : MonoBehaviour
     public Volume globalVolume;
     [Space(10)]
 
-    public GameObject blockPrefab;
-
-    [Header("Block SOs")]
-    public Blocks blocks;
+    public GameObject blockPrefab;    
 
     [Header("Important Props")]
     public ImportantProps importantProps;
@@ -191,7 +190,7 @@ public class MapGeneration : MonoBehaviour
         pathingAngle = Random.Range(0f, 360f);
 
         line.positionCount = 0;
-        currentPaintingBlock = blocks.grass;
+        currentPaintingBlock = M.blockSet.grass;
     }
 
     private IEnumerator ResetGeneration()
@@ -254,7 +253,7 @@ public class MapGeneration : MonoBehaviour
 
         /* * * * * CREATION OF MAP * * * * */
 
-        currentPaintingBlock = blocks.grass;
+        currentPaintingBlock = M.blockSet.grass;
 
         SpawnPath();
         PartitionProgress("Adding procedural base map...");
@@ -286,7 +285,7 @@ public class MapGeneration : MonoBehaviour
 
         /* * * * * * DECALS ON SHAPE OF MAP * * * * * */
 
-        currentPaintingBlock = blocks.dirt;
+        currentPaintingBlock = M.blockSet.dirt;
 
         PaintDirtPath();
         PartitionProgress("Shaping map...");
@@ -306,7 +305,7 @@ public class MapGeneration : MonoBehaviour
         //AddEnemies();
 
         /* * * * * DECORATIVE PROPS ON MAP * * * * * * */
-        currentPaintingBlock = blocks.water;
+        currentPaintingBlock = M.blockSet.water;
 
         AddWaterToDips();
         PartitionProgress("Completed!");
@@ -425,7 +424,7 @@ public class MapGeneration : MonoBehaviour
                     // This part here is because we have a special condition to apply to dirt paths
                     // which is to never have them on the lowest elevation layer, and if they are, elevate them
                     // (design choice: don't want dirt to be covered with water - dirt paths should always be clear to walk on)
-                    if (null != replacedBlock && replacedBlock.type == blocks.dirt)
+                    if (null != replacedBlock && replacedBlock.type == M.blockSet.dirt)
                     {
                         ApplyBlockElevationRestrictions(replacedBlock);
                     }
@@ -637,7 +636,7 @@ public class MapGeneration : MonoBehaviour
                 if (i >= pathObjects.Count) return;
             }
 
-            pathObjects[i].GetComponent<Block>().type = blocks.dirt;
+            pathObjects[i].GetComponent<Block>().type = M.blockSet.dirt;
             ThickenAroundObject(pathObjects[i], i, M.dirtFillRadius);
         }
     }
@@ -675,7 +674,7 @@ public class MapGeneration : MonoBehaviour
                 if (waterObj)
                 {
                     Block waterBlock = waterObj.GetComponent<Block>();
-                    waterBlock.type = blocks.water;
+                    waterBlock.type = M.blockSet.water;
                     waterBlock.UpdateBlock();
                     waterObjects.Add(waterBlock);
                 }
