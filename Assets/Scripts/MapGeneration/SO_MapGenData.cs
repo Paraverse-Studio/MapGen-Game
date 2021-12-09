@@ -10,6 +10,10 @@ public class SO_MapGenData : ScriptableObject
     [Space(5)]
     public VolumeProfile ppProfile;
 
+    [Header("        BLOCK SET ")]
+    [Space(10)]
+    public BlockSet blockSet;
+
     [Space(30)]
     [Header("    _____________  MAP BASE  _____________")]
     [Space(30)]

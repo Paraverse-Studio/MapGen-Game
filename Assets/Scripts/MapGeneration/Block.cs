@@ -174,7 +174,7 @@ public class Block : MonoBehaviour, ITickElement
 
             // 3.0    New block's Settings
             bool isWaterType = false;
-            if (MapGeneration.Instance) isWaterType = (type == MapGeneration.Instance.blocks.water);
+            if (MapGeneration.Instance) isWaterType = (type == MapGeneration.Instance.M.blockSet.water);
 
             if (!isWaterType)
             {
