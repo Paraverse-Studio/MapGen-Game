@@ -36,6 +36,8 @@ public class PlaneController : MonoBehaviour
     {
         jumpTimer += Time.deltaTime;
 
+        if (!isActive) return;
+
         // Apply gravity
         _currentYvalue -= gravity * Time.deltaTime;
         if (_controller.isGrounded)
