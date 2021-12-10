@@ -687,6 +687,7 @@ public class MapGeneration : MonoBehaviour
         // EndPoint
         Vector3 spawnSpot = pathObjects[pathObjects.Count - 1].transform.position + new Vector3(0, 1, 0);
         GameObject obj = Instantiate(importantProps.endPoint, spawnSpot, Quaternion.identity);
+        UtilityFunctions.UpdateLODlevels(obj.transform);
         treeObjects.Add(obj);        
     }
 
@@ -755,6 +756,7 @@ public class MapGeneration : MonoBehaviour
                 if (Random.Range(0f, 100f) < chanceOfSpawn)
                 {
                     GameObject obj = Instantiate(propPrefabs[Random.Range(0, propPrefabs.Length)], spawnSpot, Quaternion.identity);
+                    UtilityFunctions.UpdateLODlevels(obj.transform);
                     treeObjects.Add(obj);
                     obj.transform.position += new Vector3(0, 0.5f, 0);
                     obj.transform.SetParent(objFolder);
