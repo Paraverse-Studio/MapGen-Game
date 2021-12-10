@@ -94,6 +94,8 @@ public class Pool : MonoBehaviour
                 obj.transform.rotation = Quaternion.identity;
                 obj.transform.parent = itemsToPool[x].parentObj.transform; obj.SetActive(false); pooledObjects.Add(obj);
 
+                UtilityFunctions.UpdateLODlevels(obj.transform);
+
                 // Progress bar stuff (purely)
                 totalSpawned += 1;
                 delaySetCounter += 1;
