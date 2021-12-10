@@ -23,9 +23,14 @@ public static class UtilityFunctions
             lod.fadeMode = LODFadeMode.CrossFade;
             LODGroup.crossFadeAnimationDuration = 0.3f;
             LOD[] lods = lod.GetLODs();
-            lods[2].screenRelativeTransitionHeight = 0.01f; 
-            lods[1].screenRelativeTransitionHeight = 0.03f;
-            lods[0].screenRelativeTransitionHeight = 0.06f;
+
+            int size = lods.Length;
+            int index = 0;
+            for (int i = size - 1; i >= 0; --i)
+            {
+                lods[i].screenRelativeTransitionHeight = 0.01f + (0.025f * index);
+                index++;
+            }
             
             lod.SetLODs(lods);
         }
