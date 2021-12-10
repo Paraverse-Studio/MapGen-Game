@@ -44,7 +44,7 @@ public class MapGeneration : MonoBehaviour
     [System.Serializable]
     public struct ImportantProps
     {
-        public GameObject endPoint;        
+        public GameObject endPoint;
     }
 
     public struct GridOccupant
@@ -52,7 +52,7 @@ public class MapGeneration : MonoBehaviour
         public GameObject gameObject;
         public bool hasProp;
     }
-    
+
 
     [Header("Map Generation Data ")]
     public SO_MapGenData M;
@@ -60,7 +60,7 @@ public class MapGeneration : MonoBehaviour
     public Volume globalVolume;
     [Space(10)]
 
-    public GameObject blockPrefab;    
+    public GameObject blockPrefab;
 
     [Header("Important Props")]
     public ImportantProps importantProps;
@@ -79,8 +79,6 @@ public class MapGeneration : MonoBehaviour
     public float processesDelay = 0.02f;
 
     public static MapGeneration Instance;
-
-
 
     [Space(25)]
     public UnityEvent OnScreenStart = new UnityEvent();
@@ -688,14 +686,14 @@ public class MapGeneration : MonoBehaviour
         Vector3 spawnSpot = pathObjects[pathObjects.Count - 1].transform.position + new Vector3(0, 1, 0);
         GameObject obj = Instantiate(importantProps.endPoint, spawnSpot, Quaternion.identity);
         UtilityFunctions.UpdateLODlevels(obj.transform);
-        treeObjects.Add(obj);        
+        treeObjects.Add(obj);
     }
 
     private void AddEnemies()
     {
         for (int i = 1; i < pathObjects.Count; ++i)
         {
-            if (i % M.enemyFrequency != 0) continue;            
+            if (i % M.enemyFrequency != 0) continue;
 
             int amountToSpawn = 1;
             if (i % M.spawnDoubleEveryFrequency == 0) amountToSpawn = 2;
@@ -737,7 +735,8 @@ public class MapGeneration : MonoBehaviour
                 int newX = (int)Mathf.Round(x + randomXOffset);
                 int newZ = (int)Mathf.Round(z + randomZOffset);
 
-                if (null == gridOccupants[newX, newZ].gameObject && false == gridOccupants[newX, newZ].hasProp) continue;
+                if (null == gridOccupants[newX, newZ].gameObject) continue;
+                if (true == gridOccupants[newX, newZ].hasProp) continue;
 
                 // NEW* - don't put normal props on lowest level (where water is, only put water props there)
                 float yLevelToMeasure = Mathf.Round(YBoundary.y);
