@@ -339,8 +339,12 @@ public class MapGeneration : MonoBehaviour
 
             float newAngle = pathingAngle + randomAngle;
 
-            float randomDistance = Random.Range(M.distanceBeforeTurningPath.x, M.distanceBeforeTurningPath.y);
+            if (allObjects.Count > 0)
+            {
+                //Vector3 angleToOrigin = allObjects[0].transform.position - 
+            }
 
+            float randomDistance = Random.Range(M.distanceBeforeTurningPath.x, M.distanceBeforeTurningPath.y);
 
             // Building the very first object
             if (allObjects.Count == 0)
@@ -361,7 +365,7 @@ public class MapGeneration : MonoBehaviour
 
     private void SpawnThroughPath(GameObject turningPointObj, float newAngle, float scale)
     {
-        for (float i = 0.25f; i <= scale; i += 0.25f)
+        for (float i = 0.9f; i <= scale; i += 0.9f)
         {
             GameObject newObj = Spawn(GetPointOnCircle(turningPointObj.transform.position, i, newAngle))?.gameObject;
 
