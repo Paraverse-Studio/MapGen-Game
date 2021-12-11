@@ -10,27 +10,27 @@ public class SO_MapGenData : ScriptableObject
     [Space(5)]
     public VolumeProfile ppProfile;
 
-    [Header("        BLOCK SET ")]
+    [Header("BLOCK SET ")]
     [Space(10)]
     public BlockSet blockSet;
 
     [Space(30)]
     [Header("    _____________  MAP BASE  _____________")]
-    [Space(30)]
+    [Space(40)]
     [MinMaxSlider(-1f, 1f)]
     public Vector2 randomElevation;
 
-    [Header("        PATH SIZE ")]
+    [Header("PATH SIZE ")]
     public float distanceOfPath = 40f;
 
-    [Header("        PATH TWISTING ")]
+    [Header("PATH TWISTING ")]
     [MinMaxSlider(0f, 30f)]
     public Vector2 distanceBeforeTurningPath;
 
     [MinMaxSlider(0f, 100f)]
     public Vector2 turningAngleRange;
 
-    [Header("        PATH THICKNESS ")]
+    [Header("PATH THICKNESS ")]
     public int pathThickenFrequency = 8;
 
     [MinMaxSlider(0f, 50f)]
@@ -40,7 +40,7 @@ public class SO_MapGenData : ScriptableObject
     [Range(1.0f, 1.5f)]
     public float circularity = 1.0f;
 
-    [Header("        LUMPS ")]
+    [Header("LUMPS ")]
     [Space(10)]
     [Range(0, 40)]
     public int lumpDensity;
@@ -56,7 +56,7 @@ public class SO_MapGenData : ScriptableObject
     [Range(0, 9)]
     public int flattenIfSurroundedByLessThan = 3;
 
-    [Header("        DIRT PATH ")]
+    [Header("DIRT PATH ")]
     [Space(10)]
     public int dirtPathThickenFrequency = 8;
 
@@ -70,10 +70,10 @@ public class SO_MapGenData : ScriptableObject
 
     [Space(30)]
     [Header("    _____________  MAP PROPS  _____________")]
-    [Space(30)]
+    [Space(40)]
     public bool showProps;
 
-    [Header("        TREE SPAWNING ")]
+    [Header("TREE SPAWNING ")]
     [Range(0, 10)]
     public int treeSpawnDensity = 4;
     public int treeSpawnOffset = 2;
@@ -81,7 +81,7 @@ public class SO_MapGenData : ScriptableObject
 
     [Space(30)]
     [Header("    _____________  ENEMIES  _____________")]
-    [Space(30)]
+    [Space(40)]
     public GameObject[] enemies;
     public int enemyFrequency;
     public int enemySpawnOffset;
