@@ -5,7 +5,6 @@ using UnityEngine.Events;
 using UnityEngine.Rendering;
 using UnityEngine.Rendering.PostProcessing;
 
-
 [System.Serializable]
 public class PropItem
 {
@@ -58,6 +57,8 @@ public class MapGeneration : MonoBehaviour
     public SO_MapGenData M;
     [Header("Post Processing Data ")]
     public Volume globalVolume;
+    [Header("Randomness seed: ")]
+    public int randomSeed;
     [Space(10)]
 
     public GameObject blockPrefab;
@@ -176,6 +177,8 @@ public class MapGeneration : MonoBehaviour
 
     private void ResetVariables()
     {
+        Random.InitState(randomSeed > -1? randomSeed: Random.Range(0, 9999));
+
         progressValue = -1f;
 
         xBoundary = centerPoint2D;
