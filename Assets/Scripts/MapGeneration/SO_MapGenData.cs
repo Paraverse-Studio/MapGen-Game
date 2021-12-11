@@ -58,6 +58,8 @@ public class SO_MapGenData : ScriptableObject
 
     [Header("DIRT PATH ")]
     [Space(10)]
+    public bool raiseDirtLevel = true;
+
     public int dirtPathThickenFrequency = 8;
 
     [MinMaxSlider(0f, 40f)]

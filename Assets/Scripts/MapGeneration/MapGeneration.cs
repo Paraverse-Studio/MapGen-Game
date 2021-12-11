@@ -428,7 +428,7 @@ public class MapGeneration : MonoBehaviour
                     // This part here is because we have a special condition to apply to dirt paths
                     // which is to never have them on the lowest elevation layer, and if they are, elevate them
                     // (design choice: don't want dirt to be covered with water - dirt paths should always be clear to walk on)
-                    if (null != replacedBlock && replacedBlock.type == M.blockSet.dirt)
+                    if (M.raiseDirtLevel && null != replacedBlock && replacedBlock.type == M.blockSet.dirt)
                     {
                         ApplyBlockElevationRestrictions(replacedBlock);
                     }
