@@ -24,16 +24,16 @@ public class GlobalSettings : MonoBehaviour
     private void Awake() => Instance = this;
 
 
-    [Space(20)]
     [Header("Folders for objects: ")]
+    [Space(20)]
     public Transform uiFolder;
     public Transform healthBarFolder;
 
 
     public GameObject playerPrefab;
 
-    [Space(10)]
     [Header("Backup Safe Position: ")]
+    [Space(10)]
     public Vector3 backupSafePosition;
 
 
