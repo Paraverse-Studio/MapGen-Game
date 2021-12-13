@@ -61,6 +61,10 @@ public class Pool : MonoBehaviour
         totalProgress = 0;
         for (int i = 0; i < itemsToPool.Count; ++i)
         {
+            if (itemsToPool[i] == null) continue;
+            if (itemsToPool[i].objectToPool == null) continue;
+            if (itemsToPool[i].doSpawn == false) continue;
+
             totalProgress += itemsToPool[i].amount;
         }
 
@@ -81,6 +85,7 @@ public class Pool : MonoBehaviour
             if (itemsToPool[x] == null) continue;
             if (itemsToPool[x].objectToPool == null) continue;
             if (itemsToPool[x].doSpawn == false) continue;
+
             GameObject go = new GameObject(); go.name = "[Object Pool - " + itemsToPool[x].objectToPool.name + "]";
             go.transform.position = Vector3.zero; go.transform.rotation = Quaternion.identity;
             if (folder != null) go.transform.parent = folder;
@@ -105,12 +110,16 @@ public class Pool : MonoBehaviour
                     delaySetCounter = 0;
                     OnProgressChange?.Invoke(totalSpawned, totalProgress);
                     OnProgressChangeText?.Invoke("Loading game... " + itemsToPool[x].objectToPool.name);
-                    yield return null;
+                    //yield return null;
                 }
                 ///////////////////////////////
 
             }
         }
+
+        OnProgressChange?.Invoke(totalSpawned, totalProgress);
+        OnProgressChangeText?.Invoke("Loading complete.");
+        yield return new WaitForSeconds(0.5f);
 
         OnPoolCreateEnd?.Invoke();
     }
