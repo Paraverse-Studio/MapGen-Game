@@ -3,7 +3,6 @@ using System.Collections.Generic;
 using UnityEngine;
 using TMPro;
 
-
 public class Block : MonoBehaviour, ITickElement
 {
     [System.Serializable]
@@ -32,19 +31,8 @@ public class Block : MonoBehaviour, ITickElement
     [TextArea(6, 15)]
     public string blockHistory = "";
 
-
-    private TextMeshPro _display;
-
-    private string _textToDisplay = "";
-    public string TextToDisplay
-    {
-        set { _textToDisplay = value; }
-    }
-
     private Renderer _renderer;
     private Collider _collider;
-    private MaterialPropertyBlock _propBlock;
-
 
     private GameObject _currentPrefab = null;
     public GameObject CurrentPrefab
@@ -53,10 +41,10 @@ public class Block : MonoBehaviour, ITickElement
         set { _currentPrefab = value; }
     }
 
-    private void Awake()
-    {        
-        UpdateHistory("Created");
-    }
+    //private void Awake()
+    //{        
+    //    UpdateHistory("Created");
+    //}
 
     private void UpdateReferences()
     {
@@ -77,7 +65,6 @@ public class Block : MonoBehaviour, ITickElement
 
     private void Start()
     {
-        _propBlock = new MaterialPropertyBlock();
         ChangeName();
     }
 
@@ -122,30 +109,6 @@ public class Block : MonoBehaviour, ITickElement
     {
         // Once models are in
         UpdateReferences();
-
-        if (_renderer && (type.prefabVariations.Length == 0) && overrideSettings.overridePrefab == null)
-        {
-            if (overrideSettings.useOverrideColor)
-            {
-                if (_propBlock == null) _propBlock = new MaterialPropertyBlock();
-
-                // Get the current value of the material properties in the renderer
-                _renderer.GetPropertyBlock(_propBlock);
-
-                // Assign our new value
-                _propBlock.SetColor("_BaseColor", type.blockColour);
-
-                if (overrideSettings.overrideSOColor != null)
-                {
-                    _propBlock.SetColor("_BaseColor", overrideSettings.overrideSOColor.color);
-                }
-                else _propBlock.SetColor("_BaseColor", overrideSettings.overrideColor);
-
-                // Apply the edited values to the renderer
-                _renderer.SetPropertyBlock(_propBlock);
-            }
-        }
-
 
         if (overrideSettings.overridePrefab || type.prefabVariations.Length > 0)
         {
@@ -233,7 +196,6 @@ public class Block : MonoBehaviour, ITickElement
             obj.AddComponent<BoxCollider>();
         }
     }
-
 
     private void ApplyRandomRotation(GameObject obj)
     {
