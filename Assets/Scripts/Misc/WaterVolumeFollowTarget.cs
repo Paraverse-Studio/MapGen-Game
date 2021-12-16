@@ -25,6 +25,8 @@ public class WaterVolumeFollowTarget : MonoBehaviour
         _offset = transform.position - target.position;
         lastPosition = GetIntVector(transform.position, -0.7f);
         playerLastDeltaPosition = target.position;
+
+        gameObject.SetActive(false);
     }
 
     // Update is called once per frame
