@@ -26,7 +26,7 @@ public class MenuScreen : MonoBehaviour
     // Start is called before the first frame update
     void Start()
     {
-
+        if (playOnStart) Show();
     }
 
     // Update is called once per frame
