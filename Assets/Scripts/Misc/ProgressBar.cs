@@ -12,6 +12,8 @@ public class ProgressBar : MonoBehaviour
     public TextMeshProUGUI[] texts;
     public string defaultLabel = "Loading...";
 
+    public bool showPercentage = true;
+
     [Header("Lerp speed (smoothStep):")]
     [SerializeField]
     private float _lerpSpeed;
@@ -38,7 +40,7 @@ public class ProgressBar : MonoBehaviour
         texts[0].text = !string.IsNullOrEmpty(_specificText) ? _specificText : defaultLabel;
 
         float val = (_progress / _total);
-        if (val != 0)
+        if (val != 0 && showPercentage)
         {
             texts[1].text = (int)(Mathf.Clamp((val * 100.0f), 0.0f, 100.0f)) + "%";
         }

@@ -2876,7 +2876,7 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   totalSpawned: 0
   totalProgress: 0
-  delayAfterEverySet: 500
+  delayAfterEverySet: 250
   folder: {fileID: 929158149}
   waterVolume: {fileID: 991567769}
   itemsToPool:
@@ -2981,18 +2981,6 @@ MonoBehaviour:
           m_StringArgument: 
           m_BoolArgument: 0
         m_CallState: 2
-      - m_Target: {fileID: 125291139}
-        m_TargetAssemblyTypeName: UIManager, Assembly-CSharp
-        m_MethodName: OpenMenu
-        m_Mode: 2
-        m_Arguments:
-          m_ObjectArgument: {fileID: 1990622824}
-          m_ObjectArgumentAssemblyTypeName: MenuScreen, Assembly-CSharp
-          m_IntArgument: 0
-          m_FloatArgument: 0
-          m_StringArgument: 
-          m_BoolArgument: 0
-        m_CallState: 2
   OnPoolCreateEnd:
     m_PersistentCalls:
       m_Calls:
@@ -3049,19 +3037,7 @@ MonoBehaviour:
         m_CallState: 2
   OnProgressChangeText:
     m_PersistentCalls:
-      m_Calls:
-      - m_Target: {fileID: 1086721851}
-        m_TargetAssemblyTypeName: ProgressBar, Assembly-CSharp
-        m_MethodName: OnProgressSetText
-        m_Mode: 0
-        m_Arguments:
-          m_ObjectArgument: {fileID: 0}
-          m_ObjectArgumentAssemblyTypeName: UnityEngine.Object, UnityEngine
-          m_IntArgument: 0
-          m_FloatArgument: 0
-          m_StringArgument: 
-          m_BoolArgument: 0
-        m_CallState: 2
+      m_Calls: []
 --- !u!1 &962724356
 GameObject:
   m_ObjectHideFlags: 0
@@ -3999,7 +3975,7 @@ RectTransform:
   - {fileID: 2056556022}
   - {fileID: 1446662098}
   m_Father: {fileID: 1202260571}
-  m_RootOrder: 1
+  m_RootOrder: 2
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
   m_AnchorMin: {x: 0, y: 0}
   m_AnchorMax: {x: 1, y: 1}
@@ -4024,6 +4000,7 @@ MonoBehaviour:
   - {fileID: 1482288712}
   - {fileID: 1726052585}
   defaultLabel: 
+  showPercentage: 0
   _lerpSpeed: 0
 --- !u!114 &1086721852
 MonoBehaviour:
@@ -4510,8 +4487,8 @@ RectTransform:
   m_LocalScale: {x: 0, y: 0, z: 0}
   m_Children:
   - {fileID: 1558995724}
-  - {fileID: 1086721850}
   - {fileID: 1990622822}
+  - {fileID: 1086721850}
   - {fileID: 1786725984}
   - {fileID: 1383426150}
   m_Father: {fileID: 459568977}
@@ -5763,7 +5740,7 @@ Transform:
   m_PrefabInstance: {fileID: 0}
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 1715843896}
-  m_LocalRotation: {x: 0.49633646, y: -0.0029255832, z: 0.0016726574, w: 0.8681237}
+  m_LocalRotation: {x: 0.49633643, y: -0.002925583, z: 0.001672657, w: 0.86812377}
   m_LocalPosition: {x: 0, y: 0, z: 0}
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_Children:
@@ -6140,6 +6117,7 @@ MonoBehaviour:
   - {fileID: 1009052645}
   - {fileID: 1035238907}
   defaultLabel: Loading...
+  showPercentage: 1
   _lerpSpeed: 0.25
 --- !u!114 &1786725988
 MonoBehaviour:
@@ -6805,7 +6783,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   m_Material: {fileID: 0}
-  m_Color: {r: 1, g: 1, b: 1, a: 1}
+  m_Color: {r: 1, g: 1, b: 1, a: 0.29803923}
   m_RaycastTarget: 0
   m_RaycastPadding: {x: 0, y: 0, z: 0, w: 0}
   m_Maskable: 1
@@ -7048,7 +7026,7 @@ RectTransform:
   - {fileID: 865652187}
   - {fileID: 1939185063}
   m_Father: {fileID: 1202260571}
-  m_RootOrder: 2
+  m_RootOrder: 1
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
   m_AnchorMin: {x: 0, y: 0}
   m_AnchorMax: {x: 1, y: 1}
@@ -7263,7 +7241,7 @@ GameObject:
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
-  m_IsActive: 0
+  m_IsActive: 1
 --- !u!224 &2056556022
 RectTransform:
   m_ObjectHideFlags: 0
