@@ -51,7 +51,7 @@ public class Pool : MonoBehaviour
 
     private void Awake()
     {
-        Instance = this;        
+        Instance = this;
     }
 
     public void StartPool()
@@ -93,8 +93,14 @@ public class Pool : MonoBehaviour
             for (int i = 0; i < itemsToPool[x].amount; i++)
             {
                 GameObject obj = (GameObject)Instantiate(itemsToPool[x].objectToPool);
-                if (!itemsToPool[x].customFolder) itemsToPool[x].parentObj = go;
-                else itemsToPool[x].parentObj = itemsToPool[x].customFolder;
+                if (!itemsToPool[x].customFolder || true)
+                {
+                    itemsToPool[x].parentObj = go;
+                }
+                else
+                {
+                    itemsToPool[x].parentObj = itemsToPool[x].customFolder;
+                }
                 obj.transform.position = Vector3.zero;
                 obj.transform.rotation = Quaternion.identity;
                 obj.transform.parent = itemsToPool[x].parentObj.transform; obj.SetActive(false); pooledObjects.Add(obj);
@@ -130,8 +136,8 @@ public class Pool : MonoBehaviour
         // 1.0  First, search for unused item in pool to re-use it
         for (int i = 0; i < pooledObjects.Count; i++)
         {
-            if (pooledObjects[i] != null   &&
-                (  ignoreActive   ||   (!pooledObjects[i].activeInHierarchy && !pooledObjects[i].activeSelf)  )   &&
+            if (pooledObjects[i] != null &&
+                (ignoreActive || (!pooledObjects[i].activeInHierarchy && !pooledObjects[i].activeSelf)) &&
                 pooledObjects[i].name.Contains(nom))
             {
                 pooledObjects[i].gameObject.transform.position = position;
