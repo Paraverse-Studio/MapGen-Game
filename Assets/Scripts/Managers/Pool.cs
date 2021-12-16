@@ -125,7 +125,7 @@ public class Pool : MonoBehaviour
 
         OnProgressChange?.Invoke(totalSpawned, totalProgress);
         OnProgressChangeText?.Invoke("Loading complete");
-        yield return new WaitForSeconds(0.2f);
+        yield return new WaitForSeconds(0.15f);
 
         OnPoolCreateEnd?.Invoke();
     }
