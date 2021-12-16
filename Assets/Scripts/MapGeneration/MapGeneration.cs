@@ -1,3 +1,8 @@
+/*
+ * Copyright (c) Abhishek Mohan
+ * https://github.com/AbhishekMohan/
+ */
+
 using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
@@ -296,9 +301,9 @@ public class MapGeneration : MonoBehaviour
         //PartitionProgress("Activating props...");
         //yield return new WaitForSeconds(processesDelay);
 
-        AddFoundationAndEdgeWork();
-        PartitionProgress("Finalizing post processing...");
-        yield return new WaitForSeconds(processesDelay);
+        //AddFoundationAndEdgeWork();
+        //PartitionProgress("Finalizing post processing...");
+        //yield return new WaitForSeconds(processesDelay);
 
         /* * * * * IMPORTANT PROPS ON MAP * * * * * * */
         AddImportantProps();
@@ -486,7 +491,7 @@ public class MapGeneration : MonoBehaviour
                     x += randomXOffset;
                     z += randomZOffset;
 
-                    ElevateCircle(upOrDown % 2 != 0 ? true : false, new Vector3(x, 0, z), Random.Range(M.lumpRadius.x, M.lumpRadius.y));
+                    ElevateCircle(upOrDown % 2 == 0 ? true : false, new Vector3(x, 0, z), Random.Range(M.lumpRadius.x, M.lumpRadius.y));
                 }
             }
         }
