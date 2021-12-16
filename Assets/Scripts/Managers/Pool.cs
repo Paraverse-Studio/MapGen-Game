@@ -115,7 +115,7 @@ public class Pool : MonoBehaviour
                     yield return null;
                     delaySetCounter = 0;
                     OnProgressChange?.Invoke(totalSpawned, totalProgress);
-                    OnProgressChangeText?.Invoke("Loading game... " + itemsToPool[x].objectToPool.name);
+                    OnProgressChangeText?.Invoke("Pooling asset: " + itemsToPool[x].objectToPool.name);
                     //yield return null;
                 }
                 ///////////////////////////////
@@ -124,8 +124,8 @@ public class Pool : MonoBehaviour
         }
 
         OnProgressChange?.Invoke(totalSpawned, totalProgress);
-        OnProgressChangeText?.Invoke("Loading complete.");
-        yield return new WaitForSeconds(0.5f);
+        OnProgressChangeText?.Invoke("Loading complete");
+        yield return new WaitForSeconds(0.2f);
 
         OnPoolCreateEnd?.Invoke();
     }

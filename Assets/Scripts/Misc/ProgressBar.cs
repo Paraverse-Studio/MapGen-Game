@@ -10,6 +10,7 @@ public class ProgressBar : MonoBehaviour
     public Image bar;
     public Image wholeBar;
     public TextMeshProUGUI[] texts;
+    public string defaultLabel = "Loading...";
 
     [Header("Lerp speed (smoothStep):")]
     [SerializeField]
@@ -34,7 +35,7 @@ public class ProgressBar : MonoBehaviour
     {
         bar.fillAmount = Mathf.SmoothDamp(bar.fillAmount, _progress / _total, ref _velocity, _lerpSpeed);
         
-        texts[0].text = !string.IsNullOrEmpty(_specificText) ? _specificText : "Loading...";
+        texts[0].text = !string.IsNullOrEmpty(_specificText) ? _specificText : defaultLabel;
 
         float val = (_progress / _total);
         if (val != 0)
