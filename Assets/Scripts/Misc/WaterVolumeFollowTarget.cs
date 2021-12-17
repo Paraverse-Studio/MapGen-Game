@@ -23,7 +23,7 @@ public class WaterVolumeFollowTarget : MonoBehaviour
         waterVolume = GetComponent<WaterVolumeTransforms>();
 
         _offset = transform.position - target.position;
-        lastPosition = GetIntVector(transform.position, -0.7f);
+        lastPosition = GetIntVector(transform.position, -1.1f);
         playerLastDeltaPosition = target.position;
 
         gameObject.SetActive(false);
@@ -52,7 +52,7 @@ public class WaterVolumeFollowTarget : MonoBehaviour
 
         lastPosition = transform.position;
 
-        transform.position = GetIntVector(goalPosition, -0.7f);
+        transform.position = GetIntVector(goalPosition, -1.1f);
 
         MoveChildrenOppositeDirection();
 

@@ -139,7 +139,6 @@ public class Block : MonoBehaviour, ITickElement
             if (!isWaterType)
             {
                 _currentPrefab.transform.SetParent(transform);
-
                 CheckBoxCollider(_currentPrefab);
             }
             else
