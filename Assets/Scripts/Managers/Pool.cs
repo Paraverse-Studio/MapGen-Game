@@ -25,6 +25,7 @@ public class Pool : MonoBehaviour
 {
     public int totalSpawned = 0;
     public int totalProgress = 0;
+    public float scale = 1;
 
     private int maxSize = 1;
 
@@ -67,9 +68,9 @@ public class Pool : MonoBehaviour
         {
             if (itemsToPool[i].doSpawn == false) continue;
 
-            if (itemsToPool[i].amount > maxSize) maxSize = itemsToPool[i].amount;            
+            if ((int)(itemsToPool[i].amount * scale) > maxSize) maxSize = (int)(itemsToPool[i].amount * scale);            
 
-            totalProgress += itemsToPool[i].amount;
+            totalProgress += (int)(itemsToPool[i].amount * scale);
         }
 
         pooledObjects = new GameObject[itemsToPool.Count, maxSize];
@@ -106,7 +107,8 @@ public class Pool : MonoBehaviour
             }
             PI.id = x;
 
-            for (int i = 0; i < itemsToPool[x].amount; i++)
+            int amountSpawn = (int)(itemsToPool[x].amount * scale);
+            for (int i = 0; i < amountSpawn; i++)
             {
                 GameObject obj = Instantiate(clonedPrefab);                
 
