@@ -100,43 +100,38 @@ public class Pool : MonoBehaviour
             // so we can add temporary scripts to it, and the pooled ones will auto-have them
             GameObject clonedPrefab = Instantiate(itemsToPool[x].objectToPool);
             UtilityFunctions.UpdateLODlevels(clonedPrefab.transform);
-            PoolIndex PI = itemsToPool[x].objectToPool.GetComponent<PoolIndex>();
-            if (null == PI)
-            {
-                PI = itemsToPool[x].objectToPool.AddComponent<PoolIndex>();
-            }
-            PI.id = x;
+            clonedPrefab.SetActive(false);
 
             int amountSpawn = (int)(itemsToPool[x].amount * scale);
             for (int i = 0; i < amountSpawn; i++)
             {
                 GameObject obj = Instantiate(clonedPrefab);                
 
-                obj.transform.parent = itemsToPool[x].parentObj.transform; obj.SetActive(false); pooledObjects[x, i] = obj;
+                obj.transform.parent = itemsToPool[x].parentObj.transform; pooledObjects[x, i] = obj;
 
                 // Progress bar stuff (purely)
                 totalSpawned += 1;
                 delaySetCounter += 1;
-                if (delaySetCounter >= delayAfterEverySet)
+                if (delaySetCounter >= delayAfterEverySet || totalSpawned == 1)
                 {
                     yield return null;
                     delaySetCounter = 0;
                     OnProgressChange?.Invoke(totalSpawned, totalProgress);
                     OnProgressChangeText?.Invoke("Pooling asset: " + itemsToPool[x].objectToPool.name);
+                    yield return null;
+
                 }
                 ///////////////////////////////
-
             }
             DestroyImmediate(clonedPrefab);
         }
 
         OnProgressChange?.Invoke(totalSpawned, totalProgress);
         OnProgressChangeText?.Invoke("Loading complete");
-        yield return null;
+
+        yield return new WaitForSeconds(0.5f);
 
         OnPoolCreateEnd?.Invoke();
-
-        yield return null;
     }
 
     //  OUTDATED - used to use string comparison

@@ -43,8 +43,6 @@ public class MapGeneration : MonoBehaviour
     }
 
 
-
-
     [System.Serializable]
     public struct ImportantProps
     {
