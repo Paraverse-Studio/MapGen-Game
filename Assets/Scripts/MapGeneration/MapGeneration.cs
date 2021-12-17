@@ -9,6 +9,7 @@ using UnityEngine;
 using UnityEngine.Events;
 using UnityEngine.Rendering;
 using UnityEngine.Rendering.PostProcessing;
+using TMPro;
 
 [System.Serializable]
 public class PropItem
@@ -41,8 +42,6 @@ public class MapGeneration : MonoBehaviour
     {
         up, down
     }
-
-
 
 
     [System.Serializable]
@@ -83,6 +82,8 @@ public class MapGeneration : MonoBehaviour
 
     [Header("Processing Delay")]
     public float processesDelay = 0.02f;
+
+    public TextMeshProUGUI seedText;
 
     public static MapGeneration Instance;
 
@@ -163,22 +164,22 @@ public class MapGeneration : MonoBehaviour
 
     public IEnumerator ERegeneratePath()
     {
-        yield return null;
-
         OnScreenStart?.Invoke();
 
         ResetVariables();
 
-        yield return new WaitForSeconds(0.9f);
-
         OnMapGenerateStart?.Invoke();
+
+        yield return new WaitForSeconds(processesDelay);
 
         StartCoroutine(ResetGeneration());
     }
 
     private void ResetVariables()
     {
-        Random.InitState(randomSeed > -1 ? randomSeed : Random.Range(0, 9999));
+        int randomSeedNumber = randomSeed > -1 ? randomSeed : Random.Range(0, 9999);
+        Random.InitState(randomSeedNumber);
+        seedText.text = "seed  " + randomSeedNumber;
 
         progressValue = -1f;
 
@@ -248,7 +249,7 @@ public class MapGeneration : MonoBehaviour
         }
         waterObjects.Clear();
 
-        enemyObjects.Clear();
+        //enemyObjects.Clear();
 
         // Important Props
 
@@ -266,12 +267,6 @@ public class MapGeneration : MonoBehaviour
         yield return new WaitForSeconds(processesDelay);
 
         ThickenPath();
-        //for (int i = 0; i < pathObjects.Count; i += 1)
-        //{
-        //    ThickenAroundObject(pathObjects[i], i, M.grassFillRadius);
-        //    PartitionProgress();
-        //    if (i % 25 == 0) yield return null;
-        //}
         PartitionProgress("Expanding area...");
         yield return new WaitForSeconds(processesDelay);
 
@@ -340,7 +335,7 @@ public class MapGeneration : MonoBehaviour
         progressTotal = progressTotalCounter - 1;        
 
         OnMapGenerateEnd?.Invoke();
-        yield return new WaitForSeconds(0.2f);
+        yield return new WaitForSeconds(0.1f);
         OnScreenReady?.Invoke();
     }
 

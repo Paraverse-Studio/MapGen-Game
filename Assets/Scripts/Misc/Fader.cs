@@ -40,7 +40,12 @@ public class Fader : MonoBehaviour
         else if (_fadeOut)
         {
             cg.alpha -= Time.deltaTime * currentSpeed;
-            if (cg.alpha == 0f) _fadeOut = false;
+            if (cg.alpha == 0f)
+            {
+                _fadeOut = false;
+                cg.alpha = 1f;
+                gameObject.SetActive(false);
+            }
         }
     }
 }
