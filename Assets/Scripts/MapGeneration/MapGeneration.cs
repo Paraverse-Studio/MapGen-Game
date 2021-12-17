@@ -374,6 +374,8 @@ public class MapGeneration : MonoBehaviour
 
         /* * * * * IMPORTANT PROPS ON MAP * * * * * * */
         AddImportantProps();
+        PartitionProgress("Event triggers...");
+        yield return new WaitForSeconds(processesDelay);
 
         //AddEnemies();
 
