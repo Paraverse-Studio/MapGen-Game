@@ -111,7 +111,6 @@ public class MapGeneration : MonoBehaviour
     private float pathingAngle;
     private float distanceCreated = 0;
 
-    //private GameObject[,] gridOccupants;
     private GridOccupant[,] gridOccupants;
 
     private List<GameObject> allObjects = new List<GameObject>();
@@ -123,7 +122,7 @@ public class MapGeneration : MonoBehaviour
 
     private float progressValue;
     private int progressTotalCounter = 0;
-    private float progressTotal = 100f;
+    private float progressTotal = 110f;
 
     // Need to be initialized
     private Vector2 xBoundary;
@@ -133,9 +132,7 @@ public class MapGeneration : MonoBehaviour
 
     private Vector2 furthestBlock;
     private float furthestDistance = 0f;
-
     #endregion
-
 
     private void Awake()
     {
@@ -268,7 +265,7 @@ public class MapGeneration : MonoBehaviour
         yield return new WaitForSeconds(processesDelay);
 
         //ThickenPath();
-        for (int i = 0; i < pathObjects.Count; i+=2)
+        for (int i = 0; i < pathObjects.Count; i += 2)
         {
             ThickenAroundObject(pathObjects[i], i, M.grassFillRadius);
             PartitionProgress();
@@ -564,7 +561,7 @@ public class MapGeneration : MonoBehaviour
 
         Vector3 spawnSpot = new Vector3((int)vec.x, (int)vec.y, (int)vec.z);
 
-        GameObject obj = Pool.Instance.Instantiate(blockPrefab.name, spawnSpot, Quaternion.identity);
+        GameObject obj = Pool.Instance.Instantiate(0, spawnSpot, Quaternion.identity);
 
         Block block = obj.GetComponentInChildren<Block>();
         block.type = currentPaintingBlock;
@@ -686,7 +683,7 @@ public class MapGeneration : MonoBehaviour
             {
                 Vector3 spawnSpot = new Vector3(thisObject.position.x, yLevelToMeasure + 1, thisObject.transform.position.z);
 
-                GameObject waterObj = Pool.Instance.Instantiate(blockPrefab.name, spawnSpot, Quaternion.identity);
+                GameObject waterObj = Pool.Instance.Instantiate(0, spawnSpot, Quaternion.identity);
                 if (waterObj)
                 {
                     Block waterBlock = waterObj.GetComponent<Block>();
@@ -723,7 +720,8 @@ public class MapGeneration : MonoBehaviour
 
                 Vector3 spawnSpot = pathObjects[i].transform.position + new Vector3(xOffset, 5f, zOffset);
 
-                GameObject enemy = Pool.Instance.Instantiate(M.enemies[Random.Range(0, M.enemies.Length)].name, spawnSpot, Quaternion.identity);
+                GameObject enemy = Pool.Instance.Instantiate(M.enemies[Random.Range(0, M.enemies.Length)].GetComponent<PoolIndex>().id, 
+                    spawnSpot, Quaternion.identity);
                 if (enemy)
                 {
                     enemyObjects.Add(enemy);

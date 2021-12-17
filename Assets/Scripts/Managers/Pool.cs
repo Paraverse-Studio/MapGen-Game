@@ -65,6 +65,13 @@ public class Pool : MonoBehaviour
             if (itemsToPool[i].objectToPool == null) continue;
             if (itemsToPool[i].doSpawn == false) continue;
 
+            PoolIndex PI = itemsToPool[i].objectToPool.GetComponent<PoolIndex>();
+            if (null == PI)
+            {
+                itemsToPool[i].objectToPool.AddComponent<PoolIndex>();
+            }
+            PI.id = i;
+
             totalProgress += itemsToPool[i].amount;
         }
 
@@ -90,17 +97,12 @@ public class Pool : MonoBehaviour
             go.transform.position = Vector3.zero; go.transform.rotation = Quaternion.identity;
             if (folder != null) go.transform.parent = folder;
 
+            itemsToPool[x].parentObj = go;
+
             for (int i = 0; i < itemsToPool[x].amount; i++)
             {
                 GameObject obj = (GameObject)Instantiate(itemsToPool[x].objectToPool);
-                if (!itemsToPool[x].customFolder || true)
-                {
-                    itemsToPool[x].parentObj = go;
-                }
-                else
-                {
-                    itemsToPool[x].parentObj = itemsToPool[x].customFolder;
-                }
+                
                 obj.transform.position = Vector3.zero;
                 obj.transform.rotation = Quaternion.identity;
                 obj.transform.parent = itemsToPool[x].parentObj.transform; obj.SetActive(false); pooledObjects.Add(obj);
@@ -130,8 +132,8 @@ public class Pool : MonoBehaviour
         OnPoolCreateEnd?.Invoke();
     }
 
-    //   Retrieving an object from the pool by its name
-    public GameObject Instantiate(string nom, Vector3 position, Quaternion rotation, bool usePoolsFolder = true, bool ignoreActive = false)
+    //  OUTDATED - used to use string comparison
+    public GameObject Instantiate_OLD(string nom, Vector3 position, Quaternion rotation, bool usePoolsFolder = true, bool ignoreActive = false)
     {
         // 1.0  First, search for unused item in pool to re-use it
         for (int i = 0; i < pooledObjects.Count; i++)
@@ -152,26 +154,27 @@ public class Pool : MonoBehaviour
         return MoreNeeded(nom, usePoolsFolder);
     }
 
+    public GameObject Instantiate(int id, Vector3 position, Quaternion rotation, bool usePoolsFolder = true, bool ignoreActive = false)
+    {
+        // 1.0  First, search for unused item in pool to re-use it
+        for (int i = 0; i < pooledObjects.Count; i++)
+        {
+            if (pooledObjects[i] != null &&
+                (ignoreActive || (!pooledObjects[i].activeInHierarchy && !pooledObjects[i].activeSelf)) &&
+                pooledObjects[i].GetComponent<PoolIndex>().id == id
+                )
+            {
+                pooledObjects[i].gameObject.transform.position = position;
+                pooledObjects[i].gameObject.transform.rotation = rotation;
+                pooledObjects[i].SetActive(true);
 
-    // Polymorphism
-    //public GameObject Instantiate(string nom, Transform parent)
-    //{
-    //    // 1.0  First, search for unused item in pool to re-use it
-    //    for (int i = 0; i < pooledObjects.Count; i++)
-    //    {
-    //        if (pooledObjects[i] != null && (!pooledObjects[i].activeInHierarchy && !pooledObjects[i].activeSelf) && pooledObjects[i].name.Contains(nom))
-    //        {
-    //            pooledObjects[i].gameObject.transform.position = Vector3.zero;
-    //            pooledObjects[i].gameObject.transform.rotation = Quaternion.identity;
-    //            pooledObjects[i].gameObject.transform.SetParent(parent);
+                return pooledObjects[i];
+            }
+        }
 
-    //            pooledObjects[i].SetActive(true);
-    //            return pooledObjects[i];
-    //        }
-    //    }
-    //    // 2.0 Being here means we were out of amount, so we search for that PoolItem through list and expand it
-    //    return MoreNeeded(nom);
-    //}
+        // 2.0 Being here means we were out of amount, so we search for that PoolItem through list and expand it
+        return null; // MoreNeeded(nom, usePoolsFolder);
+    }
 
     private GameObject MoreNeeded(string nom, bool usePoolFolder = true)
     {
