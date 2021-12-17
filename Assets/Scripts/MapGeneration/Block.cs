@@ -110,7 +110,7 @@ public class Block : MonoBehaviour, ITickElement
         // Once models are in
         UpdateReferences();
 
-        if (overrideSettings.overridePrefab || type.prefabVariations.Length > 0)
+        if (type.prefabVariations.Length > 0)
         {
             // 1.0    Remove current block 
             if (transform.childCount > 0)
@@ -125,13 +125,10 @@ public class Block : MonoBehaviour, ITickElement
             }
 
             // 2.0    Add new block
-            if (overrideSettings.overridePrefab) // for premade like trees, stones, etc.
+            if (type.prefabVariations.Length > 0)
             {
-                _currentPrefab = Pool.Instance.Instantiate(overrideSettings.overridePrefab.name, Vector3.zero, Quaternion.identity, false);
-            }
-            else if (type.prefabVariations.Length > 0)
-            {
-                _currentPrefab = Pool.Instance.Instantiate(type.prefabVariations[Random.Range(0, type.prefabVariations.Length)].name, Vector3.zero, Quaternion.identity, false);
+                _currentPrefab = Pool.Instance.Instantiate(type.prefabVariations[Random.Range(0, type.prefabVariations.Length)].GetComponent<PoolIndex>().id, 
+                    Vector3.zero, Quaternion.identity, false);
             }
 
 

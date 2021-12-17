@@ -117,17 +117,22 @@ public class PlaneController : MonoBehaviour
         }
     }
 
-    public void TeleportPlayer(Vector3 pos)
+    public void TeleportPlayer(Vector3 pos, bool alsoMoveCamera = false)
     {
         _controller.enabled = false;
         transform.position = pos;
         _controller.gameObject.transform.position = pos;
         _controller.enabled = true;
+
+        if (alsoMoveCamera)
+        {
+            Camera.main.transform.position = pos;
+        }
     }
 
-    public void TeleportPlayer()
+    public void TeleportPlayer(bool alsoMoveCamera = false)
     {
         _currentYvalue = 0f;
-        TeleportPlayer(MapGeneration.Instance.CenterPointWithY + new Vector3(0, 5f, 0));
+        TeleportPlayer(MapGeneration.Instance.CenterPointWithY + new Vector3(0, 5f, 0), alsoMoveCamera);        
     }
 }
