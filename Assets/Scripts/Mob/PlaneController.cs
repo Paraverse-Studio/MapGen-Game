@@ -121,6 +121,7 @@ public class PlaneController : MonoBehaviour
     {
         _controller.enabled = false;
         transform.position = pos;
+        _controller.gameObject.transform.position = pos;
         _controller.enabled = true;
     }
 

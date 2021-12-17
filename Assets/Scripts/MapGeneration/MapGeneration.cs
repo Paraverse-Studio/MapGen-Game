@@ -129,9 +129,7 @@ public class MapGeneration : MonoBehaviour
     private Vector2 xBoundary;
     private Vector2 zBoundary;
     private Vector2 yBoundary;
-    public Vector2 YBoundary =>
-    new Vector2(Mathf.Ceil(M.lumpApplicationRounds / 2.0f),
-                Mathf.Ceil(-M.lumpApplicationRounds / 2.0f));
+    public Vector2 YBoundary => yBoundary;
 
     private Vector2 furthestBlock;
     private float furthestDistance = 0f;
@@ -182,12 +180,16 @@ public class MapGeneration : MonoBehaviour
 
     private void ResetVariables()
     {
-        Random.InitState(randomSeed > -1? randomSeed: Random.Range(0, 9999));
+        Random.InitState(randomSeed > -1 ? randomSeed : Random.Range(0, 9999));
 
         progressValue = -1f;
 
         xBoundary = centerPoint2D;
         zBoundary = centerPoint2D;
+
+        yBoundary = new Vector2(Mathf.Ceil(M.lumpApplicationRounds / 2.0f),
+                                Mathf.Ceil(-M.lumpApplicationRounds / 2.0f));
+
         furthestBlock = centerPoint2D;
         furthestDistance = 0;
         progressTotalCounter = 0;
@@ -266,7 +268,7 @@ public class MapGeneration : MonoBehaviour
         yield return new WaitForSeconds(processesDelay);
 
         //ThickenPath();
-        for (int i = 0; i < pathObjects.Count; i++)
+        for (int i = 0; i < pathObjects.Count; i+=2)
         {
             ThickenAroundObject(pathObjects[i], i, M.grassFillRadius);
             PartitionProgress();
@@ -285,9 +287,11 @@ public class MapGeneration : MonoBehaviour
         PartitionProgress("Modeling beziers...");
         yield return new WaitForSeconds(processesDelay);
 
-        SmoothenElevation();
-        PartitionProgress();
-        yield return new WaitForSeconds(processesDelay);
+        // Isn't really working - if you flatten, then the boxes have new weird lumps
+        // to flatten again... and flattening again would cause it again
+        //SmoothenElevation(M.flattenApplicationRounds);
+        //PartitionProgress();
+        //yield return new WaitForSeconds(processesDelay);
 
         /* * * * * * DECALS ON SHAPE OF MAP * * * * * */
 
@@ -780,20 +784,24 @@ public class MapGeneration : MonoBehaviour
         }
     }
 
-    private void SmoothenElevation()
+    private void SmoothenElevation(int roundsOfSmoothening = 1)
     {
-        for (int i = 0; i < allObjects.Count; ++i)
+        for (int count = 0; count < roundsOfSmoothening; ++count)
         {
-            GameObject obj = allObjects[i];
-            if (IsAdjacentOccupied(obj.transform.position, true) < M.flattenIfSurroundedByLessThan)
+            for (int i = 0; i < allObjects.Count; ++i)
             {
-                if (Mathf.Abs(obj.transform.position.y - YBoundary.x) < Mathf.Abs(obj.transform.position.y - YBoundary.y))
+                Debug.Log("HEY!!");
+                GameObject obj = allObjects[i];
+                if (IsAdjacentOccupied(obj.transform.position, true) < M.flattenIfSurroundedByLessThan)
                 {
-                    ElevateBlock(false, obj);
-                }
-                else
-                {
-                    ElevateBlock(true, obj);
+                    if (Mathf.Abs(obj.transform.position.y - YBoundary.x) < Mathf.Abs(obj.transform.position.y - YBoundary.y))
+                    {
+                        ElevateBlock(false, obj);
+                    }
+                    else
+                    {
+                        ElevateBlock(true, obj);
+                    }
                 }
             }
         }
