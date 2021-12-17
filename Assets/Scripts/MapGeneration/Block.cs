@@ -127,8 +127,10 @@ public class Block : MonoBehaviour, ITickElement
             // 2.0    Add new block
             if (type.prefabVariations.Length > 0)
             {
-                _currentPrefab = Pool.Instance.Instantiate(type.prefabVariations[Random.Range(0, type.prefabVariations.Length)].GetComponent<PoolIndex>().id, 
-                    Vector3.zero, Quaternion.identity, false);
+                _currentPrefab = Instantiate(type.prefabVariations[Random.Range(0, type.prefabVariations.Length)], 
+                    Vector3.zero, Quaternion.identity);
+                UtilityFunctions.UpdateLODlevels(_currentPrefab.transform);
+
             }
 
 
@@ -144,7 +146,7 @@ public class Block : MonoBehaviour, ITickElement
             else
             {
                 _currentPrefab.transform.SetParent(Pool.Instance.waterVolume.transform);
-                TickManager.Instance?.Subscribe(this);
+                TickManager.Instance?.Subscribe(this, gameObject);
             }
 
             _currentPrefab.transform.localPosition = new Vector3(0, 0, 0);
@@ -215,6 +217,9 @@ public class Block : MonoBehaviour, ITickElement
         obj.transform.localRotation = Quaternion.Euler(x,y,z);
     }
 
-
+    private void OnDestroy()
+    {
+        TickManager.Instance?.Unsubscribe(this);
+    }
 
 }

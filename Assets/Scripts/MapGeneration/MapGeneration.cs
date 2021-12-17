@@ -139,18 +139,7 @@ public class MapGeneration : MonoBehaviour
     private void Awake()
     {
         Instance = this;
-        _GRIDSIZE = (int)((M.distanceOfPath * 2.0f) + (M.grassFillRadius.y * 2.0f) + 1);
-    }
 
-    // Start is called before the first frame update
-    void Start()
-    {
-        // Can't and shouldn't change these 2 variables mid-play, only one time per play session
-        gridOccupants = new GridOccupant[_GRIDSIZE, _GRIDSIZE];
-        centerPoint = new Vector3((int)(_GRIDSIZE / 2), 0, (int)(_GRIDSIZE / 2));
-        centerPoint2D = new Vector3(centerPoint.x, centerPoint.z);
-
-        //RegeneratePath();
     }
 
     // Update is called once per frame
@@ -179,6 +168,14 @@ public class MapGeneration : MonoBehaviour
 
     private void ResetVariables()
     {
+        // Used to be in Start()
+        _GRIDSIZE = (int)((M.distanceOfPath * 2.0f) + (M.grassFillRadius.y * 2.0f) + 1);
+
+        // Can't and shouldn't change these 2 variables mid-play, only one time per play session
+        gridOccupants = new GridOccupant[_GRIDSIZE, _GRIDSIZE];
+        centerPoint = new Vector3((int)(_GRIDSIZE / 2), 0, (int)(_GRIDSIZE / 2));
+        centerPoint2D = new Vector3(centerPoint.x, centerPoint.z);
+
         int randomSeedNumber = randomSeed > -1 ? randomSeed : Random.Range(0, 9999);
         Random.InitState(randomSeedNumber);
         seedText.text = "seed  " + randomSeedNumber;
@@ -319,8 +316,6 @@ public class MapGeneration : MonoBehaviour
 
     private IEnumerator ResetGeneration()
     {
-        //ResetLists();
-
         PartitionProgress("Initiating building engine...");
         yield return new WaitForSeconds(processesDelay);
 
@@ -524,7 +519,7 @@ public class MapGeneration : MonoBehaviour
             ElevateBlock(true, newObj);
         }
     }
-
+    
     private void AddRandomLumps()
     {
         //// By default, lumps will spawn in a grid fashion
@@ -621,7 +616,8 @@ public class MapGeneration : MonoBehaviour
 
         Vector3 spawnSpot = new Vector3((int)vec.x, (int)vec.y, (int)vec.z);
 
-        GameObject obj = Pool.Instance.Instantiate(0, spawnSpot, Quaternion.identity);
+        GameObject obj = Instantiate(blockPrefab, spawnSpot, Quaternion.identity);
+        obj.transform.parent = Pool.Instance.gameObject.transform;
 
         Block block = obj.GetComponentInChildren<Block>();
         block.type = currentPaintingBlock;
@@ -743,7 +739,8 @@ public class MapGeneration : MonoBehaviour
             {
                 Vector3 spawnSpot = new Vector3(thisObject.position.x, yLevelToMeasure + 1, thisObject.transform.position.z);
 
-                GameObject waterObj = Pool.Instance.Instantiate(0, spawnSpot, Quaternion.identity);
+                GameObject waterObj = Instantiate(blockPrefab, spawnSpot, Quaternion.identity);
+                waterObj.transform.parent = Pool.Instance.gameObject.transform;
                 if (waterObj)
                 {
                     Block waterBlock = waterObj.GetComponent<Block>();

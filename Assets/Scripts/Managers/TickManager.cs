@@ -28,7 +28,8 @@ public enum TickDelayOption
 [System.Serializable]
 public class TickElement
 {
-    public ITickElement script;
+    public ITickElement tickElement;
+    public GameObject sourceObject;
     public TickDelayOption frameDelay;
 }
 
@@ -45,7 +46,7 @@ public class TickManager : MonoBehaviour
     }
 
     // Update is called once per frame
-    void LateUpdate()
+    void Update()
     {
         if (Time.frameCount % 60 == 0)
         {
@@ -56,9 +57,9 @@ public class TickManager : MonoBehaviour
 
         for (int i = 0; i < size; ++i)
         {
-            if (null != tickElements[i] && null != tickElements[i].script)
+            if (null != tickElements[i] && null != tickElements[i].tickElement && null != tickElements[i].sourceObject)
             {
-                if (Time.frameCount % (int)tickElements[i].frameDelay == 0) tickElements[i].script.Tick();
+                if (Time.frameCount % (int)tickElements[i].frameDelay == 0) tickElements[i].tickElement.Tick();
             }
         }
 
@@ -68,19 +69,19 @@ public class TickManager : MonoBehaviour
     {
         for (int i = 0; i < tickElements.Count; ++i)
         {
-            if (null != tickElements[i] && tickElements[i].script == unlisteningScript)
+            if (null != tickElements[i] && tickElements[i].tickElement == unlisteningScript)
             {
                 tickElements.RemoveAt(i);
             }
         }
     }
 
-    public void Subscribe(ITickElement listeningScript, TickDelayOption delayOption = TickDelayOption.t0)
+    public void Subscribe(ITickElement listeningScript, GameObject obj, TickDelayOption delayOption = TickDelayOption.t0)
     {
         TickElement newTickElement = new TickElement();
-        newTickElement.script = listeningScript;
+        newTickElement.tickElement = listeningScript;
         newTickElement.frameDelay = delayOption;
-
+        newTickElement.sourceObject = obj;
         tickElements.Add(newTickElement);
     }
 
