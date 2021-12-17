@@ -41,10 +41,16 @@ public class PlaneController : MonoBehaviour
         if (!isActive) return;
 
         // Apply gravity
-        _currentYvalue -= gravity * Time.deltaTime;
+        _currentYvalue -= gravity * Time.deltaTime * (boost? 0.2f:1);
         if (_controller.isGrounded)
         {
             if (_currentYvalue < 0) _currentYvalue = 0;
+        }
+        else
+        {
+            if (_currentYvalue < -20) _currentYvalue = -20;
+
+            if (boost) _currentYvalue = Mathf.Max(_currentYvalue, -2);
         }
 
 

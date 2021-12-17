@@ -9,6 +9,7 @@ using UnityEngine;
 using UnityEngine.Events;
 using UnityEngine.Rendering;
 using UnityEngine.Rendering.PostProcessing;
+using TMPro;
 
 [System.Serializable]
 public class PropItem
@@ -81,6 +82,8 @@ public class MapGeneration : MonoBehaviour
 
     [Header("Processing Delay")]
     public float processesDelay = 0.02f;
+
+    public TextMeshProUGUI seedText;
 
     public static MapGeneration Instance;
 
@@ -174,7 +177,9 @@ public class MapGeneration : MonoBehaviour
 
     private void ResetVariables()
     {
-        Random.InitState(randomSeed > -1 ? randomSeed : Random.Range(0, 9999));
+        int randomSeedNumber = randomSeed > -1 ? randomSeed : Random.Range(0, 9999);
+        Random.InitState(randomSeedNumber);
+        seedText.text = "seed  " + randomSeedNumber;
 
         progressValue = -1f;
 
@@ -330,7 +335,7 @@ public class MapGeneration : MonoBehaviour
         progressTotal = progressTotalCounter - 1;        
 
         OnMapGenerateEnd?.Invoke();
-        yield return new WaitForSeconds(0.25f);
+        yield return new WaitForSeconds(0.1f);
         OnScreenReady?.Invoke();
     }
 
