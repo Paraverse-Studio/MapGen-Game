@@ -23,6 +23,8 @@ public class PlaneController : MonoBehaviour
     private float _currentYvalue = 0f;
     float turnSmoothVelocity;
 
+    private bool boost = false;
+
     void Start()
     {
         // calculate the correct vertical position
@@ -51,6 +53,9 @@ public class PlaneController : MonoBehaviour
             GetMovement();
 
             GetJump();
+
+            boost = false;
+            if (Input.GetKey(KeyCode.LeftShift)) boost = true;
         }
 
 
@@ -69,7 +74,7 @@ public class PlaneController : MonoBehaviour
             moveDir = Quaternion.Euler(0f, targetAngle, 0f) * Vector3.forward;
         }          
         moveDir.Normalize();
-        moveDir *= speed;
+        moveDir *= speed * (boost ? 5 : 1);
         moveDir.y = _currentYvalue;
         _controller.Move(moveDir * Time.deltaTime);
         
@@ -97,7 +102,7 @@ public class PlaneController : MonoBehaviour
     {
         if (jumpTimer >= jumpCD && _controller.isGrounded)
         {
-            _currentYvalue = jumpSpeed;
+            _currentYvalue = jumpSpeed * (boost ? 2 : 1);
             jumpTimer = 0.0f;
         }
     }
