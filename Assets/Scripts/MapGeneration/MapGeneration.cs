@@ -161,15 +161,13 @@ public class MapGeneration : MonoBehaviour
 
     public IEnumerator ERegeneratePath()
     {
-        yield return null;
-
         OnScreenStart?.Invoke();
 
         ResetVariables();
 
-        yield return new WaitForSeconds(0.9f);
-
         OnMapGenerateStart?.Invoke();
+
+        yield return new WaitForSeconds(processesDelay);
 
         StartCoroutine(ResetGeneration());
     }
@@ -246,7 +244,7 @@ public class MapGeneration : MonoBehaviour
         }
         waterObjects.Clear();
 
-        enemyObjects.Clear();
+        //enemyObjects.Clear();
 
         // Important Props
 
@@ -264,12 +262,6 @@ public class MapGeneration : MonoBehaviour
         yield return new WaitForSeconds(processesDelay);
 
         ThickenPath();
-        //for (int i = 0; i < pathObjects.Count; i += 1)
-        //{
-        //    ThickenAroundObject(pathObjects[i], i, M.grassFillRadius);
-        //    PartitionProgress();
-        //    if (i % 25 == 0) yield return null;
-        //}
         PartitionProgress("Expanding area...");
         yield return new WaitForSeconds(processesDelay);
 
@@ -338,7 +330,7 @@ public class MapGeneration : MonoBehaviour
         progressTotal = progressTotalCounter - 1;        
 
         OnMapGenerateEnd?.Invoke();
-        yield return new WaitForSeconds(0.35f);
+        yield return new WaitForSeconds(0.25f);
         OnScreenReady?.Invoke();
     }
 
