@@ -99,19 +99,17 @@ public class Pool : MonoBehaviour
             // so we can add temporary scripts to it, and the pooled ones will auto-have them
             GameObject clonedPrefab = Instantiate(itemsToPool[x].objectToPool);
             UtilityFunctions.UpdateLODlevels(clonedPrefab.transform);
-            PoolIndex PI = clonedPrefab.GetComponent<PoolIndex>();
+            PoolIndex PI = itemsToPool[x].objectToPool.GetComponent<PoolIndex>();
             if (null == PI)
             {
-                PI = clonedPrefab.AddComponent<PoolIndex>();
+                PI = itemsToPool[x].objectToPool.AddComponent<PoolIndex>();
             }
             PI.id = x;
 
             for (int i = 0; i < itemsToPool[x].amount; i++)
             {
-                GameObject obj = Instantiate(clonedPrefab);
-                
-                //obj.transform.position = Vector3.zero;
-                //obj.transform.rotation = Quaternion.identity;
+                GameObject obj = Instantiate(clonedPrefab);                
+
                 obj.transform.parent = itemsToPool[x].parentObj.transform; obj.SetActive(false); pooledObjects[x, i] = obj;
 
                 // Progress bar stuff (purely)

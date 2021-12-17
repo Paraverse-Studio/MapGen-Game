@@ -264,13 +264,13 @@ public class MapGeneration : MonoBehaviour
         PartitionProgress("Adding procedural base map...");
         yield return new WaitForSeconds(processesDelay);
 
-        //ThickenPath();
-        for (int i = 0; i < pathObjects.Count; i += 2)
-        {
-            ThickenAroundObject(pathObjects[i], i, M.grassFillRadius);
-            PartitionProgress();
-            yield return null;
-        }
+        ThickenPath();
+        //for (int i = 0; i < pathObjects.Count; i += 1)
+        //{
+        //    ThickenAroundObject(pathObjects[i], i, M.grassFillRadius);
+        //    PartitionProgress();
+        //    if (i % 25 == 0) yield return null;
+        //}
         PartitionProgress("Expanding area...");
         yield return new WaitForSeconds(processesDelay);
 
@@ -315,11 +315,11 @@ public class MapGeneration : MonoBehaviour
         currentPaintingBlock = M.blockSet.water;
 
         AddWaterToDips();
-        PartitionProgress("Completed!");
+        PartitionProgress("Applying final touches...");
         yield return new WaitForSeconds(processesDelay);
 
         AddProps();
-        PartitionProgress();
+        PartitionProgress("Completed!");
         yield return new WaitForSeconds(processesDelay);
 
         /* * * * MISC STEPS (NO ORDER REQUIRED) * * */
@@ -333,7 +333,7 @@ public class MapGeneration : MonoBehaviour
             (int)centerPoint.z].gameObject.transform.position.y, centerPoint.z);
 
         OnMapGenerateEnd?.Invoke();
-        yield return new WaitForSeconds(0.9f);
+        yield return new WaitForSeconds(0.25f);
         OnScreenReady?.Invoke();
     }
 
@@ -350,6 +350,7 @@ public class MapGeneration : MonoBehaviour
 
             if (allObjects.Count > 0)
             {
+                // this is where I was writing the overlap prevention code
                 //Vector3 angleToOrigin = allObjects[0].transform.position - 
             }
 
@@ -475,15 +476,6 @@ public class MapGeneration : MonoBehaviour
                     GameObject checkingBlock = gridOccupants[x, z].gameObject;
                     if (checkingBlock == null) continue;
 
-                    // if we're currently adding the top-side lumps, and this object is on bottom side of block, then continue
-                    //if (upOrDown % 2 == 0 && IsOnSideOfBlock(Side.south, firstSpawnedBlock, checkingBlock))
-                    //{
-                    //    //continue;
-                    //}
-                    //else if (upOrDown % 2 != 0 && IsOnSideOfBlock(Side.north, firstSpawnedBlock, checkingBlock))
-                    //{
-                    //    //continue;
-                    //}
                     ///////////////////////
 
                     int randomXOffset = Random.Range(-M.lumpOffset, M.lumpOffset + 1);
