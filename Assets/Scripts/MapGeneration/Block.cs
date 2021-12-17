@@ -74,12 +74,12 @@ public class Block : MonoBehaviour, ITickElement
 
         if (oldType != null && type == oldType) return;
 
+        oldType = type;
+
         UpdateBlockItem();
         UpdateSize();
         gameObject.layer = type.layer.LayerIndex;
-        if (_collider) _collider.gameObject.layer = type.layer.LayerIndex;
-
-        oldType = type;    
+        if (_collider) _collider.gameObject.layer = type.layer.LayerIndex;          
     }
 
     // Not using Update(), because there's way too many blocks to have update on,

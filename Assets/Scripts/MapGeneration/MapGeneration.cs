@@ -418,7 +418,7 @@ public class MapGeneration : MonoBehaviour
         }
 
         // Randomizing the circle radius' off-set a bit
-        int randomizingCap = (int)(System.Math.Min(fillRadius.x - 1, 2));
+        int randomizingCap = (int)(System.Math.Min(fillRadius.x, 2));
         int randomizedX = Random.Range(-randomizingCap, randomizingCap);
         int randomizedZ = Random.Range(-randomizingCap, randomizingCap);
         Vector3 centerObjectOffsetted = obj.transform.position + new Vector3(randomizedX, 0, randomizedZ);
