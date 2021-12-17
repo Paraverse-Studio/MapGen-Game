@@ -89,6 +89,7 @@ public class MapGeneration : MonoBehaviour
     [Space(25)]
     public UnityEvent OnScreenStart = new UnityEvent();
     public UnityEvent OnMapGenerateStart = new UnityEvent();
+    public UnityEvent OnMapGeneratedBase = new UnityEvent();
     public UnityEvent OnMapGenerateEnd = new UnityEvent();
     public UnityEvent OnScreenReady = new UnityEvent();
 
@@ -306,6 +307,15 @@ public class MapGeneration : MonoBehaviour
         //PartitionProgress("Finalizing post processing...");
         //yield return new WaitForSeconds(processesDelay);
 
+
+        /////////       NO SHAPE MODIFICATIONS BEYOND THIS POINT        /////////////////////////
+        centerPointWithY = new Vector3(centerPoint.x, gridOccupants[(int)centerPoint.x,
+            (int)centerPoint.z].gameObject.transform.position.y, centerPoint.z);
+
+        OnMapGeneratedBase?.Invoke();
+        yield return null;
+
+
         /* * * * * IMPORTANT PROPS ON MAP * * * * * * */
         AddImportantProps();
 
@@ -327,13 +337,10 @@ public class MapGeneration : MonoBehaviour
 
         /* * * * * * * * * * * * * * * * * * * * * * */
 
-        progressTotal = progressTotalCounter - 1;
-
-        centerPointWithY = new Vector3(centerPoint.x, gridOccupants[(int)centerPoint.x,
-            (int)centerPoint.z].gameObject.transform.position.y, centerPoint.z);
+        progressTotal = progressTotalCounter - 1;        
 
         OnMapGenerateEnd?.Invoke();
-        yield return new WaitForSeconds(0.25f);
+        yield return new WaitForSeconds(0.2f);
         OnScreenReady?.Invoke();
     }
 

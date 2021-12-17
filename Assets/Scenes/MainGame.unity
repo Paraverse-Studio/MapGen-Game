@@ -2164,7 +2164,7 @@ Transform:
   m_PrefabInstance: {fileID: 0}
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 612161429}
-  m_LocalRotation: {x: 0.121929936, y: -4.2420845e-16, z: 1.0284202e-16, w: 0.99253875}
+  m_LocalRotation: {x: 0.12192993, y: 0.0000000073949904, z: -9.084488e-10, w: 0.99253875}
   m_LocalPosition: {x: 0, y: 0, z: 0}
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_Children:
@@ -4497,6 +4497,21 @@ MonoBehaviour:
           m_StringArgument: 
           m_BoolArgument: 0
         m_CallState: 2
+  OnMapGeneratedBase:
+    m_PersistentCalls:
+      m_Calls:
+      - m_Target: {fileID: 1307784244}
+        m_TargetAssemblyTypeName: PlaneController, Assembly-CSharp
+        m_MethodName: TeleportPlayer
+        m_Mode: 6
+        m_Arguments:
+          m_ObjectArgument: {fileID: 0}
+          m_ObjectArgumentAssemblyTypeName: UnityEngine.Object, UnityEngine
+          m_IntArgument: 0
+          m_FloatArgument: 0
+          m_StringArgument: 
+          m_BoolArgument: 1
+        m_CallState: 2
   OnMapGenerateEnd:
     m_PersistentCalls:
       m_Calls:
@@ -4523,18 +4538,6 @@ MonoBehaviour:
           m_FloatArgument: 0
           m_StringArgument: 
           m_BoolArgument: 0
-        m_CallState: 2
-      - m_Target: {fileID: 1307784244}
-        m_TargetAssemblyTypeName: PlaneController, Assembly-CSharp
-        m_MethodName: TeleportPlayer
-        m_Mode: 1
-        m_Arguments:
-          m_ObjectArgument: {fileID: 0}
-          m_ObjectArgumentAssemblyTypeName: UnityEngine.Object, UnityEngine
-          m_IntArgument: 0
-          m_FloatArgument: 0
-          m_StringArgument: 
-          m_BoolArgument: 1
         m_CallState: 2
       - m_Target: {fileID: 991567765}
         m_TargetAssemblyTypeName: UnityEngine.GameObject, UnityEngine
@@ -6229,7 +6232,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   cg: {fileID: 1786725985}
-  currentSpeed: 1.5
+  currentSpeed: 2
 --- !u!114 &1786725987
 MonoBehaviour:
   m_ObjectHideFlags: 0
