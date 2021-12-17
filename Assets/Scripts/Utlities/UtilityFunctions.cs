@@ -28,7 +28,7 @@ public static class UtilityFunctions
             int index = 0;
             for (int i = size - 1; i >= 0; --i)
             {
-                lods[i].screenRelativeTransitionHeight = 0.015f + (0.025f * index);
+                lods[i].screenRelativeTransitionHeight = 0.0165f + (0.0225f * index);
                 index++;
             }
             

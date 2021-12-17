@@ -74,12 +74,12 @@ public class Block : MonoBehaviour, ITickElement
 
         if (oldType != null && type == oldType) return;
 
+        oldType = type;
+
         UpdateBlockItem();
         UpdateSize();
         gameObject.layer = type.layer.LayerIndex;
-        if (_collider) _collider.gameObject.layer = type.layer.LayerIndex;
-
-        oldType = type;    
+        if (_collider) _collider.gameObject.layer = type.layer.LayerIndex;          
     }
 
     // Not using Update(), because there's way too many blocks to have update on,
@@ -94,7 +94,7 @@ public class Block : MonoBehaviour, ITickElement
 
     private void ChangeName()
     {
-        blockName = "Object " + Random.Range(1111, 9999);
+        blockName = "Block "; // + Random.Range(1111, 9999);
         UpdateHistory("Name: " + blockName);
     }
 
@@ -183,7 +183,8 @@ public class Block : MonoBehaviour, ITickElement
     }
 
     public void UpdateHistory(string msg)
-    {       
+    {
+        if (!GlobalSettings.Instance.recordBlockHistory) return;
         string time = System.DateTime.Now.ToString("hh:mm:ss");
         blockHistory += "\n" + time + "  " + msg;        
     }

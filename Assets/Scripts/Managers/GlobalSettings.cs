@@ -29,7 +29,7 @@ public class GlobalSettings : MonoBehaviour
     public Transform uiFolder;
     public Transform healthBarFolder;
 
-
+    public bool recordBlockHistory = true;
     public GameObject playerPrefab;
 
     [Header("Backup Safe Position: ")]
