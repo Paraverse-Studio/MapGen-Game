@@ -135,6 +135,8 @@ public class Pool : MonoBehaviour
         yield return null;
 
         OnPoolCreateEnd?.Invoke();
+
+        yield return null;
     }
 
     //  OUTDATED - used to use string comparison
