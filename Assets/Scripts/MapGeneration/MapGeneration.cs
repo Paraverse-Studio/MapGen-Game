@@ -168,6 +168,8 @@ public class MapGeneration : MonoBehaviour
 
         ResetVariables();
 
+        ResetLists();
+
         OnMapGenerateStart?.Invoke();
 
         yield return new WaitForSeconds(processesDelay);
@@ -200,60 +202,124 @@ public class MapGeneration : MonoBehaviour
         currentPaintingBlock = M.blockSet.grass;
     }
 
-    private IEnumerator ResetGeneration()
+    private void ResetLists()
     {
-        // Resetting object lists
-        for (int x = 0; x < _GRIDSIZE; ++x)
+        if (false)
         {
-            for (int z = 0; z < _GRIDSIZE; ++z)
+            #region OBJECT POOL DECOMMISSIONING
+
+            // Resetting object lists
+            for (int x = 0; x < _GRIDSIZE; ++x)
             {
-                if (gridOccupants[x, z].gameObject != null)
+                for (int z = 0; z < _GRIDSIZE; ++z)
                 {
-                    gridOccupants[x, z].gameObject.SetActive(false);
-                    gridOccupants[x, z].gameObject = null;
+                    if (gridOccupants[x, z].gameObject != null)
+                    {
+                        gridOccupants[x, z].gameObject.SetActive(false);
+                        gridOccupants[x, z].gameObject = null;
+                    }
                 }
             }
-        }
 
-        allObjects.Clear();
-        pathObjects.Clear();
+            allObjects.Clear();
+            pathObjects.Clear();
 
-        if (treeObjects.Count > 0)
-        {
-            for (int i = treeObjects.Count - 1; i >= 0; --i)
+            if (treeObjects.Count > 0)
             {
-                Destroy(treeObjects[i]);
+                for (int i = treeObjects.Count - 1; i >= 0; --i)
+                {
+                    Destroy(treeObjects[i]);
+                }
             }
-        }
-        treeObjects.Clear();
+            treeObjects.Clear();
 
-        //PartitionProgress();
-        //yield return null;
+            //PartitionProgress();
+            //yield return null;
 
-        if (foundationObjects.Count > 0)
-        {
-            for (int i = foundationObjects.Count - 1; i >= 0; --i)
+            if (foundationObjects.Count > 0)
             {
-                foundationObjects[i].SetActive(false);
+                for (int i = foundationObjects.Count - 1; i >= 0; --i)
+                {
+                    foundationObjects[i].SetActive(false);
+                }
             }
-        }
-        foundationObjects.Clear();
+            foundationObjects.Clear();
 
-        if (waterObjects.Count > 0)
-        {
-            for (int i = waterObjects.Count - 1; i >= 0; --i)
+            if (waterObjects.Count > 0)
             {
-                waterObjects[i].CurrentPrefab.transform.parent = Pool.Instance.gameObject.transform;
-                waterObjects[i].gameObject.SetActive(false);
+                for (int i = waterObjects.Count - 1; i >= 0; --i)
+                {
+                    waterObjects[i].CurrentPrefab.transform.parent = Pool.Instance.gameObject.transform;
+                    waterObjects[i].gameObject.SetActive(false);
+                }
             }
+            waterObjects.Clear();
+
+            //enemyObjects.Clear();
+
+            // Important Props
+
+            #endregion
         }
-        waterObjects.Clear();
 
-        //enemyObjects.Clear();
+        if (true)
+        {
+            #region DESTROY DECOMMISSIONING
 
-        // Important Props
+            // Resetting object lists
+            for (int x = 0; x < _GRIDSIZE; ++x)
+            {
+                for (int z = 0; z < _GRIDSIZE; ++z)
+                {
+                    if (gridOccupants[x, z].gameObject != null)
+                    {
+                        Destroy(gridOccupants[x, z].gameObject);
+                    }
+                }
+            }
 
+            allObjects.Clear();
+            pathObjects.Clear();
 
+            if (treeObjects.Count > 0)
+            {
+                for (int i = treeObjects.Count - 1; i >= 0; --i)
+                {
+                    Destroy(treeObjects[i]);
+                }
+            }
+            treeObjects.Clear();  
+
+            if (foundationObjects.Count > 0)
+            {
+                for (int i = foundationObjects.Count - 1; i >= 0; --i)
+                {
+                    foundationObjects[i].SetActive(false);
+                }
+            }
+            foundationObjects.Clear();
+
+            if (waterObjects.Count > 0)
+            {
+                for (int i = waterObjects.Count - 1; i >= 0; --i)
+                {
+                    Destroy(waterObjects[i]);
+                }
+            }
+            waterObjects.Clear();
+
+            //enemyObjects.Clear();
+
+            // Important Props
+
+            #endregion
+        }
+
+    }
+
+    private IEnumerator ResetGeneration()
+    {
+        //ResetLists();
 
         PartitionProgress("Initiating building engine...");
         yield return new WaitForSeconds(processesDelay);
