@@ -94,7 +94,7 @@ public class Block : MonoBehaviour, ITickElement
 
     private void ChangeName()
     {
-        blockName = "Object " + Random.Range(1111, 9999);
+        blockName = "Block "; // + Random.Range(1111, 9999);
         UpdateHistory("Name: " + blockName);
     }
 
@@ -183,7 +183,8 @@ public class Block : MonoBehaviour, ITickElement
     }
 
     public void UpdateHistory(string msg)
-    {       
+    {
+        if (!GlobalSettings.Instance.recordBlockHistory) return;
         string time = System.DateTime.Now.ToString("hh:mm:ss");
         blockHistory += "\n" + time + "  " + msg;        
     }

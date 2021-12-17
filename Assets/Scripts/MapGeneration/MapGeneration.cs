@@ -470,19 +470,19 @@ public class MapGeneration : MonoBehaviour
                     if (null == gridOccupants[x, z].gameObject) continue;
 
                     // Any other conditions
-                    GameObject firstSpawnedBlock = allObjects[0];
+                    //GameObject firstSpawnedBlock = allObjects[0];
                     GameObject checkingBlock = gridOccupants[x, z].gameObject;
                     if (checkingBlock == null) continue;
 
                     // if we're currently adding the top-side lumps, and this object is on bottom side of block, then continue
-                    if (upOrDown % 2 == 0 && IsOnSideOfBlock(Side.south, firstSpawnedBlock, checkingBlock))
-                    {
-                        //continue;
-                    }
-                    else if (upOrDown % 2 != 0 && IsOnSideOfBlock(Side.north, firstSpawnedBlock, checkingBlock))
-                    {
-                        //continue;
-                    }
+                    //if (upOrDown % 2 == 0 && IsOnSideOfBlock(Side.south, firstSpawnedBlock, checkingBlock))
+                    //{
+                    //    //continue;
+                    //}
+                    //else if (upOrDown % 2 != 0 && IsOnSideOfBlock(Side.north, firstSpawnedBlock, checkingBlock))
+                    //{
+                    //    //continue;
+                    //}
                     ///////////////////////
 
                     int randomXOffset = Random.Range(-M.lumpOffset, M.lumpOffset + 1);
