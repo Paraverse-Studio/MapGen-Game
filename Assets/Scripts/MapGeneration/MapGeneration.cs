@@ -156,6 +156,8 @@ public class MapGeneration : MonoBehaviour
     {
         OnScreenStart?.Invoke();
 
+        yield return null;
+
         ResetVariables();
 
         ResetLists();
