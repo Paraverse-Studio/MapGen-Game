@@ -127,6 +127,9 @@ public class MapGeneration : MonoBehaviour
     private int progressTotalCounter = 0;
     private float progressTotal = 110f;
 
+    private WaitForSeconds processDelay;
+    private WaitForSeconds longWait = new WaitForSeconds(5.0f);
+
     // Need to be initialized
     private Vector2 xBoundary;
     private Vector2 zBoundary;
@@ -140,7 +143,7 @@ public class MapGeneration : MonoBehaviour
     private void Awake()
     {
         Instance = this;
-
+        processDelay = new WaitForSeconds(processesDelay);
     }
 
     // Update is called once per frame
@@ -164,7 +167,8 @@ public class MapGeneration : MonoBehaviour
 
         OnMapGenerateStart?.Invoke();
 
-        yield return new WaitForSeconds(processesDelay);
+        PartitionProgress("Clearing & recycling resources...");
+        yield return new WaitForSeconds(0.25f);
 
         StartCoroutine(ResetGeneration());
     }
@@ -201,6 +205,32 @@ public class MapGeneration : MonoBehaviour
         line.positionCount = 0;
         currentPaintingBlock = M.blockSet.grass;
     }
+
+    private IEnumerator DestroyChildren(Transform t)
+    {
+        int index = 0;
+
+        //Array to hold all child obj
+        GameObject[] allChildren = new GameObject[t.childCount];
+
+        //Find all child obj and store to that array
+        foreach (Transform child in t)
+        {
+            allChildren[index] = child.gameObject;
+            index += 1;
+        }
+
+        //Now destroy them
+        for (int i = 0; i < allChildren.Length; ++i)
+        {
+            DestroyImmediate(allChildren[i]);
+            if (i % 200 == 0) yield return processDelay;
+        }
+
+        if (t.gameObject) DestroyImmediate(t.gameObject);
+    }
+
+
 
     private void ResetLists()
     {
@@ -264,21 +294,14 @@ public class MapGeneration : MonoBehaviour
         if (true)
         {
             #region DESTROY DECOMMISSIONING
-
-            if (temporaryObjFolder) DestroyImmediate(temporaryObjFolder);
+            
+            GameObject referenceFolder = temporaryObjFolder;
+            if (referenceFolder) StartCoroutine(DestroyChildren(referenceFolder.transform));
 
             allObjects.Clear();
             pathObjects.Clear();
             treeObjects.Clear();
             foundationObjects.Clear();
-
-            //if (waterObjects.Count > 0)
-            //{
-            //    for (int i = waterObjects.Count - 1; i >= 0; --i)
-            //    {
-            //        if (waterObjects[i].gameObject) Destroy(waterObjects[i].gameObject);
-            //    }
-            //}
             waterObjects.Clear();
             //enemyObjects.Clear();
 
@@ -295,7 +318,7 @@ public class MapGeneration : MonoBehaviour
     private IEnumerator ResetGeneration()
     {
         PartitionProgress("Initiating building engine...");
-        yield return new WaitForSeconds(processesDelay);
+        yield return processDelay;
 
         /* * * * * CREATION OF MAP * * * * */
 
@@ -303,27 +326,27 @@ public class MapGeneration : MonoBehaviour
 
         SpawnPath();
         PartitionProgress("Adding procedural base map...");
-        yield return new WaitForSeconds(processesDelay);
+        yield return processDelay;
 
         ThickenPath();
         PartitionProgress("Expanding area...");
-        yield return new WaitForSeconds(processesDelay);
+        yield return processDelay;
 
         ThickenAroundObject(pathObjects[pathObjects.Count - 1].gameObject, 0, M.grassFillRadius);
         PartitionProgress();
-        yield return new WaitForSeconds(processesDelay);
+        yield return processDelay;
 
         /* * * * * SHAPE MODIFICATION OF MAP * * * * */
 
         AddRandomLumps();
         PartitionProgress("Modeling beziers...");
-        yield return new WaitForSeconds(processesDelay);
+        yield return processDelay;
 
         // Isn't really working - if you flatten, then the boxes have new weird lumps
         // to flatten again... and flattening again would cause it again
         //SmoothenElevation(M.flattenApplicationRounds);
         //PartitionProgress();
-        //yield return new WaitForSeconds(processesDelay);
+        //yield return processDelay;
 
         /* * * * * * DECALS ON SHAPE OF MAP * * * * * */
 
@@ -331,15 +354,15 @@ public class MapGeneration : MonoBehaviour
 
         PaintDirtPath();
         PartitionProgress("Shaping map...");
-        yield return new WaitForSeconds(processesDelay);
+        yield return processDelay;
 
         //ApplyRandomElevation();
         //PartitionProgress("Activating props...");
-        //yield return new WaitForSeconds(processesDelay);
+        //yield return processDelay;
 
         //AddFoundationAndEdgeWork();
         //PartitionProgress("Finalizing post processing...");
-        //yield return new WaitForSeconds(processesDelay);
+        //yield return processDelay;
 
 
         /////////       NO SHAPE MODIFICATIONS BEYOND THIS POINT        /////////////////////////
@@ -353,7 +376,7 @@ public class MapGeneration : MonoBehaviour
         /* * * * * IMPORTANT PROPS ON MAP * * * * * * */
         AddImportantProps();
         PartitionProgress("Event triggers...");
-        yield return new WaitForSeconds(processesDelay);
+        yield return processDelay;
 
         //AddEnemies();
 
@@ -362,11 +385,11 @@ public class MapGeneration : MonoBehaviour
 
         AddWaterToDips();
         PartitionProgress("Applying final touches...");
-        yield return new WaitForSeconds(processesDelay);
+        yield return processDelay;
 
         AddProps();
         PartitionProgress("Completed!");
-        yield return new WaitForSeconds(processesDelay);
+        yield return processDelay;
 
         /* * * * MISC STEPS (NO ORDER REQUIRED) * * */
         globalVolume.profile = M.ppProfile;
@@ -376,7 +399,7 @@ public class MapGeneration : MonoBehaviour
         progressTotal = progressTotalCounter - 1;
 
         OnMapGenerateEnd?.Invoke();
-        yield return new WaitForSeconds(0.1f);
+        yield return new WaitForSeconds(0.25f);
         OnScreenReady?.Invoke();
     }
 
