@@ -26,6 +26,12 @@ public struct BlockSet
     public SO_BlockItem foundation;
 }
 
+[System.Serializable]
+public struct PropSet
+{
+    public GameObject[] propPrefabs;
+}
+
 public class MapGeneration : MonoBehaviour
 {
     public enum Side
@@ -72,7 +78,6 @@ public class MapGeneration : MonoBehaviour
 
     public Transform objFolder;
     private GameObject temporaryObjFolder;
-    public GameObject[] propPrefabs;
     public GameObject[] foundationPrefabs;
 
     [Header("Line (GPS)")]
@@ -840,7 +845,7 @@ public class MapGeneration : MonoBehaviour
                 // Actually placing the prop
                 if (Random.Range(0f, 100f) < chanceOfSpawn)
                 {
-                    GameObject obj = Instantiate(propPrefabs[Random.Range(0, propPrefabs.Length)], spawnSpot, Quaternion.identity);
+                    GameObject obj = Instantiate(M.propSet.propPrefabs[Random.Range(0, M.propSet.propPrefabs.Length)], spawnSpot, Quaternion.identity);
                     UtilityFunctions.UpdateLODlevels(obj.transform);
                     treeObjects.Add(obj);
                     obj.transform.position += new Vector3(0, 0.5f, 0);

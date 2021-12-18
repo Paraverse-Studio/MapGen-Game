@@ -148,7 +148,7 @@ public class Block : MonoBehaviour, ITickElement
             }
             else
             {
-                _currentPrefab.transform.SetParent(Pool.Instance.waterVolume.transform);
+                _currentPrefab.transform.SetParent(GlobalSettings.Instance.waterVolume.transform);
                 TickManager.Instance?.Subscribe(this, gameObject);
             }
 
