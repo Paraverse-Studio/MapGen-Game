@@ -115,13 +115,16 @@ public class Block : MonoBehaviour, ITickElement
             // 1.0    Remove current block 
             if (transform.childCount > 0)
             {
-                transform.GetChild(0).gameObject.SetActive(false);
-                transform.GetChild(0).parent = Pool.Instance.gameObject.transform;
+                DestroyImmediate(transform.GetChild(0).gameObject);
+
+                //transform.GetChild(0).gameObject.SetActive(false);
+                //transform.GetChild(0).parent = Pool.Instance.gameObject.transform;
             }
             if (_currentPrefab)
             {
-                _currentPrefab.SetActive(false);
-                _currentPrefab = null;
+                DestroyImmediate(_currentPrefab);
+                //_currentPrefab.SetActive(false);
+                //_currentPrefab = null;
             }
 
             // 2.0    Add new block
@@ -220,6 +223,8 @@ public class Block : MonoBehaviour, ITickElement
     private void OnDestroy()
     {
         TickManager.Instance?.Unsubscribe(this);
+
+        if (_currentPrefab) DestroyImmediate(_currentPrefab);
     }
 
 }

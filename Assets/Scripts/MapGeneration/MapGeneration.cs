@@ -52,7 +52,7 @@ public class MapGeneration : MonoBehaviour
 
     public struct GridOccupant
     {
-        public GameObject gameObject;
+        public Block block;
         public bool hasProp;
     }
 
@@ -71,6 +71,7 @@ public class MapGeneration : MonoBehaviour
     public ImportantProps importantProps;
 
     public Transform objFolder;
+    private GameObject temporaryObjFolder;
     public GameObject[] propPrefabs;
     public GameObject[] foundationPrefabs;
 
@@ -115,8 +116,8 @@ public class MapGeneration : MonoBehaviour
 
     private GridOccupant[,] gridOccupants;
 
-    private List<GameObject> allObjects = new List<GameObject>();
-    private List<GameObject> pathObjects = new List<GameObject>();
+    private List<Block> allObjects = new List<Block>();
+    private List<Block> pathObjects = new List<Block>();
     private List<GameObject> treeObjects = new List<GameObject>();
     private List<GameObject> foundationObjects = new List<GameObject>();
     private List<Block> waterObjects = new List<Block>();
@@ -204,16 +205,15 @@ public class MapGeneration : MonoBehaviour
         if (false)
         {
             #region OBJECT POOL DECOMMISSIONING
-
             // Resetting object lists
             for (int x = 0; x < _GRIDSIZE; ++x)
             {
                 for (int z = 0; z < _GRIDSIZE; ++z)
                 {
-                    if (gridOccupants[x, z].gameObject != null)
+                    if (gridOccupants[x, z].block != null)
                     {
-                        gridOccupants[x, z].gameObject.SetActive(false);
-                        gridOccupants[x, z].gameObject = null;
+                        gridOccupants[x, z].block.gameObject.SetActive(false);
+                        gridOccupants[x, z].block = null;
                     }
                 }
             }
@@ -263,51 +263,27 @@ public class MapGeneration : MonoBehaviour
         {
             #region DESTROY DECOMMISSIONING
 
-            // Resetting object lists
-            for (int x = 0; x < _GRIDSIZE; ++x)
-            {
-                for (int z = 0; z < _GRIDSIZE; ++z)
-                {
-                    if (gridOccupants[x, z].gameObject != null)
-                    {
-                        Destroy(gridOccupants[x, z].gameObject);
-                    }
-                }
-            }
+            if (temporaryObjFolder) DestroyImmediate(temporaryObjFolder);
 
             allObjects.Clear();
             pathObjects.Clear();
-
-            if (treeObjects.Count > 0)
-            {
-                for (int i = treeObjects.Count - 1; i >= 0; --i)
-                {
-                    Destroy(treeObjects[i]);
-                }
-            }
-            treeObjects.Clear();  
-
-            if (foundationObjects.Count > 0)
-            {
-                for (int i = foundationObjects.Count - 1; i >= 0; --i)
-                {
-                    foundationObjects[i].SetActive(false);
-                }
-            }
+            treeObjects.Clear();
             foundationObjects.Clear();
 
-            if (waterObjects.Count > 0)
-            {
-                for (int i = waterObjects.Count - 1; i >= 0; --i)
-                {
-                    Destroy(waterObjects[i]);
-                }
-            }
+            //if (waterObjects.Count > 0)
+            //{
+            //    for (int i = waterObjects.Count - 1; i >= 0; --i)
+            //    {
+            //        if (waterObjects[i].gameObject) Destroy(waterObjects[i].gameObject);
+            //    }
+            //}
             waterObjects.Clear();
-
             //enemyObjects.Clear();
 
             // Important Props
+
+            temporaryObjFolder = new GameObject(); temporaryObjFolder.name = "FOLDER";
+            temporaryObjFolder.transform.parent = objFolder;
 
             #endregion
         }
@@ -331,7 +307,7 @@ public class MapGeneration : MonoBehaviour
         PartitionProgress("Expanding area...");
         yield return new WaitForSeconds(processesDelay);
 
-        ThickenAroundObject(pathObjects[pathObjects.Count - 1], 0, M.grassFillRadius);
+        ThickenAroundObject(pathObjects[pathObjects.Count - 1].gameObject, 0, M.grassFillRadius);
         PartitionProgress();
         yield return new WaitForSeconds(processesDelay);
 
@@ -366,7 +342,7 @@ public class MapGeneration : MonoBehaviour
 
         /////////       NO SHAPE MODIFICATIONS BEYOND THIS POINT        /////////////////////////
         centerPointWithY = new Vector3(centerPoint.x, gridOccupants[(int)centerPoint.x,
-            (int)centerPoint.z].gameObject.transform.position.y, centerPoint.z);
+            (int)centerPoint.z].block.transform.position.y, centerPoint.z);
 
         OnMapGeneratedBase?.Invoke();
         yield return null;
@@ -395,7 +371,7 @@ public class MapGeneration : MonoBehaviour
 
         /* * * * * * * * * * * * * * * * * * * * * * */
 
-        progressTotal = progressTotalCounter - 1;        
+        progressTotal = progressTotalCounter - 1;
 
         OnMapGenerateEnd?.Invoke();
         yield return new WaitForSeconds(0.1f);
@@ -424,7 +400,7 @@ public class MapGeneration : MonoBehaviour
             // Building the very first object
             if (allObjects.Count == 0)
             {
-                GameObject obj = Spawn(centerPoint)?.gameObject;
+                Block obj = Spawn(centerPoint);
                 if (obj)
                 {
                     allObjects.Add(obj);
@@ -433,7 +409,7 @@ public class MapGeneration : MonoBehaviour
             }
             else // Buiolding the rest of the path
             {
-                SpawnThroughPath(allObjects[allObjects.Count - 1], newAngle, randomDistance);
+                SpawnThroughPath(allObjects[allObjects.Count - 1].gameObject, newAngle, randomDistance);
             }
         }
     }
@@ -442,7 +418,7 @@ public class MapGeneration : MonoBehaviour
     {
         for (float i = 0.9f; i <= scale; i += 0.9f)
         {
-            GameObject newObj = Spawn(GetPointOnCircle(turningPointObj.transform.position, i, newAngle))?.gameObject;
+            Block newObj = Spawn(GetPointOnCircle(turningPointObj.transform.position, i, newAngle));
 
             if (newObj)
             {
@@ -463,7 +439,7 @@ public class MapGeneration : MonoBehaviour
     {
         for (int i = 0; i < pathObjects.Count; i++)
         {
-            ThickenAroundObject(pathObjects[i], i, M.grassFillRadius);
+            ThickenAroundObject(pathObjects[i].gameObject, i, M.grassFillRadius);
         }
     }
 
@@ -498,7 +474,7 @@ public class MapGeneration : MonoBehaviour
                     Block replacedBlock = null;
                     Block block = SpawnAdvanced(newSpot, ref replacedBlock);
 
-                    if (block) allObjects.Add(block.gameObject);
+                    if (block) allObjects.Add(block);
 
                     // This part here is because we have a special condition to apply to dirt paths
                     // which is to never have them on the lowest elevation layer, and if they are, elevate them
@@ -514,14 +490,12 @@ public class MapGeneration : MonoBehaviour
 
     private void ApplyBlockElevationRestrictions(Block block)
     {
-        GameObject newObj = block.gameObject;
-
-        if (Mathf.Abs(Mathf.Round(newObj.transform.position.y) - YBoundary.y) < _EPSILON)
+        if (Mathf.Abs(Mathf.Round(block.transform.position.y) - YBoundary.y) < _EPSILON)
         {
-            ElevateBlock(true, newObj);
+            ElevateBlock(true, block);
         }
     }
-    
+
     private void AddRandomLumps()
     {
         //// By default, lumps will spawn in a grid fashion
@@ -534,11 +508,11 @@ public class MapGeneration : MonoBehaviour
             {
                 for (int z = (int)zBoundary.x; z < zBoundary.y; z += spread)
                 {
-                    if (null == gridOccupants[x, z].gameObject) continue;
+                    if (null == gridOccupants[x, z].block) continue;
 
                     // Any other conditions
                     //GameObject firstSpawnedBlock = allObjects[0];
-                    GameObject checkingBlock = gridOccupants[x, z].gameObject;
+                    GameObject checkingBlock = gridOccupants[x, z].block.gameObject;
                     if (checkingBlock == null) continue;
 
                     ///////////////////////
@@ -557,7 +531,7 @@ public class MapGeneration : MonoBehaviour
 
     private void ElevateCircle(bool upOrDown, Vector3 area, float radius)
     {
-        List<GameObject> alreadyElevated = new List<GameObject>();
+        List<Block> alreadyElevated = new List<Block>();
 
         // Looping through all areas in the circle, and spawning another block
         for (float x = -radius; x < radius; x += 1f)
@@ -569,7 +543,7 @@ public class MapGeneration : MonoBehaviour
                 //if (Vector3.Distance(area, newSpot) < (radius* M.circularity)) // tags: circular
                 if (IsDistanceLessThan(area, newSpot, (radius * M.circularity)))
                 {
-                    GameObject potentialObj = gridOccupants[(int)newSpot.x, (int)newSpot.z].gameObject;
+                    Block potentialObj = gridOccupants[(int)newSpot.x, (int)newSpot.z].block;
 
                     if (potentialObj != null && !alreadyElevated.Contains(potentialObj))
                     {
@@ -581,18 +555,17 @@ public class MapGeneration : MonoBehaviour
         alreadyElevated.Clear();
     }
 
-    private void ElevateBlock(bool upOrDown, GameObject obj)
+    private void ElevateBlock(bool upOrDown, Block obj)
     {
         float extremeY;
-        extremeY = GetAdjacentElevation(upOrDown ? ElevationLevel.lowest : ElevationLevel.highest, obj);
+        extremeY = GetAdjacentElevation(upOrDown ? ElevationLevel.lowest : ElevationLevel.highest, obj.gameObject);
 
         float yValue = extremeY + (upOrDown ? 1 : -1);
         yValue = Mathf.Clamp(yValue, YBoundary.y, YBoundary.x);
 
         obj.transform.position = new Vector3(obj.transform.position.x, yValue, obj.transform.position.z);
 
-        Block block = obj.GetComponentInChildren<Block>();
-        if (block) block.UpdateHistory((upOrDown ? "Raised" : "Lowered") + " to " + obj.transform.position);
+        obj.UpdateHistory((upOrDown ? "Raised" : "Lowered") + " to " + obj.transform.position);
     }
 
     private Block Spawn(Vector3 vec, bool utilizeY = false)
@@ -605,10 +578,9 @@ public class MapGeneration : MonoBehaviour
     {
         if (!utilizeY) // majority of the time you use Spawn(), you ignore y, cause you're affecting grid[x,z]
         {
-            GameObject objectAtVec = gridOccupants[(int)vec.x, (int)vec.z].gameObject;
-            if (null != objectAtVec)
+            Block blockAtVec = gridOccupants[(int)vec.x, (int)vec.z].block;
+            if (null != blockAtVec)
             {
-                Block blockAtVec = objectAtVec.GetComponentInChildren<Block>();
                 replacedBlock = blockAtVec;
                 blockAtVec.type = currentPaintingBlock;
                 blockAtVec.UpdateBlock();
@@ -619,16 +591,16 @@ public class MapGeneration : MonoBehaviour
         Vector3 spawnSpot = new Vector3((int)vec.x, (int)vec.y, (int)vec.z);
 
         GameObject obj = Instantiate(blockPrefab, spawnSpot, Quaternion.identity);
-        obj.transform.parent = Pool.Instance.gameObject.transform;
+        obj.transform.parent = temporaryObjFolder.transform;
 
-        Block block = obj.GetComponentInChildren<Block>();
+        Block block = obj.GetComponent<Block>();
         block.type = currentPaintingBlock;
         block.UpdateBlock();
         block.UpdateHistory("Spawned at " + spawnSpot);
 
         if (utilizeY) return block;
 
-        gridOccupants[(int)vec.x, (int)vec.z].gameObject = obj;
+        gridOccupants[(int)vec.x, (int)vec.z].block = block;
 
         UpdateBoundaryStats(obj.transform.position);
         return block;
@@ -652,7 +624,7 @@ public class MapGeneration : MonoBehaviour
             for (int z = -1; z < 2; ++z)
             {
                 Vector3 areaToCheck = new Vector3(src.transform.position.x + x, 0, src.transform.position.z + z);
-                GameObject objectToCheck = gridOccupants[(int)areaToCheck.x, (int)areaToCheck.z].gameObject;
+                Block objectToCheck = gridOccupants[(int)areaToCheck.x, (int)areaToCheck.z].block;
                 if (objectToCheck != null)
                 {
                     if (level == ElevationLevel.highest && objectToCheck.transform.position.y > extremestY)
@@ -677,7 +649,7 @@ public class MapGeneration : MonoBehaviour
             for (int z = -1; z < 2; ++z)
             {
                 Vector3 areaToCheck = new Vector3(src.x + x, 0, src.z + z);
-                GameObject objectToCheck = gridOccupants[(int)areaToCheck.x, (int)areaToCheck.z].gameObject;
+                Block objectToCheck = gridOccupants[(int)areaToCheck.x, (int)areaToCheck.z].block;
 
                 if (objectToCheck != null)
                 {
@@ -707,8 +679,8 @@ public class MapGeneration : MonoBehaviour
                 if (i >= pathObjects.Count) return;
             }
 
-            pathObjects[i].GetComponent<Block>().type = M.blockSet.dirt;
-            ThickenAroundObject(pathObjects[i], i, M.dirtFillRadius);
+            pathObjects[i].type = M.blockSet.dirt;
+            ThickenAroundObject(pathObjects[i].gameObject, i, M.dirtFillRadius);
         }
     }
 
@@ -719,7 +691,7 @@ public class MapGeneration : MonoBehaviour
     {
         for (int i = 0; i < allObjects.Count; i++)
         {
-            //if (allObjects[i].GetComponentInChildren<Block>().type != blocks.dirt) continue;
+            //if (allObjects[i].type != blocks.dirt) continue;
 
             float elevation = Random.Range(M.randomElevation.x, M.randomElevation.y);
             float xRandom = 0; // Random.Range(-M.randomElevation.x / 2f, M.randomElevation.x / 2f);
@@ -742,7 +714,7 @@ public class MapGeneration : MonoBehaviour
                 Vector3 spawnSpot = new Vector3(thisObject.position.x, yLevelToMeasure + 1, thisObject.transform.position.z);
 
                 GameObject waterObj = Instantiate(blockPrefab, spawnSpot, Quaternion.identity);
-                waterObj.transform.parent = Pool.Instance.gameObject.transform;
+                waterObj.transform.parent = temporaryObjFolder.transform;
                 if (waterObj)
                 {
                     Block waterBlock = waterObj.GetComponent<Block>();
@@ -761,6 +733,7 @@ public class MapGeneration : MonoBehaviour
         GameObject obj = Instantiate(importantProps.endPoint, spawnSpot, Quaternion.identity);
         UtilityFunctions.UpdateLODlevels(obj.transform);
         treeObjects.Add(obj);
+        obj.transform.parent = temporaryObjFolder.transform;
     }
 
     private void AddEnemies()
@@ -779,7 +752,7 @@ public class MapGeneration : MonoBehaviour
 
                 Vector3 spawnSpot = pathObjects[i].transform.position + new Vector3(xOffset, 5f, zOffset);
 
-                GameObject enemy = Pool.Instance.Instantiate(M.enemies[Random.Range(0, M.enemies.Length)].GetComponent<PoolIndex>().id, 
+                GameObject enemy = Instantiate(M.enemies[Random.Range(0, M.enemies.Length)],
                     spawnSpot, Quaternion.identity);
                 if (enemy)
                 {
@@ -800,7 +773,7 @@ public class MapGeneration : MonoBehaviour
         {
             for (int z = (int)zBoundary.x; z < zBoundary.y; z += spread)
             {
-                if (null == gridOccupants[x, z].gameObject) continue;
+                if (null == gridOccupants[x, z].block) continue;
 
                 // Offset: by default, a tree would be placed in its spot in the grid
                 // with an offset of 1, the tree could appear 1 block away from the center, 2 would be more
@@ -810,14 +783,14 @@ public class MapGeneration : MonoBehaviour
                 int newX = (int)Mathf.Round(x + randomXOffset);
                 int newZ = (int)Mathf.Round(z + randomZOffset);
 
-                if (null == gridOccupants[newX, newZ].gameObject) continue;
+                if (null == gridOccupants[newX, newZ].block) continue;
                 if (true == gridOccupants[newX, newZ].hasProp) continue;
 
                 // NEW* - don't put normal props on lowest level (where water is, only put water props there)
                 float yLevelToMeasure = Mathf.Round(YBoundary.y);
-                if (Mathf.Abs((Mathf.Round(gridOccupants[newX, newZ].gameObject.transform.position.y)) - yLevelToMeasure) < _EPSILON) continue;
+                if (Mathf.Abs((Mathf.Round(gridOccupants[newX, newZ].block.transform.position.y)) - yLevelToMeasure) < _EPSILON) continue;
 
-                Vector3 spawnSpot = new Vector3(newX, gridOccupants[newX, newZ].gameObject.transform.position.y, newZ);
+                Vector3 spawnSpot = new Vector3(newX, gridOccupants[newX, newZ].block.transform.position.y, newZ);
 
                 // Lastly, distance from path: by default, the chance to spawn a tree is 0%, but increases by
                 // X% for every distance unit away from the closest path block 
@@ -833,7 +806,7 @@ public class MapGeneration : MonoBehaviour
                     UtilityFunctions.UpdateLODlevels(obj.transform);
                     treeObjects.Add(obj);
                     obj.transform.position += new Vector3(0, 0.5f, 0);
-                    obj.transform.SetParent(objFolder);
+                    obj.transform.parent = temporaryObjFolder.transform;
 
                     gridOccupants[newX, newZ].hasProp = true;
                 }
@@ -847,8 +820,7 @@ public class MapGeneration : MonoBehaviour
         {
             for (int i = 0; i < allObjects.Count; ++i)
             {
-                Debug.Log("HEY!!");
-                GameObject obj = allObjects[i];
+                Block obj = allObjects[i];
                 if (IsAdjacentOccupied(obj.transform.position, true) < M.flattenIfSurroundedByLessThan)
                 {
                     if (Mathf.Abs(obj.transform.position.y - YBoundary.x) < Mathf.Abs(obj.transform.position.y - YBoundary.y))
@@ -882,7 +854,7 @@ public class MapGeneration : MonoBehaviour
 
             // RAISING edge blocks (so that anything, ie. water blocks, don't look awkward at edges)
             Vector3 objPos = allObjects[i].transform.position;
-            GameObject obj = gridOccupants[(int)objPos.x, (int)objPos.z].gameObject;
+            Block obj = gridOccupants[(int)objPos.x, (int)objPos.z].block;
             if (null != obj && Mathf.Abs(objPos.y - YBoundary.y) < _EPSILON)
             {
                 ElevateBlock(true, obj);
@@ -1003,19 +975,19 @@ public class MapGeneration : MonoBehaviour
         else return false;
     }
 
-    private GameObject GetClosestObject(Vector3 src, List<GameObject> list)
+    private GameObject GetClosestObject(Vector3 src, List<Block> list)
     {
         GameObject closest = null;
         float closestDistanceSqr = Mathf.Infinity;
         Vector3 srcPosition = src;
-        foreach (GameObject obj in list)
+        foreach (Block obj in list)
         {
             Vector3 directionToTarget = obj.transform.position - srcPosition;
             float dSqrToTarget = directionToTarget.sqrMagnitude;
             if (dSqrToTarget < closestDistanceSqr)
             {
                 closestDistanceSqr = dSqrToTarget;
-                closest = obj;
+                closest = obj.gameObject;
             }
         }
         return closest;
