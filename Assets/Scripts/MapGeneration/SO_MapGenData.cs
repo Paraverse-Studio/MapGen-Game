@@ -14,6 +14,9 @@ public class SO_MapGenData : ScriptableObject
     [Space(10)]
     public BlockSet blockSet;
 
+    [Space(10)]
+    public PropSet propSet;
+
     [Space(30)]
     [Header("    _____________  MAP BASE  _____________")]
     [Space(40)]

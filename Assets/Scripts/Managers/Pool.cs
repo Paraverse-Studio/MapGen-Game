@@ -33,7 +33,7 @@ public class Pool : MonoBehaviour
     private int delaySetCounter = 0;
 
     public Transform folder;
-    public Transform waterVolume;
+
     // list that describes each object pooled object
     public List<PoolItem> itemsToPool;
 

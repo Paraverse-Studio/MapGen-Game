@@ -29,7 +29,7 @@ public class MobCollisionAvoidance : MonoBehaviour, ITickElement
         _thisCapsule = GetComponent<CapsuleCollider>();
         _thisCapsule.radius = radius;
 
-        TickManager.Instance.Subscribe(this, TickDelayOption.t0);
+        TickManager.Instance.Subscribe(this, gameObject, TickDelayOption.t0);
 
         hitColliders = new Collider[maxColliders];
     }

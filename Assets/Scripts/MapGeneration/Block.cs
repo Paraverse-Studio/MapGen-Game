@@ -108,27 +108,32 @@ public class Block : MonoBehaviour, ITickElement
     public void UpdateBlockItem()
     {
         // Once models are in
-        UpdateReferences();
+        if (oldType == null) UpdateReferences();
 
         if (type.prefabVariations.Length > 0)
         {
             // 1.0    Remove current block 
             if (transform.childCount > 0)
             {
-                transform.GetChild(0).gameObject.SetActive(false);
-                transform.GetChild(0).parent = Pool.Instance.gameObject.transform;
+                DestroyImmediate(transform.GetChild(0).gameObject);
+
+                //transform.GetChild(0).gameObject.SetActive(false);
+                //transform.GetChild(0).parent = Pool.Instance.gameObject.transform;
             }
             if (_currentPrefab)
             {
-                _currentPrefab.SetActive(false);
-                _currentPrefab = null;
+                DestroyImmediate(_currentPrefab);
+                //_currentPrefab.SetActive(false);
+                //_currentPrefab = null;
             }
 
             // 2.0    Add new block
             if (type.prefabVariations.Length > 0)
             {
-                _currentPrefab = Pool.Instance.Instantiate(type.prefabVariations[Random.Range(0, type.prefabVariations.Length)].GetComponent<PoolIndex>().id, 
-                    Vector3.zero, Quaternion.identity, false);
+                _currentPrefab = Instantiate(type.prefabVariations[Random.Range(0, type.prefabVariations.Length)], 
+                    Vector3.zero, Quaternion.identity);
+                UtilityFunctions.UpdateLODlevels(_currentPrefab.transform);
+
             }
 
 
@@ -143,8 +148,8 @@ public class Block : MonoBehaviour, ITickElement
             }
             else
             {
-                _currentPrefab.transform.SetParent(Pool.Instance.waterVolume.transform);
-                TickManager.Instance?.Subscribe(this);
+                _currentPrefab.transform.SetParent(GlobalSettings.Instance.waterVolume.transform);
+                TickManager.Instance?.Subscribe(this, gameObject);
             }
 
             _currentPrefab.transform.localPosition = new Vector3(0, 0, 0);
@@ -152,13 +157,9 @@ public class Block : MonoBehaviour, ITickElement
 
             ApplyRandomRotation(_currentPrefab);
 
-            _currentPrefab.transform.localScale = Vector3.one;
-
-
-            UpdateHistory("Type changed to " + System.Enum.GetName(typeof(BlockType), (int)type.blockType));
+            //UpdateHistory("Type changed to " + System.Enum.GetName(typeof(BlockType), (int)type.blockType));
         }
 
-        UpdateReferences();
         //if (_renderer) _renderer.enabled = false;
     }
 
@@ -215,6 +216,11 @@ public class Block : MonoBehaviour, ITickElement
         obj.transform.localRotation = Quaternion.Euler(x,y,z);
     }
 
+    private void OnDestroy()
+    {
+        TickManager.Instance?.Unsubscribe(this);
 
+        if (_currentPrefab) DestroyImmediate(_currentPrefab);
+    }
 
 }
