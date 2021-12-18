@@ -1,3 +1,4 @@
+using Cinemachine;
 using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
@@ -8,6 +9,7 @@ public class PlaneController : MonoBehaviour
     public Transform _camera;
     public float gravity = 20f;
     public bool isActive = false;
+    public CinemachineFreeLook vcam;
 
     [Header("Movement")]
     public float speed = 6f;
@@ -52,6 +54,8 @@ public class PlaneController : MonoBehaviour
 
             if (boost) _currentYvalue = Mathf.Max(_currentYvalue, -2);
         }
+
+        if (Input.GetKeyDown(KeyCode.Escape)) vcam.gameObject.SetActive(!vcam.gameObject.activeSelf);
 
 
         if (true)
