@@ -412,7 +412,7 @@ public class MapGeneration : MonoBehaviour
         progressTotal = progressTotalCounter - 1;
 
         OnMapGenerateEnd?.Invoke();
-        yield return new WaitForSeconds(0.25f);
+        yield return new WaitForSeconds(0.35f);
         OnScreenReady?.Invoke();
     }
 
