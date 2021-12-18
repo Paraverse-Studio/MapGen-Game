@@ -378,9 +378,9 @@ public class MapGeneration : MonoBehaviour
         //PartitionProgress("Activating props...");
         //yield return processDelay;
 
-        //AddFoundationAndEdgeWork();
-        //PartitionProgress("Finalizing post processing...");
-        //yield return processDelay;
+        AddFoundationAndEdgeWork();
+        PartitionProgress("Finalizing post processing...");
+        yield return processDelay;
 
 
         /////////       NO SHAPE MODIFICATIONS BEYOND THIS POINT        /////////////////////////
