@@ -83,7 +83,7 @@ public class GameLoopManager : MonoBehaviour
 
         // Start next round:
 
-        MapGeneration.Instance.RegeneratePath();
+        MapGeneration.Instance.RegenerateMap();
     }
 
 

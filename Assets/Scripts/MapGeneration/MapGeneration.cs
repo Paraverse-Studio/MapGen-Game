@@ -152,12 +152,12 @@ public class MapGeneration : MonoBehaviour
     void Update()
     {
         UpdateLine();
-        if (Input.GetKeyDown(KeyCode.P)) RegeneratePath();
+        if (Input.GetKeyDown(KeyCode.P)) RegenerateMap();
     }
 
-    public void RegeneratePath() => StartCoroutine(ERegeneratePath());
+    public void RegenerateMap() => StartCoroutine(ERenegerateMap());
 
-    public IEnumerator ERegeneratePath()
+    public IEnumerator ERenegerateMap()
     {
         OnScreenStart?.Invoke();
 
@@ -172,7 +172,7 @@ public class MapGeneration : MonoBehaviour
         PartitionProgress("Clearing & recycling resources...");
         yield return new WaitForSeconds(0.25f);
 
-        StartCoroutine(ResetGeneration());
+        StartCoroutine(Generation());
     }
 
     private void ResetVariables()
@@ -328,7 +328,7 @@ public class MapGeneration : MonoBehaviour
 
     }
 
-    private IEnumerator ResetGeneration()
+    private IEnumerator Generation()
     {
         PartitionProgress("Initiating building engine...");
         yield return processDelay;
