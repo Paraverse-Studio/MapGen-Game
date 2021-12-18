@@ -108,7 +108,7 @@ public class Block : MonoBehaviour, ITickElement
     public void UpdateBlockItem()
     {
         // Once models are in
-        UpdateReferences();
+        if (oldType == null) UpdateReferences();
 
         if (type.prefabVariations.Length > 0)
         {
@@ -157,13 +157,9 @@ public class Block : MonoBehaviour, ITickElement
 
             ApplyRandomRotation(_currentPrefab);
 
-            _currentPrefab.transform.localScale = Vector3.one;
-
-
-            UpdateHistory("Type changed to " + System.Enum.GetName(typeof(BlockType), (int)type.blockType));
+            //UpdateHistory("Type changed to " + System.Enum.GetName(typeof(BlockType), (int)type.blockType));
         }
 
-        UpdateReferences();
         //if (_renderer) _renderer.enabled = false;
     }
 
