@@ -84,6 +84,8 @@ public class MapGeneration : MonoBehaviour
     [Header("Processing Delay")]
     public float processesDelay = 0.02f;
 
+    [Range(0f, 1f)]
+    public float delayAfterPercentDeleted = 0.06f;
     public TextMeshProUGUI seedText;
 
     public static MapGeneration Instance;
@@ -208,7 +210,7 @@ public class MapGeneration : MonoBehaviour
 
     private IEnumerator DestroyChildren(Transform t)
     {
-        int index = 0;
+        int totalObjectsToDelete = 0;
 
         //Array to hold all child obj
         GameObject[] allChildren = new GameObject[t.childCount];
@@ -216,15 +218,26 @@ public class MapGeneration : MonoBehaviour
         //Find all child obj and store to that array
         foreach (Transform child in t)
         {
-            allChildren[index] = child.gameObject;
-            index += 1;
+            allChildren[totalObjectsToDelete] = child.gameObject;
+            totalObjectsToDelete += 1;
         }
+
+        float percentOfObjectsAfterWhichUseADelay = delayAfterPercentDeleted;
+        int limit = (int)(totalObjectsToDelete * percentOfObjectsAfterWhichUseADelay);
+        int counter = 0;
 
         //Now destroy them
         for (int i = 0; i < allChildren.Length; ++i)
         {
             DestroyImmediate(allChildren[i]);
-            if (i % 200 == 0) yield return processDelay;
+            counter++;
+
+            if (counter >= limit)
+            {
+                counter = 0;
+                yield return processDelay;
+            }
+            // if (i % 200 == 0) yield return processDelay;
         }
 
         if (t.gameObject) DestroyImmediate(t.gameObject);
