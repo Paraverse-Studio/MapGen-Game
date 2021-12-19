@@ -312,7 +312,7 @@ public class MapGeneration : MonoBehaviour
         if (true)
         {
             #region DESTROY DECOMMISSIONING
-            
+
             GameObject referenceFolder = temporaryObjFolder;
             if (referenceFolder) StartCoroutine(DestroyChildren(referenceFolder.transform));
 
@@ -325,7 +325,7 @@ public class MapGeneration : MonoBehaviour
 
             // Important Props
 
-            temporaryObjFolder = new GameObject(); temporaryObjFolder.name = "FOLDER";
+            temporaryObjFolder = new GameObject("Folder");
             temporaryObjFolder.transform.parent = objFolder;
 
             #endregion
@@ -459,7 +459,8 @@ public class MapGeneration : MonoBehaviour
 
     private void SpawnThroughPath(GameObject turningPointObj, float newAngle, float scale)
     {
-        for (float i = 0.9f; i <= scale; i += 0.9f)
+        int blocksCreated = 0;
+        for (float i = 1.414f; i <= scale; i += 1.414f)
         {
             Block newObj = Spawn(GetPointOnCircle(turningPointObj.transform.position, i, newAngle));
 
@@ -469,11 +470,12 @@ public class MapGeneration : MonoBehaviour
                 pathObjects.Add(newObj);
 
                 pathingAngle = newAngle;
-
-                distanceCreated += Vector3.Distance(pathObjects[pathObjects.Count - 1]
-                    .transform.position, pathObjects[pathObjects.Count - 2].transform.position);
+                blocksCreated += 1;
             }
         }
+
+        distanceCreated += Vector3.Distance(pathObjects[pathObjects.Count - 1]
+                    .transform.position, pathObjects[pathObjects.Count - 1 - blocksCreated].transform.position);
     }
 
     // From a center object, this loops through all 360 angles, 20 at a
@@ -555,8 +557,7 @@ public class MapGeneration : MonoBehaviour
 
                     // Any other conditions
                     //GameObject firstSpawnedBlock = allObjects[0];
-                    GameObject checkingBlock = gridOccupants[x, z].block.gameObject;
-                    if (checkingBlock == null) continue;
+                    if (gridOccupants[x, z].block.gameObject == null) continue;
 
                     ///////////////////////
 
@@ -601,7 +602,7 @@ public class MapGeneration : MonoBehaviour
     private void ElevateBlock(bool upOrDown, Block obj)
     {
         float extremeY;
-        extremeY = GetAdjacentElevation(upOrDown ? ElevationLevel.lowest : ElevationLevel.highest, obj.gameObject);
+        extremeY = GetExtremestAdjacentElevation(upOrDown ? ElevationLevel.lowest : ElevationLevel.highest, obj.gameObject);
 
         float yValue = extremeY + (upOrDown ? 1 : -1);
         yValue = Mathf.Clamp(yValue, YBoundary.y, YBoundary.x);
@@ -658,7 +659,10 @@ public class MapGeneration : MonoBehaviour
         return (side == Side.north ? thisAngle <= 70f : thisAngle > 110f);
     }
 
-    private float GetAdjacentElevation(ElevationLevel level, GameObject src)
+    // Given a block (src) and a elevation type (up or down),
+    // return the extremest Y value found in the 3x3 block radius around src
+    // (ex. lowest level, return the lowest y out of the 9 blocks)
+    private float GetExtremestAdjacentElevation(ElevationLevel level, GameObject src)
     {
         float extremestY = src.transform.position.y;
 
@@ -684,7 +688,10 @@ public class MapGeneration : MonoBehaviour
         return extremestY;
     }
 
-    private int IsAdjacentOccupied(Vector3 src, bool sameElevationNeeded = false)
+    // Given a block (vector3 src), return the number of blocks that exist in its 3x3 radius 
+    // Specify sameElevation if only counting those blocks that are on the same y-level
+    // includes itself's position (result will always be 1 at lowest)
+    private int NumOfAdjacentOccupied(Vector3 src, bool sameElevationNeeded = false)
     {
         int sidesCovered = 0;
         for (int x = -1; x < 2; ++x)
@@ -752,7 +759,7 @@ public class MapGeneration : MonoBehaviour
         {
             Transform thisObject = allObjects[i].transform;
 
-            if (Mathf.Abs((Mathf.Round(thisObject.position.y)) - yLevelToMeasure) < _EPSILON)
+            if (((Mathf.Round(thisObject.position.y)) <= yLevelToMeasure))
             {
                 Vector3 spawnSpot = new Vector3(thisObject.position.x, yLevelToMeasure + 1, thisObject.transform.position.z);
 
@@ -864,7 +871,7 @@ public class MapGeneration : MonoBehaviour
             for (int i = 0; i < allObjects.Count; ++i)
             {
                 Block obj = allObjects[i];
-                if (IsAdjacentOccupied(obj.transform.position, true) < M.flattenIfSurroundedByLessThan)
+                if (NumOfAdjacentOccupied(obj.transform.position, true) < M.flattenIfSurroundedByLessThan)
                 {
                     if (Mathf.Abs(obj.transform.position.y - YBoundary.x) < Mathf.Abs(obj.transform.position.y - YBoundary.y))
                     {
@@ -884,7 +891,7 @@ public class MapGeneration : MonoBehaviour
         int size = allObjects.Count;
         for (int i = 0; i < size; ++i)
         {
-            if (9 == IsAdjacentOccupied(allObjects[i].gameObject.transform.position)) continue;
+            if (9 == NumOfAdjacentOccupied(allObjects[i].gameObject.transform.position)) continue;
 
             // Adding foundation layer blocks underneath map
             //int yLevel = (int)(allObjects[i].transform.position.y);
