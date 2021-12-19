@@ -207,7 +207,7 @@ public class MapGeneration : MonoBehaviour
         progressTotalCounter = 0;
 
         distanceCreated = 0;
-        pathingAngle = Random.Range(0f, 360f);
+        pathingAngle = 0f; // Random.Range(0f, 360f);
 
         line.positionCount = 0;
         currentPaintingBlock = M.blockSet.grass;
@@ -428,9 +428,13 @@ public class MapGeneration : MonoBehaviour
         {
             float randomAngle = Random.Range(M.turningAngleRange.x, M.turningAngleRange.y);
 
+            randomAngle = Mathf.Round(randomAngle / 45f) * 45f;
+
             randomAngle *= ((Random.value > 0.5f) ? 1.0f : -1.0f);
 
             float newAngle = pathingAngle + randomAngle;
+
+            Debug.Log($"Got angle: {randomAngle}.  Current angle: {newAngle}");
 
             if (allObjects.Count > 0)
             {
@@ -460,7 +464,7 @@ public class MapGeneration : MonoBehaviour
     private void SpawnThroughPath(GameObject turningPointObj, float newAngle, float scale)
     {
         int blocksCreated = 0;
-        for (float i = 1.414f; i <= scale; i += 1.414f)
+        for (float i = 0.6f; i <= scale; i += 0.6f)
         {
             Block newObj = Spawn(GetPointOnCircle(turningPointObj.transform.position, i, newAngle));
 
@@ -753,7 +757,7 @@ public class MapGeneration : MonoBehaviour
 
     private void AddWaterToDips()
     {
-        float yLevelToMeasure = Mathf.Round(YBoundary.y);
+        float yLevelToMeasure = Mathf.Round(YBoundary.y) + 0.1f;
 
         for (int i = 0; i < allObjects.Count; ++i)
         {
