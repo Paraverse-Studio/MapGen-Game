@@ -428,13 +428,13 @@ public class MapGeneration : MonoBehaviour
         {
             float randomAngle = Random.Range(M.turningAngleRange.x, M.turningAngleRange.y);
 
-            randomAngle = Mathf.Round(randomAngle / 45f) * 45f;
+            // this was a feature I was trying - rounds the angle to the nearest 45deg
+            // ie. only angle turns are 0, 45, 90, etc.
+            //randomAngle = Mathf.Round(randomAngle / 45f) * 45f;
 
             randomAngle *= ((Random.value > 0.5f) ? 1.0f : -1.0f);
 
             float newAngle = pathingAngle + randomAngle;
-
-            Debug.Log($"Got angle: {randomAngle}.  Current angle: {newAngle}");
 
             if (allObjects.Count > 0)
             {
