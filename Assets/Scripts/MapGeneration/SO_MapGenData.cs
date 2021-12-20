@@ -55,6 +55,8 @@ public class SO_MapGenData : ScriptableObject
 
     public int lumpOffset = 2;
 
+    public bool addEdgingBlocks = false;
+
     [Header("Elevation smoothening (flatten)")]
     public int flattenApplicationRounds = 1;
     [Range(0, 9)]
