@@ -79,6 +79,7 @@ public class Block : MonoBehaviour, ITickElement
         UpdateBlockItem();
         UpdateSize();
         gameObject.layer = type.layer.LayerIndex;
+        SetLayerRecursively(gameObject, gameObject.layer);
         if (_collider) _collider.gameObject.layer = type.layer.LayerIndex;          
     }
 
@@ -103,7 +104,14 @@ public class Block : MonoBehaviour, ITickElement
     {
         if (_renderer) _renderer.enabled = onOrOff;
     }
-
+    private void SetLayerRecursively(GameObject go, int layerNumber)
+    {
+        Transform[] c = go.GetComponentsInChildren<Transform>(true);
+        foreach (Transform trans in c)
+        {
+            trans.gameObject.layer = layerNumber;
+        }
+    }
 
     public void UpdateBlockItem()
     {

@@ -66,6 +66,8 @@ public class PlaneController : MonoBehaviour
 
             boost = false;
             if (Input.GetKey(KeyCode.LeftShift)) boost = true;
+
+            if (Input.GetKeyDown(KeyCode.J)) ChangeFrontCube();
         }
 
 
@@ -150,4 +152,28 @@ public class PlaneController : MonoBehaviour
         _currentYvalue = 0f;
         TeleportPlayer(MapGeneration.Instance.CenterPointWithY + new Vector3(0, 5f, 0), alsoMoveCamera);        
     }
+
+
+    private void ChangeFrontCube()
+    {
+        Debug.DrawRay(_controller.transform.position, _controller.transform.forward * 1.25f, Color.red, 0.2f);
+        RaycastHit[] hits;
+        hits = Physics.RaycastAll(_controller.transform.position, _controller.transform.forward, 1.25f);
+
+        for (int i = 0; i < hits.Length; ++i)
+        {
+            if (hits[i].collider.gameObject.layer == (int)LayerEnum.Solid)
+            {
+                Block block = hits[i].collider.gameObject.GetComponentInParent<Block>();
+                block.type = MapGeneration.Instance.M.blockSet.water;
+                block.transform.position -= new Vector3(0, 1, 0);
+                block.UpdateBlock();
+            }
+        }
+            
+        
+    }
+
+
+
 }
