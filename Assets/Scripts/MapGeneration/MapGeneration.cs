@@ -189,7 +189,7 @@ public class MapGeneration : MonoBehaviour
         centerPoint = new Vector3((int)(_GRIDSIZE / 2), 0, (int)(_GRIDSIZE / 2));
         centerPoint2D = new Vector3(centerPoint.x, centerPoint.z);
 
-        int randomSeedNumber = randomSeed > -1 ? randomSeed : Random.Range(0, 9999);
+        int randomSeedNumber = randomSeed > -1 ? randomSeed : Random.Range(0, 99999);
         Random.InitState(randomSeedNumber);
         seedText.text = "seed  " + randomSeedNumber;
 
