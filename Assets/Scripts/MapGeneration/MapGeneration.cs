@@ -610,7 +610,7 @@ public class MapGeneration : MonoBehaviour
         float extremeY;
         extremeY = GetExtremestAdjacentElevation(upOrDown ? ElevationLevel.lowest : ElevationLevel.highest, obj.gameObject);
 
-        float yValue = extremeY + (upOrDown ? 1 : -1);
+        float yValue = extremeY + (upOrDown ? 0.5f : -0.5f);
         yValue = Mathf.Clamp(yValue, YBoundary.y, YBoundary.x);
 
         obj.transform.position = new Vector3(obj.transform.position.x, yValue, obj.transform.position.z);
