@@ -132,9 +132,9 @@ public class MapGeneration : MonoBehaviour
     private float progressValue;
     private int progressTotalCounter = 0;
     private float progressTotal = 110f;
+    private int step = 0; // purely for debugging to detect step progress speed
 
     private WaitForSeconds processDelay;
-    private WaitForSeconds longWait = new WaitForSeconds(5.0f);
 
     // Need to be initialized
     private Vector2 xBoundary;
@@ -342,20 +342,24 @@ public class MapGeneration : MonoBehaviour
         currentPaintingBlock = M.blockSet.grass;
 
         SpawnPath();
+        step = 1;
         PartitionProgress("Shaping base map...");
         yield return processDelay;
 
         ThickenPath();
+        step = 2;
         PartitionProgress("Expanding land...");
         yield return processDelay;
 
         ThickenAroundObject(pathObjects[pathObjects.Count - 1].gameObject, 0, M.grassFillRadius);
+        step = 3;
         PartitionProgress();
         yield return processDelay;
 
         /* * * * * SHAPE MODIFICATION OF MAP * * * * */
 
         AddRandomLumps();
+        step = 4;
         PartitionProgress("Modeling paths...");
         yield return processDelay;
 
@@ -370,6 +374,7 @@ public class MapGeneration : MonoBehaviour
         currentPaintingBlock = M.blockSet.dirt;
 
         PaintDirtPath();
+        step = 5;
         PartitionProgress("Adding world objects...");
         yield return processDelay;
 
@@ -395,6 +400,7 @@ public class MapGeneration : MonoBehaviour
 
         /* * * * * IMPORTANT PROPS ON MAP * * * * * * */
         AddImportantProps();
+        step = 6;
         PartitionProgress("Event triggers...");
         yield return processDelay;
 
@@ -403,11 +409,13 @@ public class MapGeneration : MonoBehaviour
         /* * * * * DECORATIVE PROPS ON MAP * * * * * * */
         currentPaintingBlock = M.blockSet.water;
 
-        AddWaterToDips();
+        //AddWaterToDips();
+        step = 7;
         PartitionProgress("Applying final touches...");
         yield return processDelay;
 
         AddProps();
+        step = 8;
         PartitionProgress("Completed!");
         yield return processDelay;
 
@@ -927,6 +935,7 @@ public class MapGeneration : MonoBehaviour
     }
 
 
+    // Checks and records latest stats for grid boundary, and max distance, etc.
     private void UpdateBoundaryStats(Vector3 pos)
     {
         if (pos.x < xBoundary.x) xBoundary = new Vector2(pos.x, xBoundary.y);
