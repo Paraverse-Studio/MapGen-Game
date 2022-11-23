@@ -72,6 +72,7 @@ public class Block : MonoBehaviour, ITickElement
     {
         if (!type) return;
 
+        // saving processes for when this gets pooled to be the same type
         if (oldType != null && type == oldType) return;
 
         oldType = type;

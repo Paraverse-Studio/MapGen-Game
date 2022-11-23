@@ -10,29 +10,10 @@ using UnityEngine.Events;
 using UnityEngine.Rendering;
 using TMPro;
 
-[System.Serializable]
-public class PropItem
-{
-
-}
-
-[System.Serializable]
-public struct BlockSet
-{
-    public SO_BlockItem grass;
-    public SO_BlockItem dirt;
-    public SO_BlockItem water;
-    public SO_BlockItem foundation;
-}
-
-[System.Serializable]
-public struct PropSet
-{
-    public GameObject[] propPrefabs;
-}
 
 public class MapGeneration : MonoBehaviour
 {
+    // Helper enums
     public enum Side
     {
         north, south
@@ -73,9 +54,9 @@ public class MapGeneration : MonoBehaviour
     public GameObject blockPrefab;
 
     [Header("Important Props")]
-    public ImportantProps importantProps;
+    public ImportantProps importantProps; // differs from regular props, ie. Zone endpoint
 
-    public Transform objFolder;
+    public Transform objFolder; // blocks holder
     private GameObject temporaryObjFolder;
     public GameObject[] foundationPrefabs;
 
@@ -610,7 +591,7 @@ public class MapGeneration : MonoBehaviour
         float extremeY;
         extremeY = GetExtremestAdjacentElevation(upOrDown ? ElevationLevel.lowest : ElevationLevel.highest, obj.gameObject);
 
-        float yValue = extremeY + (upOrDown ? 0.5f : -0.5f);
+        float yValue = extremeY + (upOrDown ? 1f : -1f); // 0.5f : -0.5f);
         yValue = Mathf.Clamp(yValue, YBoundary.y, YBoundary.x);
 
         obj.transform.position = new Vector3(obj.transform.position.x, yValue, obj.transform.position.z);

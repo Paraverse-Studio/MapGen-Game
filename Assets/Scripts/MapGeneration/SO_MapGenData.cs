@@ -2,6 +2,30 @@ using UnityEngine;
 using NaughtyAttributes;
 using UnityEngine.Rendering;
 
+/*
+ * BlockSet are predetermined set of block types needed to have a valid map,
+ * such as a grass item, dirt item, etc. 
+ */
+[System.Serializable]
+public struct BlockSet
+{
+    public SO_BlockItem grass;
+    public SO_BlockItem dirt;
+    public SO_BlockItem water;
+    public SO_BlockItem foundation;
+}
+
+/*
+ * PropSet are just any Game Objects that can be used as props around the map,
+ * all of them will be used randomly/uniformly, no pretermined types
+ */
+[System.Serializable]
+public struct PropSet
+{
+    public GameObject[] propPrefabs;
+}
+
+
 [CreateAssetMenu(fileName = "SO_MapGenData", menuName = "SOs/MapGen/SO_MapGenData")]
 public class SO_MapGenData : ScriptableObject
 {
