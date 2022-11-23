@@ -324,17 +324,17 @@ public class MapGeneration : MonoBehaviour
 
             // Important Props
 
-            temporaryObjFolder = new GameObject("Folder");
-            temporaryObjFolder.transform.parent = objFolder;
+            
 
             #endregion
         }
-
+            temporaryObjFolder = new GameObject("Folder");
+            temporaryObjFolder.transform.parent = objFolder;
     }
 
     private IEnumerator Generation()
     {
-        PartitionProgress("Initiating building engine...");
+        PartitionProgress("Initiating generation process...");
         yield return processDelay;
 
         /* * * * * CREATION OF MAP * * * * */
@@ -342,11 +342,11 @@ public class MapGeneration : MonoBehaviour
         currentPaintingBlock = M.blockSet.grass;
 
         SpawnPath();
-        PartitionProgress("Adding procedural base map...");
+        PartitionProgress("Shaping base map...");
         yield return processDelay;
 
         ThickenPath();
-        PartitionProgress("Expanding area...");
+        PartitionProgress("Expanding land...");
         yield return processDelay;
 
         ThickenAroundObject(pathObjects[pathObjects.Count - 1].gameObject, 0, M.grassFillRadius);
@@ -356,7 +356,7 @@ public class MapGeneration : MonoBehaviour
         /* * * * * SHAPE MODIFICATION OF MAP * * * * */
 
         AddRandomLumps();
-        PartitionProgress("Modeling beziers...");
+        PartitionProgress("Modeling paths...");
         yield return processDelay;
 
         // Isn't really working - if you flatten, then the boxes have new weird lumps
@@ -370,7 +370,7 @@ public class MapGeneration : MonoBehaviour
         currentPaintingBlock = M.blockSet.dirt;
 
         PaintDirtPath();
-        PartitionProgress("Shaping map...");
+        PartitionProgress("Adding world objects...");
         yield return processDelay;
 
         //ApplyRandomElevation();
@@ -425,7 +425,6 @@ public class MapGeneration : MonoBehaviour
 
     private void SpawnPath()
     {
-
         while (distanceCreated < M.distanceOfPath)
         {
             float randomAngle = Random.Range(M.turningAngleRange.x, M.turningAngleRange.y);
@@ -494,6 +493,7 @@ public class MapGeneration : MonoBehaviour
         }
     }
 
+    // Given a cube obj, add cubes around it to form a circle of cubes of radius fillRadius
     private void ThickenAroundObject(GameObject obj, int i, Vector2 fillRadius)
     {
         // Determining what type of circle fill
@@ -511,7 +511,7 @@ public class MapGeneration : MonoBehaviour
         int randomizingCap = (int)(System.Math.Min(fillRadius.x, 2));
         int randomizedX = Random.Range(-randomizingCap, randomizingCap);
         int randomizedZ = Random.Range(-randomizingCap, randomizingCap);
-        Vector3 centerObjectOffsetted = obj.transform.position + new Vector3(randomizedX, 0, randomizedZ);
+        Vector3 centerObjectOffsetted = obj.transform.position; // + new Vector3(randomizedX, 0, randomizedZ);
 
         // Looping through all areas in the circle, and spawning another block
         for (float x = -thickness; x < thickness; x += 1f)
@@ -520,6 +520,7 @@ public class MapGeneration : MonoBehaviour
             {
                 Vector3 newSpot = centerObjectOffsetted + new Vector3((int)x, 0, (int)z);
 
+                // This condition is for circularity, helps form a circle around the obj, instead a rigid square
                 if (IsDistanceLessThan(centerObjectOffsetted, newSpot, (thickness * M.circularity))) // tags: circular
                 {
                     Block replacedBlock = null;
@@ -605,12 +606,14 @@ public class MapGeneration : MonoBehaviour
         alreadyElevated.Clear();
     }
 
+    // Given an object obj, and an elevation direction, lift/lower the object in that direction BUT
+    // with the condition that no block around this block in 3x3 should end up 2-block vertically distanced
     private void ElevateBlock(bool upOrDown, Block obj)
     {
         float extremeY;
         extremeY = GetExtremestAdjacentElevation(upOrDown ? ElevationLevel.lowest : ElevationLevel.highest, obj.gameObject);
 
-        float yValue = extremeY + (upOrDown ? 0.5f : -0.5f);
+        float yValue = extremeY + (upOrDown ? 1f : -1f);
         yValue = Mathf.Clamp(yValue, YBoundary.y, YBoundary.x);
 
         obj.transform.position = new Vector3(obj.transform.position.x, yValue, obj.transform.position.z);
@@ -626,6 +629,8 @@ public class MapGeneration : MonoBehaviour
 
     private Block SpawnAdvanced(Vector3 vec, ref Block replacedBlock, bool utilizeY = false)
     {
+        // majority of the time this will be left as false since you're only affecting grid[x,z]
+        // this should be true, when you're spawning a cube at x,z and supp
         if (!utilizeY) // majority of the time you use Spawn(), you ignore y, cause you're affecting grid[x,z]
         {
             Block blockAtVec = gridOccupants[(int)vec.x, (int)vec.z].block;
@@ -641,8 +646,8 @@ public class MapGeneration : MonoBehaviour
         Vector3 spawnSpot = new Vector3((int)vec.x, (int)vec.y, (int)vec.z);
 
         GameObject obj = Instantiate(blockPrefab, spawnSpot, Quaternion.identity);
-        obj.transform.parent = temporaryObjFolder.transform;
 
+        obj.transform.parent = objFolder.transform;
         Block block = obj.GetComponent<Block>();
         block.type = currentPaintingBlock;
         block.UpdateBlock();
@@ -723,6 +728,8 @@ public class MapGeneration : MonoBehaviour
         return sidesCovered;
     }
 
+    // Once the base map has been generated, iterate from pathObjects (base line),
+    // and paint over blocks to be dirt blocks
     private void PaintDirtPath()
     {
         for (int i = 0; i < pathObjects.Count; i++)
@@ -1009,11 +1016,6 @@ public class MapGeneration : MonoBehaviour
         }
     }
 
-    private float Rounded(float v)
-    {
-        return (((int)(v * 100.0f)) / 100.0f);
-    }
-
     // Given a source vector, a direction and a scalar, return new vector
     // from source vector in the direction of direction scaled by scalar...
     private Vector3 GetPointOnCircle(Vector3 origin, float radius, float angle)
@@ -1056,21 +1058,5 @@ public class MapGeneration : MonoBehaviour
         OnProgressChange?.Invoke(progressValue, progressTotal);
         OnProgressChangeText?.Invoke(va);
     }
-
-    public void RenderBlocks() => StartCoroutine(ERenderBlocks());
-    public IEnumerator ERenderBlocks()
-    {
-        for (int i = 0; i < allObjects.Count; ++i)
-        {
-            allObjects[i].GetComponent<Block>().ToggleRenderer(true); // UpdateBlockItem();
-            yield return null;
-        }
-        for (int i = 0; i < waterObjects.Count; ++i)
-        {
-            waterObjects[i].GetComponent<Block>().ToggleRenderer(true); //    UpdateBlockItem();
-            yield return null;
-        }
-    }
-
 
 }

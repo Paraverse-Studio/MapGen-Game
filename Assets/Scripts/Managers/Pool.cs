@@ -134,28 +134,6 @@ public class Pool : MonoBehaviour
         OnPoolCreateEnd?.Invoke();
     }
 
-    //  OUTDATED - used to use string comparison
-    //public GameObject Instantiate_OLD(string nom, Vector3 position, Quaternion rotation, bool usePoolsFolder = true, bool ignoreActive = false)
-    //{
-    //    // 1.0  First, search for unused item in pool to re-use it
-    //    for (int i = 0; i < pooledObjects.Count; i++)
-    //    {
-    //        if (pooledObjects[i] != null &&
-    //            (ignoreActive || (!pooledObjects[i].activeInHierarchy && !pooledObjects[i].activeSelf)) &&
-    //            pooledObjects[i].name.Contains(nom))
-    //        {
-    //            pooledObjects[i].gameObject.transform.position = position;
-    //            pooledObjects[i].gameObject.transform.rotation = rotation;
-    //            pooledObjects[i].SetActive(true);
-
-    //            return pooledObjects[i];
-    //        }
-    //    }
-
-    //    // 2.0 Being here means we were out of amount, so we search for that PoolItem through list and expand it
-    //    return MoreNeeded(nom, usePoolsFolder);
-    //}
-
     public GameObject Instantiate(int id, Vector3 position, Quaternion rotation, bool usePoolsFolder = true, bool ignoreActive = false)
     {
         // 1.0  First, search for unused item in pool to re-use it
@@ -172,25 +150,9 @@ public class Pool : MonoBehaviour
             }
         }
 
+        Debug.Log("More needed ?");
         return null; // MoreNeeded(nom, usePoolsFolder);
     }
-
-    //private GameObject MoreNeeded(string nom, bool usePoolFolder = true)
-    //{
-    //    Debug.Log("System: More amount of " + nom + " was needed than pooler currently holds.");
-    //    foreach (PoolItem item in itemsToPool)
-    //    {
-    //        if (item.objectToPool.name.Contains(nom) && item.canExpand)
-    //        {
-    //            GameObject obj = (GameObject)Instantiate(item.objectToPool);
-    //            obj.transform.position = Vector3.zero;
-    //            obj.transform.rotation = Quaternion.identity;
-    //            if (usePoolFolder) obj.transform.SetParent(item.parentObj.transform);
-    //            obj.SetActive(true); pooledObjects.Add(obj); return obj;
-    //        }
-    //    }
-    //    return null;
-    //}
 
 
     // END OF FILE //////////////
