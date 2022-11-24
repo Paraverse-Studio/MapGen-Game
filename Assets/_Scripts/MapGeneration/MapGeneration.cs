@@ -104,6 +104,7 @@ public class MapGeneration : MonoBehaviour
     public FloatFloatEvent OnProgressChange = new FloatFloatEvent();
     public StringEvent OnProgressChangeText = new StringEvent();
 
+
     #region SETTINGS_VARIABLES
     private float _EPSILON = 0.002f;
 
@@ -115,6 +116,7 @@ public class MapGeneration : MonoBehaviour
     public Vector3 CenterPointWithY => centerPointWithY;
     private SO_BlockItem currentPaintingBlock;
     #endregion
+
 
     #region RUNTIME_VARIABLES
     private float pathingAngle;
@@ -145,6 +147,7 @@ public class MapGeneration : MonoBehaviour
     private Vector2 furthestBlock;
     private float furthestDistance = 0f;
     #endregion
+
 
     private void Awake()
     {
@@ -409,7 +412,7 @@ public class MapGeneration : MonoBehaviour
         /* * * * * DECORATIVE PROPS ON MAP * * * * * * */
         currentPaintingBlock = M.blockSet.water;
 
-        //AddWaterToDips();
+        AddWaterToDips();
         step = 7;
         PartitionProgress("Applying final touches...");
         yield return processDelay;
@@ -441,7 +444,7 @@ public class MapGeneration : MonoBehaviour
             // ie. only angle turns are 0, 45, 90, etc.
             //randomAngle = Mathf.Round(randomAngle / 45f) * 45f;
 
-            randomAngle *= ((Random.value > 0.5f) ? 1.0f : -1.0f);
+            randomAngle *= (Random.value > 0.5f) ? 1.0f : -1.0f;
 
             float newAngle = pathingAngle + randomAngle;
 
@@ -559,7 +562,7 @@ public class MapGeneration : MonoBehaviour
     private void AddRandomLumps()
     {
         //// By default, lumps will spawn in a grid fashion
-        // Spread determines how far lumps are apart (spread = 2, means a tree will appear every 2 blocks)
+        // Spread determines how far lumps are apart (spread = 2, means a lump will appear every 2 blocks)
         int spread = M.lumpDensity;
 
         for (int upOrDown = 0; upOrDown < M.lumpApplicationRounds; ++upOrDown)
@@ -859,14 +862,13 @@ public class MapGeneration : MonoBehaviour
 
                 // NEW* - don't put normal props on lowest level (where water is, only put water props there)
                 float yLevelToMeasure = Mathf.Round(YBoundary.y);
-                if (Mathf.Abs((Mathf.Round(gridOccupants[newX, newZ].block.transform.position.y)) - yLevelToMeasure) < _EPSILON) continue;
+                if (Mathf.Abs(Mathf.Round(gridOccupants[newX, newZ].block.transform.position.y) - yLevelToMeasure) < _EPSILON) continue;
 
                 Vector3 spawnSpot = new Vector3(newX, gridOccupants[newX, newZ].block.transform.position.y, newZ);
 
-                // Lastly, distance from path: by default, the chance to spawn a tree is 0%, but increases by
-                // X% for every distance unit away from the closest path block 
+                // Lastly, distance from path: by default, the chance to spawn a tree on any given block is 0%, but increases by
+                // X% for every distance unit away from the closest path block (design choice: spam props around edges of map, to make path clear)
                 GameObject closestPathPosition = GetClosestObject(spawnSpot, pathObjects);
-
                 float chanceOfSpawn = 0.0f;
                 chanceOfSpawn += (M.treeChanceGrowthRate * Mathf.Pow(Vector3.Distance(spawnSpot, closestPathPosition.transform.position), 1.15f)); //1.35f
 
@@ -914,15 +916,6 @@ public class MapGeneration : MonoBehaviour
         {
             if (9 == NumOfAdjacentOccupied(allObjects[i].gameObject.transform.position)) continue;
 
-            // Adding foundation layer blocks underneath map
-            //int yLevel = (int)(allObjects[i].transform.position.y);
-
-            //GameObject foundationBlock = Pool.Instance.Instantiate(foundationPrefabs[Random.Range(0, foundationPrefabs.Length)].name,
-            //    new Vector3(allObjects[i].transform.position.x,
-            //    yLevel - 0.5f, allObjects[i].transform.position.z), Quaternion.identity);
-
-            //if (foundationBlock) foundationObjects.Add(foundationBlock);
-
             // RAISING edge blocks (so that anything, ie. water blocks, don't look awkward at edges)
             Vector3 objPos = allObjects[i].transform.position;
             Block obj = gridOccupants[(int)objPos.x, (int)objPos.z].block;
@@ -930,7 +923,6 @@ public class MapGeneration : MonoBehaviour
             {
                 ElevateBlock(true, obj);
             }
-
         }
     }
 
