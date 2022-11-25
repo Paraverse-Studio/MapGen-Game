@@ -2,6 +2,7 @@ using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 using TMPro;
+using UnityEngine.AI;
 
 public class Block : MonoBehaviour, ITickElement
 {
@@ -152,6 +153,7 @@ public class Block : MonoBehaviour, ITickElement
             {
                 _currentPrefab.transform.SetParent(transform);
                 CheckBoxCollider(_currentPrefab);
+                CheckNavMeshSurface(_currentPrefab);
                 _currentPrefab.isStatic = true;
             }
             else
@@ -202,6 +204,21 @@ public class Block : MonoBehaviour, ITickElement
         {
             obj.AddComponent<BoxCollider>();
         }
+    }
+
+    private void CheckNavMeshSurface(GameObject obj)
+    {
+        //NavMeshSurface surface = obj.GetComponent<NavMeshSurface>();
+        //if (!surface)
+        //{
+        //    surface = obj.AddComponent<NavMeshSurface>();
+        //}
+
+        //if (Random.Range(1, 100) < 5)
+        //{
+        //    surface.BuildNavMesh();
+        //    gameObject.name = "NAVMESH'ED";
+        //}
     }
 
     private void ApplyRandomRotation(GameObject obj)
