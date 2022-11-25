@@ -132,8 +132,7 @@ public class MapGeneration : MonoBehaviour
     private List<GameObject> enemyObjects = new List<GameObject>();
 
     private float progressValue;
-    private int progressTotalCounter = 0;
-    private float progressTotal = 110f;
+    private float progressTotal = 10f;
     private int step = 0; // purely for debugging to detect step progress speed
 
     private WaitForSeconds processDelay;
@@ -206,7 +205,6 @@ public class MapGeneration : MonoBehaviour
 
         furthestBlock = centerPoint2D;
         furthestDistance = 0;
-        progressTotalCounter = 0;
 
         distanceCreated = 0;
         pathingAngle = 0f; // Random.Range(0f, 360f);
@@ -327,12 +325,12 @@ public class MapGeneration : MonoBehaviour
 
             // Important Props
 
-            
+            temporaryObjFolder = new GameObject("Folder");
+            temporaryObjFolder.transform.parent = objFolder;
 
             #endregion
         }
-            temporaryObjFolder = new GameObject("Folder");
-            temporaryObjFolder.transform.parent = objFolder;
+            
     }
 
     private IEnumerator Generation()
@@ -426,8 +424,6 @@ public class MapGeneration : MonoBehaviour
         globalVolume.profile = M.ppProfile;
 
         /* * * * * * * * * * * * * * * * * * * * * * */
-
-        progressTotal = progressTotalCounter - 1;
 
         OnMapGenerateEnd?.Invoke();
         yield return new WaitForSeconds(0.35f);
@@ -658,7 +654,7 @@ public class MapGeneration : MonoBehaviour
 
         GameObject obj = Instantiate(blockPrefab, spawnSpot, Quaternion.identity);
 
-        obj.transform.parent = objFolder.transform;
+        obj.transform.parent = temporaryObjFolder.transform;
         Block block = obj.GetComponent<Block>();
         block.type = currentPaintingBlock;
         block.UpdateBlock();
@@ -1054,7 +1050,6 @@ public class MapGeneration : MonoBehaviour
 
     private void PartitionProgress(string va = "")
     {
-        progressTotalCounter++;
         progressValue++;
         OnProgressChange?.Invoke(progressValue, progressTotal);
         OnProgressChangeText?.Invoke(va);
