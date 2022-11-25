@@ -3,6 +3,7 @@ using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 using UnityEditor;
+using UnityEditor.AI;
 
 [CustomEditor(typeof(MapGeneration))]
 public class MapGenerationEditor : Editor
@@ -15,6 +16,12 @@ public class MapGenerationEditor : Editor
         {
             script.RegenerateMap();
         }
+
+        if (GUILayout.Button("Build NavMesh", GUILayout.Height(30)))
+        {
+            //NavMeshBuilder. ();
+        }
+
 
         //if (GUILayout.Button("Render Blocks", GUILayout.Height(30)))
         //{

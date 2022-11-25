@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using UnityEngine;
 using TMPro;
 using UnityEngine.AI;
+using UnityEngine.UI;
 
 public class Block : MonoBehaviour, ITickElement
 {
@@ -208,17 +209,11 @@ public class Block : MonoBehaviour, ITickElement
 
     private void CheckNavMeshSurface(GameObject obj)
     {
-        //NavMeshSurface surface = obj.GetComponent<NavMeshSurface>();
-        //if (!surface)
-        //{
-        //    surface = obj.AddComponent<NavMeshSurface>();
-        //}
-
-        //if (Random.Range(1, 100) < 5)
-        //{
-        //    surface.BuildNavMesh();
-        //    gameObject.name = "NAVMESH'ED";
-        //}
+        NavMeshSurface surface = obj.GetComponent<NavMeshSurface>();
+        if (!surface)
+        {
+            surface = obj.AddComponent<NavMeshSurface>();
+        }        
     }
 
     private void ApplyRandomRotation(GameObject obj)

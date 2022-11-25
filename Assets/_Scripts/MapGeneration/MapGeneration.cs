@@ -9,6 +9,7 @@ using UnityEngine;
 using UnityEngine.Events;
 using UnityEngine.Rendering;
 using TMPro;
+using UnityEngine.AI;
 
 [System.Serializable]
 public class PropItem
