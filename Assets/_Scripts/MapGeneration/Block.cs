@@ -141,7 +141,6 @@ public class Block : MonoBehaviour, ITickElement
                 _currentPrefab = Instantiate(type.prefabVariations[Random.Range(0, type.prefabVariations.Length)], 
                     Vector3.zero, Quaternion.identity);
                 UtilityFunctions.UpdateLODlevels(_currentPrefab.transform);
-
             }
 
 
@@ -153,9 +152,11 @@ public class Block : MonoBehaviour, ITickElement
             {
                 _currentPrefab.transform.SetParent(transform);
                 CheckBoxCollider(_currentPrefab);
+                _currentPrefab.isStatic = true;
             }
             else
             {
+                _currentPrefab.isStatic = false;
                 _currentPrefab.transform.SetParent(GlobalSettings.Instance.waterVolume.transform);
                 TickManager.Instance?.Subscribe(this, gameObject);
             }
