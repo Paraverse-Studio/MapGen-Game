@@ -5,12 +5,12 @@ using UnityEngine;
 using UnityEditor;
 using UnityEditor.AI;
 
-[CustomEditor(typeof(TestingNavMesh))]
+[CustomEditor(typeof(NavMeshBuilder))]
 public class TestingNavMeshEditor : Editor
 {
     public override void OnInspectorGUI()
     {
-        TestingNavMesh script = (TestingNavMesh)target;
+        NavMeshBuilder script = (NavMeshBuilder)target;
 
         if (GUILayout.Button("Build NavMesh", GUILayout.Height(30)))
         {

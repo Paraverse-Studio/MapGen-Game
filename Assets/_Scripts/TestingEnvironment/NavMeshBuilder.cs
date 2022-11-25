@@ -3,19 +3,17 @@ using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.AI;
 
-public class TestingNavMesh : MonoBehaviour
+public class NavMeshBuilder : MonoBehaviour
 {
     public NavMeshSurface surface;
 
-    private void Start()
-    {
-        //surface = GetComponentInChildren<NavMeshSurface>();
-    }
-
-
     public void BuildNavMesh()
     {
-        surface.BuildNavMesh();
+        if (surface) surface.BuildNavMesh();
+        else
+        {
+            Debug.LogError("Trying to build Nav Mesh without a NavMeshSurface provided!");
+        }
     }
 
     public void UpdateNavMesh()

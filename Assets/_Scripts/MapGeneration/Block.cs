@@ -94,18 +94,17 @@ public class Block : MonoBehaviour, ITickElement
         _currentPrefab.transform.position = newSpot;
     }
 
-
     private void ChangeName()
     {
         blockName = "Block "; // + Random.Range(1111, 9999);
         UpdateHistory("Name: " + blockName);
     }
 
-
     public void ToggleRenderer(bool onOrOff)
     {
         if (_renderer) _renderer.enabled = onOrOff;
     }
+
     private void SetLayerRecursively(GameObject go, int layerNumber)
     {
         Transform[] c = go.GetComponentsInChildren<Transform>(true);
@@ -159,6 +158,7 @@ public class Block : MonoBehaviour, ITickElement
             }
             else
             {
+                gameObject.name = " WTFFFFFFFFFF???????";
                 _currentPrefab.isStatic = false;
                 _currentPrefab.transform.SetParent(GlobalSettings.Instance.waterVolume.transform);
                 TickManager.Instance?.Subscribe(this, gameObject);
