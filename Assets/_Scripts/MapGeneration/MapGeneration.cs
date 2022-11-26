@@ -62,12 +62,14 @@ public class MapGeneration : MonoBehaviour
         public bool hasProp;
     }
 
-
     [Header("Map Generation Data ")]
     public SO_MapGenData M;
     [Header("Post Processing Data ")]
     public Volume globalVolume;
-    [Header("Randomness seed: ")]
+    [Header("NavMesh Data ")]
+    public NavMeshBuilder navMeshBuilder;
+
+    [Header("Randomness seed ")]
     public int randomSeed;
     [Space(10)]
 
@@ -424,6 +426,9 @@ public class MapGeneration : MonoBehaviour
         /* * * * MISC STEPS (NO ORDER REQUIRED) * * */
         globalVolume.profile = M.ppProfile;
 
+        navMeshBuilder.surface = allObjects[0].GetComponentInChildren<NavMeshSurface>();
+        navMeshBuilder.BuildNavMesh();
+
         /* * * * * * * * * * * * * * * * * * * * * * */
 
         OnMapGenerateEnd?.Invoke();
@@ -460,7 +465,7 @@ public class MapGeneration : MonoBehaviour
                 if (obj)
                 {
                     allObjects.Add(obj);
-                    pathObjects.Add(obj);
+                    pathObjects.Add(obj);                    
                 }
             }
             else // Buiolding the rest of the path
