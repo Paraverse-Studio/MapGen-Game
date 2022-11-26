@@ -227,8 +227,6 @@ namespace Paraverse.Enemy.NavMesh
             {
                 float distanceFromTarget = Vector3.Distance(transform.position, pursueTarget.position);
 
-                Debug.Log("Distance from target: " + distanceFromTarget + " position: "+pursueTarget.position);
-
                 if (distanceFromTarget <= stoppingDistance)
                 {
                     nav.isStopped = true;
