@@ -90,7 +90,7 @@ public class Block : MonoBehaviour, ITickElement
     // its tick called every frame
     public void Tick()
     {
-        if (false)
+        if (true)
         {
             Vector3 newSpot = new Vector3(transform.position.x, 0, transform.position.z);
             _currentPrefab.transform.position = newSpot;
