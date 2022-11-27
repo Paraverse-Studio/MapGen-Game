@@ -31,7 +31,6 @@ public class PauseMenu : MonoBehaviour
     {
         _rectTransform = GetComponent<RectTransform>();
         SetPause(false);
-        contextMenu.DisplayMessage(-1);
     }
 
     private float GetTimeDelta()

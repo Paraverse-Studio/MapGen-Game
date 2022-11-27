@@ -13,6 +13,7 @@ public class ContextMessageHandler : MonoBehaviour
     void Awake()
     {
         if (!text) text = GetComponent<TextMeshProUGUI>();
+        DisplayMessage(-1);
     }
 
     public void DisplayMessage(int i = 0)
