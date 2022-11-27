@@ -161,7 +161,7 @@ public class MapGeneration : MonoBehaviour
     void Update()
     {
         UpdateLine();
-        if (Input.GetKeyDown(KeyCode.P)) RegenerateMap();
+        if (Input.GetKeyDown(KeyCode.O)) RegenerateMap();
     }
 
     public void RegenerateMap() => StartCoroutine(ERenegerateMap());

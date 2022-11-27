@@ -76,6 +76,8 @@ public class PlaneController : MonoBehaviour
             if (Input.GetKeyDown(KeyCode.J)) ChangeFrontCube();
 
             if (Input.GetKeyDown(KeyCode.R)) TeleportPlayer();
+
+            if (Input.GetKeyDown(KeyCode.P)) TeleportPlayer();
         }
 
 
