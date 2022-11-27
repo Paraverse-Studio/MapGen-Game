@@ -196,7 +196,7 @@ public class MapGeneration : MonoBehaviour
 
         int randomSeedNumber = randomSeed > -1 ? randomSeed : Random.Range(0, 99999);
         Random.InitState(randomSeedNumber);
-        seedText.text = "seed  " + randomSeedNumber;
+        seedText.text = "Seed  " + randomSeedNumber;
 
         progressValue = -1f;
 
@@ -607,6 +607,9 @@ public class MapGeneration : MonoBehaviour
                 //if (Vector3.Distance(area, newSpot) < (radius* M.circularity)) // tags: circular
                 if (IsDistanceLessThan(area, newSpot, (radius * M.circularity)))
                 {
+                    if ((int)newSpot.x < 0) continue; // can happen if the radius for this lump is bigger than the actual map
+                    if ((int)newSpot.z < 0) continue;
+
                     Block potentialObj = gridOccupants[(int)newSpot.x, (int)newSpot.z].block;
 
                     if (potentialObj != null && !alreadyElevated.Contains(potentialObj))

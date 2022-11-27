@@ -25,7 +25,7 @@ public class PlaneController : MonoBehaviour
     private float _currentYvalue = 0f;
     float turnSmoothVelocity;
 
-    private bool boost = false;
+    private float boost = 0;
 
     void Start()
     {
@@ -43,7 +43,7 @@ public class PlaneController : MonoBehaviour
         if (!isActive) return;
 
         // Apply gravity
-        _currentYvalue -= gravity * Time.deltaTime * (boost? 0.2f:1);
+        _currentYvalue -= gravity * Time.deltaTime * (boost > 0? 0.2f:1);
         if (_controller.isGrounded)
         {
             if (_currentYvalue < 0) _currentYvalue = 0;
@@ -52,7 +52,7 @@ public class PlaneController : MonoBehaviour
         {
             if (_currentYvalue < -20) _currentYvalue = -20;
 
-            if (boost) _currentYvalue = Mathf.Max(_currentYvalue, -2);
+            if (boost > 0) _currentYvalue = Mathf.Max(_currentYvalue, -2);
         }
 
         if (Input.GetKeyDown(KeyCode.Escape)) vcam.gameObject.SetActive(!vcam.gameObject.activeSelf);
@@ -64,8 +64,14 @@ public class PlaneController : MonoBehaviour
 
             GetJump();
 
-            boost = false;
-            if (Input.GetKey(KeyCode.LeftShift)) boost = true;
+            if (Input.GetKey(KeyCode.LeftShift))
+            {
+                boost = Mathf.Max(boost + (Time.deltaTime/3f), 3);
+            }
+            else
+            {
+                boost = 0;
+            }
 
             if (Input.GetKeyDown(KeyCode.J)) ChangeFrontCube();
 
@@ -88,7 +94,7 @@ public class PlaneController : MonoBehaviour
             moveDir = Quaternion.Euler(0f, targetAngle, 0f) * Vector3.forward;
         }          
         moveDir.Normalize();
-        moveDir *= speed * (boost ? 5 : 1);
+        moveDir *= speed * (boost > 0 ? (boost + 1) : 1);
         moveDir.y = _currentYvalue;
         _controller.Move(moveDir * Time.deltaTime);
         
@@ -116,7 +122,7 @@ public class PlaneController : MonoBehaviour
     {
         if (jumpTimer >= jumpCD && _controller.isGrounded)
         {
-            _currentYvalue = jumpSpeed * (boost ? 2 : 1);
+            _currentYvalue = jumpSpeed * (boost > 0 ? (boost + 1) : 1);
             jumpTimer = 0.0f;
         }
     }
