@@ -4236,12 +4236,12 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 35187480c41252143b2204abd32f5f7a, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  text: {fileID: 0}
+  text: {fileID: 542880963}
   messageOptions:
   - Continue the current session.
   - View your playthrough progress, and stats.
   - View options.
-  - Quit to Main Menu. All progress in this session will be lost.
+  - Quit to Main Menu. All progress in this round will be lost.
 --- !u!1 &549406280
 GameObject:
   m_ObjectHideFlags: 0
@@ -4466,7 +4466,7 @@ MonoBehaviour:
           m_Arguments:
             m_ObjectArgument: {fileID: 0}
             m_ObjectArgumentAssemblyTypeName: UnityEngine.Object, UnityEngine
-            m_IntArgument: 1
+            m_IntArgument: 2
             m_FloatArgument: 0
             m_StringArgument: 
             m_BoolArgument: 0
@@ -4696,7 +4696,7 @@ Transform:
   m_PrefabInstance: {fileID: 0}
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 612161429}
-  m_LocalRotation: {x: 0.22548534, y: 0.00000002923392, z: -0.00000000676607, w: 0.97424656}
+  m_LocalRotation: {x: 0.22548532, y: -0.0000000034061995, z: 7.883504e-10, w: 0.97424656}
   m_LocalPosition: {x: 0, y: 0, z: 0}
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_ConstrainProportionsScale: 0
@@ -4985,11 +4985,11 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 35187480c41252143b2204abd32f5f7a, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  text: {fileID: 0}
+  text: {fileID: 640085763}
   messageOptions:
   - Continue the current playthrough.
   - View your playthrough progress, and stats.
-  - 'Delete current playthrough and start again from round 1. Note: this is not reversible.'
+  - Delete current playthrough and start again from round one (this cannot be undone).
   - View options.
   - Quit to desktop.
 --- !u!114 &640085763
@@ -14983,7 +14983,7 @@ MonoBehaviour:
           m_Arguments:
             m_ObjectArgument: {fileID: 0}
             m_ObjectArgumentAssemblyTypeName: UnityEngine.Object, UnityEngine
-            m_IntArgument: 2
+            m_IntArgument: 3
             m_FloatArgument: 0
             m_StringArgument: 
             m_BoolArgument: 0
