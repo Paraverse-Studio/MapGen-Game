@@ -77,7 +77,7 @@ public class PlaneController : MonoBehaviour
 
             if (Input.GetKeyDown(KeyCode.R)) TeleportPlayer();
 
-            if (Input.GetKeyDown(KeyCode.P)) TeleportPlayer();
+            if (Input.GetKeyDown(KeyCode.P)) PauseMenu.Instance.TogglePause();
         }
 
 
@@ -132,16 +132,16 @@ public class PlaneController : MonoBehaviour
     public void Active(bool o)
     {
         isActive = o;
-        if (isActive)
-        {
-            Cursor.lockState = CursorLockMode.Locked;
-            Cursor.visible = false;
-        }
-        else
-        {
-            Cursor.lockState = CursorLockMode.None;
-            Cursor.visible = true;
-        }
+        //if (isActive)
+        //{
+        //    Cursor.lockState = CursorLockMode.Locked;
+        //    Cursor.visible = false;
+        //}
+        //else
+        //{
+        //    Cursor.lockState = CursorLockMode.None;
+        //    Cursor.visible = true;
+        //}
     }
 
     public void TeleportPlayer(Vector3 pos, bool alsoMoveCamera = false)
