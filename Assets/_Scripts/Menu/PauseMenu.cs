@@ -11,7 +11,9 @@ public class PauseMenu : MonoBehaviour
     public ContextMessageHandler contextMenu;
 
     public UnityEvent OnQuitToMainMenu = new UnityEvent();
-
+    public UnityEvent OnPause = new UnityEvent();
+    public UnityEvent OffPause = new UnityEvent();
+    public BoolEvent OnPauseBool = new BoolEvent();
 
     private RectTransform _rectTransform;
     private bool _isPaused;
@@ -30,7 +32,7 @@ public class PauseMenu : MonoBehaviour
     void Start()
     {
         _rectTransform = GetComponent<RectTransform>();
-        SetPause(false);
+        _isPaused = false;
     }
 
     private float GetTimeDelta()
@@ -64,10 +66,15 @@ public class PauseMenu : MonoBehaviour
     public void SetPause(bool o)
     {
         _isPaused = o;
+        
+        if (o) OnPause?.Invoke();
+        if (!o) OffPause?.Invoke();
+        OnPauseBool?.Invoke(o);        
     }
 
     public void QuitToMainMenu()
     {
+        SetPause(false);
         OnQuitToMainMenu?.Invoke();
         //SceneManager.LoadScene(SceneManager.GetActiveScene().buildIndex);
     }

@@ -38,7 +38,9 @@ public class PlaneController : MonoBehaviour
 
     void Update()
     {
+        // Timers
         jumpTimer += Time.deltaTime;
+
 
         if (!isActive) return;
 
@@ -132,16 +134,16 @@ public class PlaneController : MonoBehaviour
     public void Active(bool o)
     {
         isActive = o;
-        //if (isActive)
-        //{
-        //    Cursor.lockState = CursorLockMode.Locked;
-        //    Cursor.visible = false;
-        //}
-        //else
-        //{
-        //    Cursor.lockState = CursorLockMode.None;
-        //    Cursor.visible = true;
-        //}
+        if (isActive)
+        {
+            Cursor.lockState = CursorLockMode.Locked;
+            Cursor.visible = false;
+        }
+        else
+        {
+            Cursor.lockState = CursorLockMode.None;
+            Cursor.visible = true;
+        }
     }
 
     public void TeleportPlayer(Vector3 pos, bool alsoMoveCamera = false)
