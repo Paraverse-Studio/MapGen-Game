@@ -31,9 +31,9 @@ public class PlaneController : MonoBehaviour
     {
         // calculate the correct vertical position
         float correctHeight = _controller.center.y + _controller.skinWidth;
+
         // set the controller center vector
-        _controller.center = new Vector3(0, correctHeight, 0);
-                
+        _controller.center = new Vector3(0, correctHeight, 0);                
     }
 
     void Update()
@@ -57,10 +57,7 @@ public class PlaneController : MonoBehaviour
             if (boost > 0) _currentYvalue = Mathf.Max(_currentYvalue, -2);
         }
 
-        if (Input.GetKeyDown(KeyCode.Escape)) vcam.gameObject.SetActive(!vcam.gameObject.activeSelf);
-
-
-        if (true)
+        if (true) // not cc'ed
         {
             GetMovement();
 
@@ -78,8 +75,6 @@ public class PlaneController : MonoBehaviour
             if (Input.GetKeyDown(KeyCode.J)) ChangeFrontCube();
 
             if (Input.GetKeyDown(KeyCode.R)) TeleportPlayer();
-
-            if (Input.GetKeyDown(KeyCode.P)) PauseMenu.Instance.TogglePause();
         }
 
 
@@ -133,16 +128,22 @@ public class PlaneController : MonoBehaviour
 
     public void Active(bool o)
     {
+        // Don't let this be activated when player is not on,
+        // but do let it be deactivated even if player is not on scene
+        if (!gameObject.activeInHierarchy && o) return;
+
         isActive = o;
         if (isActive)
         {
             Cursor.lockState = CursorLockMode.Locked;
             Cursor.visible = false;
+            vcam.gameObject.SetActive(true);
         }
         else
         {
             Cursor.lockState = CursorLockMode.None;
             Cursor.visible = true;
+            vcam.gameObject.SetActive(false);
         }
     }
 

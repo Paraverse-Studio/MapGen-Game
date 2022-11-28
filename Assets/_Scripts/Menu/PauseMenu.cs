@@ -6,22 +6,33 @@ using UnityEngine.SceneManagement;
 
 public class PauseMenu : MonoBehaviour
 {
+    [System.Serializable]
+    public struct Events
+    {
+        public UnityEvent OnQuitToMainMenu;
+        public UnityEvent OnPause;
+        public UnityEvent OffPause;
+        public BoolEvent OnPauseBool;
+    }
+
     public static PauseMenu Instance;
-    public float pausingSpeed;
-    public ContextMessageHandler contextMenu;
+    public float pausingAnimationSpeed;
+    public RectTransform rectTransform;
 
-    public UnityEvent OnQuitToMainMenu = new UnityEvent();
-    public UnityEvent OnPause = new UnityEvent();
-    public UnityEvent OffPause = new UnityEvent();
-    public BoolEvent OnPauseBool = new BoolEvent();
+    public Events events;
 
-    private RectTransform _rectTransform;
     private bool _isPaused;
-
     public bool Paused
     {
         get { return _isPaused; }
     }
+
+    // this boolean is modified externally.
+    // For situations where the game is in menu, and no pause needed
+    // should only be pausable during round gameplay
+    public bool Pausable;
+    public void TogglePausable(bool o) => Pausable = o;
+
 
     private void Awake()
     {
@@ -31,32 +42,34 @@ public class PauseMenu : MonoBehaviour
     // Start is called before the first frame update
     void Start()
     {
-        _rectTransform = GetComponent<RectTransform>();
         _isPaused = false;
     }
 
     private float GetTimeDelta()
     {
-        return Time.unscaledDeltaTime * pausingSpeed;
+        return Time.unscaledDeltaTime * pausingAnimationSpeed;
     }
 
     // Update is called once per frame
     void Update()
     {
+        // it's here instead of Player Controller for ex. because player controlled might be disabled during UI, pauses, etc.
+        if (Input.GetKeyDown(KeyCode.Escape)) TogglePause();
+
         if (_isPaused)
         {
             if (Time.timeScale != 0f) Time.timeScale = 0;
 
-            _rectTransform.offsetMin = new Vector2(Mathf.Max(_rectTransform.offsetMin.x - GetTimeDelta()*1000, 0), 0);
+            rectTransform.offsetMin = new Vector2(Mathf.Max(rectTransform.offsetMin.x - GetTimeDelta()*1000, 0), 0);
         }
         else if (!_isPaused)
         {
             if (Time.timeScale != 1f) Time.timeScale = 1f;
 
-            _rectTransform.offsetMin = new Vector2(Mathf.Min(_rectTransform.offsetMin.x + GetTimeDelta()*2000, 3500), 0);
+            rectTransform.offsetMin = new Vector2(Mathf.Min(rectTransform.offsetMin.x + GetTimeDelta()*2000, 3500), 0);
 
         }
-    }
+    }       
 
     public void TogglePause()
     {
@@ -65,17 +78,19 @@ public class PauseMenu : MonoBehaviour
 
     public void SetPause(bool o)
     {
+        if (!Pausable) return;
+
         _isPaused = o;
         
-        if (o) OnPause?.Invoke();
-        if (!o) OffPause?.Invoke();
-        OnPauseBool?.Invoke(o);        
+        if (o) events.OnPause?.Invoke();
+        if (!o) events.OffPause?.Invoke();
+        events.OnPauseBool?.Invoke(o);        
     }
 
     public void QuitToMainMenu()
     {
         SetPause(false);
-        OnQuitToMainMenu?.Invoke();
+        events.OnQuitToMainMenu?.Invoke();
         //SceneManager.LoadScene(SceneManager.GetActiveScene().buildIndex);
     }
 

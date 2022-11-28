@@ -1,3 +1,4 @@
+using System;
 using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
@@ -11,13 +12,32 @@ public class GameLoopManager : MonoBehaviour
     {
         public UnityEvent OnBootupGame;
         public UnityEvent OnDeveloperMode;
-        public UnityEvent OnPlay;
-        public BoolEvent OnPause;
+
+        public UnityEvent OnStartRound;
+        public UnityEvent OnEndRound;
+
+        public UnityEvent OnUI; //whenever game enters any UI (excluding pause)
+    }
+
+    public enum RoundCompletionType
+    {
+        Completed,
+        Failed,
+        Quit
     }
     
     public static GameLoopManager Instance;
-
+    [Header("Combat Map")]
+    [Space (20)]
     public bool developerMode = false;
+
+    [Header("Screens/Windows")]
+    public Animator roundCompleteWindow;
+
+    [Header("Runtime Data")]
+    public RoundCompletionType roundCompletionType;
+
+    private Queue<Action> queue = new();
 
     private bool _isPaused = false;
     public bool IsPaused => _isPaused;
@@ -46,19 +66,33 @@ public class GameLoopManager : MonoBehaviour
     // Update is called once per frame
     void Update()
     {
-        if (Input.GetKeyDown(KeyCode.I))
-        {
-            PauseGame();
-        }
         
     }
 
 
     #region MAIN_MENU
 
-    public void StartGame()
+    public void StartRound()
     {
-        GameLoopEvents.OnPlay?.Invoke();
+        GameLoopEvents.OnStartRound?.Invoke();
+    }
+
+
+    public void EndRound() => StartCoroutine(IEndRound());   
+
+    public IEnumerator IEndRound()
+    {
+        yield return new WaitForSeconds(0.25f);
+        GameLoopEvents.OnEndRound?.Invoke();
+
+        roundCompleteWindow.gameObject.SetActive(true);
+        roundCompleteWindow.SetTrigger("Entry");
+        yield return new WaitForSeconds(3f);
+        roundCompleteWindow.SetTrigger("Exit");
+        yield return new WaitForSeconds(1.5f);
+        roundCompleteWindow.gameObject.SetActive(false);
+
+        CompleteRound();
     }
 
     public void QuitGame()
@@ -70,30 +104,47 @@ public class GameLoopManager : MonoBehaviour
     {
         SceneManager.LoadScene(SceneManager.GetActiveScene().buildIndex);
     }
-
-    public void PauseGame()
-    {
-        _isPaused = !_isPaused;
-        Time.timeScale = _isPaused? 1f:0f;
-
-        GameLoopEvents.OnPause?.Invoke(_isPaused);
-    }
     #endregion
 
     #region PLAY_SESSION
-    public void CompleteLevel()
+
+    // succeeded = round ended due to completion of round
+    // succeeded false = user quit the round, no rewards
+    public void CompleteRound()
     {
-        // Calculate Stats()
-        // Save/Store Stats in database ()
-        // Display stats to player + score ()
+        GameLoopEvents.OnUI?.Invoke();
 
-        // Start next round:
+        switch (roundCompletionType)
+        {
+            case RoundCompletionType.Completed:
+                // Calculate Stats()
+                // show stats + rewards() happily
+                // Continue to Shop menu()
+                // Show options to continue to next round, or quit to main menu
+                break;
 
-        MapGeneration.Instance.RegenerateMap();
+            case RoundCompletionType.Failed:
+                // Calculate Stats()
+                // show stats + rewards() sadly
+                // Continue to Shop menu()
+                // Show options to continue to next round, or quit to main menu
+                break;
+
+            case RoundCompletionType.Quit:
+                // Show failed stats (that can be shown so far)
+                // Show option to retry or quit to main menu
+                break;
+        }
+        
+        RestartGame();
     }
-
 
     #endregion
 
+    private IEnumerator DelayedAction(float s, Action a)
+    {
+        yield return new WaitForSeconds(s);
+        a?.Invoke();
+    }
 
 }
