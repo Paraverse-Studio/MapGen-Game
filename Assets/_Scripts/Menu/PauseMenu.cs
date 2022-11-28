@@ -60,13 +60,13 @@ public class PauseMenu : MonoBehaviour
         {
             if (Time.timeScale != 0f) Time.timeScale = 0;
 
-            rectTransform.offsetMin = new Vector2(Mathf.Max(rectTransform.offsetMin.x - GetTimeDelta()*1000, 0), 0);
+            rectTransform.localScale = new Vector3(Mathf.Max(rectTransform.localScale.x - GetTimeDelta(), 1), 1, 1);
         }
         else if (!_isPaused)
         {
             if (Time.timeScale != 1f) Time.timeScale = 1f;
 
-            rectTransform.offsetMin = new Vector2(Mathf.Min(rectTransform.offsetMin.x + GetTimeDelta()*2000, 3500), 0);
+            rectTransform.localScale = new Vector3(Mathf.Min(rectTransform.localScale.x + GetTimeDelta(), 3), 1, 1);
 
         }
     }       
