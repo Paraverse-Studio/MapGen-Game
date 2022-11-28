@@ -61,13 +61,14 @@ public class PauseMenu : MonoBehaviour
             if (Time.timeScale != 0f) Time.timeScale = 0;
 
             rectTransform.localScale = new Vector3(Mathf.Max(rectTransform.localScale.x - GetTimeDelta(), 1), 1, 1);
+            rectTransform.gameObject.SetActive(true);
         }
         else if (!_isPaused)
         {
             if (Time.timeScale != 1f) Time.timeScale = 1f;
 
             rectTransform.localScale = new Vector3(Mathf.Min(rectTransform.localScale.x + GetTimeDelta(), 3), 1, 1);
-
+            if (rectTransform.localScale.x >= 3f) rectTransform.gameObject.SetActive(false);
         }
     }       
 
