@@ -98,9 +98,7 @@ public class MapGeneration : MonoBehaviour
     public static MapGeneration Instance;
 
     [Space(25)]
-    public UnityEvent OnScreenStart = new UnityEvent();
     public UnityEvent OnMapGenerateStart = new UnityEvent();
-    public UnityEvent OnMapGeneratedBase = new UnityEvent();
     public UnityEvent OnMapGenerateEnd = new UnityEvent();
     public UnityEvent OnScreenReady = new UnityEvent();
 
@@ -135,7 +133,7 @@ public class MapGeneration : MonoBehaviour
     private List<GameObject> enemyObjects = new List<GameObject>();
 
     private float progressValue;
-    private float progressTotal = 10f;
+    private float progressTotal = 8f;
     private int step = 0; // purely for debugging to detect step progress speed
 
     private WaitForSeconds processDelay;
@@ -168,18 +166,17 @@ public class MapGeneration : MonoBehaviour
 
     public IEnumerator ERenegerateMap()
     {
-        OnScreenStart?.Invoke();
+        OnMapGenerateStart?.Invoke();
+        //PartitionProgress("Clearing & recycling resources...");
 
-        yield return null;
+        yield return processDelay;
 
         ResetVariables();
-
         ResetLists();
 
         OnMapGenerateStart?.Invoke();
 
-        PartitionProgress("Clearing & recycling resources...");
-        yield return new WaitForSeconds(0.25f);
+        yield return processDelay;
 
         StartCoroutine(Generation());
     }
@@ -244,14 +241,11 @@ public class MapGeneration : MonoBehaviour
             {
                 counter = 0;
                 yield return processDelay;
-            }
-            // if (i % 200 == 0) yield return processDelay;
+            }           
         }
 
         if (t.gameObject) DestroyImmediate(t.gameObject);
     }
-
-
 
     private void ResetLists()
     {
@@ -332,8 +326,7 @@ public class MapGeneration : MonoBehaviour
             temporaryObjFolder.transform.parent = objFolder;
 
             #endregion
-        }
-            
+        }            
     }
 
     private IEnumerator Generation()
@@ -347,12 +340,12 @@ public class MapGeneration : MonoBehaviour
 
         SpawnPath();
         step = 1;
-        PartitionProgress("Shaping base map...");
+        PartitionProgress("Shaping map...");
         yield return processDelay;
 
         ThickenPath();
         step = 2;
-        PartitionProgress("Expanding land...");
+        PartitionProgress();
         yield return processDelay;
 
         ThickenAroundObject(pathObjects[pathObjects.Count - 1].gameObject, 0, M.grassFillRadius);
@@ -364,7 +357,7 @@ public class MapGeneration : MonoBehaviour
 
         AddRandomLumps();
         step = 4;
-        PartitionProgress("Modeling paths...");
+        PartitionProgress();
         yield return processDelay;
 
         // Isn't really working - if you flatten, then the boxes have new weird lumps
@@ -379,7 +372,7 @@ public class MapGeneration : MonoBehaviour
 
         PaintDirtPath();
         step = 5;
-        PartitionProgress("Adding world objects...");
+        PartitionProgress("Adding world props...");
         yield return processDelay;
 
         //ApplyRandomElevation();
@@ -389,23 +382,17 @@ public class MapGeneration : MonoBehaviour
         if (M.addEdgingBlocks)
         {
             AddFoundationAndEdgeWork();
-            PartitionProgress("Finalizing post processing...");
+            PartitionProgress();
             yield return processDelay;
         }
 
-
         /////////       NO SHAPE MODIFICATIONS BEYOND THIS POINT        /////////////////////////
-        centerPointWithY = new Vector3(centerPoint.x, gridOccupants[(int)centerPoint.x,
-            (int)centerPoint.z].block.transform.position.y, centerPoint.z);
-
-        OnMapGeneratedBase?.Invoke();
-        yield return null;
-
+        centerPointWithY = new Vector3(centerPoint.x, gridOccupants[(int)centerPoint.x, (int)centerPoint.z].block.transform.position.y, centerPoint.z);
 
         /* * * * * IMPORTANT PROPS ON MAP * * * * * * */
         AddImportantProps();
         step = 6;
-        PartitionProgress("Event triggers...");
+        PartitionProgress();
         yield return processDelay;
 
         //AddEnemies();
@@ -432,7 +419,7 @@ public class MapGeneration : MonoBehaviour
         /* * * * * * * * * * * * * * * * * * * * * * */
 
         OnMapGenerateEnd?.Invoke();
-        yield return new WaitForSeconds(0.35f);
+        yield return new WaitForSeconds(0.55f);
         OnScreenReady?.Invoke();
     }
 
