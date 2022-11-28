@@ -30,7 +30,7 @@ public class MobAI : MonoBehaviour
 
     private EnemyMoveState enemyMoveState = EnemyMoveState.idle;
 
-    private MobController _controller;
+    private OldMobController _controller;
     private Transform _body;
     private Transform _playerBody;
     private Transform _target;
@@ -47,7 +47,7 @@ public class MobAI : MonoBehaviour
     // Start is called before the first frame update
     void Start()
     {
-        _controller = GetComponent<MobController>();
+        _controller = GetComponent<OldMobController>();
         _body = _controller.Body;
         _playerBody = GameObject.FindGameObjectWithTag("Player").GetComponentInParent<MobComponents>().body;
         _originalPosition = _body.transform.position;

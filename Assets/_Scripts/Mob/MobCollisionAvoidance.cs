@@ -7,7 +7,7 @@ public class MobCollisionAvoidance : MonoBehaviour, ITickElement
     public float radius = 1.5f;
     public LayerMask layerMask;
 
-    private MobController _controller;
+    private OldMobController _controller;
     private MobAI _ai;
     private Transform _body;
     private float force = 0.4f;
@@ -22,7 +22,7 @@ public class MobCollisionAvoidance : MonoBehaviour, ITickElement
     void Start()
     {
         _contacts = new List<Collider>();
-        _controller = GetComponentInParent<MobController>();
+        _controller = GetComponentInParent<OldMobController>();
         _ai = GetComponentInParent<MobAI>();
         if (_controller) _body = _controller.Body;
 

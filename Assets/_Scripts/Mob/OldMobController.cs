@@ -2,7 +2,7 @@ using UnityEngine;
 using System.Collections;
 
 
-public class MobController : MonoBehaviour
+public class OldMobController : MonoBehaviour
 {
     [Header("Automotion ")]
     public bool isPlayer = false;

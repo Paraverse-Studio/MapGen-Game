@@ -33,11 +33,10 @@ public class GameLoopManager : MonoBehaviour
 
     [Header("Screens/Windows")]
     public Animator roundCompleteWindow;
+    public GameObject loadingScreen;
 
     [Header("Runtime Data")]
     public RoundCompletionType roundCompletionType;
-
-    private Queue<Action> queue = new();
 
     private bool _isPaused = false;
     public bool IsPaused => _isPaused;
@@ -82,7 +81,7 @@ public class GameLoopManager : MonoBehaviour
 
     public IEnumerator IEndRound()
     {
-        yield return new WaitForSeconds(0.25f);
+        yield return new WaitForSeconds(0.5f);
         GameLoopEvents.OnEndRound?.Invoke();
 
         roundCompleteWindow.gameObject.SetActive(true);
@@ -95,21 +94,6 @@ public class GameLoopManager : MonoBehaviour
         CompleteRound();
     }
 
-    public void QuitGame()
-    {
-        Application.Quit();
-    }
-
-    public void RestartGame()
-    {
-        SceneManager.LoadScene(SceneManager.GetActiveScene().buildIndex);
-    }
-    #endregion
-
-    #region PLAY_SESSION
-
-    // succeeded = round ended due to completion of round
-    // succeeded false = user quit the round, no rewards
     public void CompleteRound()
     {
         GameLoopEvents.OnUI?.Invoke();
@@ -138,6 +122,24 @@ public class GameLoopManager : MonoBehaviour
         
         RestartGame();
     }
+
+    public void QuitGame()
+    {
+        Application.Quit();
+    }
+
+    public void RestartGame() => StartCoroutine(IRestartGame());    
+
+    public IEnumerator IRestartGame()
+    {
+        loadingScreen.SetActive(true);
+        yield return null;
+        //SceneManager.LoadScene(SceneManager.GetActiveScene().buildIndex);
+        GameLoopEvents.OnBootupGame?.Invoke();
+        yield return new WaitForSeconds(1.5f);
+        loadingScreen.SetActive(false);
+    }
+
 
     #endregion
 

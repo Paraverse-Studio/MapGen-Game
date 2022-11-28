@@ -3,13 +3,14 @@ using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 
-public class PlaneController : MonoBehaviour
+public class PlayerController : MonoBehaviour
 {
     public CharacterController _controller;
     public Transform _camera;
     public float gravity = 20f;
     public bool isActive = false;
     public CinemachineFreeLook vcam;
+    public CinemachineBrain vcambrain;
 
     [Header("Movement")]
     public float speed = 6f;
@@ -137,13 +138,15 @@ public class PlaneController : MonoBehaviour
         {
             Cursor.lockState = CursorLockMode.Locked;
             Cursor.visible = false;
-            vcam.gameObject.SetActive(true);
+            vcam.enabled = true;
+            vcambrain.enabled = true;
         }
         else
         {
             Cursor.lockState = CursorLockMode.None;
             Cursor.visible = true;
-            vcam.gameObject.SetActive(false);
+            vcam.enabled = false;
+            vcambrain.enabled = false;
         }
     }
 
