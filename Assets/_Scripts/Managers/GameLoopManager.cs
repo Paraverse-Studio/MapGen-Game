@@ -28,20 +28,22 @@ public class GameLoopManager : MonoBehaviour
     
     public static GameLoopManager Instance;
     [Header("Combat Map")]
-    [Space (20)]
     public bool developerMode = false;
 
+    [Space(20)]
     [Header("Screens/Windows")]
     public Animator roundCompleteWindow;
     public GameObject loadingScreen;
     public GameObject roundResultsWindow;
 
+    [Space(20)]
     [Header("Runtime Data")]
     public RoundCompletionType roundCompletionType;
 
     private bool _isPaused = false;
     public bool IsPaused => _isPaused;
 
+    [Space(20)]
     public GameEvents GameLoopEvents;
 
     private void Awake()
