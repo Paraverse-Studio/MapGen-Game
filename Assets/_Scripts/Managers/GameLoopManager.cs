@@ -34,6 +34,7 @@ public class GameLoopManager : MonoBehaviour
     [Header("Screens/Windows")]
     public Animator roundCompleteWindow;
     public GameObject loadingScreen;
+    public GameObject roundResultsWindow;
 
     [Header("Runtime Data")]
     public RoundCompletionType roundCompletionType;
@@ -119,8 +120,8 @@ public class GameLoopManager : MonoBehaviour
                 // Show option to retry or quit to main menu
                 break;
         }
-        
-        RestartGame();
+
+        roundResultsWindow.SetActive(true); // or play an animation
     }
 
     public void QuitGame()

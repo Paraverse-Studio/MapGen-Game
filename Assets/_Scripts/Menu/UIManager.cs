@@ -11,12 +11,14 @@ public class UIManager : MonoBehaviour
     private void Awake()
     {
         Instance = this;
+
+        //menus = FindObjectsOfType<MenuScreen>();
     }
 
     // Start is called before the first frame update
     void Start()
     {
-        
+        //menus = FindObjectsOfType<MenuScreen>();
     }
 
     // Update is called once per frame
