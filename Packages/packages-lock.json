@@ -1,5 +1,20 @@
 {
   "dependencies": {
+    "com.unity.2d.sprite": {
+      "version": "1.0.0",
+      "depth": 0,
+      "source": "builtin",
+      "dependencies": {}
+    },
+    "com.unity.ai.navigation.components": {
+      "version": "https://github.com/Unity-Technologies/NavMeshComponents.git#package",
+      "depth": 0,
+      "source": "git",
+      "dependencies": {
+        "com.unity.modules.ai": "1.0.0"
+      },
+      "hash": "0fc6f532e4f47d66d173314efcb906bc7cf0d00f"
+    },
     "com.unity.burst": {
       "version": "1.6.0",
       "depth": 1,
@@ -90,6 +105,17 @@
       },
       "url": "https://packages.unity.com"
     },
+    "com.unity.probuilder": {
+      "version": "5.0.6",
+      "depth": 0,
+      "source": "registry",
+      "dependencies": {
+        "com.unity.settings-manager": "1.0.3",
+        "com.unity.modules.physics": "1.0.0",
+        "com.unity.modules.imgui": "1.0.0"
+      },
+      "url": "https://packages.unity.com"
+    },
     "com.unity.render-pipelines.core": {
       "version": "12.1.2",
       "depth": 1,
@@ -125,6 +151,13 @@
       "dependencies": {
         "com.unity.modules.unitywebrequest": "1.0.0"
       },
+      "url": "https://packages.unity.com"
+    },
+    "com.unity.settings-manager": {
+      "version": "1.0.3",
+      "depth": 1,
+      "source": "registry",
+      "dependencies": {},
       "url": "https://packages.unity.com"
     },
     "com.unity.shadergraph": {
