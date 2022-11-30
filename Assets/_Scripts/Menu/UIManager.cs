@@ -31,7 +31,8 @@ public class UIManager : MonoBehaviour
     {
         for (int i = 0; i < menus.Length; ++i)
         {
-            menus[i]?.End();
+            if (menus[i] && !menus[i].exempt)
+                menus[i].End();
         }
     }
 

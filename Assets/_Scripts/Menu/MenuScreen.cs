@@ -7,6 +7,7 @@ public class MenuScreen : MonoBehaviour
     public bool playOnStart = false;
     public MenuScreen previousMenu;
     public MenuScreen nextMenu;
+    public bool exempt = false; // exempt from force opening/closing
 
     private CanvasGroup _cs;
     public CanvasGroup CS
