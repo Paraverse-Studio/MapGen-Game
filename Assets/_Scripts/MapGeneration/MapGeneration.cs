@@ -78,7 +78,9 @@ public class MapGeneration : MonoBehaviour
     [Header("Important Props")]
     public ImportantProps importantProps;
 
-    public Transform objFolder;
+    public Transform blocksFolder;
+    public Transform enemiesFolder;
+
     private GameObject temporaryObjFolder;
     public GameObject[] foundationPrefabs;
 
@@ -133,7 +135,7 @@ public class MapGeneration : MonoBehaviour
     private List<GameObject> enemyObjects = new List<GameObject>();
 
     private float progressValue;
-    private float progressTotal = 8f;
+    private float progressTotal = 9f;
     private int step = 0; // purely for debugging to detect step progress speed
 
     private WaitForSeconds processDelay;
@@ -318,12 +320,12 @@ public class MapGeneration : MonoBehaviour
             treeObjects.Clear();
             foundationObjects.Clear();
             waterObjects.Clear();
-            //enemyObjects.Clear();
+            enemyObjects.Clear();
 
             // Important Props
 
             temporaryObjFolder = new GameObject("Folder");
-            temporaryObjFolder.transform.parent = objFolder;
+            temporaryObjFolder.transform.parent = blocksFolder;
 
             #endregion
         }            
@@ -389,28 +391,37 @@ public class MapGeneration : MonoBehaviour
         /////////       NO SHAPE MODIFICATIONS BEYOND THIS POINT        /////////////////////////
         centerPointWithY = new Vector3(centerPoint.x, gridOccupants[(int)centerPoint.x, (int)centerPoint.z].block.transform.position.y, centerPoint.z);
 
+
         /* * * * * IMPORTANT PROPS ON MAP * * * * * * */
         AddImportantProps();
         step = 6;
         PartitionProgress();
         yield return processDelay;
 
-        //AddEnemies();
+        AddEnemies();
+#if UNITY_EDITOR
+        enemiesFolder.gameObject.name =  "[ Enemies ] - " + enemyObjects.Count;
+#endif
+        step = 7;
+        PartitionProgress("Spawning enemies...");
+        yield return processDelay;
+
 
         /* * * * * DECORATIVE PROPS ON MAP * * * * * * */
         currentPaintingBlock = M.blockSet.water;
 
         AddWaterToDips();
-        step = 7;
+        step = 8;
         PartitionProgress("Applying final touches...");
         yield return processDelay;
 
         AddProps();
-        step = 8;
+        step = 9;
         PartitionProgress("Completed!");
         yield return processDelay;
 
-        /* * * * MISC STEPS (NO ORDER REQUIRED) * * */
+
+        /* * * * MISC STEPS (NOT RELATED TO MAP) * * */
         globalVolume.profile = M.ppProfile;
 
         navMeshBuilder.surface = allObjects[0].GetComponentInChildren<NavMeshSurface>();
@@ -804,27 +815,25 @@ public class MapGeneration : MonoBehaviour
 
     private void AddEnemies()
     {
+        int enemyFrequency = pathObjects.Count / M.enemySpawnAmount;
+
         for (int i = 1; i < pathObjects.Count; ++i)
         {
-            if (i % M.enemyFrequency != 0) continue;
+            if (i % enemyFrequency != 0) continue;
+            
+            int xOffset = Random.Range(-M.enemySpawnOffset, M.enemySpawnOffset + 1);
+            int zOffset = Random.Range(-M.enemySpawnOffset, M.enemySpawnOffset + 1);      
 
-            int amountToSpawn = 1;
-            if (i % M.spawnDoubleEveryFrequency == 0) amountToSpawn = 2;
+            Vector3 spawnSpot = pathObjects[i].transform.position + new Vector3(xOffset, 0, zOffset);
 
-            for (int amount = 0; amount < amountToSpawn; ++amount)
-            {
-                int xOffset = Random.Range(-M.enemySpawnOffset, M.enemySpawnOffset + 1);
-                int zOffset = Random.Range(-M.enemySpawnOffset, M.enemySpawnOffset + 1);
+            GameObject closestPathPosition = GetClosestObject(spawnSpot, pathObjects);
 
-                Vector3 spawnSpot = pathObjects[i].transform.position + new Vector3(xOffset, 5f, zOffset);
+            GameObject enemy = Instantiate(M.enemies[Random.Range(0, M.enemies.Length)],
+                closestPathPosition.transform.position, Quaternion.identity);
 
-                GameObject enemy = Instantiate(M.enemies[Random.Range(0, M.enemies.Length)],
-                    spawnSpot, Quaternion.identity);
-                if (enemy)
-                {
-                    enemyObjects.Add(enemy);
-                }
-            }
+            enemy.name = "Enemy " + (enemyObjects.Count + 1);
+            enemy.transform.parent = enemiesFolder;
+            enemyObjects.Add(enemy);                           
         }
     }
 
@@ -1026,6 +1035,7 @@ public class MapGeneration : MonoBehaviour
         else return false;
     }
 
+    // Get closest valid block to a given vector
     private GameObject GetClosestObject(Vector3 src, List<Block> list)
     {
         GameObject closest = null;
