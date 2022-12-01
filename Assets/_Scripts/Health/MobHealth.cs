@@ -31,11 +31,11 @@ public class MobHealth : MonoBehaviour
     private List<Image> _healthBars;
     private int _healthBarMarker = 0;
 
-    public UnityEvent OnHealthChange = new UnityEvent();
+    public FloatFloatEvent OnHealthChange = new FloatFloatEvent();
 
     private void Awake()
     {
-        _mobComponents = GetComponent<MobComponents>();
+        //_mobComponents = GetComponent<MobComponents>();
         _healthBars = new List<Image>();
     }
 
@@ -43,7 +43,7 @@ public class MobHealth : MonoBehaviour
     // Start is called before the first frame update
     void Start()
     {
-        Restart();
+        ResetHealth();
 
         if (useHealthBar)
         {
@@ -61,12 +61,12 @@ public class MobHealth : MonoBehaviour
 
         SetTotalHealth(_totalHealth);
 
-        OnHealthChange.RemoveAllListeners();
-        OnHealthChange.AddListener(UpdateHealthBars);
-        OnHealthChange.AddListener(CheckForDeath);
+        //OnHealthChange.RemoveAllListeners();
+        //OnHealthChange.AddListener(UpdateHealthBars);
+        //OnHealthChange.AddListener(CheckForDeath);
     }
 
-    private void Restart()
+    private void ResetHealth()
     {
         _health = _totalHealth;
         if (null != _healthBars) UpdateHealthBars();
@@ -101,6 +101,8 @@ public class MobHealth : MonoBehaviour
         if (Input.GetKeyDown(KeyCode.P)) IncreaseTotalHealth(-1);
     }
 
+
+    // main updater
     private void UpdateHealthBars()
     {
         for (int i = 0; i < _healthBars.Count; ++i)
@@ -114,8 +116,9 @@ public class MobHealth : MonoBehaviour
 
     public void TakeDamage(int dmg)
     {
+        int healthBefore = Health;
         Health -= dmg;
-        OnHealthChange?.Invoke();
+        OnHealthChange?.Invoke(healthBefore, Health);
     }
 
 
@@ -211,7 +214,7 @@ public class MobHealth : MonoBehaviour
 
     private void OnEnable()
     {
-        Restart();
+        ResetHealth();
         if (null != _healthBar)
         {
             _healthBar.SetActive(true);

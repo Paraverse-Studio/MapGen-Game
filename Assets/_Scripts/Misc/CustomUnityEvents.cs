@@ -9,6 +9,11 @@ public class FloatFloatEvent : UnityEvent<float, float>
 }
 
 [System.Serializable]
+public class IntIntEvent : UnityEvent<int, int>
+{
+}
+
+[System.Serializable]
 public class StringEvent : UnityEvent<string>
 {
 }

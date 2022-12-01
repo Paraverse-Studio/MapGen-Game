@@ -422,7 +422,7 @@ public class MapGeneration : MonoBehaviour
 
 
         /* * * * MISC STEPS (NOT RELATED TO MAP) * * */
-        globalVolume.profile = M.ppProfile;
+        if (M.ppProfile) globalVolume.profile = M.ppProfile;
 
         navMeshBuilder.surface = allObjects[0].GetComponentInChildren<NavMeshSurface>();
         navMeshBuilder.BuildNavMesh();

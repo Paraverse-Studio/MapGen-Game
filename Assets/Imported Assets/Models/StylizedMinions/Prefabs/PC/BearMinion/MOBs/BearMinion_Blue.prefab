@@ -965,6 +965,7 @@ GameObject:
   - component: {fileID: 3394032382423534326}
   - component: {fileID: 3394032382423534327}
   - component: {fileID: 3394032382423534312}
+  - component: {fileID: 1280474268218818245}
   m_Layer: 0
   m_Name: BearMinion
   m_TagString: Untagged
@@ -1107,6 +1108,24 @@ MonoBehaviour:
   projPf: {fileID: 0}
   projOrigin: {fileID: 0}
   basicAttackProjSpeed: 10
+--- !u!114 &1280474268218818245
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 3394032382423534313}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: f1360b5e821afee43bb7656851bcc9d0, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  healthBarsFolder: {fileID: 0}
+  healthBarPrefab: {fileID: 7640659126391647822, guid: 750a300b9734ceb449100012d6b044fb, type: 3}
+  mobBody: {fileID: 2617109067523903571}
+  OnHealthChange:
+    m_PersistentCalls:
+      m_Calls: []
 --- !u!1 &3394032383694911978
 GameObject:
   m_ObjectHideFlags: 0
