@@ -12,9 +12,9 @@ public class MobHealthBar : MonoBehaviour
     private GameObject _healthBarPrefab;
     private Transform _healthBarsFolder;
     private GameObject _healthBarObject;
-
-    private int _health;
-    private int _totalHealth;
+    private bool _healthBarSetupComplete = false;
+    private int _health = 1;
+    private int _totalHealth = 2;
 
     private Image _healthBar;
     private Image _healthDamageBar;
@@ -55,6 +55,8 @@ public class MobHealthBar : MonoBehaviour
     // Update is called once per frame
     void Update()
     {
+        if (!_healthBarSetupComplete) return;
+
         _healthBar.fillAmount = _health / _totalHealth;
 
         _healthDamageBar.fillAmount = Mathf.Lerp(_healthDamageBar.fillAmount, _healthBar.fillAmount, Time.deltaTime * 2f);
@@ -71,8 +73,8 @@ public class MobHealthBar : MonoBehaviour
     private void CreateHealthBar()
     {
         _healthBarObject = Instantiate(_healthBarPrefab, transform.position, Quaternion.identity);
-        _healthBar = _healthBarObject.transform.Find("HealthBar").GetComponent<Image>();
-        _healthDamageBar = _healthBarObject.transform.Find("DamageBar").GetComponent<Image>();
+        //_healthBar = _healthBarObject.transform.Find("HealthBar").gameObject.GetComponent<Image>();
+        //_healthDamageBar = _healthBarObject.transform.Find("DamageBar").gameObject.GetComponent<Image>();
 
         _healthBarObject.transform.SetParent(_healthBarsFolder);
         FollowTarget ft = _healthBarObject.GetComponent<FollowTarget>();

@@ -9,7 +9,8 @@ public class EndPointTrigger : MonoBehaviour
     {
         if (other.CompareTag("Player"))
         {
-            GameLoopManager.Instance.CompleteRound();
+            GameLoopManager.Instance.EndRound();
+            this.enabled = false;
         }
     }
 }
