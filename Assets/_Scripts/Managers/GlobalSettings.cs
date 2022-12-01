@@ -28,6 +28,7 @@ public class GlobalSettings : MonoBehaviour
     [Space(20)]
     public Transform uiFolder;
     public Transform healthBarFolder;
+    public GameObject healthBarPrefab;
 
     public Transform waterVolume;
 

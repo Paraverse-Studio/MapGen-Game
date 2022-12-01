@@ -7,9 +7,9 @@ using UnityEngine.Events;
 public class MobHealthBar : MonoBehaviour
 {
     [Header("Health Bar UI")]
-    public GameObject healthBarPrefab;
     public Transform mobBody;
 
+    private GameObject _healthBarPrefab;
     private Transform _healthBarsFolder;
     private GameObject _healthBarObject;
 
@@ -26,7 +26,9 @@ public class MobHealthBar : MonoBehaviour
 
     private void Awake()
     {
-        _healthBarsFolder = GameObject.FindGameObjectWithTag("HPFolder").transform;
+        if (!mobBody) mobBody = transform;
+        _healthBarsFolder = GlobalSettings.Instance.healthBarFolder;
+        _healthBarPrefab = GlobalSettings.Instance.healthBarPrefab;
     }
 
     // Start is called before the first frame update
@@ -68,7 +70,7 @@ public class MobHealthBar : MonoBehaviour
 
     private void CreateHealthBar()
     {
-        _healthBarObject = Instantiate(healthBarPrefab, transform.position, Quaternion.identity);
+        _healthBarObject = Instantiate(_healthBarPrefab, transform.position, Quaternion.identity);
         _healthBar = _healthBarObject.transform.Find("HealthBar").GetComponent<Image>();
         _healthDamageBar = _healthBarObject.transform.Find("DamageBar").GetComponent<Image>();
 
