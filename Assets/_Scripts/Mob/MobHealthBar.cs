@@ -73,8 +73,8 @@ public class MobHealthBar : MonoBehaviour
     private void CreateHealthBar()
     {
         _healthBarObject = Instantiate(_healthBarPrefab, transform.position, Quaternion.identity);
-        //_healthBar = _healthBarObject.transform.Find("HealthBar").gameObject.GetComponent<Image>();
-        //_healthDamageBar = _healthBarObject.transform.Find("DamageBar").gameObject.GetComponent<Image>();
+        _healthBar = _healthBarObject.GetComponent<HealthBarController>().healthBar;
+        _healthDamageBar = _healthBarObject.GetComponent<HealthBarController>().damageBar;
 
         _healthBarObject.transform.SetParent(_healthBarsFolder);
         FollowTarget ft = _healthBarObject.GetComponent<FollowTarget>();
