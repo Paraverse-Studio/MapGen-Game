@@ -146,15 +146,7 @@ namespace Paraverse.Enemy.NavMesh
             nav.acceleration = 999f;
             nav.angularSpeed = 999f;
 
-            // Change this code if game is multiplayer
-            if (useRaycastDetection == false)
-            {
-                pursueTarget = GameObject.FindGameObjectWithTag(targetTag).GetComponent<Transform>();
-            }
-            else
-            {
-                targetLayer = LayerMask.GetMask("Player");
-            }
+            targetLayer = LayerMask.GetMask("Player");
         }
         /// <summary>
         /// Only set state in StateHandler method to avoid bugs related to player's current state.
@@ -207,9 +199,11 @@ namespace Paraverse.Enemy.NavMesh
             curSpeed = patrolSpeed;
             startWaitDuration = Random.Range(minWaitDuration, maxWaitDuration);
             int prevVal = curWaypointIdx;
+            int safetyCounter = 0;
             // Prevents character from going to current waypoint
-            while (prevVal == curWaypointIdx)
+            while (prevVal == curWaypointIdx && safetyCounter < 1000)
             {
+                safetyCounter++;
                 curWaypointIdx = Random.Range(0, waypoints.Length - 1);
             }
             nav.SetDestination(waypoints[curWaypointIdx].position);

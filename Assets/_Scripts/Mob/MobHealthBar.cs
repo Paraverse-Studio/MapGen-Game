@@ -17,12 +17,7 @@ public class MobHealthBar : MonoBehaviour
     private int _totalHealth = 2;
 
     private Image _healthBar;
-    private Image _healthDamageBar;
-
-    public IntIntEvent OnHealthChange = new IntIntEvent();
-
-    public delegate void OnDeathDel();
-    public event OnDeathDel OnDeathEvent;
+    private Image _healthDamageBar; 
 
     private void Awake()
     {

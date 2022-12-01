@@ -357,9 +357,10 @@ GameObject:
   - component: {fileID: 676856577468170017}
   - component: {fileID: 676856577468170016}
   - component: {fileID: 676856577468170047}
+  - component: {fileID: 1323747786}
   m_Layer: 0
   m_Name: BearMinion
-  m_TagString: Untagged
+  m_TagString: Enemy
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
@@ -458,25 +459,22 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: d7247787b83f8b143b61f62b88ba1f58, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  head: {fileID: 0}
   curState: 0
-  patrolSpeed: 2.5
-  sprintSpeed: 4
-  waypoints:
+  walkSpeedRatio: 1
+  sprintSpeedRatio: 2.5
+  rotSpeed: 100
+  wps:
   - {fileID: 3308751057142083795}
   - {fileID: 3308751056154103368}
   - {fileID: 3308751057510168008}
   - {fileID: 3308751055928417641}
-  minWaitDuration: 5
-  maxWaitDuration: 10
+  minWaitDur: 5
+  maxWaitDur: 10
+  accurayWP: 2
   stoppingDistance: 2
-  detectionRange: 20
+  detectionRadius: 7
   targetTag: Player
-  useRaycastDetection: 0
-  detectionAngle: 90
-  targetLayer:
-    serializedVersion: 2
-    m_Bits: 0
+  deathEffect: {fileID: 5971161797261734830, guid: b57686338b6a45841a67921982527613, type: 3}
 --- !u!114 &676856577468170047
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -489,13 +487,35 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 5b3fe259459faf844a89438f0f42bc88, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  anim: {fileID: 0}
   targetTag: Player
-  basicAttackDamage: 7
-  basicAttackRange: 3
-  basicAttackCooldown: 3
-  basicAttackCollider: {fileID: 8547413301066612509}
-  basicAttackColliderScript: {fileID: 8547413301066612482}
-  basicAttackAnimationName: BasicAttack
+  basicAtkDmgRatio: 1
+  basicAtkRng: 2
+  minBasicAtkAnimSpeed: 0.8
+  maxBasicAtkAnimSpeed: 2.5
+  basicAtkCollider: {fileID: 8547413301066612509}
+  projUser: 0
+  projPf: {fileID: 0}
+  projHeld: {fileID: 0}
+  projOrigin: {fileID: 0}
+  basicAtkProjSpeed: 10
+--- !u!114 &1323747786
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 676856577468170046}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: b04cd1b06f0908d4c81a8bc7bcea9d24, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  maxHealth: 100
+  curHealth: 100
+  attackDamage: 5
+  attackSpeed: 0.2
+  moveSpeed: 2
 --- !u!1 &676856578194394173
 GameObject:
   m_ObjectHideFlags: 0
@@ -2561,6 +2581,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 826f6eeb6329df94c861cd0c08b9574e, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  targetTag: Player
 --- !u!1 &8559580100063632964
 GameObject:
   m_ObjectHideFlags: 0

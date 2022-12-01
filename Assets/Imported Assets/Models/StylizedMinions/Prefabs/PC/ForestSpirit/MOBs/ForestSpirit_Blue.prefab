@@ -346,9 +346,10 @@ GameObject:
   - component: {fileID: 7637898260528307777}
   - component: {fileID: 7637898260528307903}
   - component: {fileID: 3647709936275064338}
+  - component: {fileID: 1417396452}
   m_Layer: 0
   m_Name: ForestSpirit
-  m_TagString: Untagged
+  m_TagString: Enemy
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
@@ -442,25 +443,22 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: d7247787b83f8b143b61f62b88ba1f58, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  head: {fileID: 0}
   curState: 0
-  patrolSpeed: 1.5
-  sprintSpeed: 4
-  waypoints:
+  walkSpeedRatio: 1
+  sprintSpeedRatio: 2.5
+  rotSpeed: 100
+  wps:
   - {fileID: 7637898260037702365}
   - {fileID: 7637898261033544774}
   - {fileID: 7637898260743362502}
   - {fileID: 7637898261276540775}
-  minWaitDuration: 5
-  maxWaitDuration: 10
+  minWaitDur: 5
+  maxWaitDur: 10
+  accurayWP: 2
   stoppingDistance: 1.5
-  detectionRange: 10
+  detectionRadius: 7
   targetTag: Player
-  useRaycastDetection: 0
-  detectionAngle: 90
-  targetLayer:
-    serializedVersion: 2
-    m_Bits: 8
+  deathEffect: {fileID: 5971161797261734830, guid: b57686338b6a45841a67921982527613, type: 3}
 --- !u!114 &3647709936275064338
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -473,13 +471,35 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 5b3fe259459faf844a89438f0f42bc88, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  anim: {fileID: 0}
   targetTag: Player
-  basicAttackDamage: 5
-  basicAttackRange: 2
-  basicAttackCooldown: 2
-  basicAttackCollider: {fileID: 6578416460677716477}
-  basicAttackColliderScript: {fileID: 6578416460677716479}
-  basicAttackAnimationName: BasicAttack
+  basicAtkDmgRatio: 1
+  basicAtkRng: 2
+  minBasicAtkAnimSpeed: 0.8
+  maxBasicAtkAnimSpeed: 2.5
+  basicAtkCollider: {fileID: 6578416460677716477}
+  projUser: 0
+  projPf: {fileID: 0}
+  projHeld: {fileID: 0}
+  projOrigin: {fileID: 0}
+  basicAtkProjSpeed: 10
+--- !u!114 &1417396452
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 12167431876551453}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: b04cd1b06f0908d4c81a8bc7bcea9d24, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  maxHealth: 100
+  curHealth: 100
+  attackDamage: 5
+  attackSpeed: 0.2
+  moveSpeed: 2
 --- !u!1 &295202780757350474
 GameObject:
   m_ObjectHideFlags: 0
@@ -2157,7 +2177,7 @@ GameObject:
   - component: {fileID: 6578416460677716472}
   - component: {fileID: 6578416460677716479}
   m_Layer: 0
-  m_Name: RightBasicAttackCollider
+  m_Name: WeaponCollider
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
@@ -2253,6 +2273,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 826f6eeb6329df94c861cd0c08b9574e, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  targetTag: Player
 --- !u!1 &6578416460806824626
 GameObject:
   m_ObjectHideFlags: 0
@@ -2363,6 +2384,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 826f6eeb6329df94c861cd0c08b9574e, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  targetTag: Player
 --- !u!1 &6759893174833187204
 GameObject:
   m_ObjectHideFlags: 0
@@ -2608,7 +2630,7 @@ Transform:
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 7637898260037702364}
   m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
-  m_LocalPosition: {x: -3.5, y: 0, z: -3}
+  m_LocalPosition: {x: -10.74, y: 0, z: 7.98}
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_ConstrainProportionsScale: 0
   m_Children: []
@@ -2639,7 +2661,7 @@ Transform:
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 7637898260743362501}
   m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
-  m_LocalPosition: {x: 3.25, y: 0, z: 4}
+  m_LocalPosition: {x: 11.32, y: 0, z: 5.15}
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_ConstrainProportionsScale: 0
   m_Children: []
@@ -2705,7 +2727,7 @@ Transform:
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 7637898261033544773}
   m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
-  m_LocalPosition: {x: -4, y: 0, z: 3.5}
+  m_LocalPosition: {x: -9.43, y: 0, z: -8.4}
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_ConstrainProportionsScale: 0
   m_Children: []
@@ -2736,7 +2758,7 @@ Transform:
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 7637898261276540774}
   m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
-  m_LocalPosition: {x: 3.75, y: 0, z: -3.75}
+  m_LocalPosition: {x: 5.93, y: 0, z: -8.47}
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_ConstrainProportionsScale: 0
   m_Children: []

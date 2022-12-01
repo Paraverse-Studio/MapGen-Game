@@ -965,10 +965,11 @@ GameObject:
   - component: {fileID: 3394032382423534326}
   - component: {fileID: 3394032382423534327}
   - component: {fileID: 3394032382423534312}
-  - component: {fileID: 1280474268218818245}
+  - component: {fileID: 1729720464}
+  - component: {fileID: 3426257950261882956}
   m_Layer: 0
   m_Name: BearMinion
-  m_TagString: Untagged
+  m_TagString: Enemy
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
@@ -1069,17 +1070,13 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   head: {fileID: 0}
   curState: 0
-  patrolSpeed: 2.5
-  sprintSpeed: 4
-  waypoints:
-  - {fileID: 834749841623057668}
-  - {fileID: 834749840396450719}
-  - {fileID: 834749841189896223}
-  - {fileID: 834749840707070142}
+  patrolSpeed: 1.5
+  sprintSpeed: 3
+  waypoints: []
   minWaitDuration: 5
   maxWaitDuration: 10
   stoppingDistance: 2
-  detectionRange: 5
+  detectionRange: 20
   targetTag: Player
   useRaycastDetection: 0
   detectionAngle: 90
@@ -1099,16 +1096,33 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   targetTag: Player
-  basicAttackDamage: 7
-  basicAttackRange: 3
+  basicAttackDamage: 5
+  basicAttackRange: 2
   basicAttackCooldown: 3
-  basicAttackCollider: {fileID: 5827702022029265610}
-  basicAttackColliderScript: {fileID: 5827702022029265621}
+  basicAttackCollider: {fileID: 0}
+  basicAttackColliderScript: {fileID: 0}
   basicAttackAnimationName: BasicAttack
   projPf: {fileID: 0}
   projOrigin: {fileID: 0}
   basicAttackProjSpeed: 10
---- !u!114 &1280474268218818245
+--- !u!114 &1729720464
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 3394032382423534313}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: b04cd1b06f0908d4c81a8bc7bcea9d24, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  maxHealth: 100
+  curHealth: 100
+  attackDamage: 5
+  attackSpeed: 0.2
+  moveSpeed: 2
+--- !u!114 &3426257950261882956
 MonoBehaviour:
   m_ObjectHideFlags: 0
   m_CorrespondingSourceObject: {fileID: 0}
@@ -1120,9 +1134,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: f1360b5e821afee43bb7656851bcc9d0, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  healthBarsFolder: {fileID: 0}
-  healthBarPrefab: {fileID: 7640659126391647822, guid: 750a300b9734ceb449100012d6b044fb, type: 3}
-  mobBody: {fileID: 2617109067523903571}
+  mobBody: {fileID: 0}
   OnHealthChange:
     m_PersistentCalls:
       m_Calls: []
@@ -1896,6 +1908,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 826f6eeb6329df94c861cd0c08b9574e, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  targetTag: Player
 --- !u!1 &5860096483131081029
 GameObject:
   m_ObjectHideFlags: 0

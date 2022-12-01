@@ -815,6 +815,8 @@ public class MapGeneration : MonoBehaviour
 
     private void AddEnemies()
     {
+        if (!M.addEnemies) return;
+
         int enemyFrequency = pathObjects.Count / M.enemySpawnAmount;
 
         for (int i = 1; i < pathObjects.Count; ++i)

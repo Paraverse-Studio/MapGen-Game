@@ -1288,9 +1288,10 @@ GameObject:
   - component: {fileID: 2114478104052748531}
   - component: {fileID: 2114478104052748530}
   - component: {fileID: 2114478104052748529}
+  - component: {fileID: 952997431}
   m_Layer: 0
-  m_Name: MushroomMinion (2)
-  m_TagString: Untagged
+  m_Name: MushroomMinion
+  m_TagString: Enemy
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
@@ -1303,7 +1304,7 @@ Transform:
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 4680329465294377008}
   m_LocalRotation: {x: -0, y: -0, z: -0, w: 1}
-  m_LocalPosition: {x: 5.881654, y: 0.2330308, z: -0.65906715}
+  m_LocalPosition: {x: 0, y: 0.2330308, z: 0}
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_ConstrainProportionsScale: 0
   m_Children:
@@ -1371,7 +1372,7 @@ CharacterController:
   m_StepOffset: 0.3
   m_SkinWidth: 0.08
   m_MinMoveDistance: 0.001
-  m_Center: {x: 0, y: 0, z: 0}
+  m_Center: {x: 0, y: 1, z: 0}
 --- !u!114 &2114478104052748530
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -1384,25 +1385,22 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: d7247787b83f8b143b61f62b88ba1f58, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  head: {fileID: 0}
   curState: 0
-  patrolSpeed: 2
-  sprintSpeed: 5
-  waypoints:
-  - {fileID: 0}
-  - {fileID: 0}
-  - {fileID: 0}
-  - {fileID: 0}
-  minWaitDuration: 5
-  maxWaitDuration: 10
-  stoppingDistance: 1.5
-  detectionRange: 10
+  walkSpeedRatio: 1
+  sprintSpeedRatio: 2.5
+  rotSpeed: 100
+  wps:
+  - {fileID: 8920519869084330071}
+  - {fileID: 8920519867932645068}
+  - {fileID: 8920519869253053772}
+  - {fileID: 8920519867623065069}
+  minWaitDur: 5
+  maxWaitDur: 10
+  accurayWP: 2
+  stoppingDistance: 3
+  detectionRadius: 7
   targetTag: Player
-  useRaycastDetection: 0
-  detectionAngle: 90
-  targetLayer:
-    serializedVersion: 2
-    m_Bits: 8
+  deathEffect: {fileID: 5971161797261734830, guid: b57686338b6a45841a67921982527613, type: 3}
 --- !u!114 &2114478104052748529
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -1415,13 +1413,35 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 5b3fe259459faf844a89438f0f42bc88, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  anim: {fileID: 0}
   targetTag: Player
-  basicAttackDamage: 3
-  basicAttackRange: 2
-  basicAttackCooldown: 3
-  basicAttackCollider: {fileID: 5774183920684612124}
-  basicAttackColliderScript: {fileID: 5774183920684612126}
-  basicAttackAnimationName: BasicAttack
+  basicAtkDmgRatio: 1
+  basicAtkRng: 2
+  minBasicAtkAnimSpeed: 0.8
+  maxBasicAtkAnimSpeed: 2.5
+  basicAtkCollider: {fileID: 5774183920684612124}
+  projUser: 0
+  projPf: {fileID: 0}
+  projHeld: {fileID: 0}
+  projOrigin: {fileID: 0}
+  basicAtkProjSpeed: 10
+--- !u!114 &952997431
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 4680329465294377008}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: b04cd1b06f0908d4c81a8bc7bcea9d24, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  maxHealth: 100
+  curHealth: 100
+  attackDamage: 5
+  attackSpeed: 0.2
+  moveSpeed: 2
 --- !u!1 &4693299970896561023
 GameObject:
   m_ObjectHideFlags: 0
@@ -1904,6 +1924,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 826f6eeb6329df94c861cd0c08b9574e, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  targetTag: Player
 --- !u!1 &5827668850891024270
 GameObject:
   m_ObjectHideFlags: 0
@@ -3485,7 +3506,7 @@ Transform:
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 8920519867623065068}
   m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
-  m_LocalPosition: {x: 12.92, y: 0, z: -10.6}
+  m_LocalPosition: {x: 3, y: 0, z: 3}
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_ConstrainProportionsScale: 0
   m_Children: []
@@ -3549,7 +3570,7 @@ Transform:
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 8920519867932645071}
   m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
-  m_LocalPosition: {x: -4, y: 0, z: 3.5}
+  m_LocalPosition: {x: 3, y: 0, z: -3}
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_ConstrainProportionsScale: 0
   m_Children: []
@@ -3580,7 +3601,7 @@ Transform:
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 8920519869084330070}
   m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
-  m_LocalPosition: {x: -5.2, y: 0, z: -13.45}
+  m_LocalPosition: {x: -3, y: 0, z: 3}
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_ConstrainProportionsScale: 0
   m_Children: []
@@ -3611,7 +3632,7 @@ Transform:
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 8920519869253053775}
   m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
-  m_LocalPosition: {x: 14.64, y: 0, z: 3.09}
+  m_LocalPosition: {x: -3, y: 0, z: -3}
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_ConstrainProportionsScale: 0
   m_Children: []

@@ -90,6 +90,7 @@ public class SO_MapGenData : ScriptableObject
     [Space(30)]
     [Header("    _____________  ENEMIES  _____________")]
     [Space(40)]
+    public bool addEnemies;
     public GameObject[] enemies;
     public int enemySpawnAmount;
     public int enemySpawnOffset;

@@ -1677,7 +1677,7 @@ GameObject:
   - component: {fileID: 4546754175917710212}
   - component: {fileID: 4546754175917710211}
   m_Layer: 0
-  m_Name: RightBasicAttackCollider
+  m_Name: WeaponCollider
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
@@ -1773,6 +1773,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 826f6eeb6329df94c861cd0c08b9574e, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  targetTag: Player
 --- !u!1 &4546754176061235406
 GameObject:
   m_ObjectHideFlags: 0
@@ -1883,6 +1884,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 826f6eeb6329df94c861cd0c08b9574e, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  targetTag: Player
 --- !u!1 &4993331617550254229
 GameObject:
   m_ObjectHideFlags: 0
@@ -2802,9 +2804,10 @@ GameObject:
   - component: {fileID: 985494744710995005}
   - component: {fileID: 985494744710995139}
   - component: {fileID: 6254707013210129518}
+  - component: {fileID: 1503515770}
   m_Layer: 0
   m_Name: ForestSpirit
-  m_TagString: Untagged
+  m_TagString: Enemy
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
@@ -2898,25 +2901,22 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: d7247787b83f8b143b61f62b88ba1f58, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  head: {fileID: 0}
   curState: 0
-  patrolSpeed: 1.5
-  sprintSpeed: 4
-  waypoints:
+  walkSpeedRatio: 1
+  sprintSpeedRatio: 2.5
+  rotSpeed: 100
+  wps:
   - {fileID: 985494744262070433}
   - {fileID: 985494745149353530}
   - {fileID: 985494744365847994}
   - {fileID: 985494744906366235}
-  minWaitDuration: 5
-  maxWaitDuration: 10
+  minWaitDur: 5
+  maxWaitDur: 10
+  accurayWP: 2
   stoppingDistance: 1.5
-  detectionRange: 10
+  detectionRadius: 7
   targetTag: Player
-  useRaycastDetection: 0
-  detectionAngle: 90
-  targetLayer:
-    serializedVersion: 2
-    m_Bits: 8
+  deathEffect: {fileID: 5971161797261734830, guid: b57686338b6a45841a67921982527613, type: 3}
 --- !u!114 &6254707013210129518
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -2929,13 +2929,35 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 5b3fe259459faf844a89438f0f42bc88, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  anim: {fileID: 0}
   targetTag: Player
-  basicAttackDamage: 5
-  basicAttackRange: 2
-  basicAttackCooldown: 2
-  basicAttackCollider: {fileID: 4546754175917710209}
-  basicAttackColliderScript: {fileID: 4546754175917710211}
-  basicAttackAnimationName: BasicAttack
+  basicAtkDmgRatio: 1
+  basicAtkRng: 2
+  minBasicAtkAnimSpeed: 0.8
+  maxBasicAtkAnimSpeed: 2.5
+  basicAtkCollider: {fileID: 4546754175917710209}
+  projUser: 0
+  projPf: {fileID: 0}
+  projHeld: {fileID: 0}
+  projOrigin: {fileID: 0}
+  basicAtkProjSpeed: 10
+--- !u!114 &1503515770
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 7239905877389140321}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: b04cd1b06f0908d4c81a8bc7bcea9d24, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  maxHealth: 100
+  curHealth: 100
+  attackDamage: 5
+  attackSpeed: 0.2
+  moveSpeed: 2
 --- !u!1 &7239905877651621573
 GameObject:
   m_ObjectHideFlags: 0
