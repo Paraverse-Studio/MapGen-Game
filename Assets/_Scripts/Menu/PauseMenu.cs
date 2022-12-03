@@ -30,7 +30,7 @@ public class PauseMenu : MonoBehaviour
     // this boolean is modified externally.
     // For situations where the game is in menu, and no pause needed
     // should only be pausable during round gameplay
-    public bool Pausable;
+    public bool Pausable = false;
     public void TogglePausable(bool o) => Pausable = o;
 
 

@@ -427,6 +427,7 @@ public class MapGeneration : MonoBehaviour
         navMeshBuilder.surface = allObjects[0].GetComponentInChildren<NavMeshSurface>();
         navMeshBuilder.BuildNavMesh();
 
+        TeleportPlayer(CenterPointWithY + new Vector3(0, 5f, 0));
         /* * * * * * * * * * * * * * * * * * * * * * */
 
         OnMapGenerateEnd?.Invoke();
@@ -1054,6 +1055,11 @@ public class MapGeneration : MonoBehaviour
             }
         }
         return closest;
+    }
+
+    public void TeleportPlayer(Vector3 v)
+    {
+        UtilityFunctions.TeleportObject(GlobalSettings.Instance.player, v);
     }
 
     private void PartitionProgress(string va = "")

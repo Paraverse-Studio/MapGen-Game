@@ -34,6 +34,7 @@ public class GlobalSettings : MonoBehaviour
 
     public bool recordBlockHistory = true;
     public GameObject playerPrefab;
+    public GameObject player;
 
     [Header("Backup Safe Position: ")]
     [Space(10)]

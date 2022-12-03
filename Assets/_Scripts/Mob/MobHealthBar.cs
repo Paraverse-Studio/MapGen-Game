@@ -3,42 +3,62 @@ using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.UI;
 using UnityEngine.Events;
+using Paraverse.Mob.Stats;
+using TMPro;
 
 public class MobHealthBar : MonoBehaviour
 {
+    [System.Serializable]
+    public struct Override
+    {
+        public Image healthBar;
+        public Image damageBar;
+        public TextMeshProUGUI healthValueDisplay;
+        public TextMeshProUGUI nameLabel;
+    }
+
     [Header("Health Bar UI")]
     public Transform mobBody;
+
+    public Override overrideProperties;
 
     private GameObject _healthBarPrefab;
     private Transform _healthBarsFolder;
     private GameObject _healthBarObject;
+    private MobStats _mobStats;
     private bool _healthBarSetupComplete = false;
-    private int _health = 1;
-    private int _totalHealth = 2;
+    private float _health = 1.0f;
+    private float _totalHealth = 2.0f;
 
     private Image _healthBar;
-    private Image _healthDamageBar; 
-
-    private void Awake()
-    {
-        if (!mobBody) mobBody = transform;
-        _healthBarsFolder = GlobalSettings.Instance.healthBarFolder;
-        _healthBarPrefab = GlobalSettings.Instance.healthBarPrefab;
-    }
+    private Image _healthDamageBar;
+    private TextMeshProUGUI _healthValueDisplay;
 
     // Start is called before the first frame update
     void Start()
-    {        
-        if (null == _healthBarObject)
+    {
+        if (!mobBody) mobBody = transform;
+
+        _healthBarsFolder = GlobalSettings.Instance.healthBarFolder;
+        _healthBarPrefab = GlobalSettings.Instance.healthBarPrefab;
+
+        if (overrideProperties.healthBar == null)
         {
+            Debug.Log("Got called on: " + gameObject.name);
             CreateHealthBar();
         }
-        else
+        else 
         {
-            _healthBarObject.SetActive(true);
-        }
+            Debug.Log("GOt called on: " + gameObject.name);
+            LoadCustomHealthBar();
+        }        
 
         UpdateHealthBar();
+
+        if (TryGetComponent(out _mobStats))
+        {
+            _mobStats.OnHealthChange.AddListener(UpdateHealthBar);
+        }
     }
 
     private void ResetHealth()
@@ -60,9 +80,11 @@ public class MobHealthBar : MonoBehaviour
     // main updater
     public void UpdateHealthBar(int currentHP = 1, int totalHP = 1)
     {
-        _health = currentHP;
+        _health = (float)currentHP;
 
-        _totalHealth = totalHP;
+        _totalHealth = (float)totalHP;
+
+        if (_healthValueDisplay) _healthValueDisplay.text = currentHP + " / " + totalHP;
     }
 
     private void CreateHealthBar()
@@ -71,10 +93,28 @@ public class MobHealthBar : MonoBehaviour
         _healthBar = _healthBarObject.GetComponent<HealthBarController>().healthBar;
         _healthDamageBar = _healthBarObject.GetComponent<HealthBarController>().damageBar;
 
+        if (null != overrideProperties.healthBar)
+        {
+            _healthBar = overrideProperties.healthBar;
+            _healthDamageBar = overrideProperties.damageBar;
+            _healthValueDisplay = overrideProperties.healthValueDisplay;
+        }
+
         _healthBarObject.transform.SetParent(_healthBarsFolder);
         FollowTarget ft = _healthBarObject.GetComponent<FollowTarget>();
         ft.target = mobBody;
         ft._offset = new Vector3(0, 2.4f, 0);
+
+        _healthBarSetupComplete = true;
+    }
+
+    private void LoadCustomHealthBar()
+    {        
+        _healthBar = overrideProperties.healthBar;
+        _healthDamageBar = overrideProperties.damageBar;
+        _healthValueDisplay = overrideProperties.healthValueDisplay;        
+
+        _healthBarSetupComplete = true;
     }
 
     private void OnDisable()

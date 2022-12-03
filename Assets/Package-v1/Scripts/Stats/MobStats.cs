@@ -30,6 +30,8 @@ namespace Paraverse.Mob.Stats
         protected float moveSpeed = 2f;
         [DisplayName("Movement Speed")]
         public float MoveSpeed { get { return moveSpeed; } }
+
+        public IntIntEvent OnHealthChange = new IntIntEvent();
         #endregion
 
         #region Start Method
@@ -48,6 +50,7 @@ namespace Paraverse.Mob.Stats
         public void UpdateCurrentHealth(float amount)
         {
             curHealth += amount;
+            OnHealthChange?.Invoke((int)curHealth, (int)maxHealth);
         }
 
         public void UpdateAttackDamage(float amount)

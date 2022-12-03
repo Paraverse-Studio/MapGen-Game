@@ -924,6 +924,10 @@ MonoBehaviour:
   walkSpeedRatio: 1
   sprintSpeedRatio: 2
   rotSpeed: 10
+  jumpForce: 10
+  gravityValue: -20
+  gravityMultiplier: 1
+  disToGroundCheck: 0.1
 --- !u!114 &2956618024134931113
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -941,6 +945,9 @@ MonoBehaviour:
   attackDamage: 5
   attackSpeed: 2
   moveSpeed: 5
+  OnHealthChange:
+    m_PersistentCalls:
+      m_Calls: []
 --- !u!114 &2956618024134931112
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -1951,8 +1958,8 @@ BoxCollider:
   m_IsTrigger: 1
   m_Enabled: 1
   serializedVersion: 2
-  m_Size: {x: 1, y: 1, z: 1}
-  m_Center: {x: 0, y: 0, z: 0}
+  m_Size: {x: 0.99999976, y: 1.2300608, z: 1}
+  m_Center: {x: 0.000000004257929, y: 0.11503015, z: 0.00000034521682}
 --- !u!114 &6080363539117558813
 MonoBehaviour:
   m_ObjectHideFlags: 0
