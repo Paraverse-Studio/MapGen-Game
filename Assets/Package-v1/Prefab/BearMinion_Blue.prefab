@@ -1050,7 +1050,7 @@ CharacterController:
   m_Enabled: 1
   serializedVersion: 2
   m_Height: 2
-  m_Radius: 0.7
+  m_Radius: 0.75
   m_SlopeLimit: 45
   m_StepOffset: 0.3
   m_SkinWidth: 0.08
@@ -1124,7 +1124,7 @@ MonoBehaviour:
   curHealth: 100
   attackDamage: 5
   attackSpeed: 0.2
-  moveSpeed: 2
+  moveSpeed: 1.5
   OnHealthChange:
     m_PersistentCalls:
       m_Calls: []
@@ -1141,6 +1141,11 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   mobBody: {fileID: 0}
+  overrideProperties:
+    healthBar: {fileID: 0}
+    damageBar: {fileID: 0}
+    healthValueDisplay: {fileID: 0}
+    nameLabel: {fileID: 0}
 --- !u!1 &3394032383694911978
 GameObject:
   m_ObjectHideFlags: 0

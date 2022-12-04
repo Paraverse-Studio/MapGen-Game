@@ -89,7 +89,9 @@ namespace Paraverse.Player
             isInteracting = anim.GetBool(StringData.IsInteracting);
             isSprinting = input.IsSprinting;
             _isGrounded = IsGroundedCheck();
-            
+
+            jumpVelocity.y -= Time.deltaTime;
+
             MovementHandler();
             JumpHandler();
             RotationHandler();
@@ -164,7 +166,7 @@ namespace Paraverse.Player
         {
             if (controller.isGrounded)
             {
-                jumpVelocity.y += Mathf.Sqrt(jumpForce * -gravityMultiplier * -gravityValue);
+                jumpVelocity.y += Mathf.Sqrt(jumpForce * -gravityMultiplier * gravityValue);
                 anim.Play(StringData.Jump);
             }
         }

@@ -21,7 +21,7 @@ namespace Paraverse.Mob.Stats
         [DisplayName("Attack")]
         public float AttackDamage { get { return attackDamage; } }
 
-        [SerializeField, Range(0.2f, 2f), Tooltip("Attacks per second.")]
+        [SerializeField, Range(0.2f, 3f), Tooltip("Attacks per second.")]
         protected float attackSpeed = 0.2f;
         [DisplayName("Attack Speed")]
         public float AttackSpeed { get { return attackSpeed; } }
