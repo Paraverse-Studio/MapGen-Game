@@ -3,7 +3,6 @@ using Paraverse.Mob;
 using Paraverse.Mob.Combat;
 using Paraverse.Mob.Controller;
 using Paraverse.Mob.Stats;
-using UnityEditor;
 using UnityEngine;
 
 namespace Paraverse.Player
@@ -53,13 +52,13 @@ namespace Paraverse.Player
         private float diveForce = 10f;
         [SerializeField, Range(0, 3), Tooltip("The max distance of dive.")]
         private float maxDiveRange = 3f;
-        [SerializeField, Range(0,1), Tooltip("The max duration of dive.")]
+        [SerializeField, Range(0, 1), Tooltip("The max duration of dive.")]
         private float maxDiveTimer = 1f;
         private float curDiveTimer;
         [SerializeField, Range(0, 2), Tooltip("Time required to wait in between each dive.")]
         private float diveMaxWaitTimer = 1f;
         private float diveCurWaitTimer = 0f;
-        
+
         // State Booleans
         public bool IsInteracting { get { return isInteracting; } }
         private bool isInteracting = false;
@@ -90,7 +89,7 @@ namespace Paraverse.Player
             if (input == null) input = GetComponent<PlayerInputControls>();
             if (combat == null) combat = GetComponent<IMobCombat>();
             if (stats == null) stats = GetComponent<IMobStats>();
-            
+
             // Subscribes code to mob death event listener
             GameObject[] mobs = GameObject.FindGameObjectsWithTag(StringData.EnemyTag);
             for (int i = 0; i < mobs.Length; i++)
@@ -130,11 +129,6 @@ namespace Paraverse.Player
         {
             return walkSpeedRatio * stats.MoveSpeed;
         }
-
-        private float GetSprintSpeed()
-        {
-            return sprintSpeedRatio * stats.MoveSpeed;
-        }
         #endregion
 
         #region Controller Interface Methods
@@ -160,14 +154,12 @@ namespace Paraverse.Player
             // Adjusts player speed based on state
             if (IsInteracting)
                 curSpeed = 0f;
-            else if (input.IsSprinting)
-                curSpeed = GetSprintSpeed();
             else
                 curSpeed = GetWalkSpeed();
 
             // Disables player movement during dive
             if (_isDiving) return;
-            
+
             // Gets movement input values
             horizontal = input.MovementDirection.x;
             vertical = input.MovementDirection.y;
@@ -201,7 +193,7 @@ namespace Paraverse.Player
                 anim.Play(StringData.Jump);
             }
         }
-        
+
         /// <summary>
         /// Handles jump movement and variables in Update().
         /// </summary>
@@ -259,7 +251,7 @@ namespace Paraverse.Player
             {
                 diveStartPos = transform.position;
                 curDiveTimer = 0f;
-                diveCurWaitTimer = 0f; 
+                diveCurWaitTimer = 0f;
                 diveDir = new Vector3(moveDir.x, jumpDir.y, moveDir.z);
                 _isDiving = true;
                 anim.Play(StringData.Dive);
