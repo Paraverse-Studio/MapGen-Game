@@ -836,7 +836,8 @@ public class MapGeneration : MonoBehaviour
 
             enemy.name = "Enemy " + (enemyObjects.Count + 1);
             enemy.transform.parent = enemiesFolder;
-            enemyObjects.Add(enemy);                           
+            enemyObjects.Add(enemy);
+            EnemiesManager.Instance.AddEnemy(enemy);
         }
     }
 

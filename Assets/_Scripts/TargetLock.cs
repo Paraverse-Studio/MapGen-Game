@@ -1,31 +1,35 @@
 using UnityEngine;
 using System.Collections;
 using Paraverse.Mob.Controller;
+using UnityEngine.Events;
+using System.Collections.Generic;
+using System;
 
 public class TargetLock : MonoBehaviour
 {
+    public static TargetLock Instance;
+
     [Header("References")]
     public GameObject source;
-    public Transform targettingIcon;
-    public GameObject Target;
+    public MobController Target;
 
     [Header("Target Outline")]
     public float outlineSize;
     public Color outlineColor;
 
+    [Header("Events")]
+    public MobControllerEvent OnTargetLocked = new MobControllerEvent();
+    public MobControllerEvent OnTargetUnlocked = new MobControllerEvent();
+
+    private List<MobController> selectableMobs;
+
+    private void Awake()
+    {
+        Instance = this;
+    }
+
     void Update()
     {
-        if (Target)
-        {
-            targettingIcon.gameObject.SetActive(true);
-            targettingIcon.position = Camera.main.WorldToScreenPoint(Target.transform.position + new Vector3(0, 0.5f, 0));
-        }
-        else
-        {
-            targettingIcon.gameObject.SetActive(false);
-        }
-
-
         if (Input.GetKey(KeyCode.LeftShift))
         {
             if (!Target) SelectTarget();
@@ -37,19 +41,40 @@ public class TargetLock : MonoBehaviour
 
     }
 
+    public void UpdateSelectableMobsList(List <MobController> list)
+    {
+        selectableMobs = list;
+
+        foreach (MobController mob in selectableMobs)
+        {
+            Outline outline = mob.gameObject.GetComponent<Outline>();
+            if (!outline) outline = mob.gameObject.AddComponent<Outline>();
+            outline.OutlineMode = Outline.Mode.OutlineAll;
+            outline.OutlineColor = outlineColor;
+            outline.OutlineWidth = outlineSize;
+
+            StartCoroutine(DoAfterDelay(0.2f, () => outline.enabled = false));
+        }        
+    }
+
+    private IEnumerator DoAfterDelay(float f, Action action)
+    {
+        yield return new WaitForSeconds(f);
+        action?.Invoke();
+    }
+
     public void SelectTarget()
     {
-        MobController[] mobs = FindObjectsOfType<MobController>();
         float distance = Mathf.Infinity;
-        GameObject targetSoFar = null;
+        MobController targetSoFar = null;
 
-        foreach (MobController mob in mobs)
+        foreach (MobController mob in selectableMobs)
         {
             float dist = Vector3.Distance(source.transform.position, mob.transform.position);
             if (dist < distance)
             {
                 distance = dist;
-                targetSoFar = mob.gameObject;
+                targetSoFar = mob;
             }
         }
 
@@ -57,9 +82,9 @@ public class TargetLock : MonoBehaviour
 
         if (Target != null)
         {
-            Outline outline = Target.GetComponent<Outline>();
+            OnTargetLocked?.Invoke(Target);
 
-            if (!outline) outline = Target.AddComponent<Outline>();
+            Outline outline = Target.GetComponent<Outline>();
             
             outline.OutlineMode = Outline.Mode.OutlineAll;
             outline.OutlineColor = outlineColor;
@@ -70,14 +95,16 @@ public class TargetLock : MonoBehaviour
 
     public void DeselectTarget()
     {
-        if (Target)
+        if (!Target) return;
+        
+        Outline outline;
+        if (Target.TryGetComponent(out outline))
         {
-            Outline outline;
-            if (Target.TryGetComponent(out outline))
-            {
-                outline.enabled = false;
-            }
-        }
+            outline.enabled = false;
+        }        
+
+        OnTargetUnlocked?.Invoke(Target);
+
         Target = null;
     }
 

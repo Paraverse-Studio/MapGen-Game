@@ -11,4 +11,6 @@ public class HealthBarController : MonoBehaviour
     public Image damageBar;
 
     public TextMeshProUGUI nameLabel;
+
+    public GameObject targetIcon;
 }

@@ -190,7 +190,7 @@ namespace Paraverse.Mob.Controller
             SetRandomWaypoint();
             nav.stoppingDistance = 0f;
             nav.acceleration = 999f;
-            nav.angularSpeed = 999f;
+            nav.autoBraking = false;
 
             pursueTarget = GameObject.FindGameObjectWithTag(targetTag).GetComponent<Transform>();
         }
