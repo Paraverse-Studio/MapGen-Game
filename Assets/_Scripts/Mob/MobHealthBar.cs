@@ -5,6 +5,7 @@ using UnityEngine.UI;
 using UnityEngine.Events;
 using Paraverse.Mob.Stats;
 using TMPro;
+using Paraverse.Mob.Controller;
 
 public class MobHealthBar : MonoBehaviour
 {
@@ -33,6 +34,7 @@ public class MobHealthBar : MonoBehaviour
     private Image _healthBar;
     private Image _healthDamageBar;
     private TextMeshProUGUI _healthValueDisplay;
+    private GameObject _targetIcon;
 
     // Start is called before the first frame update
     void Start()
@@ -44,12 +46,10 @@ public class MobHealthBar : MonoBehaviour
 
         if (overrideProperties.healthBar == null)
         {
-            Debug.Log("Got called on: " + gameObject.name);
             CreateHealthBar();
         }
         else 
         {
-            Debug.Log("GOt called on: " + gameObject.name);
             LoadCustomHealthBar();
         }        
 
@@ -59,6 +59,9 @@ public class MobHealthBar : MonoBehaviour
         {
             _mobStats.OnHealthChange.AddListener(UpdateHealthBar);
         }
+
+        TargetLock.Instance.OnTargetLocked.AddListener(ActivateTargetIcon);
+        TargetLock.Instance.OnTargetUnlocked.AddListener(DeactivateTargetIcon);
     }
 
     private void ResetHealth()
@@ -92,6 +95,7 @@ public class MobHealthBar : MonoBehaviour
         _healthBarObject = Instantiate(_healthBarPrefab, transform.position, Quaternion.identity);
         _healthBar = _healthBarObject.GetComponent<HealthBarController>().healthBar;
         _healthDamageBar = _healthBarObject.GetComponent<HealthBarController>().damageBar;
+        _targetIcon = _healthBarObject.GetComponent<HealthBarController>().targetIcon;
 
         if (null != overrideProperties.healthBar)
         {
@@ -117,6 +121,23 @@ public class MobHealthBar : MonoBehaviour
         _healthBarSetupComplete = true;
     }
 
+    public void ActivateTargetIcon(MobController obj)
+    {
+        if (obj == _mobStats.gameObject && _targetIcon)
+        {
+            _targetIcon.SetActive(true);
+        }
+    }
+
+    public void DeactivateTargetIcon(MobController obj)
+    {
+        if (obj == _mobStats.gameObject && _targetIcon)
+        {
+            _targetIcon.SetActive(false);
+        }
+    }
+
+
     private void OnDisable()
     {
         if (_healthBarObject) _healthBarObject.SetActive(false);
@@ -127,5 +148,7 @@ public class MobHealthBar : MonoBehaviour
         ResetHealth();
         if (_healthBarObject) _healthBarObject.SetActive(true);        
     }
+
+
 
 }

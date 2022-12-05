@@ -1,14 +1,19 @@
+using Paraverse.Mob.Controller;
 using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
+using UnityEngine.Events;
 
 public class EnemiesManager : MonoBehaviour
 {
     public static EnemiesManager Instance;
 
-    private List<GameObject> _enemies = new List<GameObject>();
+    [SerializeField]
+    private List<MobController> _enemies = new List<MobController>();
 
-    public List<GameObject> Enemies
+    public MobControllersListEvent OnEnemiesListUpdated = new MobControllersListEvent();
+
+    public List<MobController> Enemies
     {
         get { return _enemies; }
     }
@@ -22,6 +27,7 @@ public class EnemiesManager : MonoBehaviour
     private void Awake()
     {
         Instance = this;
+        _enemies.Clear();
     }
 
     // Start is called before the first frame update
@@ -38,20 +44,27 @@ public class EnemiesManager : MonoBehaviour
   
     public void AddEnemy(GameObject enemyObj)
     {
-        _enemies.Add(enemyObj);
+        MobController enemy = enemyObj.GetComponentInChildren<MobController>();
+        if (enemy)
+        {
+            _enemies.Add(enemy);
+            OnEnemiesListUpdated?.Invoke(Enemies);
+
+            enemy.OnDeathEvent += RemoveEnemy;
+        }
     }
 
-    public bool RemoveEnemy(GameObject enemyObj)
+    public void RemoveEnemy(Transform enemyObj)
     {
-        if (_enemies.Contains(enemyObj))
+        MobController enemy = enemyObj.gameObject.GetComponentInChildren<MobController>();
+        if (enemy)
         {
-            _enemies.Remove(enemyObj);
-            return true;
-        }
-        else
-        {
-            return false;
-        }
+            if (_enemies.Contains(enemy))
+            {
+                _enemies.Remove(enemy);
+                OnEnemiesListUpdated?.Invoke(Enemies);
+            }
+        }        
     }
 
 }
