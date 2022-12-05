@@ -29,8 +29,6 @@ namespace Paraverse.Player
         private float curSpeed;
         [SerializeField, Tooltip("The walk speed of the mob.")]
         private float walkSpeedRatio = 5f;
-        [SerializeField, Tooltip("The sprint speed of the mob.")]
-        private float sprintSpeedRatio = 7f;
         [SerializeField, Tooltip("The rotation speed of the mob.")]
         private float rotSpeed = 10f;
 
@@ -44,8 +42,8 @@ namespace Paraverse.Player
         [SerializeField, Tooltip("Raycast distance to detect is Grounded")]
         private float disToGroundCheck = 0.1f;
         [SerializeField, Range(0, 2), Tooltip("Time required to wait in between each jump.")]
-        private float maxJumpBuffer = 1f;
-        private float curJumpBuffer = 0f;
+        private float jumpCd = 0.5f;
+        private float curJumpCd = 0f;
 
         [Header("Dive Values")]
         [SerializeField, Tooltip("The dive force of the mob.")]
@@ -56,8 +54,8 @@ namespace Paraverse.Player
         private float maxDiveTimer = 1f;
         private float curDiveTimer;
         [SerializeField, Range(0, 2), Tooltip("Time required to wait in between each dive.")]
-        private float diveMaxWaitTimer = 1f;
-        private float diveCurWaitTimer = 0f;
+        private float diveCd = 0.5f;
+        private float curDiveCd = 0f;
 
         // State Booleans
         public bool IsInteracting { get { return isInteracting; } }
@@ -186,9 +184,9 @@ namespace Paraverse.Player
         /// </summary>
         private void Jump()
         {
-            if (controller.isGrounded && curJumpBuffer >= maxJumpBuffer)
+            if (controller.isGrounded && curJumpCd >= jumpCd)
             {
-                curJumpBuffer = 0f;
+                curJumpCd = 0f;
                 jumpDir.y += Mathf.Sqrt(jumpForce * -gravityMultiplier * gravityForce);
                 anim.Play(StringData.Jump);
             }
@@ -201,8 +199,8 @@ namespace Paraverse.Player
         {
             ApplyGravity();
 
-            curJumpBuffer += Time.deltaTime;
-            curJumpBuffer = Mathf.Clamp(curJumpBuffer, 0, maxJumpBuffer);
+            curJumpCd += Time.deltaTime;
+            curJumpCd = Mathf.Clamp(curJumpCd, 0, jumpCd);
 
             controller.Move(jumpDir * Time.deltaTime);
         }
@@ -247,11 +245,11 @@ namespace Paraverse.Player
         /// </summary>
         private void Dive()
         {
-            if (controller.isGrounded && diveCurWaitTimer >= diveMaxWaitTimer && _isDiving == false && _isMoving)
+            if (controller.isGrounded && curDiveCd >= diveCd && _isDiving == false && _isMoving)
             {
                 diveStartPos = transform.position;
                 curDiveTimer = 0f;
-                diveCurWaitTimer = 0f;
+                curDiveCd = 0f;
                 diveDir = new Vector3(moveDir.x, jumpDir.y, moveDir.z);
                 _isDiving = true;
                 anim.Play(StringData.Dive);
@@ -280,8 +278,8 @@ namespace Paraverse.Player
                 }
             }
 
-            diveCurWaitTimer += Time.deltaTime;
-            diveCurWaitTimer = Mathf.Clamp(diveCurWaitTimer, 0, diveMaxWaitTimer);
+            curDiveCd += Time.deltaTime;
+            curDiveCd = Mathf.Clamp(curDiveCd, 0, diveCd);
         }
         #endregion
 
