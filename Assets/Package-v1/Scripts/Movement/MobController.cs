@@ -177,7 +177,9 @@ namespace Paraverse.Mob.Controller
         public void ApplyHitAnimation()
         {
             if (IsInteracting == false)
+            {
                 anim.Play(StringData.Hit);
+            }
         }
         #endregion
 

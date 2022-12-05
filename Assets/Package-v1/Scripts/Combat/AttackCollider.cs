@@ -1,9 +1,5 @@
 using Paraverse.Mob;
-using Paraverse.Mob.Controller;
-using Paraverse.Mob.Stats;
-using Paraverse.Player;
 using UnityEngine;
-using UnityEngine.InputSystem.XR;
 
 namespace Paraverse
 {
