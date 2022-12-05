@@ -33,15 +33,17 @@ namespace Paraverse.Player
         [Header("Jump Values")]
         [SerializeField, Tooltip("The jump force of the mob.")]
         private float jumpForce = 10f;
-        [SerializeField, Tooltip("The gravity force of the mob.")]
-        private float gravityForce = -20f;
-        [SerializeField, Tooltip("The gravity multiplier force.")]
-        private float gravityMultiplier = 1f;
-        [SerializeField, Tooltip("Raycast distance to detect is Grounded")]
+        [SerializeField, Range(0.1f,1f), Tooltip("Raycast distance to detect is Grounded")]
         private float disToGroundCheck = 0.1f;
         [SerializeField, Range(0, 2), Tooltip("Time required to wait in between each jump.")]
         private float jumpCd = 0.5f;
         private float curJumpCd = 0f;
+
+        [Header("Gravity Values")]
+        [SerializeField, Tooltip("The gravity force of the mob.")]
+        private float gravityForce = -20f;
+        [SerializeField, Tooltip("The gravity multiplier force.")]
+        private float gravityMultiplier = 1f;
 
         [Header("Dive Values")]
         [SerializeField, Tooltip("The dive force of the mob.")]
@@ -49,8 +51,8 @@ namespace Paraverse.Player
         [SerializeField, Range(0, 3), Tooltip("The max distance of dive.")]
         private float maxDiveRange = 3f;
         [SerializeField, Range(0, 1), Tooltip("The max duration of dive.")]
-        private float maxDiveTimer = 1f;
-        private float curDiveTimer;
+        private float maxDiveDuration = 1f;
+        private float curDiveDuration;
         [SerializeField, Range(0, 2), Tooltip("Time required to wait in between each dive.")]
         private float diveCd = 0.5f;
         private float curDiveCd = 0f;
@@ -246,7 +248,7 @@ namespace Paraverse.Player
             if (controller.isGrounded && curDiveCd >= diveCd && _isDiving == false && _isMoving)
             {
                 diveStartPos = transform.position;
-                curDiveTimer = 0f;
+                curDiveDuration = 0f;
                 curDiveCd = 0f;
                 diveDir = new Vector3(moveDir.x, jumpDir.y, moveDir.z);
                 _isDiving = true;
@@ -263,13 +265,13 @@ namespace Paraverse.Player
             {
                 // Updates mob position and dive timer
                 float diveRange = ParaverseHelper.GetDistance(transform.position, diveStartPos);
-                curDiveTimer += Time.deltaTime;
+                curDiveDuration += Time.deltaTime;
 
                 // Moves the mob in the move direction
                 controller.Move(diveDir * diveForce * Time.deltaTime);
 
                 // Stops dive when conditions met
-                if (diveRange >= maxDiveRange || curDiveTimer >= maxDiveTimer)
+                if (diveRange >= maxDiveRange || curDiveDuration >= maxDiveDuration)
                 {
                     _isDiving = false;
                     return;
