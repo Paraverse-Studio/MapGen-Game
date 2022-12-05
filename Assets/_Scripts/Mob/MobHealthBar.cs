@@ -28,6 +28,7 @@ public class MobHealthBar : MonoBehaviour
     private GameObject _healthBarObject;
     private MobStats _mobStats;
     private MobController _mobController;
+    private Selectable _selectable;
     private bool _healthBarSetupComplete = false;
     private float _health = 1.0f;
     private float _totalHealth = 2.0f;
@@ -62,9 +63,10 @@ public class MobHealthBar : MonoBehaviour
         }
 
         _mobController = GetComponentInChildren<MobController>();
+        _selectable = GetComponentInChildren<Selectable>();
 
-        TargetLock.Instance.OnTargetLocked.AddListener(ActivateTargetIcon);
-        TargetLock.Instance.OnTargetUnlocked.AddListener(DeactivateTargetIcon);
+        _selectable.OnSelected.AddListener(ActivateTargetIcon);
+        _selectable.OnDeselected.AddListener(DeactivateTargetIcon);
     }
 
     private void ResetHealth()
@@ -124,17 +126,17 @@ public class MobHealthBar : MonoBehaviour
         _healthBarSetupComplete = true;
     }
 
-    public void ActivateTargetIcon(MobController obj)
+    public void ActivateTargetIcon()
     {
-        if (obj == _mobController && _targetIcon)
+        if (_targetIcon)
         {
             _targetIcon.SetActive(true);
         }
     }
 
-    public void DeactivateTargetIcon(MobController obj)
+    public void DeactivateTargetIcon()
     {
-        if (obj == _mobController && _targetIcon)
+        if (_targetIcon)
         {
             _targetIcon.SetActive(false);
         }

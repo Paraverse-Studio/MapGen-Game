@@ -30,7 +30,7 @@ public class GameObjectEvent : UnityEvent<GameObject>
 }
 
 [System.Serializable]
-public class MobControllerEvent : UnityEvent<MobController>
+public class SelectableEvent : UnityEvent<Selectable>
 {
 }
 

@@ -5,6 +5,20 @@ using UnityEngine.Events;
 
 public class Selectable : MonoBehaviour
 {
+    [System.Serializable]
+    public enum SelectablePriority
+    {
+        aboveAllOthers,
+        whenIsolated
+    }
+
+    [Header("Selectable Settings")]
+    public SelectablePriority priority;
+    public float range;
+
+    [HideInInspector]
+    public Outline outline;
+
     private bool _isSelected;
 
     public bool IsSelected
@@ -15,6 +29,32 @@ public class Selectable : MonoBehaviour
     public UnityEvent OnSelected = new UnityEvent();
 
     public UnityEvent OnDeselected = new UnityEvent();
+
+    private void Awake()
+    {
+        outline = GetComponent<Outline>();
+        if (!outline) outline = gameObject.AddComponent<Outline>();
+    }
+
+    private void Start()
+    {
+        TargetLockSystem.Instance.Add(this);
+    }
+
+    private void OnEnable()
+    {
+        TargetLockSystem.Instance.Add(this);
+    }
+
+    private void OnDisable()
+    {
+        TargetLockSystem.Instance.Remove(this);
+    }
+
+    private void OnDestroy()
+    {
+        TargetLockSystem.Instance.Remove(this);
+    }
 
     public void Select()
     {
@@ -31,5 +71,7 @@ public class Selectable : MonoBehaviour
         _isSelected = false;
         OnDeselected?.Invoke();
     }
+
+
 
 }
