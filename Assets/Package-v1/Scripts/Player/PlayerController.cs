@@ -33,7 +33,7 @@ namespace Paraverse.Player
         [Header("Jump Values")]
         [SerializeField, Tooltip("The jump force of the mob.")]
         private float jumpForce = 10f;
-        [SerializeField, Range(0.1f,1f), Tooltip("Raycast distance to detect is Grounded")]
+        [SerializeField, Range(0.1f, 1f), Tooltip("Raycast distance to detect is Grounded")]
         private float disToGroundCheck = 0.1f;
         [SerializeField, Range(0, 2), Tooltip("Time required to wait in between each jump.")]
         private float jumpCd = 0.5f;
@@ -119,13 +119,6 @@ namespace Paraverse.Player
             DiveHandler();
             RotationHandler();
             AnimationHandler();
-        }
-        #endregion
-
-        #region Helper Methods
-        private float GetWalkSpeed()
-        {
-            return walkSpeedRatio * stats.MoveSpeed;
         }
         #endregion
 
