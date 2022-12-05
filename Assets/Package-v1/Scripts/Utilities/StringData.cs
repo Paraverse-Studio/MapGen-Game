@@ -1,6 +1,7 @@
 public static class StringData
 {
     // Tags
+    public static string UntaggedTag = "Untagged";
     public static string PlayerTag = "Player";
     public static string EnemyTag = "Enemy";
 

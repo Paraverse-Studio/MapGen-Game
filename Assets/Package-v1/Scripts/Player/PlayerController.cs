@@ -60,7 +60,6 @@ namespace Paraverse.Player
         private float diveMaxWaitTimer = 1f;
         private float diveCurWaitTimer = 0f;
         
-
         // State Booleans
         public bool IsInteracting { get { return isInteracting; } }
         private bool isInteracting = false;
