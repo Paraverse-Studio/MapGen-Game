@@ -27,8 +27,6 @@ namespace Paraverse.Player
 
         [Header("Movement Values"), Tooltip("The current speed of the mob")]
         private float curSpeed;
-        [SerializeField, Tooltip("The walk speed of the mob.")]
-        private float walkSpeedRatio = 5f;
         [SerializeField, Tooltip("The rotation speed of the mob.")]
         private float rotSpeed = 10f;
 
