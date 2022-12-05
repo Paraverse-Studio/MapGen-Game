@@ -27,6 +27,7 @@ public class MobHealthBar : MonoBehaviour
     private Transform _healthBarsFolder;
     private GameObject _healthBarObject;
     private MobStats _mobStats;
+    private MobController _mobController;
     private bool _healthBarSetupComplete = false;
     private float _health = 1.0f;
     private float _totalHealth = 2.0f;
@@ -59,6 +60,8 @@ public class MobHealthBar : MonoBehaviour
         {
             _mobStats.OnHealthChange.AddListener(UpdateHealthBar);
         }
+
+        _mobController = GetComponentInChildren<MobController>();
 
         TargetLock.Instance.OnTargetLocked.AddListener(ActivateTargetIcon);
         TargetLock.Instance.OnTargetUnlocked.AddListener(DeactivateTargetIcon);
@@ -123,7 +126,7 @@ public class MobHealthBar : MonoBehaviour
 
     public void ActivateTargetIcon(MobController obj)
     {
-        if (obj == _mobStats.gameObject && _targetIcon)
+        if (obj == _mobController && _targetIcon)
         {
             _targetIcon.SetActive(true);
         }
@@ -131,7 +134,7 @@ public class MobHealthBar : MonoBehaviour
 
     public void DeactivateTargetIcon(MobController obj)
     {
-        if (obj == _mobStats.gameObject && _targetIcon)
+        if (obj == _mobController && _targetIcon)
         {
             _targetIcon.SetActive(false);
         }
