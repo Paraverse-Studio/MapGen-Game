@@ -15,7 +15,7 @@ namespace Paraverse.Mob.Combat
         protected IMobStats stats;
 
         [Header("Target Values")]
-        [SerializeField, Tooltip("Target tag (Player by default).")]
+        [Tooltip("Target tag (Player by default).")]
         protected string targetTag = "Player";
         protected Transform player;
 
@@ -23,8 +23,8 @@ namespace Paraverse.Mob.Combat
         [SerializeField, Range(0, 1), Tooltip("Basic attack damage ratio of attack damage stat.")]
         protected float basicAtkDmgRatio = 1f;
         [SerializeField, Tooltip("Basic attack range.")]
-        protected float basicAtkRng = 2f;
-        public float BasicAtkRng { get { return basicAtkRng; } }
+        protected float basicAtkRange = 2f;
+        public float BasicAtkRange { get { return basicAtkRange; } }
 
         [Header("Basic Attack Speed Values")]
         [SerializeField, Range(0.5f, 1f)]
@@ -32,7 +32,6 @@ namespace Paraverse.Mob.Combat
         [SerializeField, Range(1f, 2.5f)]
         protected float maxBasicAtkAnimSpeed = 2f;
         protected float curBasicAtkAnimSpeed;
-        protected float baseAtkCd = 1f;
         protected float curBasicAtkCd;
 
         [Header("Only For Melee Attackers")]
@@ -61,7 +60,7 @@ namespace Paraverse.Mob.Combat
         public bool IsInteracting { get { return isInteracting; } }
 
         // Returns true when character is within basic attack range and cooldown is 0.
-        public bool CanBasicAtk { get { return distanceFromTarget <= basicAtkRng && curBasicAtkCd <= 0; } }
+        public bool CanBasicAtk { get { return distanceFromTarget <= basicAtkRange && curBasicAtkCd <= 0; } }
         #endregion
 
         #region Start & Update Methods
@@ -190,7 +189,7 @@ namespace Paraverse.Mob.Combat
             // Instantiate and initialize projectile
             GameObject go = Instantiate(projPf, projOrigin.position, transform.rotation);
             Projectile proj = go.GetComponent<Projectile>();
-            proj.Init(basicAtkProjSpeed, basicAtkRng, basicAtkDmgRatio * stats.AttackDamage);
+            proj.Init(basicAtkProjSpeed, basicAtkRange, basicAtkDmgRatio * stats.AttackDamage);
         }
 
         /// <summary>

@@ -60,7 +60,6 @@ namespace Paraverse.Player
         // State Booleans
         public bool IsInteracting { get { return isInteracting; } }
         private bool isInteracting = false;
-        private bool isSprinting = false;
         public bool IsMoving { get { return _isMoving; } }
         private bool _isMoving = false;
         public bool IsGrounded { get { return _isGrounded; } }
@@ -107,7 +106,6 @@ namespace Paraverse.Player
         private void Update()
         {
             isInteracting = anim.GetBool(StringData.IsInteracting);
-            isSprinting = input.IsSprinting;
             _isMoving = moveDir.magnitude > 0;
             Debug.Log("Is Moving: " + _isMoving);
             _isGrounded = IsGroundedCheck();
@@ -142,7 +140,6 @@ namespace Paraverse.Player
         private void AnimationHandler()
         {
             anim.SetFloat(StringData.Speed, moveDir.normalized.magnitude);
-            anim.SetBool(StringData.IsSprinting, isSprinting);
             anim.SetBool(StringData.IsGrounded, IsGrounded);
             anim.SetBool(StringData.IsDiving, IsDiving);
         }

@@ -3424,7 +3424,6 @@ GameObject:
   - component: {fileID: 8586723283797941117}
   - component: {fileID: 1376336924}
   - component: {fileID: 4734784885605418516}
-  - component: {fileID: 1424251817782328766}
   m_Layer: 15
   m_Name: MushroomMinion
   m_TagString: Enemy
@@ -3535,7 +3534,7 @@ MonoBehaviour:
   accurayWP: 2
   stoppingDistance: 9
   detectionRadius: 7
-  pursueRadius: 7
+  pursueRadius: 10
   deathEffect: {fileID: 5971161797261734830, guid: b57686338b6a45841a67921982527613, type: 3}
 --- !u!114 &8586723283797941117
 MonoBehaviour:
@@ -3549,10 +3548,9 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 5b3fe259459faf844a89438f0f42bc88, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  anim: {fileID: 0}
-  targetTag: Player
+  anim: {fileID: 2434766801564320006}
   basicAtkDmgRatio: 1
-  basicAtkRng: 10
+  basicAtkRange: 7
   minBasicAtkAnimSpeed: 0.8
   maxBasicAtkAnimSpeed: 2.5
   basicAtkCollider: {fileID: 0}
@@ -3599,22 +3597,6 @@ MonoBehaviour:
     damageBar: {fileID: 0}
     healthValueDisplay: {fileID: 0}
     nameLabel: {fileID: 0}
---- !u!208 &1424251817782328766
-NavMeshObstacle:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 8962721782757474758}
-  m_Enabled: 1
-  serializedVersion: 3
-  m_Shape: 1
-  m_Extents: {x: 0.5, y: 1, z: 0.5}
-  m_MoveThreshold: 0.1
-  m_Carve: 1
-  m_CarveOnlyStationary: 1
-  m_Center: {x: 0, y: 1.1, z: 0}
-  m_TimeToStationary: 0.5
 --- !u!1 &8962721783346320102
 GameObject:
   m_ObjectHideFlags: 0

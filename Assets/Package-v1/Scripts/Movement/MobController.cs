@@ -90,9 +90,9 @@ namespace Paraverse.Mob.Controller
             if (stats == null) stats = GetComponent<IMobStats>();
 
             // Ensure basic attack range is >= to stopping distance
-            if (combat.BasicAtkRng < stoppingDistance)
+            if (combat.BasicAtkRange < stoppingDistance)
             {
-                stoppingDistance = combat.BasicAtkRng;
+                stoppingDistance = combat.BasicAtkRange;
                 Debug.LogWarning(transform.name + " cannot have basic attack range lower than its stopping distance.");
             }
 
@@ -311,7 +311,7 @@ namespace Paraverse.Mob.Controller
             {
                 float distanceFromTarget = ParaverseHelper.GetDistance(transform.position, pursueTarget.position);
 
-                if (distanceFromTarget <= combat.BasicAtkRng)
+                if (distanceFromTarget <= combat.BasicAtkRange)
                 {
                     nav.isStopped = true;
                     curSpeed = 0f;

@@ -8,7 +8,6 @@ namespace Paraverse.Player
         #region Variables
         private PlayerInputs input;
         private InputAction movement;
-        private InputAction rotation;
 
         public delegate void OnJumpDel();
         public event OnJumpDel OnJumpEvent;
@@ -31,10 +30,6 @@ namespace Paraverse.Player
 
         public Vector2 MovementDirection { get { return _movementDirection; } }
         private Vector2 _movementDirection;
-        public Vector2 RotationDirection { get { return _rotationDirection; } }
-        private Vector2 _rotationDirection;
-        public bool IsSprinting { get { return _isSprinting; } }
-        private bool _isSprinting = false;
         #endregion
 
         #region Singleton
@@ -109,7 +104,6 @@ namespace Paraverse.Player
         private void Update()
         {
             _movementDirection = movement.ReadValue<Vector2>();
-            _rotationDirection = rotation.ReadValue<Vector2>();
         }
         #endregion
 

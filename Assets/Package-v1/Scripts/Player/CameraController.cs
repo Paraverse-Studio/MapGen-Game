@@ -10,6 +10,8 @@ namespace Paraverse.Player
         private Transform target;
         [SerializeField, Tooltip("The target tag to fetch transform for target.")]
         private string targetTag = "Player";
+        [SerializeField]
+        private Vector3 offset;
 
         #endregion
 
@@ -23,6 +25,7 @@ namespace Paraverse.Player
         private void Update()
         {
             LookAt(target);
+            FollowTarget(target);
         }
         #endregion
 
@@ -31,6 +34,12 @@ namespace Paraverse.Player
         {
             cam.transform.LookAt(target);
         }
+
+        private void FollowTarget(Transform target)
+        {
+            cam.transform.position = target.position + offset;
+        }
+
         #endregion
     }
 }

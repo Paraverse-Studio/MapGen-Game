@@ -610,6 +610,7 @@ GameObject:
   - component: {fileID: 1434620542630552522}
   - component: {fileID: 1434620542630552533}
   - component: {fileID: 1370003163}
+  - component: {fileID: 3692306788590404293}
   m_Layer: 0
   m_Name: BearMinion
   m_TagString: Enemy
@@ -725,7 +726,7 @@ MonoBehaviour:
   accurayWP: 2
   stoppingDistance: 2
   detectionRadius: 7
-  targetTag: Player
+  pursueRadius: 7
   deathEffect: {fileID: 5971161797261734830, guid: b57686338b6a45841a67921982527613, type: 3}
 --- !u!114 &1434620542630552533
 MonoBehaviour:
@@ -739,10 +740,9 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 5b3fe259459faf844a89438f0f42bc88, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  anim: {fileID: 0}
-  targetTag: Player
+  anim: {fileID: 5639412388680000276}
   basicAtkDmgRatio: 1
-  basicAtkRng: 2
+  basicAtkRange: 2
   minBasicAtkAnimSpeed: 0.8
   maxBasicAtkAnimSpeed: 2.5
   basicAtkCollider: {fileID: 7787539235654771703}
@@ -768,6 +768,25 @@ MonoBehaviour:
   attackDamage: 5
   attackSpeed: 0.2
   moveSpeed: 2
+  OnHealthChange:
+    m_PersistentCalls:
+      m_Calls: []
+--- !u!208 &3692306788590404293
+NavMeshObstacle:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1434620542630552532}
+  m_Enabled: 1
+  serializedVersion: 3
+  m_Shape: 1
+  m_Extents: {x: 0.5, y: 0.75, z: 0.5}
+  m_MoveThreshold: 0.1
+  m_Carve: 1
+  m_CarveOnlyStationary: 1
+  m_Center: {x: 0, y: 1, z: 0}
+  m_TimeToStationary: 0.5
 --- !u!1 &1727210872171838189
 GameObject:
   m_ObjectHideFlags: 0
