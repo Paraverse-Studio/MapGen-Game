@@ -13,4 +13,6 @@ public class HealthBarController : MonoBehaviour
     public TextMeshProUGUI nameLabel;
 
     public GameObject targetIcon;
+
+    public GameObject barContainer;
 }

@@ -177,6 +177,7 @@ GameObject:
   - component: {fileID: 4084042723739394}
   - component: {fileID: 205009428504985892}
   - component: {fileID: 5194253771473335692}
+  - component: {fileID: 4419218316099174442}
   m_Layer: 0
   m_Name: mushroom_2
   m_TagString: Untagged
@@ -242,7 +243,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   priority: 0
-  ange: 0
+  range: 0
   outline: {fileID: 0}
   OnSelected:
     m_PersistentCalls:
@@ -250,6 +251,29 @@ MonoBehaviour:
   OnDeselected:
     m_PersistentCalls:
       m_Calls: []
+--- !u!114 &4419218316099174442
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1404320471278758}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: f1360b5e821afee43bb7656851bcc9d0, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  mobBody: {fileID: 0}
+  settings:
+    showWhenSelected: 1
+    hideName: 0
+    hideBar: 1
+    hideSelection: 0
+  overrideProperties:
+    healthBar: {fileID: 0}
+    damageBar: {fileID: 0}
+    healthValueDisplay: {fileID: 0}
+    nameLabel: {fileID: 0}
 --- !u!1 &1740716866560304
 GameObject:
   m_ObjectHideFlags: 0

@@ -18,11 +18,20 @@ public class MobHealthBar : MonoBehaviour
         public TextMeshProUGUI nameLabel;
     }
 
+    [System.Serializable]
+    public struct Settings
+    {
+        public bool showWhenSelected;
+        public bool hideName;
+        public bool hideBar;
+        public bool hideSelection;
+    }
+
     [Header("Health Bar UI")]
     public Transform mobBody;
 
+    public Settings settings;
     public Override overrideProperties;
-
     private GameObject _healthBarPrefab;
     private Transform _healthBarsFolder;
     private GameObject _healthBarObject;
@@ -35,8 +44,9 @@ public class MobHealthBar : MonoBehaviour
 
     private Image _healthBar;
     private Image _healthDamageBar;
-    private TextMeshProUGUI _healthValueDisplay;
+    private TextMeshProUGUI _nameLabel;
     private GameObject _targetIcon;
+    private TextMeshProUGUI _healthValueDisplay;
 
     // Start is called before the first frame update
     void Start()
@@ -62,7 +72,6 @@ public class MobHealthBar : MonoBehaviour
             _mobStats.OnHealthChange.AddListener(UpdateHealthBar);
         }
 
-        _mobController = GetComponentInChildren<MobController>();
         _selectable = GetComponentInChildren<Selectable>();
 
         _selectable.OnSelected.AddListener(ActivateTargetIcon);
@@ -98,10 +107,13 @@ public class MobHealthBar : MonoBehaviour
     private void CreateHealthBar()
     {
         _healthBarObject = Instantiate(_healthBarPrefab, transform.position, Quaternion.identity);
-        _healthBar = _healthBarObject.GetComponent<HealthBarController>().healthBar;
-        _healthDamageBar = _healthBarObject.GetComponent<HealthBarController>().damageBar;
-        _targetIcon = _healthBarObject.GetComponent<HealthBarController>().targetIcon;
+        HealthBarController controller = _healthBarObject.GetComponent<HealthBarController>();
+        _healthBar = controller.healthBar;
+        _healthDamageBar = controller.damageBar;
+        _targetIcon = controller.targetIcon;
+        _nameLabel = controller.nameLabel;
 
+        // Custom for Player's HP
         if (null != overrideProperties.healthBar)
         {
             _healthBar = overrideProperties.healthBar;
@@ -109,12 +121,20 @@ public class MobHealthBar : MonoBehaviour
             _healthValueDisplay = overrideProperties.healthValueDisplay;
         }
 
+        // Settings
+        if (settings.hideBar) controller.barContainer.gameObject.SetActive(false);
+        if (settings.hideName) controller.nameLabel.gameObject.SetActive(false);
+        if (settings.hideSelection) controller.targetIcon.SetActive(false);
+
+        _nameLabel.text = gameObject.name;
         _healthBarObject.transform.SetParent(_healthBarsFolder);
         FollowTarget ft = _healthBarObject.GetComponent<FollowTarget>();
         ft.target = mobBody;
         ft._offset = new Vector3(0, 2.4f, 0);
 
         _healthBarSetupComplete = true;
+
+        if (settings.showWhenSelected) _healthBarObject.gameObject.SetActive(false); 
     }
 
     private void LoadCustomHealthBar()
@@ -131,6 +151,7 @@ public class MobHealthBar : MonoBehaviour
         if (_targetIcon)
         {
             _targetIcon.SetActive(true);
+            if (settings.showWhenSelected) _healthBarObject.gameObject.SetActive(true);
         }
     }
 
@@ -139,6 +160,7 @@ public class MobHealthBar : MonoBehaviour
         if (_targetIcon)
         {
             _targetIcon.SetActive(false);
+            if (settings.showWhenSelected) _healthBarObject.gameObject.SetActive(false);
         }
     }
 
