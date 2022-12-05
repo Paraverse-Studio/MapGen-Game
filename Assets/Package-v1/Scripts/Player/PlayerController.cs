@@ -1,7 +1,9 @@
+using Paraverse.Helper;
 using Paraverse.Mob;
 using Paraverse.Mob.Combat;
 using Paraverse.Mob.Controller;
 using Paraverse.Mob.Stats;
+using UnityEditor;
 using UnityEngine;
 
 namespace Paraverse.Player
@@ -34,27 +36,48 @@ namespace Paraverse.Player
         private float rotSpeed = 10f;
 
         [Header("Jump Values")]
-        [SerializeField, Tooltip("The rotation speed of the mob.")]
+        [SerializeField, Tooltip("The jump force of the mob.")]
         private float jumpForce = 10f;
-        [SerializeField, Tooltip("The rotation speed of the mob.")]
-        private float gravityValue = -20f;
-        [SerializeField, Tooltip("The rotation speed of the mob.")]
+        [SerializeField, Tooltip("The gravity force of the mob.")]
+        private float gravityForce = -20f;
+        [SerializeField, Tooltip("The gravity multiplier force.")]
         private float gravityMultiplier = 1f;
         [SerializeField, Tooltip("Raycast distance to detect is Grounded")]
         private float disToGroundCheck = 0.1f;
-        //[SerializeField, Tooltip("Ground detection layer")]
-        //private float groundLayer = StringData.Default;
+        [SerializeField, Range(0, 2), Tooltip("Time required to wait in between each jump.")]
+        private float maxJumpBuffer = 1f;
+        private float curJumpBuffer = 0f;
+
+        [Header("Dive Values")]
+        [SerializeField, Tooltip("The dive force of the mob.")]
+        private float diveForce = 10f;
+        [SerializeField, Range(0, 3), Tooltip("The max distance of dive.")]
+        private float maxDiveRange = 3f;
+        [SerializeField, Range(0,1), Tooltip("The max duration of dive.")]
+        private float maxDiveTimer = 1f;
+        private float curDiveTimer;
+        [SerializeField, Range(0, 2), Tooltip("Time required to wait in between each dive.")]
+        private float diveMaxWaitTimer = 1f;
+        private float diveCurWaitTimer = 0f;
+        
 
         // State Booleans
         public bool IsInteracting { get { return isInteracting; } }
         private bool isInteracting = false;
         private bool isSprinting = false;
+        public bool IsMoving { get { return _isMoving; } }
+        private bool _isMoving = false;
         public bool IsGrounded { get { return _isGrounded; } }
         private bool _isGrounded = false;
+        public bool IsDiving { get { return _isDiving; } }
+        private bool _isDiving = false;
 
-        // Movement & Jump inputs and velocities
+        // Movement, Jump & Dive inputs and velocities
         private Vector3 moveDir;
-        private Vector3 jumpVelocity;
+        private Vector3 jumpDir;
+        private Vector3 diveDir;
+        // Gets the dive start position
+        private Vector3 diveStartPos;
         private float horizontal;
         private float vertical;
         #endregion
@@ -82,18 +105,22 @@ namespace Paraverse.Player
             input.OnUseItemThreeEvent += UseItemThree;
             input.OnUseItemFourEvent += UseItemFour;
             input.OnJumpEvent += Jump;
+            input.OnDiveEvent += Dive;
         }
 
         private void Update()
         {
             isInteracting = anim.GetBool(StringData.IsInteracting);
             isSprinting = input.IsSprinting;
+            _isMoving = moveDir.magnitude > 0;
+            Debug.Log("Is Moving: " + _isMoving);
             _isGrounded = IsGroundedCheck();
 
-            jumpVelocity.y -= Time.deltaTime;
+            jumpDir.y -= Time.deltaTime;
 
             MovementHandler();
             JumpHandler();
+            DiveHandler();
             RotationHandler();
             AnimationHandler();
         }
@@ -126,6 +153,7 @@ namespace Paraverse.Player
             anim.SetFloat(StringData.Speed, moveDir.normalized.magnitude);
             anim.SetBool(StringData.IsSprinting, isSprinting);
             anim.SetBool(StringData.IsGrounded, IsGrounded);
+            anim.SetBool(StringData.IsDiving, IsDiving);
         }
 
         private void MovementHandler()
@@ -138,12 +166,15 @@ namespace Paraverse.Player
             else
                 curSpeed = GetWalkSpeed();
 
+            // Disables player movement during dive
+            if (_isDiving) return;
+            
             // Gets movement input values
             horizontal = input.MovementDirection.x;
             vertical = input.MovementDirection.y;
 
             // Makes player movement relative to camera
-            moveDir = new Vector3(horizontal, jumpVelocity.y, vertical);
+            moveDir = new Vector3(horizontal, jumpDir.y, vertical);
             moveDir = moveDir.x * new Vector3(cam.transform.right.x, 0, cam.transform.right.z) + moveDir.z * new Vector3(cam.transform.forward.x, 0, cam.transform.forward.z);
             moveDir.Normalize();
 
@@ -164,33 +195,46 @@ namespace Paraverse.Player
         /// </summary>
         private void Jump()
         {
-            if (controller.isGrounded)
+            if (controller.isGrounded && curJumpBuffer >= maxJumpBuffer)
             {
-                jumpVelocity.y += Mathf.Sqrt(jumpForce * -gravityMultiplier * gravityValue);
+                curJumpBuffer = 0f;
+                jumpDir.y += Mathf.Sqrt(jumpForce * -gravityMultiplier * gravityForce);
                 anim.Play(StringData.Jump);
             }
         }
         
-
+        /// <summary>
+        /// Handles jump movement and variables in Update().
+        /// </summary>
         private void JumpHandler()
         {
             ApplyGravity();
 
-            controller.Move(jumpVelocity * Time.deltaTime);
+            curJumpBuffer += Time.deltaTime;
+            curJumpBuffer = Mathf.Clamp(curJumpBuffer, 0, maxJumpBuffer);
+
+            controller.Move(jumpDir * Time.deltaTime);
         }
 
+        /// <summary>
+        /// Responsible for applying gravity to player.
+        /// </summary>
         private void ApplyGravity()
         {
             // Ensures player remains grounded when grounded
-            if (jumpVelocity.y < 0 && IsGrounded)
+            if (jumpDir.y < 0 && IsGrounded)
             {
-                jumpVelocity.y = 0f;
+                jumpDir.y = 0f;
             }
 
             // Applies gravity and jump movement
-            jumpVelocity.y += gravityValue * Time.deltaTime;
+            jumpDir.y += gravityForce * Time.deltaTime;
         }
 
+        /// <summary>
+        /// Returns true if player is grounded.
+        /// </summary>
+        /// <returns></returns>
         private bool IsGroundedCheck()
         {
             Vector3 origin = transform.position;
@@ -203,6 +247,50 @@ namespace Paraverse.Player
             }
 
             return false;
+        }
+        #endregion
+
+        #region Dive Handler
+        /// <summary>
+        /// Invokes dive action
+        /// </summary>
+        private void Dive()
+        {
+            if (controller.isGrounded && diveCurWaitTimer >= diveMaxWaitTimer && _isDiving == false && _isMoving)
+            {
+                diveStartPos = transform.position;
+                curDiveTimer = 0f;
+                diveCurWaitTimer = 0f; 
+                diveDir = new Vector3(moveDir.x, jumpDir.y, moveDir.z);
+                _isDiving = true;
+                anim.Play(StringData.Dive);
+            }
+        }
+
+        /// <summary>
+        /// Handles dive movement and variables in Update().
+        /// </summary>
+        private void DiveHandler()
+        {
+            if (_isDiving)
+            {
+                // Updates mob position and dive timer
+                float diveRange = ParaverseHelper.GetDistance(transform.position, diveStartPos);
+                curDiveTimer += Time.deltaTime;
+
+                // Moves the mob in the move direction
+                controller.Move(diveDir * diveForce * Time.deltaTime);
+
+                // Stops dive when conditions met
+                if (diveRange >= maxDiveRange || curDiveTimer >= maxDiveTimer)
+                {
+                    _isDiving = false;
+                    return;
+                }
+            }
+
+            diveCurWaitTimer += Time.deltaTime;
+            diveCurWaitTimer = Mathf.Clamp(diveCurWaitTimer, 0, diveMaxWaitTimer);
         }
         #endregion
 

@@ -12,6 +12,8 @@ namespace Paraverse.Player
 
         public delegate void OnJumpDel();
         public event OnJumpDel OnJumpEvent;
+        public delegate void OnDiveDel();
+        public event OnDiveDel OnDiveEvent;
         public delegate void OnBasicAttackDel();
         public event OnBasicAttackDel OnBasicAttackEvent;
         public delegate void OnUseItemOneDel();
@@ -31,8 +33,6 @@ namespace Paraverse.Player
         private Vector2 _rotationDirection;
         public bool IsSprinting { get { return _isSprinting; } }
         private bool _isSprinting = false;
-        public bool IsJumping { get { return _isJumping; } }
-        private bool _isJumping = false;
         #endregion
 
         #region Singleton
@@ -64,6 +64,8 @@ namespace Paraverse.Player
 
             input.Player.Jump.performed += OnJump;
 
+            input.Player.Dive.performed += OnDive;
+
             input.Player.ItemOne.performed += OnUseItemOne;
             input.Player.ItemOne.Enable();
             input.Player.ItemTwo.performed += OnUseItemTwo;
@@ -92,6 +94,8 @@ namespace Paraverse.Player
             input.Player.BasicAttack.Disable();
 
             input.Player.Jump.performed -= OnJump;
+
+            input.Player.Dive.performed -= OnDive;
 
             input.Player.ItemOne.performed -= OnUseItemOne;
             input.Player.ItemOne.Disable();
@@ -131,6 +135,11 @@ namespace Paraverse.Player
         private void OnJump(InputAction.CallbackContext obj)
         {
             OnJumpEvent?.Invoke();
+        }
+
+        private void OnDive(InputAction.CallbackContext obj)
+        {
+            OnDiveEvent?.Invoke();
         }
 
         private void OnBasicAttack(InputAction.CallbackContext obj)
