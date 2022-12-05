@@ -122,6 +122,13 @@ namespace Paraverse.Player
         }
         #endregion
 
+        #region Helper Methods
+        private float GetWalkSpeed()
+        {
+            return stats.MoveSpeed;
+        }
+        #endregion
+
         #region Controller Interface Methods
         public void ApplyHitAnimation()
         {
