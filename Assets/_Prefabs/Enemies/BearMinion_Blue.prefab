@@ -1125,7 +1125,12 @@ MonoBehaviour:
   attackDamage: 15
   attackSpeed: 0.2
   moveSpeed: 1.5
+  maxEnergy: 100
+  currentEnergy: 100
   OnHealthChange:
+    m_PersistentCalls:
+      m_Calls: []
+  OnEnergyChange:
     m_PersistentCalls:
       m_Calls: []
 --- !u!114 &391566317227412392
@@ -1140,17 +1145,20 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: f1360b5e821afee43bb7656851bcc9d0, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  mobBody: {fileID: 0}
+  bodyToFollow: {fileID: 0}
   settings:
     showWhenSelected: 0
     hideName: 0
-    hideBar: 0
+    hideHealthBar: 0
     hideSelection: 0
+    hideEnergyBar: 1
   overrideProperties:
     healthBar: {fileID: 0}
     damageBar: {fileID: 0}
     healthValueDisplay: {fileID: 0}
     nameLabel: {fileID: 0}
+    energyBar: {fileID: 0}
+    energyLerpBar: {fileID: 0}
 --- !u!114 &2728153904193783093
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -1165,8 +1173,9 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   priority: 0
   type: 0
-  range: 0
+  rangeOverride: -1
   outline: {fileID: 0}
+  range: 0
   OnSelected:
     m_PersistentCalls:
       m_Calls: []

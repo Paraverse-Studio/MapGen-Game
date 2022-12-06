@@ -28,7 +28,7 @@ public class MobHealthBar : MonoBehaviour
         public bool hideName;
         public bool hideHealthBar;
         public bool hideSelection;
-        public bool hideEnergyBar;
+        public bool showEnergyBar;
     }
 
     [Header("Health Bar UI")]
@@ -156,7 +156,7 @@ public class MobHealthBar : MonoBehaviour
         if (settings.hideHealthBar) controller.healthBarContainer.gameObject.SetActive(false);
         if (settings.hideName) controller.nameLabel.gameObject.SetActive(false);
         if (settings.hideSelection) controller.targetIcon.SetActive(false);
-        if (settings.hideEnergyBar) controller.energyBarContainer.gameObject.SetActive(false);
+        if (settings.showEnergyBar) controller.energyBarContainer.gameObject.SetActive(true);
 
         // Find this object's bounds height, using either a collider or mesh renderer
         Collider collider = GetComponentInChildren<Collider>();

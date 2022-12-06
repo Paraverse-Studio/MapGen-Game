@@ -25,17 +25,28 @@ public class GameLoopManager : MonoBehaviour
         Failed,
         Quit
     }
+
+    public enum CompletionPredicateType
+    {
+        KillAllEnemies,
+        GetAllGems,
+        SurviveXMinutes,
+    }
     
     public static GameLoopManager Instance;
     [Header("Combat Map")]
     public bool developerMode = false;
 
     [Space(20)]
-    [Header("Screens/Windows")]
+    [Header("Screens/Windows/Views")]
     public Animator roundCompleteWindow;
     public GameObject loadingScreen;
     public GameObject roundResultsWindow;
     public RoundTimer roundTimer;
+
+    [Header("Predicate")]
+    public CompletionPredicateType CompletionPredicate;
+    private Predicate<bool> _predicate;
 
     [Space(20)]
     [Header("Runtime Data")]
@@ -80,6 +91,23 @@ public class GameLoopManager : MonoBehaviour
         GameLoopEvents.OnStartRound?.Invoke();
     }
 
+    public void MakeCompletionPredicate(CompletionPredicateType predicate)
+    {
+        switch (CompletionPredicate)
+        {
+            case CompletionPredicateType.KillAllEnemies:
+                _predicate = KillAllEnemies;
+                break;
+
+            case CompletionPredicateType.GetAllGems:
+                // implement
+                break;
+
+            case CompletionPredicateType.SurviveXMinutes:
+                //implement
+                break;
+        }
+    }
 
     public void EndRound() => StartCoroutine(IEndRound());   
 
@@ -152,5 +180,19 @@ public class GameLoopManager : MonoBehaviour
         yield return new WaitForSeconds(s);
         a?.Invoke();
     }
+
+
+    /* * * * * * *  P R E D I C A T E S  * * * * * * * * */
+    public bool KillAllEnemies(bool idk)
+    {
+        return EnemiesManager.Instance.EnemiesCount <= 0;
+    }
+
+    // Implement Get All Gems
+
+    // Implement survive X minutes
+
+
+    /* * * * * * *  P R E D I C A T E S  * * * * * * * * */
 
 }
