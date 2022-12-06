@@ -606,8 +606,8 @@ public class MapGeneration : MonoBehaviour
                 //if (Vector3.Distance(area, newSpot) < (radius* M.circularity)) // tags: circular
                 if (IsDistanceLessThan(area, newSpot, (radius * M.circularity)))
                 {
-                    if ((int)newSpot.x < 0) continue; // can happen if the radius for this lump is bigger than the actual map
-                    if ((int)newSpot.z < 0) continue;
+                    if ((int)newSpot.x < 0 || (int)newSpot.x >= _GRIDSIZE) continue; // can happen if the radius for this lump is bigger than the actual map
+                    if ((int)newSpot.z < 0 || (int)newSpot.z >= _GRIDSIZE) continue;
 
                     Block potentialObj = gridOccupants[(int)newSpot.x, (int)newSpot.z].block;
 

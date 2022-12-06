@@ -15,7 +15,8 @@ public class TargetLockSystem : MonoBehaviour
 
     [Header("Target Outline")]
     public float outlineSize;
-    public Color outlineColor;
+    public Color hostileOutlineColor;
+    public Color neutralOutlineColor;
 
     [Header("Events")]
     public SelectableEvent OnTargetLocked = new SelectableEvent();
@@ -53,7 +54,7 @@ public class TargetLockSystem : MonoBehaviour
             _selectables.Add(selectable);
 
             selectable.outline.OutlineMode = Outline.Mode.OutlineAll;
-            selectable.outline.OutlineColor = outlineColor;
+            selectable.outline.OutlineColor = hostileOutlineColor;
             selectable.outline.OutlineWidth = outlineSize;
 
             StartCoroutine(DoAfterDelay(0.2f, () => selectable.outline.enabled = false));
@@ -101,7 +102,11 @@ public class TargetLockSystem : MonoBehaviour
             OnTargetLocked?.Invoke(Target);
 
             Target.outline.OutlineMode = Outline.Mode.OutlineAll;
-            Target.outline.OutlineColor = outlineColor;
+            Target.outline.OutlineColor = hostileOutlineColor;
+            if (Target.type != Selectable.SelectableType.hostile)
+            {
+                Target.outline.OutlineColor = neutralOutlineColor;
+            }
             Target.outline.OutlineWidth = outlineSize;
             Target.outline.enabled = true;
         }

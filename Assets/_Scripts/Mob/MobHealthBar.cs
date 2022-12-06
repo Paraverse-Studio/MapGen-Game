@@ -72,10 +72,11 @@ public class MobHealthBar : MonoBehaviour
             _mobStats.OnHealthChange.AddListener(UpdateHealthBar);
         }
 
-        _selectable = GetComponentInChildren<Selectable>();
-
-        _selectable.OnSelected.AddListener(ActivateTargetIcon);
-        _selectable.OnDeselected.AddListener(DeactivateTargetIcon);
+        if (TryGetComponent(out _selectable))
+        {
+            _selectable.OnSelected.AddListener(ActivateTargetIcon);
+            _selectable.OnDeselected.AddListener(DeactivateTargetIcon);
+        }
     }
 
     private void ResetHealth()
@@ -126,11 +127,17 @@ public class MobHealthBar : MonoBehaviour
         if (settings.hideName) controller.nameLabel.gameObject.SetActive(false);
         if (settings.hideSelection) controller.targetIcon.SetActive(false);
 
+        // Find this object's bounds height, using either a collider or mesh renderer
+        Collider collider = GetComponentInChildren<Collider>();
+        Renderer renderer = GetComponentInChildren<Renderer>();
+
+        float height = collider ? collider.bounds.size.y : renderer.bounds.size.y;
+
         _nameLabel.text = gameObject.name;
         _healthBarObject.transform.SetParent(_healthBarsFolder);
         FollowTarget ft = _healthBarObject.GetComponent<FollowTarget>();
         ft.target = mobBody;
-        ft._offset = new Vector3(0, 2.4f, 0);
+        ft._offset = new Vector3(0, height * 1.1f, 0);
 
         _healthBarSetupComplete = true;
 
