@@ -10,7 +10,9 @@ public class TargetLockSystem : MonoBehaviour
     public static TargetLockSystem Instance;
 
     [Header("References")]
-    public GameObject source;
+    public GameObject player;
+
+    [HideInInspector]
     public Selectable Target;
 
     [Header("Target Outline")]
@@ -90,7 +92,7 @@ public class TargetLockSystem : MonoBehaviour
 
         foreach (Selectable obj in _selectables)
         {            
-            float dist = Vector3.Distance(source.transform.position, obj.transform.position);
+            float dist = Vector3.Distance(player.transform.position, obj.transform.position);
 
             if (dist > obj.range) continue;
 
@@ -104,12 +106,12 @@ public class TargetLockSystem : MonoBehaviour
             }
         }
 
-        Target = targetSoFar;
-
-        Target.Select();
+        Target = targetSoFar;        
 
         if (Target != null)
         {
+            Target.Select();
+
             OnTargetLocked?.Invoke(Target);
 
             Target.outline.OutlineMode = Outline.Mode.OutlineAll;
