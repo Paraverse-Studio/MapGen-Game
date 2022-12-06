@@ -266,12 +266,13 @@ namespace Paraverse.Player
 
             if (controller.isGrounded && curDiveCd >= diveCd && _isMoving)
             {
-                diveStartPos = transform.position;
-                curDiveDuration = 0f;
-                curDiveCd = 0f;
-                diveDir = new Vector3(moveDir.x, jumpDir.y, moveDir.z);
                 _isDiving = true;
+                curDiveCd = 0f;
+                curDiveDuration = 0f;
+                diveStartPos = transform.position;
+                diveDir = new Vector3(moveDir.x, jumpDir.y, moveDir.z);
                 anim.Play(StringData.Dive);
+                controller.detectCollisions = false;
                 stats.ConsumeDiveEnergy();
             }
         }
@@ -294,6 +295,7 @@ namespace Paraverse.Player
                 if (diveRange >= maxDiveRange || curDiveDuration >= maxDiveDuration)
                 {
                     _isDiving = false;
+                    controller.detectCollisions = true;
                     return;
                 }
             }
@@ -309,7 +311,7 @@ namespace Paraverse.Player
 
         #endregion
 
-        #region KnockBack Handler
+        #region Knockback Handler
         /// <summary>
         /// Invokes knock back action
         /// </summary>
