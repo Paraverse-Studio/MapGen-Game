@@ -97,11 +97,17 @@
                       else
                       {
                          if( (IN.texcoord.x * _ImageSize.x ) % (_ImageSize.x / _Steps) < _BorderWidth )
+                         {
                              c *= _BorderColor;
-                         else if ( IN.texcoord.y * _ImageSize.y < _BorderWidth )
-                             c *= _BorderColor;
-                         else
+                         
+                         }else if ( IN.texcoord.y * _ImageSize.y < _BorderWidth )
+                         {
+                             c *= _Color; // this used to be border colour cause author wanted horizontal black line
+                         }
+                         else // color rest the main colour
+                         {
                              c *= _Color;
+                         }
                       }
                   }
                       

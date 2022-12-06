@@ -108,7 +108,7 @@ public class MobHealthBar : MonoBehaviour
     private void CreateHealthBar()
     {
         _healthBarObject = Instantiate(_healthBarPrefab, transform.position, Quaternion.identity);
-        HealthBarController controller = _healthBarObject.GetComponent<HealthBarController>();
+        HealthBarViewController controller = _healthBarObject.GetComponent<HealthBarViewController>();
         _healthBar = controller.healthBar;
         _healthDamageBar = controller.damageBar;
         _targetIcon = controller.targetIcon;

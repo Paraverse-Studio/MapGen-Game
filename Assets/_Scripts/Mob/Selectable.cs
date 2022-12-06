@@ -22,10 +22,12 @@ public class Selectable : MonoBehaviour
     [Header("Selectable Settings")]
     public SelectablePriority priority;
     public SelectableType type;
-    public float range;
+    public float rangeOverride = -1;
 
     [HideInInspector]
     public Outline outline;
+    [HideInInspector]
+    public float range;
 
     private bool _isSelected;
 
@@ -42,6 +44,21 @@ public class Selectable : MonoBehaviour
     {
         outline = GetComponent<Outline>();
         if (!outline) outline = gameObject.AddComponent<Outline>();
+
+        range = 5f;
+        switch (type)
+        {
+            case SelectableType.hostile:
+                range = 10f;
+                break;
+            case SelectableType.interactive:
+                range = 4f;
+                break;
+            case SelectableType.informational:
+                range = 4f;
+                break;
+        }
+        if (rangeOverride > 0) range = rangeOverride;
     }
 
     private void Start()

@@ -91,6 +91,9 @@ public class TargetLockSystem : MonoBehaviour
         foreach (Selectable obj in _selectables)
         {            
             float dist = Vector3.Distance(source.transform.position, obj.transform.position);
+
+            if (dist > obj.range) continue;
+
             if (obj.priority == Selectable.SelectablePriority.whenIsolated)
                 dist *= 2f;
 
