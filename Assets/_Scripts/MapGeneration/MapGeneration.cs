@@ -162,6 +162,8 @@ public class MapGeneration : MonoBehaviour
     {
         UpdateLine();
         if (Input.GetKeyDown(KeyCode.O)) RegenerateMap();
+
+        if (Input.GetKeyDown(KeyCode.R)) TeleportPlayer (centerPointWithY);
     }
 
     public void RegenerateMap() => StartCoroutine(ERenegerateMap());
