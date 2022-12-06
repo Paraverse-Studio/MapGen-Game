@@ -13,7 +13,9 @@ public class GameLoopManager : MonoBehaviour
         public UnityEvent OnBootupGame;
         public UnityEvent OnDeveloperMode;
 
+        public UnityEvent OnInitiateRound;
         public UnityEvent OnStartRound;
+
         public UnityEvent OnEndRound;
 
         public UnityEvent OnUI; //whenever game enters any UI (excluding pause)
@@ -44,6 +46,9 @@ public class GameLoopManager : MonoBehaviour
     public GameObject roundResultsWindow;
     public RoundTimer roundTimer;
 
+    [Header("End Portal")]
+    public GameObject EndPortal;
+
     [Header("Predicate")]
     public CompletionPredicateType CompletionPredicate;
     private Predicate<bool> _predicate;
@@ -52,6 +57,7 @@ public class GameLoopManager : MonoBehaviour
     [Header("Runtime Data")]
     public RoundCompletionType roundCompletionType;
 
+    private bool _roundReady = false;
     private bool _isPaused = false;
     public bool IsPaused => _isPaused;
 
@@ -80,14 +86,24 @@ public class GameLoopManager : MonoBehaviour
     // Update is called once per frame
     void Update()
     {
-        
+        if (Time.frameCount % 60 == 0)
+        {
+            if (null == _predicate) MakeCompletionPredicate(CompletionPredicate);
+            if (_predicate(_roundReady)) EndPortal.SetActive(true);
+        }
     }
 
 
     #region MAIN_MENU
 
+    public void InitiateRound()
+    {
+        GameLoopEvents.OnInitiateRound?.Invoke();
+    }
+
     public void StartRound()
     {
+        _roundReady = true;
         GameLoopEvents.OnStartRound?.Invoke();
     }
 
@@ -113,6 +129,8 @@ public class GameLoopManager : MonoBehaviour
 
     public IEnumerator IEndRound()
     {
+        _roundReady = false;
+
         yield return new WaitForSeconds(0.5f);
         GameLoopEvents.OnEndRound?.Invoke();
 
@@ -183,9 +201,10 @@ public class GameLoopManager : MonoBehaviour
 
 
     /* * * * * * *  P R E D I C A T E S  * * * * * * * * */
-    public bool KillAllEnemies(bool idk)
+    public bool KillAllEnemies(bool mapReady)
     {
-        return EnemiesManager.Instance.EnemiesCount <= 0;
+
+        return mapReady && EnemiesManager.Instance.EnemiesCount <= 0;
     }
 
     // Implement Get All Gems

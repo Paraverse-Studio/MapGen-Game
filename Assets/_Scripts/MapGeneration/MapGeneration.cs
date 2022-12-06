@@ -811,7 +811,10 @@ public class MapGeneration : MonoBehaviour
         // EndPoint
         Vector3 spawnSpot = pathObjects[pathObjects.Count - 1].transform.position + new Vector3(0, 1, 0);
         GameObject obj = Instantiate(importantProps.endPoint, spawnSpot, Quaternion.identity);
+        obj.name = "END PORTAL (Special)";
         UtilityFunctions.UpdateLODlevels(obj.transform);
+        GameLoopManager.Instance.EndPortal = obj;
+        obj.SetActive(false);
         treeObjects.Add(obj);
         obj.transform.parent = temporaryObjFolder.transform;
     }
