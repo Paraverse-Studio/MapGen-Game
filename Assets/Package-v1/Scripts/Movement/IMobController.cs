@@ -1,3 +1,4 @@
+using UnityEngine;
 using Paraverse.Mob.Stats;
 
 namespace Paraverse.Mob
@@ -6,5 +7,6 @@ namespace Paraverse.Mob
     {
         public IMobStats Stats { get; }
         public void ApplyHitAnimation();
+        public void ApplyKnockBack(Vector3 mobPos);
     }
 }

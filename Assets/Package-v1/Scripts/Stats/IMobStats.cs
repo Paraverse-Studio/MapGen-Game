@@ -1,5 +1,3 @@
-using UnityEngine;
-
 namespace Paraverse.Mob.Stats
 {
     public interface IMobStats
@@ -58,6 +56,12 @@ namespace Paraverse.Mob.Stats
         /// </summary>
         /// <param name="amount"></param>
         public void UpdateCurrentEnergy(float amount);
+
+        /// <summary>
+        /// Consumes mob energy upon dive.
+        /// </summary>
+        /// <param name="amount"></param>
+        public void ConsumeDiveEnergy();
         #endregion
     }
 }

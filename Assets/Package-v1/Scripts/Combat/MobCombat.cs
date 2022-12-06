@@ -103,7 +103,7 @@ namespace Paraverse.Mob.Combat
                 }
                 basicAtkCollider.SetActive(true);
                 basicAtkColScript = basicAtkCollider.GetComponent<AttackCollider>();
-                basicAtkColScript.Init(basicAtkDmgRatio * stats.AttackDamage);
+                basicAtkColScript.Init(this, basicAtkDmgRatio * stats.AttackDamage);
                 basicAtkCollider.SetActive(false);
             }
         }
@@ -117,10 +117,9 @@ namespace Paraverse.Mob.Combat
         {
             if (curBasicAtkCd <= 0)
             {
-                isInteracting = true;
                 anim.Play(StringData.BasicAttack);
                 curBasicAtkCd = GetBasicAttackCooldown();
-                Debug.Log("Basic attack");
+                //Debug.Log("Basic attack");
             }
         }
 
