@@ -75,6 +75,7 @@ public class MobHealthBar : MonoBehaviour
         }        
 
         UpdateHealthBar();
+        UpdateEnergyBar();
 
         if (TryGetComponent(out _mobStats))
         {
@@ -93,6 +94,7 @@ public class MobHealthBar : MonoBehaviour
     {
         _health = _totalHealth;
         if (null != _healthBarObject) UpdateHealthBar();
+        if (null != _healthBarObject) UpdateEnergyBar();
     }
 
     // Update is called once per frame
@@ -184,7 +186,9 @@ public class MobHealthBar : MonoBehaviour
     {        
         _healthBar = overrideProperties.healthBar;
         _healthDamageBar = overrideProperties.damageBar;
-        _healthValueDisplay = overrideProperties.healthValueDisplay;        
+        _healthValueDisplay = overrideProperties.healthValueDisplay;
+        _energyBar = overrideProperties.energyBar;
+        _energyLerpBar = overrideProperties.energyLerpBar;
 
         _healthBarSetupComplete = true;
     }
