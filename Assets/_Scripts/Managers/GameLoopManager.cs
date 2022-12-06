@@ -35,6 +35,7 @@ public class GameLoopManager : MonoBehaviour
     public Animator roundCompleteWindow;
     public GameObject loadingScreen;
     public GameObject roundResultsWindow;
+    public RoundTimer roundTimer;
 
     [Space(20)]
     [Header("Runtime Data")]

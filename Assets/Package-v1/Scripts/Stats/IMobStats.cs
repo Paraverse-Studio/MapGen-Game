@@ -11,6 +11,7 @@ namespace Paraverse.Mob.Stats
         public float AttackDamage { get; }
         public float AttackSpeed { get; }
         public float MoveSpeed { get; }
+        public float Energy { get; }
         #endregion
 
         // Methods
