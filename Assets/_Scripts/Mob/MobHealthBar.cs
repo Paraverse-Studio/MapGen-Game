@@ -17,6 +17,8 @@ public class MobHealthBar : MonoBehaviour
         public Image damageBar;
         public TextMeshProUGUI healthValueDisplay;
         public TextMeshProUGUI nameLabel;
+        public Image energyBar;
+        public Image energyLerpBar;
     }
 
     [System.Serializable]
@@ -24,8 +26,9 @@ public class MobHealthBar : MonoBehaviour
     {
         public bool showWhenSelected;
         public bool hideName;
-        public bool hideBar;
+        public bool hideHealthBar;
         public bool hideSelection;
+        public bool hideEnergyBar;
     }
 
     [Header("Health Bar UI")]
@@ -37,17 +40,22 @@ public class MobHealthBar : MonoBehaviour
     private Transform _healthBarsFolder;
     private GameObject _healthBarObject;
     private MobStats _mobStats;
-    private MobController _mobController;
     private Selectable _selectable;
     private bool _healthBarSetupComplete = false;
+
+    // local copies (for lerping without constant reference)
     private float _health = 1.0f;
     private float _totalHealth = 2.0f;
+    private float _energy = 1.0f;
+    private float _totalEnergy = 2.0f;
 
     private Image _healthBar;
     private Image _healthDamageBar;
     private TextMeshProUGUI _nameLabel;
     private GameObject _targetIcon;
     private TextMeshProUGUI _healthValueDisplay;
+    private Image _energyBar;
+    private Image _energyLerpBar;
 
     // Start is called before the first frame update
     void Start()
@@ -71,6 +79,7 @@ public class MobHealthBar : MonoBehaviour
         if (TryGetComponent(out _mobStats))
         {
             _mobStats.OnHealthChange.AddListener(UpdateHealthBar);
+            _mobStats.OnEnergyChange.AddListener(UpdateEnergyBar);
         }
 
         if (TryGetComponent(out _selectable))
@@ -91,9 +100,16 @@ public class MobHealthBar : MonoBehaviour
     {
         if (!_healthBarSetupComplete) return;
 
+        // Health
         _healthBar.fillAmount = _health / _totalHealth;
 
         _healthDamageBar.fillAmount = Mathf.Lerp(_healthDamageBar.fillAmount, _healthBar.fillAmount, Time.deltaTime * 2f);
+
+
+        // Energy
+        _energyBar.fillAmount = _energy / _totalEnergy;
+
+        _energyLerpBar.fillAmount = Mathf.Lerp(_energyLerpBar.fillAmount, _energyBar.fillAmount, Time.deltaTime * 2f);
     }
 
     // main updater
@@ -106,12 +122,21 @@ public class MobHealthBar : MonoBehaviour
         if (_healthValueDisplay) _healthValueDisplay.text = currentHP + " / " + totalHP;
     }
 
+    public void UpdateEnergyBar(int currentEnergy = 1, int totalEnergy = 1)
+    {
+        _energy = (float)currentEnergy;
+
+        _totalEnergy = (float)totalEnergy;
+    }
+
     private void CreateHealthBar()
     {
         _healthBarObject = Instantiate(_healthBarPrefab, transform.position, Quaternion.identity);
         HealthBarViewController controller = _healthBarObject.GetComponent<HealthBarViewController>();
         _healthBar = controller.healthBar;
         _healthDamageBar = controller.damageBar;
+        _energyBar = controller.energyBar;
+        _energyLerpBar = controller.energyLerpBar;
         _targetIcon = controller.targetIcon;
         _nameLabel = controller.nameLabel;
 
@@ -121,12 +146,15 @@ public class MobHealthBar : MonoBehaviour
             _healthBar = overrideProperties.healthBar;
             _healthDamageBar = overrideProperties.damageBar;
             _healthValueDisplay = overrideProperties.healthValueDisplay;
+            _energyBar = overrideProperties.energyBar;
+            _energyLerpBar = overrideProperties.energyLerpBar;
         }
 
         // Settings
-        if (settings.hideBar) controller.barContainer.gameObject.SetActive(false);
+        if (settings.hideHealthBar) controller.healthBarContainer.gameObject.SetActive(false);
         if (settings.hideName) controller.nameLabel.gameObject.SetActive(false);
         if (settings.hideSelection) controller.targetIcon.SetActive(false);
+        if (settings.hideEnergyBar) controller.energyBarContainer.gameObject.SetActive(false);
 
         // Find this object's bounds height, using either a collider or mesh renderer
         Collider collider = GetComponentInChildren<Collider>();

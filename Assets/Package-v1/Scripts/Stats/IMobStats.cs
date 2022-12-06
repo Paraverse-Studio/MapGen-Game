@@ -11,7 +11,8 @@ namespace Paraverse.Mob.Stats
         public float AttackDamage { get; }
         public float AttackSpeed { get; }
         public float MoveSpeed { get; }
-        public float Energy { get; }
+        public float MaxEnergy { get; }
+        public float CurrentEnergy { get; }
         #endregion
 
         // Methods
@@ -45,6 +46,18 @@ namespace Paraverse.Mob.Stats
         /// </summary>
         /// <param name="amount"></param>
         public void UpdateMovementSpeed(float amount);
+
+        /// <summary>
+        /// Updates mob energy stat value.
+        /// </summary>
+        /// <param name="amount"></param>
+        public void UpdateMaxEnergy(float amount);
+
+        /// <summary>
+        /// Updates mob current energy stat value.
+        /// </summary>
+        /// <param name="amount"></param>
+        public void UpdateCurrentEnergy(float amount);
         #endregion
     }
 }

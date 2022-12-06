@@ -14,5 +14,11 @@ public class HealthBarViewController : MonoBehaviour
 
     public GameObject targetIcon;
 
-    public GameObject barContainer;
+    public GameObject healthBarContainer;
+
+    public Image energyBar;
+
+    public Image energyLerpBar;
+
+    public GameObject energyBarContainer;
 }
