@@ -15,12 +15,14 @@ public class TargetLockSystem : MonoBehaviour
 
     [Header("Target Outline")]
     public float outlineSize;
-    public Color outlineColor;
+    public Color hostileOutlineColor;
+    public Color neutralOutlineColor;
 
     [Header("Events")]
     public SelectableEvent OnTargetLocked = new SelectableEvent();
     public SelectableEvent OnTargetUnlocked = new SelectableEvent();
 
+    private bool _continuousTargetting = false;
 
     private List<Selectable> _selectables = new List<Selectable>();
 
@@ -34,16 +36,9 @@ public class TargetLockSystem : MonoBehaviour
         Instance = this;
     }
 
-    void Update()
+    private void Update()
     {
-        if (Input.GetKey(KeyCode.LeftShift))
-        {
-            if (!Target) SelectTarget();
-        }
-        else
-        {
-            DeselectTarget();
-        }
+        if (_continuousTargetting && null == Target) SelectTarget();
     }
 
     public void Add(Selectable selectable)
@@ -53,7 +48,7 @@ public class TargetLockSystem : MonoBehaviour
             _selectables.Add(selectable);
 
             selectable.outline.OutlineMode = Outline.Mode.OutlineAll;
-            selectable.outline.OutlineColor = outlineColor;
+            selectable.outline.OutlineColor = hostileOutlineColor;
             selectable.outline.OutlineWidth = outlineSize;
 
             StartCoroutine(DoAfterDelay(0.2f, () => selectable.outline.enabled = false));
@@ -72,6 +67,20 @@ public class TargetLockSystem : MonoBehaviour
     {
         yield return new WaitForSeconds(f);
         action?.Invoke();
+    }
+
+    public void ToggleSelect()
+    {
+        if (Target)
+        {
+            _continuousTargetting = false;
+            DeselectTarget();
+        }
+        else
+        {
+            _continuousTargetting = true;
+            SelectTarget();
+        }
     }
 
     public void SelectTarget()
@@ -101,7 +110,11 @@ public class TargetLockSystem : MonoBehaviour
             OnTargetLocked?.Invoke(Target);
 
             Target.outline.OutlineMode = Outline.Mode.OutlineAll;
-            Target.outline.OutlineColor = outlineColor;
+            Target.outline.OutlineColor = hostileOutlineColor;
+            if (Target.type != Selectable.SelectableType.hostile)
+            {
+                Target.outline.OutlineColor = neutralOutlineColor;
+            }
             Target.outline.OutlineWidth = outlineSize;
             Target.outline.enabled = true;
         }

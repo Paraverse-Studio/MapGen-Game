@@ -12,8 +12,16 @@ public class Selectable : MonoBehaviour
         whenIsolated
     }
 
+    public enum SelectableType
+    {
+        hostile,
+        interactive,
+        informational
+    }
+
     [Header("Selectable Settings")]
     public SelectablePriority priority;
+    public SelectableType type;
     public float range;
 
     [HideInInspector]

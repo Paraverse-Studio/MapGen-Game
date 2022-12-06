@@ -3534,8 +3534,8 @@ MonoBehaviour:
   maxWaitDur: 10
   accurayWP: 2
   stoppingDistance: 9
-  detectionRadius: 7
-  pursueRadius: 10
+  detectionRadius: 5
+  pursueRadius: 7
   deathEffect: {fileID: 5971161797261734830, guid: b57686338b6a45841a67921982527613, type: 3}
 --- !u!114 &8586723283797941117
 MonoBehaviour:
@@ -3572,8 +3572,8 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: b04cd1b06f0908d4c81a8bc7bcea9d24, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  maxHealth: 100
-  curHealth: 100
+  maxHealth: 25
+  curHealth: 25
   attackDamage: 5
   attackSpeed: 0.2
   moveSpeed: 2
@@ -3593,6 +3593,11 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   mobBody: {fileID: 0}
+  settings:
+    showWhenSelected: 0
+    hideName: 0
+    hideBar: 0
+    hideSelection: 0
   overrideProperties:
     healthBar: {fileID: 0}
     damageBar: {fileID: 0}
@@ -3611,7 +3616,8 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   priority: 0
-  ange: 0
+  type: 0
+  range: 0
   outline: {fileID: 0}
   OnSelected:
     m_PersistentCalls:

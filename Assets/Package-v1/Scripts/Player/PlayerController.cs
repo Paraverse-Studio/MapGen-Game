@@ -101,6 +101,7 @@ namespace Paraverse.Player
             input.OnUseItemFourEvent += UseItemFour;
             input.OnJumpEvent += Jump;
             input.OnDiveEvent += Dive;
+            input.OnTargetLockEvent += TargetLock;
         }
 
         private void Update()
@@ -278,6 +279,12 @@ namespace Paraverse.Player
             curDiveCd += Time.deltaTime;
             curDiveCd = Mathf.Clamp(curDiveCd, 0, diveCd);
         }
+
+        private void TargetLock()
+        {
+            TargetLockSystem.Instance.ToggleSelect();
+        }
+
         #endregion
 
         #region Item Interaction Methods

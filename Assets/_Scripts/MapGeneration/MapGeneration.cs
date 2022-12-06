@@ -606,8 +606,8 @@ public class MapGeneration : MonoBehaviour
                 //if (Vector3.Distance(area, newSpot) < (radius* M.circularity)) // tags: circular
                 if (IsDistanceLessThan(area, newSpot, (radius * M.circularity)))
                 {
-                    if ((int)newSpot.x < 0) continue; // can happen if the radius for this lump is bigger than the actual map
-                    if ((int)newSpot.z < 0) continue;
+                    if ((int)newSpot.x < 0 || (int)newSpot.x >= _GRIDSIZE) continue; // can happen if the radius for this lump is bigger than the actual map
+                    if ((int)newSpot.z < 0 || (int)newSpot.z >= _GRIDSIZE) continue;
 
                     Block potentialObj = gridOccupants[(int)newSpot.x, (int)newSpot.z].block;
 
@@ -829,10 +829,10 @@ public class MapGeneration : MonoBehaviour
 
             Vector3 spawnSpot = pathObjects[i].transform.position + new Vector3(xOffset, 0, zOffset);
 
-            GameObject closestPathPosition = GetClosestObject(spawnSpot, pathObjects);
+            GameObject closestPathPosition = GetClosestObject(spawnSpot, allObjects);
 
             GameObject enemy = Instantiate(M.enemies[Random.Range(0, M.enemies.Length)],
-                closestPathPosition.transform.position, Quaternion.identity);
+                closestPathPosition.transform.position + new Vector3(0, 1.5f, 0), Quaternion.identity);
 
             enemy.name = "Enemy " + (enemyObjects.Count + 1);
             enemy.transform.parent = enemiesFolder;
