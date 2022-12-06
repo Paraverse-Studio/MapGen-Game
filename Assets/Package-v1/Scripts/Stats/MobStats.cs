@@ -97,6 +97,7 @@ namespace Paraverse.Mob.Stats
         public void ConsumeDiveEnergy()
         {
             curEnergy -= diveEnergyCost;
+            OnEnergyChange?.Invoke((int)curEnergy, (int)maxEnergy);
         }
 
         public void UpdateCurrentEnergy(float amount)
