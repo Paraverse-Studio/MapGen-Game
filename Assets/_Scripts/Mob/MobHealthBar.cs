@@ -6,6 +6,7 @@ using UnityEngine.Events;
 using Paraverse.Mob.Stats;
 using TMPro;
 using Paraverse.Mob.Controller;
+using System;
 
 public class MobHealthBar : MonoBehaviour
 {
@@ -28,7 +29,7 @@ public class MobHealthBar : MonoBehaviour
     }
 
     [Header("Health Bar UI")]
-    public Transform mobBody;
+    public Transform bodyToFollow;
 
     public Settings settings;
     public Override overrideProperties;
@@ -51,7 +52,7 @@ public class MobHealthBar : MonoBehaviour
     // Start is called before the first frame update
     void Start()
     {
-        if (!mobBody) mobBody = transform;
+        if (!bodyToFollow) bodyToFollow = transform;
 
         _healthBarsFolder = GlobalSettings.Instance.healthBarFolder;
         _healthBarPrefab = GlobalSettings.Instance.healthBarPrefab;
@@ -136,12 +137,19 @@ public class MobHealthBar : MonoBehaviour
         _nameLabel.text = gameObject.name;
         _healthBarObject.transform.SetParent(_healthBarsFolder);
         FollowTarget ft = _healthBarObject.GetComponent<FollowTarget>();
-        ft.target = mobBody;
+        ft.target = bodyToFollow;
         ft._offset = new Vector3(0, height * 1.1f, 0);
 
         _healthBarSetupComplete = true;
 
-        if (settings.showWhenSelected) _healthBarObject.gameObject.SetActive(false); 
+        // Turn off the HP Huds for those that only show it when selected
+        if (settings.showWhenSelected) StartCoroutine(DoAfterDelay(0.2f, () => _healthBarObject.gameObject.SetActive(false))); 
+    }
+
+    private IEnumerator DoAfterDelay(float f, Action action)
+    {
+        yield return new WaitForSeconds(f);
+        action?.Invoke();
     }
 
     private void LoadCustomHealthBar()
