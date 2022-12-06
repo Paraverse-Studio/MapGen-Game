@@ -36,6 +36,7 @@ public class Selectable : MonoBehaviour
         get { return _isSelected; }
     }
 
+    [Header("Events")]
     public UnityEvent OnSelected = new UnityEvent();
 
     public UnityEvent OnDeselected = new UnityEvent();
@@ -63,22 +64,22 @@ public class Selectable : MonoBehaviour
 
     private void Start()
     {
-        TargetLockSystem.Instance.Add(this);
+        if (TargetLockSystem.Instance) TargetLockSystem.Instance.Add(this);
     }
 
     private void OnEnable()
     {
-        TargetLockSystem.Instance.Add(this);
+        if (TargetLockSystem.Instance) TargetLockSystem.Instance.Add(this);
     }
 
     private void OnDisable()
     {
-        TargetLockSystem.Instance.Remove(this);
+        if (TargetLockSystem.Instance) TargetLockSystem.Instance.Remove(this);
     }
 
     private void OnDestroy()
     {
-        TargetLockSystem.Instance.Remove(this);
+        if (TargetLockSystem.Instance) TargetLockSystem.Instance.Remove(this);
     }
 
     public void Select()
@@ -96,7 +97,5 @@ public class Selectable : MonoBehaviour
         _isSelected = false;
         OnDeselected?.Invoke();
     }
-
-
 
 }

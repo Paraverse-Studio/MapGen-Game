@@ -31,13 +31,30 @@ namespace Paraverse.Mob.Stats
         [DisplayName("Movement Speed")]
         public float MoveSpeed { get { return moveSpeed; } }
 
+        [SerializeField]
+        protected float maxEnergy = 100f;
+        [DisplayName("Max Energy")]
+        public float MaxEnergy { get { return maxEnergy; } }
+
+        [SerializeField]
+        protected float currentEnergy = 100f;
+        [DisplayName("Current Energy")]
+        public float CurrentEnergy { get { return currentEnergy; } }
+
+        [HideInInspector]
         public IntIntEvent OnHealthChange = new IntIntEvent();
+        
+        [HideInInspector]
+        public IntIntEvent OnEnergyChange = new IntIntEvent();
         #endregion
 
         #region Start Method
         protected virtual void Start()
         {
             curHealth = maxHealth;
+            currentEnergy = maxEnergy;
+            OnHealthChange?.Invoke((int)curHealth, (int)maxHealth);
+            OnEnergyChange?.Invoke((int)currentEnergy, (int)maxEnergy);
         }
         #endregion
 
@@ -66,6 +83,17 @@ namespace Paraverse.Mob.Stats
         public void UpdateMovementSpeed(float amount)
         {
             moveSpeed += amount;
+        }
+
+        public void UpdateMaxEnergy(float amount)
+        {
+            maxEnergy += amount;
+        }
+
+        public void UpdateCurrentEnergy(float amount)
+        {
+            currentEnergy += amount;
+            OnEnergyChange?.Invoke((int)currentEnergy, (int)maxEnergy);
         }
         #endregion
     }

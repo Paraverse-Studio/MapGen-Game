@@ -243,8 +243,10 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   priority: 1
-  range: 0
+  type: 1
+  rangeOverride: -1
   outline: {fileID: 0}
+  range: 0
   OnSelected:
     m_PersistentCalls:
       m_Calls: []
@@ -263,17 +265,20 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: f1360b5e821afee43bb7656851bcc9d0, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  mobBody: {fileID: 0}
+  bodyToFollow: {fileID: 0}
   settings:
     showWhenSelected: 1
     hideName: 0
-    hideBar: 1
+    hideHealthBar: 1
     hideSelection: 0
+    hideEnergyBar: 0
   overrideProperties:
     healthBar: {fileID: 0}
     damageBar: {fileID: 0}
     healthValueDisplay: {fileID: 0}
     nameLabel: {fileID: 0}
+    energyBar: {fileID: 0}
+    energyLerpBar: {fileID: 0}
 --- !u!1 &1740716866560304
 GameObject:
   m_ObjectHideFlags: 0
