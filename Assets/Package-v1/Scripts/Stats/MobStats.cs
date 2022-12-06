@@ -37,24 +37,28 @@ namespace Paraverse.Mob.Stats
         public float MaxEnergy { get { return maxEnergy; } }
 
         [SerializeField]
-        protected float currentEnergy = 100f;
+        protected float curEnergy = 100f;
         [DisplayName("Current Energy")]
-        public float CurrentEnergy { get { return currentEnergy; } }
+        public float CurrentEnergy { get { return curEnergy; } }
 
         [HideInInspector]
         public IntIntEvent OnHealthChange = new IntIntEvent();
         
         [HideInInspector]
         public IntIntEvent OnEnergyChange = new IntIntEvent();
+
+        [SerializeField, Tooltip("Energy cost for mob dive.")]
+        private float diveEnergyCost = 30f;
+
         #endregion
 
         #region Start Method
         protected virtual void Start()
         {
             curHealth = maxHealth;
-            currentEnergy = maxEnergy;
+            curEnergy = maxEnergy;
             OnHealthChange?.Invoke((int)curHealth, (int)maxHealth);
-            OnEnergyChange?.Invoke((int)currentEnergy, (int)maxEnergy);
+            OnEnergyChange?.Invoke((int)curEnergy, (int)maxEnergy);
         }
         #endregion
 
@@ -90,10 +94,15 @@ namespace Paraverse.Mob.Stats
             maxEnergy += amount;
         }
 
+        public void ConsumeDiveEnergy()
+        {
+            curEnergy -= diveEnergyCost;
+        }
+
         public void UpdateCurrentEnergy(float amount)
         {
-            currentEnergy += amount;
-            OnEnergyChange?.Invoke((int)currentEnergy, (int)maxEnergy);
+            curEnergy += amount;
+            OnEnergyChange?.Invoke((int)curEnergy, (int)maxEnergy);
         }
         #endregion
     }

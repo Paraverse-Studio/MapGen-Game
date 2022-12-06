@@ -3,6 +3,7 @@ using Paraverse.Mob;
 using Paraverse.Mob.Combat;
 using Paraverse.Mob.Controller;
 using Paraverse.Mob.Stats;
+using UnityEditorInternal;
 using UnityEngine;
 
 namespace Paraverse.Player
@@ -271,6 +272,7 @@ namespace Paraverse.Player
                 diveDir = new Vector3(moveDir.x, jumpDir.y, moveDir.z);
                 _isDiving = true;
                 anim.Play(StringData.Dive);
+                stats.ConsumeDiveEnergy();
             }
         }
 
