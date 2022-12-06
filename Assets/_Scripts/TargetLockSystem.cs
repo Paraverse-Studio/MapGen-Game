@@ -22,6 +22,7 @@ public class TargetLockSystem : MonoBehaviour
     public SelectableEvent OnTargetLocked = new SelectableEvent();
     public SelectableEvent OnTargetUnlocked = new SelectableEvent();
 
+    private bool _continuousTargetting = false;
 
     private List<Selectable> _selectables = new List<Selectable>();
 
@@ -35,16 +36,9 @@ public class TargetLockSystem : MonoBehaviour
         Instance = this;
     }
 
-    void Update()
+    private void Update()
     {
-        if (Input.GetKey(KeyCode.LeftShift))
-        {
-            if (!Target) SelectTarget();
-        }
-        else
-        {
-            DeselectTarget();
-        }
+        if (_continuousTargetting && null == Target) SelectTarget();
     }
 
     public void Add(Selectable selectable)
@@ -73,6 +67,20 @@ public class TargetLockSystem : MonoBehaviour
     {
         yield return new WaitForSeconds(f);
         action?.Invoke();
+    }
+
+    public void ToggleSelect()
+    {
+        if (Target)
+        {
+            _continuousTargetting = false;
+            DeselectTarget();
+        }
+        else
+        {
+            _continuousTargetting = true;
+            SelectTarget();
+        }
     }
 
     public void SelectTarget()
