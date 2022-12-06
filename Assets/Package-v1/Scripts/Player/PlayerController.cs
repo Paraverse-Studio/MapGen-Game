@@ -331,6 +331,7 @@ namespace Paraverse.Player
             {
                 // Updates mob position and dive timer
                 float knockBackRange = ParaverseHelper.GetDistance(transform.position, knockStartPos);
+                curKnockbackDuration += Time.deltaTime;
 
                 // Moves the mob in the move direction
                 controller.Move(knockbackDir * knockForce * Time.deltaTime);
