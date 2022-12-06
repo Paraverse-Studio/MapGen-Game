@@ -57,6 +57,15 @@ namespace Paraverse.Player
         private float diveCd = 0.5f;
         private float curDiveCd = 0f;
 
+        [Header("Knockback Values")]
+        [SerializeField, Tooltip("The dive force of the mob.")]
+        private float knockForce = 30f;
+        [SerializeField, Range(0, 3), Tooltip("The max distance of dive.")]
+        private float maxKnockbackRange = 1f;
+        [SerializeField, Range(0, 1), Tooltip("The max duration of dive.")]
+        private float maxKnockbackDuration = 1f;
+        private float curKnockbackDuration;
+
         // State Booleans
         public bool IsInteracting { get { return isInteracting; } }
         private bool isInteracting = false;
@@ -66,13 +75,18 @@ namespace Paraverse.Player
         private bool _isGrounded = false;
         public bool IsDiving { get { return _isDiving; } }
         private bool _isDiving = false;
+        public bool IsKnockedBack { get { return _isKnockedBack; } }
+        private bool _isKnockedBack = false;
 
         // Movement, Jump & Dive inputs and velocities
         private Vector3 moveDir;
         private Vector3 jumpDir;
         private Vector3 diveDir;
-        // Gets the dive start position
+        private Vector3 knockbackDir;
+        // Gets the start positions
         private Vector3 diveStartPos;
+        private Vector3 knockStartPos;
+        // Gets the controller horizontal and vertical inputs
         private float horizontal;
         private float vertical;
         #endregion
@@ -108,16 +122,17 @@ namespace Paraverse.Player
         {
             isInteracting = anim.GetBool(StringData.IsInteracting);
             _isMoving = moveDir.magnitude > 0;
-            Debug.Log("Is Moving: " + _isMoving);
             _isGrounded = IsGroundedCheck();
 
             jumpDir.y -= Time.deltaTime;
 
+            
             MovementHandler();
             JumpHandler();
             DiveHandler();
+            KnockbackHandler();
             RotationHandler();
-            AnimationHandler();
+            AnimationHandler(); 
         }
         #endregion
 
@@ -131,7 +146,6 @@ namespace Paraverse.Player
         #region Controller Interface Methods
         public void ApplyHitAnimation()
         {
-            Debug.Log("hit animation: " + IsInteracting);
             if (IsInteracting == false)
                 anim.Play(StringData.Hit);
         }
@@ -147,14 +161,14 @@ namespace Paraverse.Player
 
         private void MovementHandler()
         {
+            // Disables player movement during dive
+            if (_isDiving || _isKnockedBack) return;
+
             // Adjusts player speed based on state
             if (IsInteracting)
                 curSpeed = 0f;
             else
                 curSpeed = GetWalkSpeed();
-
-            // Disables player movement during dive
-            if (_isDiving) return;
 
             // Gets movement input values
             horizontal = input.MovementDirection.x;
@@ -170,6 +184,8 @@ namespace Paraverse.Player
 
         private void RotationHandler()
         {
+            if (_isKnockedBack) return;
+
             // Ensures player faces the direction in which they were moving when stopped
             if (moveDir != Vector3.zero)
                 transform.forward = moveDir;
@@ -182,6 +198,8 @@ namespace Paraverse.Player
         /// </summary>
         private void Jump()
         {
+            if (_isKnockedBack) return;
+
             if (controller.isGrounded && curJumpCd >= jumpCd)
             {
                 curJumpCd = 0f;
@@ -243,7 +261,9 @@ namespace Paraverse.Player
         /// </summary>
         private void Dive()
         {
-            if (controller.isGrounded && curDiveCd >= diveCd && _isDiving == false && _isMoving)
+            if (_isKnockedBack || _isDiving) return;
+
+            if (controller.isGrounded && curDiveCd >= diveCd && _isMoving)
             {
                 diveStartPos = transform.position;
                 curDiveDuration = 0f;
@@ -285,6 +305,42 @@ namespace Paraverse.Player
             TargetLockSystem.Instance.ToggleSelect();
         }
 
+        #endregion
+
+        #region KnockBack Handler
+        /// <summary>
+        /// Invokes knock back action
+        /// </summary>
+        public void ApplyKnockBack(Vector3 mobPos)
+        {
+            Vector3 impactDir = (transform.position - mobPos).normalized;
+            knockStartPos = transform.position;
+            curKnockbackDuration = 0f;
+            knockbackDir = new Vector3(impactDir.x, 0f, impactDir.z);
+            _isKnockedBack = true;
+        }
+
+        /// <summary>
+        /// Handles knock back movement and variables in Update().
+        /// </summary>
+        private void KnockbackHandler()
+        {
+            if (_isKnockedBack)
+            {
+                // Updates mob position and dive timer
+                float knockBackRange = ParaverseHelper.GetDistance(transform.position, knockStartPos);
+
+                // Moves the mob in the move direction
+                controller.Move(knockbackDir * knockForce * Time.deltaTime);
+
+                // Stops dive when conditions met
+                if (knockBackRange >= maxKnockbackRange || curKnockbackDuration >= maxKnockbackDuration)
+                {
+                    _isKnockedBack = false;
+                    return;
+                }
+            }
+        }
         #endregion
 
         #region Item Interaction Methods
