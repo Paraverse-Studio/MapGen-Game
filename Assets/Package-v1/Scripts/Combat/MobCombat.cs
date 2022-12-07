@@ -77,6 +77,7 @@ namespace Paraverse.Mob.Combat
         {
             distanceFromTarget = ParaverseHelper.GetDistance(transform.position, player.position);
             AttackCooldownHandler();
+            EnergyHandler();
 
             // used to control player movement - if isInteracting => curSpeed = 0f
             isInteracting = anim.GetBool(StringData.IsInteracting);
@@ -156,6 +157,16 @@ namespace Paraverse.Mob.Combat
             anim.SetFloat(StringData.AttackSpeed, curBasicAtkAnimSpeed);
             //Debug.Log(transform.name + " attacks " + stats.AttackSpeed + " times per second.");
             //Debug.Log(transform.name + "'s animation speed is " + anim.GetFloat(StringData.AttackSpeed) + " seconds.");
+        }
+        #endregion
+
+        #region Energy Handler
+        /// <summary>
+        /// Handles basic attack cooldowns
+        /// </summary>
+        protected virtual void EnergyHandler()
+        {
+            stats.UpdateCurrentEnergy(stats.EnergyRegen * Time.deltaTime);            
         }
         #endregion
 

@@ -11,6 +11,7 @@ namespace Paraverse.Mob.Stats
         public float MoveSpeed { get; }
         public float MaxEnergy { get; }
         public float CurrentEnergy { get; }
+        public float EnergyRegen { get; }
         #endregion
 
         // Methods

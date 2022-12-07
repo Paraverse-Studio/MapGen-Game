@@ -41,6 +41,11 @@ namespace Paraverse.Mob.Stats
         [DisplayName("Current Energy")]
         public float CurrentEnergy { get { return curEnergy; } }
 
+        [SerializeField]
+        protected float energyRegen = 25f;
+        [DisplayName("Energy Regen /s")]
+        public float EnergyRegen { get { return energyRegen; } }
+
         [HideInInspector]
         public IntIntEvent OnHealthChange = new IntIntEvent();
         
@@ -101,7 +106,7 @@ namespace Paraverse.Mob.Stats
 
         public void UpdateCurrentEnergy(float amount)
         {
-            curEnergy += amount;
+            curEnergy = Mathf.Clamp(curEnergy + amount, 0f, MaxEnergy);
             OnEnergyChange?.Invoke((int)curEnergy, (int)maxEnergy);
         }
         #endregion
