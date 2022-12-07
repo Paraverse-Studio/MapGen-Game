@@ -922,18 +922,19 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 96a71ce8f1988584da286175b4a438c6, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  walkSpeedRatio: 1
-  sprintSpeedRatio: 1
   rotSpeed: 10
   jumpForce: 5
+  disToGroundCheck: 0.1
+  jumpCd: 0.5
   gravityForce: -20
   gravityMultiplier: 1
-  disToGroundCheck: 0.1
-  maxJumpBuffer: 1
   diveForce: 10
   maxDiveRange: 3
-  maxDiveTimer: 1
-  diveMaxWaitTimer: 1
+  maxDiveDuration: 1
+  diveCd: 0.5
+  knockForce: 15
+  maxKnockbackRange: 1
+  maxKnockbackDuration: 1
 --- !u!114 &2956618024134931113
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -951,9 +952,15 @@ MonoBehaviour:
   attackDamage: 10
   attackSpeed: 1
   moveSpeed: 5
+  maxEnergy: 100
+  curEnergy: 100
   OnHealthChange:
     m_PersistentCalls:
       m_Calls: []
+  OnEnergyChange:
+    m_PersistentCalls:
+      m_Calls: []
+  diveEnergyCost: 30
 --- !u!114 &2956618024134931112
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -967,9 +974,8 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   anim: {fileID: 2956618024134931115}
-  targetTag: Player
   basicAtkDmgRatio: 1
-  basicAtkRng: 2
+  basicAtkRange: 2
   minBasicAtkAnimSpeed: 0.8
   maxBasicAtkAnimSpeed: 2
   basicAtkCollider: {fileID: 6080363539117558812}
@@ -990,12 +996,20 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: f1360b5e821afee43bb7656851bcc9d0, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  mobBody: {fileID: 0}
+  bodyToFollow: {fileID: 0}
+  settings:
+    showWhenSelected: 0
+    hideName: 0
+    hideHealthBar: 0
+    hideSelection: 0
+    showEnergyBar: 0
   overrideProperties:
     healthBar: {fileID: 0}
     damageBar: {fileID: 0}
     healthValueDisplay: {fileID: 0}
     nameLabel: {fileID: 0}
+    energyBar: {fileID: 0}
+    energyLerpBar: {fileID: 0}
 --- !u!1 &3042775459034123614
 GameObject:
   m_ObjectHideFlags: 0

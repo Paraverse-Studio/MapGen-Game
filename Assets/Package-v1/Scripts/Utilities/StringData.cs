@@ -10,6 +10,7 @@ public static class StringData
     public static string IsSprinting = "isSprinting";
     public static string IsGrounded = "isGrounded";
     public static string IsDiving = "isDiving";
+    public static string IsKnockedBack = "isKnockedBack";
     public static string IsInteracting = "isInteracting";
     public static string AttackSpeed = "attackSpeed";
     public static string BasicAttack = "BasicAttack";

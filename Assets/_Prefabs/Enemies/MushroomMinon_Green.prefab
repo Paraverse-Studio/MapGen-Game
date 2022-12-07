@@ -1161,7 +1161,7 @@ GameObject:
   serializedVersion: 6
   m_Component:
   - component: {fileID: 4257800397191294150}
-  m_Layer: 15
+  m_Layer: 0
   m_Name: Waypoints
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -1196,7 +1196,7 @@ GameObject:
   serializedVersion: 6
   m_Component:
   - component: {fileID: 4257800397331501611}
-  m_Layer: 15
+  m_Layer: 0
   m_Name: Waypoint (3)
   m_TagString: Untagged
   m_Icon: {fileID: 4162164826716764455, guid: 0000000000000000d000000000000000, type: 0}
@@ -1227,7 +1227,7 @@ GameObject:
   serializedVersion: 6
   m_Component:
   - component: {fileID: 4257800397965989680}
-  m_Layer: 15
+  m_Layer: 0
   m_Name: Waypoint (1)
   m_TagString: Untagged
   m_Icon: {fileID: 4162164826716764455, guid: 0000000000000000d000000000000000, type: 0}
@@ -1258,7 +1258,7 @@ GameObject:
   serializedVersion: 6
   m_Component:
   - component: {fileID: 4257800398774748635}
-  m_Layer: 15
+  m_Layer: 0
   m_Name: MushroomMinon_Green
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -1291,7 +1291,7 @@ GameObject:
   serializedVersion: 6
   m_Component:
   - component: {fileID: 4257800398895495818}
-  m_Layer: 15
+  m_Layer: 0
   m_Name: Waypoint (4)
   m_TagString: Untagged
   m_Icon: {fileID: 4162164826716764455, guid: 0000000000000000d000000000000000, type: 0}
@@ -1322,7 +1322,7 @@ GameObject:
   serializedVersion: 6
   m_Component:
   - component: {fileID: 4257800399188322731}
-  m_Layer: 15
+  m_Layer: 0
   m_Name: Waypoint (2)
   m_TagString: Untagged
   m_Icon: {fileID: 4162164826716764455, guid: 0000000000000000d000000000000000, type: 0}
@@ -3536,6 +3536,9 @@ MonoBehaviour:
   stoppingDistance: 9
   detectionRadius: 5
   pursueRadius: 7
+  knockForce: 15
+  maxKnockbackRange: 2
+  maxKnockbackDuration: 1
   deathEffect: {fileID: 5971161797261734830, guid: b57686338b6a45841a67921982527613, type: 3}
 --- !u!114 &8586723283797941117
 MonoBehaviour:
@@ -3577,9 +3580,15 @@ MonoBehaviour:
   attackDamage: 5
   attackSpeed: 0.2
   moveSpeed: 2
+  maxEnergy: 100
+  curEnergy: 100
   OnHealthChange:
     m_PersistentCalls:
       m_Calls: []
+  OnEnergyChange:
+    m_PersistentCalls:
+      m_Calls: []
+  diveEnergyCost: 30
 --- !u!114 &4734784885605418516
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -3592,17 +3601,20 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: f1360b5e821afee43bb7656851bcc9d0, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  mobBody: {fileID: 0}
+  bodyToFollow: {fileID: 0}
   settings:
     showWhenSelected: 0
     hideName: 0
-    hideBar: 0
+    hideHealthBar: 0
     hideSelection: 0
+    showEnergyBar: 0
   overrideProperties:
     healthBar: {fileID: 0}
     damageBar: {fileID: 0}
     healthValueDisplay: {fileID: 0}
     nameLabel: {fileID: 0}
+    energyBar: {fileID: 0}
+    energyLerpBar: {fileID: 0}
 --- !u!114 &3872327214927598813
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -3617,8 +3629,9 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   priority: 0
   type: 0
-  range: 0
+  rangeOverride: -1
   outline: {fileID: 0}
+  range: 0
   OnSelected:
     m_PersistentCalls:
       m_Calls: []

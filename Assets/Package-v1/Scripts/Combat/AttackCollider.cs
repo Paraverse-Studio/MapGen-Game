@@ -27,7 +27,6 @@ namespace Paraverse
 
                 IMobController controller = other.GetComponent<IMobController>();
                 controller.Stats.UpdateCurrentHealth(-damage);
-                controller.ApplyHitAnimation();
                 controller.ApplyKnockBack(mob.transform.position);
 
                 Debug.Log(other.name + " took " + damage + " points of damage.");

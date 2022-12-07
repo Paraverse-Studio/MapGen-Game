@@ -3,7 +3,6 @@ using Paraverse.Mob;
 using Paraverse.Mob.Combat;
 using Paraverse.Mob.Controller;
 using Paraverse.Mob.Stats;
-using UnityEditorInternal;
 using UnityEngine;
 
 namespace Paraverse.Player
@@ -147,8 +146,7 @@ namespace Paraverse.Player
         #region Controller Interface Methods
         public void ApplyHitAnimation()
         {
-            if (IsInteracting == false)
-                anim.Play(StringData.Hit);
+            //if (IsInteracting == false)
         }
         #endregion
 
@@ -158,6 +156,7 @@ namespace Paraverse.Player
             anim.SetFloat(StringData.Speed, moveDir.normalized.magnitude);
             anim.SetBool(StringData.IsGrounded, IsGrounded);
             anim.SetBool(StringData.IsDiving, IsDiving);
+            anim.SetBool(StringData.IsKnockedBack, IsKnockedBack);
         }
 
         private void MovementHandler()
@@ -320,6 +319,7 @@ namespace Paraverse.Player
             curKnockbackDuration = 0f;
             knockbackDir = new Vector3(impactDir.x, 0f, impactDir.z);
             _isKnockedBack = true;
+            anim.Play(StringData.Hit);
         }
 
         /// <summary>
