@@ -1,6 +1,5 @@
 using Paraverse.Mob;
 using Paraverse.Mob.Combat;
-using Paraverse.Mob.Controller;
 using UnityEngine;
 
 namespace Paraverse

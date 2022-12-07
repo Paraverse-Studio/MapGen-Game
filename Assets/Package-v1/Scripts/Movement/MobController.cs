@@ -1,3 +1,4 @@
+using DG.Tweening;
 using Paraverse.Helper;
 using Paraverse.Mob.Stats;
 using UnityEngine;
@@ -76,15 +77,13 @@ namespace Paraverse.Mob.Controller
 
         [Header("Knockback Values")]
         [SerializeField, Tooltip("The dive force of the mob.")]
-        private float knockForce = 30f;
-        [SerializeField, Range(0, 3), Tooltip("The max distance of dive.")]
-        private float maxKnockbackRange = 1f;
-        [SerializeField, Range(0, 1), Tooltip("The max duration of dive.")]
-        private float maxKnockbackDuration = 1f;
-        private float curKnockbackDuration;
-        private Vector3 knockbackDir;
-        // Gets the knockback start position
-        private Vector3 knockStartPos;
+        private float knockForce = 1.5f;
+        [SerializeField, Range(0, 1), Tooltip("Knock back duration")]
+        private float knockbackDuration;
+        [SerializeField, Range(0, 1), Tooltip("Knock back stun duration when hitting a collider")]
+        private float knockBackWallStunDur = 0.5f;
+        [SerializeField, Tooltip("The offset from the collider when knocked back")]
+        private float colDisOffset = 0.2f;
 
         [Header("Death Values")]
         [SerializeField]
@@ -153,7 +152,7 @@ namespace Paraverse.Mob.Controller
 
             if (_isKnockedBack)
             {
-                KnockbackHandler();
+                //KnockbackHandler();
                 return;
             }
 
@@ -202,38 +201,56 @@ namespace Paraverse.Mob.Controller
             }
         }
 
+
         /// <summary>
         /// Invokes knock back action
         /// </summary>
-        public void ApplyKnockBack(Vector3 hitPoint)
+        public void ApplyKnockBack(Vector3 hitterPos)
         {
-            Vector3 impactDir = (transform.position - hitPoint).normalized;
-            knockStartPos = transform.position;
-            curKnockbackDuration = 0f;
-            knockbackDir = new Vector3(impactDir.x, 0f, impactDir.z);
             _isKnockedBack = true;
+            curSpeed = 0f;
+
+            // Get the knock back direction
+            Vector3 knockbackDir = transform.position - hitterPos;
+            knockbackDir = new Vector3(knockbackDir.x, 0f, knockbackDir.z);
+            knockbackDir.Normalize();
+
+            // Check for obstacles
+            RaycastHit hit;
+            Vector3 origin = transform.position;
+
+            if (Physics.Raycast(origin, knockbackDir * knockForce, out hit, knockForce))
+            {
+                // Gets knock back speed ratio
+                float disToCollider = ParaverseHelper.GetDistance(transform.position, hit.point + (knockbackDir * colDisOffset));
+                float maxKnockbackDis = ParaverseHelper.GetDistance(transform.position, knockbackDir * knockForce);
+                float knockDurRatio = disToCollider / maxKnockbackDis;
+                float knockDur = knockbackDuration * knockDurRatio;
+
+                // Apply knockback
+                transform.DOMove(hit.point + (knockbackDir * colDisOffset), knockDur)
+                    .OnComplete(KnockbackCollision);
+            }
+            else
+            {
+                // Apply knockback
+                transform.DOMove(transform.position + (knockbackDir * knockForce), knockbackDuration)
+                    .OnComplete(KnockbackComplete);
+            }
+        }
+
+        private void KnockbackCollision()
+        {
+            transform.DOMove(transform.position, knockBackWallStunDur)
+                .OnComplete(KnockbackComplete);
         }
 
         /// <summary>
         /// Handles knock back movement and variables in Update().
         /// </summary>
-        private void KnockbackHandler()
+        private void KnockbackComplete()
         {
-            if (_isKnockedBack)
-            {
-                // Updates mob position and dive timer
-                float knockBackRange = ParaverseHelper.GetDistance(transform.position, knockStartPos);
-
-                // Moves the mob in the move direction
-                controller.Move(knockbackDir * knockForce * Time.deltaTime);
-
-                // Stops dive when conditions met
-                if (knockBackRange >= maxKnockbackRange || curKnockbackDuration >= maxKnockbackDuration)
-                {
-                    _isKnockedBack = false;
-                    return;
-                }
-            }
+            _isKnockedBack = false;
         }
         #endregion
 

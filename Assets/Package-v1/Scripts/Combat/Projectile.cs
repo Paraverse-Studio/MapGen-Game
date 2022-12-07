@@ -1,5 +1,6 @@
 using Paraverse.Helper;
 using Paraverse.Mob;
+using Paraverse.Mob.Combat;
 using Paraverse.Mob.Stats;
 using UnityEngine;
 
@@ -8,6 +9,7 @@ namespace Paraverse
     public class Projectile : MonoBehaviour
     {
         #region Variables
+        private MobCombat mob;
         [SerializeField, Tooltip("Speed of the projectile.")]
         private string targetTag = "Player";
         [SerializeField, Tooltip("Speed of the projectile.")]
@@ -41,8 +43,9 @@ namespace Paraverse
         }
         #endregion
 
-        public void Init(float speed, float range, float damage)
+        public void Init(MobCombat mob, float speed, float range, float damage)
         {
+            this.mob = mob;
             this.speed = speed;
             this.range = range;
             this.damage = damage;
@@ -54,7 +57,7 @@ namespace Paraverse
             {
                 IMobController controller = other.GetComponent<IMobController>();
                 controller.Stats.UpdateCurrentHealth(-damage);
-                controller.ApplyHitAnimation();
+                controller.ApplyKnockBack(mob.transform.position);
                 Destroy(gameObject);
             }
         }

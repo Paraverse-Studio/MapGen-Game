@@ -1,3 +1,4 @@
+using DG.Tweening;
 using Paraverse.Helper;
 using Paraverse.Mob;
 using Paraverse.Mob.Combat;
@@ -59,12 +60,13 @@ namespace Paraverse.Player
 
         [Header("Knockback Values")]
         [SerializeField, Tooltip("The dive force of the mob.")]
-        private float knockForce = 30f;
-        [SerializeField, Range(0, 3), Tooltip("The max distance of dive.")]
-        private float maxKnockbackRange = 1f;
-        [SerializeField, Range(0, 1), Tooltip("The max duration of dive.")]
-        private float maxKnockbackDuration = 1f;
-        private float curKnockbackDuration;
+        private float knockForce = 1.5f;
+        [SerializeField, Range(0, 1), Tooltip("Knock back duration")]
+        private float knockbackDuration;
+        [SerializeField, Range(0, 1), Tooltip("Knock back stun duration when hitting a collider")]
+        private float knockBackWallStunDur = 0.5f;
+        [SerializeField, Tooltip("The offset from the collider when knocked back")]
+        private float colDisOffset = 0.2f;
 
         // State Booleans
         public bool IsInteracting { get { return isInteracting; } }
@@ -81,12 +83,11 @@ namespace Paraverse.Player
         // Movement, Jump & Dive inputs and velocities
         private Vector3 goalDir;
         private Vector3 moveDir;
-        private Vector3 jumpDir;
         private Vector3 diveDir;
+        private Vector3 jumpDir;
         private Vector3 knockbackDir;
         // Gets the start positions
         private Vector3 diveStartPos;
-        private Vector3 knockStartPos;
         // Gets the controller horizontal and vertical inputs
         private float horizontal;
         private float vertical;
@@ -127,13 +128,12 @@ namespace Paraverse.Player
 
             jumpDir.y -= Time.deltaTime;
 
-            
+
             MovementHandler();
             JumpHandler();
             DiveHandler();
-            KnockbackHandler();
             RotationHandler();
-            AnimationHandler(); 
+            AnimationHandler();
         }
         #endregion
 
@@ -144,17 +144,10 @@ namespace Paraverse.Player
         }
         #endregion
 
-        #region Controller Interface Methods
-        public void ApplyHitAnimation()
-        {
-            //if (IsInteracting == false)
-        }
-        #endregion
-
         #region Movement Handler Methods
         private void AnimationHandler()
         {
-            anim.SetFloat(StringData.Speed, moveDir.normalized.magnitude);
+            anim.SetFloat(StringData.Speed, moveDir.magnitude);
             anim.SetBool(StringData.IsGrounded, IsGrounded);
             anim.SetBool(StringData.IsDiving, IsDiving);
             anim.SetBool(StringData.IsKnockedBack, IsKnockedBack);
@@ -175,6 +168,8 @@ namespace Paraverse.Player
             horizontal = this.input.MovementDirection.x;
             vertical = this.input.MovementDirection.y;
 
+            Debug.Log("horiz: " + horizontal);
+
             // Player's raw input
             Vector3 input = new Vector3(horizontal, 0, vertical);
 
@@ -183,16 +178,17 @@ namespace Paraverse.Player
 
             // Our camera angle's matrix applied to our input, to get input relative to camera
             goalDir = matrix.MultiplyPoint3x4(input);
-            
-            // Lerping user's existing movement force to the goal movement force
-            moveDir =  Vector3.Lerp(moveDir, goalDir, Time.deltaTime * rotSpeed);
 
-            moveDir.Normalize();
+            // Lerping user's existing movement force to the goal movement force
+            moveDir = Vector3.Lerp(moveDir, goalDir, Time.deltaTime * rotSpeed);
+
             if (input == Vector3.zero)
             {
-                moveDir.x = 0;
-                moveDir.z = 0;
+                //moveDir.x = 0;
+                //moveDir.z = 0;
             }
+
+
             controller.Move(moveDir * curSpeed * Time.deltaTime);
         }
 
@@ -335,37 +331,51 @@ namespace Paraverse.Player
         /// <summary>
         /// Invokes knock back action
         /// </summary>
-        public void ApplyKnockBack(Vector3 mobPos)
+        public void ApplyKnockBack(Vector3 hitterPos)
         {
-            Vector3 impactDir = (transform.position - mobPos).normalized;
-            knockStartPos = transform.position;
-            curKnockbackDuration = 0f;
-            knockbackDir = new Vector3(impactDir.x, 0f, impactDir.z);
             _isKnockedBack = true;
-            anim.Play(StringData.Hit);
+
+            // Get the knock back direction
+            Vector3 knockbackDir = transform.position - hitterPos;
+            knockbackDir = new Vector3(knockbackDir.x, 0f, knockbackDir.z);
+            knockbackDir.Normalize();
+
+            // Check for obstacles
+            RaycastHit hit;
+            Vector3 origin = transform.position;
+
+            if (Physics.Raycast(origin, knockbackDir * knockForce, out hit, knockForce))
+            {
+                // Gets knock back speed ratio
+                float disToCollider = ParaverseHelper.GetDistance(transform.position, hit.point + (knockbackDir * colDisOffset));
+                float maxKnockbackDis = ParaverseHelper.GetDistance(transform.position, knockbackDir * knockForce);
+                float knockDurRatio = disToCollider / maxKnockbackDis;
+                float knockDur = knockbackDuration * knockDurRatio;
+
+                // Apply knockback
+                transform.DOMove(hit.point + (knockbackDir * colDisOffset), knockDur)
+                    .OnComplete(KnockbackCollision);
+            }
+            else
+            {
+                // Apply knockback
+                transform.DOMove(transform.position + (knockbackDir * knockForce), knockbackDuration)
+                    .OnComplete(KnockbackComplete);
+            }
+        }
+
+        private void KnockbackCollision()
+        {
+            transform.DOMove(transform.position, knockBackWallStunDur)
+                .OnComplete(KnockbackComplete);
         }
 
         /// <summary>
         /// Handles knock back movement and variables in Update().
         /// </summary>
-        private void KnockbackHandler()
+        private void KnockbackComplete()
         {
-            if (_isKnockedBack)
-            {
-                // Updates mob position and dive timer
-                float knockBackRange = ParaverseHelper.GetDistance(transform.position, knockStartPos);
-                curKnockbackDuration += Time.deltaTime;
-
-                // Moves the mob in the move direction
-                controller.Move(knockbackDir * knockForce * Time.deltaTime);
-
-                // Stops dive when conditions met
-                if (knockBackRange >= maxKnockbackRange || curKnockbackDuration >= maxKnockbackDuration)
-                {
-                    _isKnockedBack = false;
-                    return;
-                }
-            }
+            _isKnockedBack = false;
         }
         #endregion
 

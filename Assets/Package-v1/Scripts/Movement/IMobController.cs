@@ -6,7 +6,6 @@ namespace Paraverse.Mob
     public interface IMobController
     {
         public IMobStats Stats { get; }
-        public void ApplyHitAnimation();
         public void ApplyKnockBack(Vector3 mobPos);
     }
 }
