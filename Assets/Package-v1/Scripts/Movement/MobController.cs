@@ -163,20 +163,20 @@ namespace Paraverse.Mob.Controller
             {
                 PursueTarget();
                 SetState(MobState.Pursue);
-                Debug.Log("Pursue State");
+                //Debug.Log("Pursue State");
             }
             else if (TargetDetected() && combat.CanBasicAtk)
             {
                 CombatHandler();
                 SetState(MobState.Combat);
-                Debug.Log("Combat State");
+                //Debug.Log("Combat State");
             }
             else
             {
                 nav.updateRotation = true;
                 Patrol();
                 SetState(MobState.Patrol);
-                Debug.Log("Patrol State");
+                //Debug.Log("Patrol State");
             }
         }
 

@@ -79,6 +79,7 @@ namespace Paraverse.Player
         private bool _isKnockedBack = false;
 
         // Movement, Jump & Dive inputs and velocities
+        private Vector3 goalDir;
         private Vector3 moveDir;
         private Vector3 jumpDir;
         private Vector3 diveDir;
@@ -171,14 +172,27 @@ namespace Paraverse.Player
                 curSpeed = GetWalkSpeed();
 
             // Gets movement input values
-            horizontal = input.MovementDirection.x;
-            vertical = input.MovementDirection.y;
+            horizontal = this.input.MovementDirection.x;
+            vertical = this.input.MovementDirection.y;
 
-            // Makes player movement relative to camera
-            moveDir = new Vector3(horizontal, jumpDir.y, vertical);
-            moveDir = moveDir.x * new Vector3(cam.transform.right.x, 0, cam.transform.right.z) + moveDir.z * new Vector3(cam.transform.forward.x, 0, cam.transform.forward.z);
+            // Player's raw input
+            Vector3 input = new Vector3(horizontal, 0, vertical);
+
+            // The matrix that holds our camera angle
+            Matrix4x4 matrix = Matrix4x4.Rotate(Quaternion.Euler(0, 45f, 0));
+
+            // Our camera angle's matrix applied to our input, to get input relative to camera
+            goalDir = matrix.MultiplyPoint3x4(input);
+            
+            // Lerping user's existing movement force to the goal movement force
+            moveDir =  Vector3.Lerp(moveDir, goalDir, Time.deltaTime * rotSpeed);
+
             moveDir.Normalize();
-
+            if (input == Vector3.zero)
+            {
+                moveDir.x = 0;
+                moveDir.z = 0;
+            }
             controller.Move(moveDir * curSpeed * Time.deltaTime);
         }
 
@@ -187,8 +201,17 @@ namespace Paraverse.Player
             if (_isKnockedBack) return;
 
             // Ensures player faces the direction in which they were moving when stopped
+            //if (goalDir != Vector3.zero)
+            //{
+            //    transform.forward = moveDir;
+            //}
+
+
             if (moveDir != Vector3.zero)
-                transform.forward = moveDir;
+            {
+                Quaternion targetLook = Quaternion.LookRotation(moveDir);
+                transform.rotation = Quaternion.Slerp(transform.rotation, targetLook, rotSpeed * Time.deltaTime);
+            }
         }
         #endregion
 
