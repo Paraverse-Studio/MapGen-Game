@@ -149,10 +149,9 @@ public class GameLoopManager : MonoBehaviour
     public IEnumerator IEndRound()
     {
         _roundReady = false;
+        roundTimer.PauseTimer();
 
-        yield return new WaitForSeconds(0.5f);
         GameLoopEvents.OnEndRound?.Invoke();
-
         roundCompleteWindow.gameObject.SetActive(true);
         roundCompleteWindow.SetTrigger("Entry");
         yield return new WaitForSeconds(3f);
@@ -167,7 +166,7 @@ public class GameLoopManager : MonoBehaviour
     {
         GlobalSettings.Instance.player.GetComponentInChildren<MobStats>().OnHealthChange.RemoveListener(AccrueDamageTaken);
         
-        float score = ScoreFormula.CalculateScore(totalEnemiesSpawned * 12f, roundTimer.GetTime(), playerMaxHealth, damageTaken);
+        float score = ScoreFormula.CalculateScore(totalEnemiesSpawned * 11f, roundTimer.GetTime(), playerMaxHealth, damageTaken);
 
 
 

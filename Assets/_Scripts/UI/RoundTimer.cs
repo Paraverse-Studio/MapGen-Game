@@ -8,6 +8,7 @@ public class RoundTimer : MonoBehaviour
     TextMeshProUGUI text;
     float timer;
     float originalSize;
+    bool paused = false;
 
     // Start is called before the first frame update
     void Start()
@@ -20,7 +21,7 @@ public class RoundTimer : MonoBehaviour
     // Update is called once per frame
     void Update()
     {
-        timer += Time.deltaTime;
+        if (!paused) timer += Time.deltaTime;
 
         int minutes = Mathf.FloorToInt(timer / 60f);
         int seconds = Mathf.FloorToInt(timer - minutes * 60f);
@@ -35,8 +36,15 @@ public class RoundTimer : MonoBehaviour
 
     public float GetTime() => timer;
 
+    public void PauseTimer()
+    {
+        paused = true;
+        text.fontSize = originalSize * 1.25f;
+    }
+
     public void RestartTimer()
     {
+        paused = false;
         timer = 0;
         text.fontSize = (originalSize * 2f);
     }

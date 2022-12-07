@@ -29,7 +29,7 @@ public class ScoreFormula
         // Damage Taken /////////////
         float relativeDamageTaken = maxHealth - damageTaken;
 
-        float damageTakenScore = (relativeDamageTaken / (maxHealth * 0.85f)) * 100f; // 85% is considered 100 score in dmg taken
+        float damageTakenScore = (relativeDamageTaken / (maxHealth * 0.90f)) * 100f; // 85% is considered 100 score in dmg taken
 
         damageTakenScore *= damageTakenScore > 100f? 1.1f : 1f; // amplifies good score if they're above 100
 
