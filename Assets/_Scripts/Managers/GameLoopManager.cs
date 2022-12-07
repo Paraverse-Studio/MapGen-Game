@@ -1,6 +1,8 @@
+using Paraverse.Mob.Stats;
 using System;
 using System.Collections;
 using System.Collections.Generic;
+using TMPro;
 using UnityEngine;
 using UnityEngine.Events;
 using UnityEngine.SceneManagement;
@@ -19,6 +21,13 @@ public class GameLoopManager : MonoBehaviour
         public UnityEvent OnEndRound;
 
         public UnityEvent OnUI; //whenever game enters any UI (excluding pause)
+    }
+
+    [System.Serializable]
+    public struct ResultsScreen
+    {
+        public TextMeshProUGUI scoreText;
+        public TextMeshProUGUI rankText;
     }
 
     public enum RoundCompletionType
@@ -53,9 +62,16 @@ public class GameLoopManager : MonoBehaviour
     public CompletionPredicateType CompletionPredicate;
     private Predicate<bool> _predicate;
 
+    [Header("References")]
+    public ResultsScreen Results;
+
     [Space(20)]
     [Header("Runtime Data")]
     public RoundCompletionType roundCompletionType;
+    public int damageTaken;
+    private int totalEnemiesSpawned;
+    private int lastHealthSaved = -1;
+    private int playerMaxHealth;
 
     private bool _roundReady = false;
     private bool _isPaused = false;
@@ -104,7 +120,10 @@ public class GameLoopManager : MonoBehaviour
     public void StartRound()
     {
         _roundReady = true;
+
         GameLoopEvents.OnStartRound?.Invoke();
+        totalEnemiesSpawned = EnemiesManager.Instance.EnemiesCount;
+        GlobalSettings.Instance.player.GetComponentInChildren<MobStats>().OnHealthChange.AddListener(AccrueDamageTaken);
     }
 
     public void MakeCompletionPredicate(CompletionPredicateType predicate)
@@ -146,6 +165,17 @@ public class GameLoopManager : MonoBehaviour
 
     public void CompleteRound()
     {
+        GlobalSettings.Instance.player.GetComponentInChildren<MobStats>().OnHealthChange.RemoveListener(AccrueDamageTaken);
+        
+        float score = ScoreFormula.CalculateScore(totalEnemiesSpawned * 12f, roundTimer.GetTime(), playerMaxHealth, damageTaken);
+
+
+
+        Results.scoreText.text = "Rank: " + (int)score;
+        Results.rankText.text = GetScoreRank((int)score);
+
+
+
         GameLoopEvents.OnUI?.Invoke();
 
         switch (roundCompletionType)
@@ -190,6 +220,22 @@ public class GameLoopManager : MonoBehaviour
         loadingScreen.SetActive(false);
     }
 
+    public void AccrueDamageTaken(int playerCurrentHealth, int _playerMaxHealth)
+    {
+        playerMaxHealth = _playerMaxHealth;
+
+        if (lastHealthSaved != -1)
+        {
+            damageTaken += Mathf.Max(lastHealthSaved - playerCurrentHealth, 0);
+        }
+        else
+        {
+            damageTaken += Mathf.Max(_playerMaxHealth - playerCurrentHealth, 0);
+        }
+
+        lastHealthSaved = playerCurrentHealth;
+    }
+
 
     #endregion
 
@@ -213,5 +259,17 @@ public class GameLoopManager : MonoBehaviour
 
 
     /* * * * * * *  P R E D I C A T E S  * * * * * * * * */
+
+    public string GetScoreRank(int score)
+    {
+        if (score > 100) return "S+";
+        else if (score >= 90) return "S";
+        else if (score >= 80) return "A";
+        else if (score >= 70) return "B";
+        else if (score >= 60) return "C";
+        else if (score >= 50) return "D";
+        else return "F";
+    }
+
 
 }

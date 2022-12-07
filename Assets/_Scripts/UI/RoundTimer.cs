@@ -33,6 +33,8 @@ public class RoundTimer : MonoBehaviour
         }
     }
 
+    public float GetTime() => timer;
+
     public void RestartTimer()
     {
         timer = 0;
