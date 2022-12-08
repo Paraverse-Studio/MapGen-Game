@@ -67,8 +67,8 @@ namespace Paraverse.Player
         private float curKnockbackDuration;
 
         // State Booleans
-        public bool IsInteracting { get { return isInteracting; } }
-        private bool isInteracting = false;
+        public bool IsInteracting { get { return _isInteracting; } }
+        private bool _isInteracting = false;
         public bool IsMoving { get { return _isMoving; } }
         private bool _isMoving = false;
         public bool IsGrounded { get { return _isGrounded; } }
@@ -121,17 +121,17 @@ namespace Paraverse.Player
 
         private void Update()
         {
-            isInteracting = anim.GetBool(StringData.IsInteracting);
+            _isInteracting = anim.GetBool(StringData.IsInteracting);
             _isMoving = Mathf.Abs(vertical) > 0 || Mathf.Abs(horizontal) > 0;
             _isGrounded = IsGroundedCheck();
 
             jumpDir.y -= Time.deltaTime;
 
             MovementHandler();
+            RotationHandler();
             JumpHandler();
             DiveHandler();
             KnockbackHandler();
-            RotationHandler();
             AnimationHandler();
         }
         #endregion
@@ -155,7 +155,7 @@ namespace Paraverse.Player
         private void MovementHandler()
         {
             // Disables player movement during dive
-            if (_isDiving || _isKnockedBack) return;
+            if (_isDiving || _isKnockedBack || _isInteracting) return;
 
             // Adjusts player speed based on state
             if (IsInteracting)
@@ -206,7 +206,7 @@ namespace Paraverse.Player
         /// </summary>
         private void Jump()
         {
-            if (_isKnockedBack) return;
+            if (_isKnockedBack || _isInteracting) return;
 
             if (_isGrounded && curJumpCd >= jumpCd)
             {
@@ -269,7 +269,7 @@ namespace Paraverse.Player
         /// </summary>
         private void Dive()
         {
-            if (_isKnockedBack || _isDiving || _isMoving == false) return;
+            if (_isKnockedBack || _isDiving || _isInteracting || _isMoving == false) return;
 
             if (_isGrounded && curDiveCd >= diveCd)
             {
