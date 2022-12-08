@@ -253,6 +253,7 @@ public class MapGeneration : MonoBehaviour
 
     private void ResetLists()
     {
+        /*
         if (false)
         {
             #region OBJECT POOL DECOMMISSIONING
@@ -309,7 +310,7 @@ public class MapGeneration : MonoBehaviour
 
             #endregion
         }
-
+        */
         if (true)
         {
             #region DESTROY DECOMMISSIONING
