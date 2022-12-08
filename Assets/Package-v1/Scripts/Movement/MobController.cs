@@ -26,8 +26,8 @@ namespace Paraverse.Mob.Controller
         public MobState CurMobState { get { return curState; } }
 
         // State Booleans 
-        public bool IsInteracting { get { return isInteracting; } }
-        private bool isInteracting = false;
+        public bool IsInteracting { get { return _isInteracting; } }
+        private bool _isInteracting = false;
         public bool IsKnockedBack { get { return _isKnockedBack; } }
         private bool _isKnockedBack = false;
 
@@ -74,16 +74,16 @@ namespace Paraverse.Mob.Controller
         [Tooltip("Set to true once target is detected.")]
         private bool targetDetected = false;
 
+
         [Header("Knockback Values")]
         [SerializeField, Tooltip("The dive force of the mob.")]
-        private float knockForce = 30f;
+        private float knockForce = 5f;
         [SerializeField, Range(0, 3), Tooltip("The max distance of dive.")]
-        private float maxKnockbackRange = 1f;
+        private float maxKnockbackRange = 1.5f;
         [SerializeField, Range(0, 1), Tooltip("The max duration of dive.")]
         private float maxKnockbackDuration = 1f;
         private float curKnockbackDuration;
         private Vector3 knockbackDir;
-        // Gets the knockback start position
         private Vector3 knockStartPos;
 
         [Header("Death Values")]
@@ -129,7 +129,7 @@ namespace Paraverse.Mob.Controller
 
         private void Update()
         {
-            isInteracting = anim.GetBool(StringData.IsInteracting);
+            _isInteracting = anim.GetBool(StringData.IsInteracting);
 
             DeathHandler();
             if (isDead) return;
@@ -145,7 +145,8 @@ namespace Paraverse.Mob.Controller
         /// </summary>
         private void StateHandler()
         {
-            if (IsInteracting && _isKnockedBack == false)
+            nav.speed = curSpeed;
+            if (_isInteracting && _isKnockedBack == false)
             {
                 curSpeed = 0f;
                 return;
@@ -153,11 +154,10 @@ namespace Paraverse.Mob.Controller
 
             if (_isKnockedBack)
             {
+                curSpeed = 0f;
                 KnockbackHandler();
                 return;
             }
-
-            nav.speed = curSpeed;
 
             if (TargetDetected() && combat.CanBasicAtk == false)
             {
@@ -194,24 +194,19 @@ namespace Paraverse.Mob.Controller
         #endregion
 
         #region Controller Interface Methods
-        public void ApplyHitAnimation()
-        {
-            if (IsInteracting == false)
-            {
-                anim.Play(StringData.Hit);
-            }
-        }
 
         /// <summary>
         /// Invokes knock back action
         /// </summary>
-        public void ApplyKnockBack(Vector3 hitPoint)
+        public void ApplyKnockBack(Vector3 mobPos)
         {
-            Vector3 impactDir = (transform.position - hitPoint).normalized;
+            Vector3 impactDir = (transform.position - mobPos).normalized;
             knockStartPos = transform.position;
             curKnockbackDuration = 0f;
             knockbackDir = new Vector3(impactDir.x, 0f, impactDir.z);
             _isKnockedBack = true;
+            if (_isInteracting == false)
+                anim.Play(StringData.Hit);
         }
 
         /// <summary>
@@ -223,6 +218,7 @@ namespace Paraverse.Mob.Controller
             {
                 // Updates mob position and dive timer
                 float knockBackRange = ParaverseHelper.GetDistance(transform.position, knockStartPos);
+                curKnockbackDuration += Time.deltaTime;
 
                 // Moves the mob in the move direction
                 controller.Move(knockbackDir * knockForce * Time.deltaTime);

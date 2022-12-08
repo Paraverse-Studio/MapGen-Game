@@ -59,16 +59,16 @@ namespace Paraverse.Player
 
         [Header("Knockback Values")]
         [SerializeField, Tooltip("The dive force of the mob.")]
-        private float knockForce = 30f;
+        private float knockForce = 5f;
         [SerializeField, Range(0, 3), Tooltip("The max distance of dive.")]
-        private float maxKnockbackRange = 1f;
+        private float maxKnockbackRange = 1.5f;
         [SerializeField, Range(0, 1), Tooltip("The max duration of dive.")]
         private float maxKnockbackDuration = 1f;
         private float curKnockbackDuration;
 
         // State Booleans
-        public bool IsInteracting { get { return isInteracting; } }
-        private bool isInteracting = false;
+        public bool IsInteracting { get { return _isInteracting; } }
+        private bool _isInteracting = false;
         public bool IsMoving { get { return _isMoving; } }
         private bool _isMoving = false;
         public bool IsGrounded { get { return _isGrounded; } }
@@ -121,19 +121,18 @@ namespace Paraverse.Player
 
         private void Update()
         {
-            isInteracting = anim.GetBool(StringData.IsInteracting);
-            _isMoving = moveDir.magnitude > 0;
+            _isInteracting = anim.GetBool(StringData.IsInteracting);
+            _isMoving = Mathf.Abs(vertical) > 0 || Mathf.Abs(horizontal) > 0;
             _isGrounded = IsGroundedCheck();
 
             jumpDir.y -= Time.deltaTime;
 
-            
             MovementHandler();
+            RotationHandler();
             JumpHandler();
             DiveHandler();
             KnockbackHandler();
-            RotationHandler();
-            AnimationHandler(); 
+            AnimationHandler();
         }
         #endregion
 
@@ -144,17 +143,10 @@ namespace Paraverse.Player
         }
         #endregion
 
-        #region Controller Interface Methods
-        public void ApplyHitAnimation()
-        {
-            //if (IsInteracting == false)
-        }
-        #endregion
-
         #region Movement Handler Methods
         private void AnimationHandler()
         {
-            anim.SetFloat(StringData.Speed, moveDir.normalized.magnitude);
+            anim.SetFloat(StringData.Speed, moveDir.magnitude);
             anim.SetBool(StringData.IsGrounded, IsGrounded);
             anim.SetBool(StringData.IsDiving, IsDiving);
             anim.SetBool(StringData.IsKnockedBack, IsKnockedBack);
@@ -163,7 +155,7 @@ namespace Paraverse.Player
         private void MovementHandler()
         {
             // Disables player movement during dive
-            if (_isDiving || _isKnockedBack) return;
+            if (_isDiving || _isKnockedBack || _isInteracting) return;
 
             // Adjusts player speed based on state
             if (IsInteracting)
@@ -183,16 +175,10 @@ namespace Paraverse.Player
 
             // Our camera angle's matrix applied to our input, to get input relative to camera
             goalDir = matrix.MultiplyPoint3x4(input);
-            
-            // Lerping user's existing movement force to the goal movement force
-            moveDir =  Vector3.Lerp(moveDir, goalDir, Time.deltaTime * rotSpeed);
 
-            moveDir.Normalize();
-            if (input == Vector3.zero)
-            {
-                moveDir.x = 0;
-                moveDir.z = 0;
-            }
+            // Lerping user's existing movement force to the goal movement force
+            moveDir = Vector3.Lerp(moveDir, goalDir, Time.deltaTime * rotSpeed);
+
             controller.Move(moveDir * curSpeed * Time.deltaTime);
         }
 
@@ -205,8 +191,7 @@ namespace Paraverse.Player
             //{
             //    transform.forward = moveDir;
             //}
-
-
+            
             if (moveDir != Vector3.zero)
             {
                 Quaternion targetLook = Quaternion.LookRotation(moveDir);
@@ -221,9 +206,9 @@ namespace Paraverse.Player
         /// </summary>
         private void Jump()
         {
-            if (_isKnockedBack) return;
+            if (_isKnockedBack || _isInteracting) return;
 
-            if (controller.isGrounded && curJumpCd >= jumpCd)
+            if (_isGrounded && curJumpCd >= jumpCd)
             {
                 curJumpCd = 0f;
                 jumpDir.y += Mathf.Sqrt(jumpForce * -gravityMultiplier * gravityForce);
@@ -250,7 +235,7 @@ namespace Paraverse.Player
         private void ApplyGravity()
         {
             // Ensures player remains grounded when grounded
-            if (jumpDir.y < 0 && IsGrounded)
+            if (jumpDir.y < 0 && _isGrounded)
             {
                 jumpDir.y = 0f;
             }
@@ -284,17 +269,18 @@ namespace Paraverse.Player
         /// </summary>
         private void Dive()
         {
-            if (_isKnockedBack || _isDiving) return;
+            if (_isKnockedBack || _isDiving || _isInteracting || _isMoving == false) return;
 
-            if (controller.isGrounded && curDiveCd >= diveCd && _isMoving)
+            if (_isGrounded && curDiveCd >= diveCd)
             {
-                diveStartPos = transform.position;
-                curDiveDuration = 0f;
-                curDiveCd = 0f;
-                diveDir = new Vector3(moveDir.x, jumpDir.y, moveDir.z);
-                _isDiving = true;
-                anim.Play(StringData.Dive);
                 stats.ConsumeDiveEnergy();
+                _isDiving = true;
+                curDiveCd = 0f;
+                curDiveDuration = 0f;
+                diveStartPos = transform.position;
+                controller.detectCollisions = false;
+                diveDir = new Vector3(goalDir.x, 0f, goalDir.z);
+                anim.Play(StringData.Dive);
             }
         }
 
@@ -315,6 +301,7 @@ namespace Paraverse.Player
                 // Stops dive when conditions met
                 if (diveRange >= maxDiveRange || curDiveDuration >= maxDiveDuration)
                 {
+                    controller.detectCollisions = true;
                     _isDiving = false;
                     return;
                 }
