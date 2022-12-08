@@ -28,6 +28,7 @@ public class GameLoopManager : MonoBehaviour
     {
         public TextMeshProUGUI scoreText;
         public TextMeshProUGUI rankText;
+        public TextMeshProUGUI goldText;
     }
 
     public enum RoundCompletionType
@@ -54,6 +55,7 @@ public class GameLoopManager : MonoBehaviour
     public GameObject loadingScreen;
     public GameObject roundResultsWindow;
     public RoundTimer roundTimer;
+    public PauseMenuViewController pauseMenu;
 
     [Header("End Portal")]
     public GameObject EndPortal;
@@ -67,11 +69,14 @@ public class GameLoopManager : MonoBehaviour
 
     [Space(20)]
     [Header("Runtime Data")]
+    [Min(1)]
+    public int round;
     public RoundCompletionType roundCompletionType;
     public int damageTaken;
     private int totalEnemiesSpawned;
     private int lastHealthSaved = -1;
     private int playerMaxHealth;
+    private int goldRewarded = 0;
 
     private bool _roundReady = false;
     private bool _isPaused = false;
@@ -107,6 +112,8 @@ public class GameLoopManager : MonoBehaviour
             if (null == _predicate) MakeCompletionPredicate(CompletionPredicate);
             if (_predicate(_roundReady)) EndPortal.SetActive(true);
         }
+
+        if (Input.GetKeyDown(KeyCode.U)) EndRound();
     }
 
 
@@ -164,15 +171,20 @@ public class GameLoopManager : MonoBehaviour
 
     public void CompleteRound()
     {
-        GlobalSettings.Instance.player.GetComponentInChildren<MobStats>().OnHealthChange.RemoveListener(AccrueDamageTaken);
-        
+        MobStats playerStats = GlobalSettings.Instance.player.GetComponentInChildren<MobStats>();
+        playerStats.OnHealthChange.RemoveListener(AccrueDamageTaken);
+        playerMaxHealth = playerStats.MaxHealth;
+
         float score = ScoreFormula.CalculateScore(totalEnemiesSpawned * 11f, roundTimer.GetTime(), playerMaxHealth, damageTaken);
+        goldRewarded = (int)(score * 1);
 
-
-
-        Results.scoreText.text = "Rank: " + (int)score;
+        GlobalSettings.Instance.player.GetComponentInChildren<MobStats>().UpdateGold(goldRewarded);
+        Results.scoreText.text = "Score: " + (int)score + "%";
         Results.rankText.text = GetScoreRank((int)score);
+        //Results.goldText.text = "+" + goldRewarded;
 
+        // save it in database here, we need to save stats in db asap so players
+        // who might d/c right after ending get their stuff saved
 
 
         GameLoopEvents.OnUI?.Invoke();
@@ -219,6 +231,7 @@ public class GameLoopManager : MonoBehaviour
         loadingScreen.SetActive(false);
     }
 
+
     public void AccrueDamageTaken(int playerCurrentHealth, int _playerMaxHealth)
     {
         playerMaxHealth = _playerMaxHealth;
@@ -248,7 +261,6 @@ public class GameLoopManager : MonoBehaviour
     /* * * * * * *  P R E D I C A T E S  * * * * * * * * */
     public bool KillAllEnemies(bool mapReady)
     {
-
         return mapReady && EnemiesManager.Instance.EnemiesCount <= 0;
     }
 

@@ -4,14 +4,18 @@ namespace Paraverse.Mob.Stats
     {
         #region Properties
         // Properties 
-        public float MaxHealth { get; }
-        public float CurHealth { get; }
+        public int MaxHealth { get; }
+        public int CurHealth { get; }
         public float AttackDamage { get; }
         public float AttackSpeed { get; }
         public float MoveSpeed { get; }
         public float MaxEnergy { get; }
         public float CurrentEnergy { get; }
         public float EnergyRegen { get; }
+
+
+
+        public int Gold { get; }
         #endregion
 
         // Methods
@@ -20,13 +24,13 @@ namespace Paraverse.Mob.Stats
         /// Updates mob health stat value.
         /// </summary>
         /// <param name="amount"></param>
-        public void UpdateMaxHealth(float amount);
+        public void UpdateMaxHealth(int amount);
 
         /// <summary>
         /// Updates mob current health stat value.
         /// </summary>
         /// <param name="amount"></param>
-        public void UpdateCurrentHealth(float amount);
+        public void UpdateCurrentHealth(int amount);
 
         /// <summary>
         /// Updates mob attack damage stat value.
@@ -63,6 +67,12 @@ namespace Paraverse.Mob.Stats
         /// </summary>
         /// <param name="amount"></param>
         public void ConsumeDiveEnergy();
+
+        /// <summary>
+        /// Updates mob current gold.
+        /// </summary>
+        /// <param name="amount"></param>
+        public void UpdateGold(int amount);
         #endregion
     }
 }

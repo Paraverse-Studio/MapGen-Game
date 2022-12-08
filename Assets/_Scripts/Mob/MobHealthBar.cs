@@ -150,6 +150,7 @@ public class MobHealthBar : MonoBehaviour
             _healthValueDisplay = overrideProperties.healthValueDisplay;
             _energyBar = overrideProperties.energyBar;
             _energyLerpBar = overrideProperties.energyLerpBar;
+            _nameLabel = overrideProperties.nameLabel;
         }
 
         // Settings
@@ -189,6 +190,7 @@ public class MobHealthBar : MonoBehaviour
         _healthValueDisplay = overrideProperties.healthValueDisplay;
         _energyBar = overrideProperties.energyBar;
         _energyLerpBar = overrideProperties.energyLerpBar;
+        _nameLabel = overrideProperties.nameLabel;
 
         _healthBarSetupComplete = true;
     }

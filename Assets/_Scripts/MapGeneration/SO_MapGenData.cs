@@ -6,6 +6,11 @@ using UnityEngine.Rendering;
 public class SO_MapGenData : ScriptableObject
 {
     [Space(30)]
+    [Header("    _____________  MAP LORE  _____________")]
+    [Space(5)]
+    public string mapDescription;
+
+    [Space(30)]
     [Header("    _____________  MAP SET-UP  _____________")]
     [Space(5)]
     public VolumeProfile ppProfile;

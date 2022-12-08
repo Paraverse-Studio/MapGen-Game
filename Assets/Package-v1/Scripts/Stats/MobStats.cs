@@ -8,13 +8,13 @@ namespace Paraverse.Mob.Stats
         #region Variables
 
         [SerializeField]
-        protected float maxHealth = 100f;
+        protected int maxHealth = 100;
         [DisplayName("Max Health")]
-        public float MaxHealth { get { return maxHealth; } }
+        public int MaxHealth { get { return maxHealth; } }
 
-        public float curHealth = 100f;
+        public int curHealth = 100;
         [DisplayName("Current Health")]
-        public float CurHealth { get { return curHealth; } }
+        public int CurHealth { get { return curHealth; } }
 
         [SerializeField]
         protected float attackDamage = 5f;
@@ -46,6 +46,14 @@ namespace Paraverse.Mob.Stats
         [DisplayName("Energy Regen /s")]
         public float EnergyRegen { get { return energyRegen; } }
 
+
+        [SerializeField]
+        protected float gold = 100f;
+        [DisplayName("Current Gold")]
+        public float Gold { get { return gold; } }
+
+        int IMobStats.Gold => throw new System.NotImplementedException();
+
         [HideInInspector]
         public IntIntEvent OnHealthChange = new IntIntEvent();
         
@@ -68,15 +76,15 @@ namespace Paraverse.Mob.Stats
         #endregion
 
         #region Update Stat Methods
-        public void UpdateMaxHealth(float amount)
+        public void UpdateMaxHealth(int amount)
         {
             maxHealth += amount;
         }
 
-        public void UpdateCurrentHealth(float amount)
+        public void UpdateCurrentHealth(int amount)
         {
             curHealth += amount;
-            OnHealthChange?.Invoke((int)curHealth, (int)maxHealth);
+            OnHealthChange?.Invoke(curHealth, maxHealth);
         }
 
         public void UpdateAttackDamage(float amount)
@@ -108,6 +116,11 @@ namespace Paraverse.Mob.Stats
         {
             curEnergy = Mathf.Clamp(curEnergy + amount, 0f, MaxEnergy);
             OnEnergyChange?.Invoke((int)curEnergy, (int)maxEnergy);
+        }
+
+        public void UpdateGold(int amount)
+        {
+            gold += amount;
         }
         #endregion
     }

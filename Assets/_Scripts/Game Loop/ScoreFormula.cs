@@ -21,7 +21,7 @@ public class ScoreFormula
         
         float timeScore = (1.0f - (extraTimeTaken / expectedTime)) * 100f; // individual aspect scores should be out of 100 (but can go beyond 100)
 
-        timeScore *= timeScore > 100? 1.1f : 1f;  // amplifies good score if they're above 100
+        //timeScore *= timeScore > 100? 1.1f : 1f;  // amplifies good score if they're above 100
 
         timeScore = Mathf.Max(timeScore, 0); // Safety
 
@@ -31,7 +31,7 @@ public class ScoreFormula
 
         float damageTakenScore = (relativeDamageTaken / (maxHealth * 0.90f)) * 100f; // 85% is considered 100 score in dmg taken
 
-        damageTakenScore *= damageTakenScore > 100f? 1.1f : 1f; // amplifies good score if they're above 100
+        //damageTakenScore *= damageTakenScore > 100f? 1.1f : 1f; // amplifies good score if they're above 100
 
         damageTakenScore = Mathf.Max(damageTakenScore, 0); // Safety
 
@@ -40,7 +40,10 @@ public class ScoreFormula
 
         // Summary //////////////////
         score = (timeScore + damageTakenScore) / 2f;
-        Debug.Log($"Score Summary: Time taken {timeTaken} (score {timeScore}), and damage taken {damageTaken} (score {damageTakenScore}): Score {score}%");
+
+        Debug.Log($"Score Summary: Time taken {timeTaken} (score {(int)timeScore}%), " +
+            $"and damage taken {damageTaken} (score {(int)damageTakenScore}%): Score {(int)score}%");
+
         return score;
     }
 

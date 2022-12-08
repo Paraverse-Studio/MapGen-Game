@@ -53,7 +53,7 @@ namespace Paraverse
             if (other.CompareTag(targetTag))
             {
                 IMobController controller = other.GetComponent<IMobController>();
-                controller.Stats.UpdateCurrentHealth(-damage);
+                controller.Stats.UpdateCurrentHealth((int)-damage);
                 controller.ApplyHitAnimation();
                 Destroy(gameObject);
             }

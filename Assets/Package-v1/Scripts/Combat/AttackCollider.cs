@@ -26,7 +26,7 @@ namespace Paraverse
                 //ContactPoint contact = other.contacts[0];
 
                 IMobController controller = other.GetComponent<IMobController>();
-                controller.Stats.UpdateCurrentHealth(-damage);
+                controller.Stats.UpdateCurrentHealth((int)-damage);
                 controller.ApplyKnockBack(mob.transform.position);
 
                 Debug.Log(other.name + " took " + damage + " points of damage.");
