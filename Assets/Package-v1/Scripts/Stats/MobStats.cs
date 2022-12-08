@@ -6,7 +6,6 @@ namespace Paraverse.Mob.Stats
     public class MobStats : MonoBehaviour, IMobStats
     {
         #region Variables
-
         [SerializeField]
         protected float maxHealth = 100f;
         [DisplayName("Max Health")]

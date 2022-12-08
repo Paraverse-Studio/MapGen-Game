@@ -17,6 +17,16 @@ namespace Paraverse.Helper
         }
 
         /// <summary>
+        /// Returns given position disregarding the Y axis. 
+        /// </summary>
+        /// <param name="position"></param>
+        /// <returns></returns>
+        public static Vector3 GetPositionXZ(Vector3 position)
+        {
+            return new Vector3(position.x, 0f, position.z);
+        }
+
+        /// <summary>
         /// Rotates the gameobject to target direction with given rotation speed.
         /// </summary>
         /// <param name="from">Rotate from</param>

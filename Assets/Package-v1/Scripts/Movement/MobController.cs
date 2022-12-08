@@ -193,46 +193,6 @@ namespace Paraverse.Mob.Controller
         }
         #endregion
 
-        #region Controller Interface Methods
-
-        /// <summary>
-        /// Invokes knock back action
-        /// </summary>
-        public void ApplyKnockBack(Vector3 mobPos)
-        {
-            Vector3 impactDir = (transform.position - mobPos).normalized;
-            knockStartPos = transform.position;
-            curKnockbackDuration = 0f;
-            knockbackDir = new Vector3(impactDir.x, 0f, impactDir.z);
-            _isKnockedBack = true;
-            if (_isInteracting == false)
-                anim.Play(StringData.Hit);
-        }
-
-        /// <summary>
-        /// Handles knock back movement and variables in Update().
-        /// </summary>
-        private void KnockbackHandler()
-        {
-            if (_isKnockedBack)
-            {
-                // Updates mob position and dive timer
-                float knockBackRange = ParaverseHelper.GetDistance(transform.position, knockStartPos);
-                curKnockbackDuration += Time.deltaTime;
-
-                // Moves the mob in the move direction
-                controller.Move(knockbackDir * knockForce * Time.deltaTime);
-
-                // Stops dive when conditions met
-                if (knockBackRange >= maxKnockbackRange || curKnockbackDuration >= maxKnockbackDuration)
-                {
-                    _isKnockedBack = false;
-                    return;
-                }
-            }
-        }
-        #endregion
-
         #region Helper Methods
         /// <summary>
         /// Initializes the mob upon Start().
@@ -282,8 +242,8 @@ namespace Paraverse.Mob.Controller
         private void Patrol()
         {
             // Disregards the y position for distance calculation
-            Vector3 mobPos = new Vector3(transform.position.x, 0f, transform.position.z);
-            Vector3 targetPos = new Vector3(wps[curWPIdx].position.x, 0f, wps[curWPIdx].position.z);
+            Vector3 mobPos = ParaverseHelper.GetPositionXZ(transform.position);
+            Vector3 targetPos = ParaverseHelper.GetPositionXZ(wps[curWPIdx].position);
 
             float distanceFromWP = ParaverseHelper.GetDistance(mobPos, targetPos);
 
@@ -361,21 +321,23 @@ namespace Paraverse.Mob.Controller
         {
             if (pursueTarget != null)
             {
-                float distanceFromTarget = ParaverseHelper.GetDistance(transform.position, pursueTarget.position);
+                Vector3 mobPos = ParaverseHelper.GetPositionXZ(transform.position);
+                Vector3 targetPos = ParaverseHelper.GetPositionXZ(pursueTarget.position);
+                float distanceFromTarget = ParaverseHelper.GetDistance(mobPos, targetPos);
 
                 if (distanceFromTarget <= combat.BasicAtkRange)
                 {
                     nav.isStopped = true;
                     curSpeed = 0f;
                     transform.rotation = ParaverseHelper.FaceTarget(transform, pursueTarget, rotSpeed);
-                    Debug.Log("Combat Idle");
+                    //Debug.Log("Combat Idle");
                 }
                 else
                 {
                     nav.updateRotation = true;
                     nav.isStopped = false;
                     curSpeed = GetPursueSpeed();
-                    Debug.Log("Pursuing");
+                    //Debug.Log("Pursuing");
                 }
                 nav.SetDestination(pursueTarget.position);
             }
@@ -435,13 +397,53 @@ namespace Paraverse.Mob.Controller
 
             // Ensures mob is looking at the target before attacking
             Vector3 dir = (pursueTarget.position - transform.position).normalized;
-            Quaternion lookRot = Quaternion.LookRotation(new Vector3(dir.x, 0, dir.z));
+            dir = ParaverseHelper.GetPositionXZ(dir);
+            Quaternion lookRot = Quaternion.LookRotation(dir);
             float angle = Quaternion.Angle(transform.rotation, lookRot);
 
             if (angle <= 0)
                 combat.BasicAttackHandler();
 
             Debug.Log("Combat Handling");
+        }
+        #endregion
+
+        #region Knockback Methods
+        /// <summary>
+        /// Invokes knock back action
+        /// </summary>
+        public void ApplyKnockBack(Vector3 mobPos)
+        {
+            Vector3 impactDir = (transform.position - mobPos).normalized;
+            knockStartPos = transform.position;
+            curKnockbackDuration = 0f;
+            knockbackDir = new Vector3(impactDir.x, 0f, impactDir.z);
+            _isKnockedBack = true;
+            if (_isInteracting == false)
+                anim.Play(StringData.Hit);
+        }
+
+        /// <summary>
+        /// Handles knock back movement and variables in Update().
+        /// </summary>
+        private void KnockbackHandler()
+        {
+            if (_isKnockedBack)
+            {
+                // Updates mob position and dive timer
+                float knockBackRange = ParaverseHelper.GetDistance(transform.position, knockStartPos);
+                curKnockbackDuration += Time.deltaTime;
+
+                // Moves the mob in the move direction
+                controller.Move(knockbackDir * knockForce * Time.deltaTime);
+
+                // Stops dive when conditions met
+                if (knockBackRange >= maxKnockbackRange || curKnockbackDuration >= maxKnockbackDuration)
+                {
+                    _isKnockedBack = false;
+                    return;
+                }
+            }
         }
         #endregion
 

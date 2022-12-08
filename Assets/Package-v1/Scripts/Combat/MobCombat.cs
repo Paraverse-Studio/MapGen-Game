@@ -170,6 +170,11 @@ namespace Paraverse.Mob.Combat
         }
         #endregion
 
+        public void OnEarlyAttackAnimCancel()
+        {
+            DisableBasicAttackCollider();
+        }
+
         #region Animation Event Methods
         /// <summary>
         /// Enables basic weapon collider.
