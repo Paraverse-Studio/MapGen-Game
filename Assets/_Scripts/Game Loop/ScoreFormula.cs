@@ -4,13 +4,15 @@ using UnityEngine;
 
 public class ScoreFormula 
 {
-
     /*
     *   So far, criteria to determine score:
     *   - Speed (Time Taken to complete round)
     *   - Evasion (Damage Taken throughout round)
     *   - Accuracy (How many skillshots launched vs how many hit)
     */
+
+    // SCORE FORMULA equations experimented here:
+    // https://docs.google.com/spreadsheets/d/1YmY8MhHaiasEs3mNR-olTqkzsJOxXCbKX6hNTioxm4c/edit#gid=0
 
     public static float CalculateScore(float expectedTime, float timeTaken, int maxHealth, int damageTaken)
     {
@@ -29,7 +31,7 @@ public class ScoreFormula
         // Damage Taken /////////////
         float relativeDamageTaken = maxHealth - damageTaken;
 
-        float damageTakenScore = (relativeDamageTaken / (maxHealth * 0.90f)) * 100f; // 85% is considered 100 score in dmg taken
+        float damageTakenScore = (relativeDamageTaken / (maxHealth * 0.90f)) * 80f + 20f; // check google sheets to see why this equation is such
 
         //damageTakenScore *= damageTakenScore > 100f? 1.1f : 1f; // amplifies good score if they're above 100
 
