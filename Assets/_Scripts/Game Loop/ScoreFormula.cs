@@ -23,7 +23,7 @@ public class ScoreFormula
         
         float timeScore = (1.0f - (extraTimeTaken / expectedTime)) * 50f + 30f; // individual aspect scores should be out of 100 (but can go beyond 100)
 
-        //timeScore *= timeScore > 100? 1.1f : 1f;  // amplifies good score if they're above 100
+        timeScore *= timeScore > 100? 1.1f : 1f;  // amplifies good score if they're above 100
 
         timeScore = Mathf.Max(timeScore, 0); // Safety
 
@@ -33,7 +33,7 @@ public class ScoreFormula
 
         float damageTakenScore = (relativeDamageTaken / (maxHealth * 0.90f)) * 80f + 20f; // check google sheets to see why this equation is such
 
-        //damageTakenScore *= damageTakenScore > 100f? 1.1f : 1f; // amplifies good score if they're above 100
+        damageTakenScore *= damageTakenScore > 100f? 1.1f : 1f; // amplifies good score if they're above 100
 
         damageTakenScore = Mathf.Max(damageTakenScore, 0); // Safety
 
