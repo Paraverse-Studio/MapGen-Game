@@ -110,7 +110,6 @@ namespace Paraverse.Player
         #region Event Methods
         private void OnJump(InputAction.CallbackContext obj)
         {
-            Debug.Log("Space pressed!");
             OnJumpEvent?.Invoke();
         }
 

@@ -38,6 +38,20 @@ namespace Paraverse.Player
         [SerializeField, Range(0, 2), Tooltip("Time required to wait in between each jump.")]
         private float jumpCd = 0.5f;
         private float curJumpCd = 0f;
+        [SerializeField, Tooltip("Detect these layers to consider mob is grounded.")]
+        private LayerMask groundedLayers;
+
+        [Header("Landing Avoidance")]
+        [SerializeField, Tooltip("Raycast distance to check for enemies below for land avoidance.")]
+        private float disToEnemyCheck = 0.5f;
+        [SerializeField, Tooltip("Max time allowance of is not grounded state.")]
+        private float isNotGroundedMaxDur = 2f;
+        private float isNotGroundedDur;
+        [SerializeField, Tooltip("Avoid landing on these layers.")]
+        private LayerMask avoidLayers;
+        [SerializeField, Tooltip("Force applied to player movement to avoid the avoidLayers.")]
+        private float avoidanceForce = 10f;
+        private float downwardAvoidanceForceRatio = 2f;
 
         [Header("Gravity Values")]
         [SerializeField, Tooltip("The gravity force of the mob.")]
@@ -75,6 +89,8 @@ namespace Paraverse.Player
         private bool _isGrounded = false;
         public bool IsDiving { get { return _isDiving; } }
         private bool _isDiving = false;
+        public bool IsAvoidLandingOn { get { return _isAvoidingLandingOn; } }
+        private bool _isAvoidingLandingOn = false;
         public bool IsKnockedBack { get { return _isKnockedBack; } }
         private bool _isKnockedBack = false;
 
@@ -130,9 +146,11 @@ namespace Paraverse.Player
             MovementHandler();
             RotationHandler();
             JumpHandler();
+            AvoidEnemyUponLand();
             DiveHandler();
             KnockbackHandler();
-            AnimationHandler();
+            AnimationHandler(); 
+            OnTopMobHandler();
         }
         #endregion
 
@@ -206,7 +224,7 @@ namespace Paraverse.Player
         /// </summary>
         private void Jump()
         {
-            if (_isKnockedBack || _isInteracting) return;
+            if (_isKnockedBack || _isInteracting || _isAvoidingLandingOn) return;
 
             if (_isGrounded && curJumpCd >= jumpCd)
             {
@@ -253,17 +271,58 @@ namespace Paraverse.Player
             Vector3 origin = transform.position;
             Vector3 dir = -transform.up;
 
-            Debug.DrawRay(origin, dir, Color.red);
-            if (Physics.Raycast(origin, dir * disToGroundCheck, disToGroundCheck))
+            //Debug.DrawRay(origin, dir, Color.red);
+            if (Physics.Raycast(origin, dir * disToGroundCheck, disToGroundCheck, groundedLayers))
             {
+                _isAvoidingLandingOn = false;
                 return true;
             }
 
             return false;
         }
+
+        /// <summary>
+        /// Checks if mob is landing on an avoidance layer object, if so, sets avoidLandingOn as true. 
+        /// </summary>
+        private void AvoidEnemyUponLand()
+        {
+            RaycastHit hit;
+            Vector3 origin = transform.position;
+            Vector3 dir = -transform.up;
+
+            Debug.DrawRay(origin, dir, Color.magenta);
+            if (Physics.SphereCast(origin, controller.radius, dir * disToEnemyCheck, out hit, disToEnemyCheck, avoidLayers))
+            {
+                Debug.Log("ON ENEMY!");
+                _isAvoidingLandingOn = true;
+            }
+        }
+
+        /// <summary>
+        /// Handles avoiding landing
+        /// </summary>
+        private void OnTopMobHandler()
+        {
+            Vector3 offDis = new Vector3(transform.forward.x, -downwardAvoidanceForceRatio, transform.forward.z);
+            if (_isAvoidingLandingOn)
+            {
+                controller.Move(offDis * avoidanceForce * Time.deltaTime);
+            }
+
+            if (_isGrounded == false)
+            {
+                isNotGroundedDur += Time.deltaTime;
+                if (isNotGroundedDur >= isNotGroundedMaxDur)
+                    _isAvoidingLandingOn = true;
+            }
+            else
+            {
+                isNotGroundedDur = 0f;
+            }
+        }
         #endregion
 
-        #region Dive Handler
+        #region Dive Methods
         /// <summary>
         /// Invokes dive action
         /// </summary>
@@ -318,12 +377,13 @@ namespace Paraverse.Player
 
         #endregion
 
-        #region KnockBack Handler
+        #region KnockBack Methods
         /// <summary>
         /// Invokes knock back action
         /// </summary>
         public void ApplyKnockBack(Vector3 mobPos)
         {
+            combat.OnEarlyAttackAnimCancel();
             Vector3 impactDir = (transform.position - mobPos).normalized;
             knockStartPos = transform.position;
             curKnockbackDuration = 0f;
