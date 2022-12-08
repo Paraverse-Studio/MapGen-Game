@@ -19,7 +19,7 @@ public class ScoreFormula
         // Time Taken ///////////////
         float extraTimeTaken = timeTaken - expectedTime;
         
-        float timeScore = (1.0f - (extraTimeTaken / expectedTime)) * 100f; // individual aspect scores should be out of 100 (but can go beyond 100)
+        float timeScore = (1.0f - (extraTimeTaken / expectedTime)) * 50f + 30f; // individual aspect scores should be out of 100 (but can go beyond 100)
 
         //timeScore *= timeScore > 100? 1.1f : 1f;  // amplifies good score if they're above 100
 
