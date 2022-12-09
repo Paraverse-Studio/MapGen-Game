@@ -80,6 +80,12 @@ namespace Paraverse.Player
         private float maxKnockbackDuration = 1f;
         private float curKnockbackDuration;
 
+        [Header("Death Values")]
+        [SerializeField]
+        private GameObject deathEffect;
+        public delegate void OnDeathDel(Transform target);
+        public event OnDeathDel OnDeathEvent;
+
         // State Booleans
         public bool IsInteracting { get { return _isInteracting; } }
         private bool _isInteracting = false;
@@ -93,6 +99,8 @@ namespace Paraverse.Player
         private bool _isAvoidingLandingOn = false;
         public bool IsKnockedBack { get { return _isKnockedBack; } }
         private bool _isKnockedBack = false;
+        public bool IsDead { get { return _isDead; } }
+        private bool _isDead = false;
 
         // Movement, Jump & Dive inputs and velocities
         private Vector3 goalDir;
@@ -142,6 +150,9 @@ namespace Paraverse.Player
             _isGrounded = IsGroundedCheck();
 
             jumpDir.y -= Time.deltaTime;
+
+            DeathHandler();
+            if (_isDead) return;
 
             MovementHandler();
             RotationHandler();
@@ -413,6 +424,25 @@ namespace Paraverse.Player
                     return;
                 }
             }
+        }
+        #endregion
+
+        #region Death Handler Methods
+        private void DeathHandler()
+        {
+            if (stats.CurHealth <= 0 && _isDead == false)
+            {
+                _isDead = true;
+                Death();
+                OnDeathEvent?.Invoke(transform);
+            }
+        }
+
+        private void Death()
+        {
+            Debug.Log("Player has died!");
+            controller.detectCollisions = false;
+            anim.Play(StringData.Death);
         }
         #endregion
 
