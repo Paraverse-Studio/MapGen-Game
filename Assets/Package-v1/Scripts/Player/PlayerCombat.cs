@@ -21,5 +21,15 @@ namespace Paraverse.Player
 
             base.BasicAttackHandler();
         }
+
+        public void AddListenerOnBasicAttack()
+        {
+            input.OnBasicAttackEvent += BasicAttackHandler;
+        }
+
+        public void RemoveListenerOnBasicAttack()
+        {
+            input.OnBasicAttackEvent -= BasicAttackHandler;
+        }
     }
 }

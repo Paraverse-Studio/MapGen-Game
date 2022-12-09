@@ -63,6 +63,12 @@ namespace Paraverse.Mob.Stats
         public void UpdateCurrentEnergy(float amount);
 
         /// <summary>
+        /// Resets mob stats.
+        /// </summary>
+        /// <param name="amount"></param>
+        public void ResetStats();
+
+        /// <summary>
         /// Consumes mob energy upon dive.
         /// </summary>
         /// <param name="amount"></param>

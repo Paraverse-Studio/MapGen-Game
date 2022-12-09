@@ -111,6 +111,12 @@ namespace Paraverse.Mob.Stats
             UpdateCurrentEnergy(-diveEnergyCost);
         }
 
+        public void ResetStats()
+        {
+            curHealth = maxHealth;
+            curEnergy = maxEnergy;
+        }
+
         public void UpdateCurrentEnergy(float amount)
         {
             curEnergy = Mathf.Clamp(curEnergy + amount, 0f, MaxEnergy);
