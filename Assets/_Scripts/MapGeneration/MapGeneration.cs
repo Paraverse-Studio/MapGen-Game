@@ -401,34 +401,33 @@ public class MapGeneration : MonoBehaviour
         PartitionProgress();
         yield return processDelay;
 
-        AddEnemies();
-#if UNITY_EDITOR
-        enemiesFolder.gameObject.name =  "[ Enemies ] - " + enemyObjects.Count;
-#endif
-        step = 7;
-        PartitionProgress("Spawning enemies...");
-        yield return processDelay;
-
-
         /* * * * * DECORATIVE PROPS ON MAP * * * * * * */
         currentPaintingBlock = M.blockSet.water;
 
         AddWaterToDips();
-        step = 8;
-        PartitionProgress("Applying final touches...");
+        step = 7;
+        PartitionProgress("Spawning dangerous enemies...");
         yield return processDelay;
 
         AddProps();
+        step = 8;
+        PartitionProgress("");
+        yield return processDelay;
+
+        navMeshBuilder.surface = allObjects[0].GetComponentInChildren<NavMeshSurface>();
+        navMeshBuilder.BuildNavMesh();
+
+        AddEnemies();
+#if UNITY_EDITOR
+        enemiesFolder.gameObject.name = "[ Enemies ] - " + enemyObjects.Count;
+#endif
         step = 9;
-        PartitionProgress("Completed!");
+        PartitionProgress("Applying final touches...");
         yield return processDelay;
 
 
         /* * * * MISC STEPS (NOT RELATED TO MAP) * * */
         if (M.ppProfile) globalVolume.profile = M.ppProfile;
-
-        navMeshBuilder.surface = allObjects[0].GetComponentInChildren<NavMeshSurface>();
-        navMeshBuilder.BuildNavMesh();
 
         TeleportPlayer(CenterPointWithY + new Vector3(0, 5f, 0));
         /* * * * * * * * * * * * * * * * * * * * * * */
@@ -835,10 +834,14 @@ public class MapGeneration : MonoBehaviour
 
             Vector3 spawnSpot = pathObjects[i].transform.position + new Vector3(xOffset, 0, zOffset);
 
-            GameObject closestPathPosition = GetClosestObject(spawnSpot, allObjects);
+            GameObject closestPathPosition = GetClosestObject(spawnSpot, allObjects, 
+                (Block b) =>
+                {
+                    return !GetGridOccupant(b).hasProp;
+                });
 
             GameObject enemy = Instantiate(M.enemies[Random.Range(0, M.enemies.Length)],
-                closestPathPosition.transform.position + new Vector3(0, 1.5f, 0), Quaternion.identity);
+                closestPathPosition.transform.position + new Vector3(0, 0.5f, 0), Quaternion.identity);
 
             enemy.name = "Enemy " + (enemyObjects.Count + 1);
             enemy.transform.parent = enemiesFolder;
@@ -1028,6 +1031,13 @@ public class MapGeneration : MonoBehaviour
         }
     }
 
+
+    public GridOccupant GetGridOccupant(Block b)
+    {
+        GridOccupant occupant = gridOccupants[(int)b.gameObject.transform.position.x, (int)b.gameObject.transform.position.z];
+        return occupant;
+    }
+
     // Given a source vector, a direction and a scalar, return new vector
     // from source vector in the direction of direction scaled by scalar...
     private Vector3 GetPointOnCircle(Vector3 origin, float radius, float angle)
@@ -1045,8 +1055,13 @@ public class MapGeneration : MonoBehaviour
         else return false;
     }
 
+    public GameObject GetClosestBlock(Transform source)
+    {
+        return GetClosestObject(source.position, allObjects);
+    }
+
     // Get closest valid block to a given vector
-    private GameObject GetClosestObject(Vector3 src, List<Block> list)
+    private GameObject GetClosestObject(Vector3 src, List<Block> list, System.Predicate<Block> condition = null)
     {
         GameObject closest = null;
         float closestDistanceSqr = Mathf.Infinity;
@@ -1057,8 +1072,11 @@ public class MapGeneration : MonoBehaviour
             float dSqrToTarget = directionToTarget.sqrMagnitude;
             if (dSqrToTarget < closestDistanceSqr)
             {
-                closestDistanceSqr = dSqrToTarget;
-                closest = obj.gameObject;
+                if (null == condition || condition(obj))
+                {
+                    closestDistanceSqr = dSqrToTarget;
+                    closest = obj.gameObject;
+                }
             }
         }
         return closest;

@@ -75,6 +75,7 @@ public class GameLoopManager : MonoBehaviour
     [Min(1)]
     public int nextRoundNumber;
     public RoundCompletionType roundCompletionType;
+    private GameObject player;
     MobStats playerStats;
     public int damageTaken;
     private int totalEnemiesSpawned;
@@ -97,7 +98,8 @@ public class GameLoopManager : MonoBehaviour
     // Start is called before the first frame update
     void Start()
     {
-        playerStats = GlobalSettings.Instance.player.GetComponentInChildren<MobStats>();
+        player = GlobalSettings.Instance.player;
+        playerStats = player.GetComponentInChildren<MobStats>();
 
         if (!developerMode) 
         {
@@ -120,6 +122,13 @@ public class GameLoopManager : MonoBehaviour
         }
 
         if (Input.GetKeyDown(KeyCode.U)) EndRound();
+
+
+        if (player.transform.position.y <= -25f)
+        {
+            playerStats.UpdateCurrentHealth((int)(-playerStats.MaxHealth*0.30f));
+            UtilityFunctions.TeleportObject(player, MapGeneration.Instance.GetClosestBlock(player.transform).transform.position + new Vector3(0, 0.5f,0));
+        }
     }
 
 

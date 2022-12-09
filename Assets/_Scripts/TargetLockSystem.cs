@@ -40,7 +40,7 @@ public class TargetLockSystem : MonoBehaviour
 
     private void Update()
     {
-        if (_continuousTargetting && null == Target) SelectTarget();
+        //if (_continuousTargetting && null == Target) SelectTarget();
     }
 
     public void Add(Selectable selectable)
