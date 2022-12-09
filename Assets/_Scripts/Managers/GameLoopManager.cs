@@ -35,6 +35,7 @@ public class GameLoopManager : MonoBehaviour
     {
         Completed,
         Failed,
+        BossDefeated,
         Quit
     }
 
@@ -52,6 +53,8 @@ public class GameLoopManager : MonoBehaviour
     [Space(20)]
     [Header("Screens/Windows/Views")]
     public Animator roundCompleteWindow;
+    public Animator roundFailedWindow;
+    public Animator bossDefeatedWindow;
     public GameObject loadingScreen;
     public GameObject roundResultsWindow;
     public RoundTimer roundTimer;
@@ -70,7 +73,7 @@ public class GameLoopManager : MonoBehaviour
     [Space(20)]
     [Header("Runtime Data")]
     [Min(1)]
-    public int round;
+    public int nextRoundNumber;
     public RoundCompletionType roundCompletionType;
     MobStats playerStats;
     public int damageTaken;
@@ -175,13 +178,31 @@ public class GameLoopManager : MonoBehaviour
         _roundReady = false;
         roundTimer.PauseTimer();
 
+        // DETERMINE HOW ROUND ENDED (SUCCESSFUL OR FAILED OR BOSS DEFEATED?)
+        // here ...
+
+
+        Animator roundEndWindow = new Animator();
+        switch (roundCompletionType)
+        {
+            case RoundCompletionType.Completed:
+                roundEndWindow = roundCompleteWindow;
+                break;
+            case RoundCompletionType.Failed:
+                roundEndWindow = roundFailedWindow;
+                break;
+            case RoundCompletionType.BossDefeated:
+                roundEndWindow = bossDefeatedWindow;
+                break;
+        }
+
         GameLoopEvents.OnEndRound?.Invoke();
-        roundCompleteWindow.gameObject.SetActive(true);
-        roundCompleteWindow.SetTrigger("Entry");
+        roundEndWindow.gameObject.SetActive(true);
+        roundEndWindow.SetTrigger("Entry");
         yield return new WaitForSeconds(3f);
-        roundCompleteWindow.SetTrigger("Exit");
+        roundEndWindow.SetTrigger("Exit");
         yield return new WaitForSeconds(1.5f);
-        roundCompleteWindow.gameObject.SetActive(false);
+        roundEndWindow.gameObject.SetActive(false);
 
         CompleteRound();
     }
@@ -197,6 +218,9 @@ public class GameLoopManager : MonoBehaviour
 
         Results.scoreText.text = "Score: " + (int)score + "%";
         Results.rankText.text = ScoreFormula.GetScoreRank((int)score);
+
+        nextRoundNumber++;
+
         //Results.goldText.text = "+" + goldRewarded;
 
         // save it in database here, we need to save stats in db asap so players
