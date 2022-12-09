@@ -80,7 +80,7 @@ public class ScoreFormula
     public static string GetScoreRank(int score)
     {
         if (score > 100) return "S+";
-        else if (score >= 90) return "S";
+        else if (score >= 95) return "S";
         else if (score >= 80) return "A";
         else if (score >= 70) return "B";
         else if (score >= 60) return "C";
