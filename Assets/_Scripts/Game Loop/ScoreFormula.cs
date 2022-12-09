@@ -14,6 +14,13 @@ public class ScoreFormula
     // SCORE FORMULA equations experimented here:
     // https://docs.google.com/spreadsheets/d/1YmY8MhHaiasEs3mNR-olTqkzsJOxXCbKX6hNTioxm4c/edit#gid=0
 
+    // Time Taken resources:
+
+    // Damage Taken resources graph:
+    // https://www.desmos.com/calculator/wuaxtd2vef (shows the graph)
+    // https://www.mathcelebrity.com/3ptquad.php?p1=50%2C+75&p2=0%2C+107&p3=100%2C+35&pl=Calculate+Equation (helped find the equation)
+
+
     public static float CalculateScore(float expectedTime, float timeTaken, int maxHealth, int damageTaken)
     {
         float score = -1f;
@@ -21,7 +28,7 @@ public class ScoreFormula
         // Time Taken ///////////////
         float extraTimeTaken = timeTaken - expectedTime;
         
-        float timeScore = (1.0f - (extraTimeTaken / expectedTime)) * 50f + 30f; // individual aspect scores should be out of 100 (but can go beyond 100)
+        float timeScore = (1.0f - (extraTimeTaken / expectedTime)) * 45f + 45f; // individual aspect scores should be out of 100 (but can go beyond 100)
 
         timeScore *= timeScore > 100? 1.1f : 1f;  // amplifies good score if they're above 100
 
@@ -29,9 +36,7 @@ public class ScoreFormula
 
 
         // Damage Taken /////////////
-        float relativeDamageTaken = maxHealth - damageTaken;
-
-        float damageTakenScore = (relativeDamageTaken / (maxHealth * 0.90f)) * 80f + 20f; // check google sheets to see why this equation is such
+        float damageTakenScore = DamageTakenScore2(maxHealth, damageTaken); 
 
         damageTakenScore *= damageTakenScore > 100f? 1.1f : 1f; // amplifies good score if they're above 100
 
@@ -48,6 +53,30 @@ public class ScoreFormula
 
         return score;
     }
+
+
+
+    // Version 1
+    private static float DamageTakenScore(int maxHealth, int damageTaken)
+    {
+        float relativeDamageTaken = maxHealth - damageTaken;
+
+        float damageTakenScore = (relativeDamageTaken / (maxHealth * 0.90f)) * 80f + 20f; // check google sheets to see why this equation is such
+
+        damageTakenScore *= damageTakenScore > 100f ? 1.1f : 1f; // amplifies good score if they're above 100
+
+        damageTakenScore = Mathf.Max(damageTakenScore, 0); // Safety
+
+        return damageTakenScore;
+    }
+
+
+    // Version 2
+    private static float DamageTakenScore2(int maxHealth, int damageTaken)
+    {
+        return (-0.0016f * Mathf.Pow(damageTaken, 2f)) - (0.56f * damageTaken) + 107f; 
+    }
+
 
 
 }

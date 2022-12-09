@@ -72,6 +72,7 @@ public class GameLoopManager : MonoBehaviour
     [Min(1)]
     public int round;
     public RoundCompletionType roundCompletionType;
+    MobStats playerStats;
     public int damageTaken;
     private int totalEnemiesSpawned;
     private int lastHealthSaved = -1;
@@ -93,6 +94,8 @@ public class GameLoopManager : MonoBehaviour
     // Start is called before the first frame update
     void Start()
     {
+        playerStats = GlobalSettings.Instance.player.GetComponentInChildren<MobStats>();
+
         if (!developerMode) 
         {
             GameLoopEvents.OnBootupGame?.Invoke();
@@ -122,6 +125,8 @@ public class GameLoopManager : MonoBehaviour
     public void InitiateRound()
     {
         GameLoopEvents.OnInitiateRound?.Invoke();
+
+        ResetStates();
     }
 
     public void StartRound()
@@ -129,8 +134,20 @@ public class GameLoopManager : MonoBehaviour
         _roundReady = true;
 
         GameLoopEvents.OnStartRound?.Invoke();
+
         totalEnemiesSpawned = EnemiesManager.Instance.EnemiesCount;
-        GlobalSettings.Instance.player.GetComponentInChildren<MobStats>().OnHealthChange.AddListener(AccrueDamageTaken);
+        playerMaxHealth = playerStats.MaxHealth;
+
+        playerStats.OnHealthChange.AddListener(AccrueDamageTaken);
+    }
+
+    public void ResetStates()
+    {
+        damageTaken = 0;
+        totalEnemiesSpawned = 0;
+        lastHealthSaved = -1;
+        playerMaxHealth = 0;
+        goldRewarded = 0;
     }
 
     public void MakeCompletionPredicate(CompletionPredicateType predicate)
@@ -171,14 +188,13 @@ public class GameLoopManager : MonoBehaviour
 
     public void CompleteRound()
     {
-        MobStats playerStats = GlobalSettings.Instance.player.GetComponentInChildren<MobStats>();
         playerStats.OnHealthChange.RemoveListener(AccrueDamageTaken);
-        playerMaxHealth = playerStats.MaxHealth;
 
-        float score = ScoreFormula.CalculateScore(totalEnemiesSpawned * 11f, roundTimer.GetTime(), playerMaxHealth, damageTaken);
+        float score = ScoreFormula.CalculateScore(totalEnemiesSpawned * 12f, roundTimer.GetTime(), playerMaxHealth, damageTaken);
         goldRewarded = (int)(score * 1);
 
-        GlobalSettings.Instance.player.GetComponentInChildren<MobStats>().UpdateGold(goldRewarded);
+        playerStats.UpdateGold(goldRewarded); // save it to db
+
         Results.scoreText.text = "Score: " + (int)score + "%";
         Results.rankText.text = GetScoreRank((int)score);
         //Results.goldText.text = "+" + goldRewarded;
