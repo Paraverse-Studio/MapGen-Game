@@ -205,7 +205,7 @@ public class MapGeneration : MonoBehaviour
         zBoundary = centerPoint2D;
 
         yBoundary = new Vector2(Mathf.Ceil(M.lumpApplicationRounds / 2.0f),
-                                Mathf.Ceil(-M.lumpApplicationRounds / 2.0f));
+                                Mathf.Floor(-M.lumpApplicationRounds / 2.0f));
 
         furthestBlock = centerPoint2D;
         furthestDistance = 0;
@@ -589,7 +589,7 @@ public class MapGeneration : MonoBehaviour
                     x += randomXOffset;
                     z += randomZOffset;
 
-                    ElevateCircle(upOrDown % 2 == 0 ? true : false, new Vector3(x, 0, z), Random.Range(M.lumpRadius.x, M.lumpRadius.y));
+                    ElevateCircle(z % 2 == 0 ? true : false, new Vector3(x, 0, z), Random.Range(M.lumpRadius.x, M.lumpRadius.y));
                 }
             }
         }

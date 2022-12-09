@@ -196,7 +196,7 @@ public class GameLoopManager : MonoBehaviour
         playerStats.UpdateGold(goldRewarded); // save it to db
 
         Results.scoreText.text = "Score: " + (int)score + "%";
-        Results.rankText.text = GetScoreRank((int)score);
+        Results.rankText.text = ScoreFormula.GetScoreRank((int)score);
         //Results.goldText.text = "+" + goldRewarded;
 
         // save it in database here, we need to save stats in db asap so players
@@ -286,17 +286,6 @@ public class GameLoopManager : MonoBehaviour
 
 
     /* * * * * * *  P R E D I C A T E S  * * * * * * * * */
-
-    public string GetScoreRank(int score)
-    {
-        if (score > 100) return "S+";
-        else if (score >= 90) return "S";
-        else if (score >= 80) return "A";
-        else if (score >= 70) return "B";
-        else if (score >= 60) return "C";
-        else if (score >= 50) return "D";
-        else return "F";
-    }
 
 
 }

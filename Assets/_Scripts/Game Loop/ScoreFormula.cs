@@ -28,7 +28,7 @@ public class ScoreFormula
         // Time Taken ///////////////
         float extraTimeTaken = timeTaken - expectedTime;
         
-        float timeScore = (1.0f - (extraTimeTaken / expectedTime)) * 45f + 45f; // individual aspect scores should be out of 100 (but can go beyond 100)
+        float timeScore = (1.0f - (extraTimeTaken / expectedTime)) * 35f + 45f; // individual aspect scores should be out of 100 (but can go beyond 100)
 
         timeScore *= timeScore > 100? 1.1f : 1f;  // amplifies good score if they're above 100
 
@@ -74,9 +74,18 @@ public class ScoreFormula
     // Version 2
     private static float DamageTakenScore2(int maxHealth, int damageTaken)
     {
-        return (-0.0016f * Mathf.Pow(damageTaken, 2f)) - (0.56f * damageTaken) + 107f; 
+        return (-0.0004f * Mathf.Pow(damageTaken, 2f)) - (0.75f * damageTaken) + 107f; 
     }
 
-
+    public static string GetScoreRank(int score)
+    {
+        if (score > 100) return "S+";
+        else if (score >= 90) return "S";
+        else if (score >= 80) return "A";
+        else if (score >= 70) return "B";
+        else if (score >= 60) return "C";
+        else if (score >= 50) return "D";
+        else return "F";
+    }
 
 }
