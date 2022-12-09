@@ -1,7 +1,9 @@
 using Paraverse.Helper;
 using Paraverse.Mob.Stats;
+using Paraverse.Player;
 using UnityEngine;
 using UnityEngine.AI;
+using UnityEngine.UIElements;
 
 namespace Paraverse.Mob.Controller
 {
@@ -30,6 +32,8 @@ namespace Paraverse.Mob.Controller
         private bool _isInteracting = false;
         public bool IsKnockedBack { get { return _isKnockedBack; } }
         private bool _isKnockedBack = false;
+        public bool IsDead { get { return _isDead; } }
+        private bool _isDead = false;
 
         [Header("Movement Values"), Tooltip("The current speed of the mob")]
         private float curSpeed;
@@ -71,9 +75,9 @@ namespace Paraverse.Mob.Controller
         private string targetTag = StringData.PlayerTag;
         [Tooltip("The targets transform")]
         private Transform pursueTarget;
+        private IMobController playerController;
         [Tooltip("Set to true once target is detected.")]
         private bool targetDetected = false;
-
 
         [Header("Knockback Values")]
         [SerializeField, Tooltip("The dive force of the mob.")]
@@ -89,7 +93,6 @@ namespace Paraverse.Mob.Controller
         [Header("Death Values")]
         [SerializeField]
         private GameObject deathEffect;
-        private bool isDead = false;
         public delegate void OnDeathDel(Transform target);
         public event OnDeathDel OnDeathEvent;
         #endregion
@@ -129,10 +132,13 @@ namespace Paraverse.Mob.Controller
 
         private void Update()
         {
+            if (nav.enabled == false) 
+                Debug.LogError(transform.name + "'s Nav Agent is Disabled");
+
             _isInteracting = anim.GetBool(StringData.IsInteracting);
 
             DeathHandler();
-            if (isDead) return;
+            if (_isDead) return;
 
             StateHandler();
             AnimatorHandler();
@@ -159,13 +165,13 @@ namespace Paraverse.Mob.Controller
                 return;
             }
 
-            if (TargetDetected() && combat.CanBasicAtk == false)
+            if (TargetDetected() && combat.CanBasicAtk == false && playerController.IsDead == false)
             {
                 PursueTarget();
                 SetState(MobState.Pursue);
                 //Debug.Log("Pursue State");
             }
-            else if (TargetDetected() && combat.CanBasicAtk)
+            else if (TargetDetected() && combat.CanBasicAtk && playerController.IsDead == false)
             {
                 CombatHandler();
                 SetState(MobState.Combat);
@@ -204,6 +210,7 @@ namespace Paraverse.Mob.Controller
             nav.acceleration = 999f;
             nav.autoBraking = false;
 
+            playerController = GameObject.FindGameObjectWithTag(targetTag).GetComponent<IMobController>();
             pursueTarget = GameObject.FindGameObjectWithTag(targetTag).GetComponent<Transform>();
         }
 
@@ -450,9 +457,9 @@ namespace Paraverse.Mob.Controller
         #region Death Handler Methods
         private void DeathHandler()
         {
-            if (stats.CurHealth <= 0 && isDead == false)
+            if (stats.CurHealth <= 0 && _isDead == false)
             {
-                isDead = true;
+                _isDead = true;
                 Death();
                 OnDeathEvent?.Invoke(transform);
             }
