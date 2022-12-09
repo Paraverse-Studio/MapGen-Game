@@ -323,6 +323,7 @@ public class MapGeneration : MonoBehaviour
             treeObjects.Clear();
             foundationObjects.Clear();
             waterObjects.Clear();
+            for (int i = 0; i < enemyObjects.Count; ++i) if (enemyObjects[i]) Destroy(enemyObjects[i]);
             enemyObjects.Clear();
 
             // Important Props
