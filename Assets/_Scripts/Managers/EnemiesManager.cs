@@ -42,6 +42,12 @@ public class EnemiesManager : MonoBehaviour
         
     }
   
+
+    public void ResetEnemiesList()
+    {
+        _enemies.Clear();
+    }
+
     public void AddEnemy(GameObject enemyObj)
     {
         MobController enemy = enemyObj.GetComponentInChildren<MobController>();
