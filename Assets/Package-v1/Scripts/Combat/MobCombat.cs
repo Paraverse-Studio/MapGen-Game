@@ -59,6 +59,8 @@ namespace Paraverse.Mob.Combat
         // Sets to true when character is doing an action (Attack, Stun).
         public bool IsBasicAttacking { get { return _isBasicAttacking; } }
         private bool _isBasicAttacking = false;
+        public bool IsAttackLunging { get { return _isAttackLunging; } }
+        private bool _isAttackLunging = false;
 
         // Returns true when character is within basic attack range and cooldown is 0.
         public bool CanBasicAtk { get { return distanceFromTarget <= basicAtkRange && curBasicAtkCd <= 0; } }
@@ -176,6 +178,7 @@ namespace Paraverse.Mob.Combat
         public void OnEarlyAttackAnimCancel()
         {
             _isBasicAttacking = false;
+            _isAttackLunging = false;
             DisableBasicAttackCollider();
         }
 
@@ -194,6 +197,22 @@ namespace Paraverse.Mob.Combat
         protected void DisableBasicAttackCollider()
         {
             basicAtkCollider.SetActive(false);
+        }
+
+        /// <summary>
+        /// Enables attack lunging.
+        /// </summary>
+        protected void EnableAttackLunging()
+        {
+            _isAttackLunging = true;
+        }
+
+        /// <summary>
+        /// Disables attack lunging.
+        /// </summary>
+        protected void DisableAttackLunging()
+        {
+            _isAttackLunging = false;
         }
 
         /// <summary>
