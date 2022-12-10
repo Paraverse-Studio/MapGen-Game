@@ -1,4 +1,7 @@
+using Paraverse.Mob;
+using Paraverse.Mob.Controller;
 using Paraverse.Mob.Stats;
+using Paraverse.Player;
 using System;
 using System.Collections;
 using System.Collections.Generic;
@@ -77,6 +80,7 @@ public class GameLoopManager : MonoBehaviour
     public RoundCompletionType roundCompletionType;
     private GameObject player;
     MobStats playerStats;
+    PlayerController playerController;
     public int damageTaken;
     private int totalEnemiesSpawned;
     private int lastHealthSaved = -1;
@@ -100,6 +104,7 @@ public class GameLoopManager : MonoBehaviour
     {
         player = GlobalSettings.Instance.player;
         playerStats = player.GetComponentInChildren<MobStats>();
+        playerController = player.GetComponentInChildren<PlayerController>();
 
         if (!developerMode) 
         {
@@ -151,6 +156,7 @@ public class GameLoopManager : MonoBehaviour
         playerMaxHealth = playerStats.MaxHealth;
 
         playerStats.OnHealthChange.AddListener(AccrueDamageTaken);
+        playerController.OnDeathEvent += EndRoundPremature;
     }
 
     public void ResetStates()
@@ -178,6 +184,12 @@ public class GameLoopManager : MonoBehaviour
                 //implement
                 break;
         }
+    }
+
+    private void EndRoundPremature(Transform t)
+    {
+        roundCompletionType = RoundCompletionType.Failed;
+        EndRound();
     }
 
     public void EndRound() => StartCoroutine(IEndRound());   
@@ -219,6 +231,7 @@ public class GameLoopManager : MonoBehaviour
     public void CompleteRound()
     {
         playerStats.OnHealthChange.RemoveListener(AccrueDamageTaken);
+        playerController.OnDeathEvent -= EndRoundPremature;
 
         float score = ScoreFormula.CalculateScore(totalEnemiesSpawned * 12f, roundTimer.GetTime(), playerMaxHealth, damageTaken);
         goldRewarded = (int)(score * 1);

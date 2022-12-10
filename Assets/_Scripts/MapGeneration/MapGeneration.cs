@@ -431,6 +431,12 @@ public class MapGeneration : MonoBehaviour
         if (M.ppProfile) globalVolume.profile = M.ppProfile;
 
         TeleportPlayer(CenterPointWithY + new Vector3(0, 5f, 0));
+
+        if (M.mapVFX)
+        {
+            ParticleSystem vfx = Instantiate(M.mapVFX, GlobalSettings.Instance.player.transform);
+            vfx.transform.localPosition = Vector3.zero;
+        } 
         /* * * * * * * * * * * * * * * * * * * * * * */
 
         OnMapGenerateEnd?.Invoke();

@@ -14,6 +14,7 @@ public class SO_MapGenData : ScriptableObject
     [Header("    _____________  MAP SET-UP  _____________")]
     [Space(5)]
     public VolumeProfile ppProfile;
+    public ParticleSystem mapVFX;
 
     [Header("BLOCK SET ")]
     [Space(10)]

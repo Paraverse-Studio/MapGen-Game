@@ -35,6 +35,7 @@ public class Block : MonoBehaviour, ITickElement
 
     private Renderer _renderer;
     private Collider _collider;
+    private NavMeshSurface _surface;
 
     private GameObject _currentPrefab = null;
     public GameObject CurrentPrefab

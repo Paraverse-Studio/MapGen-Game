@@ -232,7 +232,7 @@ namespace Paraverse.Player
             if (_isGrounded && curJumpCd >= jumpCd)
             {
                 curJumpCd = 0f;
-                jumpDir.y += Mathf.Sqrt(jumpForce * GlobalValues.GravityModifier * GlobalValues.GravityForce);
+                jumpDir.y += Mathf.Sqrt(jumpForce * -GlobalValues.GravityModifier * GlobalValues.GravityForce);
                 anim.Play(StringData.Jump);
             }
         }
