@@ -7,6 +7,7 @@ using UnityEngine.Events;
 public class EnemiesManager : MonoBehaviour
 {
     public static EnemiesManager Instance;
+    public ParticleSystem deathVFX;
 
     [SerializeField]
     private List<MobController> _enemies = new List<MobController>();
@@ -57,6 +58,7 @@ public class EnemiesManager : MonoBehaviour
             OnEnemiesListUpdated?.Invoke(Enemies);
 
             enemy.OnDeathEvent += RemoveEnemy;
+            //enemy.OnDeathEvent += SpawnDeathVFX;
         }
     }
 
@@ -71,6 +73,11 @@ public class EnemiesManager : MonoBehaviour
                 OnEnemiesListUpdated?.Invoke(Enemies);
             }
         }        
+    }
+
+    private void SpawnDeathVFX(Transform t)
+    {
+        Instantiate(deathVFX, t.transform.position, Quaternion.identity);
     }
 
 }

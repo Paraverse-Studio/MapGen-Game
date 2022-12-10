@@ -88,6 +88,7 @@ public class GameLoopManager : MonoBehaviour
     private int goldRewarded = 0;
 
     private bool _roundReady = false;
+    private bool _isBossRound = false;
     private bool _isPaused = false;
     public bool IsPaused => _isPaused;
 
@@ -126,7 +127,7 @@ public class GameLoopManager : MonoBehaviour
             if (_predicate(_roundReady)) EndPortal.SetActive(true);
         }
 
-        if (Input.GetKeyDown(KeyCode.U)) EndRound();
+        if (Input.GetKeyDown(KeyCode.U)) EndRound(successfulRound: true);
         if (Input.GetKeyDown(KeyCode.Y)) playerStats.SetFullHealth();
 
         if (player.transform.position.y <= -25f)
@@ -148,8 +149,6 @@ public class GameLoopManager : MonoBehaviour
 
     public void StartRound()
     {
-        _roundReady = true;
-
         GameLoopEvents.OnStartRound?.Invoke();
 
         totalEnemiesSpawned = EnemiesManager.Instance.EnemiesCount;
@@ -157,6 +156,8 @@ public class GameLoopManager : MonoBehaviour
 
         playerStats.OnHealthChange.AddListener(AccrueDamageTaken);
         playerController.OnDeathEvent += EndRoundPremature;
+
+        _roundReady = true;
     }
 
     public void ResetStates()
@@ -166,6 +167,8 @@ public class GameLoopManager : MonoBehaviour
         lastHealthSaved = -1;
         playerMaxHealth = 0;
         goldRewarded = 0;
+        _isBossRound = false;
+        _roundReady = false;
     }
 
     public void MakeCompletionPredicate(CompletionPredicateType predicate)
@@ -189,17 +192,27 @@ public class GameLoopManager : MonoBehaviour
     private void EndRoundPremature(Transform t)
     {
         roundCompletionType = RoundCompletionType.Failed;
-        EndRound();
+        EndRound(successfulRound: false);
     }
 
-    public void EndRound() => StartCoroutine(IEndRound());   
+    public void EndRound(bool successfulRound) => StartCoroutine(IEndRound(successfulRound));   
 
-    public IEnumerator IEndRound()
+    public IEnumerator IEndRound(bool successfulRound)
     {
         _roundReady = false;
         roundTimer.PauseTimer();
 
         // DETERMINE HOW ROUND ENDED (SUCCESSFUL OR FAILED OR BOSS DEFEATED?)
+        if (successfulRound)
+        {
+            if (!_isBossRound) roundCompletionType = RoundCompletionType.Completed;
+            else roundCompletionType = RoundCompletionType.BossDefeated;
+        }
+        else
+        {
+            roundCompletionType = RoundCompletionType.Failed;
+        }
+
         // here ...
 
 
@@ -233,6 +246,7 @@ public class GameLoopManager : MonoBehaviour
         playerStats.OnHealthChange.RemoveListener(AccrueDamageTaken);
         playerController.OnDeathEvent -= EndRoundPremature;
         EnemiesManager.Instance.ResetEnemiesList();
+        Destroy(EndPortal);
 
         float score = ScoreFormula.CalculateScore(totalEnemiesSpawned * 12f, roundTimer.GetTime(), playerMaxHealth, damageTaken);
         goldRewarded = (int)(score * 1);
