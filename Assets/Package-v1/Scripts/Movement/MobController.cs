@@ -137,9 +137,6 @@ namespace Paraverse.Mob.Controller
 
         private void Update()
         {
-            if (nav.enabled == false)
-                Debug.LogError(transform.name + "'s Nav Agent is Disabled");
-
             _isInteracting = anim.GetBool(StringData.IsInteracting);
 
             DeathHandler();

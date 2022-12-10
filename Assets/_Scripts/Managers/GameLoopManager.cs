@@ -232,6 +232,7 @@ public class GameLoopManager : MonoBehaviour
     {
         playerStats.OnHealthChange.RemoveListener(AccrueDamageTaken);
         playerController.OnDeathEvent -= EndRoundPremature;
+        EnemiesManager.Instance.ResetEnemiesList();
 
         float score = ScoreFormula.CalculateScore(totalEnemiesSpawned * 12f, roundTimer.GetTime(), playerMaxHealth, damageTaken);
         goldRewarded = (int)(score * 1);
@@ -248,7 +249,7 @@ public class GameLoopManager : MonoBehaviour
         // save it in database here, we need to save stats in db asap so players
         // who might d/c right after ending get their stuff saved
 
-
+        ResetStates();
         GameLoopEvents.OnUI?.Invoke();
 
         switch (roundCompletionType)
@@ -323,7 +324,9 @@ public class GameLoopManager : MonoBehaviour
     /* * * * * * *  P R E D I C A T E S  * * * * * * * * */
     public bool KillAllEnemies(bool mapReady)
     {
-        return mapReady && EnemiesManager.Instance.EnemiesCount <= 0;
+        int enemiesLeft = EnemiesManager.Instance.EnemiesCount;
+        Debug.Log($"CURRENT PREDICATE: [KILL ALL ENEMIES] STATUS:  mapReady: {mapReady}  -  enemies left: {enemiesLeft}");
+        return mapReady && enemiesLeft <= 0;
     }
 
     // Implement Get All Gems
