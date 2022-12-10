@@ -73,6 +73,9 @@ namespace Paraverse.Player
         private float maxKnockbackDuration = 1f;
         private float curKnockbackDuration;
 
+        [SerializeField, Tooltip("The attack dashing force applied during basic attack.")]
+        private float attackDashForce = 2f;
+
         [Header("Death Values")]
         private GameObject deathEffect;
         public delegate void OnDeathDel(Transform target);
@@ -147,13 +150,13 @@ namespace Paraverse.Player
             if (_isDead) return;
 
             MovementHandler();
-            //AttackMovementHandler();
             RotationHandler();
             JumpHandler();
             AvoidEnemyUponLand();
             DiveHandler();
             KnockbackHandler();
             AnimationHandler();
+            AttackMovementHandler();
         }
         #endregion
 
@@ -380,11 +383,9 @@ namespace Paraverse.Player
         #endregion
 
         #region Attack Movement
-        [SerializeField, Tooltip("The attack dashing force applied during basic attack.")]
-        private float attackDashForce = 2f;
         private void AttackMovementHandler()
         {
-            if (combat.IsBasicAttacking)
+            if (combat.IsAttackLunging)
             {
                 controller.Move(transform.forward * attackDashForce * Time.deltaTime);
             }
