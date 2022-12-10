@@ -813,7 +813,6 @@ GameObject:
   - component: {fileID: 3351448952234461169}
   - component: {fileID: 2956618024134931115}
   - component: {fileID: 2956618024134931028}
-  - component: {fileID: 2956618024134931029}
   - component: {fileID: 2956618024134931031}
   - component: {fileID: 2956618024134931030}
   - component: {fileID: 2956618024134931113}
@@ -884,20 +883,6 @@ CharacterController:
   m_SkinWidth: 0.08
   m_MinMoveDistance: 0.001
   m_Center: {x: 0, y: 1, z: 0}
---- !u!136 &2956618024134931029
-CapsuleCollider:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 2722828104521882955}
-  m_Material: {fileID: 0}
-  m_IsTrigger: 0
-  m_Enabled: 1
-  m_Radius: 0.3
-  m_Height: 1.8
-  m_Direction: 1
-  m_Center: {x: 0, y: 0.9, z: 0}
 --- !u!114 &2956618024134931031
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -935,15 +920,14 @@ MonoBehaviour:
     serializedVersion: 2
     m_Bits: 32768
   avoidanceForce: 10
-  gravityForce: -20
-  gravityMultiplier: 1
-  diveForce: 10
-  maxDiveRange: 3.5
+  diveForce: 9
+  maxDiveRange: 3
   maxDiveDuration: 0.5
   diveCd: 0.5
   knockForce: 6
   maxKnockbackRange: 1.5
   maxKnockbackDuration: 1
+  attackDashForce: 2
 --- !u!114 &2956618024134931113
 MonoBehaviour:
   m_ObjectHideFlags: 0

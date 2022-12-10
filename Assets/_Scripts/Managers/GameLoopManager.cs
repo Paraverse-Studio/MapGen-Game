@@ -127,7 +127,7 @@ public class GameLoopManager : MonoBehaviour
         }
 
         if (Input.GetKeyDown(KeyCode.U)) EndRound();
-
+        if (Input.GetKeyDown(KeyCode.Y)) playerStats.SetFullHealth();
 
         if (player.transform.position.y <= -25f)
         {

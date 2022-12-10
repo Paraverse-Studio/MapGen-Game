@@ -2904,7 +2904,7 @@ Transform:
   m_GameObject: {fileID: 9035889900967811526}
   m_LocalRotation: {x: -0, y: -0, z: -0, w: 1}
   m_LocalPosition: {x: 0, y: 0, z: 0}
-  m_LocalScale: {x: 1.15, y: 1.15, z: 1.15}
+  m_LocalScale: {x: 1.2, y: 1.2, z: 1.2}
   m_ConstrainProportionsScale: 0
   m_Children:
   - {fileID: 420956309294156252}
@@ -3000,8 +3000,10 @@ MonoBehaviour:
   detectionRadius: 6
   pursueRadius: 10
   knockForce: 7
-  maxKnockbackRange: 1.3
+  maxKnockbackRange: 1.1
   maxKnockbackDuration: 1
+  checkFallRange: 2
+  maxDeathTimerUponFall: 2
   deathEffect: {fileID: 5971161797261734830, guid: b57686338b6a45841a67921982527613, type: 3}
 --- !u!114 &5751539926344400073
 MonoBehaviour:
@@ -3040,7 +3042,7 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   maxHealth: 40
   curHealth: 40
-  attackDamage: 20
+  attackDamage: 10
   attackSpeed: 0.7
   moveSpeed: 2.35
   maxEnergy: 100
