@@ -188,6 +188,7 @@ namespace Paraverse.Mob.Combat
         /// </summary>
         protected void EnableBasicAttackCollider()
         {
+            if (controller.IsKnockedBack) return;
             basicAtkCollider.SetActive(true);
         }
 
@@ -204,6 +205,7 @@ namespace Paraverse.Mob.Combat
         /// </summary>
         protected void EnableAttackLunging()
         {
+            if (controller.IsKnockedBack) return;
             _isAttackLunging = true;
         }
 

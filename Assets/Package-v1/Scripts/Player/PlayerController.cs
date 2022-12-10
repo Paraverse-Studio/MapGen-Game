@@ -387,8 +387,6 @@ namespace Paraverse.Player
         #region Attack Movement
         private void AttackMovementHandler()
         {
-            Debug.Log("basic attack combat idx: " + combat.BasicAttackComboIdx);
-
             if (combat.IsAttackLunging && combat.BasicAttackComboIdx == 0)
             {
                 controller.Move(transform.forward * atkThreeDashForce * Time.deltaTime);
