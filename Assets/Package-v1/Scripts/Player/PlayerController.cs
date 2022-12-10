@@ -74,7 +74,9 @@ namespace Paraverse.Player
         private float curKnockbackDuration;
 
         [SerializeField, Tooltip("The attack dashing force applied during basic attack.")]
-        private float attackDashForce = 2f;
+        private float atkDashForce = 2f;
+        [SerializeField, Tooltip("The attack dashing force applied during basic attack three.")]
+        private float atkThreeDashForce = 4f;
 
         [Header("Death Values")]
         private GameObject deathEffect;
@@ -385,9 +387,15 @@ namespace Paraverse.Player
         #region Attack Movement
         private void AttackMovementHandler()
         {
-            if (combat.IsAttackLunging)
+            Debug.Log("basic attack combat idx: " + combat.BasicAttackComboIdx);
+
+            if (combat.IsAttackLunging && combat.BasicAttackComboIdx == 0)
             {
-                controller.Move(transform.forward * attackDashForce * Time.deltaTime);
+                controller.Move(transform.forward * atkThreeDashForce * Time.deltaTime);
+            }
+            else if (combat.IsAttackLunging)
+            {
+                controller.Move(transform.forward * atkDashForce * Time.deltaTime);
             }
         }
         #endregion

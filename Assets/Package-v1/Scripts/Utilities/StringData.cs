@@ -15,6 +15,8 @@ public static class StringData
     public static string IsBasicAttacking = "isBasicAttacking";
     public static string AttackSpeed = "attackSpeed";
     public static string BasicAttack = "BasicAttack";
+    public static string BasicAttackTwo = "BasicAttackTwo";
+    public static string BasicAttackThree = "BasicAttackThree";
     public static string Idle = "Idle";
     public static string Jump = "Jump";
     public static string Dive = "Dive";
