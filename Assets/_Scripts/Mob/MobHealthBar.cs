@@ -27,7 +27,7 @@ public class MobHealthBar : MonoBehaviour
         public bool showWhenSelected;
         public bool hideName;
         public bool hideHealthBar;
-        public bool hideSelection;
+        public bool showSelectionAllTimes; // this one's not even used
         public bool showEnergyBar;
     }
 
@@ -156,7 +156,7 @@ public class MobHealthBar : MonoBehaviour
         // Settings
         controller.healthBarContainer.gameObject.SetActive(!settings.hideHealthBar);
         controller.nameLabel.gameObject.SetActive(!settings.hideName);
-        controller.targetIcon.SetActive(!settings.hideSelection);
+        controller.targetIcon.SetActive(settings.showSelectionAllTimes);
         controller.energyBarContainer.gameObject.SetActive(settings.showEnergyBar);
 
         // Find this object's bounds height, using either a collider or mesh renderer

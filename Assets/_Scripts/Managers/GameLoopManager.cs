@@ -127,7 +127,7 @@ public class GameLoopManager : MonoBehaviour
             if (_predicate(_roundReady)) EndPortal.SetActive(true);
         }
 
-        if (Input.GetKeyDown(KeyCode.U)) EndRound(successfulRound: true);
+        if (Input.GetKeyDown(KeyCode.U)) EndPortal.SetActive(true);
         if (Input.GetKeyDown(KeyCode.Y)) playerStats.SetFullHealth();
 
         if (player.transform.position.y <= -25f)

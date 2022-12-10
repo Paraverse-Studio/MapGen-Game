@@ -459,6 +459,9 @@ namespace Paraverse.Player
         public void ResetPlayer()
         {
             _isDead = false;
+            horizontal = 0f;
+            vertical = 0f;
+            // also reset all _isInteracting, _knockedBack, etc. Basically all types of CC  ( @ PRAB )
             stats.ResetStats();
             anim.Play(StringData.Idle);
             combat.AddListenerOnBasicAttack();

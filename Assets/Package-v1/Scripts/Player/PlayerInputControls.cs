@@ -77,6 +77,7 @@ namespace Paraverse.Player
         {
             movement = input.Player.Movement;
 
+            _movementDirection = Vector2.zero;
             input.Player.BasicAttack.performed -= OnBasicAttack;
             input.Player.BasicAttack.Disable();
 
