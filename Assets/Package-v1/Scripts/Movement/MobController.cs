@@ -1,9 +1,7 @@
 using Paraverse.Helper;
 using Paraverse.Mob.Stats;
-using Paraverse.Player;
 using UnityEngine;
 using UnityEngine.AI;
-using UnityEngine.UIElements;
 
 namespace Paraverse.Mob.Controller
 {
@@ -90,6 +88,13 @@ namespace Paraverse.Mob.Controller
         private Vector3 knockbackDir;
         private Vector3 knockStartPos;
 
+        [Header("Fall Check")]
+        [SerializeField, Tooltip("Checks if mob should fall off map.")]
+        private float checkFallRange = 2f;
+        [SerializeField, Tooltip("Timer for enemy death when falling off map.")]
+        private float maxDeathTimerUponFall = 2f;
+        private float deathTimerUponFall;
+
         [Header("Death Values")]
         [SerializeField]
         private GameObject deathEffect;
@@ -132,7 +137,7 @@ namespace Paraverse.Mob.Controller
 
         private void Update()
         {
-            if (nav.enabled == false) 
+            if (nav.enabled == false)
                 Debug.LogError(transform.name + "'s Nav Agent is Disabled");
 
             _isInteracting = anim.GetBool(StringData.IsInteracting);
@@ -426,6 +431,7 @@ namespace Paraverse.Mob.Controller
             curKnockbackDuration = 0f;
             knockbackDir = new Vector3(impactDir.x, 0f, impactDir.z);
             _isKnockedBack = true;
+            nav.enabled = false;
             if (_isInteracting == false)
                 anim.Play(StringData.Hit);
         }
@@ -441,16 +447,45 @@ namespace Paraverse.Mob.Controller
                 float knockBackRange = ParaverseHelper.GetDistance(transform.position, knockStartPos);
                 curKnockbackDuration += Time.deltaTime;
 
-                // Moves the mob in the move direction
+                if (CheckFall())
+                {
+                    Debug.Log("Falling");
+                    nav.enabled = false;
+                    controller.Move(transform.up * GlobalValues.GravityForce * GlobalValues.GravityModifier * Time.deltaTime);
+                    controller.Move(knockbackDir * knockForce * Time.deltaTime);
+
+                    // Kills enemy within death timer upon fall
+                    deathTimerUponFall += Time.deltaTime;
+                    if (deathTimerUponFall >= maxDeathTimerUponFall)
+                        stats.UpdateCurrentHealth(-1000000);
+
+                    return;
+                }
                 controller.Move(knockbackDir * knockForce * Time.deltaTime);
 
                 // Stops dive when conditions met
                 if (knockBackRange >= maxKnockbackRange || curKnockbackDuration >= maxKnockbackDuration)
                 {
+                    Debug.Log("Knocked back");
                     _isKnockedBack = false;
-                    return;
+                    nav.enabled = true;
                 }
             }
+        }
+
+        private bool CheckFall()
+        {
+            Vector3 origin = transform.position;
+            Vector3 dir = -transform.up;
+
+            if (Physics.Raycast(origin, dir * checkFallRange, checkFallRange))
+            {
+            }
+            else
+            {
+                return true;
+            }
+            return false;
         }
         #endregion
 

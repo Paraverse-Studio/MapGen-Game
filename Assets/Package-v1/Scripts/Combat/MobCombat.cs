@@ -13,6 +13,7 @@ namespace Paraverse.Mob.Combat
 
         // Required reference scripts
         protected IMobStats stats;
+        protected IMobController controller;
 
         [Header("Target Values")]
         [Tooltip("Target tag (Player by default).")]
@@ -56,8 +57,8 @@ namespace Paraverse.Mob.Combat
         protected float distanceFromTarget;
 
         // Sets to true when character is doing an action (Attack, Stun).
-        protected bool isInteracting = false;
-        public bool IsInteracting { get { return isInteracting; } }
+        public bool IsBasicAttacking { get { return _isBasicAttacking; } }
+        private bool _isBasicAttacking = false;
 
         // Returns true when character is within basic attack range and cooldown is 0.
         public bool CanBasicAtk { get { return distanceFromTarget <= basicAtkRange && curBasicAtkCd <= 0; } }
@@ -69,18 +70,20 @@ namespace Paraverse.Mob.Combat
             if (anim == null) anim = GetComponent<Animator>();
             if (player == null) player = GameObject.FindGameObjectWithTag(targetTag).GetComponent<Transform>();
             if (stats == null) stats = GetComponent<IMobStats>();
+            if (controller == null) controller = GetComponent<IMobController>();
 
             Initialize();
         }
 
         protected virtual void Update()
         {
+            if (controller.IsDead) return;
+
             distanceFromTarget = ParaverseHelper.GetDistance(transform.position, player.position);
             AttackCooldownHandler();
             EnergyHandler();
 
-            // used to control player movement - if isInteracting => curSpeed = 0f
-            isInteracting = anim.GetBool(StringData.IsInteracting);
+            _isBasicAttacking = anim.GetBool(StringData.IsBasicAttacking);
         }
         #endregion
 
@@ -172,6 +175,7 @@ namespace Paraverse.Mob.Combat
 
         public void OnEarlyAttackAnimCancel()
         {
+            _isBasicAttacking = false;
             DisableBasicAttackCollider();
         }
 

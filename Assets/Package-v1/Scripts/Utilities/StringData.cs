@@ -12,6 +12,7 @@ public static class StringData
     public static string IsDiving = "isDiving";
     public static string IsKnockedBack = "isKnockedBack";
     public static string IsInteracting = "isInteracting";
+    public static string IsBasicAttacking = "isBasicAttacking";
     public static string AttackSpeed = "attackSpeed";
     public static string BasicAttack = "BasicAttack";
     public static string Jump = "Jump";

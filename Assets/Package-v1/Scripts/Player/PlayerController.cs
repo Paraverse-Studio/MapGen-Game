@@ -1,7 +1,6 @@
 using Paraverse.Helper;
 using Paraverse.Mob;
 using Paraverse.Mob.Combat;
-using Paraverse.Mob.Controller;
 using Paraverse.Mob.Stats;
 using UnityEngine;
 
@@ -20,7 +19,7 @@ namespace Paraverse.Player
         private CharacterController controller;
         private PlayerInputControls input;
         // Reference to the combat script
-        private IMobCombat combat;
+        private PlayerCombat combat;
         // Reference to the stats script
         IMobStats IMobController.Stats { get { return stats; } }
         private IMobStats stats;
@@ -53,12 +52,6 @@ namespace Paraverse.Player
         private float avoidanceForce = 10f;
         private float downwardAvoidanceForceRatio = 2f;
 
-        [Header("Gravity Values")]
-        [SerializeField, Tooltip("The gravity force of the mob.")]
-        private float gravityForce = -20f;
-        [SerializeField, Tooltip("The gravity multiplier force.")]
-        private float gravityMultiplier = 1f;
-
         [Header("Dive Values")]
         [SerializeField, Tooltip("The dive force of the mob.")]
         private float diveForce = 10f;
@@ -81,7 +74,6 @@ namespace Paraverse.Player
         private float curKnockbackDuration;
 
         [Header("Death Values")]
-        [SerializeField]
         private GameObject deathEffect;
         public delegate void OnDeathDel(Transform target);
         public event OnDeathDel OnDeathEvent;
@@ -123,15 +115,15 @@ namespace Paraverse.Player
             if (anim == null) anim = GetComponentInChildren<Animator>();
             if (controller == null) controller = GetComponent<CharacterController>();
             if (input == null) input = GetComponent<PlayerInputControls>();
-            if (combat == null) combat = GetComponent<IMobCombat>();
+            if (combat == null) combat = GetComponent<PlayerCombat>();
             if (stats == null) stats = GetComponent<IMobStats>();
 
             // Subscribes code to mob death event listener
-            GameObject[] mobs = GameObject.FindGameObjectsWithTag(StringData.EnemyTag);
-            for (int i = 0; i < mobs.Length; i++)
-            {
-                mobs[i].GetComponent<MobController>().OnDeathEvent += OnKillTest;
-            }
+            //GameObject[] mobs = GameObject.FindGameObjectsWithTag(StringData.EnemyTag);
+            //for (int i = 0; i < mobs.Length; i++)
+            //{
+            //    mobs[i].GetComponent<MobController>().OnDeathEvent += OnKillTest;
+            //}
 
             // Subscribes item pick up code to use item event listener
             input.OnUseItemOneEvent += UseItemOne;
@@ -155,13 +147,13 @@ namespace Paraverse.Player
             if (_isDead) return;
 
             MovementHandler();
+            //AttackMovementHandler();
             RotationHandler();
             JumpHandler();
             AvoidEnemyUponLand();
             DiveHandler();
             KnockbackHandler();
-            AnimationHandler(); 
-            OnTopMobHandler();
+            AnimationHandler();
         }
         #endregion
 
@@ -220,7 +212,7 @@ namespace Paraverse.Player
             //{
             //    transform.forward = moveDir;
             //}
-            
+
             if (moveDir != Vector3.zero)
             {
                 Quaternion targetLook = Quaternion.LookRotation(moveDir);
@@ -240,7 +232,7 @@ namespace Paraverse.Player
             if (_isGrounded && curJumpCd >= jumpCd)
             {
                 curJumpCd = 0f;
-                jumpDir.y += Mathf.Sqrt(jumpForce * -gravityMultiplier * gravityForce);
+                jumpDir.y += Mathf.Sqrt(jumpForce * GlobalValues.GravityModifier * GlobalValues.GravityForce);
                 anim.Play(StringData.Jump);
             }
         }
@@ -270,7 +262,7 @@ namespace Paraverse.Player
             }
 
             // Applies gravity and jump movement
-            jumpDir.y += gravityForce * Time.deltaTime;
+            jumpDir.y += GlobalValues.GravityForce * GlobalValues.GravityModifier * Time.deltaTime;
         }
 
         /// <summary>
@@ -282,7 +274,6 @@ namespace Paraverse.Player
             Vector3 origin = transform.position;
             Vector3 dir = -transform.up;
 
-            //Debug.DrawRay(origin, dir, Color.red);
             if (Physics.Raycast(origin, dir * disToGroundCheck, disToGroundCheck, groundedLayers))
             {
                 _isAvoidingLandingOn = false;
@@ -304,9 +295,9 @@ namespace Paraverse.Player
             Debug.DrawRay(origin, dir, Color.magenta);
             if (Physics.SphereCast(origin, controller.radius, dir * disToEnemyCheck, out hit, disToEnemyCheck, avoidLayers))
             {
-                Debug.Log("ON ENEMY!");
                 _isAvoidingLandingOn = true;
             }
+            OnTopMobHandler();
         }
 
         /// <summary>
@@ -388,6 +379,18 @@ namespace Paraverse.Player
 
         #endregion
 
+        #region Attack Movement
+        [SerializeField, Tooltip("The attack dashing force applied during basic attack.")]
+        private float attackDashForce = 2f;
+        private void AttackMovementHandler()
+        {
+            if (combat.IsBasicAttacking)
+            {
+                controller.Move(transform.forward * attackDashForce * Time.deltaTime);
+            }
+        }
+        #endregion
+
         #region KnockBack Methods
         /// <summary>
         /// Invokes knock back action
@@ -441,8 +444,16 @@ namespace Paraverse.Player
         private void Death()
         {
             Debug.Log("Player has died!");
+            combat.RemoveListenerOnBasicAttack();
             controller.detectCollisions = false;
             anim.Play(StringData.Death);
+        }
+
+        public void ResetPlayer()
+        {
+            _isDead = false;
+            stats.ResetStats();
+            combat.AddListenerOnBasicAttack();
         }
         #endregion
 
