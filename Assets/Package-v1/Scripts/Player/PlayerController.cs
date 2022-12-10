@@ -255,7 +255,7 @@ namespace Paraverse.Player
         /// </summary>
         private void ApplyGravity()
         {
-            // Ensures player remains grounded when grounded
+            // Ensures player remains grounded when grounded 
             if (jumpDir.y < 0 && _isGrounded)
             {
                 jumpDir.y = 0f;
@@ -453,6 +453,7 @@ namespace Paraverse.Player
         {
             _isDead = false;
             stats.ResetStats();
+            anim.Play(StringData.Idle);
             combat.AddListenerOnBasicAttack();
         }
         #endregion
