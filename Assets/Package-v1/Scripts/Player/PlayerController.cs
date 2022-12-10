@@ -52,12 +52,6 @@ namespace Paraverse.Player
         private float avoidanceForce = 10f;
         private float downwardAvoidanceForceRatio = 2f;
 
-        [Header("Gravity Values")]
-        [SerializeField, Tooltip("The gravity force of the mob.")]
-        private float gravityForce = -20f;
-        [SerializeField, Tooltip("The gravity multiplier force.")]
-        private float gravityMultiplier = 1f;
-
         [Header("Dive Values")]
         [SerializeField, Tooltip("The dive force of the mob.")]
         private float diveForce = 10f;
@@ -80,7 +74,6 @@ namespace Paraverse.Player
         private float curKnockbackDuration;
 
         [Header("Death Values")]
-        [SerializeField]
         private GameObject deathEffect;
         public delegate void OnDeathDel(Transform target);
         public event OnDeathDel OnDeathEvent;
@@ -154,7 +147,7 @@ namespace Paraverse.Player
             if (_isDead) return;
 
             MovementHandler();
-            AttackMovementHandler();
+            //AttackMovementHandler();
             RotationHandler();
             JumpHandler();
             AvoidEnemyUponLand();
@@ -239,7 +232,7 @@ namespace Paraverse.Player
             if (_isGrounded && curJumpCd >= jumpCd)
             {
                 curJumpCd = 0f;
-                jumpDir.y += Mathf.Sqrt(jumpForce * -gravityMultiplier * gravityForce);
+                jumpDir.y += Mathf.Sqrt(jumpForce * GlobalValues.GravityModifier * GlobalValues.GravityForce);
                 anim.Play(StringData.Jump);
             }
         }
@@ -269,7 +262,7 @@ namespace Paraverse.Player
             }
 
             // Applies gravity and jump movement
-            jumpDir.y += gravityForce * Time.deltaTime;
+            jumpDir.y += GlobalValues.GravityForce * GlobalValues.GravityModifier * Time.deltaTime;
         }
 
         /// <summary>
@@ -281,7 +274,6 @@ namespace Paraverse.Player
             Vector3 origin = transform.position;
             Vector3 dir = -transform.up;
 
-            //Debug.DrawRay(origin, dir, Color.red);
             if (Physics.Raycast(origin, dir * disToGroundCheck, disToGroundCheck, groundedLayers))
             {
                 _isAvoidingLandingOn = false;
