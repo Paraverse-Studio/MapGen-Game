@@ -1,4 +1,7 @@
+using Paraverse.Mob;
+using Paraverse.Mob.Controller;
 using Paraverse.Mob.Stats;
+using Paraverse.Player;
 using System;
 using System.Collections;
 using System.Collections.Generic;
@@ -35,6 +38,7 @@ public class GameLoopManager : MonoBehaviour
     {
         Completed,
         Failed,
+        BossDefeated,
         Quit
     }
 
@@ -52,6 +56,8 @@ public class GameLoopManager : MonoBehaviour
     [Space(20)]
     [Header("Screens/Windows/Views")]
     public Animator roundCompleteWindow;
+    public Animator roundFailedWindow;
+    public Animator bossDefeatedWindow;
     public GameObject loadingScreen;
     public GameObject roundResultsWindow;
     public RoundTimer roundTimer;
@@ -70,9 +76,11 @@ public class GameLoopManager : MonoBehaviour
     [Space(20)]
     [Header("Runtime Data")]
     [Min(1)]
-    public int round;
+    public int nextRoundNumber;
     public RoundCompletionType roundCompletionType;
+    private GameObject player;
     MobStats playerStats;
+    PlayerController playerController;
     public int damageTaken;
     private int totalEnemiesSpawned;
     private int lastHealthSaved = -1;
@@ -94,7 +102,9 @@ public class GameLoopManager : MonoBehaviour
     // Start is called before the first frame update
     void Start()
     {
-        playerStats = GlobalSettings.Instance.player.GetComponentInChildren<MobStats>();
+        player = GlobalSettings.Instance.player;
+        playerStats = player.GetComponentInChildren<MobStats>();
+        playerController = player.GetComponentInChildren<PlayerController>();
 
         if (!developerMode) 
         {
@@ -117,6 +127,13 @@ public class GameLoopManager : MonoBehaviour
         }
 
         if (Input.GetKeyDown(KeyCode.U)) EndRound();
+
+
+        if (player.transform.position.y <= -25f)
+        {
+            playerStats.UpdateCurrentHealth((int)(-playerStats.MaxHealth*0.30f));
+            UtilityFunctions.TeleportObject(player, MapGeneration.Instance.GetClosestBlock(player.transform).transform.position + new Vector3(0, 0.5f,0));
+        }
     }
 
 
@@ -139,6 +156,7 @@ public class GameLoopManager : MonoBehaviour
         playerMaxHealth = playerStats.MaxHealth;
 
         playerStats.OnHealthChange.AddListener(AccrueDamageTaken);
+        playerController.OnDeathEvent += EndRoundPremature;
     }
 
     public void ResetStates()
@@ -168,6 +186,12 @@ public class GameLoopManager : MonoBehaviour
         }
     }
 
+    private void EndRoundPremature(Transform t)
+    {
+        roundCompletionType = RoundCompletionType.Failed;
+        EndRound();
+    }
+
     public void EndRound() => StartCoroutine(IEndRound());   
 
     public IEnumerator IEndRound()
@@ -175,13 +199,31 @@ public class GameLoopManager : MonoBehaviour
         _roundReady = false;
         roundTimer.PauseTimer();
 
+        // DETERMINE HOW ROUND ENDED (SUCCESSFUL OR FAILED OR BOSS DEFEATED?)
+        // here ...
+
+
+        Animator roundEndWindow = new Animator();
+        switch (roundCompletionType)
+        {
+            case RoundCompletionType.Completed:
+                roundEndWindow = roundCompleteWindow;
+                break;
+            case RoundCompletionType.Failed:
+                roundEndWindow = roundFailedWindow;
+                break;
+            case RoundCompletionType.BossDefeated:
+                roundEndWindow = bossDefeatedWindow;
+                break;
+        }
+
         GameLoopEvents.OnEndRound?.Invoke();
-        roundCompleteWindow.gameObject.SetActive(true);
-        roundCompleteWindow.SetTrigger("Entry");
+        roundEndWindow.gameObject.SetActive(true);
+        roundEndWindow.SetTrigger("Entry");
         yield return new WaitForSeconds(3f);
-        roundCompleteWindow.SetTrigger("Exit");
+        roundEndWindow.SetTrigger("Exit");
         yield return new WaitForSeconds(1.5f);
-        roundCompleteWindow.gameObject.SetActive(false);
+        roundEndWindow.gameObject.SetActive(false);
 
         CompleteRound();
     }
@@ -189,6 +231,7 @@ public class GameLoopManager : MonoBehaviour
     public void CompleteRound()
     {
         playerStats.OnHealthChange.RemoveListener(AccrueDamageTaken);
+        playerController.OnDeathEvent -= EndRoundPremature;
 
         float score = ScoreFormula.CalculateScore(totalEnemiesSpawned * 12f, roundTimer.GetTime(), playerMaxHealth, damageTaken);
         goldRewarded = (int)(score * 1);
@@ -197,6 +240,9 @@ public class GameLoopManager : MonoBehaviour
 
         Results.scoreText.text = "Score: " + (int)score + "%";
         Results.rankText.text = ScoreFormula.GetScoreRank((int)score);
+
+        nextRoundNumber++;
+
         //Results.goldText.text = "+" + goldRewarded;
 
         // save it in database here, we need to save stats in db asap so players

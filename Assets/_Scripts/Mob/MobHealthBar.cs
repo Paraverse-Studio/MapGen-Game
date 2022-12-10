@@ -103,7 +103,7 @@ public class MobHealthBar : MonoBehaviour
         if (!_healthBarSetupComplete) return;
 
         // Health
-        _healthBar.fillAmount = _health / _totalHealth;
+        _healthBar.fillAmount = Mathf.Clamp(_health / _totalHealth, 0f, 1f);
 
         _healthDamageBar.fillAmount = Mathf.Lerp(_healthDamageBar.fillAmount, _healthBar.fillAmount, Time.deltaTime * 2f);
 
