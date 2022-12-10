@@ -1,5 +1,6 @@
 using Paraverse.Mob;
 using Paraverse.Mob.Combat;
+using System.Collections.Generic;
 using UnityEngine;
 
 namespace Paraverse
@@ -10,6 +11,7 @@ namespace Paraverse
         [SerializeField, Tooltip("Enter the tag of target.")]
         private string targetTag = "Player";
         private float damage;
+        private List<GameObject> hitTargets = new List<GameObject>();
 
 
         public void Init(MobCombat mob, float damage)
@@ -18,11 +20,17 @@ namespace Paraverse
             this.damage = damage;
         }
 
+        private void OnEnable()
+        {
+            hitTargets.Clear();
+        }
+
         private void OnTriggerEnter(Collider other)
         {
-            if (other.CompareTag(targetTag))
+            if (other.CompareTag(targetTag) && !hitTargets.Contains(other.gameObject))
             {
                 //ContactPoint contact = other.contacts[0];
+                hitTargets.Add(other.gameObject);
 
                 IMobController controller = other.GetComponent<IMobController>();
                 controller.Stats.UpdateCurrentHealth((int)-damage);
