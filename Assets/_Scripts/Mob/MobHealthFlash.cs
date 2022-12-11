@@ -21,8 +21,10 @@ public class MobHealthFlash : MonoBehaviour
     // Start is called before the first frame update
     void Start()
     {
-        if (null == _flashMaterial && GlobalSettings.Instance) 
+        if (null == _flashMaterial && GlobalSettings.Instance)
+        {
             _flashMaterial = GlobalSettings.Instance.FlashMaterial;
+        }
 
         _renderers = GetComponentsInChildren<Renderer>();
         foreach (Renderer r in _renderers)
@@ -31,14 +33,11 @@ public class MobHealthFlash : MonoBehaviour
         }
 
         _iDamageFlash = IDamageFlash();
-        _mobStats = GetComponent<MobStats>();
-        _mobStats.OnHealthChange.AddListener(FlashWhenDamage);
-    }
 
-    // Update is called once per frame
-    void Update()
-    {
-        if (Input.GetKeyDown(KeyCode.E)) DamageFlash();
+        if (TryGetComponent(out _mobStats))
+        {
+            _mobStats.OnHealthChange.AddListener(FlashWhenDamage);
+        }
     }
 
     public void FlashWhenDamage(int currentHealth, int totalHealth)
