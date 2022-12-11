@@ -39,6 +39,13 @@ public class SO_MapGenData : ScriptableObject
     [MinMaxSlider(0f, 100f)]
     public Vector2 turningAngleRange;
 
+    [Range(0f, 90f)]
+    public float roundAngleToNearest;
+
+    [Header("(Overlap prevention) recommended max: 90f")]
+    [Range(0f, 90f)]
+    public float maxAngleTurn;
+
     [Header("PATH THICKNESS ")]
     public int pathThickenFrequency = 8;
 

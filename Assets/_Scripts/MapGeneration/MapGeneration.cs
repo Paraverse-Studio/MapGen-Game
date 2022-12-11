@@ -452,17 +452,15 @@ public class MapGeneration : MonoBehaviour
 
             // this was a feature I was trying - rounds the angle to the nearest 45deg
             // ie. only angle turns are 0, 45, 90, etc.
-            randomAngle = Mathf.Round(randomAngle / 90f) * 90f;
-
+            randomAngle = Mathf.Round(randomAngle / M.roundAngleToNearest) * M.roundAngleToNearest;
             randomAngle *= (Random.value > 0.5f) ? 1.0f : -1.0f;
 
-            float newAngle = pathingAngle + randomAngle;
+            // New Feature* : trying out preventing the pathing curve to ever rotate enough to face the origin spot
+            // so that we don't get overlap path ways
+            if (pathingAngle >= M.maxAngleTurn) randomAngle = Mathf.Abs(randomAngle) * -1f;
+            else if (pathingAngle <= -M.maxAngleTurn) randomAngle = Mathf.Abs(randomAngle);
 
-            if (allObjects.Count > 0)
-            {
-                // this is where I was writing the overlap prevention code
-                //Vector3 angleToOrigin = allObjects[0].transform.position - 
-            }
+            float newAngle = pathingAngle + randomAngle;
 
             float randomDistance = Random.Range(M.distanceBeforeTurningPath.x, M.distanceBeforeTurningPath.y);
 
