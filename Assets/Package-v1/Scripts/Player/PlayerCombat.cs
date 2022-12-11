@@ -5,7 +5,7 @@ namespace Paraverse.Player
 {
     public class PlayerCombat : MobCombat
     {
-        private PlayerController controller;
+        private new PlayerController controller;
         private PlayerInputControls input;
 
         public int BasicAttackComboIdx { get { return basicAtkComboIdx; } }

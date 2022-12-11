@@ -173,7 +173,7 @@ namespace Paraverse.Mob.Combat
         }
         #endregion
 
-        public void OnEarlyAttackAnimCancel()
+        public void OnAttackInterrupt()
         {
             _isAttackLunging = false;
             DisableBasicAttackCollider();

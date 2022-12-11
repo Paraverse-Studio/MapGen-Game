@@ -408,7 +408,7 @@ namespace Paraverse.Player
         /// </summary>
         public void ApplyKnockBack(Vector3 mobPos)
         {
-            combat.OnEarlyAttackAnimCancel();
+            //combat.OnEarlyAttackAnimCancel();
             Vector3 impactDir = (transform.position - mobPos).normalized;
             knockStartPos = transform.position;
             curKnockbackDuration = 0f;

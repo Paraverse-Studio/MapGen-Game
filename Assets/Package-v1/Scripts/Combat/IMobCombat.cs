@@ -6,6 +6,6 @@ namespace Paraverse.Mob
         public float BasicAtkRange { get; }
         public bool CanBasicAtk { get; }
         public abstract void BasicAttackHandler();
-        public abstract void OnEarlyAttackAnimCancel();
+        public abstract void OnAttackInterrupt();
     }
 }

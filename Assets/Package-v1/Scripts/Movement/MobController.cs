@@ -20,21 +20,6 @@ namespace Paraverse.Mob.Controller
         // Reference to the stats script
         IMobStats IMobController.Stats { get { return stats; } }
         private IMobStats stats;
-        // Reference to mob state
-        [SerializeField, Tooltip("The current state of the mob.")]
-        private MobState curState;
-        public MobState CurMobState { get { return curState; } }
-
-        // State Booleans 
-        public bool IsInteracting { get { return _isInteracting; } }
-        private bool _isInteracting = false;
-        public bool IsKnockedBack { get { return _isKnockedBack; } }
-        private bool _isKnockedBack = false;
-        public bool IsDead { get { return _isDead; } }
-        private bool _isDead = false;
-
-        public IMobController Target { get { return _target; } }
-        private IMobController _target;
 
         [Header("Movement Values"), Tooltip("The current speed of the mob")]
         private float curSpeed;
@@ -103,6 +88,22 @@ namespace Paraverse.Mob.Controller
         private GameObject deathEffect;
         public delegate void OnDeathDel(Transform target);
         public event OnDeathDel OnDeathEvent;
+
+        // Reference to mob state
+        [SerializeField, Tooltip("The current state of the mob.")]
+        private MobState curState;
+        public MobState CurMobState { get { return curState; } }
+
+        // State Booleans 
+        public bool IsInteracting { get { return _isInteracting; } }
+        private bool _isInteracting = false;
+        public bool IsKnockedBack { get { return _isKnockedBack; } }
+        private bool _isKnockedBack = false;
+        public bool IsDead { get { return _isDead; } }
+        private bool _isDead = false;
+
+        public IMobController Target { get { return _target; } }
+        private IMobController _target;
         #endregion
 
         #region Start & Update Methods
