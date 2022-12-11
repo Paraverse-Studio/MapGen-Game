@@ -132,7 +132,7 @@ public class GameLoopManager : MonoBehaviour
 
         if (player.transform.position.y <= -25f)
         {
-            playerStats.UpdateCurrentHealth((int)(-playerStats.MaxHealth*0.30f));
+            playerStats.UpdateCurrentHealth((int)(-playerStats.MaxHealth*0.20f));
             UtilityFunctions.TeleportObject(player, MapGeneration.Instance.GetClosestBlock(player.transform).transform.position + new Vector3(0, 0.5f,0));
         }
     }
