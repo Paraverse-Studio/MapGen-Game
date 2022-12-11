@@ -98,6 +98,8 @@ namespace Paraverse.Player
         private bool _isKnockedBack = false;
         public bool IsDead { get { return _isDead; } }
         private bool _isDead = false;
+        public IMobController Target { get { return _target; } }
+        private IMobController _target;
 
         // Movement, Jump & Dive inputs and velocities
         private Vector3 goalDir;
@@ -148,6 +150,7 @@ namespace Paraverse.Player
 
             jumpDir.y -= Time.deltaTime;
 
+            AnimationHandler();
             DeathHandler();
             if (_isDead) return;
 
@@ -157,7 +160,6 @@ namespace Paraverse.Player
             AvoidEnemyUponLand();
             DiveHandler();
             KnockbackHandler();
-            AnimationHandler();
             AttackMovementHandler();
         }
         #endregion
@@ -174,6 +176,7 @@ namespace Paraverse.Player
         {
             anim.SetFloat(StringData.Speed, moveDir.magnitude);
             anim.SetBool(StringData.IsGrounded, IsGrounded);
+            anim.SetBool(StringData.IsDead, IsDead);
             anim.SetBool(StringData.IsDiving, IsDiving);
             anim.SetBool(StringData.IsKnockedBack, IsKnockedBack);
         }
@@ -243,7 +246,7 @@ namespace Paraverse.Player
         }
 
         /// <summary>
-        /// Handles jump movement and variables in Update().
+        /// Handles jump movement and variables in Updat().
         /// </summary>
         private void JumpHandler()
         {
@@ -379,6 +382,7 @@ namespace Paraverse.Player
 
         private void TargetLock()
         {
+            //_target =
             TargetLockSystem.Instance.ToggleSelect();
         }
 
@@ -450,17 +454,18 @@ namespace Paraverse.Player
 
         private void Death()
         {
-            Debug.Log("Player has died!");
             combat.RemoveListenerOnBasicAttack();
             controller.detectCollisions = false;
             anim.Play(StringData.Death);
+
+            horizontal = 0f;
+            vertical = 0f;
         }
 
         public void ResetPlayer()
         {
+            controller.detectCollisions = true;
             _isDead = false;
-            horizontal = 0f;
-            vertical = 0f;
             // also reset all _isInteracting, _knockedBack, etc. Basically all types of CC  ( @ PRAB )
             stats.ResetStats();
             anim.Play(StringData.Idle);

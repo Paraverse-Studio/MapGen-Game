@@ -132,7 +132,7 @@ public class GameLoopManager : MonoBehaviour
 
         if (player.transform.position.y <= -25f)
         {
-            playerStats.UpdateCurrentHealth((int)(-playerStats.MaxHealth*0.20f));
+            playerStats.UpdateCurrentHealth((int)(-playerStats.MaxHealth*1.20f));
             UtilityFunctions.TeleportObject(player, MapGeneration.Instance.GetClosestBlock(player.transform).transform.position + new Vector3(0, 0.5f,0));
         }
     }
@@ -233,11 +233,12 @@ public class GameLoopManager : MonoBehaviour
         GameLoopEvents.OnEndRound?.Invoke();
         roundEndWindow.gameObject.SetActive(true);
         roundEndWindow.SetTrigger("Entry");
-        yield return new WaitForSeconds(3f);
+        Time.timeScale = 0.4f;
+        yield return new WaitForSecondsRealtime(3f);
         roundEndWindow.SetTrigger("Exit");
-        yield return new WaitForSeconds(1.5f);
+        yield return new WaitForSecondsRealtime(1.5f);
         roundEndWindow.gameObject.SetActive(false);
-
+        Time.timeScale = 1f;
         CompleteRound();
     }
 

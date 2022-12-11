@@ -58,14 +58,14 @@ public class PauseMenu : MonoBehaviour
 
         if (_isPaused)
         {
-            if (Time.timeScale != 0f) Time.timeScale = 0;
+            //if (Time.timeScale != 0f) Time.timeScale = 0;
 
             rectTransform.localScale = new Vector3(Mathf.Max(rectTransform.localScale.x - GetTimeDelta(), 1), 1, 1);
             rectTransform.gameObject.SetActive(true);
         }
         else if (!_isPaused)
         {
-            if (Time.timeScale != 1f) Time.timeScale = 1f;
+            //if (Time.timeScale != 1f) Time.timeScale = 1f;
 
             rectTransform.localScale = new Vector3(Mathf.Min(rectTransform.localScale.x + GetTimeDelta(), 3), 1, 1);
             if (rectTransform.localScale.x >= 3f) rectTransform.gameObject.SetActive(false);
@@ -85,7 +85,9 @@ public class PauseMenu : MonoBehaviour
         
         if (o) events.OnPause?.Invoke();
         if (!o) events.OffPause?.Invoke();
-        events.OnPauseBool?.Invoke(o);        
+        events.OnPauseBool?.Invoke(o);
+
+        Time.timeScale = _isPaused? 0f : 1f;
     }
 
     public void QuitToMainMenu()

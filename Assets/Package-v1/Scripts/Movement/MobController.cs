@@ -33,6 +33,9 @@ namespace Paraverse.Mob.Controller
         public bool IsDead { get { return _isDead; } }
         private bool _isDead = false;
 
+        public IMobController Target { get { return _target; } }
+        private IMobController _target;
+
         [Header("Movement Values"), Tooltip("The current speed of the mob")]
         private float curSpeed;
         [SerializeField, Range(0, 1), Tooltip("The walk speed of the mob.")]
