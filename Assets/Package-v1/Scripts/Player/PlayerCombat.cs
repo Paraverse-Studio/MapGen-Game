@@ -44,37 +44,24 @@ namespace Paraverse.Player
 
         private void GetBasicAttackCombo()
         {
-            Debug.Log("Index: " + basicAtkComboIdx + "      bool2: " + anim.GetBool(StringData.CanBasicAttackTwo) + 
-                                                     "      bool3: " + anim.GetBool(StringData.CanBasicAttackThree));
-
-
-            if (anim.GetBool(StringData.CanBasicAttackThree)) // && basicAtkComboIdx == 2)
+            if (anim.GetBool(StringData.CanBasicAttackThree))
             {
-                Debug.Log("ATTK 3 called " + basicAtkComboIdx);
-                basicAtkComboIdx++;
                 anim.SetBool(StringData.IsInteracting, true);
                 anim.Play(StringData.BasicAttackThree);
             }
-            else if (anim.GetBool(StringData.CanBasicAttackTwo)) // && basicAtkComboIdx == 1)
+            else if (anim.GetBool(StringData.CanBasicAttackTwo))
             {
-                Debug.Log("ATTK 2 called " + basicAtkComboIdx);
-
-                basicAtkComboIdx++;
                 anim.SetBool(StringData.IsInteracting, true);
                 anim.Play(StringData.BasicAttackTwo);
             }
             else if (basicAtkComboIdx == 0)
             {
-                Debug.Log("ATTK 1 called " + basicAtkComboIdx);
-
-                basicAtkComboIdx++;
                 anim.Play(StringData.BasicAttack);
             }
             
             ResetAnimationBasicAttackStates();
 
-            // increment combo atk idx
-            //basicAtkComboIdx++;
+            basicAtkComboIdx++;
             curCombatResetTimer = maxComboResetTimer;
             if (basicAtkComboIdx > basicAtkComboIdxLimit)
             {

@@ -183,8 +183,11 @@ namespace Paraverse.Player
 
         private void MovementHandler()
         {
+            bool two = anim.GetBool(StringData.CanBasicAttackTwo);
+            bool three = anim.GetBool(StringData.CanBasicAttackThree);
+
             // Disables player movement during dive
-            if (_isDiving || _isKnockedBack || _isInteracting) return;
+            if (_isDiving || _isKnockedBack || _isInteracting && two == false && three == false) return;
 
             // Adjusts player speed based on state
             if (IsInteracting)

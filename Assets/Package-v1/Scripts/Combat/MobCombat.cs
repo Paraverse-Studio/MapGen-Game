@@ -158,8 +158,6 @@ namespace Paraverse.Mob.Combat
             curBasicAtkAnimSpeed = stats.AttackSpeed;
             curBasicAtkAnimSpeed = Mathf.Clamp(curBasicAtkAnimSpeed, minBasicAtkAnimSpeed, maxBasicAtkAnimSpeed);
             anim.SetFloat(StringData.AttackSpeed, curBasicAtkAnimSpeed);
-            //Debug.Log(transform.name + " attacks " + stats.AttackSpeed + " times per second.");
-            //Debug.Log(transform.name + "'s animation speed is " + anim.GetFloat(StringData.AttackSpeed) + " seconds.");
         }
         #endregion
 
