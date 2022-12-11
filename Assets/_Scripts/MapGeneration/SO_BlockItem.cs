@@ -27,6 +27,7 @@ public class SO_BlockItem : ScriptableObject
     public Color blockColour;
     public SingleLayer layer;
     public Vector3 defaultScale = Vector3.one;
+    public Vector3 defaultOffset = Vector3.zero;
 
     public RandomizeRotation rotationRandomization = new RandomizeRotation();
 

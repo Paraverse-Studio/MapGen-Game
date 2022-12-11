@@ -56,8 +56,14 @@ public class SO_MapGenData : ScriptableObject
     [Range(1.0f, 1.5f)]
     public float circularity = 1.0f;
 
-    [Header("LUMPS ")]
-    [Space(10)]
+    [Space(30)]
+    [Header("    _____________  MAP LUMPS  _____________")]
+    [Space(40)]
+
+    [Range(0, 1)]
+    [Tooltip("Block elevation distance, a whole block up or half? Etc.")]
+    public float blockRaiseSize = 1f;
+
     [Range(0, 40)]
     public int lumpDensity;
 
