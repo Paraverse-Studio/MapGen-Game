@@ -452,7 +452,7 @@ public class MapGeneration : MonoBehaviour
 
             // this was a feature I was trying - rounds the angle to the nearest 45deg
             // ie. only angle turns are 0, 45, 90, etc.
-            //randomAngle = Mathf.Round(randomAngle / 45f) * 45f;
+            randomAngle = Mathf.Round(randomAngle / 90f) * 90f;
 
             randomAngle *= (Random.value > 0.5f) ? 1.0f : -1.0f;
 
@@ -734,6 +734,9 @@ public class MapGeneration : MonoBehaviour
             for (int z = -1; z < 2; ++z)
             {
                 Vector3 areaToCheck = new Vector3(src.x + x, 0, src.z + z);
+
+                if (!IsInGrid(areaToCheck)) continue;
+
                 Block objectToCheck = gridOccupants[(int)areaToCheck.x, (int)areaToCheck.z].block;
 
                 if (objectToCheck != null)
@@ -1053,6 +1056,13 @@ public class MapGeneration : MonoBehaviour
         float x = origin.x + radius * Mathf.Sin(angleInRadians);
         float z = origin.z + radius * Mathf.Cos(angleInRadians);
         return new Vector3(x, origin.y, z);
+    }
+
+    private bool IsInGrid(Vector3 spot)
+    {
+        if ((int)spot.x < 0 || (int)spot.x >= _GRIDSIZE) return false; // can happen if the radius for this lump is bigger than the actual map
+        if ((int)spot.z < 0 || (int)spot.z >= _GRIDSIZE) return false;
+        return true;
     }
 
     private bool IsDistanceLessThan(Vector3 a, Vector3 b, float compareValue)
