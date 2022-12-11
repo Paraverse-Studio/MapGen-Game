@@ -181,17 +181,11 @@ public class Block : MonoBehaviour, ITickElement
     private void UpdateSize()
     {
         transform.localScale = type.defaultScale;
-        if (overrideSettings.overrideScale != Vector3.zero)
+        
+        if (transform.childCount > 0)
         {
-            if (transform.childCount > 0)
-            {
-                transform.GetChild(0).localScale = overrideSettings.overrideScale;
-            }
-            else
-            {
-                transform.localScale = overrideSettings.overrideScale;
-            }
-        }
+            transform.GetChild(0).localPosition = type.defaultOffset; 
+        }        
     }
 
     public void UpdateHistory(string msg)

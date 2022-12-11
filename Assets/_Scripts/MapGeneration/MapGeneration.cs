@@ -204,8 +204,8 @@ public class MapGeneration : MonoBehaviour
         xBoundary = centerPoint2D;
         zBoundary = centerPoint2D;
 
-        yBoundary = new Vector2(Mathf.Ceil(M.lumpApplicationRounds / 2.0f),
-                                Mathf.Floor(-M.lumpApplicationRounds / 2.0f));
+        yBoundary = new Vector2(Mathf.Ceil(M.lumpApplicationRounds / 2.0f) * M.blockRaiseSize,
+                                Mathf.Floor(-M.lumpApplicationRounds / 2.0f) * M.blockRaiseSize);
 
         furthestBlock = centerPoint2D;
         furthestDistance = 0;
@@ -561,7 +561,7 @@ public class MapGeneration : MonoBehaviour
 
     private void ApplyBlockElevationRestrictions(Block block)
     {
-        if (Mathf.Abs(Mathf.Round(block.transform.position.y) - YBoundary.y) < _EPSILON)
+        if (Mathf.Abs(block.transform.position.y - YBoundary.y) < _EPSILON)
         {
             ElevateBlock(true, block);
         }
@@ -635,7 +635,7 @@ public class MapGeneration : MonoBehaviour
         float extremeY;
         extremeY = GetExtremestAdjacentElevation(upOrDown ? ElevationLevel.lowest : ElevationLevel.highest, obj.gameObject);
 
-        float yValue = extremeY + (upOrDown ? 1f : -1f);
+        float yValue = extremeY + ((upOrDown ? 1f : -1f) * M.blockRaiseSize);
         yValue = Mathf.Clamp(yValue, YBoundary.y, YBoundary.x);
 
         obj.transform.position = new Vector3(obj.transform.position.x, yValue, obj.transform.position.z);
@@ -655,7 +655,13 @@ public class MapGeneration : MonoBehaviour
         // this should be true, when you're spawning a cube at x,z and supp
         if (!utilizeY) // majority of the time you use Spawn(), you ignore y, cause you're affecting grid[x,z]
         {
-            Block blockAtVec = gridOccupants[(int)vec.x, (int)vec.z].block;
+            Block blockAtVec = null;
+
+            if (IsInGrid(new Vector3((int)vec.x, -1f, (int)vec.z))) // the y doesn't matter here, IsInGrid() doesn't use it
+            {
+                blockAtVec = gridOccupants[(int)vec.x, (int)vec.z].block;
+            }
+
             if (null != blockAtVec)
             {
                 replacedBlock = blockAtVec;
@@ -791,15 +797,15 @@ public class MapGeneration : MonoBehaviour
 
     private void AddWaterToDips()
     {
-        float yLevelToMeasure = Mathf.Round(YBoundary.y) + 0.1f;
+        float yLevelToMeasure = YBoundary.y + _EPSILON;
 
         for (int i = 0; i < allObjects.Count; ++i)
         {
             Transform thisObject = allObjects[i].transform;
 
-            if (((Mathf.Round(thisObject.position.y)) <= yLevelToMeasure))
+            if (thisObject.position.y <= yLevelToMeasure)
             {
-                Vector3 spawnSpot = new Vector3(thisObject.position.x, yLevelToMeasure + 1, thisObject.transform.position.z);
+                Vector3 spawnSpot = new Vector3(thisObject.position.x, YBoundary.y + M.blockRaiseSize, thisObject.transform.position.z);
 
                 GameObject waterObj = Instantiate(blockPrefab, spawnSpot, Quaternion.identity);
                 waterObj.transform.parent = temporaryObjFolder.transform;
@@ -812,6 +818,9 @@ public class MapGeneration : MonoBehaviour
                 }
             }
         }
+
+        // modify this next bit to make water more adaptive and dynamic to whatever size and height you need it
+        WaterVolumeFollowTarget.Instance.overrideY = YBoundary.y + (M.blockRaiseSize * 0.5f); 
     }
 
     private void AddImportantProps()
@@ -883,8 +892,7 @@ public class MapGeneration : MonoBehaviour
                 if (true == gridOccupants[newX, newZ].hasProp) continue;
 
                 // NEW* - don't put normal props on lowest level (where water is, only put water props there)
-                float yLevelToMeasure = Mathf.Round(YBoundary.y);
-                if (Mathf.Abs(Mathf.Round(gridOccupants[newX, newZ].block.transform.position.y) - yLevelToMeasure) < _EPSILON) continue;
+                if (Mathf.Abs(gridOccupants[newX, newZ].block.transform.position.y - YBoundary.y) < _EPSILON) continue;
 
                 Vector3 spawnSpot = new Vector3(newX, gridOccupants[newX, newZ].block.transform.position.y, newZ);
 
@@ -892,7 +900,7 @@ public class MapGeneration : MonoBehaviour
                 // X% for every distance unit away from the closest path block (design choice: spam props around edges of map, to make path clear)
                 GameObject closestPathPosition = GetClosestObject(spawnSpot, pathObjects);
                 float chanceOfSpawn = 0.0f;
-                chanceOfSpawn += (M.treeChanceGrowthRate * Mathf.Pow(Vector3.Distance(spawnSpot, closestPathPosition.transform.position), 1.15f)); //1.35f
+                chanceOfSpawn += (M.treeChanceGrowthRate * Mathf.Pow(Vector3.Distance(spawnSpot, closestPathPosition.transform.position), 1.175f)); //1.35f
 
                 // Actually placing the prop
                 if (Random.Range(0f, 100f) < chanceOfSpawn)
@@ -900,7 +908,7 @@ public class MapGeneration : MonoBehaviour
                     GameObject obj = Instantiate(M.propSet.propPrefabs[Random.Range(0, M.propSet.propPrefabs.Length)], spawnSpot, Quaternion.identity);
                     UtilityFunctions.UpdateLODlevels(obj.transform);
                     treeObjects.Add(obj);
-                    obj.transform.position += new Vector3(0, 0.5f, 0);
+                    obj.transform.position += new Vector3(0, 0.5f, 0); // only 0.5f because the pivot point is center of block
                     obj.transform.parent = temporaryObjFolder.transform;
 
                     gridOccupants[newX, newZ].hasProp = true;

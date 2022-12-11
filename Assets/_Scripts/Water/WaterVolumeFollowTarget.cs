@@ -3,8 +3,11 @@ using Bitgem.VFX.StylisedWater;
 
 public class WaterVolumeFollowTarget : MonoBehaviour
 {
+    public static WaterVolumeFollowTarget Instance;
+
     public Transform target;
     public Vector3 _offset;
+    public float overrideY;
 
     [Header("Time Delay (if any): ")]
     public float timeDelay = 0;
@@ -20,10 +23,11 @@ public class WaterVolumeFollowTarget : MonoBehaviour
     // Start is called before the first frame update
     void Awake()
     {
+        Instance = this;
         waterVolume = GetComponent<WaterVolumeTransforms>();
 
         _offset = transform.position - target.position;
-        lastPosition = GetIntVector(transform.position, -1.1f);
+        lastPosition = GetIntVector(transform.position);
         playerLastDeltaPosition = target.position;
 
         gameObject.SetActive(false);
@@ -52,13 +56,13 @@ public class WaterVolumeFollowTarget : MonoBehaviour
 
         lastPosition = transform.position;
 
-        transform.position = GetIntVector(goalPosition, -1.1f);
+        transform.position = GetIntVector(goalPosition);
 
         MoveChildrenOppositeDirection();
 
     }
 
-    private Vector3 GetIntVector(Vector3 v, float overrideY = 0)
+    private Vector3 GetIntVector(Vector3 v)
     {
         int x = (int)v.x;
         float y = overrideY;
