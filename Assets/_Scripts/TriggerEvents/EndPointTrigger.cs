@@ -4,12 +4,13 @@ using UnityEngine;
 
 public class EndPointTrigger : MonoBehaviour
 {
-
     private void OnTriggerEnter(Collider other)
     {
         if (other.CompareTag("Player"))
         {
-            GameLoopManager.Instance.CompleteRound();
+            GameLoopManager.Instance.EndRound(successfulRound: true);
+            this.enabled = false;
+
         }
     }
 }

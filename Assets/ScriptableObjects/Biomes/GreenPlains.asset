@@ -12,7 +12,9 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: ac7b4726c008121408f35db723b6e5ff, type: 3}
   m_Name: GreenPlains
   m_EditorClassIdentifier: 
+  mapDescription: Balmy Green Plains
   ppProfile: {fileID: 11400000, guid: b3c5a5a69239adb4d8970121354188bf, type: 2}
+  mapVFX: {fileID: 1782885247822439967, guid: d540fdc5850b09f48ad8d0575f59cc7e, type: 3}
   blockSet:
     grass: {fileID: 11400000, guid: 31d0d318a6ac60c45bef5c50f37f6eca, type: 2}
     dirt: {fileID: 11400000, guid: 250ba34ca6bae284e8c3555cac6370b0, type: 2}
@@ -30,16 +32,19 @@ MonoBehaviour:
     - {fileID: 7236105332991377948, guid: 70c559d121d814761b9d14c5629c374b, type: 3}
     - {fileID: 8642253930628860144, guid: 9fdd5cde1d88e4e8e9c89c9128a77b90, type: 3}
   randomElevation: {x: 0, y: 0}
-  distanceOfPath: 100
+  distanceOfPath: 120
   distanceBeforeTurningPath: {x: 6, y: 10}
-  turningAngleRange: {x: 15, y: 25}
+  turningAngleRange: {x: 0, y: 80}
+  roundAngleToNearest: 45
+  maxAngleTurn: 90
   pathThickenFrequency: 15
-  grassFillRadius: {x: 3, y: 12}
+  grassFillRadius: {x: 6, y: 12}
   circularity: 1.15
+  blockRaiseSize: 0.6
   lumpDensity: 15
   lumpApplicationRounds: 2
-  lumpRadius: {x: 4, y: 14}
-  lumpOffset: 8
+  lumpRadius: {x: 3, y: 6}
+  lumpOffset: 4
   addEdgingBlocks: 1
   flattenApplicationRounds: 0
   flattenIfSurroundedByLessThan: 3
@@ -52,9 +57,10 @@ MonoBehaviour:
   treeSpawnDensity: 5
   treeSpawnOffset: 2
   treeChanceGrowthRate: 20
+  addEnemies: 1
   enemies:
-  - {fileID: 7129288949800645051, guid: fa69cb80ac4a27542ae8d7fa1c9a5a0c, type: 3}
-  - {fileID: 7129288949800645051, guid: f38f2c312ac12744fab143c2765c48f6, type: 3}
-  enemyFrequency: 12
-  enemySpawnOffset: 5
-  spawnDoubleEveryFrequency: 24
+  - {fileID: 834749840821475308, guid: 504274220e31b014bb1f9da275f2fca1, type: 3}
+  - {fileID: 1491135451762375406, guid: 7cd480286f30f724d8b6b177b24d1810, type: 3}
+  - {fileID: 4257800398774748632, guid: feaf9f99f013c334fb69778b3288438e, type: 3}
+  enemySpawnAmount: 8
+  enemySpawnOffset: 4

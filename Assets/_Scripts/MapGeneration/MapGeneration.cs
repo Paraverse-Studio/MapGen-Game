@@ -78,7 +78,9 @@ public class MapGeneration : MonoBehaviour
     [Header("Important Props")]
     public ImportantProps importantProps;
 
-    public Transform objFolder;
+    public Transform blocksFolder;
+    public Transform enemiesFolder;
+
     private GameObject temporaryObjFolder;
     public GameObject[] foundationPrefabs;
 
@@ -133,7 +135,7 @@ public class MapGeneration : MonoBehaviour
     private List<GameObject> enemyObjects = new List<GameObject>();
 
     private float progressValue;
-    private float progressTotal = 8f;
+    private float progressTotal = 9f;
     private int step = 0; // purely for debugging to detect step progress speed
 
     private WaitForSeconds processDelay;
@@ -160,6 +162,8 @@ public class MapGeneration : MonoBehaviour
     {
         UpdateLine();
         if (Input.GetKeyDown(KeyCode.O)) RegenerateMap();
+
+        if (Input.GetKeyDown(KeyCode.R)) TeleportPlayer (centerPointWithY);
     }
 
     public void RegenerateMap() => StartCoroutine(ERenegerateMap());
@@ -200,8 +204,8 @@ public class MapGeneration : MonoBehaviour
         xBoundary = centerPoint2D;
         zBoundary = centerPoint2D;
 
-        yBoundary = new Vector2(Mathf.Ceil(M.lumpApplicationRounds / 2.0f),
-                                Mathf.Ceil(-M.lumpApplicationRounds / 2.0f));
+        yBoundary = new Vector2(Mathf.Ceil(M.lumpApplicationRounds / 2.0f) * M.blockRaiseSize,
+                                Mathf.Floor(-M.lumpApplicationRounds / 2.0f) * M.blockRaiseSize);
 
         furthestBlock = centerPoint2D;
         furthestDistance = 0;
@@ -249,6 +253,7 @@ public class MapGeneration : MonoBehaviour
 
     private void ResetLists()
     {
+        /*
         if (false)
         {
             #region OBJECT POOL DECOMMISSIONING
@@ -305,7 +310,7 @@ public class MapGeneration : MonoBehaviour
 
             #endregion
         }
-
+        */
         if (true)
         {
             #region DESTROY DECOMMISSIONING
@@ -318,12 +323,13 @@ public class MapGeneration : MonoBehaviour
             treeObjects.Clear();
             foundationObjects.Clear();
             waterObjects.Clear();
-            //enemyObjects.Clear();
+            for (int i = 0; i < enemyObjects.Count; ++i) if (enemyObjects[i]) Destroy(enemyObjects[i]);
+            enemyObjects.Clear();
 
             // Important Props
 
             temporaryObjFolder = new GameObject("Folder");
-            temporaryObjFolder.transform.parent = objFolder;
+            temporaryObjFolder.transform.parent = blocksFolder;
 
             #endregion
         }            
@@ -389,33 +395,48 @@ public class MapGeneration : MonoBehaviour
         /////////       NO SHAPE MODIFICATIONS BEYOND THIS POINT        /////////////////////////
         centerPointWithY = new Vector3(centerPoint.x, gridOccupants[(int)centerPoint.x, (int)centerPoint.z].block.transform.position.y, centerPoint.z);
 
+
         /* * * * * IMPORTANT PROPS ON MAP * * * * * * */
         AddImportantProps();
         step = 6;
         PartitionProgress();
         yield return processDelay;
 
-        //AddEnemies();
-
         /* * * * * DECORATIVE PROPS ON MAP * * * * * * */
         currentPaintingBlock = M.blockSet.water;
 
         AddWaterToDips();
         step = 7;
-        PartitionProgress("Applying final touches...");
+        PartitionProgress("Spawning dangerous enemies...");
         yield return processDelay;
 
         AddProps();
         step = 8;
-        PartitionProgress("Completed!");
+        PartitionProgress("");
         yield return processDelay;
-
-        /* * * * MISC STEPS (NO ORDER REQUIRED) * * */
-        globalVolume.profile = M.ppProfile;
 
         navMeshBuilder.surface = allObjects[0].GetComponentInChildren<NavMeshSurface>();
         navMeshBuilder.BuildNavMesh();
 
+        AddEnemies();
+#if UNITY_EDITOR
+        enemiesFolder.gameObject.name = "[ Enemies ] - " + enemyObjects.Count;
+#endif
+        step = 9;
+        PartitionProgress("Applying final touches...");
+        yield return processDelay;
+
+
+        /* * * * MISC STEPS (NOT RELATED TO MAP) * * */
+        if (M.ppProfile) globalVolume.profile = M.ppProfile;
+
+        TeleportPlayer(CenterPointWithY + new Vector3(0, 5f, 0));
+
+        if (M.mapVFX)
+        {
+            ParticleSystem vfx = Instantiate(M.mapVFX, GlobalSettings.Instance.player.transform);
+            vfx.transform.localPosition = Vector3.zero;
+        } 
         /* * * * * * * * * * * * * * * * * * * * * * */
 
         OnMapGenerateEnd?.Invoke();
@@ -431,17 +452,15 @@ public class MapGeneration : MonoBehaviour
 
             // this was a feature I was trying - rounds the angle to the nearest 45deg
             // ie. only angle turns are 0, 45, 90, etc.
-            //randomAngle = Mathf.Round(randomAngle / 45f) * 45f;
-
+            randomAngle = Mathf.Round(randomAngle / M.roundAngleToNearest) * M.roundAngleToNearest;
             randomAngle *= (Random.value > 0.5f) ? 1.0f : -1.0f;
 
-            float newAngle = pathingAngle + randomAngle;
+            // New Feature* : trying out preventing the pathing curve to ever rotate enough to face the origin spot
+            // so that we don't get overlap path ways
+            if (pathingAngle >= M.maxAngleTurn) randomAngle = Mathf.Abs(randomAngle) * -1f;
+            else if (pathingAngle <= -M.maxAngleTurn) randomAngle = Mathf.Abs(randomAngle);
 
-            if (allObjects.Count > 0)
-            {
-                // this is where I was writing the overlap prevention code
-                //Vector3 angleToOrigin = allObjects[0].transform.position - 
-            }
+            float newAngle = pathingAngle + randomAngle;
 
             float randomDistance = Random.Range(M.distanceBeforeTurningPath.x, M.distanceBeforeTurningPath.y);
 
@@ -542,7 +561,7 @@ public class MapGeneration : MonoBehaviour
 
     private void ApplyBlockElevationRestrictions(Block block)
     {
-        if (Mathf.Abs(Mathf.Round(block.transform.position.y) - YBoundary.y) < _EPSILON)
+        if (Mathf.Abs(block.transform.position.y - YBoundary.y) < _EPSILON)
         {
             ElevateBlock(true, block);
         }
@@ -574,7 +593,7 @@ public class MapGeneration : MonoBehaviour
                     x += randomXOffset;
                     z += randomZOffset;
 
-                    ElevateCircle(upOrDown % 2 == 0 ? true : false, new Vector3(x, 0, z), Random.Range(M.lumpRadius.x, M.lumpRadius.y));
+                    ElevateCircle(z % 2 == 0 ? true : false, new Vector3(x, 0, z), Random.Range(M.lumpRadius.x, M.lumpRadius.y));
                 }
             }
         }
@@ -594,8 +613,8 @@ public class MapGeneration : MonoBehaviour
                 //if (Vector3.Distance(area, newSpot) < (radius* M.circularity)) // tags: circular
                 if (IsDistanceLessThan(area, newSpot, (radius * M.circularity)))
                 {
-                    if ((int)newSpot.x < 0) continue; // can happen if the radius for this lump is bigger than the actual map
-                    if ((int)newSpot.z < 0) continue;
+                    if ((int)newSpot.x < 0 || (int)newSpot.x >= _GRIDSIZE) continue; // can happen if the radius for this lump is bigger than the actual map
+                    if ((int)newSpot.z < 0 || (int)newSpot.z >= _GRIDSIZE) continue;
 
                     Block potentialObj = gridOccupants[(int)newSpot.x, (int)newSpot.z].block;
 
@@ -616,7 +635,7 @@ public class MapGeneration : MonoBehaviour
         float extremeY;
         extremeY = GetExtremestAdjacentElevation(upOrDown ? ElevationLevel.lowest : ElevationLevel.highest, obj.gameObject);
 
-        float yValue = extremeY + (upOrDown ? 1f : -1f);
+        float yValue = extremeY + ((upOrDown ? 1f : -1f) * M.blockRaiseSize);
         yValue = Mathf.Clamp(yValue, YBoundary.y, YBoundary.x);
 
         obj.transform.position = new Vector3(obj.transform.position.x, yValue, obj.transform.position.z);
@@ -636,7 +655,13 @@ public class MapGeneration : MonoBehaviour
         // this should be true, when you're spawning a cube at x,z and supp
         if (!utilizeY) // majority of the time you use Spawn(), you ignore y, cause you're affecting grid[x,z]
         {
-            Block blockAtVec = gridOccupants[(int)vec.x, (int)vec.z].block;
+            Block blockAtVec = null;
+
+            if (IsInGrid(new Vector3((int)vec.x, -1f, (int)vec.z))) // the y doesn't matter here, IsInGrid() doesn't use it
+            {
+                blockAtVec = gridOccupants[(int)vec.x, (int)vec.z].block;
+            }
+
             if (null != blockAtVec)
             {
                 replacedBlock = blockAtVec;
@@ -713,6 +738,9 @@ public class MapGeneration : MonoBehaviour
             for (int z = -1; z < 2; ++z)
             {
                 Vector3 areaToCheck = new Vector3(src.x + x, 0, src.z + z);
+
+                if (!IsInGrid(areaToCheck)) continue;
+
                 Block objectToCheck = gridOccupants[(int)areaToCheck.x, (int)areaToCheck.z].block;
 
                 if (objectToCheck != null)
@@ -769,15 +797,15 @@ public class MapGeneration : MonoBehaviour
 
     private void AddWaterToDips()
     {
-        float yLevelToMeasure = Mathf.Round(YBoundary.y) + 0.1f;
+        float yLevelToMeasure = YBoundary.y + _EPSILON;
 
         for (int i = 0; i < allObjects.Count; ++i)
         {
             Transform thisObject = allObjects[i].transform;
 
-            if (((Mathf.Round(thisObject.position.y)) <= yLevelToMeasure))
+            if (thisObject.position.y <= yLevelToMeasure)
             {
-                Vector3 spawnSpot = new Vector3(thisObject.position.x, yLevelToMeasure + 1, thisObject.transform.position.z);
+                Vector3 spawnSpot = new Vector3(thisObject.position.x, YBoundary.y + M.blockRaiseSize, thisObject.transform.position.z);
 
                 GameObject waterObj = Instantiate(blockPrefab, spawnSpot, Quaternion.identity);
                 waterObj.transform.parent = temporaryObjFolder.transform;
@@ -790,6 +818,9 @@ public class MapGeneration : MonoBehaviour
                 }
             }
         }
+
+        // modify this next bit to make water more adaptive and dynamic to whatever size and height you need it
+        WaterVolumeFollowTarget.Instance.overrideY = YBoundary.y + (M.blockRaiseSize * 0.5f); 
     }
 
     private void AddImportantProps()
@@ -797,34 +828,42 @@ public class MapGeneration : MonoBehaviour
         // EndPoint
         Vector3 spawnSpot = pathObjects[pathObjects.Count - 1].transform.position + new Vector3(0, 1, 0);
         GameObject obj = Instantiate(importantProps.endPoint, spawnSpot, Quaternion.identity);
+        obj.name = "END PORTAL (Special)";
         UtilityFunctions.UpdateLODlevels(obj.transform);
+        GameLoopManager.Instance.EndPortal = obj;
+        obj.SetActive(false);
         treeObjects.Add(obj);
         obj.transform.parent = temporaryObjFolder.transform;
     }
 
     private void AddEnemies()
     {
+        if (!M.addEnemies) return;
+
+        int enemyFrequency = pathObjects.Count / M.enemySpawnAmount;
+
         for (int i = 1; i < pathObjects.Count; ++i)
         {
-            if (i % M.enemyFrequency != 0) continue;
+            if (i % enemyFrequency != 0) continue;
+            
+            int xOffset = Random.Range(-M.enemySpawnOffset, M.enemySpawnOffset + 1);
+            int zOffset = Random.Range(-M.enemySpawnOffset, M.enemySpawnOffset + 1);      
 
-            int amountToSpawn = 1;
-            if (i % M.spawnDoubleEveryFrequency == 0) amountToSpawn = 2;
+            Vector3 spawnSpot = pathObjects[i].transform.position + new Vector3(xOffset, 0, zOffset);
 
-            for (int amount = 0; amount < amountToSpawn; ++amount)
-            {
-                int xOffset = Random.Range(-M.enemySpawnOffset, M.enemySpawnOffset + 1);
-                int zOffset = Random.Range(-M.enemySpawnOffset, M.enemySpawnOffset + 1);
-
-                Vector3 spawnSpot = pathObjects[i].transform.position + new Vector3(xOffset, 5f, zOffset);
-
-                GameObject enemy = Instantiate(M.enemies[Random.Range(0, M.enemies.Length)],
-                    spawnSpot, Quaternion.identity);
-                if (enemy)
+            GameObject closestPathPosition = GetClosestObject(spawnSpot, allObjects, 
+                (Block b) =>
                 {
-                    enemyObjects.Add(enemy);
-                }
-            }
+                    return !GetGridOccupant(b).hasProp;
+                });
+
+            GameObject enemy = Instantiate(M.enemies[Random.Range(0, M.enemies.Length)],
+                closestPathPosition.transform.position + new Vector3(0, 0.5f, 0), Quaternion.identity);
+
+            enemy.name = "Enemy " + (enemyObjects.Count + 1);
+            enemy.transform.parent = enemiesFolder;
+            enemyObjects.Add(enemy);
+            EnemiesManager.Instance.AddEnemy(enemy);
         }
     }
 
@@ -853,8 +892,7 @@ public class MapGeneration : MonoBehaviour
                 if (true == gridOccupants[newX, newZ].hasProp) continue;
 
                 // NEW* - don't put normal props on lowest level (where water is, only put water props there)
-                float yLevelToMeasure = Mathf.Round(YBoundary.y);
-                if (Mathf.Abs(Mathf.Round(gridOccupants[newX, newZ].block.transform.position.y) - yLevelToMeasure) < _EPSILON) continue;
+                if (Mathf.Abs(gridOccupants[newX, newZ].block.transform.position.y - YBoundary.y) < _EPSILON) continue;
 
                 Vector3 spawnSpot = new Vector3(newX, gridOccupants[newX, newZ].block.transform.position.y, newZ);
 
@@ -862,7 +900,7 @@ public class MapGeneration : MonoBehaviour
                 // X% for every distance unit away from the closest path block (design choice: spam props around edges of map, to make path clear)
                 GameObject closestPathPosition = GetClosestObject(spawnSpot, pathObjects);
                 float chanceOfSpawn = 0.0f;
-                chanceOfSpawn += (M.treeChanceGrowthRate * Mathf.Pow(Vector3.Distance(spawnSpot, closestPathPosition.transform.position), 1.15f)); //1.35f
+                chanceOfSpawn += (M.treeChanceGrowthRate * Mathf.Pow(Vector3.Distance(spawnSpot, closestPathPosition.transform.position), 1.175f)); //1.35f
 
                 // Actually placing the prop
                 if (Random.Range(0f, 100f) < chanceOfSpawn)
@@ -870,7 +908,7 @@ public class MapGeneration : MonoBehaviour
                     GameObject obj = Instantiate(M.propSet.propPrefabs[Random.Range(0, M.propSet.propPrefabs.Length)], spawnSpot, Quaternion.identity);
                     UtilityFunctions.UpdateLODlevels(obj.transform);
                     treeObjects.Add(obj);
-                    obj.transform.position += new Vector3(0, 0.5f, 0);
+                    obj.transform.position += new Vector3(0, 0.5f, 0); // only 0.5f because the pivot point is center of block
                     obj.transform.parent = temporaryObjFolder.transform;
 
                     gridOccupants[newX, newZ].hasProp = true;
@@ -1009,6 +1047,13 @@ public class MapGeneration : MonoBehaviour
         }
     }
 
+
+    public GridOccupant GetGridOccupant(Block b)
+    {
+        GridOccupant occupant = gridOccupants[(int)b.gameObject.transform.position.x, (int)b.gameObject.transform.position.z];
+        return occupant;
+    }
+
     // Given a source vector, a direction and a scalar, return new vector
     // from source vector in the direction of direction scaled by scalar...
     private Vector3 GetPointOnCircle(Vector3 origin, float radius, float angle)
@@ -1019,6 +1064,13 @@ public class MapGeneration : MonoBehaviour
         return new Vector3(x, origin.y, z);
     }
 
+    private bool IsInGrid(Vector3 spot)
+    {
+        if ((int)spot.x < 0 || (int)spot.x >= _GRIDSIZE) return false; // can happen if the radius for this lump is bigger than the actual map
+        if ((int)spot.z < 0 || (int)spot.z >= _GRIDSIZE) return false;
+        return true;
+    }
+
     private bool IsDistanceLessThan(Vector3 a, Vector3 b, float compareValue)
     {
         float dist = (a - b).sqrMagnitude;
@@ -1026,7 +1078,13 @@ public class MapGeneration : MonoBehaviour
         else return false;
     }
 
-    private GameObject GetClosestObject(Vector3 src, List<Block> list)
+    public GameObject GetClosestBlock(Transform source)
+    {
+        return GetClosestObject(source.position, allObjects);
+    }
+
+    // Get closest valid block to a given vector
+    private GameObject GetClosestObject(Vector3 src, List<Block> list, System.Predicate<Block> condition = null)
     {
         GameObject closest = null;
         float closestDistanceSqr = Mathf.Infinity;
@@ -1037,11 +1095,19 @@ public class MapGeneration : MonoBehaviour
             float dSqrToTarget = directionToTarget.sqrMagnitude;
             if (dSqrToTarget < closestDistanceSqr)
             {
-                closestDistanceSqr = dSqrToTarget;
-                closest = obj.gameObject;
+                if (null == condition || condition(obj))
+                {
+                    closestDistanceSqr = dSqrToTarget;
+                    closest = obj.gameObject;
+                }
             }
         }
         return closest;
+    }
+
+    public void TeleportPlayer(Vector3 v)
+    {
+        UtilityFunctions.TeleportObject(GlobalSettings.Instance.player, v);
     }
 
     private void PartitionProgress(string va = "")

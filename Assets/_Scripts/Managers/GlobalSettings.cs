@@ -28,11 +28,16 @@ public class GlobalSettings : MonoBehaviour
     [Space(20)]
     public Transform uiFolder;
     public Transform healthBarFolder;
+    public GameObject healthBarPrefab;
 
     public Transform waterVolume;
 
     public bool recordBlockHistory = true;
     public GameObject playerPrefab;
+    public GameObject player;
+
+    [Header("Combat")]
+    public Material FlashMaterial;
 
     [Header("Backup Safe Position: ")]
     [Space(10)]

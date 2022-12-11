@@ -35,6 +35,7 @@ public class Block : MonoBehaviour, ITickElement
 
     private Renderer _renderer;
     private Collider _collider;
+    private NavMeshSurface _surface;
 
     private GameObject _currentPrefab = null;
     public GameObject CurrentPrefab
@@ -161,7 +162,6 @@ public class Block : MonoBehaviour, ITickElement
             }
             else
             {
-                gameObject.name = " WTFFFFFFFFFF???????";
                 _currentPrefab.isStatic = false;
                 _currentPrefab.transform.SetParent(GlobalSettings.Instance.waterVolume.transform);
                 TickManager.Instance?.Subscribe(this, gameObject);
@@ -181,17 +181,11 @@ public class Block : MonoBehaviour, ITickElement
     private void UpdateSize()
     {
         transform.localScale = type.defaultScale;
-        if (overrideSettings.overrideScale != Vector3.zero)
+        
+        if (transform.childCount > 0)
         {
-            if (transform.childCount > 0)
-            {
-                transform.GetChild(0).localScale = overrideSettings.overrideScale;
-            }
-            else
-            {
-                transform.localScale = overrideSettings.overrideScale;
-            }
-        }
+            transform.GetChild(0).localPosition = type.defaultOffset; 
+        }        
     }
 
     public void UpdateHistory(string msg)

@@ -7,6 +7,9 @@ public class NavMeshBuilder : MonoBehaviour
 {
     public NavMeshSurface surface;
 
+    public bool update = false;
+    public float updateDelay = 0.5f;
+
     public void BuildNavMesh()
     {
         if (surface) surface.BuildNavMesh();
@@ -19,5 +22,7 @@ public class NavMeshBuilder : MonoBehaviour
     public void UpdateNavMesh()
     {
         surface.UpdateNavMesh(surface.navMeshData);
-    }
+    } 
+
+
 }

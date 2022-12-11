@@ -6,9 +6,15 @@ using UnityEngine.Rendering;
 public class SO_MapGenData : ScriptableObject
 {
     [Space(30)]
+    [Header("    _____________  MAP LORE  _____________")]
+    [Space(5)]
+    public string mapDescription;
+
+    [Space(30)]
     [Header("    _____________  MAP SET-UP  _____________")]
     [Space(5)]
     public VolumeProfile ppProfile;
+    public ParticleSystem mapVFX;
 
     [Header("BLOCK SET ")]
     [Space(10)]
@@ -33,6 +39,13 @@ public class SO_MapGenData : ScriptableObject
     [MinMaxSlider(0f, 100f)]
     public Vector2 turningAngleRange;
 
+    [Range(0f, 90f)]
+    public float roundAngleToNearest;
+
+    [Header("(Overlap prevention) recommended max: 90f")]
+    [Range(0f, 90f)]
+    public float maxAngleTurn;
+
     [Header("PATH THICKNESS ")]
     public int pathThickenFrequency = 8;
 
@@ -43,8 +56,14 @@ public class SO_MapGenData : ScriptableObject
     [Range(1.0f, 1.5f)]
     public float circularity = 1.0f;
 
-    [Header("LUMPS ")]
-    [Space(10)]
+    [Space(30)]
+    [Header("    _____________  MAP LUMPS  _____________")]
+    [Space(40)]
+
+    [Range(0, 1)]
+    [Tooltip("Block elevation distance, a whole block up or half? Etc.")]
+    public float blockRaiseSize = 1f;
+
     [Range(0, 40)]
     public int lumpDensity;
 
@@ -90,8 +109,9 @@ public class SO_MapGenData : ScriptableObject
     [Space(30)]
     [Header("    _____________  ENEMIES  _____________")]
     [Space(40)]
+    public bool addEnemies;
     public GameObject[] enemies;
-    public int enemyFrequency;
+    public int enemySpawnAmount;
     public int enemySpawnOffset;
-    public int spawnDoubleEveryFrequency;
+
 }

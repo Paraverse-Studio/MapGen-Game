@@ -15,18 +15,6 @@ public class UIManager : MonoBehaviour
         //menus = FindObjectsOfType<MenuScreen>();
     }
 
-    // Start is called before the first frame update
-    void Start()
-    {
-        //menus = FindObjectsOfType<MenuScreen>();
-    }
-
-    // Update is called once per frame
-    void Update()
-    {
-        
-    }
-
     public void CloseAll()
     {
         for (int i = 0; i < menus.Length; ++i)
@@ -53,6 +41,5 @@ public class UIManager : MonoBehaviour
             }
         }
     }
-
 
 }

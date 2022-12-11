@@ -36,4 +36,16 @@ public static class UtilityFunctions
         }
     }
 
+    public static void TeleportObject(GameObject obj, Vector3 spot)
+    {
+        CharacterController cc;
+        if (obj.TryGetComponent(out cc))
+        {
+            cc.enabled = false;
+        }
+        obj.transform.position = spot;
+
+        if (cc) cc.enabled = true;
+    }
+
 }
