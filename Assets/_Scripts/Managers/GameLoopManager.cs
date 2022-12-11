@@ -48,7 +48,7 @@ public class GameLoopManager : MonoBehaviour
         GetAllGems,
         SurviveXMinutes,
     }
-    
+
     public static GameLoopManager Instance;
     [Header("Combat Map")]
     public bool developerMode = false;
@@ -107,7 +107,7 @@ public class GameLoopManager : MonoBehaviour
         playerStats = player.GetComponentInChildren<MobStats>();
         playerController = player.GetComponentInChildren<PlayerController>();
 
-        if (!developerMode) 
+        if (!developerMode)
         {
             GameLoopEvents.OnBootupGame?.Invoke();
         }
@@ -132,8 +132,8 @@ public class GameLoopManager : MonoBehaviour
 
         if (player.transform.position.y <= -25f)
         {
-            playerStats.UpdateCurrentHealth((int)(-playerStats.MaxHealth*1.20f));
-            UtilityFunctions.TeleportObject(player, MapGeneration.Instance.GetClosestBlock(player.transform).transform.position + new Vector3(0, 0.5f,0));
+            playerStats.UpdateCurrentHealth((int)(-playerStats.MaxHealth * GlobalValues.FallDamage / 100.0f));
+            UtilityFunctions.TeleportObject(player, MapGeneration.Instance.GetClosestBlock(player.transform).transform.position + new Vector3(0, 0.5f, 0));
         }
     }
 
@@ -195,7 +195,7 @@ public class GameLoopManager : MonoBehaviour
         EndRound(successfulRound: false);
     }
 
-    public void EndRound(bool successfulRound) => StartCoroutine(IEndRound(successfulRound));   
+    public void EndRound(bool successfulRound) => StartCoroutine(IEndRound(successfulRound));
 
     public IEnumerator IEndRound(bool successfulRound)
     {
@@ -297,7 +297,7 @@ public class GameLoopManager : MonoBehaviour
         Application.Quit();
     }
 
-    public void RestartGame() => StartCoroutine(IRestartGame());    
+    public void RestartGame() => StartCoroutine(IRestartGame());
 
     public IEnumerator IRestartGame()
     {
