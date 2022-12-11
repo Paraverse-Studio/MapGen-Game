@@ -36,6 +36,9 @@ public class GlobalSettings : MonoBehaviour
     public GameObject playerPrefab;
     public GameObject player;
 
+    [Header("Combat")]
+    public Material FlashMaterial;
+
     [Header("Backup Safe Position: ")]
     [Space(10)]
     public Vector3 backupSafePosition;

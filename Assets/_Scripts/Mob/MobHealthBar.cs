@@ -65,6 +65,8 @@ public class MobHealthBar : MonoBehaviour
         _healthBarsFolder = GlobalSettings.Instance.healthBarFolder;
         _healthBarPrefab = GlobalSettings.Instance.healthBarPrefab;
 
+        gameObject.AddComponent<MobHealthFlash>();
+
         if (overrideProperties.healthBar == null)
         {
             CreateHealthBar();
