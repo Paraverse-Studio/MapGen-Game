@@ -12,6 +12,7 @@ namespace Paraverse
         private MobCombat mob;
         [SerializeField, Tooltip("Speed of the projectile.")]
         private string targetTag = "Player";
+        private Vector3 target;
         [SerializeField, Tooltip("Speed of the projectile.")]
         private float speed;
         [SerializeField, Tooltip("Range of the projectile.")]
@@ -39,12 +40,13 @@ namespace Paraverse
             }
 
             curdeathTimer += Time.deltaTime;
-            transform.position += (transform.forward * speed * Time.deltaTime);
+            transform.position += (target * speed * Time.deltaTime);
         }
         #endregion
 
-        public void Init(MobCombat mob, float speed, float range, float damage)
+        public void Init(MobCombat mob, Vector3 target, float speed, float range, float damage)
         {
+            this.target = target;
             this.mob = mob;
             this.speed = speed;
             this.range = range;

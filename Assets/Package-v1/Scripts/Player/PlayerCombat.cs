@@ -22,50 +22,65 @@ namespace Paraverse.Player
             input = GetComponent<PlayerInputControls>();    
             input.OnBasicAttackEvent += ApplyBasicAttack;
         }
-        
+
+        protected override void Update()
+        {
+            base.Update();
+            BasicAttackComboHandler();
+        }
+
+        /// <summary>
+        /// Runs on attack
+        /// </summary>
         private void ApplyBasicAttack()
         {
             if (controller.IsAvoidLandingOn) return;
 
-            if (controller.IsInteracting == false)
+            if (controller.IsInteracting == false || anim.GetBool(StringData.CanBasicAttackTwo) || anim.GetBool(StringData.CanBasicAttackThree))
             {
                 GetBasicAttackCombo();
-                curBasicAtkCd = GetBasicAttackCooldown();
-                //Debug.Log("Basic attack");
             }
-        }
-
-        public override void BasicAttackHandler()
-        {
-            BasicAttackComboHandler();
         }
 
         private void GetBasicAttackCombo()
         {
-            switch (basicAtkComboIdx)
+            if (basicAtkComboIdx == 0)
             {
-                case 0:
-                    anim.Play(StringData.BasicAttack);
-                    break;
-                case 1:
-                    anim.Play(StringData.BasicAttackTwo);
-                    break;
-                case 2:
-                    anim.Play(StringData.BasicAttackThree);
-                    break;
+                anim.Play(StringData.BasicAttack);
             }
+            else if (anim.GetBool(StringData.CanBasicAttackTwo) && basicAtkComboIdx == 1)
+            {
+                anim.SetBool(StringData.IsInteracting, true);
+                anim.Play(StringData.BasicAttackTwo);
+            }
+            else if (anim.GetBool(StringData.CanBasicAttackThree) && basicAtkComboIdx == 2)
+            {
+                anim.SetBool(StringData.IsInteracting, true);
+                anim.Play(StringData.BasicAttackThree);
+            }
+            ResetAnimationBasicAttackStates();
 
             // increment combo atk idx
             basicAtkComboIdx++;
             curCombatResetTimer = maxComboResetTimer;
             if (basicAtkComboIdx > basicAtkComboIdxLimit)
+            {
                 basicAtkComboIdx = 0;
+            }
+        }
+
+        private void ResetAnimationBasicAttackStates()
+        {
+            _isAttackLunging = false;
+            anim.SetBool(StringData.CanBasicAttackTwo, false);
+            anim.SetBool(StringData.CanBasicAttackThree, false);
         }
 
         private void BasicAttackComboHandler()
         {
             if (curCombatResetTimer <= 0)
             {
+                ResetAnimationBasicAttackStates();
                 basicAtkComboIdx = 0;
             }
             else
@@ -83,5 +98,21 @@ namespace Paraverse.Player
         {
             input.OnBasicAttackEvent -= BasicAttackHandler;
         }
+
+        #region Animation Events
+        public void EnableBasicAttackTwo()
+        {
+            ResetAnimationBasicAttackStates();
+            anim.SetBool(StringData.CanBasicAttackTwo, true);
+            anim.SetBool(StringData.BasicAttack, false);
+        }
+
+        public void EnableBasicAttackThree()
+        {
+            ResetAnimationBasicAttackStates();
+            anim.SetBool(StringData.CanBasicAttackThree, true);
+            anim.SetBool(StringData.BasicAttack, false);
+        }
+        #endregion
     }
 }

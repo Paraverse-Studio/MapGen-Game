@@ -1,6 +1,7 @@
+using System;
+using UnityEngine;
 using Paraverse.Helper;
 using Paraverse.Mob.Stats;
-using UnityEngine;
 
 namespace Paraverse.Mob.Combat
 {
@@ -37,9 +38,9 @@ namespace Paraverse.Mob.Combat
 
         [Header("Only For Melee Attackers")]
         [SerializeField, Tooltip("Basic attack weapon collider [Only required for melee weapon users].")]
-        private GameObject basicAtkCollider;
+        protected GameObject basicAtkCollider;
         [Tooltip("AttackCollider script of basic attack collider.")]
-        private AttackCollider basicAtkColScript;
+        protected AttackCollider basicAtkColScript;
 
         [Header("Projectile Values")]
         [SerializeField, Tooltip("Set as true if mob is a projectile user.")]
@@ -57,11 +58,10 @@ namespace Paraverse.Mob.Combat
         protected float distanceFromTarget;
 
         // Sets to true when character is doing an action (Attack, Stun).
-        public bool IsBasicAttacking { get { return _isBasicAttacking; } }
-        private bool _isBasicAttacking = false;
         public bool IsAttackLunging { get { return _isAttackLunging; } }
-        private bool _isAttackLunging = false;
-
+        protected bool _isAttackLunging = false;
+        public bool IsBasicAttacking {  get { return _isBasicAttacking; } }
+        protected bool _isBasicAttacking = false;
         // Returns true when character is within basic attack range and cooldown is 0.
         public bool CanBasicAtk { get { return distanceFromTarget <= basicAtkRange && curBasicAtkCd <= 0; } }
         #endregion
@@ -84,8 +84,6 @@ namespace Paraverse.Mob.Combat
             distanceFromTarget = ParaverseHelper.GetDistance(transform.position, player.position);
             AttackCooldownHandler();
             EnergyHandler();
-
-            _isBasicAttacking = anim.GetBool(StringData.IsBasicAttacking);
         }
         #endregion
 
@@ -177,7 +175,6 @@ namespace Paraverse.Mob.Combat
 
         public void OnEarlyAttackAnimCancel()
         {
-            _isBasicAttacking = false;
             _isAttackLunging = false;
             DisableBasicAttackCollider();
         }
@@ -226,10 +223,13 @@ namespace Paraverse.Mob.Combat
             if (projHeld != null)
                 projHeld.SetActive(false);
 
+            Vector3 playerPos = new Vector3(player.position.x, player.position.y + 0.5f, player.position.z);
+            Vector3 targetDir = (playerPos - projOrigin.position).normalized;
+
             // Instantiate and initialize projectile
             GameObject go = Instantiate(projPf, projOrigin.position, transform.rotation);
             Projectile proj = go.GetComponent<Projectile>();
-            proj.Init(this, basicAtkProjSpeed, basicAtkRange, basicAtkDmgRatio * stats.AttackDamage);
+            proj.Init(this, targetDir, basicAtkProjSpeed, basicAtkRange, basicAtkDmgRatio * stats.AttackDamage);
         }
 
         /// <summary>
