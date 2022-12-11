@@ -382,8 +382,7 @@ namespace Paraverse.Player
 
         private void TargetLock()
         {
-            //_target =
-            TargetLockSystem.Instance.ToggleSelect();
+            TargetLockSystem.Instance.SelectTarget().TryGetComponent(out _target);            
         }
 
         #endregion
@@ -408,7 +407,7 @@ namespace Paraverse.Player
         /// </summary>
         public void ApplyKnockBack(Vector3 mobPos)
         {
-            //combat.OnEarlyAttackAnimCancel();
+            combat.OnAttackInterrupt();
             Vector3 impactDir = (transform.position - mobPos).normalized;
             knockStartPos = transform.position;
             curKnockbackDuration = 0f;
@@ -469,7 +468,6 @@ namespace Paraverse.Player
             // also reset all _isInteracting, _knockedBack, etc. Basically all types of CC  ( @ PRAB )
             stats.ResetStats();
             anim.Play(StringData.Idle);
-            combat.AddListenerOnBasicAttack();
         }
         #endregion
 

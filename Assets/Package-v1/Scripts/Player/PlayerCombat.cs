@@ -44,24 +44,37 @@ namespace Paraverse.Player
 
         private void GetBasicAttackCombo()
         {
-            if (basicAtkComboIdx == 0)
+            Debug.Log("Index: " + basicAtkComboIdx + "      bool2: " + anim.GetBool(StringData.CanBasicAttackTwo) + 
+                                                     "      bool3: " + anim.GetBool(StringData.CanBasicAttackThree));
+
+
+            if (anim.GetBool(StringData.CanBasicAttackThree)) // && basicAtkComboIdx == 2)
             {
-                anim.Play(StringData.BasicAttack);
-            }
-            else if (anim.GetBool(StringData.CanBasicAttackTwo) && basicAtkComboIdx == 1)
-            {
-                anim.SetBool(StringData.IsInteracting, true);
-                anim.Play(StringData.BasicAttackTwo);
-            }
-            else if (anim.GetBool(StringData.CanBasicAttackThree) && basicAtkComboIdx == 2)
-            {
+                Debug.Log("ATTK 3 called " + basicAtkComboIdx);
+                basicAtkComboIdx++;
                 anim.SetBool(StringData.IsInteracting, true);
                 anim.Play(StringData.BasicAttackThree);
             }
+            else if (anim.GetBool(StringData.CanBasicAttackTwo)) // && basicAtkComboIdx == 1)
+            {
+                Debug.Log("ATTK 2 called " + basicAtkComboIdx);
+
+                basicAtkComboIdx++;
+                anim.SetBool(StringData.IsInteracting, true);
+                anim.Play(StringData.BasicAttackTwo);
+            }
+            else if (basicAtkComboIdx == 0)
+            {
+                Debug.Log("ATTK 1 called " + basicAtkComboIdx);
+
+                basicAtkComboIdx++;
+                anim.Play(StringData.BasicAttack);
+            }
+            
             ResetAnimationBasicAttackStates();
 
             // increment combo atk idx
-            basicAtkComboIdx++;
+            //basicAtkComboIdx++;
             curCombatResetTimer = maxComboResetTimer;
             if (basicAtkComboIdx > basicAtkComboIdxLimit)
             {
@@ -104,14 +117,12 @@ namespace Paraverse.Player
         {
             ResetAnimationBasicAttackStates();
             anim.SetBool(StringData.CanBasicAttackTwo, true);
-            anim.SetBool(StringData.BasicAttack, false);
         }
 
         public void EnableBasicAttackThree()
         {
             ResetAnimationBasicAttackStates();
             anim.SetBool(StringData.CanBasicAttackThree, true);
-            anim.SetBool(StringData.BasicAttack, false);
         }
         #endregion
     }

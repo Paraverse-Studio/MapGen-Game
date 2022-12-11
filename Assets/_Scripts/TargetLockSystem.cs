@@ -4,6 +4,7 @@ using Paraverse.Mob.Controller;
 using UnityEngine.Events;
 using System.Collections.Generic;
 using System;
+using Paraverse.Mob;
 
 public class TargetLockSystem : MonoBehaviour
 {
@@ -85,7 +86,7 @@ public class TargetLockSystem : MonoBehaviour
         }
     }
 
-    public void SelectTarget()
+    public Selectable SelectTarget()
     {
         float distance = Mathf.Infinity;
         Selectable targetSoFar = null;
@@ -122,7 +123,11 @@ public class TargetLockSystem : MonoBehaviour
             }
             Target.outline.OutlineWidth = outlineSize;
             Target.outline.enabled = true;
+
+            return Target;
         }
+
+        return null;
     }
 
     public void DeselectTarget()

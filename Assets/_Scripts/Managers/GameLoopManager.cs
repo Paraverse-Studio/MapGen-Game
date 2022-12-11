@@ -340,7 +340,7 @@ public class GameLoopManager : MonoBehaviour
     public bool KillAllEnemies(bool mapReady)
     {
         int enemiesLeft = EnemiesManager.Instance.EnemiesCount;
-        Debug.Log($"CURRENT PREDICATE: [KILL ALL ENEMIES] STATUS:  mapReady: {mapReady}  -  enemies left: {enemiesLeft}");
+        //Debug.Log($"CURRENT PREDICATE: [KILL ALL ENEMIES] STATUS:  mapReady: {mapReady}  -  enemies left: {enemiesLeft}");
         return mapReady && enemiesLeft <= 0;
     }
 
