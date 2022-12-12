@@ -31,6 +31,11 @@ public static class UtilityFunctions
                 lods[i].screenRelativeTransitionHeight = 0.015f + (0.020f * index);
                 index++;
             }
+
+            if (GlobalSettings.Instance.QualityLevel == 1)
+            {
+                lod.ForceLOD(size - 1);
+            }
             
             lod.SetLODs(lods);
         }

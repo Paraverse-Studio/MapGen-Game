@@ -2,6 +2,7 @@ using Paraverse.Helper;
 using Paraverse.IK;
 using Paraverse.Mob;
 using Paraverse.Mob.Combat;
+using Paraverse.Mob.Controller;
 using Paraverse.Mob.Stats;
 using UnityEngine;
 
@@ -102,8 +103,8 @@ namespace Paraverse.Player
         private bool _isKnockedBack = false;
         public bool IsDead { get { return _isDead; } }
         private bool _isDead = false;
-        public IMobController Target { get { return _target; } }
-        private IMobController _target;
+        public MobController Target { get { return _target; } }
+        private MobController _target;
 
         // Movement, Jump & Dive inputs and velocities
         private Vector3 goalDir;
@@ -379,10 +380,14 @@ namespace Paraverse.Player
 
         private void TargetLock()
         {
-            TargetLockSystem.Instance.SelectTarget().TryGetComponent(out _target);  
+            if (null != TargetLockSystem.Instance.SelectTarget())
+            {
+                TargetLockSystem.Instance.Target.gameObject.GetComponent<MobController>().TryGetComponent(out _target);
+            }
+            Debug.Log("Pressed shift, target is: " + _target);
             if (null != _target)
             {
-                headIK.SetLookAtObj(_target.Transform);
+                //headIK.SetLookAtObj(_target.gameObject.transform);
             }
         }
 

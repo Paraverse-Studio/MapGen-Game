@@ -13,7 +13,6 @@ public class TargetLockSystem : MonoBehaviour
     [Header("References")]
     public GameObject player;
 
-    [HideInInspector]
     public Selectable Target;
 
     [Header("Target Outline")]
@@ -88,6 +87,12 @@ public class TargetLockSystem : MonoBehaviour
 
     public Selectable SelectTarget()
     {
+        if (Target)
+        {
+            DeselectTarget();
+            return null;
+        }
+
         float distance = Mathf.Infinity;
         Selectable targetSoFar = null;
 
