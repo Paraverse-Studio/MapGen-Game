@@ -818,6 +818,7 @@ GameObject:
   - component: {fileID: 2956618024134931113}
   - component: {fileID: 2956618024134931112}
   - component: {fileID: 1752897480}
+  - component: {fileID: 1293426518}
   m_Layer: 14
   m_Name: Player
   m_TagString: Player
@@ -920,6 +921,7 @@ MonoBehaviour:
     serializedVersion: 2
     m_Bits: 32768
   avoidanceForce: 10
+  downwardAvoidanceForceRatio: 2
   diveForce: 10
   maxDiveRange: 3.5
   maxDiveDuration: 0.5
@@ -972,8 +974,6 @@ MonoBehaviour:
   anim: {fileID: 2956618024134931115}
   basicAtkDmgRatio: 1
   basicAtkRange: 2
-  minBasicAtkAnimSpeed: 0.8
-  maxBasicAtkAnimSpeed: 2
   basicAtkCollider: {fileID: 6080363539117558812}
   projUser: 0
   projPf: {fileID: 0}
@@ -1007,6 +1007,19 @@ MonoBehaviour:
     nameLabel: {fileID: 0}
     energyBar: {fileID: 0}
     energyLerpBar: {fileID: 0}
+--- !u!114 &1293426518
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 2722828104521882955}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 4826847c54a11f046974f3cd6d61e25a, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  _lookAtObj: {fileID: 0}
 --- !u!1 &3042775459034123614
 GameObject:
   m_ObjectHideFlags: 0

@@ -6,6 +6,7 @@ namespace Paraverse.IK
     {
         private Animator anim;
         public Transform LookAtObj { get { return _lookAtObj; } }
+        [SerializeField]
         private Transform _lookAtObj;
 
         private void Start()
