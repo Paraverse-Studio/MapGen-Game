@@ -95,6 +95,7 @@ AnimatorState:
   - {fileID: 6836551017031747797}
   m_StateMachineBehaviours:
   - {fileID: 8034028144283799612}
+  - {fileID: 5217802166154108076}
   m_Position: {x: 50, y: 50, z: 0}
   m_IKOnFeet: 0
   m_WriteDefaultValues: 1
@@ -427,6 +428,12 @@ AnimatorController:
     m_DefaultInt: 0
     m_DefaultBool: 0
     m_Controller: {fileID: 0}
+  - m_Name: isBasicAttacking
+    m_Type: 4
+    m_DefaultFloat: 0
+    m_DefaultInt: 0
+    m_DefaultBool: 0
+    m_Controller: {fileID: 0}
   m_AnimatorLayers:
   - serializedVersion: 5
     m_Name: Base Layer
@@ -696,6 +703,19 @@ AnimatorState:
   m_MirrorParameter: 
   m_CycleOffsetParameter: 
   m_TimeParameter: 
+--- !u!114 &5217802166154108076
+MonoBehaviour:
+  m_ObjectHideFlags: 1
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 42945beeedb30a04584257d5ef725971, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  parameter: isBasicAttacking
 --- !u!1102 &5445518928477771438
 AnimatorState:
   serializedVersion: 6

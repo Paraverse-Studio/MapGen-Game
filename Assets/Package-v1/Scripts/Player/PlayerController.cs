@@ -91,6 +91,10 @@ namespace Paraverse.Player
         public Transform Transform { get { return transform; } }
         public bool IsInteracting { get { return _isInteracting; } }
         private bool _isInteracting = false;
+        public bool IsBasicAttacking { get { return _isBasicAttacking; } }
+        private bool _isBasicAttacking = false;
+        public bool IsUsingSkill { get { return _isUsingSkill; } }
+        private bool _isUsingSkill = false;
         public bool IsMoving { get { return _isMoving; } }
         private bool _isMoving = false;
         public bool IsGrounded { get { return _isGrounded; } }
@@ -143,7 +147,6 @@ namespace Paraverse.Player
 
         private void Update()
         {
-            _isInteracting = anim.GetBool(StringData.IsInteracting);
             _isMoving = Mathf.Abs(vertical) > 0 || Mathf.Abs(horizontal) > 0;
             _isGrounded = IsGroundedCheck();
 
@@ -178,6 +181,9 @@ namespace Paraverse.Player
             anim.SetBool(StringData.IsDead, IsDead);
             anim.SetBool(StringData.IsDiving, IsDiving);
             anim.SetBool(StringData.IsKnockedBack, IsKnockedBack);
+            _isInteracting = anim.GetBool(StringData.IsInteracting);
+            _isBasicAttacking = anim.GetBool(StringData.IsBasicAttacking);
+            _isUsingSkill = anim.GetBool(StringData.IsUsingSkill);
         }
 
         private void MovementHandler()
@@ -214,13 +220,14 @@ namespace Paraverse.Player
         {
             if (_isKnockedBack) return;
 
-            // Ensures player faces the direction in which they were moving when stopped
-            //if (goalDir != Vector3.zero)
-            //{
-            //    transform.forward = moveDir;
-            //}
-
-            if (moveDir != Vector3.zero)
+            // Rotates player to locked target when attacking 
+            if (null != _target && _isBasicAttacking)
+            {
+                Vector3 targetDir = ParaverseHelper.GetPositionXZ(_target.position - transform.position).normalized;
+                transform.forward = targetDir;
+                Debug.Log("Rotate towards: " + _target.name);
+            }
+            else if (moveDir != Vector3.zero)
             {
                 Quaternion targetLook = Quaternion.LookRotation(moveDir);
                 transform.rotation = Quaternion.Slerp(transform.rotation, targetLook, rotSpeed * Time.deltaTime);

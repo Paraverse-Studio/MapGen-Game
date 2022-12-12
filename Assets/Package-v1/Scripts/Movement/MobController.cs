@@ -102,6 +102,10 @@ namespace Paraverse.Mob.Controller
         public Transform Transform { get { return transform; } }
         public bool IsInteracting { get { return _isInteracting; } }
         private bool _isInteracting = false;
+        public bool IsBasicAttacking { get { return _isBasicAttacking; } }
+        private bool _isBasicAttacking = false;
+        public bool IsUsingSkill { get { return _isUsingSkill; } }
+        private bool _isUsingSkill = false;
         public bool IsKnockedBack { get { return _isKnockedBack; } }
         private bool _isKnockedBack = false;
         public bool IsDead { get { return _isDead; } }
