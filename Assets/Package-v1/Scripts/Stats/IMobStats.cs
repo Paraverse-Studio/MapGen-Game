@@ -2,8 +2,8 @@ namespace Paraverse.Mob.Stats
 {
     public interface IMobStats
     {
-        #region Properties
         // Properties 
+        #region Properties
         public int MaxHealth { get; }
         public int CurHealth { get; }
         public float AttackDamage { get; }

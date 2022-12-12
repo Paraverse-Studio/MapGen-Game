@@ -5,9 +5,11 @@ namespace Paraverse.Player
 {
     public class PlayerCombat : MobCombat
     {
+        #region Variables
         private new PlayerController controller;
         private PlayerInputControls input;
 
+        // Basic attack combo variables
         public int BasicAttackComboIdx { get { return basicAtkComboIdx; } }
         private int basicAtkComboIdx = 0;
         private int basicAtkComboIdxLimit = 2;
@@ -15,66 +17,74 @@ namespace Paraverse.Player
         private float maxComboResetTimer = 1f;
         private float curCombatResetTimer;
 
+        public bool CanComboAttackTwo { get { return _canComboAttackTwo; } }
+        private bool _canComboAttackTwo = false;
+        public bool CanComboAttackThree { get { return _canComboAttackThree; } }
+        private bool _canComboAttackThree = false;
+        #endregion
+
+        #region Start & Update Methods
         protected override void Start()
         {
             base.Start();
             controller = gameObject.GetComponent<PlayerController>();
-            input = GetComponent<PlayerInputControls>();    
+            input = GetComponent<PlayerInputControls>();
             input.OnBasicAttackEvent += ApplyBasicAttack;
         }
 
         protected override void Update()
         {
             base.Update();
+            AnimationHandler();
             BasicAttackComboHandler();
         }
+        #endregion
 
+        #region Animation Handler
+        private void AnimationHandler()
+        {
+            _canComboAttackTwo = anim.GetBool(StringData.CanBasicAttackTwo);
+            _canComboAttackThree = anim.GetBool(StringData.CanBasicAttackThree);
+        }
+        #endregion 
+
+        #region Basic Attack Methods
         /// <summary>
-        /// Runs on attack
+        /// Runs on OnBasicAttackEvent
         /// </summary>
         private void ApplyBasicAttack()
         {
-            if (controller.IsAvoidLandingOn) return;
+            if (controller.IsAvoidingObjUponLanding) return;
 
             if (controller.IsInteracting == false || anim.GetBool(StringData.CanBasicAttackTwo) || anim.GetBool(StringData.CanBasicAttackThree))
             {
-                GetBasicAttackCombo();
+                PlayBasicAttackCombo();
             }
         }
 
-        private void GetBasicAttackCombo()
+        /// <summary>
+        /// Plays the basic attack animation based on the basic attack combo.
+        /// </summary>
+        private void PlayBasicAttackCombo()
         {
-            Debug.Log("Index: " + basicAtkComboIdx + "      bool2: " + anim.GetBool(StringData.CanBasicAttackTwo) + 
-                                                     "      bool3: " + anim.GetBool(StringData.CanBasicAttackThree));
-
-
-            if (anim.GetBool(StringData.CanBasicAttackThree)) // && basicAtkComboIdx == 2)
+            if (anim.GetBool(StringData.CanBasicAttackThree))
             {
-                Debug.Log("ATTK 3 called " + basicAtkComboIdx);
-                basicAtkComboIdx++;
                 anim.SetBool(StringData.IsInteracting, true);
                 anim.Play(StringData.BasicAttackThree);
             }
-            else if (anim.GetBool(StringData.CanBasicAttackTwo)) // && basicAtkComboIdx == 1)
+            else if (anim.GetBool(StringData.CanBasicAttackTwo))
             {
-                Debug.Log("ATTK 2 called " + basicAtkComboIdx);
-
-                basicAtkComboIdx++;
                 anim.SetBool(StringData.IsInteracting, true);
                 anim.Play(StringData.BasicAttackTwo);
             }
             else if (basicAtkComboIdx == 0)
             {
-                Debug.Log("ATTK 1 called " + basicAtkComboIdx);
-
-                basicAtkComboIdx++;
                 anim.Play(StringData.BasicAttack);
             }
-            
-            ResetAnimationBasicAttackStates();
 
-            // increment combo atk idx
-            //basicAtkComboIdx++;
+            // Increment combo index upon basic attack
+            ResetAnimationBasicAttackStates();
+            basicAtkComboIdx++;
             curCombatResetTimer = maxComboResetTimer;
             if (basicAtkComboIdx > basicAtkComboIdxLimit)
             {
@@ -82,6 +92,9 @@ namespace Paraverse.Player
             }
         }
 
+        /// <summary>
+        /// Resets the animation event booleans.
+        /// </summary>
         private void ResetAnimationBasicAttackStates()
         {
             _isAttackLunging = false;
@@ -89,6 +102,9 @@ namespace Paraverse.Player
             anim.SetBool(StringData.CanBasicAttackThree, false);
         }
 
+        /// <summary>
+        /// Resets basic attack combo index to 0 when curCombatResetTimer reaches 0.
+        /// </summary>
         private void BasicAttackComboHandler()
         {
             if (curCombatResetTimer <= 0)
@@ -101,26 +117,19 @@ namespace Paraverse.Player
                 curCombatResetTimer -= Time.deltaTime;
             }
         }
-
-        public void AddListenerOnBasicAttack()
-        {
-            input.OnBasicAttackEvent += BasicAttackHandler;
-        }
-
-        public void RemoveListenerOnBasicAttack()
-        {
-            input.OnBasicAttackEvent -= BasicAttackHandler;
-        }
+        #endregion
 
         #region Animation Events
         public void EnableBasicAttackTwo()
         {
+            Debug.Log("Animation");
             ResetAnimationBasicAttackStates();
             anim.SetBool(StringData.CanBasicAttackTwo, true);
         }
 
         public void EnableBasicAttackThree()
         {
+            Debug.Log("Animation");
             ResetAnimationBasicAttackStates();
             anim.SetBool(StringData.CanBasicAttackThree, true);
         }
