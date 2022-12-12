@@ -91,7 +91,7 @@ public class Block : MonoBehaviour, ITickElement
     // its tick called every frame
     public void Tick()
     {
-        if (true)
+        if (type && type == MapGeneration.Instance.M.blockSet.water)
         {
             Vector3 newSpot = new Vector3(transform.position.x, 0, transform.position.z);
             _currentPrefab.transform.position = newSpot;

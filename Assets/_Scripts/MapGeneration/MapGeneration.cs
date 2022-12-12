@@ -429,16 +429,24 @@ public class MapGeneration : MonoBehaviour
 
         /* * * * MISC STEPS (NOT RELATED TO MAP) * * */
         if (M.ppProfile) globalVolume.profile = M.ppProfile;
-        globalVolume.gameObject.SetActive(GlobalSettings.Instance.QualityLevel > 3);
 
         TeleportPlayer(CenterPointWithY + new Vector3(0, 5f, 0));
 
-        if (M.mapVFX && GlobalSettings.Instance.QualityLevel > 4)
+        ParticleSystem vfx = null;
+        if (M.mapVFX)
         {
-            ParticleSystem vfx = Instantiate(M.mapVFX, GlobalSettings.Instance.player.transform);
+            vfx = Instantiate(M.mapVFX, GlobalSettings.Instance.player.transform);
             vfx.transform.localPosition = Vector3.zero;
-        } 
+        }
         /* * * * * * * * * * * * * * * * * * * * * * */
+
+
+        /* * * * * QUALITY SETTINGS (PERFORMANCE) * * * * * * */
+        globalVolume.gameObject.SetActive(GlobalSettings.Instance.QualityLevel > 3);
+        if (GlobalSettings.Instance.QualityLevel <= 1) QualitySettings.SetQualityLevel(0, true);
+        if (GlobalSettings.Instance.QualityLevel <= 4 && vfx) Destroy(vfx.gameObject);
+
+        /* * * * * * * * * * * * * * * * * * * * * * * * * * * */
 
         OnMapGenerateEnd?.Invoke();
         yield return new WaitForSeconds(0.55f);

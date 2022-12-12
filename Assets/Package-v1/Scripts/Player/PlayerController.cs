@@ -103,8 +103,8 @@ namespace Paraverse.Player
         private bool _isKnockedBack = false;
         public bool IsDead { get { return _isDead; } }
         private bool _isDead = false;
-        public MobController Target { get { return _target; } }
-        private MobController _target;
+        public Transform Target { get { return _target; } }
+        private Transform _target;
 
         // Movement, Jump & Dive inputs and velocities
         private Vector3 goalDir;
@@ -129,6 +129,7 @@ namespace Paraverse.Player
             if (input == null) input = GetComponent<PlayerInputControls>();
             if (combat == null) combat = GetComponent<PlayerCombat>();
             if (stats == null) stats = GetComponent<IMobStats>();
+            if (headIK == null) headIK = GetComponent<HeadIK>();
 
             // Subscribes item pick up code to use item event listener
             input.OnUseItemOneEvent += UseItemOne;
@@ -380,15 +381,9 @@ namespace Paraverse.Player
 
         private void TargetLock()
         {
-            if (null != TargetLockSystem.Instance.SelectTarget())
-            {
-                TargetLockSystem.Instance.Target.gameObject.GetComponent<MobController>().TryGetComponent(out _target);
-            }
-            Debug.Log("Pressed shift, target is: " + _target);
-            if (null != _target)
-            {
-                //headIK.SetLookAtObj(_target.gameObject.transform);
-            }
+            _target = TargetLockSystem.Instance.ToggleSelect();
+            Debug.Log("Pressed shift, target is: " + _target);            
+            headIK.SetLookAtObj(_target);
         }
 
         #endregion

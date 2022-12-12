@@ -41,6 +41,11 @@ public class TargetLockSystem : MonoBehaviour
     private void Update()
     {
         //if (_continuousTargetting && null == Target) SelectTarget();
+
+        if (Target && Vector3.Distance (player.transform.position, Target.transform.position) > Target.range)
+        {
+            //DeselectTarget();
+        }
     }
 
     public void Add(Selectable selectable)
@@ -71,7 +76,7 @@ public class TargetLockSystem : MonoBehaviour
         action?.Invoke();
     }
 
-    public void ToggleSelect()
+    public Transform ToggleSelect()
     {
         if (Target)
         {
@@ -81,8 +86,10 @@ public class TargetLockSystem : MonoBehaviour
         else
         {
             _continuousTargetting = true;
-            SelectTarget();
+            Selectable s = SelectTarget();
+            if (s) return s.gameObject.transform;
         }
+        return null;
     }
 
     public Selectable SelectTarget()
