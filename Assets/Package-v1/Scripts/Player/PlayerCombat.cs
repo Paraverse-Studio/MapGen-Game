@@ -83,7 +83,7 @@ namespace Paraverse.Player
             }
 
             // Increment combo index upon basic attack
-            ResetAnimationBasicAttackStates();
+            ResetAnimationComboStates();
             basicAtkComboIdx++;
             curCombatResetTimer = maxComboResetTimer;
             if (basicAtkComboIdx > basicAtkComboIdxLimit)
@@ -95,7 +95,7 @@ namespace Paraverse.Player
         /// <summary>
         /// Resets the animation event booleans.
         /// </summary>
-        private void ResetAnimationBasicAttackStates()
+        private void ResetAnimationComboStates()
         {
             _isAttackLunging = false;
             anim.SetBool(StringData.CanBasicAttackTwo, false);
@@ -109,7 +109,7 @@ namespace Paraverse.Player
         {
             if (curCombatResetTimer <= 0)
             {
-                ResetAnimationBasicAttackStates();
+                ResetAnimationComboStates();
                 basicAtkComboIdx = 0;
             }
             else
@@ -120,17 +120,15 @@ namespace Paraverse.Player
         #endregion
 
         #region Animation Events
-        public void EnableBasicAttackTwo()
+        public void AllowComboAttackTwo()
         {
-            Debug.Log("Animation");
-            ResetAnimationBasicAttackStates();
+            ResetAnimationComboStates();
             anim.SetBool(StringData.CanBasicAttackTwo, true);
         }
 
-        public void EnableBasicAttackThree()
+        public void AllowComboAttackThree()
         {
-            Debug.Log("Animation");
-            ResetAnimationBasicAttackStates();
+            ResetAnimationComboStates();
             anim.SetBool(StringData.CanBasicAttackThree, true);
         }
         #endregion

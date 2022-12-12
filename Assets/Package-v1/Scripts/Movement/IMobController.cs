@@ -5,6 +5,7 @@ namespace Paraverse.Mob
 {
     public interface IMobController
     {
+        public Transform Transform { get; }
         public bool IsKnockedBack { get; }
         public bool IsDead { get; }
         public IMobStats Stats { get; }

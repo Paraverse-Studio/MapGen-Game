@@ -99,6 +99,7 @@ namespace Paraverse.Mob.Controller
         public MobState CurMobState { get { return curState; } }
 
         // State Booleans 
+        public Transform Transform { get { return transform; } }
         public bool IsInteracting { get { return _isInteracting; } }
         private bool _isInteracting = false;
         public bool IsKnockedBack { get { return _isKnockedBack; } }
