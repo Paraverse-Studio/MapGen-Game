@@ -1,4 +1,5 @@
 using Paraverse.Helper;
+using Paraverse.IK;
 using Paraverse.Mob;
 using Paraverse.Mob.Combat;
 using Paraverse.Mob.Stats;
@@ -18,6 +19,7 @@ namespace Paraverse.Player
         private Animator anim;
         private CharacterController controller;
         private PlayerInputControls input;
+        private HeadIK headIK;
         // Reference to the combat script
         private PlayerCombat combat;
         // Reference to the stats script
@@ -85,6 +87,7 @@ namespace Paraverse.Player
         public event OnDeathDel OnDeathEvent;
 
         // State Booleans
+        public Transform Transform { get { return transform; } }
         public bool IsInteracting { get { return _isInteracting; } }
         private bool _isInteracting = false;
         public bool IsMoving { get { return _isMoving; } }
@@ -376,7 +379,11 @@ namespace Paraverse.Player
 
         private void TargetLock()
         {
-            TargetLockSystem.Instance.SelectTarget().TryGetComponent(out _target);            
+            TargetLockSystem.Instance.SelectTarget().TryGetComponent(out _target);  
+            if (null != _target)
+            {
+                headIK.SetLookAtObj(_target.Transform);
+            }
         }
 
         #endregion
