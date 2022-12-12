@@ -64,7 +64,7 @@ namespace Paraverse.Mob.Stats
 
         #endregion
 
-        #region Start Method
+        #region Start & Update Methods
         protected virtual void Start()
         {
             curHealth = maxHealth;
@@ -72,8 +72,13 @@ namespace Paraverse.Mob.Stats
             OnHealthChange?.Invoke((int)curHealth, (int)maxHealth);
             OnEnergyChange?.Invoke((int)curEnergy, (int)maxEnergy);
         }
-        #endregion
 
+        protected virtual void Update()
+        {
+            UpdateCurrentEnergy(EnergyRegen * Time.deltaTime);
+        }
+        #endregion
+        
         #region Update Stat Methods
         public void UpdateMaxHealth(int amount)
         {

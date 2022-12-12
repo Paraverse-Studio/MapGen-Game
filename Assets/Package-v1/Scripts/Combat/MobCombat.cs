@@ -24,17 +24,9 @@ namespace Paraverse.Mob.Combat
         [Header("Basic Attack Values")]
         [SerializeField, Range(0, 1), Tooltip("Basic attack damage ratio of attack damage stat.")]
         protected float basicAtkDmgRatio = 1f;
+        protected float curBasicAtkCd;
         [SerializeField, Tooltip("Basic attack range.")]
         protected float basicAtkRange = 2f;
-        public float BasicAtkRange { get { return basicAtkRange; } }
-
-        [Header("Basic Attack Speed Values")]
-        [SerializeField, Range(0.5f, 1f)]
-        protected float minBasicAtkAnimSpeed = 0.8f;
-        [SerializeField, Range(1f, 2.5f)]
-        protected float maxBasicAtkAnimSpeed = 2f;
-        protected float curBasicAtkAnimSpeed;
-        protected float curBasicAtkCd;
 
         [Header("Only For Melee Attackers")]
         [SerializeField, Tooltip("Basic attack weapon collider [Only required for melee weapon users].")]
@@ -57,13 +49,14 @@ namespace Paraverse.Mob.Combat
         // Constantly updates the distance from player
         protected float distanceFromTarget;
 
-        // Sets to true when character is doing an action (Attack, Stun).
-        public bool IsAttackLunging { get { return _isAttackLunging; } }
+        public float BasicAtkRange { get { return basicAtkRange; } }
         protected bool _isAttackLunging = false;
         public bool IsBasicAttacking {  get { return _isBasicAttacking; } }
         protected bool _isBasicAttacking = false;
         // Returns true when character is within basic attack range and cooldown is 0.
         public bool CanBasicAtk { get { return distanceFromTarget <= basicAtkRange && curBasicAtkCd <= 0; } }
+        // Sets to true when character is doing an action (Attack, Stun).
+        public bool IsAttackLunging { get { return _isAttackLunging; } }
         #endregion
 
         #region Start & Update Methods
@@ -83,7 +76,6 @@ namespace Paraverse.Mob.Combat
 
             distanceFromTarget = ParaverseHelper.GetDistance(transform.position, player.position);
             AttackCooldownHandler();
-            EnergyHandler();
         }
         #endregion
 
@@ -115,28 +107,12 @@ namespace Paraverse.Mob.Combat
 
         #region Basic Attack Logic
         /// <summary>
-        /// Responsible for handling basic attack animation and cooldown.
-        /// </summary>
-        public virtual void BasicAttackHandler()
-        {
-            if (curBasicAtkCd <= 0)
-            {
-                anim.Play(StringData.BasicAttack);
-                curBasicAtkCd = GetBasicAttackCooldown();
-                //Debug.Log("Basic attack");
-            }
-        }
-
-        /// <summary>
         /// Handles basic attack cooldowns
         /// </summary>
         protected virtual void AttackCooldownHandler()
         {
             curBasicAtkCd -= Time.deltaTime;
             curBasicAtkCd = Mathf.Clamp(curBasicAtkCd, 0f, GetBasicAttackCooldown());
-
-            // Updates the mobs anim attack speed
-            SetBasicAttackAnimSpeed();
         }
 
         /// <summary>
@@ -147,35 +123,30 @@ namespace Paraverse.Mob.Combat
         {
             return 1f / stats.AttackSpeed;
         }
-
-        /// <summary>
-        /// Sets the attack animation speed and returns the basic attack cooldown based on the attack speed stat value.
-        /// </summary>
-        /// <returns></returns>
-        protected void SetBasicAttackAnimSpeed()
-        {
-            // Updates the attack animation speed 
-            curBasicAtkAnimSpeed = stats.AttackSpeed;
-            curBasicAtkAnimSpeed = Mathf.Clamp(curBasicAtkAnimSpeed, minBasicAtkAnimSpeed, maxBasicAtkAnimSpeed);
-            anim.SetFloat(StringData.AttackSpeed, curBasicAtkAnimSpeed);
-        }
         #endregion
 
-        #region Energy Handler
+        #region Public Methods
         /// <summary>
-        /// Handles basic attack cooldowns
+        /// Responsible for handling basic attack animation and cooldown.
         /// </summary>
-        protected virtual void EnergyHandler()
+        public virtual void BasicAttackHandler()
         {
-            stats.UpdateCurrentEnergy(stats.EnergyRegen * Time.deltaTime);            
+            if (curBasicAtkCd <= 0)
+            {
+                anim.Play(StringData.BasicAttack);
+                curBasicAtkCd = GetBasicAttackCooldown();
+            }
         }
-        #endregion
 
+        /// <summary>
+        /// Resets booelans when mob is interrupted during attack. 
+        /// </summary>
         public void OnAttackInterrupt()
         {
             _isAttackLunging = false;
             DisableBasicAttackCollider();
         }
+        #endregion
 
         #region Animation Event Methods
         /// <summary>

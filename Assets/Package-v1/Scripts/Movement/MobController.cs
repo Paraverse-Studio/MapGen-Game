@@ -65,6 +65,10 @@ namespace Paraverse.Mob.Controller
         [Tooltip("Set to true once target is detected.")]
         private bool targetDetected = false;
 
+        [Header("Attack Dash Values")]
+        [SerializeField, Tooltip("The attack dashing force applied during basic attack.")]
+        private float atkDashForce = 2f;
+
         [Header("Knockback Values")]
         [SerializeField, Tooltip("The dive force of the mob.")]
         private float knockForce = 5f;
@@ -160,6 +164,11 @@ namespace Paraverse.Mob.Controller
             nav.speed = curSpeed;
             if (_isInteracting && _isKnockedBack == false)
             {
+                if (combat.IsAttackLunging)
+                    AttackMovementHandler();
+                else
+                    nav.enabled = true;
+
                 curSpeed = 0f;
                 return;
             }
@@ -450,9 +459,8 @@ namespace Paraverse.Mob.Controller
 
                 if (CheckFall())
                 {
-                    Debug.Log("Falling");
                     nav.enabled = false;
-                    controller.Move(transform.up * GlobalValues.GravityForce * GlobalValues.GravityModifier * Time.deltaTime);
+                    knockbackDir.y += GlobalValues.GravityForce * GlobalValues.GravityModifier;
                     controller.Move(knockbackDir * knockForce * Time.deltaTime);
 
                     // Kills enemy within death timer upon fall
@@ -467,7 +475,6 @@ namespace Paraverse.Mob.Controller
                 // Stops dive when conditions met
                 if (knockBackRange >= maxKnockbackRange || curKnockbackDuration >= maxKnockbackDuration)
                 {
-                    Debug.Log("Knocked back");
                     _isKnockedBack = false;
                     nav.enabled = true;
                 }
@@ -487,6 +494,17 @@ namespace Paraverse.Mob.Controller
                 return true;
             }
             return false;
+        }
+        #endregion
+
+        #region Attack Movement
+        private void AttackMovementHandler()
+        {
+            if (combat.IsAttackLunging)
+            {
+                nav.enabled = false;
+                controller.Move(transform.forward * atkDashForce * Time.deltaTime);
+            }
         }
         #endregion
 

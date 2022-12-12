@@ -43,13 +43,14 @@ namespace Paraverse.Player
         [Header("Landing Avoidance")]
         [SerializeField, Tooltip("Raycast distance to check for enemies below for land avoidance.")]
         private float disToEnemyCheck = 0.5f;
-        [SerializeField, Tooltip("Max time allowance of is not grounded state.")]
+        [SerializeField, Tooltip("Max time allowance of is not grounded state before avoidance force is applied.")]
         private float isNotGroundedMaxDur = 2f;
         private float isNotGroundedDur;
         [SerializeField, Tooltip("Avoid landing on these layers.")]
         private LayerMask avoidLayers;
         [SerializeField, Tooltip("Force applied to player movement to avoid the avoidLayers.")]
         private float avoidanceForce = 10f;
+        [SerializeField, Tooltip("Downward force applied on the mob when landing off an avoidance object.")]
         private float downwardAvoidanceForceRatio = 2f;
 
         [Header("Dive Values")]
@@ -65,11 +66,11 @@ namespace Paraverse.Player
         private float curDiveCd = 0f;
 
         [Header("Knockback Values")]
-        [SerializeField, Tooltip("The dive force of the mob.")]
+        [SerializeField, Tooltip("The knockback force of the mob.")]
         private float knockForce = 5f;
-        [SerializeField, Range(0, 3), Tooltip("The max distance of dive.")]
+        [SerializeField, Range(0, 3), Tooltip("The max distance of knockback.")]
         private float maxKnockbackRange = 1.5f;
-        [SerializeField, Range(0, 1), Tooltip("The max duration of dive.")]
+        [SerializeField, Range(0, 1), Tooltip("The max duration of knockback.")]
         private float maxKnockbackDuration = 1f;
         private float curKnockbackDuration;
 
@@ -90,10 +91,10 @@ namespace Paraverse.Player
         private bool _isMoving = false;
         public bool IsGrounded { get { return _isGrounded; } }
         private bool _isGrounded = false;
+        public bool IsAvoidingObjUponLanding { get { return _isAvoidingObjUponLanding; } }
+        private bool _isAvoidingObjUponLanding = false;
         public bool IsDiving { get { return _isDiving; } }
         private bool _isDiving = false;
-        public bool IsAvoidLandingOn { get { return _isAvoidingLandingOn; } }
-        private bool _isAvoidingLandingOn = false;
         public bool IsKnockedBack { get { return _isKnockedBack; } }
         private bool _isKnockedBack = false;
         public bool IsDead { get { return _isDead; } }
@@ -125,13 +126,6 @@ namespace Paraverse.Player
             if (combat == null) combat = GetComponent<PlayerCombat>();
             if (stats == null) stats = GetComponent<IMobStats>();
 
-            // Subscribes code to mob death event listener
-            //GameObject[] mobs = GameObject.FindGameObjectsWithTag(StringData.EnemyTag);
-            //for (int i = 0; i < mobs.Length; i++)
-            //{
-            //    mobs[i].GetComponent<MobController>().OnDeathEvent += OnKillTest;
-            //}
-
             // Subscribes item pick up code to use item event listener
             input.OnUseItemOneEvent += UseItemOne;
             input.OnUseItemTwoEvent += UseItemTwo;
@@ -157,7 +151,7 @@ namespace Paraverse.Player
             MovementHandler();
             RotationHandler();
             JumpHandler();
-            AvoidEnemyUponLand();
+            AvoidObjUponLand();
             DiveHandler();
             KnockbackHandler();
             AttackMovementHandler();
@@ -183,11 +177,8 @@ namespace Paraverse.Player
 
         private void MovementHandler()
         {
-            bool two = anim.GetBool(StringData.CanBasicAttackTwo);
-            bool three = anim.GetBool(StringData.CanBasicAttackThree);
-
             // Disables player movement during dive
-            if (_isDiving || _isKnockedBack || _isInteracting && two == false && three == false) return;
+            if (_isDiving || _isKnockedBack || _isInteracting && !combat.CanComboAttackTwo && !combat.CanComboAttackThree) return;
 
             // Adjusts player speed based on state
             if (IsInteracting)
@@ -238,7 +229,7 @@ namespace Paraverse.Player
         /// </summary>
         private void Jump()
         {
-            if (_isKnockedBack || _isInteracting || _isAvoidingLandingOn) return;
+            if (_isKnockedBack || _isInteracting || _isAvoidingObjUponLanding) return;
 
             if (_isGrounded && curJumpCd >= jumpCd)
             {
@@ -287,7 +278,7 @@ namespace Paraverse.Player
 
             if (Physics.Raycast(origin, dir * disToGroundCheck, disToGroundCheck, groundedLayers))
             {
-                _isAvoidingLandingOn = false;
+                _isAvoidingObjUponLanding = false;
                 return true;
             }
 
@@ -297,36 +288,36 @@ namespace Paraverse.Player
         /// <summary>
         /// Checks if mob is landing on an avoidance layer object, if so, sets avoidLandingOn as true. 
         /// </summary>
-        private void AvoidEnemyUponLand()
+        private void AvoidObjUponLand()
         {
             RaycastHit hit;
             Vector3 origin = transform.position;
             Vector3 dir = -transform.up;
 
-            Debug.DrawRay(origin, dir, Color.magenta);
             if (Physics.SphereCast(origin, controller.radius, dir * disToEnemyCheck, out hit, disToEnemyCheck, avoidLayers))
             {
-                _isAvoidingLandingOn = true;
+                _isAvoidingObjUponLanding = true;
             }
-            OnTopMobHandler();
+            LandingAvoidanceHandler();
         }
 
         /// <summary>
         /// Handles avoiding landing
         /// </summary>
-        private void OnTopMobHandler()
+        private void LandingAvoidanceHandler()
         {
             Vector3 offDis = new Vector3(transform.forward.x, -downwardAvoidanceForceRatio, transform.forward.z);
-            if (_isAvoidingLandingOn)
+            if (_isAvoidingObjUponLanding)
             {
                 controller.Move(offDis * avoidanceForce * Time.deltaTime);
             }
 
+            // Apply avoidance force if mob is not grounded within isNotGroundedMaxDur
             if (_isGrounded == false)
             {
                 isNotGroundedDur += Time.deltaTime;
                 if (isNotGroundedDur >= isNotGroundedMaxDur)
-                    _isAvoidingLandingOn = true;
+                    _isAvoidingObjUponLanding = true;
             }
             else
             {
@@ -390,20 +381,6 @@ namespace Paraverse.Player
 
         #endregion
 
-        #region Attack Movement
-        private void AttackMovementHandler()
-        {
-            if (combat.IsAttackLunging && combat.BasicAttackComboIdx == 0)
-            {
-                controller.Move(transform.forward * atkThreeDashForce * Time.deltaTime);
-            }
-            else if (combat.IsAttackLunging)
-            {
-                controller.Move(transform.forward * atkDashForce * Time.deltaTime);
-            }
-        }
-        #endregion
-
         #region KnockBack Methods
         /// <summary>
         /// Invokes knock back action
@@ -443,7 +420,24 @@ namespace Paraverse.Player
         }
         #endregion
 
+        #region Attack Movement
+        private void AttackMovementHandler()
+        {
+            if (combat.IsAttackLunging && combat.BasicAttackComboIdx == 0)
+            {
+                controller.Move(transform.forward * atkThreeDashForce * Time.deltaTime);
+            }
+            else if (combat.IsAttackLunging)
+            {
+                controller.Move(transform.forward * atkDashForce * Time.deltaTime);
+            }
+        }
+        #endregion
+
         #region Death Handler Methods
+        /// <summary>
+        /// Checks if player is dead.
+        /// </summary>
         private void DeathHandler()
         {
             if (stats.CurHealth <= 0 && _isDead == false)
@@ -454,9 +448,11 @@ namespace Paraverse.Player
             }
         }
 
+        /// <summary>
+        /// Runs upon player death.
+        /// </summary>
         private void Death()
         {
-            combat.RemoveListenerOnBasicAttack();
             controller.detectCollisions = false;
             anim.Play(StringData.Death);
 
@@ -495,10 +491,5 @@ namespace Paraverse.Player
             Debug.Log("Item Four Used");
         }
         #endregion
-
-        private void OnKillTest(Transform target)
-        {
-            Debug.Log(transform.name + " killed " + target.name);
-        }
     }
 }
