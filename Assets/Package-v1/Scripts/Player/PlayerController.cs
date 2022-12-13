@@ -16,6 +16,7 @@ namespace Paraverse.Player
     {
         #region Variables 
         // Important unity components
+        public static PlayerController Instance;
         private Camera cam;
         private Animator anim;
         private CharacterController controller;
@@ -77,6 +78,7 @@ namespace Paraverse.Player
         private float maxKnockbackDuration = 1f;
         private float curKnockbackDuration;
 
+        [Header("Attack Dashing Values")]
         [SerializeField, Tooltip("The attack dashing force applied during basic attack.")]
         private float atkDashForce = 2f;
         [SerializeField, Tooltip("The attack dashing force applied during basic attack three.")]
@@ -85,7 +87,7 @@ namespace Paraverse.Player
         [Header("Death Values")]
         private GameObject deathEffect;
         public delegate void OnDeathDel(Transform target);
-        public event OnDeathDel OnDeathEvent;
+        public event IMobController.OnDeathDel OnDeathEvent;
 
         // State Booleans
         public Transform Transform { get { return transform; } }
@@ -125,6 +127,14 @@ namespace Paraverse.Player
         #endregion
 
         #region Start & Update Methods
+        private void Awake()
+        {
+            if (null == Instance)
+                Instance = this;
+            else
+                Destroy(this);
+        }
+
         private void Start()
         {
             if (cam == null) cam = Camera.main;
@@ -225,7 +235,6 @@ namespace Paraverse.Player
             {
                 Vector3 targetDir = ParaverseHelper.GetPositionXZ(_target.position - transform.position).normalized;
                 transform.forward = targetDir;
-                Debug.Log("Rotate towards: " + _target.name);
             }
             else if (moveDir != Vector3.zero)
             {

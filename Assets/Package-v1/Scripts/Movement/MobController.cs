@@ -68,6 +68,7 @@ namespace Paraverse.Mob.Controller
         [Header("Attack Dash Values")]
         [SerializeField, Tooltip("The attack dashing force applied during basic attack.")]
         private float atkDashForce = 2f;
+        private float controllerStep;
 
         [Header("Knockback Values")]
         [SerializeField, Tooltip("The dive force of the mob.")]
@@ -91,7 +92,7 @@ namespace Paraverse.Mob.Controller
         [SerializeField]
         private GameObject deathEffect;
         public delegate void OnDeathDel(Transform target);
-        public event OnDeathDel OnDeathEvent;
+        public event IMobController.OnDeathDel OnDeathEvent;
 
         // Reference to mob state
         [SerializeField, Tooltip("The current state of the mob.")]
@@ -123,6 +124,7 @@ namespace Paraverse.Mob.Controller
             if (controller == null) controller = GetComponent<CharacterController>();
             if (combat == null) combat = GetComponent<IMobCombat>();
             if (stats == null) stats = GetComponent<IMobStats>();
+            controllerStep = controller.stepOffset;
 
             // Ensure basic attack range is >= to stopping distance
             if (combat.BasicAtkRange < stoppingDistance)
@@ -172,7 +174,10 @@ namespace Paraverse.Mob.Controller
                 if (combat.IsAttackLunging)
                     AttackMovementHandler();
                 else
+                {
                     nav.enabled = true;
+                    controller.stepOffset = controllerStep;
+                }
 
                 curSpeed = 0f;
                 return;
@@ -507,6 +512,7 @@ namespace Paraverse.Mob.Controller
         {
             if (combat.IsAttackLunging)
             {
+                controller.stepOffset = 0.1f;
                 nav.enabled = false;
                 controller.Move(transform.forward * atkDashForce * Time.deltaTime);
             }

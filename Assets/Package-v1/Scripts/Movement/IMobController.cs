@@ -13,5 +13,8 @@ namespace Paraverse.Mob
         public bool IsDead { get; }
         public IMobStats Stats { get; }
         public void ApplyKnockBack(Vector3 mobPos);
+
+        public delegate void OnDeathDel(Transform target);
+        public event OnDeathDel OnDeathEvent;
     }
 }

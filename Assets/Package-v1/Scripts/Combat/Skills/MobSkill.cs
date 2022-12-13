@@ -1,7 +1,6 @@
 using Paraverse.Mob.Stats;
 using Paraverse.Player;
 using UnityEngine;
-using UnityEngine.EventSystems;
 
 namespace Paraverse.Combat
 {
@@ -17,7 +16,7 @@ namespace Paraverse.Combat
         protected string _skillName = "";
 
         public string Description { get { return _description; } }
-        [SerializeField, TextArea(2,3), Tooltip("Skill description.")]
+        [SerializeField, TextArea(2, 3), Tooltip("Skill description.")]
         protected string _description = "";
 
         public bool IsOffCooldown { get { return curCooldown <= 0; } }
