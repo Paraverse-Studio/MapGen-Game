@@ -116,6 +116,15 @@ public partial class @PlayerInputs : IInputActionCollection2, IDisposable
                     ""processors"": """",
                     ""interactions"": """",
                     ""initialStateCheck"": false
+                },
+                {
+                    ""name"": ""SkillOne"",
+                    ""type"": ""Button"",
+                    ""id"": ""e6e65f11-af36-4cb4-b217-9bcf41ea57c7"",
+                    ""expectedControlType"": ""Button"",
+                    ""processors"": """",
+                    ""interactions"": """",
+                    ""initialStateCheck"": false
                 }
             ],
             ""bindings"": [
@@ -437,6 +446,28 @@ public partial class @PlayerInputs : IInputActionCollection2, IDisposable
                     ""action"": ""TargetLock"",
                     ""isComposite"": false,
                     ""isPartOfComposite"": false
+                },
+                {
+                    ""name"": """",
+                    ""id"": ""1d9d909d-00c9-4f92-a1b5-c94b2ca2d832"",
+                    ""path"": ""<Keyboard>/u"",
+                    ""interactions"": """",
+                    ""processors"": """",
+                    ""groups"": """",
+                    ""action"": ""SkillOne"",
+                    ""isComposite"": false,
+                    ""isPartOfComposite"": false
+                },
+                {
+                    ""name"": """",
+                    ""id"": ""19e82cdd-61af-4154-af90-da5b2c96e07c"",
+                    ""path"": ""<Gamepad>/buttonNorth"",
+                    ""interactions"": """",
+                    ""processors"": """",
+                    ""groups"": """",
+                    ""action"": ""SkillOne"",
+                    ""isComposite"": false,
+                    ""isPartOfComposite"": false
                 }
             ]
         }
@@ -455,6 +486,7 @@ public partial class @PlayerInputs : IInputActionCollection2, IDisposable
         m_Player_ItemThree = m_Player.FindAction("ItemThree", throwIfNotFound: true);
         m_Player_ItemFour = m_Player.FindAction("ItemFour", throwIfNotFound: true);
         m_Player_TargetLock = m_Player.FindAction("TargetLock", throwIfNotFound: true);
+        m_Player_SkillOne = m_Player.FindAction("SkillOne", throwIfNotFound: true);
     }
 
     public void Dispose()
@@ -524,6 +556,7 @@ public partial class @PlayerInputs : IInputActionCollection2, IDisposable
     private readonly InputAction m_Player_ItemThree;
     private readonly InputAction m_Player_ItemFour;
     private readonly InputAction m_Player_TargetLock;
+    private readonly InputAction m_Player_SkillOne;
     public struct PlayerActions
     {
         private @PlayerInputs m_Wrapper;
@@ -538,6 +571,7 @@ public partial class @PlayerInputs : IInputActionCollection2, IDisposable
         public InputAction @ItemThree => m_Wrapper.m_Player_ItemThree;
         public InputAction @ItemFour => m_Wrapper.m_Player_ItemFour;
         public InputAction @TargetLock => m_Wrapper.m_Player_TargetLock;
+        public InputAction @SkillOne => m_Wrapper.m_Player_SkillOne;
         public InputActionMap Get() { return m_Wrapper.m_Player; }
         public void Enable() { Get().Enable(); }
         public void Disable() { Get().Disable(); }
@@ -577,6 +611,9 @@ public partial class @PlayerInputs : IInputActionCollection2, IDisposable
                 @TargetLock.started -= m_Wrapper.m_PlayerActionsCallbackInterface.OnTargetLock;
                 @TargetLock.performed -= m_Wrapper.m_PlayerActionsCallbackInterface.OnTargetLock;
                 @TargetLock.canceled -= m_Wrapper.m_PlayerActionsCallbackInterface.OnTargetLock;
+                @SkillOne.started -= m_Wrapper.m_PlayerActionsCallbackInterface.OnSkillOne;
+                @SkillOne.performed -= m_Wrapper.m_PlayerActionsCallbackInterface.OnSkillOne;
+                @SkillOne.canceled -= m_Wrapper.m_PlayerActionsCallbackInterface.OnSkillOne;
             }
             m_Wrapper.m_PlayerActionsCallbackInterface = instance;
             if (instance != null)
@@ -611,6 +648,9 @@ public partial class @PlayerInputs : IInputActionCollection2, IDisposable
                 @TargetLock.started += instance.OnTargetLock;
                 @TargetLock.performed += instance.OnTargetLock;
                 @TargetLock.canceled += instance.OnTargetLock;
+                @SkillOne.started += instance.OnSkillOne;
+                @SkillOne.performed += instance.OnSkillOne;
+                @SkillOne.canceled += instance.OnSkillOne;
             }
         }
     }
@@ -627,5 +667,6 @@ public partial class @PlayerInputs : IInputActionCollection2, IDisposable
         void OnItemThree(InputAction.CallbackContext context);
         void OnItemFour(InputAction.CallbackContext context);
         void OnTargetLock(InputAction.CallbackContext context);
+        void OnSkillOne(InputAction.CallbackContext context);
     }
 }
