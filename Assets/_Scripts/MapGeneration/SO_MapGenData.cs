@@ -42,9 +42,10 @@ public class SO_MapGenData : ScriptableObject
     [Range(0f, 90f)]
     public float roundAngleToNearest;
 
-    [Header("(Overlap prevention) recommended max: 90f")]
+    [Header("Path Overlap Prevention Tech")]
+    [Header("(recommended max: 90f)")]
     [Range(0f, 90f)]
-    public float maxAngleTurn;
+    public float maxAccumulatedAngle;
 
     [Header("PATH THICKNESS ")]
     public int pathThickenFrequency = 8;

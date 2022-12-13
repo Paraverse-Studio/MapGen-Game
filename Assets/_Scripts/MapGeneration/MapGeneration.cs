@@ -135,7 +135,7 @@ public class MapGeneration : MonoBehaviour
     private List<GameObject> enemyObjects = new List<GameObject>();
 
     private float progressValue;
-    private float progressTotal = 9f;
+    private float progressTotal = 10f;
     private int step = 0; // purely for debugging to detect step progress speed
 
     private WaitForSeconds processDelay;
@@ -376,10 +376,10 @@ public class MapGeneration : MonoBehaviour
 
         currentPaintingBlock = M.blockSet.dirt;
 
-        PaintDirtPath();
-        step = 5;
         PartitionProgress("Adding world props...");
         yield return processDelay;
+        PaintDirtPath();
+        step = 5;
 
         //ApplyRandomElevation();
         //PartitionProgress("Activating props...");
@@ -397,37 +397,46 @@ public class MapGeneration : MonoBehaviour
 
 
         /* * * * * IMPORTANT PROPS ON MAP * * * * * * */
+        PartitionProgress("Adding event triggers...");
+        yield return processDelay;
         AddImportantProps();
         step = 6;
-        PartitionProgress();
-        yield return processDelay;
 
         /* * * * * DECORATIVE PROPS ON MAP * * * * * * */
         currentPaintingBlock = M.blockSet.water;
 
+        PartitionProgress("");
+        yield return processDelay;
         AddWaterToDips();
         step = 7;
-        PartitionProgress("Spawning dangerous enemies...");
-        yield return processDelay;
 
         AddProps();
         step = 8;
         PartitionProgress("");
         yield return processDelay;
 
-        navMeshBuilder.surface = allObjects[0].GetComponentInChildren<NavMeshSurface>();
-        navMeshBuilder.BuildNavMesh();
 
-        AddEnemies();
-#if UNITY_EDITOR
+        /* * * * * * ADDING ENEMIES * * * * * * * * * */
+        if (M.addEnemies)
+        {
+            step = 9;
+            PartitionProgress("Spawning dangerous enemies...");
+            yield return processDelay;
+
+            navMeshBuilder.surface = allObjects[0].GetComponentInChildren<NavMeshSurface>();
+            navMeshBuilder.BuildNavMesh();
+
+            AddEnemies();            
+        }
+
         enemiesFolder.gameObject.name = "[ Enemies ] - " + enemyObjects.Count;
-#endif
-        step = 9;
+        /* * * * * * * * * * * * * * * * * * * * * * * */
+
+        /* * * * MISC STEPS (NOT RELATED TO MAP) * * */
+        step = 10;
         PartitionProgress("Applying final touches...");
         yield return processDelay;
 
-
-        /* * * * MISC STEPS (NOT RELATED TO MAP) * * */
         if (M.ppProfile) globalVolume.profile = M.ppProfile;
 
         TeleportPlayer(CenterPointWithY + new Vector3(0, 5f, 0));
@@ -442,6 +451,7 @@ public class MapGeneration : MonoBehaviour
 
 
         /* * * * * QUALITY SETTINGS (PERFORMANCE) * * * * * * */
+
         globalVolume.gameObject.SetActive(GlobalSettings.Instance.QualityLevel > 3);
         if (GlobalSettings.Instance.QualityLevel <= 1) QualitySettings.SetQualityLevel(0, true);
         if (GlobalSettings.Instance.QualityLevel <= 4 && vfx) Destroy(vfx.gameObject);
@@ -466,8 +476,8 @@ public class MapGeneration : MonoBehaviour
 
             // New Feature* : trying out preventing the pathing curve to ever rotate enough to face the origin spot
             // so that we don't get overlap path ways
-            if (pathingAngle >= M.maxAngleTurn) randomAngle = Mathf.Abs(randomAngle) * -1f;
-            else if (pathingAngle <= -M.maxAngleTurn) randomAngle = Mathf.Abs(randomAngle);
+            if (pathingAngle >= M.maxAccumulatedAngle) randomAngle = Mathf.Abs(randomAngle) * -1f;
+            else if (pathingAngle <= -M.maxAccumulatedAngle) randomAngle = Mathf.Abs(randomAngle);
 
             float newAngle = pathingAngle + randomAngle;
 
@@ -849,9 +859,14 @@ public class MapGeneration : MonoBehaviour
     {
         if (!M.addEnemies) return;
 
-        int enemyFrequency = pathObjects.Count / M.enemySpawnAmount;
+        // We don't want enemies to start right from beginning of path
+        // because we want player to spawn peacefully and digest the air
+        // before encountering something hostile
+        int gapOfTilesBeforeFirstEnemy = 10;
 
-        for (int i = 1; i < pathObjects.Count; ++i)
+        int enemyFrequency = (pathObjects.Count - gapOfTilesBeforeFirstEnemy) / M.enemySpawnAmount;
+
+        for (int i = gapOfTilesBeforeFirstEnemy; i < pathObjects.Count; ++i)
         {
             if (i % enemyFrequency != 0) continue;
             
