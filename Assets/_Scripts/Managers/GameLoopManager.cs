@@ -249,7 +249,7 @@ public class GameLoopManager : MonoBehaviour
         EnemiesManager.Instance.ResetEnemiesList();
         Destroy(EndPortal);
 
-        float score = ScoreFormula.CalculateScore(totalEnemiesSpawned * 12f, roundTimer.GetTime(), playerMaxHealth, damageTaken);
+        float score = ScoreFormula.CalculateScore(totalEnemiesSpawned * 10f, roundTimer.GetTime(), playerMaxHealth, damageTaken);
         goldRewarded = (int)(score * 1);
 
         playerStats.UpdateGold(goldRewarded); // save it to db

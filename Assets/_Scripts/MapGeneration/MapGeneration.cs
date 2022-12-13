@@ -466,8 +466,8 @@ public class MapGeneration : MonoBehaviour
 
             // New Feature* : trying out preventing the pathing curve to ever rotate enough to face the origin spot
             // so that we don't get overlap path ways
-            if (pathingAngle >= M.maxAngleTurn) randomAngle = Mathf.Abs(randomAngle) * -1f;
-            else if (pathingAngle <= -M.maxAngleTurn) randomAngle = Mathf.Abs(randomAngle);
+            if (pathingAngle >= M.maxAccumulatedAngle) randomAngle = Mathf.Abs(randomAngle) * -1f;
+            else if (pathingAngle <= -M.maxAccumulatedAngle) randomAngle = Mathf.Abs(randomAngle);
 
             float newAngle = pathingAngle + randomAngle;
 
