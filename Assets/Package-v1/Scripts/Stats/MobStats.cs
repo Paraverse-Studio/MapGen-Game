@@ -1,6 +1,4 @@
-using Paraverse.Player;
 using Paraverse.Stats;
-using System.ComponentModel;
 using UnityEngine;
 
 namespace Paraverse.Mob.Stats
@@ -13,9 +11,9 @@ namespace Paraverse.Mob.Stats
         public Stat MaxHealth { get { return _maxHealth; } }
         private Stat _maxHealth;
 
-        public int CurHealth { get { return _curHealth; } }
         [SerializeField]
         public int _curHealth = 100;
+        public int CurHealth { get { return _curHealth; } }
 
         [SerializeField]
         protected float attackDamage = 5f;
@@ -37,9 +35,9 @@ namespace Paraverse.Mob.Stats
         public Stat MaxEnergy { get { return _maxEnergy; } }
         private Stat _maxEnergy;
 
-        public float CurrentEnergy { get { return curEnergy; } }
         [SerializeField]
         protected float curEnergy = 100f;
+        public float CurrentEnergy { get { return curEnergy; } }
 
         [SerializeField]
         protected float energyRegen = 25f;
@@ -48,14 +46,13 @@ namespace Paraverse.Mob.Stats
 
 
         [SerializeField]
-        protected float gold = 100f;
-        public float Gold { get { return gold; } }
+        protected float _gold = 100f;
+        public int Gold { get { return (int)_gold; } }
 
-        int IMobStats.Gold => throw new System.NotImplementedException();
 
         [HideInInspector]
         public IntIntEvent OnHealthChange = new IntIntEvent();
-        
+
         [HideInInspector]
         public IntIntEvent OnEnergyChange = new IntIntEvent();
 
@@ -89,7 +86,7 @@ namespace Paraverse.Mob.Stats
             UpdateCurrentEnergy(EnergyRegen.FinalValue * Time.deltaTime);
         }
         #endregion
-        
+
         #region Update Stat Methods
         public void UpdateMaxHealth(int amount)
         {
@@ -147,7 +144,7 @@ namespace Paraverse.Mob.Stats
 
         public void UpdateGold(int amount)
         {
-            gold += amount;
+            _gold += amount;
         }
         #endregion
     }
