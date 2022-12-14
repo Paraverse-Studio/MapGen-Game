@@ -128,7 +128,15 @@ public class GameLoopManager : MonoBehaviour
         }
 
         if (Input.GetKeyDown(KeyCode.U)) EndPortal.SetActive(true);
-        if (Input.GetKeyDown(KeyCode.Y)) playerStats.SetFullHealth();
+        if (Input.GetKeyDown(KeyCode.Y))
+        {
+            playerStats.SetFullHealth();
+            List<MobController> m = EnemiesManager.Instance.Enemies;
+            foreach (MobController _m in m)
+            {
+                _m.GetComponentInChildren<MobStats>().SetFullHealth();
+            }
+        }
 
         if (player.transform.position.y <= -25f)
         {
