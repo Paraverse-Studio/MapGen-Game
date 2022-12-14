@@ -254,7 +254,7 @@ namespace Paraverse.Mob.Controller
         /// <returns></returns>
         private float GetPatrolSpeed()
         {
-            return walkSpeedRatio * stats.MoveSpeed;
+            return walkSpeedRatio * stats.MoveSpeed.FinalValue;
         }
 
         /// <summary>
@@ -263,7 +263,7 @@ namespace Paraverse.Mob.Controller
         /// <returns></returns>
         private float GetPursueSpeed()
         {
-            return sprintSpeedRatio * stats.MoveSpeed;
+            return sprintSpeedRatio * stats.MoveSpeed.FinalValue;
         }
         #endregion
 

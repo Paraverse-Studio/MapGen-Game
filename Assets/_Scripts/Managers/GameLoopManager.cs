@@ -132,7 +132,7 @@ public class GameLoopManager : MonoBehaviour
 
         if (player.transform.position.y <= -25f)
         {
-            playerStats.UpdateCurrentHealth((int)(-playerStats.MaxHealth * GlobalValues.FallDamage / 100.0f));
+            playerStats.UpdateCurrentHealth((int)(-playerStats.MaxHealth.FinalValue * GlobalValues.FallDamage / 100.0f));
             UtilityFunctions.TeleportObject(player, MapGeneration.Instance.GetClosestBlock(player.transform).transform.position + new Vector3(0, 0.5f, 0));
         }
     }
@@ -152,7 +152,7 @@ public class GameLoopManager : MonoBehaviour
         GameLoopEvents.OnStartRound?.Invoke();
 
         totalEnemiesSpawned = EnemiesManager.Instance.EnemiesCount;
-        playerMaxHealth = playerStats.MaxHealth;
+        playerMaxHealth = (int)playerStats.MaxHealth.FinalValue;
 
         playerStats.OnHealthChange.AddListener(AccrueDamageTaken);
         playerController.OnDeathEvent += EndRoundPremature;

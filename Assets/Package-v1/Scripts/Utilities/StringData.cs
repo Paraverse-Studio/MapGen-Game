@@ -26,4 +26,7 @@ public static class StringData
     public static string Dive = "Dive";
     public static string Hit = "Hit";
     public static string Death = "Death";
+
+    // Method Names
+    public static string TempStatModifierHandler = "TempStatModifierHandler";
 }

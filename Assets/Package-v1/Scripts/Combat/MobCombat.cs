@@ -99,7 +99,7 @@ namespace Paraverse.Mob.Combat
                 }
                 basicAtkCollider.SetActive(true);
                 basicAtkColScript = basicAtkCollider.GetComponent<AttackCollider>();
-                basicAtkColScript.Init(this, basicAtkDmgRatio * stats.AttackDamage);
+                basicAtkColScript.Init(this, basicAtkDmgRatio * stats.AttackDamage.FinalValue);
                 basicAtkCollider.SetActive(false);
             }
         }
@@ -121,7 +121,7 @@ namespace Paraverse.Mob.Combat
         /// <returns></returns>
         protected float GetBasicAttackCooldown()
         {
-            return 1f / stats.AttackSpeed;
+            return 1f / stats.AttackSpeed.FinalValue;
         }
         #endregion
 
@@ -198,7 +198,7 @@ namespace Paraverse.Mob.Combat
             // Instantiate and initialize projectile
             GameObject go = Instantiate(projPf, projOrigin.position, transform.rotation);
             Projectile proj = go.GetComponent<Projectile>();
-            proj.Init(this, targetDir, basicAtkProjSpeed, basicAtkRange, basicAtkDmgRatio * stats.AttackDamage);
+            proj.Init(this, targetDir, basicAtkProjSpeed, basicAtkRange, basicAtkDmgRatio * stats.AttackDamage.FinalValue);
         }
 
         /// <summary>

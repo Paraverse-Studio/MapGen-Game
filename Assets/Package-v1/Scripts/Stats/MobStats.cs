@@ -1,4 +1,5 @@
 using Paraverse.Player;
+using Paraverse.Stats;
 using System.ComponentModel;
 using UnityEngine;
 
@@ -9,47 +10,45 @@ namespace Paraverse.Mob.Stats
         #region Variables
         [SerializeField]
         protected int maxHealth = 100;
-        [DisplayName("Max Health")]
-        public int MaxHealth { get { return maxHealth; } }
+        public Stat MaxHealth { get { return _maxHealth; } }
+        private Stat _maxHealth;
 
-        public int curHealth = 100;
-        [DisplayName("Current Health")]
-        public int CurHealth { get { return curHealth; } }
+        public int CurHealth { get { return _curHealth; } }
+        [SerializeField]
+        public int _curHealth = 100;
 
         [SerializeField]
         protected float attackDamage = 5f;
-        [DisplayName("Attack")]
-        public float AttackDamage { get { return attackDamage; } }
+        public Stat AttackDamage { get { return _attackDamage; } }
+        private Stat _attackDamage;
 
         [SerializeField, Range(0.2f, 3f), Tooltip("Attacks per second.")]
         protected float attackSpeed = 0.2f;
-        [DisplayName("Attack Speed")]
-        public float AttackSpeed { get { return attackSpeed; } }
+        public Stat AttackSpeed { get { return _attackSpeed; } }
+        private Stat _attackSpeed;
 
         [SerializeField]
         protected float moveSpeed = 2f;
-        [DisplayName("Movement Speed")]
-        public float MoveSpeed { get { return moveSpeed; } }
+        public Stat MoveSpeed { get { return _moveSpeed; } }
+        private Stat _moveSpeed;
 
         [SerializeField]
         protected float maxEnergy = 100f;
-        [DisplayName("Max Energy")]
-        public float MaxEnergy { get { return maxEnergy; } }
+        public Stat MaxEnergy { get { return _maxEnergy; } }
+        private Stat _maxEnergy;
 
+        public float CurrentEnergy { get { return curEnergy; } }
         [SerializeField]
         protected float curEnergy = 100f;
-        [DisplayName("Current Energy")]
-        public float CurrentEnergy { get { return curEnergy; } }
 
         [SerializeField]
         protected float energyRegen = 25f;
-        [DisplayName("Energy Regen /s")]
-        public float EnergyRegen { get { return energyRegen; } }
+        public Stat EnergyRegen { get { return _energyRegen; } }
+        private Stat _energyRegen;
 
 
         [SerializeField]
         protected float gold = 100f;
-        [DisplayName("Current Gold")]
         public float Gold { get { return gold; } }
 
         int IMobStats.Gold => throw new System.NotImplementedException();
@@ -66,56 +65,67 @@ namespace Paraverse.Mob.Stats
         #endregion
 
         #region Start & Update Methods
-        protected virtual void Start()
+        protected virtual void Awake()
         {
-            curHealth = maxHealth;
-            curEnergy = maxEnergy;
-            OnHealthChange?.Invoke((int)curHealth, (int)maxHealth);
+            Init();
+            _curHealth = (int)MaxHealth.FinalValue;
+            curEnergy = (int)MaxEnergy.FinalValue;
+            OnHealthChange?.Invoke((int)_curHealth, (int)maxHealth);
             OnEnergyChange?.Invoke((int)curEnergy, (int)maxEnergy);
+        }
+
+        private void Init()
+        {
+            _maxHealth = new Stat(maxHealth);
+            _maxEnergy = new Stat(maxEnergy);
+            _attackDamage = new Stat(attackDamage);
+            _attackSpeed = new Stat(attackSpeed);
+            _moveSpeed = new Stat(moveSpeed);
+            _energyRegen = new Stat(energyRegen);
         }
 
         protected virtual void Update()
         {
-            UpdateCurrentEnergy(EnergyRegen * Time.deltaTime);
+            UpdateCurrentEnergy(EnergyRegen.FinalValue * Time.deltaTime);
         }
         #endregion
         
         #region Update Stat Methods
         public void UpdateMaxHealth(int amount)
         {
-            maxHealth += amount;
+            _maxHealth.AddMod(new StatModifier(amount));
         }
 
         public void UpdateCurrentHealth(int amount)
         {
-            curHealth += amount;
-            OnHealthChange?.Invoke(curHealth, maxHealth);
+            _curHealth += amount;
+            OnHealthChange?.Invoke(_curHealth, maxHealth);
         }
 
         public void SetFullHealth()
         {
-            curHealth = maxHealth;
-            OnHealthChange?.Invoke(curHealth, maxHealth);
+            _curHealth = (int)MaxHealth.FinalValue;
+            OnHealthChange?.Invoke(_curHealth, maxHealth);
         }
 
         public void UpdateAttackDamage(float amount)
         {
-            attackDamage += amount;
+            _attackDamage.AddMod(new StatModifier(amount));
         }
 
         public void UpdateAttackSpeed(float amount)
         {
-            attackSpeed += amount;
+            _attackSpeed.AddMod(new StatModifier(amount));
         }
 
         public void UpdateMovementSpeed(float amount)
         {
-            moveSpeed += amount;
+            _moveSpeed.AddMod(new StatModifier(amount));
         }
 
         public void UpdateMaxEnergy(float amount)
         {
-            maxEnergy += amount;
+            _maxEnergy.AddMod(new StatModifier(amount));
         }
 
         public void ConsumeDiveEnergy()
@@ -125,14 +135,14 @@ namespace Paraverse.Mob.Stats
 
         public void ResetStats()
         {
-            curHealth = maxHealth;
-            curEnergy = maxEnergy;
+            _curHealth = (int)MaxHealth.FinalValue;
+            curEnergy = (int)MaxEnergy.FinalValue;
         }
 
         public void UpdateCurrentEnergy(float amount)
         {
-            curEnergy = Mathf.Clamp(curEnergy + amount, 0f, MaxEnergy);
-            OnEnergyChange?.Invoke((int)curEnergy, (int)maxEnergy);
+            curEnergy = Mathf.Clamp(curEnergy + amount, 0f, MaxEnergy.FinalValue);
+            OnEnergyChange?.Invoke((int)curEnergy, (int)MaxEnergy.FinalValue);
         }
 
         public void UpdateGold(int amount)

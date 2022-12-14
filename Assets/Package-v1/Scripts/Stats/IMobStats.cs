@@ -1,20 +1,19 @@
+using Paraverse.Stats;
+
 namespace Paraverse.Mob.Stats
 {
     public interface IMobStats
     {
         // Properties 
         #region Properties
-        public int MaxHealth { get; }
+        public Stat MaxHealth { get; }
         public int CurHealth { get; }
-        public float AttackDamage { get; }
-        public float AttackSpeed { get; }
-        public float MoveSpeed { get; }
-        public float MaxEnergy { get; }
+        public Stat AttackDamage { get; }
+        public Stat AttackSpeed { get; }
+        public Stat MoveSpeed { get; }
+        public Stat MaxEnergy { get; }
         public float CurrentEnergy { get; }
-        public float EnergyRegen { get; }
-
-
-
+        public Stat EnergyRegen { get; }
         public int Gold { get; }
         #endregion
 
