@@ -435,8 +435,6 @@ namespace Paraverse.Mob.Controller
 
             if (angle <= 0)
                 combat.BasicAttackHandler();
-
-            Debug.Log("Combat Handling");
         }
         #endregion
 

@@ -193,10 +193,11 @@ namespace Paraverse.Mob.Combat
                 projHeld.SetActive(false);
 
             Vector3 playerPos = new Vector3(player.position.x, player.position.y + 0.5f, player.position.z);
-            Vector3 targetDir = (playerPos - projOrigin.position).normalized;
+            Vector3 targetDir = (playerPos - transform.position).normalized;
+            Quaternion lookRot = Quaternion.LookRotation(targetDir);
 
             // Instantiate and initialize projectile
-            GameObject go = Instantiate(projPf, projOrigin.position, transform.rotation);
+            GameObject go = Instantiate(projPf, projOrigin.position, lookRot);
             Projectile proj = go.GetComponent<Projectile>();
             proj.Init(this, targetDir, basicAtkProjSpeed, basicAtkRange, basicAtkDmgRatio * stats.AttackDamage.FinalValue);
         }
