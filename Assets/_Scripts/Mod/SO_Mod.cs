@@ -22,10 +22,10 @@ public class SO_Mod : ScriptableObject
     public string Description;
     public SO_Mod[] PrerequisiteMods; // <mod ID, how many of that mod needed>
 
-
     /// <summary>
     /// takes in a user's currency, and existing mods in numerable, and returns
     /// whether this mod is purchaseable
+    /// Also, this is where conditions such as prerequisite mods are checked
     /// </summary>
     public virtual bool CanPurchase(int userCurrencyAmount, IEnumerable<SO_Mod> userCurrentMods)
     {
