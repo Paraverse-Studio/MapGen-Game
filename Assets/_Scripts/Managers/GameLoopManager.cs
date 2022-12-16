@@ -127,6 +127,14 @@ public class GameLoopManager : MonoBehaviour
             if (_predicate(_roundReady)) EndPortal.SetActive(true);
         }
 
+        if (player.transform.position.y <= -25f)
+        {
+            playerStats.UpdateCurrentHealth((int)(-playerStats.MaxHealth.FinalValue * GlobalValues.FallDamage / 100.0f));
+            UtilityFunctions.TeleportObject(player, MapGeneration.Instance.GetClosestBlock(player.transform).transform.position + new Vector3(0, 0.5f, 0));
+        }
+
+
+
         if (Input.GetKeyDown(KeyCode.U)) EndPortal.SetActive(true);
         if (Input.GetKeyDown(KeyCode.Y))
         {
@@ -137,12 +145,11 @@ public class GameLoopManager : MonoBehaviour
                 _m.GetComponentInChildren<MobStats>().SetFullHealth();
             }
         }
-
-        if (player.transform.position.y <= -25f)
+        if (Input.GetKeyDown(KeyCode.T))
         {
-            playerStats.UpdateCurrentHealth((int)(-playerStats.MaxHealth.FinalValue * GlobalValues.FallDamage / 100.0f));
-            UtilityFunctions.TeleportObject(player, MapGeneration.Instance.GetClosestBlock(player.transform).transform.position + new Vector3(0, 0.5f, 0));
+            ShopManager.Instance.CalculateShopItems(200, new List<SO_Mod>());
         }
+
     }
 
 

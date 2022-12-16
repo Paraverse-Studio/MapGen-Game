@@ -12,11 +12,13 @@ public class ShopManager : MonoBehaviour
     }
 
     #region public variables
+    public static ShopManager Instance;
+
     [Header("References:")]
     public GameObject ShopWindow;
 
     [Header("Elements:")]
-    public GameObject shopItemPrefab;
+    public ModCard shopItemPrefab;
     public Transform shopItemsFolder;
 
     [Header("Shop Algorithm:")]
@@ -37,6 +39,11 @@ public class ShopManager : MonoBehaviour
 
     #endregion
 
+    private void Awake()
+    {
+        Instance = this;
+    }
+
     // Start is called before the first frame update
     void Start()
     {
@@ -48,7 +55,7 @@ public class ShopManager : MonoBehaviour
         foreach (Transform c in shopItemsFolder) Destroy(c.gameObject);
     }
 
-    public void CalculateShopMods(int userCurrencyAmount, IEnumerable<SO_Mod> userCurrentMods)
+    public void CalculateShopItems(int userCurrencyAmount, IEnumerable<SO_Mod> userCurrentMods)
     {
         // 1.0  Clear resources, and prepare
         ClearShop();
@@ -61,11 +68,11 @@ public class ShopManager : MonoBehaviour
         int userCurrencyIndex = -1;
         for (int i = 0; i < AvailableMods.Count; ++i)
         {
-            if (AvailableMods[i].Cost < userCurrencyAmount) userCurrencyIndex = userCurrencyAmount;
+            if (AvailableMods[i].Cost < userCurrencyAmount) userCurrencyIndex = i;
         }
 
         // 4.0  Then poll a couple of mods from that price point and below
-        for (int i = userCurrencyIndex - 1; i >= 0; --i)
+        for (int i = userCurrencyIndex; i >= 0; --i)
         {
             if (AvailableMods[i].CanPurchase(userCurrencyAmount, userCurrentMods))
             {
@@ -77,10 +84,17 @@ public class ShopManager : MonoBehaviour
         // 5.0  From the polled amount, randomly pick the amount of mods to show on shop
         System.Random rand = new();
         _modPool = _modPool.OrderBy(_ => rand.Next()).ToList();
-        List<ModPair> _modsToShow = (List<ModPair>)_modPool.Take(cardsQuantity);
+
+        List<ModPair> _modsToShow = new();
+        int availableModPool = Mathf.Min(cardsQuantity, _modPool.Count);
+
+        for (int i = 0; i < availableModPool; ++i)
+        {
+            if (null != _modPool[i].mod) _modsToShow.Add(_modPool[i]);
+        }
 
         // 6.0  Show the finalized mods to the user
-        for (int i = 0; i < cardsQuantity; ++i)
+        for (int i = 0; i < _modsToShow.Count; ++i)
         {
             InstantiateModCard(_modsToShow[i]);
         }
@@ -90,9 +104,11 @@ public class ShopManager : MonoBehaviour
 
     private void InstantiateModCard(ModPair modPair)
     {
-        GameObject go = Instantiate(shopItemPrefab, shopItemsFolder);
-
-        // Attach references here
+        ModCard modCard = Instantiate(shopItemPrefab, shopItemsFolder);
+        modCard.titleLabel.text = modPair.mod.Title;
+        modCard.imageHolder.sprite = modPair.mod.Image;
+        modCard.descriptionLabel.text = modPair.mod.Description;
+        modCard.costLabel.text = modPair.mod.Cost.ToString();
     }
 
 }
