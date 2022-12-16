@@ -107,6 +107,7 @@ namespace Paraverse.Player
         private bool _isDiving = false;
         public bool IsKnockedBack { get { return _isKnockedBack; } }
         private bool _isKnockedBack = false;
+        public bool IsInvulnerable { get; set; }
         public bool IsDead { get { return _isDead; } }
         private bool _isDead = false;
         public Transform Target { get { return _target; } }
@@ -199,7 +200,9 @@ namespace Paraverse.Player
         private void MovementHandler()
         {
             // Disables player movement during dive
-            if (_isDiving || _isKnockedBack || _isInteracting && !combat.CanComboAttackTwo && !combat.CanComboAttackThree && !_isUsingSkill) return;
+            if (_isDiving || _isKnockedBack 
+                || _isInteracting && !combat.CanComboAttackTwo 
+                && !combat.CanComboAttackThree && !_isUsingSkill) return;
 
             // Adjusts player speed based on state
             if (IsInteracting)
@@ -224,6 +227,31 @@ namespace Paraverse.Player
             moveDir = Vector3.Lerp(moveDir, goalDir, Time.deltaTime * rotSpeed);
 
             controller.Move(moveDir * curSpeed * Time.deltaTime);
+        }
+
+        /// <summary>
+        /// Can be pulled and used in other scripts to control movement
+        /// </summary>
+        /// <param name="moveSpeed"></param>
+        public void ControlMovement(float moveSpeed)
+        {
+            // Gets movement input values
+            horizontal = this.input.MovementDirection.x;
+            vertical = this.input.MovementDirection.y;
+
+            // Player's raw input
+            Vector3 input = new Vector3(horizontal, 0, vertical);
+
+            // The matrix that holds our camera angle
+            Matrix4x4 matrix = Matrix4x4.Rotate(Quaternion.Euler(0, 45f, 0));
+
+            // Our camera angle's matrix applied to our input, to get input relative to camera
+            goalDir = matrix.MultiplyPoint3x4(input);
+
+            // Lerping user's existing movement force to the goal movement force
+            moveDir = Vector3.Lerp(moveDir, goalDir, Time.deltaTime * rotSpeed);
+
+            controller.Move(moveDir * moveSpeed * Time.deltaTime);
         }
 
         private void RotationHandler()
@@ -410,6 +438,8 @@ namespace Paraverse.Player
         /// </summary>
         public void ApplyKnockBack(Vector3 mobPos)
         {
+            if (IsInvulnerable) return;
+
             combat.OnAttackInterrupt();
             Vector3 impactDir = (transform.position - mobPos).normalized;
             knockStartPos = transform.position;

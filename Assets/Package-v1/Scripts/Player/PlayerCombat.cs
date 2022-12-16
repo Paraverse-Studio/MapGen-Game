@@ -47,7 +47,7 @@ namespace Paraverse.Player
 
             for (int i = 0; i < ActiveSkills.Count; i++)
             {
-                ActiveSkills[i].ActivateSkill(input, anim, stats);
+                ActiveSkills[i].ActivateSkill(transform, input, anim, stats);
             }
         }
 
@@ -202,7 +202,7 @@ namespace Paraverse.Player
                 RemoveFromActiveSkills(ActiveSkills[ActiveSkills.Count-1]);
             
             ActiveSkills.Add(skill);
-            skill.ActivateSkill(input, anim, stats);
+            skill.ActivateSkill(transform, input, anim, stats);
         }
 
         /// <summary>

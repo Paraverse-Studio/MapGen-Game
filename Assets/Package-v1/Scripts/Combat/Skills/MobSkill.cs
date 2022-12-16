@@ -1,12 +1,16 @@
+using Paraverse.Helper;
+using Paraverse.Mob.Combat;
 using Paraverse.Mob.Stats;
 using Paraverse.Player;
 using UnityEngine;
 
 namespace Paraverse.Combat
 {
-    public class MobSkill : MonoBehaviour
+    public class MobSkill : MonoBehaviour, IMobSkill
     {
         #region Variables
+        protected Transform mob;
+        protected Transform target;
         protected PlayerInputControls input;
         protected Animator anim;
         protected IMobStats stats;
@@ -19,6 +23,9 @@ namespace Paraverse.Combat
         [SerializeField, TextArea(2, 3), Tooltip("Skill description.")]
         protected string _description = "";
 
+        public bool TargetWithinRange { get { return IsInRange(); } }
+        [SerializeField, Tooltip("Skill range value.")]
+        protected float _range = 5f;
         public bool IsOffCooldown { get { return curCooldown <= 0; } }
         [SerializeField, Tooltip("Skill cooldown value.")]
         protected float cooldown = 5f;
@@ -31,27 +38,41 @@ namespace Paraverse.Combat
         [SerializeField, Tooltip("Name of skill animation to play.")]
         protected string animName = "";
 
-        private delegate void method();
+        [SerializeField]
+        protected GameObject attackColliderGO;
+        protected AttackCollider attackCollider;
+
+        [SerializeField, Header("Projectile Values")]
+        protected ProjectileData projData;
+
+        [Header("Damage Values")]
+        [SerializeField, Range(0, 10)]
+        protected float damageRatio = 1;
         #endregion
 
-        #region Start Method
-        public virtual void ActivateSkill(PlayerInputControls input, Animator anim, IMobStats stats)
+        #region Public Methods
+        public virtual void ActivateSkill(Transform mob, PlayerInputControls input, Animator anim, IMobStats stats, Transform target = null)
         {
+            this.mob = mob;
+            this.target = target;
             this.input = input;
             this.anim = anim;
             this.stats = stats;
             input.OnSkillOneEvent += Execute;
             curCooldown = 0f;
+
+            if (null == attackCollider && null != attackColliderGO)
+            {
+                attackCollider = attackColliderGO.GetComponent<AttackCollider>();
+                attackCollider.Init(mob.GetComponent<MobCombat>(), stats);
+            }
         }
 
         public virtual void DeactivateSkill(PlayerInputControls input)
         {
-            Debug.Log("input: " + input);
             input.OnSkillOneEvent -= Execute;
         }
-        #endregion
 
-        #region Update Methods
         /// <summary>
         /// Contains all methods required to run in Update within MobCombat script.
         /// </summary>
@@ -60,20 +81,6 @@ namespace Paraverse.Combat
             CooldownHandler();
         }
 
-        /// <summary>
-        /// Handles skill cooldown.
-        /// </summary>
-        protected virtual void CooldownHandler()
-        {
-            if (curCooldown > 0)
-            {
-                curCooldown -= Time.deltaTime;
-            }
-            curCooldown = Mathf.Clamp(curCooldown, 0f, cooldown);
-        }
-        #endregion
-
-        #region Skill Execution Conditions
         /// <summary>
         /// Responsible for executing skill on button press.
         /// </summary>
@@ -88,6 +95,20 @@ namespace Paraverse.Combat
                     "The max cooldown for this skill is " + cooldown + " and the animation name is " + animName + ".");
             }
         }
+        #endregion
+
+        #region Private Methods
+        /// <summary>
+        /// Handles skill cooldown.
+        /// </summary>
+        protected virtual void CooldownHandler()
+        {
+            if (curCooldown > 0)
+            {
+                curCooldown -= Time.deltaTime;
+            }
+            curCooldown = Mathf.Clamp(curCooldown, 0f, cooldown);
+        }
 
         /// <summary>
         /// Returns true if skill conditions are met. 
@@ -95,13 +116,22 @@ namespace Paraverse.Combat
         /// <returns></returns>
         protected virtual bool CanUseSkill()
         {
-            if (IsOffCooldown && HasEnergy)
+            if (IsOffCooldown && HasEnergy && TargetWithinRange)
             {
                 return true;
             }
 
             Debug.Log(_skillName + " is on cooldown or don't have enough energy!");
             return false;
+        }
+
+        protected bool IsInRange()
+        {
+            if (target == null) return true;
+
+            float disFromTarget = ParaverseHelper.GetDistance(mob.position, target.position);
+
+            return disFromTarget <= _range;
         }
         #endregion
     }
