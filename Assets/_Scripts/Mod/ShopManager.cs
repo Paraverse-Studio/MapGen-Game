@@ -2,6 +2,7 @@ using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 using System.Linq;
+using UnityEngine.Events;
 
 public class ShopManager : MonoBehaviour
 {
@@ -30,6 +31,10 @@ public class ShopManager : MonoBehaviour
 
     [Header("Mods To Buy:")]
     public List<SO_Mod> AvailableMods;
+
+    [Header("Events:")]
+    public UnityEvent OnPurchaseItem = new UnityEvent();
+
     #endregion
 
     #region private variables
@@ -60,6 +65,10 @@ public class ShopManager : MonoBehaviour
         // 1.0  Clear resources
         ClearShop();
         _modPool.Clear();
+        for (int i = 0; i < AvailableMods.Count; ++ i)
+        {
+            if (null == AvailableMods[i]) AvailableMods.Remove(AvailableMods[i]);
+        }
 
         // 2.0  Refresh available mods list, sort them by their price
         AvailableMods.Sort((a, b) => a.Cost.CompareTo(b.Cost));
@@ -110,15 +119,20 @@ public class ShopManager : MonoBehaviour
         modCard.descriptionLabel.text = modPair.mod.Description;
         modCard.costLabel.text = modPair.mod.Cost.ToString();
 
-        modCard.purchaseButton.onClick.AddListener(() => OnClickPurchaseItem(modCard.gameObject, modPair.index));
+        modCard.purchaseButton.onClick.AddListener(() => OnClickPurchaseItem(modCard, modPair));
     }
 
-    public void OnClickPurchaseItem(GameObject modCard, int shopItemIndex)
+    public void OnClickPurchaseItem(ModCard modCard, ModPair shopItem)
     {
-        Debug.Log("Purchased item: " + AvailableMods[shopItemIndex].Title);
-        _purhasedMods.Add(AvailableMods[shopItemIndex]);
-        AvailableMods.Remove(AvailableMods[shopItemIndex]);
-        Destroy(modCard);
+        Debug.Log("Purchased item: " + AvailableMods[shopItem.index].Title);
+
+        shopItem.mod.Activate();
+        _purhasedMods.Add(AvailableMods[shopItem.index]);
+        //AvailableMods.Remove(AvailableMods[shopItem.index]);
+        AvailableMods[shopItem.index] = null; // we do this instead of Remove() to retain index integrity
+        Destroy(modCard.gameObject);
+        OnPurchaseItem?.Invoke();
+
         _refresher.RefreshContentFitters();
     }
 

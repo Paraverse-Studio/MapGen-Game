@@ -22,6 +22,9 @@ public class SO_Mod : ScriptableObject
     public string Description;
     public SO_Mod[] PrerequisiteMods; // <mod ID, how many of that mod needed>
 
+    [Header("Obtained Items")]
+    public GameObject[] obtainedItems;
+
     /// <summary>
     /// takes in a user's currency, and existing mods in numerable, and returns
     /// whether this mod is purchaseable
