@@ -57,7 +57,7 @@ public class ShopManager : MonoBehaviour
 
     public void CalculateShopItems(int userCurrencyAmount, IEnumerable<SO_Mod> userCurrentMods)
     {
-        // 1.0  Clear resources, and prepare
+        // 1.0  Clear resources
         ClearShop();
         _modPool.Clear();
 
@@ -109,6 +109,17 @@ public class ShopManager : MonoBehaviour
         modCard.imageHolder.sprite = modPair.mod.Image;
         modCard.descriptionLabel.text = modPair.mod.Description;
         modCard.costLabel.text = modPair.mod.Cost.ToString();
+
+        modCard.purchaseButton.onClick.AddListener(() => OnClickPurchaseItem(modCard.gameObject, modPair.index));
+    }
+
+    public void OnClickPurchaseItem(GameObject modCard, int shopItemIndex)
+    {
+        Debug.Log("Purchased item: " + AvailableMods[shopItemIndex].Title);
+        _purhasedMods.Add(AvailableMods[shopItemIndex]);
+        AvailableMods.Remove(AvailableMods[shopItemIndex]);
+        Destroy(modCard);
+        _refresher.RefreshContentFitters();
     }
 
 }

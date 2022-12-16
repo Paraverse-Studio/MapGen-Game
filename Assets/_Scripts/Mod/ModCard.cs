@@ -10,4 +10,6 @@ public class ModCard : MonoBehaviour
     public Image imageHolder;
     public TextMeshProUGUI descriptionLabel;
     public TextMeshProUGUI costLabel;
+
+    public Button purchaseButton;
 }
