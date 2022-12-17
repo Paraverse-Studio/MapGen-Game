@@ -24,6 +24,7 @@ public struct BlockSet
     public SO_BlockItem dirt;
     public SO_BlockItem water;
     public SO_BlockItem foundation;
+    public SO_BlockItem bridge;
 }
 
 [System.Serializable]
@@ -127,15 +128,15 @@ public class MapGeneration : MonoBehaviour
 
     private GridOccupant[,] gridOccupants;
 
-    private List<Block> allObjects = new List<Block>();
+    private List<Block> allObjects = new List<Block>(); // all ground-related blocks
     private List<Block> pathObjects = new List<Block>();
-    private List<GameObject> treeObjects = new List<GameObject>();
+    private List<GameObject> propObjects = new List<GameObject>();
     private List<GameObject> foundationObjects = new List<GameObject>();
     private List<Block> waterObjects = new List<Block>();
     private List<GameObject> enemyObjects = new List<GameObject>();
 
     private float progressValue;
-    private float progressTotal = 10f;
+    private float progressTotal = 11f;
     private int step = 0; // purely for debugging to detect step progress speed
 
     private WaitForSeconds processDelay;
@@ -320,7 +321,7 @@ public class MapGeneration : MonoBehaviour
 
             allObjects.Clear();
             pathObjects.Clear();
-            treeObjects.Clear();
+            propObjects.Clear();
             foundationObjects.Clear();
             waterObjects.Clear();
             for (int i = 0; i < enemyObjects.Count; ++i) if (enemyObjects[i]) Destroy(enemyObjects[i]);
@@ -410,8 +411,13 @@ public class MapGeneration : MonoBehaviour
         AddWaterToDips();
         step = 7;
 
-        AddProps();
+        if (GlobalSettings.Instance.QualityLevel > 3) AddFoliage();        
         step = 8;
+        PartitionProgress("");
+        yield return processDelay;
+
+        AddProps();
+        step = 9;
         PartitionProgress("");
         yield return processDelay;
 
@@ -419,7 +425,7 @@ public class MapGeneration : MonoBehaviour
         /* * * * * * ADDING ENEMIES * * * * * * * * * */
         if (M.addEnemies)
         {
-            step = 9;
+            step = 10;
             PartitionProgress("Spawning dangerous enemies...");
             yield return processDelay;
 
@@ -433,7 +439,7 @@ public class MapGeneration : MonoBehaviour
         /* * * * * * * * * * * * * * * * * * * * * * * */
 
         /* * * * MISC STEPS (NOT RELATED TO MAP) * * */
-        step = 10;
+        step = 11;
         PartitionProgress("Applying final touches...");
         yield return processDelay;
 
@@ -570,7 +576,7 @@ public class MapGeneration : MonoBehaviour
                     // which is to never have them on the lowest elevation layer, and if they are, elevate them
                     // (design choice: don't want dirt to be covered with water - dirt paths should always be clear to walk on)
                     if (M.raiseDirtLevel && null != replacedBlock && replacedBlock.type == M.blockSet.dirt)
-                    {
+                    {                        
                         ApplyBlockElevationRestrictions(replacedBlock);
                     }
                 }
@@ -582,6 +588,11 @@ public class MapGeneration : MonoBehaviour
     {
         if (Mathf.Abs(block.transform.position.y - YBoundary.y) < _EPSILON)
         {
+            if (M.blockSet.bridge)
+            {
+                block.type = M.blockSet.bridge;
+                block.UpdateBlock();
+            }
             ElevateBlock(true, block);
         }
     }
@@ -649,13 +660,18 @@ public class MapGeneration : MonoBehaviour
 
     // Given an object obj, and an elevation direction, lift/lower the object in that direction BUT
     // with the condition that no block around this block in 3x3 should end up 2-block vertically distanced
-    private void ElevateBlock(bool upOrDown, Block obj)
+    private void ElevateBlock(bool upOrDown, Block obj, float overrideElevationSize = -1f)
     {
         float extremeY;
         extremeY = GetExtremestAdjacentElevation(upOrDown ? ElevationLevel.lowest : ElevationLevel.highest, obj.gameObject);
 
-        float yValue = extremeY + ((upOrDown ? 1f : -1f) * M.blockRaiseSize);
-        yValue = Mathf.Clamp(yValue, YBoundary.y, YBoundary.x);
+        float elevationSize = M.blockRaiseSize;
+        if (overrideElevationSize != -1) elevationSize = overrideElevationSize;
+
+        float yValue = extremeY + ((upOrDown ? 1f : -1f) * elevationSize);
+
+        // this is so that these elevations don't create new extreme ends. That is to be determined purely from lump application rounds
+        yValue = Mathf.Clamp(yValue, YBoundary.y, YBoundary.x); 
 
         obj.transform.position = new Vector3(obj.transform.position.x, yValue, obj.transform.position.z);
 
@@ -851,7 +867,7 @@ public class MapGeneration : MonoBehaviour
         UtilityFunctions.UpdateLODlevels(obj.transform);
         GameLoopManager.Instance.EndPortal = obj;
         obj.SetActive(false);
-        treeObjects.Add(obj);
+        propObjects.Add(obj);
         obj.transform.parent = temporaryObjFolder.transform;
     }
 
@@ -888,6 +904,23 @@ public class MapGeneration : MonoBehaviour
             enemy.transform.parent = enemiesFolder;
             enemyObjects.Add(enemy);
             EnemiesManager.Instance.AddEnemy(enemy);
+        }
+    }
+
+    private void AddFoliage()
+    {
+        for (int i = 0; i < allObjects.Count; ++i)
+        {
+            Block b = allObjects[i];
+            if (Random.Range(0, 1.0f) <= b.type.propSpawnChance)
+            {
+                GameObject foliage = Instantiate(b.type.blockFoliage[Random.Range(0, b.type.blockFoliage.Length)], b.transform.position, Quaternion.identity);
+                foliage.transform.position += new Vector3(0, 0.5f, 0);
+                foliage.transform.rotation = Quaternion.AngleAxis(Random.Range(0, 360), Vector3.up);
+                UtilityFunctions.UpdateLODlevels(foliage.transform);
+                propObjects.Add(foliage);
+                foliage.transform.parent = temporaryObjFolder.transform;
+            }
         }
     }
 
@@ -931,7 +964,7 @@ public class MapGeneration : MonoBehaviour
                 {
                     GameObject obj = Instantiate(M.propSet.propPrefabs[Random.Range(0, M.propSet.propPrefabs.Length)], spawnSpot, Quaternion.identity);
                     UtilityFunctions.UpdateLODlevels(obj.transform);
-                    treeObjects.Add(obj);
+                    propObjects.Add(obj);
                     obj.transform.position += new Vector3(0, 0.5f, 0); // only 0.5f because the pivot point is center of block
                     obj.transform.parent = temporaryObjFolder.transform;
 
@@ -973,9 +1006,16 @@ public class MapGeneration : MonoBehaviour
             // RAISING edge blocks (so that anything, ie. water blocks, don't look awkward at edges)
             Vector3 objPos = allObjects[i].transform.position;
             Block obj = gridOccupants[(int)objPos.x, (int)objPos.z].block;
+
+            if (M.blockSet.foundation)
+            { 
+                obj.type = M.blockSet.foundation;
+                obj.UpdateBlock();
+            }
+
             if (null != obj && Mathf.Abs(objPos.y - YBoundary.y) < _EPSILON)
             {
-                ElevateBlock(true, obj);
+                ElevateBlock(true, obj, M.edgeRaiseSize);
             }
         }
     }

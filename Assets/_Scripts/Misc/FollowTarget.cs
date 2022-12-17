@@ -12,6 +12,10 @@ public class FollowTarget : MonoBehaviour
     [Header("Snap to long distance?")]
     public bool snapToFarDistance = false;
 
+    [Header("Lerp on y-value?")]
+    public bool lerpY;
+    public float lerpValue;
+
     private Vector3 velocity;
     
 
@@ -33,6 +37,7 @@ public class FollowTarget : MonoBehaviour
         }
 
         Vector3 goalPosition = _offset + target.position;
+        if (lerpY) goalPosition.y = Mathf.Lerp(transform.position.y, goalPosition.y, Time.deltaTime * lerpValue);
 
         if (smoothStepLerp > 0)
         {
