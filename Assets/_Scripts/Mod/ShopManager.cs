@@ -90,7 +90,7 @@ public class ShopManager : MonoBehaviour
             if (_modPool.Count >= pollQuantity) break;
         }
 
-        // 5.0  From the polled amount, randomly pick the amount of mods to show on shop
+        // 5.0  From the polled amount, randomly pick the mods to show on shop
         System.Random rand = new();
         _modPool = _modPool.OrderBy(_ => rand.Next()).ToList();
 
