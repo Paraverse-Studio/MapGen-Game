@@ -257,6 +257,11 @@ public class GameLoopManager : MonoBehaviour
         CompleteRound();
     }
 
+    public void CalculateShop()
+    {
+        ShopManager.Instance.CalculateShopItems(200, new List<SO_Mod>());
+    }
+
     public void CompleteRound()
     {
         playerStats.OnHealthChange.RemoveListener(AccrueDamageTaken);

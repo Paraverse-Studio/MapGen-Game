@@ -63,6 +63,11 @@ public class ShopManager : MonoBehaviour
     public void CalculateShopItems(int userCurrencyAmount, IEnumerable<SO_Mod> userCurrentMods)
     {
         // 1.0  Clear resources
+        if (null == AvailableMods || AvailableMods.Count == 0)
+        {
+            Debug.Log("Shop Manager: There are no available mods in the list.");
+            return;
+        }
         ClearShop();
         _modPool.Clear();
         for (int i = 0; i < AvailableMods.Count; ++ i)
