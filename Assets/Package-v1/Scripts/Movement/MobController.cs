@@ -1,4 +1,5 @@
 using Paraverse.Helper;
+using Paraverse.Mob.Combat;
 using Paraverse.Mob.Stats;
 using UnityEngine;
 using UnityEngine.AI;
@@ -8,6 +9,10 @@ namespace Paraverse.Mob.Controller
     [RequireComponent(typeof(Animator))]
     [RequireComponent(typeof(NavMeshAgent))]
     [RequireComponent(typeof(CharacterController))]
+    [RequireComponent(typeof(MobCombat))]
+    [RequireComponent(typeof(MobStats))]
+    [RequireComponent(typeof(MobHealthBar))]
+    [RequireComponent(typeof(Selectable))]
     public class MobController : MonoBehaviour, IMobController
     {
         #region Variables
