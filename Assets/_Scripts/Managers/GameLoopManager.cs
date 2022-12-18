@@ -34,6 +34,13 @@ public class GameLoopManager : MonoBehaviour
         public TextMeshProUGUI goldText;
     }
 
+    [System.Serializable]
+    public struct ShopScreen
+    {
+        public TextMeshProUGUI goldText;
+        public TextMeshProUGUI messageText;
+    }
+
     public enum RoundCompletionType
     {
         Completed,
@@ -71,7 +78,8 @@ public class GameLoopManager : MonoBehaviour
     private Predicate<bool> _predicate;
 
     [Header("References")]
-    public ResultsScreen Results;
+    public ResultsScreen resultScreen;
+    public ShopScreen shopScreen;
 
     [Space(20)]
     [Header("Runtime Data")]
@@ -274,15 +282,22 @@ public class GameLoopManager : MonoBehaviour
 
         playerStats.UpdateGold(goldRewarded); // save it to db
 
-        Results.scoreText.text = "Score: " + (int)score + "%";
-        Results.rankText.text = ScoreFormula.GetScoreRank((int)score);
+        resultScreen.scoreText.text = "Score: " + (int)score + "%";
+        resultScreen.rankText.text = ScoreFormula.GetScoreRank((int)score);
 
         nextRoundNumber++;
 
+        // Update Results Screen
         //Results.goldText.text = "+" + goldRewarded;
+
+        // Update Shop Screen
+        shopScreen.goldText.text = playerStats.Gold.ToString();
+        shopScreen.messageText.text = "Spend your gold here to purchase upgrades!";
 
         // save it in database here, we need to save stats in db asap so players
         // who might d/c right after ending get their stuff saved
+
+
 
         ResetStates();
         GameLoopEvents.OnUI?.Invoke();

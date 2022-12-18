@@ -30,11 +30,11 @@ public class PauseMenuViewController : MonoBehaviour
 
         goldText.text = playerStats.Gold.ToString();
 
-        statText.text = playerStats.MaxHealth + "\n" +
-                        playerStats.AttackDamage + "\n" +
-                        playerStats.AttackSpeed + "/sec\n\n" +
+        statText.text = playerStats.MaxHealth.FinalValue + "\n" +
+                        playerStats.AttackDamage.FinalValue + "\n" +
+                        playerStats.AttackSpeed.FinalValue + "/sec\n\n" +
                         "0\n" + // placeholder for ability
-                        playerStats.MoveSpeed + " m/s\n";
+                        playerStats.MoveSpeed.FinalValue + " m/s\n";
     }
 
 }

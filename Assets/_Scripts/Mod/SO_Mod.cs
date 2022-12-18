@@ -8,7 +8,7 @@ public enum ModType
     StatMod, SkillMod, SkillUpgradeMod, EffectMod
 }
 
-[CreateAssetMenu(fileName = "ModName", menuName = "SOs/Mods/SO_Mod")]
+//[CreateAssetMenu(fileName = "ModName", menuName = "SOs/Mods/SO_Mod")]
 public class SO_Mod : ScriptableObject
 {
     [Header("——————  BASICS  —————")]
@@ -20,10 +20,7 @@ public class SO_Mod : ScriptableObject
     public int Cost;
     [TextArea(1, 4)]
     public string Description;
-    public SO_Mod[] PrerequisiteMods; // <mod ID, how many of that mod needed>
-
-    [Header("Obtained Items")]
-    public GameObject[] obtainedItems;
+    public SO_Mod[] PrerequisiteMods;
 
     /// <summary>
     /// takes in a user's currency, and existing mods in numerable, and returns
@@ -50,9 +47,9 @@ public class SO_Mod : ScriptableObject
     /// <summary>
     /// Logic for activating this mod to the user
     /// </summary>
-    public virtual void Activate(System.Action callback = null)
+    public virtual void Activate()
     {
-
+        Debug.Log("CALLED BASE ACTIVATION....");
     }
 
 

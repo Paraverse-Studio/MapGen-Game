@@ -3,6 +3,8 @@ using System.Collections.Generic;
 using UnityEngine;
 using System.Linq;
 using UnityEngine.Events;
+using TMPro;
+using Paraverse.Mob.Stats;
 
 public class ShopManager : MonoBehaviour
 {
@@ -17,6 +19,7 @@ public class ShopManager : MonoBehaviour
 
     [Header("References:")]
     public GameObject ShopWindow;
+    public TextMeshProUGUI goldText;
 
     [Header("Elements:")]
     public ModCard shopItemPrefab;
@@ -41,6 +44,7 @@ public class ShopManager : MonoBehaviour
     private ContentFitterRefresher _refresher;
     private List<ModPair> _modPool = new();
     private List<SO_Mod> _purhasedMods = new();
+    MobStats _playerStats;
 
     #endregion
 
@@ -53,6 +57,7 @@ public class ShopManager : MonoBehaviour
     void Start()
     {
         _refresher = ShopWindow.GetComponent<ContentFitterRefresher>();
+        _playerStats = GlobalSettings.Instance.player.GetComponentInChildren<MobStats>();
     }
 
     private void ClearShop()
@@ -131,7 +136,11 @@ public class ShopManager : MonoBehaviour
     {
         Debug.Log("Purchased item: " + AvailableMods[shopItem.index].Title);
 
+        _playerStats.UpdateGold(-shopItem.mod.Cost); // save it to db
+        goldText.text = _playerStats.Gold.ToString();
+
         shopItem.mod.Activate();
+
         _purhasedMods.Add(AvailableMods[shopItem.index]);
         //AvailableMods.Remove(AvailableMods[shopItem.index]);
         AvailableMods[shopItem.index] = null; // we do this instead of Remove() to retain index integrity

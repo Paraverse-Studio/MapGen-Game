@@ -61,6 +61,7 @@ public class MapGeneration : MonoBehaviour
     {
         public Block block;
         public bool hasProp;
+        public bool hasWater;
     }
 
     [Header("Map Generation Data ")]
@@ -406,9 +407,9 @@ public class MapGeneration : MonoBehaviour
         /* * * * * DECORATIVE PROPS ON MAP * * * * * * */
         currentPaintingBlock = M.blockSet.water;
 
+        AddWaterToDips();
         PartitionProgress("");
         yield return processDelay;
-        AddWaterToDips();
         step = 7;
 
         if (GlobalSettings.Instance.QualityLevel > 3) AddFoliage();        
@@ -842,6 +843,8 @@ public class MapGeneration : MonoBehaviour
             {
                 Vector3 spawnSpot = new Vector3(thisObject.position.x, YBoundary.y + M.blockRaiseSize, thisObject.transform.position.z);
 
+                GridOccupant gridSpot = GetGridOccupant(spawnSpot);
+
                 GameObject waterObj = Instantiate(blockPrefab, spawnSpot, Quaternion.identity);
                 waterObj.transform.parent = temporaryObjFolder.transform;
                 if (waterObj)
@@ -850,6 +853,7 @@ public class MapGeneration : MonoBehaviour
                     waterBlock.type = M.blockSet.water;
                     waterBlock.UpdateBlock();
                     waterObjects.Add(waterBlock);
+                    gridSpot.hasWater = true;
                 }
             }
         }
@@ -911,6 +915,12 @@ public class MapGeneration : MonoBehaviour
     {
         for (int i = 0; i < allObjects.Count; ++i)
         {
+            if (GetGridOccupant(allObjects[i]).hasWater)
+            {
+                Debug.Log("THIS WAS TRUUUUUUUUEEEEEEEEEEEEE!!!!!!!!!!!!!!!!!");
+                continue; // don't want tile-related foliage in water (make water related foliage here)
+            }
+
             Block b = allObjects[i];
             if (Random.Range(0, 1.0f) <= b.type.propSpawnChance)
             {
@@ -1114,7 +1124,12 @@ public class MapGeneration : MonoBehaviour
 
     public GridOccupant GetGridOccupant(Block b)
     {
-        GridOccupant occupant = gridOccupants[(int)b.gameObject.transform.position.x, (int)b.gameObject.transform.position.z];
+        return GetGridOccupant(b.gameObject.transform.position);
+    }
+
+    public GridOccupant GetGridOccupant(Vector3 v)
+    {
+        GridOccupant occupant = gridOccupants[(int)v.x, (int)v.z];
         return occupant;
     }
 
