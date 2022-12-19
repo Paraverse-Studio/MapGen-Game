@@ -1521,6 +1521,8 @@ MonoBehaviour:
   target: {fileID: 1293426510}
   _offset: {x: 0, y: 0, z: 0}
   snapToFarDistance: 0
+  lerpY: 0
+  lerpValue: 0
 --- !u!1 &107008954
 GameObject:
   m_ObjectHideFlags: 0
@@ -17327,7 +17329,7 @@ PrefabInstance:
       objectReference: {fileID: 480862771}
     - target: {fileID: 2956618024134931113, guid: aa4e16a1786ed124fa06618210886566, type: 3}
       propertyPath: maxHealth
-      value: 1000
+      value: 500
       objectReference: {fileID: 0}
     - target: {fileID: 3351448952234461169, guid: aa4e16a1786ed124fa06618210886566, type: 3}
       propertyPath: m_RootOrder
@@ -26229,7 +26231,7 @@ MonoBehaviour:
   type: 0
   rangeOverride: -1
   outline: {fileID: 0}
-  range: 0
+  Range: 0
   OnSelected:
     m_PersistentCalls:
       m_Calls: []
@@ -27296,7 +27298,7 @@ MonoBehaviour:
   type: 0
   rangeOverride: -1
   outline: {fileID: 0}
-  range: 0
+  Range: 0
   OnSelected:
     m_PersistentCalls:
       m_Calls: []
@@ -27383,7 +27385,7 @@ MonoBehaviour:
   stoppingDistance: 4
   detectionRadius: 5
   pursueRadius: 7
-  atkDashForce: 10
+  atkDashForce: 20
   knockForce: 5
   maxKnockbackRange: 1.5
   maxKnockbackDuration: 1
@@ -27454,6 +27456,7 @@ MonoBehaviour:
     projOrigin: {fileID: 0}
     basicAtkProjSpeed: 10
   explosionEffect: {fileID: 5971161797261734830, guid: b57686338b6a45841a67921982527613, type: 3}
+  explosionRadius: 1.5
 --- !u!23 &5839250836224373215
 MeshRenderer:
   m_ObjectHideFlags: 0

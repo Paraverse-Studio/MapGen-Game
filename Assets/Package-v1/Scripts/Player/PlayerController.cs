@@ -95,7 +95,7 @@ namespace Paraverse.Player
         private bool _isInteracting = false;
         public bool IsBasicAttacking { get { return _isBasicAttacking; } }
         private bool _isBasicAttacking = false;
-        public bool IsUsingSkill { get { return _isUsingSkill; } }
+        public bool IsSkilling { get { return _isUsingSkill; } }
         private bool _isUsingSkill = false;
         public bool IsMoving { get { return _isMoving; } }
         private bool _isMoving = false;
