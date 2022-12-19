@@ -45,6 +45,7 @@ public class GlobalSettings : MonoBehaviour
     [Header("Backup Safe Position: ")]
     [Space(10)]
     public Vector3 backupSafePosition;
+    public GameObject testGameObject;
 
 
 
