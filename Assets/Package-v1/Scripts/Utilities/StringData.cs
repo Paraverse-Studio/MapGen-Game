@@ -14,6 +14,7 @@ public static class StringData
     public static string IsKnockedBack = "isKnockedBack";
     public static string IsInteracting = "isInteracting";
     public static string IsBasicAttacking = "isBasicAttacking";
+    public static string IsSkilling = "isSkilling";
     public static string IsUsingSkill = "isUsingSkill";
     public static string BasicAttack = "BasicAttack";
     public static string AttackSpeed = "attackSpeed";

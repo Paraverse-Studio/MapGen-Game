@@ -1,4 +1,5 @@
 using Paraverse.Combat;
+using Paraverse.Mob.Combat;
 using Paraverse.Mob.Stats;
 using Paraverse.Player;
 using UnityEngine;
@@ -9,14 +10,11 @@ public class SpinSkill : MobSkill, IMobSkill
     [SerializeField]
     protected float skillStartTimer = 3f;
     protected float skillCurTimer = 3f;
-    protected bool isSkilling = false;
-    [SerializeField]
-    protected string animBool = "isSkilling";
     [SerializeField]
     private float skillMoveSpeed = 3f;
 
     #region Public Methods
-    public override void ActivateSkill(Transform mob, PlayerInputControls input, Animator anim, IMobStats stats, Transform target = null)
+    public override void ActivateSkill(MobCombat mob, PlayerInputControls input, Animator anim, IMobStats stats, Transform target = null)
     {
         base.ActivateSkill(mob, input, anim, stats, target);
         if (null == controller) controller = mob.GetComponent<PlayerController>();
@@ -29,7 +27,6 @@ public class SpinSkill : MobSkill, IMobSkill
     {
         base.SkillUpdate();
         SkillHander();
-        anim.SetBool(animBool, isSkilling);
     }
 
     /// <summary>
@@ -52,7 +49,7 @@ public class SpinSkill : MobSkill, IMobSkill
     #region Private Methods
     protected void SkillHander()
     {
-        if (isSkilling)
+        if (_skillOn)
         {
             if (skillCurTimer > 0)
             {
@@ -75,7 +72,7 @@ public class SpinSkill : MobSkill, IMobSkill
         attackColliderGO.SetActive(true);
         skillCurTimer = skillStartTimer;
         controller.IsInvulnerable = true;
-        isSkilling = true;
+        _skillOn = true;
     }
 
     protected void DisableColldier()
@@ -83,7 +80,7 @@ public class SpinSkill : MobSkill, IMobSkill
         attackColliderGO.SetActive(false);
         skillCurTimer = skillStartTimer;
         controller.IsInvulnerable = false;
-        isSkilling = false;
+        _skillOn = false;
     }
     #endregion
 }

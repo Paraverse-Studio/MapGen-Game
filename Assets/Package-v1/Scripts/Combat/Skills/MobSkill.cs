@@ -9,7 +9,7 @@ namespace Paraverse.Combat
     public class MobSkill : MonoBehaviour, IMobSkill
     {
         #region Variables
-        protected Transform mob;
+        protected MobCombat mob;
         protected Transform target;
         protected PlayerInputControls input;
         protected Animator anim;
@@ -42,16 +42,19 @@ namespace Paraverse.Combat
         protected GameObject attackColliderGO;
         protected AttackCollider attackCollider;
 
-        [SerializeField, Header("Projectile Values")]
-        protected ProjectileData projData;
+        [Header("Projectile Values")]
+        public ProjectileData projData;
 
         [Header("Damage Values")]
         [SerializeField, Range(0, 10)]
         protected float damageRatio = 1;
+
+        public bool skillOn { get { return _skillOn; } }
+        protected bool _skillOn = false;
         #endregion
 
         #region Public Methods
-        public virtual void ActivateSkill(Transform mob, PlayerInputControls input, Animator anim, IMobStats stats, Transform target = null)
+        public virtual void ActivateSkill(MobCombat mob, PlayerInputControls input, Animator anim, IMobStats stats, Transform target = null)
         {
             this.mob = mob;
             this.target = target;
@@ -64,7 +67,7 @@ namespace Paraverse.Combat
             if (null == attackCollider && null != attackColliderGO)
             {
                 attackCollider = attackColliderGO.GetComponent<AttackCollider>();
-                attackCollider.Init(mob.GetComponent<MobCombat>(), stats);
+                attackCollider.Init(mob, stats);
             }
         }
 
@@ -88,6 +91,7 @@ namespace Paraverse.Combat
         {
             if (CanUseSkill())
             {
+                _skillOn = true;
                 curCooldown = cooldown;
                 stats.UpdateCurrentEnergy(-cost);
                 anim.Play(animName);
@@ -129,7 +133,7 @@ namespace Paraverse.Combat
         {
             if (target == null) return true;
 
-            float disFromTarget = ParaverseHelper.GetDistance(mob.position, target.position);
+            float disFromTarget = ParaverseHelper.GetDistance(mob.transform.position, target.position);
 
             return disFromTarget <= _range;
         }

@@ -194,7 +194,7 @@ namespace Paraverse.Player
             anim.SetBool(StringData.IsKnockedBack, IsKnockedBack);
             _isInteracting = anim.GetBool(StringData.IsInteracting);
             _isBasicAttacking = anim.GetBool(StringData.IsBasicAttacking);
-            _isUsingSkill = anim.GetBool(StringData.IsUsingSkill);
+            _isUsingSkill = anim.GetBool(StringData.IsSkilling);
         }
 
         private void MovementHandler()
