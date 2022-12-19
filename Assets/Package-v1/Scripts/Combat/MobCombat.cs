@@ -187,8 +187,8 @@ namespace Paraverse.Mob.Combat
             if (projData.projHeld != null)
                 projData.projHeld.SetActive(false);
 
-            Vector3 playerPos = new Vector3(player.position.x, player.position.y + 0.5f, player.position.z);
-            Vector3 targetDir = (playerPos - transform.position).normalized;
+            Vector3 playerPos = (player.position - transform.position).normalized;
+            Vector3 targetDir = new Vector3(transform.forward.x, playerPos.y, transform.forward.z);
             Quaternion lookRot = Quaternion.LookRotation(targetDir);
 
             // Instantiate and initialize projectile
