@@ -192,7 +192,7 @@ namespace Paraverse.Mob.Combat
 
             // Instantiate and initialize projectile
             GameObject go = Instantiate(projData.projPf, projData.projOrigin.position, lookRot);
-            Projectile proj = go.GetComponent<Projectile>();
+            Projectile proj = go.GetComponentInChildren<Projectile>();
             proj.Init(this, targetDir, projData.basicAtkProjSpeed, basicAtkRange, basicAtkDmgRatio * stats.AttackDamage.FinalValue);
         }
 
