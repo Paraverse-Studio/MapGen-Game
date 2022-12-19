@@ -45,7 +45,7 @@ namespace Paraverse.Mob.Combat
 
         public float BasicAtkRange { get { return basicAtkRange; } }
         protected bool _isAttackLunging = false;
-        public bool IsBasicAttacking {  get { return _isBasicAttacking; } }
+        public bool IsBasicAttacking { get { return _isBasicAttacking; } }
         protected bool _isBasicAttacking = false;
         // Returns true when character is within basic attack range and cooldown is 0.
         public bool CanBasicAtk { get { return distanceFromTarget <= basicAtkRange && curBasicAtkCd <= 0; } }
@@ -88,7 +88,7 @@ namespace Paraverse.Mob.Combat
                 // Checks if melee users have basic attack collider script on weapon
                 if (basicAtkCollider == null)
                 {
-                    Debug.LogError(gameObject.name + " needs to have a basic attack collider!");
+                    Debug.LogWarning(gameObject.name + " needs to have a basic attack collider!");
                     return;
                 }
                 basicAtkCollider.SetActive(true);
@@ -180,7 +180,7 @@ namespace Paraverse.Mob.Combat
         /// <summary>
         /// Fires a projectile and disables the projectile held by the mob (ONLY if mob is holding a proj).
         /// </summary>
-        public void FireProjectile()
+        public virtual void FireProjectile()
         {
             // Archers may hold an arrow which needs to be set to off/on when firing
             if (projData.projHeld != null)
@@ -191,9 +191,9 @@ namespace Paraverse.Mob.Combat
             Quaternion lookRot = Quaternion.LookRotation(targetDir);
 
             // Instantiate and initialize projectile
-            GameObject go = Instantiate(projData.projPf, projData.projOrigin.position, lookRot);
-            Projectile proj = go.GetComponentInChildren<Projectile>();
-            proj.Init(this, targetDir, projData.basicAtkProjSpeed, basicAtkRange, basicAtkDmgRatio * stats.AttackDamage.FinalValue);
+            //GameObject go = Instantiate(projData.projPf, projData.projOrigin.position, lookRot);
+            //Projectile proj = go.GetComponent<Projectile>();
+            //proj.Init(this, targetDir, projData.basicAtkProjSpeed, basicAtkRange, basicAtkDmgRatio * stats.AttackDamage.FinalValue);
         }
 
         /// <summary>

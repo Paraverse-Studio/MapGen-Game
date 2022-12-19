@@ -19,22 +19,19 @@ namespace Paraverse.Player
         private float maxComboResetTimer = 1f;
         private float curCombatResetTimer;
 
+        private int usingSkillIdx;
+
         public bool CanComboAttackTwo { get { return _canComboAttackTwo; } }
         private bool _canComboAttackTwo = false;
         public bool CanComboAttackThree { get { return _canComboAttackThree; } }
         private bool _canComboAttackThree = false;
+        public bool IsSkilling { get { return _isSkilling; } }
+        protected bool _isSkilling = false;
 
 
         // Skills 
         [SerializeField]
-        private List<MobSkill> ActiveSkills = new List<MobSkill>();
-        [SerializeField]
-        private List<MobSkill> SkillsContainer = new List<MobSkill>();
-        [SerializeField, Tooltip("Max allowed active skills.")]
-        private int maxActiveSkills = 1;
-
-        [SerializeField]
-        private List<MobSkill> SKILLS = new List<MobSkill>();
+        private List<MobSkill> skills = new List<MobSkill>();
         #endregion
 
         #region Start & Update Methods
@@ -45,65 +42,30 @@ namespace Paraverse.Player
             input = GetComponent<PlayerInputControls>();
             input.OnBasicAttackEvent += ApplyBasicAttack;
 
-            for (int i = 0; i < ActiveSkills.Count; i++)
+            for (int i = 0; i < skills.Count; i++)
             {
-                ActiveSkills[i].ActivateSkill(transform, input, anim, stats);
+                skills[i].ActivateSkill(this, input, anim, stats);
             }
         }
 
-        private int counter = 0;
-        private int activeCounter = 0;
         protected override void Update()
         {
             base.Update();
             AnimationHandler();
             BasicAttackComboHandler();
 
-            for (int i = 0; i < ActiveSkills.Count; i++)
+            bool usingSkill = false;
+            for (int i = 0; i < skills.Count; i++)
             {
-                ActiveSkills[i].SkillUpdate();
-            }
-
-            if (Input.GetKeyDown(KeyCode.N))
-            {
-                switch (counter)
+                skills[i].SkillUpdate();
+                if (skills[i].skillOn)
                 {
-                    case 0:
-                        AddToSkillsContainer(SKILLS[0]);
-                        break;
-                    case 1:
-                        AddToSkillsContainer(SKILLS[1]);
-                        break;
-                    case 2:
-                        AddToSkillsContainer(SKILLS[2]);
-                        break;
-                    case 3:
-                        AddToSkillsContainer(SKILLS[3]);
-                        break;
+                    usingSkill = true;
+                    usingSkillIdx = i;
                 }
-                counter++;
             }
-            if (Input.GetKeyDown(KeyCode.M))
-            {
-                switch (activeCounter)
-                {
-                    case 0:
-                        AddToActiveSkills(SkillsContainer[0]);
-                        break;
-                    case 1:
-                        AddToActiveSkills(SkillsContainer[1]);
-                        break;
-                    case 2:
-                        AddToActiveSkills(SkillsContainer[2]);
-                        break;
-                    case 3:
-                        AddToActiveSkills(SkillsContainer[3]);
-                        break;
-                }
-                activeCounter++;
-                if (activeCounter > 3)
-                    activeCounter = 0;
-            }
+            anim.SetBool(StringData.IsUsingSkill, usingSkill);
+            _isSkilling = anim.GetBool(StringData.IsSkilling);
         }
         #endregion
 
@@ -193,16 +155,16 @@ namespace Paraverse.Player
         /// <param name="skill"></param>
         public void AddToActiveSkills(MobSkill skill)
         {
-            if (ActiveSkills.Contains(skill))
+            if (skills.Contains(skill))
             {
                 Debug.Log(skill.Name + " already exists in the Active Skills OR you have max number of active skills.");
                 return;
             }
-            if (ActiveSkills.Count > 0)
-                RemoveFromActiveSkills(ActiveSkills[ActiveSkills.Count-1]);
+            if (skills.Count > 0)
+                RemoveFromActiveSkills(skills[skills.Count-1]);
             
-            ActiveSkills.Add(skill);
-            skill.ActivateSkill(transform, input, anim, stats);
+            skills.Add(skill);
+            skill.ActivateSkill(this, input, anim, stats);
         }
 
         /// <summary>
@@ -212,42 +174,14 @@ namespace Paraverse.Player
         public void RemoveFromActiveSkills(MobSkill skill)
         {
             Debug.Log("skill: " + skill.Name);
-            if (ActiveSkills.Count <= 0)
+            if (skills.Count <= 0)
             {
                 Debug.Log("No skill exists in Active Skills.");
                 return;
             }
             skill.DeactivateSkill(input);
-            ActiveSkills.Remove(skill);
-            Debug.Log("Remove skill: " + skill.Name + " from Active Skills: " + ActiveSkills.Count);
-        }
-
-        /// <summary>
-        /// Adds skills to mobs skills container.
-        /// </summary>
-        /// <param name="skill"></param>
-        public void AddToSkillsContainer(MobSkill skill)
-        {
-            if (SkillsContainer.Contains(skill))
-            {
-                Debug.Log(skill.Name + " already exists in the Skills Container.");
-                return;
-            }
-            SkillsContainer.Add(skill);
-        }
-
-        /// <summary>
-        /// Removes skill from mobs skills container. 
-        /// </summary>
-        /// <param name="skill"></param>
-        public void RemoveFromSkillsContainer(MobSkill skill)
-        {
-            if (SkillsContainer.Count <= 0)
-            {
-                Debug.Log("No skill exists in Skills Container.");
-                return;
-            }
-            SkillsContainer.Remove(skill);
+            skills.Remove(skill);
+            Debug.Log("Remove skill: " + skill.Name + " from Active Skills: " + skills.Count);
         }
         #endregion
 
@@ -262,6 +196,35 @@ namespace Paraverse.Player
         {
             ResetAnimationComboStates();
             anim.SetBool(StringData.CanBasicAttackThree, true);
+        }
+
+        public override void FireProjectile()
+        {
+            ProjectileData data;
+
+            if (IsSkilling)
+                data = skills[usingSkillIdx].projData;
+            else
+                data = projData;
+
+            Debug.Log(
+                "data - projPf: " + data.projPf +
+                "data -  projHeld: " + data.projHeld +
+                "data - projOrigin: " + data.projOrigin +
+                "data - basicAtkProjSpeed: " + data.basicAtkProjSpeed);
+
+            // Archers may hold an arrow which needs to be set to off/on when firing
+            if (data.projHeld != null)
+                data.projHeld.SetActive(false);
+
+            Vector3 playerPos = new Vector3(player.position.x, player.position.y + 0.5f, player.position.z);
+            Vector3 targetDir = (playerPos - transform.position).normalized;
+            Quaternion lookRot = Quaternion.LookRotation(targetDir);
+
+            //// Instantiate and initialize projectile
+            //GameObject go = Instantiate(projData.projPf, projData.projOrigin.position, lookRot);
+            //Projectile proj = go.GetComponent<Projectile>();
+            //proj.Init(this, targetDir, projData.basicAtkProjSpeed, basicAtkRange, basicAtkDmgRatio * stats.AttackDamage.FinalValue);
         }
         #endregion
     }
