@@ -208,8 +208,8 @@ GameObject:
   - component: {fileID: 5125661759958323763}
   - component: {fileID: 5125661759958323762}
   m_Layer: 0
-  m_Name: StumpEnt
-  m_TagString: Untagged
+  m_Name: Wraith Stump
+  m_TagString: Enemy
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
@@ -223,7 +223,7 @@ Transform:
   m_GameObject: {fileID: 5125661759965749517}
   m_LocalRotation: {x: -0, y: -0, z: -0, w: 1}
   m_LocalPosition: {x: 0, y: 0, z: 0}
-  m_LocalScale: {x: 1, y: 1, z: 1}
+  m_LocalScale: {x: 1.3, y: 1.3, z: 1.3}
   m_ConstrainProportionsScale: 0
   m_Children:
   - {fileID: 5125661759965265199}
@@ -286,8 +286,8 @@ CharacterController:
   serializedVersion: 2
   m_Height: 2
   m_Radius: 0.5
-  m_SlopeLimit: 45
-  m_StepOffset: 0.3
+  m_SlopeLimit: 35
+  m_StepOffset: 0.7
   m_SkinWidth: 0.08
   m_MinMoveDistance: 0.001
   m_Center: {x: 0, y: 1, z: 0}
@@ -317,7 +317,7 @@ MonoBehaviour:
   stoppingDistance: 4
   detectionRadius: 5
   pursueRadius: 7
-  atkDashForce: 20
+  atkDashForce: 16
   knockForce: 5
   maxKnockbackRange: 1.5
   maxKnockbackDuration: 1
@@ -339,7 +339,7 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   maxHealth: 100
   _curHealth: 100
-  attackDamage: 5
+  attackDamage: 10
   attackSpeed: 0.2
   moveSpeed: 2
   maxEnergy: 100
@@ -478,7 +478,7 @@ SkinnedMeshRenderer:
   m_RenderingLayerMask: 1
   m_RendererPriority: 0
   m_Materials:
-  - {fileID: 2100000, guid: ef5d6bba4e4cdf74cb003b5ea3c10743, type: 2}
+  - {fileID: 2100000, guid: 48c8af70a6feccf49b79df89a8838117, type: 2}
   m_StaticBatchInfo:
     firstSubMesh: 0
     subMeshCount: 0
