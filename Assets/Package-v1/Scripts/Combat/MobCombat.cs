@@ -69,6 +69,7 @@ namespace Paraverse.Mob.Combat
             if (controller.IsDead) return;
 
             distanceFromTarget = ParaverseHelper.GetDistance(transform.position, player.position);
+            _isBasicAttacking = anim.GetBool(StringData.IsBasicAttacking);
             AttackCooldownHandler();
         }
         #endregion
@@ -191,9 +192,9 @@ namespace Paraverse.Mob.Combat
             Quaternion lookRot = Quaternion.LookRotation(targetDir);
 
             // Instantiate and initialize projectile
-            //GameObject go = Instantiate(projData.projPf, projData.projOrigin.position, lookRot);
-            //Projectile proj = go.GetComponent<Projectile>();
-            //proj.Init(this, targetDir, projData.basicAtkProjSpeed, basicAtkRange, basicAtkDmgRatio * stats.AttackDamage.FinalValue);
+            GameObject go = Instantiate(projData.projPf, projData.projOrigin.position, lookRot);
+            Projectile proj = go.GetComponent<Projectile>();
+            proj.Init(this, targetDir, projData.basicAtkProjSpeed, basicAtkRange, basicAtkDmgRatio * stats.AttackDamage.FinalValue);
         }
 
         /// <summary>

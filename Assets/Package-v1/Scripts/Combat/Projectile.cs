@@ -47,6 +47,20 @@ namespace Paraverse
             transform.position += (target * speed * Time.deltaTime);
         }
         #endregion
+        public void Init(MobCombat mob, Vector3 target, float damage)
+        {
+            this.target = target;
+            this.mob = mob;
+            this.damage = damage;
+        }
+
+        public void Init(MobCombat mob, Vector3 target, float range, float damage)
+        {
+            this.target = target;
+            this.mob = mob;
+            this.range = range;
+            this.damage = damage;
+        }
 
         public void Init(MobCombat mob, Vector3 target, float speed, float range, float damage)
         {

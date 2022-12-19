@@ -110,8 +110,8 @@ namespace Paraverse.Mob.Controller
         private bool _isInteracting = false;
         public bool IsBasicAttacking { get { return _isBasicAttacking; } }
         private bool _isBasicAttacking = false;
-        public bool IsUsingSkill { get { return _isUsingSkill; } }
-        private bool _isUsingSkill = false;
+        public bool IsSkilling { get { return _isSkilling; } }
+        private bool _isSkilling = false;
         public bool IsKnockedBack { get { return _isKnockedBack; } }
         private bool _isKnockedBack = false;
         public bool IsDead { get { return _isDead; } }
@@ -158,6 +158,8 @@ namespace Paraverse.Mob.Controller
         private void Update()
         {
             _isInteracting = anim.GetBool(StringData.IsInteracting);
+            _isBasicAttacking = anim.GetBool(StringData.IsBasicAttacking);
+            _isSkilling = anim.GetBool(StringData.IsSkilling);
 
             DeathHandler();
             if (_isDead) return;
