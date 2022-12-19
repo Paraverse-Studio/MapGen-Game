@@ -425,9 +425,9 @@ namespace Paraverse.Player
 
         private void TargetLock()
         {
-            _target = TargetLockSystem.Instance.ToggleSelect();
+            _target = SelectableSystem.Instance.ToggleSelect();
             Debug.Log("Pressed shift, target is: " + _target);            
-            headIK.SetLookAtObj(_target);
+            //headIK.SetLookAtObj(_target);
         }
 
         #endregion

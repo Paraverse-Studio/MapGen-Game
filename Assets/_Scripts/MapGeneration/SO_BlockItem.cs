@@ -8,6 +8,7 @@ public enum BlockType
     dirt,
     water,
     foundation,
+    bridge,
     propPart
 }
 
@@ -23,14 +24,21 @@ public class SO_BlockItem : ScriptableObject
         public bool z;
     }
 
+    [Header("—————  Basics  ————— ")]
     public BlockType blockType;
-    public Color blockColour;
     public SingleLayer layer;
+
+    [Header("—————  Modifications  —————")]
     public Vector3 defaultScale = Vector3.one;
     public Vector3 defaultOffset = Vector3.zero;
 
     public RandomizeRotation rotationRandomization = new RandomizeRotation();
 
+    [Header("—————  Physical  —————")]
     public GameObject[] prefabVariations;
+
+    [Header("—————  Props  —————")]
+    public float propSpawnChance;
+    public GameObject[] blockFoliage;
 
 }

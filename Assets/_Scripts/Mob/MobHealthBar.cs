@@ -111,7 +111,9 @@ public class MobHealthBar : MonoBehaviour
 
 
         // Energy
-        _energyBar.fillAmount = _energy / _totalEnergy;
+        float goalAmount = _energy / _totalEnergy;
+        if (_energyBar.fillAmount < goalAmount) _energyBar.fillAmount = Mathf.Lerp(_energyBar.fillAmount, goalAmount, Time.deltaTime * 10f);
+        else _energyBar.fillAmount = goalAmount;
 
         _energyLerpBar.fillAmount = Mathf.Lerp(_energyLerpBar.fillAmount, _energyBar.fillAmount, Time.deltaTime * 2f);
     }

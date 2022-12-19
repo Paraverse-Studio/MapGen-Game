@@ -7,9 +7,7 @@ public static class UtilityFunctions
     
     public static bool IsDistanceLessThan(Vector3 a, Vector3 b, float compareValue)
     {
-        float dist = (a - b).sqrMagnitude;
-        if (dist < (compareValue * compareValue)) return true;
-        else return false;
+        return (a - b).sqrMagnitude < (compareValue * compareValue);
     }
 
     public static void UpdateLODlevels(Transform root)
@@ -17,8 +15,6 @@ public static class UtilityFunctions
         LODGroup[] objectLods = root.GetComponentsInChildren<LODGroup>();
         foreach (LODGroup lod in objectLods)
         {
-            LODGroup.crossFadeAnimationDuration = 0.3f;
-            lod.fadeMode = LODFadeMode.CrossFade;
             lod.animateCrossFading = true;
             lod.fadeMode = LODFadeMode.CrossFade;
             LODGroup.crossFadeAnimationDuration = 0.3f;

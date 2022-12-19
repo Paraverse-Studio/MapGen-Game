@@ -24,6 +24,7 @@ public struct BlockSet
     public SO_BlockItem dirt;
     public SO_BlockItem water;
     public SO_BlockItem foundation;
+    public SO_BlockItem bridge;
 }
 
 [System.Serializable]
@@ -56,10 +57,12 @@ public class MapGeneration : MonoBehaviour
         public GameObject endPoint;
     }
 
+    [System.Serializable]
     public struct GridOccupant
     {
         public Block block;
         public bool hasProp;
+        public bool hasWater;
     }
 
     [Header("Map Generation Data ")]
@@ -127,15 +130,15 @@ public class MapGeneration : MonoBehaviour
 
     private GridOccupant[,] gridOccupants;
 
-    private List<Block> allObjects = new List<Block>();
+    private List<Block> allObjects = new List<Block>(); // all ground-related blocks
     private List<Block> pathObjects = new List<Block>();
-    private List<GameObject> treeObjects = new List<GameObject>();
+    private List<GameObject> propObjects = new List<GameObject>();
     private List<GameObject> foundationObjects = new List<GameObject>();
     private List<Block> waterObjects = new List<Block>();
     private List<GameObject> enemyObjects = new List<GameObject>();
 
     private float progressValue;
-    private float progressTotal = 10f;
+    private float progressTotal = 11f;
     private int step = 0; // purely for debugging to detect step progress speed
 
     private WaitForSeconds processDelay;
@@ -161,9 +164,7 @@ public class MapGeneration : MonoBehaviour
     void Update()
     {
         UpdateLine();
-        if (Input.GetKeyDown(KeyCode.O)) RegenerateMap();
-
-        if (Input.GetKeyDown(KeyCode.R)) TeleportPlayer (centerPointWithY);
+        if (Input.GetKeyDown(KeyCode.R)) RegenerateMap();
     }
 
     public void RegenerateMap() => StartCoroutine(ERenegerateMap());
@@ -320,7 +321,7 @@ public class MapGeneration : MonoBehaviour
 
             allObjects.Clear();
             pathObjects.Clear();
-            treeObjects.Clear();
+            propObjects.Clear();
             foundationObjects.Clear();
             waterObjects.Clear();
             for (int i = 0; i < enemyObjects.Count; ++i) if (enemyObjects[i]) Destroy(enemyObjects[i]);
@@ -405,13 +406,18 @@ public class MapGeneration : MonoBehaviour
         /* * * * * DECORATIVE PROPS ON MAP * * * * * * */
         currentPaintingBlock = M.blockSet.water;
 
+        AddWaterToDips();
         PartitionProgress("");
         yield return processDelay;
-        AddWaterToDips();
         step = 7;
 
-        AddProps();
+        if (GlobalSettings.Instance.QualityLevel > 3) AddFoliage();        
         step = 8;
+        PartitionProgress("");
+        yield return processDelay;
+
+        AddProps();
+        step = 9;
         PartitionProgress("");
         yield return processDelay;
 
@@ -419,7 +425,7 @@ public class MapGeneration : MonoBehaviour
         /* * * * * * ADDING ENEMIES * * * * * * * * * */
         if (M.addEnemies)
         {
-            step = 9;
+            step = 10;
             PartitionProgress("Spawning dangerous enemies...");
             yield return processDelay;
 
@@ -433,7 +439,7 @@ public class MapGeneration : MonoBehaviour
         /* * * * * * * * * * * * * * * * * * * * * * * */
 
         /* * * * MISC STEPS (NOT RELATED TO MAP) * * */
-        step = 10;
+        step = 11;
         PartitionProgress("Applying final touches...");
         yield return processDelay;
 
@@ -546,10 +552,10 @@ public class MapGeneration : MonoBehaviour
         }
 
         // Randomizing the circle radius' off-set a bit
-        int randomizingCap = (int)(System.Math.Min(fillRadius.x, 2));
+        int randomizingCap = (int)(System.Math.Min(fillRadius.x, 3));
         int randomizedX = Random.Range(-randomizingCap, randomizingCap);
         int randomizedZ = Random.Range(-randomizingCap, randomizingCap);
-        Vector3 centerObjectOffsetted = obj.transform.position; // + new Vector3(randomizedX, 0, randomizedZ);
+        Vector3 centerObjectOffsetted = obj.transform.position + ((currentPaintingBlock == M.blockSet.dirt)? Vector3.zero : new Vector3(randomizedX, 0, randomizedZ));
 
         // Looping through all areas in the circle, and spawning another block
         for (float x = -thickness; x < thickness; x += 1f)
@@ -570,7 +576,7 @@ public class MapGeneration : MonoBehaviour
                     // which is to never have them on the lowest elevation layer, and if they are, elevate them
                     // (design choice: don't want dirt to be covered with water - dirt paths should always be clear to walk on)
                     if (M.raiseDirtLevel && null != replacedBlock && replacedBlock.type == M.blockSet.dirt)
-                    {
+                    {                        
                         ApplyBlockElevationRestrictions(replacedBlock);
                     }
                 }
@@ -582,6 +588,11 @@ public class MapGeneration : MonoBehaviour
     {
         if (Mathf.Abs(block.transform.position.y - YBoundary.y) < _EPSILON)
         {
+            if (M.blockSet.bridge)
+            {
+                block.type = M.blockSet.bridge;
+                block.UpdateBlock();
+            }
             ElevateBlock(true, block);
         }
     }
@@ -649,13 +660,18 @@ public class MapGeneration : MonoBehaviour
 
     // Given an object obj, and an elevation direction, lift/lower the object in that direction BUT
     // with the condition that no block around this block in 3x3 should end up 2-block vertically distanced
-    private void ElevateBlock(bool upOrDown, Block obj)
+    private void ElevateBlock(bool upOrDown, Block obj, float overrideElevationSize = -1f)
     {
         float extremeY;
         extremeY = GetExtremestAdjacentElevation(upOrDown ? ElevationLevel.lowest : ElevationLevel.highest, obj.gameObject);
 
-        float yValue = extremeY + ((upOrDown ? 1f : -1f) * M.blockRaiseSize);
-        yValue = Mathf.Clamp(yValue, YBoundary.y, YBoundary.x);
+        float elevationSize = M.blockRaiseSize;
+        if (overrideElevationSize != -1) elevationSize = overrideElevationSize;
+
+        float yValue = extremeY + ((upOrDown ? 1f : -1f) * elevationSize);
+
+        // this is so that these elevations don't create new extreme ends. That is to be determined purely from lump application rounds
+        yValue = Mathf.Clamp(yValue, YBoundary.y, YBoundary.x); 
 
         obj.transform.position = new Vector3(obj.transform.position.x, yValue, obj.transform.position.z);
 
@@ -700,9 +716,9 @@ public class MapGeneration : MonoBehaviour
         block.UpdateBlock();
         block.UpdateHistory("Spawned at " + spawnSpot);
 
-        if (utilizeY) return block;
-
         gridOccupants[(int)vec.x, (int)vec.z].block = block;
+
+        if (utilizeY) return block;
 
         UpdateBoundaryStats(obj.transform.position);
         return block;
@@ -824,7 +840,9 @@ public class MapGeneration : MonoBehaviour
 
             if (thisObject.position.y <= yLevelToMeasure)
             {
-                Vector3 spawnSpot = new Vector3(thisObject.position.x, YBoundary.y + M.blockRaiseSize, thisObject.transform.position.z);
+                Vector3 spawnSpot = new Vector3(thisObject.position.x, YBoundary.y + M.blockRaiseSize, thisObject.position.z);
+
+                GridOccupant gridSpot = GetGridOccupant(spawnSpot);
 
                 GameObject waterObj = Instantiate(blockPrefab, spawnSpot, Quaternion.identity);
                 waterObj.transform.parent = temporaryObjFolder.transform;
@@ -834,6 +852,10 @@ public class MapGeneration : MonoBehaviour
                     waterBlock.type = M.blockSet.water;
                     waterBlock.UpdateBlock();
                     waterObjects.Add(waterBlock);
+                    gridSpot.hasWater = true;
+                    allObjects[i].hasWater = true;
+
+                    gridSpot.block.gameObject.name = "WHATF";
                 }
             }
         }
@@ -851,7 +873,7 @@ public class MapGeneration : MonoBehaviour
         UtilityFunctions.UpdateLODlevels(obj.transform);
         GameLoopManager.Instance.EndPortal = obj;
         obj.SetActive(false);
-        treeObjects.Add(obj);
+        propObjects.Add(obj);
         obj.transform.parent = temporaryObjFolder.transform;
     }
 
@@ -875,20 +897,60 @@ public class MapGeneration : MonoBehaviour
 
             Vector3 spawnSpot = pathObjects[i].transform.position + new Vector3(xOffset, 0, zOffset);
 
-            GameObject closestPathPosition = GetClosestObject(spawnSpot, allObjects, 
+            GameObject closestPathObject = GetClosestObject(spawnSpot, allObjects, 
                 (Block b) =>
                 {
                     return !GetGridOccupant(b).hasProp;
-                });
+                }).gameObject;
 
             GameObject enemy = Instantiate(M.enemies[Random.Range(0, M.enemies.Length)],
-                closestPathPosition.transform.position + new Vector3(0, 0.5f, 0), Quaternion.identity);
+                closestPathObject.transform.position + new Vector3(0, 0.5f, 0), Quaternion.identity);
 
             enemy.name = "Enemy " + (enemyObjects.Count + 1);
             enemy.transform.parent = enemiesFolder;
             enemyObjects.Add(enemy);
             EnemiesManager.Instance.AddEnemy(enemy);
         }
+    }
+
+    private void AddFoliage()
+    {
+        int spread = M.foliageDensity;
+        
+        for (int xLoc = (int)xBoundary.x; xLoc < xBoundary.y; xLoc += spread)
+        {
+            for (int zLoc = (int)zBoundary.x; zLoc < zBoundary.y; zLoc += spread)
+            {
+                Vector3 location = new(xLoc, 0, zLoc);
+                if (!IsInGrid(location) || null == GetGridOccupant(location).block) continue;
+
+                Block b = GetGridOccupant(location).block;
+                SO_BlockItem type = b.type;
+
+                if (Random.Range(0, 1.0f) > b.type.propSpawnChance) continue;
+                
+                for (int x = -1; x < 2; ++x)
+                {
+                    for (int z = -1; z < 2; ++z)
+                    {
+                        Vector3 location2 = new Vector3(x, 0, z) + location;
+                        if (!IsInGrid(location2) || null == GetGridOccupant(location2).block) continue;
+                        GridOccupant gridOccupant = GetGridOccupant(location2);
+                        Block b2 = gridOccupant.block;
+                        if (b2.hasWater) continue;
+                        if (gridOccupant.hasProp || gridOccupant.hasWater) continue;
+                        if (type != b2.type) continue;
+
+                        GameObject foliage = Instantiate(type.blockFoliage[Random.Range(0, type.blockFoliage.Length)], b2.transform.position, Quaternion.identity);
+                        foliage.transform.position += new Vector3(0, 0.5f, 0);
+                        foliage.transform.rotation = Quaternion.AngleAxis(Random.Range(0, 360), Vector3.up);
+                        UtilityFunctions.UpdateLODlevels(foliage.transform);
+                        propObjects.Add(foliage);
+                        foliage.transform.parent = temporaryObjFolder.transform;
+                    }
+                }                    
+            }
+        }        
     }
 
     private void AddProps()
@@ -922,16 +984,16 @@ public class MapGeneration : MonoBehaviour
 
                 // Lastly, distance from path: by default, the chance to spawn a tree on any given block is 0%, but increases by
                 // X% for every distance unit away from the closest path block (design choice: spam props around edges of map, to make path clear)
-                GameObject closestPathPosition = GetClosestObject(spawnSpot, pathObjects);
+                GameObject closestPathObject = GetClosestObject(spawnSpot, pathObjects).gameObject;
                 float chanceOfSpawn = 0.0f;
-                chanceOfSpawn += (M.treeChanceGrowthRate * Mathf.Pow(Vector3.Distance(spawnSpot, closestPathPosition.transform.position), 1.175f)); //1.35f
+                chanceOfSpawn += (M.treeChanceGrowthRate * Mathf.Pow(Vector3.Distance(spawnSpot, closestPathObject.transform.position), 1.175f)); //1.35f
 
                 // Actually placing the prop
                 if (Random.Range(0f, 100f) < chanceOfSpawn)
                 {
                     GameObject obj = Instantiate(M.propSet.propPrefabs[Random.Range(0, M.propSet.propPrefabs.Length)], spawnSpot, Quaternion.identity);
                     UtilityFunctions.UpdateLODlevels(obj.transform);
-                    treeObjects.Add(obj);
+                    propObjects.Add(obj);
                     obj.transform.position += new Vector3(0, 0.5f, 0); // only 0.5f because the pivot point is center of block
                     obj.transform.parent = temporaryObjFolder.transform;
 
@@ -973,9 +1035,16 @@ public class MapGeneration : MonoBehaviour
             // RAISING edge blocks (so that anything, ie. water blocks, don't look awkward at edges)
             Vector3 objPos = allObjects[i].transform.position;
             Block obj = gridOccupants[(int)objPos.x, (int)objPos.z].block;
+
+            if (M.blockSet.foundation)
+            { 
+                obj.type = M.blockSet.foundation;
+                obj.UpdateBlock();
+            }
+
             if (null != obj && Mathf.Abs(objPos.y - YBoundary.y) < _EPSILON)
             {
-                ElevateBlock(true, obj);
+                ElevateBlock(true, obj, M.edgeRaiseSize);
             }
         }
     }
@@ -1074,7 +1143,12 @@ public class MapGeneration : MonoBehaviour
 
     public GridOccupant GetGridOccupant(Block b)
     {
-        GridOccupant occupant = gridOccupants[(int)b.gameObject.transform.position.x, (int)b.gameObject.transform.position.z];
+        return GetGridOccupant(b.gameObject.transform.position);
+    }
+
+    public GridOccupant GetGridOccupant(Vector3 v)
+    {
+        GridOccupant occupant = gridOccupants[(int)v.x, (int)v.z];
         return occupant;
     }
 
@@ -1102,15 +1176,15 @@ public class MapGeneration : MonoBehaviour
         else return false;
     }
 
-    public GameObject GetClosestBlock(Transform source)
+    public Block GetClosestBlock(Transform source)
     {
         return GetClosestObject(source.position, allObjects);
     }
 
     // Get closest valid block to a given vector
-    private GameObject GetClosestObject(Vector3 src, List<Block> list, System.Predicate<Block> condition = null)
+    private Block GetClosestObject(Vector3 src, List<Block> list, System.Predicate<Block> condition = null)
     {
-        GameObject closest = null;
+        Block closest = null;
         float closestDistanceSqr = Mathf.Infinity;
         Vector3 srcPosition = src;
         foreach (Block obj in list)
@@ -1122,7 +1196,7 @@ public class MapGeneration : MonoBehaviour
                 if (null == condition || condition(obj))
                 {
                     closestDistanceSqr = dSqrToTarget;
-                    closest = obj.gameObject;
+                    closest = obj;
                 }
             }
         }

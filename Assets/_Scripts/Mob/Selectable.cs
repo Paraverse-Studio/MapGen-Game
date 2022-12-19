@@ -27,7 +27,7 @@ public class Selectable : MonoBehaviour
     [HideInInspector]
     public Outline outline;
     [HideInInspector]
-    public float range;
+    public float Range;
 
     private bool _isSelected;
 
@@ -46,40 +46,40 @@ public class Selectable : MonoBehaviour
         outline = GetComponent<Outline>();
         if (!outline) outline = gameObject.AddComponent<Outline>();
 
-        range = 5f;
+        Range = 5f;
         switch (type)
         {
             case SelectableType.hostile:
-                range = 8f;
+                Range = 8f;
                 break;
             case SelectableType.interactive:
-                range = 4f;
+                Range = 4f;
                 break;
             case SelectableType.informational:
-                range = 4f;
+                Range = 4f;
                 break;
         }
-        if (rangeOverride > 0) range = rangeOverride;
+        if (rangeOverride > 0) Range = rangeOverride;
     }
 
     private void Start()
     {
-        if (TargetLockSystem.Instance) TargetLockSystem.Instance.Add(this);
+        if (SelectableSystem.Instance) SelectableSystem.Instance.Add(this);
     }
 
     private void OnEnable()
     {
-        if (TargetLockSystem.Instance) TargetLockSystem.Instance.Add(this);
+        if (SelectableSystem.Instance) SelectableSystem.Instance.Add(this);
     }
 
     private void OnDisable()
     {
-        if (TargetLockSystem.Instance) TargetLockSystem.Instance.Remove(this);
+        if (SelectableSystem.Instance) SelectableSystem.Instance.Remove(this);
     }
 
     private void OnDestroy()
     {
-        if (TargetLockSystem.Instance) TargetLockSystem.Instance.Remove(this);
+        if (SelectableSystem.Instance) SelectableSystem.Instance.Remove(this);
     }
 
     public void Select()

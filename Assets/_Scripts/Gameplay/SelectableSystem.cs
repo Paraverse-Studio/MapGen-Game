@@ -6,13 +6,12 @@ using System.Collections.Generic;
 using System;
 using Paraverse.Mob;
 
-public class TargetLockSystem : MonoBehaviour
+public class SelectableSystem : MonoBehaviour
 {
-    public static TargetLockSystem Instance;
+    public static SelectableSystem Instance;
 
     [Header("References")]
     public GameObject player;
-
     public Selectable Target;
 
     [Header("Target Outline")]
@@ -20,18 +19,22 @@ public class TargetLockSystem : MonoBehaviour
     public Color hostileOutlineColor;
     public Color neutralOutlineColor;
 
-    [Header("Events")]
-    public SelectableEvent OnTargetLocked = new SelectableEvent();
-    public SelectableEvent OnTargetUnlocked = new SelectableEvent();
-
-    private bool _continuousTargetting = false;
-
     private List<Selectable> _selectables = new List<Selectable>();
-
     public List<Selectable> Selectables
     {
         get { return _selectables; }
     }
+
+    [Header("Settings")]
+    [Tooltip("Don't deselect a target before this duration has passed")]
+    public float TargetMinimumDuration;
+
+    [Header("Events")]
+    public TransformEvent OnTargetLocked = new TransformEvent();
+    public TransformEvent OnTargetUnlocked = new TransformEvent();
+
+    private float _targetSelectedDuration = 0f;
+
 
     private void Awake()
     {
@@ -40,11 +43,16 @@ public class TargetLockSystem : MonoBehaviour
 
     private void Update()
     {
-        //if (_continuousTargetting && null == Target) SelectTarget();
-
-        if (Target && Vector3.Distance (player.transform.position, Target.transform.position) > Target.range)
+        if (Target)
         {
-            //DeselectTarget();
+            _targetSelectedDuration += Time.deltaTime;
+
+            if (Time.frameCount % 20 == 0 && 
+                _targetSelectedDuration > TargetMinimumDuration &&
+                (player.transform.position - Target.transform.position).sqrMagnitude > (Target.Range * Target.Range))
+            {
+                DeselectTarget();
+            }
         }
     }
 
@@ -80,12 +88,10 @@ public class TargetLockSystem : MonoBehaviour
     {
         if (Target)
         {
-            _continuousTargetting = false;
             DeselectTarget();
         }
         else
         {
-            _continuousTargetting = true;
             Selectable s = SelectTarget();
             if (s) return s.gameObject.transform;
         }
@@ -107,7 +113,7 @@ public class TargetLockSystem : MonoBehaviour
         {            
             float dist = Vector3.Distance(player.transform.position, obj.transform.position);
 
-            if (dist > obj.range) continue;
+            if (dist > obj.Range) continue;
 
             if (obj.priority == Selectable.SelectablePriority.whenIsolated)
                 dist *= 2f;
@@ -125,7 +131,7 @@ public class TargetLockSystem : MonoBehaviour
         {
             Target.Select();
 
-            OnTargetLocked?.Invoke(Target);
+            OnTargetLocked?.Invoke(Target.gameObject.transform);
 
             Target.outline.OutlineMode = Outline.Mode.OutlineAll;
             Target.outline.OutlineColor = hostileOutlineColor;
@@ -147,12 +153,12 @@ public class TargetLockSystem : MonoBehaviour
         if (!Target) return;
 
         Target.Deselect();
-
         Target.outline.enabled = false;
-
-        OnTargetUnlocked?.Invoke(Target);
-
         Target = null;
+        _targetSelectedDuration = 0f;
+
+        OnTargetUnlocked?.Invoke(null);
     }
 
+ 
 }

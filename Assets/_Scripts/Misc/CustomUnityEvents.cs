@@ -30,6 +30,11 @@ public class GameObjectEvent : UnityEvent<GameObject>
 }
 
 [System.Serializable]
+public class TransformEvent : UnityEvent<Transform>
+{
+}
+
+[System.Serializable]
 public class SelectableEvent : UnityEvent<Selectable>
 {
 }

@@ -17,13 +17,16 @@ public class Block : MonoBehaviour, ITickElement
         public GameObject overridePrefab;
     }
 
-    [Header("Block Item: ")]
+    [Header("Block Item")]
     public SO_BlockItem type;
     private SO_BlockItem oldType = null;
 
-    [Header("Override Settings: ")]
-    public BlockOverrideSettings overrideSettings;   
+    [Header("Properties")]
+    public bool hasProp;
+    public bool hasWater;
 
+    [Header("Override Settings: ")]
+    public BlockOverrideSettings overrideSettings;  
 
     // PRIVATE //////////////////////////
     private string blockName = "";
@@ -83,7 +86,7 @@ public class Block : MonoBehaviour, ITickElement
         UpdateSize();
         gameObject.layer = type.layer.LayerIndex;
         SetLayerRecursively(gameObject, gameObject.layer);
-        if (_collider) _collider.gameObject.layer = type.layer.LayerIndex;          
+        if (_collider) _collider.gameObject.layer = type.layer.LayerIndex;
     }
 
     // Not using Update(), because there's way too many blocks to have update on,

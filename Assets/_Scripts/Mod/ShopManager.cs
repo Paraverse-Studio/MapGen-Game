@@ -2,6 +2,9 @@ using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 using System.Linq;
+using UnityEngine.Events;
+using TMPro;
+using Paraverse.Mob.Stats;
 
 public class ShopManager : MonoBehaviour
 {
@@ -12,11 +15,14 @@ public class ShopManager : MonoBehaviour
     }
 
     #region public variables
+    public static ShopManager Instance;
+
     [Header("References:")]
     public GameObject ShopWindow;
+    public TextMeshProUGUI goldText;
 
     [Header("Elements:")]
-    public GameObject shopItemPrefab;
+    public ModCard shopItemPrefab;
     public Transform shopItemsFolder;
 
     [Header("Shop Algorithm:")]
@@ -28,19 +34,29 @@ public class ShopManager : MonoBehaviour
 
     [Header("Mods To Buy:")]
     public List<SO_Mod> AvailableMods;
+
+    [Header("Events:")]
+    public UnityEvent OnPurchaseItem = new UnityEvent();
     #endregion
 
     #region private variables
     private ContentFitterRefresher _refresher;
     private List<ModPair> _modPool = new();
     private List<SO_Mod> _purhasedMods = new();
+    MobStats _playerStats;
 
     #endregion
+
+    private void Awake()
+    {
+        Instance = this;
+    }
 
     // Start is called before the first frame update
     void Start()
     {
         _refresher = ShopWindow.GetComponent<ContentFitterRefresher>();
+        _playerStats = GlobalSettings.Instance.player.GetComponentInChildren<MobStats>();
     }
 
     private void ClearShop()
@@ -48,11 +64,20 @@ public class ShopManager : MonoBehaviour
         foreach (Transform c in shopItemsFolder) Destroy(c.gameObject);
     }
 
-    public void CalculateShopMods(int userCurrencyAmount, IEnumerable<SO_Mod> userCurrentMods)
+    public void CalculateShopItems(int userCurrencyAmount, IEnumerable<SO_Mod> userCurrentMods)
     {
-        // 1.0  Clear resources, and prepare
+        // 1.0  Clear resources
+        if (null == AvailableMods || AvailableMods.Count == 0)
+        {
+            Debug.Log("Shop Manager: There are no available mods in the list.");
+            return;
+        }
         ClearShop();
         _modPool.Clear();
+        for (int i = 0; i < AvailableMods.Count; ++ i)
+        {
+            if (null == AvailableMods[i]) AvailableMods.Remove(AvailableMods[i]);
+        }
 
         // 2.0  Refresh available mods list, sort them by their price
         AvailableMods.Sort((a, b) => a.Cost.CompareTo(b.Cost));
@@ -61,11 +86,11 @@ public class ShopManager : MonoBehaviour
         int userCurrencyIndex = -1;
         for (int i = 0; i < AvailableMods.Count; ++i)
         {
-            if (AvailableMods[i].Cost < userCurrencyAmount) userCurrencyIndex = userCurrencyAmount;
+            if (AvailableMods[i].Cost < userCurrencyAmount) userCurrencyIndex = i;
         }
 
         // 4.0  Then poll a couple of mods from that price point and below
-        for (int i = userCurrencyIndex - 1; i >= 0; --i)
+        for (int i = userCurrencyIndex; i >= 0; --i)
         {
             if (AvailableMods[i].CanPurchase(userCurrencyAmount, userCurrentMods))
             {
@@ -74,13 +99,20 @@ public class ShopManager : MonoBehaviour
             if (_modPool.Count >= pollQuantity) break;
         }
 
-        // 5.0  From the polled amount, randomly pick the amount of mods to show on shop
+        // 5.0  From the polled amount, randomly pick the mods to show on shop
         System.Random rand = new();
         _modPool = _modPool.OrderBy(_ => rand.Next()).ToList();
-        List<ModPair> _modsToShow = (List<ModPair>)_modPool.Take(cardsQuantity);
+
+        List<ModPair> _modsToShow = new();
+        int availableModPool = Mathf.Min(cardsQuantity, _modPool.Count);
+
+        for (int i = 0; i < availableModPool; ++i)
+        {
+            if (null != _modPool[i].mod) _modsToShow.Add(_modPool[i]);
+        }
 
         // 6.0  Show the finalized mods to the user
-        for (int i = 0; i < cardsQuantity; ++i)
+        for (int i = 0; i < _modsToShow.Count; ++i)
         {
             InstantiateModCard(_modsToShow[i]);
         }
@@ -90,9 +122,31 @@ public class ShopManager : MonoBehaviour
 
     private void InstantiateModCard(ModPair modPair)
     {
-        GameObject go = Instantiate(shopItemPrefab, shopItemsFolder);
+        ModCard modCard = Instantiate(shopItemPrefab, shopItemsFolder);
+        modCard.titleLabel.text = modPair.mod.Title;
+        modCard.imageHolder.sprite = modPair.mod.Image;
+        modCard.descriptionLabel.text = modPair.mod.Description;
+        modCard.costLabel.text = modPair.mod.Cost.ToString();
 
-        // Attach references here
+        modCard.purchaseButton.onClick.AddListener(() => OnClickPurchaseItem(modCard, modPair));
+    }
+
+    public void OnClickPurchaseItem(ModCard modCard, ModPair shopItem)
+    {
+        Debug.Log("Purchased item: " + AvailableMods[shopItem.index].Title);
+
+        _playerStats.UpdateGold(-shopItem.mod.Cost); // save it to db
+        goldText.text = _playerStats.Gold.ToString();
+
+        shopItem.mod.Activate();
+
+        _purhasedMods.Add(AvailableMods[shopItem.index]);
+        //AvailableMods.Remove(AvailableMods[shopItem.index]);
+        AvailableMods[shopItem.index] = null; // we do this instead of Remove() to retain index integrity
+        Destroy(modCard.gameObject);
+        OnPurchaseItem?.Invoke();
+
+        _refresher.RefreshContentFitters();
     }
 
 }

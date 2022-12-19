@@ -65,6 +65,10 @@ public class SO_MapGenData : ScriptableObject
     [Tooltip("Block elevation distance, a whole block up or half? Etc.")]
     public float blockRaiseSize = 1f;
 
+    [Range(0, 1)]
+    [Tooltip("Above, except this is for edge blocks")]
+    public float edgeRaiseSize = 1f;
+
     [Range(0, 40)]
     public int lumpDensity;
 
@@ -100,6 +104,9 @@ public class SO_MapGenData : ScriptableObject
     [Header("    _____________  MAP PROPS  _____________")]
     [Space(40)]
     public bool showProps;
+
+    [Range(0, 40)]
+    public int foliageDensity;
 
     [Header("TREE SPAWNING ")]
     [Range(0, 10)]

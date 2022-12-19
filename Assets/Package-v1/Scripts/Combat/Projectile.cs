@@ -21,6 +21,10 @@ namespace Paraverse
         private float damage;
         [SerializeField, Tooltip("Projectile is destroyed after this duration.")]
         private float deathTimer = 5f;
+
+        [Header("Special Properties")]
+        public bool pierce = false;
+
         private float curdeathTimer = 0f;
         private Vector3 origin;
         #endregion
@@ -60,7 +64,7 @@ namespace Paraverse
                 IMobController controller = other.GetComponent<IMobController>();
                 controller.Stats.UpdateCurrentHealth((int)-damage);
                 controller.ApplyKnockBack(mob.transform.position);
-                Destroy(gameObject);
+                if (!pierce) Destroy(gameObject);
             }
         }
     }
