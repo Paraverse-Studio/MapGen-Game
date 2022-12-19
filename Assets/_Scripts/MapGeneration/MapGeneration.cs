@@ -57,6 +57,7 @@ public class MapGeneration : MonoBehaviour
         public GameObject endPoint;
     }
 
+    [System.Serializable]
     public struct GridOccupant
     {
         public Block block;
@@ -715,9 +716,9 @@ public class MapGeneration : MonoBehaviour
         block.UpdateBlock();
         block.UpdateHistory("Spawned at " + spawnSpot);
 
-        if (utilizeY) return block;
-
         gridOccupants[(int)vec.x, (int)vec.z].block = block;
+
+        if (utilizeY) return block;
 
         UpdateBoundaryStats(obj.transform.position);
         return block;
@@ -839,7 +840,7 @@ public class MapGeneration : MonoBehaviour
 
             if (thisObject.position.y <= yLevelToMeasure)
             {
-                Vector3 spawnSpot = new Vector3(thisObject.position.x, YBoundary.y + M.blockRaiseSize, thisObject.transform.position.z);
+                Vector3 spawnSpot = new Vector3(thisObject.position.x, YBoundary.y + M.blockRaiseSize, thisObject.position.z);
 
                 GridOccupant gridSpot = GetGridOccupant(spawnSpot);
 
@@ -852,6 +853,9 @@ public class MapGeneration : MonoBehaviour
                     waterBlock.UpdateBlock();
                     waterObjects.Add(waterBlock);
                     gridSpot.hasWater = true;
+                    allObjects[i].hasWater = true;
+
+                    gridSpot.block.gameObject.name = "WHATF";
                 }
             }
         }
@@ -893,14 +897,14 @@ public class MapGeneration : MonoBehaviour
 
             Vector3 spawnSpot = pathObjects[i].transform.position + new Vector3(xOffset, 0, zOffset);
 
-            GameObject closestPathPosition = GetClosestObject(spawnSpot, allObjects, 
+            GameObject closestPathObject = GetClosestObject(spawnSpot, allObjects, 
                 (Block b) =>
                 {
                     return !GetGridOccupant(b).hasProp;
-                });
+                }).gameObject;
 
             GameObject enemy = Instantiate(M.enemies[Random.Range(0, M.enemies.Length)],
-                closestPathPosition.transform.position + new Vector3(0, 0.5f, 0), Quaternion.identity);
+                closestPathObject.transform.position + new Vector3(0, 0.5f, 0), Quaternion.identity);
 
             enemy.name = "Enemy " + (enemyObjects.Count + 1);
             enemy.transform.parent = enemiesFolder;
@@ -931,7 +935,10 @@ public class MapGeneration : MonoBehaviour
                     {
                         Vector3 location2 = new Vector3(x, 0, z) + location;
                         if (!IsInGrid(location2) || null == GetGridOccupant(location2).block) continue;
-                        Block b2 = GetGridOccupant(location2).block;
+                        GridOccupant gridOccupant = GetGridOccupant(location2);
+                        Block b2 = gridOccupant.block;
+                        if (b2.hasWater) continue;
+                        if (gridOccupant.hasProp || gridOccupant.hasWater) continue;
                         if (type != b2.type) continue;
 
                         GameObject foliage = Instantiate(type.blockFoliage[Random.Range(0, type.blockFoliage.Length)], b2.transform.position, Quaternion.identity);
@@ -977,9 +984,9 @@ public class MapGeneration : MonoBehaviour
 
                 // Lastly, distance from path: by default, the chance to spawn a tree on any given block is 0%, but increases by
                 // X% for every distance unit away from the closest path block (design choice: spam props around edges of map, to make path clear)
-                GameObject closestPathPosition = GetClosestObject(spawnSpot, pathObjects);
+                GameObject closestPathObject = GetClosestObject(spawnSpot, pathObjects).gameObject;
                 float chanceOfSpawn = 0.0f;
-                chanceOfSpawn += (M.treeChanceGrowthRate * Mathf.Pow(Vector3.Distance(spawnSpot, closestPathPosition.transform.position), 1.175f)); //1.35f
+                chanceOfSpawn += (M.treeChanceGrowthRate * Mathf.Pow(Vector3.Distance(spawnSpot, closestPathObject.transform.position), 1.175f)); //1.35f
 
                 // Actually placing the prop
                 if (Random.Range(0f, 100f) < chanceOfSpawn)
@@ -1169,15 +1176,15 @@ public class MapGeneration : MonoBehaviour
         else return false;
     }
 
-    public GameObject GetClosestBlock(Transform source)
+    public Block GetClosestBlock(Transform source)
     {
         return GetClosestObject(source.position, allObjects);
     }
 
     // Get closest valid block to a given vector
-    private GameObject GetClosestObject(Vector3 src, List<Block> list, System.Predicate<Block> condition = null)
+    private Block GetClosestObject(Vector3 src, List<Block> list, System.Predicate<Block> condition = null)
     {
-        GameObject closest = null;
+        Block closest = null;
         float closestDistanceSqr = Mathf.Infinity;
         Vector3 srcPosition = src;
         foreach (Block obj in list)
@@ -1189,7 +1196,7 @@ public class MapGeneration : MonoBehaviour
                 if (null == condition || condition(obj))
                 {
                     closestDistanceSqr = dSqrToTarget;
-                    closest = obj.gameObject;
+                    closest = obj;
                 }
             }
         }

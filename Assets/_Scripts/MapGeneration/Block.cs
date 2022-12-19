@@ -17,13 +17,16 @@ public class Block : MonoBehaviour, ITickElement
         public GameObject overridePrefab;
     }
 
-    [Header("Block Item: ")]
+    [Header("Block Item")]
     public SO_BlockItem type;
     private SO_BlockItem oldType = null;
 
-    [Header("Override Settings: ")]
-    public BlockOverrideSettings overrideSettings;   
+    [Header("Properties")]
+    public bool hasProp;
+    public bool hasWater;
 
+    [Header("Override Settings: ")]
+    public BlockOverrideSettings overrideSettings;  
 
     // PRIVATE //////////////////////////
     private string blockName = "";

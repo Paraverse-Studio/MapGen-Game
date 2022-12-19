@@ -37,7 +37,6 @@ public class ShopManager : MonoBehaviour
 
     [Header("Events:")]
     public UnityEvent OnPurchaseItem = new UnityEvent();
-
     #endregion
 
     #region private variables

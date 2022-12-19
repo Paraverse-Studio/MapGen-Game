@@ -4,15 +4,25 @@ using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.Events;
 
-public class EnemiesManager : MonoBehaviour
+public class EnemiesManager : MonoBehaviour, ITickElement
 {
     public static EnemiesManager Instance;
+
+    [Header("Properties")]
     public ParticleSystem deathVFX;
 
+    [Header("Performance")]
+    public float hideEnemyDistance;
+    public TickDelayOption checkDistanceDelay;
+
+    [Header("Enemies List")]
     [SerializeField]
     private List<MobController> _enemies = new List<MobController>();
 
+    [Header("Events")]
     public MobControllersListEvent OnEnemiesListUpdated = new MobControllersListEvent();
+
+    private Transform _player;
 
     public List<MobController> Enemies
     {
@@ -34,15 +44,24 @@ public class EnemiesManager : MonoBehaviour
     // Start is called before the first frame update
     void Start()
     {
-        
+        _player = GlobalSettings.Instance.player.transform;
+        TickManager.Instance?.Subscribe(this, gameObject, checkDistanceDelay);
     }
 
-    // Update is called once per frame
-    void Update()
+    public void Tick()
     {
-        
+        for(int i = 0; i < Enemies.Count; ++i)
+        {
+            if ((Enemies[i].transform.position - _player.position).sqrMagnitude > (hideEnemyDistance * hideEnemyDistance))
+            {
+                Enemies[i].gameObject.SetActive(false);
+            }
+            else
+            {
+                Enemies[i].gameObject.SetActive(true);
+            }
+        }
     }
-  
 
     public void ResetEnemiesList()
     {
@@ -80,4 +99,5 @@ public class EnemiesManager : MonoBehaviour
         Instantiate(deathVFX, t.transform.position, Quaternion.identity);
     }
 
+    
 }
