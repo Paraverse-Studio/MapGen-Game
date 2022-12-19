@@ -42,14 +42,14 @@ namespace Paraverse.IK
 
         private void OnEnable()
         {
-            SelectableSystem.Instance.OnTargetLocked.AddListener(SetLookAtObj);
-            SelectableSystem.Instance.OnTargetUnlocked.AddListener(SetLookAtToNull);
+            SelectableSystem.Instance?.OnTargetLocked.AddListener(SetLookAtObj);
+            SelectableSystem.Instance?.OnTargetUnlocked.AddListener(SetLookAtToNull);
         }
 
         private void OnDisable()
         {
-            SelectableSystem.Instance.OnTargetLocked.RemoveListener(SetLookAtObj);
-            SelectableSystem.Instance.OnTargetUnlocked.RemoveListener(SetLookAtToNull);
+            SelectableSystem.Instance?.OnTargetLocked.RemoveListener(SetLookAtObj);
+            SelectableSystem.Instance?.OnTargetUnlocked.RemoveListener(SetLookAtToNull);
         }
     }
 }

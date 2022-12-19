@@ -154,6 +154,14 @@ public class GameLoopManager : MonoBehaviour
                 _m.GetComponentInChildren<MobStats>().SetFullHealth();
             }
         }
+        if (Input.GetKeyDown(KeyCode.I))
+        {
+            List<MobController> m = EnemiesManager.Instance.Enemies;
+            foreach (MobController _m in m)
+            {
+                _m.GetComponentInChildren<MobStats>().UpdateCurrentHealth(-_m.GetComponentInChildren<MobStats>().CurHealth);
+            }
+        }
         if (Input.GetKeyDown(KeyCode.T))
         {
             ShopManager.Instance.CalculateShopItems(200, new List<SO_Mod>());

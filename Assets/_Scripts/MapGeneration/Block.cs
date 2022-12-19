@@ -83,7 +83,7 @@ public class Block : MonoBehaviour, ITickElement
         UpdateSize();
         gameObject.layer = type.layer.LayerIndex;
         SetLayerRecursively(gameObject, gameObject.layer);
-        if (_collider) _collider.gameObject.layer = type.layer.LayerIndex;          
+        if (_collider) _collider.gameObject.layer = type.layer.LayerIndex;
     }
 
     // Not using Update(), because there's way too many blocks to have update on,
