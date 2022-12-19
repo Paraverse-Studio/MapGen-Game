@@ -1344,6 +1344,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   targetTag: Player
+  dot: 0
 --- !u!1 &2739856676951319334
 GameObject:
   m_ObjectHideFlags: 0
@@ -1456,6 +1457,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   targetTag: Player
+  dot: 0
 --- !u!1 &3236425430432729743
 GameObject:
   m_ObjectHideFlags: 0
@@ -3141,7 +3143,7 @@ MonoBehaviour:
   pursueRadius: 10
   atkDashForce: 12
   knockForce: 5
-  maxKnockbackRange: 1.4
+  maxKnockbackRange: 1.5
   maxKnockbackDuration: 1
   checkFallRange: 2
   maxDeathTimerUponFall: 2
@@ -3164,10 +3166,11 @@ MonoBehaviour:
   basicAtkRange: 3
   basicAtkCollider: {fileID: 2739856676951319334}
   projUser: 0
-  projPf: {fileID: 0}
-  projHeld: {fileID: 0}
-  projOrigin: {fileID: 0}
-  basicAtkProjSpeed: 10
+  projData:
+    projPf: {fileID: 0}
+    projHeld: {fileID: 0}
+    projOrigin: {fileID: 0}
+    basicAtkProjSpeed: 10
 --- !u!114 &1810881194
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -3238,7 +3241,7 @@ MonoBehaviour:
   type: 0
   rangeOverride: -1
   outline: {fileID: 0}
-  range: 0
+  Range: 0
   OnSelected:
     m_PersistentCalls:
       m_Calls: []

@@ -141,7 +141,8 @@ public class GameLoopManager : MonoBehaviour
             UtilityFunctions.TeleportObject(player, MapGeneration.Instance.GetClosestBlock(player.transform).transform.position + new Vector3(0, 0.5f, 0));
         }
 
-
+        if (Input.GetKeyDown(KeyCode.F1)) GlobalSettings.Instance.QualityLevel = 1;
+        if (Input.GetKeyDown(KeyCode.F5)) GlobalSettings.Instance.QualityLevel = 5;
 
         if (Input.GetKeyDown(KeyCode.U)) EndPortal.SetActive(true);
         if (Input.GetKeyDown(KeyCode.Y))

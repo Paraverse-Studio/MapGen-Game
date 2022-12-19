@@ -11,7 +11,7 @@ namespace Paraverse.IK
 
         private void Start()
         {
-            anim = GetComponent<Animator>();
+            anim = GetComponent<Animator>();            
         }
 
         private void OnAnimatorIK()
@@ -33,6 +33,23 @@ namespace Paraverse.IK
         public void SetLookAtObj(Transform lookAtObj)
         {
             _lookAtObj = lookAtObj;
+        }
+
+        public void SetLookAtToNull(Transform lookAtObj)
+        {
+            _lookAtObj = null;
+        }
+
+        private void OnEnable()
+        {
+            SelectableSystem.Instance.OnTargetLocked.AddListener(SetLookAtObj);
+            SelectableSystem.Instance.OnTargetUnlocked.AddListener(SetLookAtToNull);
+        }
+
+        private void OnDisable()
+        {
+            SelectableSystem.Instance.OnTargetLocked.RemoveListener(SetLookAtObj);
+            SelectableSystem.Instance.OnTargetUnlocked.RemoveListener(SetLookAtToNull);
         }
     }
 }

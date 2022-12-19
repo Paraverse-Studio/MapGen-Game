@@ -30,8 +30,8 @@ public class SelectableSystem : MonoBehaviour
     public float TargetMinimumDuration;
 
     [Header("Events")]
-    public SelectableEvent OnTargetLocked = new SelectableEvent();
-    public SelectableEvent OnTargetUnlocked = new SelectableEvent();
+    public TransformEvent OnTargetLocked = new TransformEvent();
+    public TransformEvent OnTargetUnlocked = new TransformEvent();
 
     private float _targetSelectedDuration = 0f;
 
@@ -131,7 +131,7 @@ public class SelectableSystem : MonoBehaviour
         {
             Target.Select();
 
-            OnTargetLocked?.Invoke(Target);
+            OnTargetLocked?.Invoke(Target.gameObject.transform);
 
             Target.outline.OutlineMode = Outline.Mode.OutlineAll;
             Target.outline.OutlineColor = hostileOutlineColor;
@@ -157,7 +157,8 @@ public class SelectableSystem : MonoBehaviour
         Target = null;
         _targetSelectedDuration = 0f;
 
-        OnTargetUnlocked?.Invoke(Target);
+        OnTargetUnlocked?.Invoke(null);
     }
 
+ 
 }

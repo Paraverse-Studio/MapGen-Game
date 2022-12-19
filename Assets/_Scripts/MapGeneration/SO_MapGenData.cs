@@ -105,6 +105,9 @@ public class SO_MapGenData : ScriptableObject
     [Space(40)]
     public bool showProps;
 
+    [Range(0, 40)]
+    public int foliageDensity;
+
     [Header("TREE SPAWNING ")]
     [Range(0, 10)]
     public int treeSpawnDensity = 4;

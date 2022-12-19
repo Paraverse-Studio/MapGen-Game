@@ -37,6 +37,7 @@ public class FollowTarget : MonoBehaviour
         }
 
         Vector3 goalPosition = _offset + target.position;
+        Vector3 goalPositionOriginal = goalPosition;
         if (lerpY) goalPosition.y = Mathf.Lerp(transform.position.y, goalPosition.y, Time.deltaTime * lerpValue);
 
         if (smoothStepLerp > 0)
@@ -48,8 +49,8 @@ public class FollowTarget : MonoBehaviour
             transform.position = goalPosition;
         }
 
-        if (snapToFarDistance && Vector3.Distance(transform.position, goalPosition) > 10f) 
-            transform.position = goalPosition;
+        if (snapToFarDistance && (transform.position- goalPositionOriginal).sqrMagnitude > (10f * 10f)) 
+            transform.position = goalPositionOriginal;
 
     }
 

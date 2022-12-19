@@ -913,25 +913,39 @@ public class MapGeneration : MonoBehaviour
 
     private void AddFoliage()
     {
-        for (int i = 0; i < allObjects.Count; ++i)
+        int spread = M.foliageDensity;
+        
+        for (int xLoc = (int)xBoundary.x; xLoc < xBoundary.y; xLoc += spread)
         {
-            if (GetGridOccupant(allObjects[i]).hasWater)
+            for (int zLoc = (int)zBoundary.x; zLoc < zBoundary.y; zLoc += spread)
             {
-                Debug.Log("THIS WAS TRUUUUUUUUEEEEEEEEEEEEE!!!!!!!!!!!!!!!!!");
-                continue; // don't want tile-related foliage in water (make water related foliage here)
-            }
+                Vector3 location = new(xLoc, 0, zLoc);
+                if (!IsInGrid(location) || null == GetGridOccupant(location).block) continue;
 
-            Block b = allObjects[i];
-            if (Random.Range(0, 1.0f) <= b.type.propSpawnChance)
-            {
-                GameObject foliage = Instantiate(b.type.blockFoliage[Random.Range(0, b.type.blockFoliage.Length)], b.transform.position, Quaternion.identity);
-                foliage.transform.position += new Vector3(0, 0.5f, 0);
-                foliage.transform.rotation = Quaternion.AngleAxis(Random.Range(0, 360), Vector3.up);
-                UtilityFunctions.UpdateLODlevels(foliage.transform);
-                propObjects.Add(foliage);
-                foliage.transform.parent = temporaryObjFolder.transform;
+                Block b = GetGridOccupant(location).block;
+                SO_BlockItem type = b.type;
+
+                if (Random.Range(0, 1.0f) > b.type.propSpawnChance) continue;
+                
+                for (int x = -1; x < 2; ++x)
+                {
+                    for (int z = -1; z < 2; ++z)
+                    {
+                        Vector3 location2 = new Vector3(x, 0, z) + location;
+                        if (!IsInGrid(location2) || null == GetGridOccupant(location2).block) continue;
+                        Block b2 = GetGridOccupant(location2).block;
+                        if (type != b2.type) continue;
+
+                        GameObject foliage = Instantiate(type.blockFoliage[Random.Range(0, type.blockFoliage.Length)], b2.transform.position, Quaternion.identity);
+                        foliage.transform.position += new Vector3(0, 0.5f, 0);
+                        foliage.transform.rotation = Quaternion.AngleAxis(Random.Range(0, 360), Vector3.up);
+                        UtilityFunctions.UpdateLODlevels(foliage.transform);
+                        propObjects.Add(foliage);
+                        foliage.transform.parent = temporaryObjFolder.transform;
+                    }
+                }                    
             }
-        }
+        }        
     }
 
     private void AddProps()
