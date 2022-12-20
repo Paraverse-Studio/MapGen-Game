@@ -15,11 +15,11 @@ namespace Paraverse.Combat
         protected Animator anim;
         protected IMobStats stats;
 
-        public string Name { get { return _skillName; } }
+        public string Name { get { return _skillName; } set { _skillName = value; } }
         [SerializeField, Tooltip("Skill name.")]
         protected string _skillName = "";
 
-        public string Description { get { return _description; } }
+        public string Description { get { return _description; } set { _skillName = value; } }
         [SerializeField, TextArea(2, 3), Tooltip("Skill description.")]
         protected string _description = "";
 

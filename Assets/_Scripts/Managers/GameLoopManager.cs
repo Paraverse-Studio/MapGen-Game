@@ -145,11 +145,11 @@ public class GameLoopManager : MonoBehaviour
         if (Input.GetKeyDown(KeyCode.F1)) GlobalSettings.Instance.QualityLevel = 1;
         if (Input.GetKeyDown(KeyCode.F5)) GlobalSettings.Instance.QualityLevel = 5;
 
-        if (Input.GetKeyDown(KeyCode.U))
-        {
-            EndPortal.SetActive(true);
-            GameObject go = Instantiate(GlobalSettings.Instance.testGameObject, player.transform.position + new Vector3(0, 0.5f, 0), player.transform.rotation);
-        }
+        //if (Input.GetKeyDown(KeyCode.U))
+        //{
+        //    EndPortal.SetActive(true);
+        //    GameObject go = Instantiate(GlobalSettings.Instance.testGameObject, player.transform.position + new Vector3(0, 0.5f, 0), player.transform.rotation);
+        //}
         if (Input.GetKeyDown(KeyCode.Y))
         {
             playerStats.SetFullHealth();
@@ -169,6 +169,7 @@ public class GameLoopManager : MonoBehaviour
         }
         if (Input.GetKeyDown(KeyCode.T))
         {
+            ShopManager.Instance.ShopWindow.SetActive(!ShopManager.Instance.ShopWindow.activeSelf);
             ShopManager.Instance.CalculateShopItems(200, new List<SO_Mod>());
         }
     }

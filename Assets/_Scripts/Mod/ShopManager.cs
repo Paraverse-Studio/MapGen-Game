@@ -5,6 +5,7 @@ using System.Linq;
 using UnityEngine.Events;
 using TMPro;
 using Paraverse.Mob.Stats;
+using Paraverse.Player;
 
 public class ShopManager : MonoBehaviour
 {
@@ -43,6 +44,7 @@ public class ShopManager : MonoBehaviour
     private ContentFitterRefresher _refresher;
     private List<ModPair> _modPool = new();
     private List<SO_Mod> _purhasedMods = new();
+    GameObject _player;
     MobStats _playerStats;
 
     #endregion
@@ -56,6 +58,7 @@ public class ShopManager : MonoBehaviour
     void Start()
     {
         _refresher = ShopWindow.GetComponent<ContentFitterRefresher>();
+        _player = GlobalSettings.Instance.player;
         _playerStats = GlobalSettings.Instance.player.GetComponentInChildren<MobStats>();
     }
 
@@ -133,20 +136,21 @@ public class ShopManager : MonoBehaviour
 
     public void OnClickPurchaseItem(ModCard modCard, ModPair shopItem)
     {
+        // Logistics
         Debug.Log("Purchased item: " + AvailableMods[shopItem.index].Title);
 
-        _playerStats.UpdateGold(-shopItem.mod.Cost); // save it to db
+        _playerStats.UpdateGold(-shopItem.mod.Cost);
         goldText.text = _playerStats.Gold.ToString();
 
-        shopItem.mod.Activate();
-
         _purhasedMods.Add(AvailableMods[shopItem.index]);
-        //AvailableMods.Remove(AvailableMods[shopItem.index]);
         AvailableMods[shopItem.index] = null; // we do this instead of Remove() to retain index integrity
         Destroy(modCard.gameObject);
         OnPurchaseItem?.Invoke();
 
         _refresher.RefreshContentFitters();
+
+        // the mod itself handles what the mod will do for the player when activated
+        shopItem.mod.Activate(_player);
     }
 
 }
