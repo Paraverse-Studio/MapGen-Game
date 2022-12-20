@@ -53,7 +53,7 @@ namespace Paraverse.Player
             base.Update();
             AnimationHandler();
             BasicAttackComboHandler();
-
+            
             bool usingSkill = false;
             for (int i = 0; i < skills.Count; i++)
             {
@@ -207,24 +207,16 @@ namespace Paraverse.Player
             else
                 data = projData;
 
-            Debug.Log(
-                "data - projPf: " + data.projPf +
-                "data -  projHeld: " + data.projHeld +
-                "data - projOrigin: " + data.projOrigin +
-                "data - basicAtkProjSpeed: " + data.basicAtkProjSpeed);
-
             // Archers may hold an arrow which needs to be set to off/on when firing
             if (data.projHeld != null)
                 data.projHeld.SetActive(false);
 
-            Vector3 playerPos = new Vector3(player.position.x, player.position.y + 0.5f, player.position.z);
-            Vector3 targetDir = (playerPos - transform.position).normalized;
-            Quaternion lookRot = Quaternion.LookRotation(targetDir);
-
             //// Instantiate and initialize projectile
-            //GameObject go = Instantiate(projData.projPf, projData.projOrigin.position, lookRot);
-            //Projectile proj = go.GetComponent<Projectile>();
-            //proj.Init(this, targetDir, projData.basicAtkProjSpeed, basicAtkRange, basicAtkDmgRatio * stats.AttackDamage.FinalValue);
+            GameObject go = Instantiate(data.projPf, data.projOrigin.position, transform.rotation);
+            Projectile proj = go.GetComponent<Projectile>();
+            proj.Init(this, transform.forward, basicAtkDmgRatio * stats.AttackDamage.FinalValue);
+
+            skills[usingSkillIdx].skillOn = false;
         }
         #endregion
     }

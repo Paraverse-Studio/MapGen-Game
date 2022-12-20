@@ -1492,11 +1492,6 @@ MonoBehaviour:
   snapToFarDistance: 0
   lerpY: 0
   lerpValue: 0
---- !u!1 &127246888 stripped
-GameObject:
-  m_CorrespondingSourceObject: {fileID: 8226609649851606894, guid: 0cb8e2c7e1ff0ae4b9b69c45902519e2, type: 3}
-  m_PrefabInstance: {fileID: 714849718}
-  m_PrefabAsset: {fileID: 0}
 --- !u!1 &166201821
 GameObject:
   m_ObjectHideFlags: 0
@@ -3524,9 +3519,9 @@ MonoBehaviour:
   animName: SpinSlash
   attackColliderGO: {fileID: 502047795}
   projData:
-    projPf: {fileID: 1919281199}
-    projHeld: {fileID: 127246888}
-    projOrigin: {fileID: 0}
+    projPf: {fileID: 98397111005207279, guid: 9b601de79a043e140a973529dec2522a, type: 3}
+    projHeld: {fileID: 0}
+    projOrigin: {fileID: 1293426510}
     basicAtkProjSpeed: 15
   damageRatio: 1.5
   skillStartTimer: 3
@@ -16483,10 +16478,10 @@ MonoBehaviour:
   animName: SkillTwo
   attackColliderGO: {fileID: 0}
   projData:
-    projPf: {fileID: 0}
+    projPf: {fileID: 98397111005207279, guid: 9b601de79a043e140a973529dec2522a, type: 3}
     projHeld: {fileID: 0}
-    projOrigin: {fileID: 0}
-    basicAtkProjSpeed: 10
+    projOrigin: {fileID: 1551081357}
+    basicAtkProjSpeed: 18
   damageRatio: 1
 --- !u!4 &1264230143
 Transform:
@@ -16998,7 +16993,11 @@ PrefabInstance:
     - target: {fileID: 2956618024134931112, guid: aa4e16a1786ed124fa06618210886566, type: 3}
       propertyPath: skills.Array.data[0]
       value: 
-      objectReference: {fileID: 480862771}
+      objectReference: {fileID: 1264230142}
+    - target: {fileID: 2956618024134931112, guid: aa4e16a1786ed124fa06618210886566, type: 3}
+      propertyPath: skills.Array.data[1]
+      value: 
+      objectReference: {fileID: 1264230142}
     - target: {fileID: 2956618024134931112, guid: aa4e16a1786ed124fa06618210886566, type: 3}
       propertyPath: ActiveSkills.Array.size
       value: 1
@@ -17254,6 +17253,10 @@ PrefabInstance:
     - target: {fileID: 5485293303236546298, guid: aa4e16a1786ed124fa06618210886566, type: 3}
       propertyPath: m_LocalRotation.z
       value: -0.16308095
+      objectReference: {fileID: 0}
+    - target: {fileID: 6080363539117558812, guid: aa4e16a1786ed124fa06618210886566, type: 3}
+      propertyPath: m_IsActive
+      value: 0
       objectReference: {fileID: 0}
     - target: {fileID: 6495789465226524294, guid: aa4e16a1786ed124fa06618210886566, type: 3}
       propertyPath: m_LocalPosition.x
@@ -19672,6 +19675,37 @@ PrefabInstance:
       objectReference: {fileID: 0}
     m_RemovedComponents: []
   m_SourcePrefab: {fileID: 100100000, guid: 68f93de3c1cd8f64da4cd9e3fe69f53e, type: 3}
+--- !u!1 &1551081356
+GameObject:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  serializedVersion: 6
+  m_Component:
+  - component: {fileID: 1551081357}
+  m_Layer: 14
+  m_Name: GameObject
+  m_TagString: Untagged
+  m_Icon: {fileID: 0}
+  m_NavMeshLayer: 0
+  m_StaticEditorFlags: 0
+  m_IsActive: 1
+--- !u!4 &1551081357
+Transform:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1551081356}
+  m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
+  m_LocalPosition: {x: 0.307, y: 0.95, z: 1.421}
+  m_LocalScale: {x: 1, y: 1, z: 1}
+  m_ConstrainProportionsScale: 0
+  m_Children: []
+  m_Father: {fileID: 1293426510}
+  m_RootOrder: 6
+  m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
 --- !u!1001 &1702892485
 PrefabInstance:
   m_ObjectHideFlags: 0
@@ -22226,11 +22260,6 @@ PrefabInstance:
       objectReference: {fileID: 0}
     m_RemovedComponents: []
   m_SourcePrefab: {fileID: 100100000, guid: 8bb98344b55d49346b75bdd60e843507, type: 3}
---- !u!1 &1919281199 stripped
-GameObject:
-  m_CorrespondingSourceObject: {fileID: 3411919438641840453, guid: 68f93de3c1cd8f64da4cd9e3fe69f53e, type: 3}
-  m_PrefabInstance: {fileID: 1490379855}
-  m_PrefabAsset: {fileID: 0}
 --- !u!1001 &1933955200
 PrefabInstance:
   m_ObjectHideFlags: 0

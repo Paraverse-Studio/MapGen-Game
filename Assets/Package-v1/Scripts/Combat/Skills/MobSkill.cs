@@ -49,8 +49,7 @@ namespace Paraverse.Combat
         [SerializeField, Range(0, 10)]
         protected float damageRatio = 1;
 
-        public bool skillOn { get { return _skillOn; } }
-        protected bool _skillOn = false;
+        public bool skillOn { get; set; }
         #endregion
 
         #region Public Methods
@@ -91,7 +90,7 @@ namespace Paraverse.Combat
         {
             if (CanUseSkill())
             {
-                _skillOn = true;
+                skillOn = true;
                 curCooldown = cooldown;
                 stats.UpdateCurrentEnergy(-cost);
                 anim.Play(animName);

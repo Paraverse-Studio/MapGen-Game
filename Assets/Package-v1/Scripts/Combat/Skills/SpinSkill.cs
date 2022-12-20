@@ -49,7 +49,7 @@ public class SpinSkill : MobSkill, IMobSkill
     #region Private Methods
     protected void SkillHander()
     {
-        if (_skillOn)
+        if (skillOn)
         {
             if (skillCurTimer > 0)
             {
@@ -72,7 +72,7 @@ public class SpinSkill : MobSkill, IMobSkill
         attackColliderGO.SetActive(true);
         skillCurTimer = skillStartTimer;
         controller.IsInvulnerable = true;
-        _skillOn = true;
+        skillOn = true;
     }
 
     protected void DisableColldier()
@@ -80,7 +80,7 @@ public class SpinSkill : MobSkill, IMobSkill
         attackColliderGO.SetActive(false);
         skillCurTimer = skillStartTimer;
         controller.IsInvulnerable = false;
-        _skillOn = false;
+        skillOn = false;
     }
     #endregion
 }
