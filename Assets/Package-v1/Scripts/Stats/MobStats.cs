@@ -100,13 +100,12 @@ namespace Paraverse.Mob.Stats
         public void UpdateCurrentHealth(int amount)
         {
             _curHealth += amount;
-            OnHealthChange?.Invoke(_curHealth, maxHealth);
+            OnHealthChange?.Invoke(CurHealth, (int)MaxHealth.FinalValue);
         }
 
         public void SetFullHealth()
         {
-            _curHealth = (int)MaxHealth.FinalValue;
-            OnHealthChange?.Invoke(_curHealth, maxHealth);
+            UpdateCurrentHealth((int)(MaxHealth.FinalValue) - CurHealth);
         }
 
         public void UpdateAttackDamage(float amount)

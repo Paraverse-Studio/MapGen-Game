@@ -138,8 +138,8 @@ public class GameLoopManager : MonoBehaviour
 
         if (player.transform.position.y <= -25f)
         {
-            playerStats.UpdateCurrentHealth((int)(-playerStats.MaxHealth.FinalValue * GlobalValues.FallDamage / 100.0f));
             UtilityFunctions.TeleportObject(player, MapGeneration.Instance.GetClosestBlock(player.transform).transform.position + new Vector3(0, 0.5f, 0));
+            Invoke("PlayerFallDamage", 0.15f);
         }
 
         if (Input.GetKeyDown(KeyCode.F1)) GlobalSettings.Instance.QualityLevel = 1;
@@ -399,6 +399,11 @@ public class GameLoopManager : MonoBehaviour
 
 
     /* * * * * * *  P R E D I C A T E S  * * * * * * * * */
+
+    private void PlayerFallDamage()
+    {
+        playerStats.UpdateCurrentHealth((int)(-playerStats.MaxHealth.FinalValue * GlobalValues.FallDamage / 100.0f));
+    }
 
 
 }

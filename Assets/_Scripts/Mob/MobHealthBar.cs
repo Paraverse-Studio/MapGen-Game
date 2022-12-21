@@ -6,7 +6,6 @@ using UnityEngine.Events;
 using Paraverse.Mob.Stats;
 using TMPro;
 using Paraverse.Mob.Controller;
-using System;
 
 public class MobHealthBar : MonoBehaviour
 {
@@ -44,8 +43,8 @@ public class MobHealthBar : MonoBehaviour
     private bool _healthBarSetupComplete = false;
 
     // local copies (for lerping without constant reference)
-    private float _health = 1.0f;
-    private float _totalHealth = 2.0f;
+    private float _health = -1.0f;
+    private float _totalHealth = -1.0f;
     private float _energy = 1.0f;
     private float _totalEnergy = 2.0f;
 
@@ -106,7 +105,6 @@ public class MobHealthBar : MonoBehaviour
 
         // Health
         _healthBar.fillAmount = Mathf.Clamp(_health / _totalHealth, 0f, 1f);
-
         _healthDamageBar.fillAmount = Mathf.Lerp(_healthDamageBar.fillAmount, _healthBar.fillAmount, Time.deltaTime * 2f);
 
 
@@ -119,13 +117,35 @@ public class MobHealthBar : MonoBehaviour
     }
 
     // main updater
-    public void UpdateHealthBar(int currentHP = 1, int totalHP = 1)
+    public void UpdateHealthBar(int currentHP = -1, int totalHP = -1)
     {
-        _health = (float)currentHP;
+        int healthChange = (int)_health - currentHP;
+        if (_health == -1f) healthChange = totalHP - currentHP;
 
+        PopupTextOnHealthChange(healthChange);
+
+        _health = (float)currentHP;
         _totalHealth = (float)totalHP;
 
         if (_healthValueDisplay) _healthValueDisplay.text = currentHP + " / " + totalHP;
+    }
+
+    public void PopupTextOnHealthChange(int healthChange)
+    {
+        if (!GlobalSettings.Instance.ScreenSpaceCanvas)
+        {
+            Debug.Log("Health Bar: No screen space canvas provided in Global Settings to create pop up text!");
+            return;
+        }
+        GameObject popupObj = Instantiate(GlobalSettings.Instance.popupTextPrefab, GlobalSettings.Instance.ScreenSpaceCanvas.transform);
+        float xOffset = Random.Range(-0.25f, 0.25f);
+        float zOffset = Random.Range(-0.25f, 0.25f);
+        Vector3 screenPosition = Camera.main.WorldToScreenPoint(bodyToFollow.transform.position + new Vector3(xOffset, 0.5f, zOffset));
+        popupObj.transform.position = new Vector3(screenPosition.x, screenPosition.y, 0);
+
+        TextMeshProUGUI textObj = popupObj.GetComponentInChildren<TextMeshProUGUI>();
+        textObj.text = Mathf.Abs(healthChange).ToString();
+        textObj.color = (healthChange >= 0)? GlobalSettings.Instance.damageColour : GlobalSettings.Instance.healColour;
     }
 
     public void UpdateEnergyBar(int currentEnergy = 1, int totalEnergy = 1)
@@ -167,7 +187,7 @@ public class MobHealthBar : MonoBehaviour
         Collider collider = GetComponentInChildren<Collider>();
         Renderer renderer = GetComponentInChildren<Renderer>();
 
-        float height = collider ? collider.bounds.size.y : renderer.bounds.size.y;
+        float height = renderer ? renderer.bounds.size.y : collider.bounds.size.y;
 
         _nameLabel.text = gameObject.name;
         _healthBarObject.transform.SetParent(_healthBarsFolder);
@@ -181,7 +201,7 @@ public class MobHealthBar : MonoBehaviour
         if (settings.showWhenSelected) StartCoroutine(DoAfterDelay(0.2f, () => _healthBarObject.gameObject.SetActive(false))); 
     }
 
-    private IEnumerator DoAfterDelay(float f, Action action)
+    private IEnumerator DoAfterDelay(float f, System.Action action)
     {
         yield return new WaitForSeconds(f);
         action?.Invoke();
@@ -225,7 +245,6 @@ public class MobHealthBar : MonoBehaviour
 
     private void OnEnable()
     {
-        ResetHealth();
         if (_healthBarObject) _healthBarObject.SetActive(true);        
     }
 
