@@ -42,8 +42,9 @@ public class ShopManager : MonoBehaviour
 
     #region private variables
     private ContentFitterRefresher _refresher;
-    private List<ModPair> _modPool = new();
+    private List<ModPair> _modPool = new(); // used intermediate in the shop calculation
     private List<SO_Mod> _purhasedMods = new();
+    private List<ModCard> _modCards = new();
     GameObject _player;
     MobStats _playerStats;
 
@@ -65,6 +66,7 @@ public class ShopManager : MonoBehaviour
     private void ClearShop()
     {
         foreach (Transform c in shopItemsFolder) Destroy(c.gameObject);
+        _modCards.Clear();
     }
 
     public void CalculateShopItems(int userCurrencyAmount, IEnumerable<SO_Mod> userCurrentMods)
@@ -83,6 +85,7 @@ public class ShopManager : MonoBehaviour
         }
 
         // 2.0  Refresh available mods list, sort them by their price
+        goldText.text = _playerStats.Gold.ToString();
         AvailableMods.Sort((a, b) => a.Cost.CompareTo(b.Cost));
 
         // 3.0  Find user's currency index point: index of the highest priced item the user can buy
@@ -126,6 +129,7 @@ public class ShopManager : MonoBehaviour
     private void InstantiateModCard(ModPair modPair)
     {
         ModCard modCard = Instantiate(shopItemPrefab, shopItemsFolder);
+        _modCards.Add(modCard);
         modCard.titleLabel.text = modPair.mod.Title;
         modCard.imageHolder.sprite = modPair.mod.Image;
         modCard.descriptionLabel.text = modPair.mod.Description;
@@ -134,10 +138,30 @@ public class ShopManager : MonoBehaviour
         modCard.purchaseButton.onClick.AddListener(() => OnClickPurchaseItem(modCard, modPair));
     }
 
+    private void RefreshShopItemValues()
+    {
+        for (int i = 0; i < _modCards.Count; ++i)
+        {
+            if (null == _modCards[i]) continue;
+
+            if (_playerStats.Gold < System.Int32.Parse(_modCards[i].costLabel.text))
+            {
+                _modCards[i].costLabel.color = Color.red;
+                _modCards[i].cardLock.SetActive(true);
+            }
+        }
+    }
+
     public void OnClickPurchaseItem(ModCard modCard, ModPair shopItem)
     {
+        if (_playerStats.Gold < shopItem.mod.Cost)
+        {
+            // cannot purchase it, notify user of insuffucient gold
+            return;
+        }
+
         // Logistics
-        Debug.Log("Purchased item: " + AvailableMods[shopItem.index].Title);
+        Debug.Log($"Purchased item {AvailableMods[shopItem.index].Title}!");
 
         _playerStats.UpdateGold(-shopItem.mod.Cost);
         goldText.text = _playerStats.Gold.ToString();
@@ -147,6 +171,7 @@ public class ShopManager : MonoBehaviour
         Destroy(modCard.gameObject);
         OnPurchaseItem?.Invoke();
 
+        RefreshShopItemValues();
         _refresher.RefreshContentFitters();
 
         // the mod itself handles what the mod will do for the player when activated
