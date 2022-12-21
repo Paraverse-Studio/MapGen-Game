@@ -67,8 +67,12 @@ namespace Paraverse.Mob.Stats
             Init();
             _curHealth = (int)MaxHealth.FinalValue;
             _curEnergy = (int)MaxEnergy.FinalValue;
-            OnHealthChange?.Invoke((int)CurHealth, (int)MaxHealth.FinalValue);
-            OnEnergyChange?.Invoke((int)CurEnergy, (int)MaxEnergy.FinalValue);
+        }
+
+        private void Start()
+        {
+            OnHealthChange?.Invoke(CurHealth, (int)MaxHealth.FinalValue);
+            OnEnergyChange?.Invoke((int)CurEnergy, (int)MaxEnergy.FinalValue);            
         }
 
         private void Init()

@@ -429,6 +429,7 @@ public class MapGeneration : MonoBehaviour
             PartitionProgress("Spawning dangerous enemies...");
             yield return processDelay;
 
+            foreach (Block b in allObjects) b.CheckNavMeshSurface(b.CurrentPrefab);
             navMeshBuilder.surface = allObjects[0].GetComponentInChildren<NavMeshSurface>();
             navMeshBuilder.BuildNavMesh();
 

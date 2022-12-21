@@ -160,7 +160,7 @@ public class Block : MonoBehaviour, ITickElement
             {
                 _currentPrefab.transform.SetParent(transform);
                 CheckBoxCollider(_currentPrefab);
-                CheckNavMeshSurface(_currentPrefab);
+                //CheckNavMeshSurface(_currentPrefab); // this did it to all blocks pre-emptively, not needed
                 _currentPrefab.isStatic = true;
             }
             else
@@ -207,12 +207,15 @@ public class Block : MonoBehaviour, ITickElement
         }
     }
 
-    private void CheckNavMeshSurface(GameObject obj)
+    public void CheckNavMeshSurface(GameObject obj)
     {
-        NavMeshSurface surface = obj.GetComponent<NavMeshSurface>();
-        if (!surface)
+        if (type == MapGeneration.Instance.M.blockSet.water) return;
+        if (hasProp) return;
+
+        _surface = obj.GetComponent<NavMeshSurface>();
+        if (!_surface)
         {
-            surface = obj.AddComponent<NavMeshSurface>();
+            _surface = obj.AddComponent<NavMeshSurface>();
         }        
     }
 
