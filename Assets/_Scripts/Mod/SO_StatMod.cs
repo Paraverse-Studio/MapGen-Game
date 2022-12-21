@@ -1,4 +1,5 @@
 using Paraverse.Mob.Stats;
+using Paraverse.Stats;
 using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
@@ -6,8 +7,28 @@ using UnityEngine;
 [CreateAssetMenu(fileName = "ModName", menuName = "SOs/Mods/Stat Mod")]
 public class SO_StatMod : SO_Mod
 {
+    [System.Serializable]
+    public enum StatType
+    {
+        Attack,
+        Ability,
+        Health,
+        Energy,
+        AttackSpeed,
+        MoveSpeed
+    }
+
+    [System.Serializable]
+    public struct StatPair
+    {
+        public StatType type;
+        public float value;
+    }
+
     [Header("Stats Change")]
-    public MobStats addedStats;
+    [SerializeField]
+    public List<StatPair> addStats;
+
     private MobStats _player;
 
     public override void Activate(GameObject go)
@@ -22,16 +43,35 @@ public class SO_StatMod : SO_Mod
             return;
         }
 
-        // Set some info from mod card to skill 
-        // ---> logistics and lore of the skill is provided from mod card to skill
-        // ---> skill CD, range, damage and these things are to be put right on skill prefab
-        //Skill.Name = Title;
-        //Skill.Description = Description;
+        // Add the stats to the player provided
+        foreach (StatPair statPair in addStats)
+        {
+            StatModifier modifier = new(statPair.value);
 
-        //// Add this skill to the player's list of skills, and also activate this one
-        //_player.skills.Add(Skill);
-        //_player.ActivateSkill(Skill);
+            // do something with entry.Value or entry.Key
+            switch (statPair.type)
+            {
+                case StatType.Attack:
+                    _player.AttackDamage.AddMod(modifier);
+                    break;
+                case StatType.Ability:
+                    _player.AttackDamage.AddMod(modifier); // todo NEEDS TO BE ABILITY.ADDMOD() ONCE IT'S IN
+                    break;
+                case StatType.Health:
+                    _player.MaxHealth.AddMod(modifier);
+                    break;
+                case StatType.Energy:
+                    _player.MaxEnergy.AddMod(modifier);
+                    break;
+                case StatType.AttackSpeed:
+                    _player.AttackSpeed.AddMod(modifier);
+                    break;
+                case StatType.MoveSpeed:
+                    _player.MoveSpeed.AddMod(modifier);
+                    break;
+            }
+        }        
 
-        Debug.Log($"Skill Mod: Mod \"{Title}\" (ID {ID}) activated for {_player.gameObject.name}!");
+        Debug.Log($"Stat Mod: Mod \"{Title}\" (ID {ID}) activated for {_player.gameObject.name}!");
     }
 }

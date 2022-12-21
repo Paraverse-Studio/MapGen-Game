@@ -12,7 +12,7 @@ namespace Paraverse.Mob.Stats
         public Stat AttackSpeed { get; }
         public Stat MoveSpeed { get; }
         public Stat MaxEnergy { get; }
-        public float CurrentEnergy { get; }
+        public float CurEnergy { get; }
         public Stat EnergyRegen { get; }
         public int Gold { get; }
         #endregion

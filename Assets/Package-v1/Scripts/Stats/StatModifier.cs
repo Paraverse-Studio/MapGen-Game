@@ -10,5 +10,9 @@ namespace Paraverse.Stats
         {
             Value = value;
         }
+
+        public StatModifier()
+        {
+        }
     }
 }
