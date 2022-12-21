@@ -12,7 +12,7 @@ GameObject:
   - component: {fileID: 7223241284080112824}
   - component: {fileID: 5208217350697971753}
   m_Layer: 17
-  m_Name: RegalCrescent
+  m_Name: RegalCrescent_Proj
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
@@ -54,7 +54,7 @@ BoxCollider:
   m_IsTrigger: 1
   m_Enabled: 1
   serializedVersion: 2
-  m_Size: {x: 3.3783698, y: 0.15622857, z: 1.2888727}
+  m_Size: {x: 3.3783698, y: 1, z: 1.2888727}
   m_Center: {x: 0, y: 0, z: 0}
 --- !u!114 &5208217350697971753
 MonoBehaviour:
@@ -74,6 +74,8 @@ MonoBehaviour:
   damage: 5
   deathTimer: 5
   pierce: 1
+  launchFX: {fileID: 0}
+  hitFX: {fileID: 5519072114157303484, guid: 2d53090493fc26445b399e72e6ae9a2d, type: 3}
 --- !u!1 &601490176716190153
 GameObject:
   m_ObjectHideFlags: 0
@@ -24928,7 +24930,7 @@ PrefabInstance:
       objectReference: {fileID: 0}
     - target: {fileID: 7157444543083321804, guid: 618926b8731e90f4785c001ebd60cc62, type: 3}
       propertyPath: m_VersionIndex
-      value: 7647
+      value: 7650
       objectReference: {fileID: 0}
     - target: {fileID: 8774709015317902384, guid: 618926b8731e90f4785c001ebd60cc62, type: 3}
       propertyPath: m_Mesh
