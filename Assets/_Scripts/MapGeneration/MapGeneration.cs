@@ -459,7 +459,7 @@ public class MapGeneration : MonoBehaviour
         /* * * * * QUALITY SETTINGS (PERFORMANCE) * * * * * * */
 
         globalVolume.gameObject.SetActive(GlobalSettings.Instance.QualityLevel > 3);
-        if (GlobalSettings.Instance.QualityLevel <= 1) QualitySettings.SetQualityLevel(0, true);
+        QualitySettings.SetQualityLevel(Mathf.Max(0, GlobalSettings.Instance.QualityLevel - 2), true);
         if (GlobalSettings.Instance.QualityLevel <= 4 && vfx) Destroy(vfx.gameObject);
 
         /* * * * * * * * * * * * * * * * * * * * * * * * * * * */
