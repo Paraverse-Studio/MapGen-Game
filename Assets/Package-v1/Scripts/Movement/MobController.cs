@@ -1,6 +1,7 @@
 using Paraverse.Helper;
 using Paraverse.Mob.Combat;
 using Paraverse.Mob.Stats;
+using Paraverse.Stats;
 using UnityEngine;
 using UnityEngine.AI;
 
@@ -22,12 +23,13 @@ namespace Paraverse.Mob.Controller
         private CharacterController controller;
         // Reference to the combat script
         private IMobCombat combat;
+        private StatusEffectManager statusEffectManager;
         // Reference to the stats script
         IMobStats IMobController.Stats { get { return stats; } }
         private IMobStats stats;
 
         [Header("Movement Values"), Tooltip("The current speed of the mob")]
-        private float curSpeed;
+        private float curMoveSpeed;
         [SerializeField, Range(0, 1), Tooltip("The walk speed of the mob.")]
         private float walkSpeedRatio = 1f;
         [SerializeField, Range(1, 10), Tooltip("The sprint speed of the mob.")]
@@ -100,20 +102,20 @@ namespace Paraverse.Mob.Controller
         public event IMobController.OnDeathDel OnDeathEvent;
 
         // Reference to mob state
-        [SerializeField, Tooltip("The current state of the mob.")]
-        private MobState curState;
-        public MobState CurMobState { get { return curState; } }
+        [SerializeField, Tooltip("The current general state of the mob.")]
+        private MobState _curMobState;
+        public MobState CurMobState { get { return _curMobState; } }
 
         // State Booleans 
         public Transform Transform { get { return transform; } }
         public bool IsInteracting { get { return _isInteracting; } }
         private bool _isInteracting = false;
-        public bool IsBasicAttacking { get { return _isBasicAttacking; } }
-        private bool _isBasicAttacking = false;
-        public bool IsSkilling { get { return _isSkilling; } }
-        private bool _isSkilling = false;
-        public bool IsKnockedBack { get { return _isKnockedBack; } }
-        private bool _isKnockedBack = false;
+        public bool IsStaggered { get { return _isStaggered; } }
+        private bool _isStaggered = false;
+        public bool IsHardCCed { get { return _isHardCced; } }
+        private bool _isHardCced = false;
+        public bool IsSoftCCed { get { return _isSoftCced; } }
+        private bool _isSoftCced = false;
         public bool IsDead { get { return _isDead; } }
         private bool _isDead = false;
 
@@ -158,13 +160,12 @@ namespace Paraverse.Mob.Controller
         private void Update()
         {
             _isInteracting = anim.GetBool(StringData.IsInteracting);
-            _isBasicAttacking = anim.GetBool(StringData.IsBasicAttacking);
-            _isSkilling = anim.GetBool(StringData.IsSkilling);
 
             DeathHandler();
             if (_isDead) return;
 
             StateHandler();
+            CCHandler();
             AnimatorHandler();
         }
         #endregion
@@ -175,46 +176,66 @@ namespace Paraverse.Mob.Controller
         /// </summary>
         private void StateHandler()
         {
-            nav.speed = curSpeed;
-            if (_isInteracting && _isKnockedBack == false)
+            nav.speed = curMoveSpeed;
+
+            if (_isInteracting)
             {
                 if (combat.IsAttackLunging)
+                {
+                    CleanseStagger();
                     AttackMovementHandler();
+                }
                 else
                 {
                     nav.enabled = true;
                     controller.stepOffset = controllerStep;
                 }
 
-                curSpeed = 0f;
-                return;
-            }
-
-            if (_isKnockedBack)
-            {
-                curSpeed = 0f;
-                KnockbackHandler();
+                curMoveSpeed = 0f;
                 return;
             }
 
             if (TargetDetected() && combat.CanBasicAtk == false && playerController.IsDead == false)
             {
                 PursueTarget();
-                SetState(MobState.Pursue);
+                SetGeneralState(MobState.Pursue);
                 //Debug.Log("Pursue State");
             }
             else if (TargetDetected() && combat.CanBasicAtk && playerController.IsDead == false)
             {
                 CombatHandler();
-                SetState(MobState.Combat);
+                SetGeneralState(MobState.Combat);
                 //Debug.Log("Combat State");
             }
             else
             {
                 nav.updateRotation = true;
                 Patrol();
-                SetState(MobState.Patrol);
+                SetGeneralState(MobState.Patrol);
                 //Debug.Log("Patrol State");
+            }
+        }
+
+        private void CCHandler()
+        {
+            if (_isHardCced)
+            {
+                HardCCHandler();
+                curMoveSpeed = 0f;
+            }
+            else if (_isSoftCced)
+            {
+                SoftCCHandler();
+                curMoveSpeed = 0f;
+            }
+            else if (_isStaggered)
+            {
+                curMoveSpeed = 0f;
+                KnockbackHandler();
+            }
+            else
+            {
+                return;
             }
         }
 
@@ -223,8 +244,8 @@ namespace Paraverse.Mob.Controller
         /// </summary>
         private void AnimatorHandler()
         {
-            anim.SetFloat(StringData.Speed, curSpeed);
-            if (curState.Equals(MobState.Pursue) && curSpeed != 0)
+            anim.SetFloat(StringData.Speed, curMoveSpeed);
+            if (_curMobState.Equals(MobState.Pursue) && curMoveSpeed != 0)
                 anim.SetBool(StringData.IsSprinting, true);
             else
                 anim.SetBool(StringData.IsSprinting, false);
@@ -250,9 +271,9 @@ namespace Paraverse.Mob.Controller
         /// Only set state in StateHandler method to avoid bugs related to player's current state.
         /// </summary>
         /// <param name="state"></param>
-        private void SetState(MobState state)
+        private void SetGeneralState(MobState state)
         {
-            curState = state;
+            _curMobState = state;
         }
 
         /// <summary>
@@ -295,7 +316,7 @@ namespace Paraverse.Mob.Controller
                 }
                 else
                 {
-                    curSpeed = 0f;
+                    curMoveSpeed = 0f;
                     nav.isStopped = true;
                     curWaitTimer += Time.deltaTime;
                 }
@@ -303,7 +324,7 @@ namespace Paraverse.Mob.Controller
             }
             else
             {
-                curSpeed = GetPatrolSpeed();
+                curMoveSpeed = GetPatrolSpeed();
                 nav.isStopped = false;
 
                 // Checks if waypoint is unreachable
@@ -335,7 +356,7 @@ namespace Paraverse.Mob.Controller
         {
             curWaitTimer = 0f;
             nav.isStopped = false;
-            curSpeed = GetPatrolSpeed();
+            curMoveSpeed = GetPatrolSpeed();
             startWaitDur = Random.Range(minWaitDur, maxWaitDur);
             int prevVal = curWPIdx;
             int safetyCounter = 0;
@@ -367,7 +388,7 @@ namespace Paraverse.Mob.Controller
                 if (distanceFromTarget <= combat.BasicAtkRange)
                 {
                     nav.isStopped = true;
-                    curSpeed = 0f;
+                    curMoveSpeed = 0f;
                     transform.rotation = ParaverseHelper.FaceTarget(transform, pursueTarget, rotSpeed);
                     //Debug.Log("Combat Idle");
                 }
@@ -375,7 +396,7 @@ namespace Paraverse.Mob.Controller
                 {
                     nav.updateRotation = true;
                     nav.isStopped = false;
-                    curSpeed = GetPursueSpeed();
+                    curMoveSpeed = GetPursueSpeed();
                     //Debug.Log("Pursuing");
                 }
                 nav.SetDestination(pursueTarget.position);
@@ -430,7 +451,7 @@ namespace Paraverse.Mob.Controller
         /// </summary>
         private void CombatHandler()
         {
-            curSpeed = 0;
+            curMoveSpeed = 0;
             nav.isStopped = true;
             transform.rotation = ParaverseHelper.FaceTarget(transform, pursueTarget, rotSpeed);
 
@@ -455,7 +476,7 @@ namespace Paraverse.Mob.Controller
             knockStartPos = transform.position;
             curKnockbackDuration = 0f;
             knockbackDir = new Vector3(impactDir.x, 0f, impactDir.z);
-            _isKnockedBack = true;
+            _isStaggered = true;
             nav.enabled = false;
             if (_isInteracting == false)
                 anim.Play(StringData.Hit);
@@ -466,7 +487,7 @@ namespace Paraverse.Mob.Controller
         /// </summary>
         private void KnockbackHandler()
         {
-            if (_isKnockedBack)
+            if (_isStaggered)
             {
                 // Updates mob position and dive timer
                 float knockBackRange = ParaverseHelper.GetDistance(transform.position, knockStartPos);
@@ -481,7 +502,7 @@ namespace Paraverse.Mob.Controller
                     // Kills enemy within death timer upon fall
                     deathTimerUponFall += Time.deltaTime;
                     if (deathTimerUponFall >= maxDeathTimerUponFall)
-                        stats.UpdateCurrentHealth(-1000000);
+                        stats.UpdateCurrentHealth(-stats.CurHealth);
 
                     return;
                 }
@@ -490,7 +511,7 @@ namespace Paraverse.Mob.Controller
                 // Stops dive when conditions met
                 if (knockBackRange >= maxKnockbackRange || curKnockbackDuration >= maxKnockbackDuration)
                 {
-                    _isKnockedBack = false;
+                    CleanseStagger();
                     nav.enabled = true;
                 }
             }
@@ -512,6 +533,18 @@ namespace Paraverse.Mob.Controller
         }
         #endregion
 
+        #region Hard and Soft CC Methods
+        private void SoftCCHandler()
+        {
+            CleanseStagger();
+        }
+
+        private void HardCCHandler()
+        {
+            CleanseStagger();
+        }
+        #endregion
+
         #region Attack Movement
         private void AttackMovementHandler()
         {
@@ -521,6 +554,13 @@ namespace Paraverse.Mob.Controller
                 nav.enabled = false;
                 controller.Move(transform.forward * atkDashForce * Time.deltaTime);
             }
+        }
+        #endregion
+
+        #region Status Effect Methods
+        private void CleanseStagger()
+        {
+            _isStaggered = false;
         }
         #endregion
 

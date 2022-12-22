@@ -7,9 +7,6 @@ namespace Paraverse.Mob
     {
         public Transform Transform { get; }
         public bool IsInteracting { get; }
-        public bool IsBasicAttacking { get; }
-        public bool IsSkilling { get; }
-        public bool IsKnockedBack { get; }
         public bool IsDead { get; }
         public IMobStats Stats { get; }
         public void ApplyKnockBack(Vector3 mobPos);

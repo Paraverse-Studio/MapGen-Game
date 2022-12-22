@@ -105,7 +105,7 @@ namespace Paraverse.Player
         private bool _isAvoidingObjUponLanding = false;
         public bool IsDiving { get { return _isDiving; } }
         private bool _isDiving = false;
-        public bool IsKnockedBack { get { return _isKnockedBack; } }
+        public bool IsStaggered { get { return _isKnockedBack; } }
         private bool _isKnockedBack = false;
         public bool IsInvulnerable { get; set; }
         public bool IsDead { get { return _isDead; } }
@@ -191,7 +191,7 @@ namespace Paraverse.Player
             anim.SetBool(StringData.IsGrounded, IsGrounded);
             anim.SetBool(StringData.IsDead, IsDead);
             anim.SetBool(StringData.IsDiving, IsDiving);
-            anim.SetBool(StringData.IsKnockedBack, IsKnockedBack);
+            anim.SetBool(StringData.IsKnockedBack, IsStaggered);
             _isInteracting = anim.GetBool(StringData.IsInteracting);
             _isBasicAttacking = anim.GetBool(StringData.IsBasicAttacking);
             _isUsingSkill = anim.GetBool(StringData.IsSkilling);

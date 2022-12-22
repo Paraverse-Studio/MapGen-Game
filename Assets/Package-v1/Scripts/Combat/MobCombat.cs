@@ -44,13 +44,13 @@ namespace Paraverse.Mob.Combat
         protected float distanceFromTarget;
 
         public float BasicAtkRange { get { return basicAtkRange; } }
-        protected bool _isAttackLunging = false;
         public bool IsBasicAttacking { get { return _isBasicAttacking; } }
         protected bool _isBasicAttacking = false;
         // Returns true when character is within basic attack range and cooldown is 0.
         public bool CanBasicAtk { get { return distanceFromTarget <= basicAtkRange && curBasicAtkCd <= 0; } }
         // Sets to true when character is doing an action (Attack, Stun).
         public bool IsAttackLunging { get { return _isAttackLunging; } }
+        protected bool _isAttackLunging = false;
         #endregion
 
         #region Start & Update Methods
@@ -149,7 +149,6 @@ namespace Paraverse.Mob.Combat
         /// </summary>
         protected void EnableBasicAttackCollider()
         {
-            if (controller.IsKnockedBack) return;
             basicAtkCollider.SetActive(true);
         }
 
@@ -166,7 +165,6 @@ namespace Paraverse.Mob.Combat
         /// </summary>
         protected void EnableAttackLunging()
         {
-            if (controller.IsKnockedBack) return;
             _isAttackLunging = true;
         }
 
