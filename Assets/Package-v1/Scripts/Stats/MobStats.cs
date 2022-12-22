@@ -72,12 +72,9 @@ namespace Paraverse.Mob.Stats
             Init();
             _curHealth = (int)MaxHealth.FinalValue;
             _curEnergy = (int)MaxEnergy.FinalValue;
-        }
 
-        private void Start()
-        {
             OnHealthChange?.Invoke(CurHealth, (int)MaxHealth.FinalValue);
-            OnEnergyChange?.Invoke((int)CurEnergy, (int)MaxEnergy.FinalValue);            
+            OnEnergyChange?.Invoke((int)CurEnergy, (int)MaxEnergy.FinalValue);
         }
 
         private void Init()
@@ -87,7 +84,7 @@ namespace Paraverse.Mob.Stats
             _attackDamage = new Stat(attackDamage);
             _attackSpeed = new Stat(attackSpeed);
             _moveSpeed = new Stat(moveSpeed);
-            _energyRegen = new Stat(energyRegen);
+            _energyRegen = new Stat(energyRegen);  
         }
 
         protected virtual void Update()
@@ -100,14 +97,13 @@ namespace Paraverse.Mob.Stats
         public void UpdateMaxHealth(int amount)
         {
             _maxHealth.AddMod(new StatModifier(amount));
-            OnHealthChange?.Invoke(CurHealth, (int)MaxHealth.FinalValue);
+            UpdateCurrentHealth(amount);
         }
 
         public void UpdateCurrentHealth(int amount)
         {
             _curHealth += amount;
-
-            UpdateMaxHealth(amount);
+            OnHealthChange?.Invoke(CurHealth, (int)MaxHealth.FinalValue);
         }
 
         public void SetFullHealth()

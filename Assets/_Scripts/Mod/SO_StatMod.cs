@@ -46,28 +46,26 @@ public class SO_StatMod : SO_Mod
         // Add the stats to the player provided
         foreach (StatPair statPair in addStats)
         {
-            StatModifier modifier = new(statPair.value);
-
             // do something with entry.Value or entry.Key
             switch (statPair.type)
             {
                 case StatType.Attack:
-                    _player.AttackDamage.AddMod(modifier);
+                    _player.UpdateAttackDamage(statPair.value);
                     break;
                 case StatType.Ability:
-                    _player.AttackDamage.AddMod(modifier); // todo NEEDS TO BE ABILITY.ADDMOD() ONCE IT'S IN
+                    _player.UpdateAbilityPower(statPair.value);
                     break;
                 case StatType.Health:
-                    _player.MaxHealth.AddMod(modifier);
+                    _player.UpdateMaxHealth((int)statPair.value);
                     break;
                 case StatType.Energy:
-                    _player.MaxEnergy.AddMod(modifier);
+                    _player.UpdateMaxEnergy(statPair.value);
                     break;
                 case StatType.AttackSpeed:
-                    _player.AttackSpeed.AddMod(modifier);
+                    _player.UpdateAttackSpeed(statPair.value);
                     break;
                 case StatType.MoveSpeed:
-                    _player.MoveSpeed.AddMod(modifier);
+                    _player.UpdateMovementSpeed(statPair.value);
                     break;
             }
         }        
