@@ -15,11 +15,11 @@ namespace Paraverse.Combat
         protected Animator anim;
         protected IMobStats stats;
 
-        public string Name { get { return _skillName; } }
+        public string Name { get { return _skillName; } set { _skillName = value; } }
         [SerializeField, Tooltip("Skill name.")]
         protected string _skillName = "";
 
-        public string Description { get { return _description; } }
+        public string Description { get { return _description; } set { _skillName = value; } }
         [SerializeField, TextArea(2, 3), Tooltip("Skill description.")]
         protected string _description = "";
 
@@ -31,7 +31,7 @@ namespace Paraverse.Combat
         protected float cooldown = 5f;
         protected float curCooldown;
 
-        public bool HasEnergy { get { return cost <= stats.CurrentEnergy; } }
+        public bool HasEnergy { get { return cost <= stats.CurEnergy; } }
         [SerializeField, Tooltip("Required energy cost to execute skill.")]
         protected float cost = 10f;
 
@@ -94,7 +94,7 @@ namespace Paraverse.Combat
                 curCooldown = cooldown;
                 stats.UpdateCurrentEnergy(-cost);
                 anim.Play(animName);
-                Debug.Log("Executing skill: " + _skillName + " which takes " + cost + " points of energy out of " + stats.CurrentEnergy + " point of current energy." +
+                Debug.Log("Executing skill: " + _skillName + " which takes " + cost + " points of energy out of " + stats.CurEnergy + " point of current energy." +
                     "The max cooldown for this skill is " + cooldown + " and the animation name is " + animName + ".");
             }
         }

@@ -27,11 +27,10 @@ public class GlobalSettings : MonoBehaviour
     [Range(1, 5)]
     public int QualityLevel;
 
-    [Header("Folders for objects: ")]
-    [Space(20)]
+    [Header("Folders for objects ")]
+    public Canvas ScreenSpaceCanvas;
     public Transform uiFolder;
     public Transform healthBarFolder;
-    public GameObject healthBarPrefab;
 
     public Transform waterVolume;
 
@@ -40,7 +39,11 @@ public class GlobalSettings : MonoBehaviour
     public GameObject player;
 
     [Header("Combat")]
+    public GameObject healthBarPrefab;
     public Material FlashMaterial;
+    public GameObject popupTextPrefab;
+    public Color damageColour;
+    public Color healColour;
 
     [Header("Backup Safe Position: ")]
     [Space(10)]

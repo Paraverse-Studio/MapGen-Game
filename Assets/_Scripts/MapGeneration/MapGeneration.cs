@@ -429,6 +429,7 @@ public class MapGeneration : MonoBehaviour
             PartitionProgress("Spawning dangerous enemies...");
             yield return processDelay;
 
+            foreach (Block b in allObjects) b.CheckNavMeshSurface(b.CurrentPrefab);
             navMeshBuilder.surface = allObjects[0].GetComponentInChildren<NavMeshSurface>();
             navMeshBuilder.BuildNavMesh();
 
@@ -459,7 +460,7 @@ public class MapGeneration : MonoBehaviour
         /* * * * * QUALITY SETTINGS (PERFORMANCE) * * * * * * */
 
         globalVolume.gameObject.SetActive(GlobalSettings.Instance.QualityLevel > 3);
-        if (GlobalSettings.Instance.QualityLevel <= 1) QualitySettings.SetQualityLevel(0, true);
+        QualitySettings.SetQualityLevel(Mathf.Max(0, GlobalSettings.Instance.QualityLevel - 2), true);
         if (GlobalSettings.Instance.QualityLevel <= 4 && vfx) Destroy(vfx.gameObject);
 
         /* * * * * * * * * * * * * * * * * * * * * * * * * * * */

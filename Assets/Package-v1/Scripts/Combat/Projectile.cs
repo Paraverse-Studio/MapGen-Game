@@ -25,6 +25,10 @@ namespace Paraverse
         [Header("Special Properties")]
         public bool pierce = false;
 
+        [Header("VFX")]
+        public GameObject launchFX;
+        public GameObject hitFX;
+
         private float curdeathTimer = 0f;
         private Vector3 origin;
         #endregion
@@ -33,6 +37,8 @@ namespace Paraverse
         private void Start()
         {
             origin = transform.position;
+
+            if (launchFX) Instantiate(hitFX, origin, Quaternion.identity);
         }
 
         private void Update()
@@ -77,7 +83,10 @@ namespace Paraverse
             {
                 IMobController controller = other.GetComponent<IMobController>();
                 controller.Stats.UpdateCurrentHealth((int)-damage);
-                controller.ApplyKnockBack(mob.transform.position);
+                //controller.ApplyKnockBack(mob.transform.position);
+
+                if (hitFX) Instantiate(hitFX, other.transform.position + new Vector3(0, 0.5f, 0), Quaternion.identity); 
+
                 if (!pierce) Destroy(gameObject);
             }
         }

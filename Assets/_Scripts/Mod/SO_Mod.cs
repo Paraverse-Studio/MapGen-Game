@@ -47,9 +47,9 @@ public class SO_Mod : ScriptableObject
     /// <summary>
     /// Logic for activating this mod to the user
     /// </summary>
-    public virtual void Activate()
+    public virtual void Activate(GameObject providedObject = null)
     {
-        Debug.Log("CALLED BASE ACTIVATION....");
+        Debug.Log("SO_Mod: base class called Activate() !");
     }
 
 

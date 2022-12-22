@@ -12,4 +12,6 @@ public class ModCard : MonoBehaviour
     public TextMeshProUGUI costLabel;
 
     public Button purchaseButton;
+
+    public GameObject cardLock;
 }

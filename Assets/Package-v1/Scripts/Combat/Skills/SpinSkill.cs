@@ -40,7 +40,7 @@ public class SpinSkill : MobSkill, IMobSkill
             stats.UpdateCurrentEnergy(-cost);
             anim.Play(animName);
             EnableColldier();
-            Debug.Log("Executing skill: " + _skillName + " which takes " + cost + " points of energy out of " + stats.CurrentEnergy + " point of current energy." +
+            Debug.Log("Executing skill: " + _skillName + " which takes " + cost + " points of energy out of " + stats.CurEnergy + " point of current energy." +
                 "The max cooldown for this skill is " + cooldown + " and the animation name is " + animName + ".");
         }
     }

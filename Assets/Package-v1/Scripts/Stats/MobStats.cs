@@ -36,8 +36,8 @@ namespace Paraverse.Mob.Stats
         private Stat _maxEnergy;
 
         [SerializeField]
-        protected float curEnergy = 100f;
-        public float CurrentEnergy { get { return curEnergy; } }
+        protected float _curEnergy = 100f;
+        public float CurEnergy { get { return _curEnergy; } }
 
         [SerializeField]
         protected float energyRegen = 25f;
@@ -66,9 +66,13 @@ namespace Paraverse.Mob.Stats
         {
             Init();
             _curHealth = (int)MaxHealth.FinalValue;
-            curEnergy = (int)MaxEnergy.FinalValue;
-            OnHealthChange?.Invoke((int)_curHealth, (int)maxHealth);
-            OnEnergyChange?.Invoke((int)curEnergy, (int)maxEnergy);
+            _curEnergy = (int)MaxEnergy.FinalValue;
+        }
+
+        private void Start()
+        {
+            OnHealthChange?.Invoke(CurHealth, (int)MaxHealth.FinalValue);
+            OnEnergyChange?.Invoke((int)CurEnergy, (int)MaxEnergy.FinalValue);            
         }
 
         private void Init()
@@ -96,13 +100,12 @@ namespace Paraverse.Mob.Stats
         public void UpdateCurrentHealth(int amount)
         {
             _curHealth += amount;
-            OnHealthChange?.Invoke(_curHealth, maxHealth);
+            OnHealthChange?.Invoke(CurHealth, (int)MaxHealth.FinalValue);
         }
 
         public void SetFullHealth()
         {
-            _curHealth = (int)MaxHealth.FinalValue;
-            OnHealthChange?.Invoke(_curHealth, maxHealth);
+            UpdateCurrentHealth((int)(MaxHealth.FinalValue) - CurHealth);
         }
 
         public void UpdateAttackDamage(float amount)
@@ -133,13 +136,13 @@ namespace Paraverse.Mob.Stats
         public void ResetStats()
         {
             _curHealth = (int)MaxHealth.FinalValue;
-            curEnergy = (int)MaxEnergy.FinalValue;
+            _curEnergy = (int)MaxEnergy.FinalValue;
         }
 
         public void UpdateCurrentEnergy(float amount)
         {
-            curEnergy = Mathf.Clamp(curEnergy + amount, 0f, MaxEnergy.FinalValue);
-            OnEnergyChange?.Invoke((int)curEnergy, (int)MaxEnergy.FinalValue);
+            _curEnergy = Mathf.Clamp(_curEnergy + amount, 0f, MaxEnergy.FinalValue);
+            OnEnergyChange?.Invoke((int)_curEnergy, (int)MaxEnergy.FinalValue);
         }
 
         public void UpdateGold(int amount)

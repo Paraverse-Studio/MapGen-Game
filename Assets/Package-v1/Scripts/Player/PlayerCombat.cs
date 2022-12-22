@@ -28,10 +28,11 @@ namespace Paraverse.Player
         public bool IsSkilling { get { return _isSkilling; } }
         protected bool _isSkilling = false;
 
-
         // Skills 
-        [SerializeField]
-        private List<MobSkill> skills = new List<MobSkill>();
+        public List<MobSkill> skills = new List<MobSkill>();
+
+        private MobSkill _activeSkill;
+        public MobSkill ActiveSkill { get { return _activeSkill; } }
         #endregion
 
         #region Start & Update Methods
@@ -45,6 +46,15 @@ namespace Paraverse.Player
             for (int i = 0; i < skills.Count; i++)
             {
                 skills[i].ActivateSkill(this, input, anim, stats);
+            }
+        }
+
+        public void ActivateSkill(MobSkill skill)
+        {
+            if (skills.Contains(skill))
+            {
+                skill.ActivateSkill(this, input, anim, stats);
+                _activeSkill = skill;
             }
         }
 

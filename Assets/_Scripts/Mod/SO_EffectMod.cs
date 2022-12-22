@@ -1,16 +1,15 @@
-using Paraverse.Combat;
-using Paraverse.Player;
+using Paraverse.Mob.Stats;
 using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 
-[CreateAssetMenu(fileName = "ModName", menuName = "SOs/Mods/Skill Mod")]
-public class SO_SkillMod : SO_Mod
+[CreateAssetMenu(fileName = "ModName", menuName = "SOs/Mods/Effect Mod")]
+public class SO_EffectMod : SO_Mod
 {
-    [Header("Obtained Skills")]
-    public MobSkill Skill;
+    [Header("Effects Obtained")]
+    //public Effect[] effects;
 
-    private PlayerCombat _player;
+    private MobStats _player;
 
     public override void Activate(GameObject go)
     {
@@ -27,13 +26,13 @@ public class SO_SkillMod : SO_Mod
         // Set some info from mod card to skill 
         // ---> logistics and lore of the skill is provided from mod card to skill
         // ---> skill CD, range, damage and these things are to be put right on skill prefab
-        Skill.Name = Title;
-        Skill.Description = Description;        
+        //Skill.Name = Title;
+        //Skill.Description = Description;
 
-        // Add this skill to the player's list of skills, and also activate this one
-        _player.skills.Add(Skill);
-        _player.ActivateSkill(Skill);
-        
-        Debug.Log($"Skill Mod: Mod \"{Title}\" (ID {ID}) activated for {_player.gameObject.name}!");
+        //// Add this skill to the player's list of skills, and also activate this one
+        //_player.skills.Add(Skill);
+        //_player.ActivateSkill(Skill);
+
+        Debug.Log($"Effect Mod: Mod \"{Title}\" (ID {ID}) activated for {_player.gameObject.name}!");
     }
 }
