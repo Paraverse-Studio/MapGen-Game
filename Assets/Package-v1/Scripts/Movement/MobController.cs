@@ -180,6 +180,9 @@ namespace Paraverse.Mob.Controller
         {
             nav.speed = curMoveSpeed;
 
+            if (_isStaggered == false && combat.IsAttackLunging == false)
+                nav.enabled = true;
+
             if (_isInteracting && IsFalling == false)
             {
                 if (combat.IsAttackLunging)
@@ -189,8 +192,6 @@ namespace Paraverse.Mob.Controller
                 }
                 else
                 {
-                    if (_isStaggered == false)
-                        nav.enabled = true;
                     controller.stepOffset = controllerStep;
                 }
 
