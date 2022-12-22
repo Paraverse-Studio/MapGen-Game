@@ -116,6 +116,8 @@ namespace Paraverse.Mob.Controller
         private bool _isHardCced = false;
         public bool IsSoftCCed { get { return _isSoftCced; } }
         private bool _isSoftCced = false;
+        public bool IsFalling { get { return _isFalling; } }
+        private bool _isFalling = false;
         public bool IsDead { get { return _isDead; } }
         private bool _isDead = false;
 
@@ -178,7 +180,7 @@ namespace Paraverse.Mob.Controller
         {
             nav.speed = curMoveSpeed;
 
-            if (_isInteracting)
+            if (_isInteracting && IsFalling == false)
             {
                 if (combat.IsAttackLunging)
                 {
@@ -187,7 +189,8 @@ namespace Paraverse.Mob.Controller
                 }
                 else
                 {
-                    nav.enabled = true;
+                    if (_isStaggered == false)
+                        nav.enabled = true;
                     controller.stepOffset = controllerStep;
                 }
 
@@ -195,6 +198,7 @@ namespace Paraverse.Mob.Controller
                 return;
             }
 
+            if (nav.enabled == false) return;
             if (TargetDetected() && combat.CanBasicAtk == false && playerController.IsDead == false)
             {
                 PursueTarget();
@@ -512,7 +516,6 @@ namespace Paraverse.Mob.Controller
                 if (knockBackRange >= maxKnockbackRange || curKnockbackDuration >= maxKnockbackDuration)
                 {
                     CleanseStagger();
-                    nav.enabled = true;
                 }
             }
         }
@@ -522,11 +525,15 @@ namespace Paraverse.Mob.Controller
             Vector3 origin = transform.position;
             Vector3 dir = -transform.up;
 
+            Debug.DrawRay(origin, dir * checkFallRange, Color.red);
             if (Physics.Raycast(origin, dir * checkFallRange, checkFallRange))
             {
+                Debug.Log("Not Falling");
             }
             else
             {
+                Debug.Log("Falling");
+                _isFalling = true;
                 return true;
             }
             return false;
@@ -560,6 +567,7 @@ namespace Paraverse.Mob.Controller
         #region Status Effect Methods
         private void CleanseStagger()
         {
+            if (CheckFall()) return;
             _isStaggered = false;
         }
         #endregion

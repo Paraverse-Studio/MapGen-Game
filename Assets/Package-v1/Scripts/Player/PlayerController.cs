@@ -2,7 +2,6 @@ using Paraverse.Helper;
 using Paraverse.IK;
 using Paraverse.Mob;
 using Paraverse.Mob.Combat;
-using Paraverse.Mob.Controller;
 using Paraverse.Mob.Stats;
 using UnityEngine;
 
@@ -200,8 +199,8 @@ namespace Paraverse.Player
         private void MovementHandler()
         {
             // Disables player movement during dive
-            if (_isDiving || _isKnockedBack 
-                || _isInteracting && !combat.CanComboAttackTwo 
+            if (_isDiving || _isKnockedBack
+                || _isInteracting && !combat.CanComboAttackTwo
                 && !combat.CanComboAttackThree && !_isUsingSkill) return;
 
             // Adjusts player speed based on state
@@ -426,7 +425,7 @@ namespace Paraverse.Player
         private void TargetLock()
         {
             _target = SelectableSystem.Instance.ToggleSelect();
-            Debug.Log("Pressed shift, target is: " + _target);            
+            Debug.Log("Pressed shift, target is: " + _target);
             //headIK.SetLookAtObj(_target);
         }
 
