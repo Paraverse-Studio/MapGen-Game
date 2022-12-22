@@ -59,7 +59,7 @@ public class TickManager : MonoBehaviour
         {
             if (null != tickElements[i] && null != tickElements[i].tickElement && null != tickElements[i].sourceObject)
             {
-                if (Time.frameCount % (int)tickElements[i].frameDelay == 0) tickElements[i].tickElement.Tick();
+                if (Time.frameCount % Mathf.Max(1, (int)tickElements[i].frameDelay) == 0) tickElements[i].tickElement.Tick();
             }
         }
 
