@@ -223,7 +223,7 @@ Transform:
   m_GameObject: {fileID: 5125661759965749517}
   m_LocalRotation: {x: -0, y: -0, z: -0, w: 1}
   m_LocalPosition: {x: 0, y: 0, z: 0}
-  m_LocalScale: {x: 1.3, y: 1.3, z: 1.3}
+  m_LocalScale: {x: 1.35, y: 1.35, z: 1.35}
   m_ConstrainProportionsScale: 0
   m_Children:
   - {fileID: 5125661759965265199}
@@ -324,7 +324,7 @@ MonoBehaviour:
   checkFallRange: 2
   maxDeathTimerUponFall: 2
   deathEffect: {fileID: 8073467667769803130, guid: 75c1b160671ce934fad50936633acef1, type: 3}
-  curState: 0
+  _curMobState: 0
 --- !u!114 &5125661759958323761
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -340,6 +340,7 @@ MonoBehaviour:
   maxHealth: 100
   _curHealth: 100
   attackDamage: 10
+  abilityPower: 10
   attackSpeed: 0.2
   moveSpeed: 0
   maxEnergy: 100
@@ -396,6 +397,7 @@ MonoBehaviour:
     hideHealthBar: 0
     showSelectionAllTimes: 0
     showEnergyBar: 0
+    heightAdjustment: 0.2
   overrideProperties:
     healthBar: {fileID: 0}
     damageBar: {fileID: 0}

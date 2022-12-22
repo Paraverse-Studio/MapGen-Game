@@ -28,6 +28,7 @@ public class MobHealthBar : MonoBehaviour
         public bool hideHealthBar;
         public bool showSelectionAllTimes; // this one's not even used
         public bool showEnergyBar;
+        public float heightAdjustment;
     }
 
     [Header("Health Bar UI")]
@@ -187,13 +188,14 @@ public class MobHealthBar : MonoBehaviour
         Collider collider = GetComponentInChildren<Collider>();
         Renderer renderer = GetComponentInChildren<Renderer>();
 
-        float height = renderer ? renderer.bounds.size.y : collider.bounds.size.y;
+        float height = renderer ? GetEncapsulatedBounds(gameObject).size.y : collider.bounds.size.y;
+        height += settings.heightAdjustment;
 
         _nameLabel.text = gameObject.name;
         _healthBarObject.transform.SetParent(_healthBarsFolder);
         FollowTarget ft = _healthBarObject.GetComponent<FollowTarget>();
         ft.target = bodyToFollow;
-        ft._offset = new Vector3(0, height * 1.1f, 0);
+        ft._offset = new Vector3(0, height, 0);
 
         _healthBarSetupComplete = true;
 
@@ -249,5 +251,28 @@ public class MobHealthBar : MonoBehaviour
     }
 
 
+    #region HELPER_FUNCTIONS
+    private Bounds GetEncapsulatedBounds(GameObject go)
+    {
+        Bounds bounds = new Bounds(Vector3.zero, Vector3.zero);
+        Renderer r;
+        if (bounds.extents.x == 0)
+        {
+            bounds = new Bounds(go.transform.position, Vector3.zero);
+            foreach (Transform child in go.transform)
+            {
+                if (child.TryGetComponent(out r))
+                {                 
+                    bounds.Encapsulate(r.bounds);
+                }
+                else
+                {
+                    bounds.Encapsulate(GetEncapsulatedBounds(child.gameObject));
+                }
+            }
+        }
+        return bounds;
+    }
+    #endregion
 
 }
