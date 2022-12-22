@@ -45,9 +45,15 @@ namespace Paraverse.Combat
         [Header("Projectile Values")]
         public ProjectileData projData;
 
-        [Header("Damage Values")]
-        [SerializeField, Range(0, 10)]
-        protected float damageRatio = 1;
+        [Header("Damage & Potency")]
+        [SerializeField]
+        protected float flatPower = 1;
+
+        [SerializeField, Range(0, 1)]
+        protected float attackScaling = 0;
+
+        [SerializeField, Range(0, 1)]
+        protected float abilityScaling = 0;
 
         public bool skillOn { get; set; }
         #endregion
@@ -96,6 +102,10 @@ namespace Paraverse.Combat
                 anim.Play(animName);
                 Debug.Log("Executing skill: " + _skillName + " which takes " + cost + " points of energy out of " + stats.CurEnergy + " point of current energy." +
                     "The max cooldown for this skill is " + cooldown + " and the animation name is " + animName + ".");
+
+                // depending on the skill, 
+                // if it's a projectile, set its damage to:
+                // int damage = (flatPower) + (mobStats.AttackDamage.FinalValue * attackScaling) + (mobStats.AbilityPower.FinalValue * abilityScaling);
             }
         }
         #endregion

@@ -20,6 +20,11 @@ namespace Paraverse.Mob.Stats
         public Stat AttackDamage { get { return _attackDamage; } }
         private Stat _attackDamage;
 
+        [SerializeField]
+        protected float abilityPower = 10f;
+        public Stat AbilityPower { get { return _abilityPower; } }
+        private Stat _abilityPower;
+
         [SerializeField, Range(0.2f, 3f), Tooltip("Attacks per second.")]
         protected float attackSpeed = 0.2f;
         public Stat AttackSpeed { get { return _attackSpeed; } }
@@ -95,12 +100,14 @@ namespace Paraverse.Mob.Stats
         public void UpdateMaxHealth(int amount)
         {
             _maxHealth.AddMod(new StatModifier(amount));
+            OnHealthChange?.Invoke(CurHealth, (int)MaxHealth.FinalValue);
         }
 
         public void UpdateCurrentHealth(int amount)
         {
             _curHealth += amount;
-            OnHealthChange?.Invoke(CurHealth, (int)MaxHealth.FinalValue);
+
+            UpdateMaxHealth(amount);
         }
 
         public void SetFullHealth()
@@ -111,6 +118,11 @@ namespace Paraverse.Mob.Stats
         public void UpdateAttackDamage(float amount)
         {
             _attackDamage.AddMod(new StatModifier(amount));
+        }
+
+        public void UpdateAbilityPower(float amount)
+        {
+            _abilityPower.AddMod(new StatModifier(amount));
         }
 
         public void UpdateAttackSpeed(float amount)

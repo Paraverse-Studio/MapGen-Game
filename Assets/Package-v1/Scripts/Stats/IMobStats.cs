@@ -9,6 +9,7 @@ namespace Paraverse.Mob.Stats
         public Stat MaxHealth { get; }
         public int CurHealth { get; }
         public Stat AttackDamage { get; }
+        public Stat AbilityPower { get; }
         public Stat AttackSpeed { get; }
         public Stat MoveSpeed { get; }
         public Stat MaxEnergy { get; }
@@ -36,6 +37,12 @@ namespace Paraverse.Mob.Stats
         /// </summary>
         /// <param name="amount"></param>
         public void UpdateAttackDamage(float amount);
+
+        /// <summary>
+        /// Updates mob ability power stat value.
+        /// </summary>
+        /// <param name="amount"></param>
+        public void UpdateAbilityPower(float amount);
 
         /// <summary>
         /// Updates mob attack speed stat value.
