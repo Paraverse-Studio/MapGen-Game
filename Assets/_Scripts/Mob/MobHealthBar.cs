@@ -76,8 +76,8 @@ public class MobHealthBar : MonoBehaviour
             LoadCustomHealthBar();
         }        
 
-        UpdateHealthBar();
-        UpdateEnergyBar();
+        //UpdateHealthBar();
+        //UpdateEnergyBar();
 
         if (TryGetComponent(out _mobStats))
         {
