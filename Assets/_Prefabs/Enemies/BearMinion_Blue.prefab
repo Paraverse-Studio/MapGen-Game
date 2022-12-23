@@ -1223,14 +1223,14 @@ MonoBehaviour:
   stoppingDistance: 2
   detectionRadius: 6
   pursueRadius: 10
-  atkDashForce: 5
+  atkDashForce: 5.5
   knockForce: 5
   maxKnockbackRange: 1.4
   maxKnockbackDuration: 1
   checkFallRange: 2
   maxDeathTimerUponFall: 2
   deathEffect: {fileID: 8073467667769803130, guid: 75c1b160671ce934fad50936633acef1, type: 3}
-  curState: 0
+  _curMobState: 0
 --- !u!114 &3394032382423534312
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -1268,10 +1268,11 @@ MonoBehaviour:
   maxHealth: 55
   _curHealth: 55
   attackDamage: 10
-  attackSpeed: 0.35
+  abilityPower: 10
+  attackSpeed: 0.3
   moveSpeed: 2
   maxEnergy: 100
-  curEnergy: 100
+  _curEnergy: 100
   energyRegen: 25
   _gold: 100
   OnHealthChange:
@@ -1300,6 +1301,7 @@ MonoBehaviour:
     hideHealthBar: 0
     showSelectionAllTimes: 0
     showEnergyBar: 0
+    heightAdjustment: 0
   overrideProperties:
     healthBar: {fileID: 0}
     damageBar: {fileID: 0}
