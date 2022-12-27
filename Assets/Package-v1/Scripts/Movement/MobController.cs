@@ -12,6 +12,7 @@ namespace Paraverse.Mob.Controller
     [RequireComponent(typeof(CharacterController))]
     [RequireComponent(typeof(MobCombat))]
     [RequireComponent(typeof(MobStats))]
+    [RequireComponent(typeof(StatusEffectManager))]
     [RequireComponent(typeof(MobHealthBar))]
     [RequireComponent(typeof(Selectable))]
     public class MobController : MonoBehaviour, IMobController
@@ -94,6 +95,8 @@ namespace Paraverse.Mob.Controller
         [SerializeField, Tooltip("Timer for enemy death when falling off map.")]
         private float maxDeathTimerUponFall = 2f;
         private float deathTimerUponFall;
+        [SerializeField]
+        private float fallForce = 0.5f;
 
         [Header("Death Values")]
         [SerializeField]
@@ -118,6 +121,8 @@ namespace Paraverse.Mob.Controller
         private bool _isSoftCced = false;
         public bool IsFalling { get { return _isFalling; } }
         private bool _isFalling = false;
+        public bool IsInvulnerable { get; }
+        private bool _isInvulnerable = false;
         public bool IsDead { get { return _isDead; } }
         private bool _isDead = false;
 
@@ -133,6 +138,7 @@ namespace Paraverse.Mob.Controller
             if (controller == null) controller = GetComponent<CharacterController>();
             if (combat == null) combat = GetComponent<IMobCombat>();
             if (stats == null) stats = GetComponent<IMobStats>();
+            if (statusEffectManager == null) statusEffectManager = GetComponent<StatusEffectManager>();
             controllerStep = controller.stepOffset;
 
             // Ensure basic attack range is >= to stopping distance
@@ -152,8 +158,7 @@ namespace Paraverse.Mob.Controller
             // Checks if waypoint gameobjects have been referenced 
             if (wps.Length <= 0)
             {
-                Debug.LogError("Mob has no waypoint references!");
-                return;
+                Debug.LogWarning("Mob has no waypoint references!");
             }
 
             Initialize();
@@ -180,6 +185,7 @@ namespace Paraverse.Mob.Controller
         {
             nav.speed = curMoveSpeed;
 
+            // Ensures nav is enabled after switching it off
             if (_isStaggered == false && combat.IsAttackLunging == false)
                 nav.enabled = true;
 
@@ -270,6 +276,8 @@ namespace Paraverse.Mob.Controller
 
             playerController = GameObject.FindGameObjectWithTag(targetTag).GetComponent<IMobController>();
             pursueTarget = GameObject.FindGameObjectWithTag(targetTag).GetComponent<Transform>();
+            Debug.Log("pursue: " + pursueTarget);
+            Debug.Log("controller: " + playerController);
         }
 
         /// <summary>
@@ -306,6 +314,13 @@ namespace Paraverse.Mob.Controller
         /// </summary>
         private void Patrol()
         {
+            // Mob stays stationary when wps set to 0
+            if (wps.Length <= 0)
+            {
+                nav.isStopped = true;
+                return;
+            }
+
             // Disregards the y position for distance calculation
             Vector3 mobPos = ParaverseHelper.GetPositionXZ(transform.position);
             Vector3 targetPos = ParaverseHelper.GetPositionXZ(wps[curWPIdx].position);
@@ -359,6 +374,7 @@ namespace Paraverse.Mob.Controller
         /// </summary>
         private void SetRandomWaypoint()
         {
+            if (wps.Length <= 0) return;
             curWaitTimer = 0f;
             nav.isStopped = false;
             curMoveSpeed = GetPatrolSpeed();
@@ -425,7 +441,7 @@ namespace Paraverse.Mob.Controller
         /// <returns></returns>
         private bool WithinDetectionRadius()
         {
-            if (pursueTarget == null)
+            if (null == pursueTarget)
             {
                 Debug.LogError("Pursue target cannot be null.");
                 return false;
@@ -477,6 +493,8 @@ namespace Paraverse.Mob.Controller
         /// </summary>
         public void ApplyKnockBack(Vector3 mobPos)
         {
+            if (_isInvulnerable) return;
+
             Vector3 impactDir = (transform.position - mobPos).normalized;
             knockStartPos = transform.position;
             curKnockbackDuration = 0f;
@@ -501,8 +519,9 @@ namespace Paraverse.Mob.Controller
                 if (CheckFall())
                 {
                     nav.enabled = false;
-                    knockbackDir.y += GlobalValues.GravityForce * GlobalValues.GravityModifier;
-                    controller.Move(knockbackDir * knockForce * Time.deltaTime);
+                    knockbackDir.y = GlobalValues.GravityForce;
+                    Vector3 fallDir = new Vector3(knockbackDir.x * knockForce, knockbackDir.y * fallForce, knockbackDir.z * knockForce);
+                    controller.Move(fallDir * Time.deltaTime);
 
                     // Kills enemy within death timer upon fall
                     deathTimerUponFall += Time.deltaTime;
@@ -529,11 +548,9 @@ namespace Paraverse.Mob.Controller
             Debug.DrawRay(origin, dir * checkFallRange, Color.red);
             if (Physics.Raycast(origin, dir * checkFallRange, checkFallRange))
             {
-                Debug.Log("Not Falling");
             }
             else
             {
-                Debug.Log("Falling");
                 _isFalling = true;
                 return true;
             }
