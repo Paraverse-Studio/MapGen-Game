@@ -104,9 +104,14 @@ namespace Paraverse.Player
         private bool _isAvoidingObjUponLanding = false;
         public bool IsDiving { get { return _isDiving; } }
         private bool _isDiving = false;
-        public bool IsStaggered { get { return _isKnockedBack; } }
-        private bool _isKnockedBack = false;
-        public bool IsInvulnerable { get; set; }
+        public bool IsStaggered { get { return _isStaggered; } }
+        private bool _isStaggered = false;
+        public bool IsHardCCed { get { return _isHardCced; } }
+        private bool _isHardCced = false;
+        public bool IsSoftCCed { get { return _isSoftCced; } }
+        private bool _isSoftCced = false;
+        public bool IsInvulnerable { get; }
+        private bool _isInvulnerable = false;
         public bool IsDead { get { return _isDead; } }
         private bool _isDead = false;
         public Transform Target { get { return _target; } }
@@ -198,8 +203,8 @@ namespace Paraverse.Player
 
         private void MovementHandler()
         {
-            // Disables player movement during dive
-            if (_isDiving || _isKnockedBack
+            // Disables player movement during dive/
+            if (_isDiving || _isStaggered
                 || _isInteracting && !combat.CanComboAttackTwo
                 && !combat.CanComboAttackThree && !_isUsingSkill) return;
 
@@ -255,7 +260,7 @@ namespace Paraverse.Player
 
         private void RotationHandler()
         {
-            if (_isKnockedBack) return;
+            if (_isStaggered) return;
 
             // Rotates player to locked target when attacking 
             if (null != _target && _isBasicAttacking)
@@ -277,7 +282,7 @@ namespace Paraverse.Player
         /// </summary>
         private void Jump()
         {
-            if (_isKnockedBack || _isInteracting || _isAvoidingObjUponLanding) return;
+            if (_isStaggered || _isInteracting || _isAvoidingObjUponLanding) return;
 
             if (_isGrounded && curJumpCd >= jumpCd)
             {
@@ -380,7 +385,7 @@ namespace Paraverse.Player
         /// </summary>
         private void Dive()
         {
-            if (_isKnockedBack || _isDiving || _isInteracting || _isMoving == false) return;
+            if (_isStaggered || _isDiving || _isInteracting || _isMoving == false) return;
 
             if (_isGrounded && curDiveCd >= diveCd)
             {
@@ -444,7 +449,7 @@ namespace Paraverse.Player
             knockStartPos = transform.position;
             curKnockbackDuration = 0f;
             knockbackDir = new Vector3(impactDir.x, 0f, impactDir.z);
-            _isKnockedBack = true;
+            _isStaggered = true;
             anim.Play(StringData.Hit);
         }
 
@@ -453,7 +458,7 @@ namespace Paraverse.Player
         /// </summary>
         private void KnockbackHandler()
         {
-            if (_isKnockedBack)
+            if (_isStaggered)
             {
                 // Updates mob position and dive timer
                 float knockBackRange = ParaverseHelper.GetDistance(transform.position, knockStartPos);
@@ -465,7 +470,7 @@ namespace Paraverse.Player
                 // Stops dive when conditions met
                 if (knockBackRange >= maxKnockbackRange || curKnockbackDuration >= maxKnockbackDuration)
                 {
-                    _isKnockedBack = false;
+                    _isStaggered = false;
                     return;
                 }
             }

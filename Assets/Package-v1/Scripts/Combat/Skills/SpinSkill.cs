@@ -71,7 +71,7 @@ public class SpinSkill : MobSkill, IMobSkill
     {
         attackColliderGO.SetActive(true);
         skillCurTimer = skillStartTimer;
-        controller.IsInvulnerable = true;
+        //controller.IsInvulnerable = true;
         skillOn = true;
     }
 
@@ -79,7 +79,7 @@ public class SpinSkill : MobSkill, IMobSkill
     {
         attackColliderGO.SetActive(false);
         skillCurTimer = skillStartTimer;
-        controller.IsInvulnerable = false;
+        //controller.IsInvulnerable = false;
         skillOn = false;
     }
     #endregion
