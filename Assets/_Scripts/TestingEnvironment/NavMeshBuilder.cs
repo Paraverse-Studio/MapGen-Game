@@ -5,10 +5,17 @@ using UnityEngine.AI;
 
 public class NavMeshBuilder : MonoBehaviour
 {
+    public static NavMeshBuilder Instance;
+
     public NavMeshSurface surface;
 
     public bool update = false;
     public float updateDelay = 0.5f;
+
+    private void Awake()
+    {
+        Instance = this;
+    }
 
     public void BuildNavMesh()
     {
