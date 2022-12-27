@@ -296,10 +296,18 @@ public class GameLoopManager : MonoBehaviour
 
         playerStats.UpdateGold(goldRewarded); // save it to db
 
-        resultScreen.scoreText.text = "Score: " + (int)score + "%";
-        resultScreen.rankText.text = ScoreFormula.GetScoreRank((int)score);
+        if (roundCompletionType == RoundCompletionType.Failed)
+        {
+            resultScreen.scoreText.text = "Score: " + "N/A";
+            resultScreen.rankText.text = "F";
+        }
+        else
+        {
+            resultScreen.scoreText.text = "Score: " + (int)score + "%";
+            resultScreen.rankText.text = ScoreFormula.GetScoreRank((int)score);
 
-        nextRoundNumber++;
+            nextRoundNumber++;
+        }
 
         // Update Results Screen
         //Results.goldText.text = "+" + goldRewarded;
