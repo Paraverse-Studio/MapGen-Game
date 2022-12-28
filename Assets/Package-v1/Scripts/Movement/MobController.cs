@@ -19,119 +19,119 @@ namespace Paraverse.Mob.Controller
     {
         #region Variables
         // Important unity components
-        private NavMeshAgent nav;
-        private Animator anim;
-        private CharacterController controller;
+        protected NavMeshAgent nav;
+        protected Animator anim;
+        protected CharacterController controller;
         // Reference to the combat script
-        private IMobCombat combat;
-        private StatusEffectManager statusEffectManager;
+        protected IMobCombat combat;
+        protected StatusEffectManager statusEffectManager;
         // Reference to the stats script
         IMobStats IMobController.Stats { get { return stats; } }
-        private IMobStats stats;
+        protected IMobStats stats;
 
         [Header("Movement Values"), Tooltip("The current speed of the mob")]
-        private float curMoveSpeed;
+        protected float curMoveSpeed;
         [SerializeField, Range(0, 1), Tooltip("The walk speed of the mob.")]
-        private float walkSpeedRatio = 1f;
+        protected float walkSpeedRatio = 1f;
         [SerializeField, Range(1, 10), Tooltip("The sprint speed of the mob.")]
-        private float sprintSpeedRatio = 2.5f;
+        protected float sprintSpeedRatio = 2.5f;
         [SerializeField, Tooltip("The rotation speed of the mob.")]
-        private float rotSpeed = 100f;
+        protected float rotSpeed = 100f;
 
         [Header("Patrol State Values")]
         [SerializeField, Tooltip("The waypoints the mob is going to patrol between.")]
-        private Transform[] wps;
-        private int curWPIdx;
+        protected Transform[] wps;
+        protected int curWPIdx;
         [SerializeField, Range(0, 10), Tooltip("The minimum wait duration for the mob at each waypoint.")]
-        private float minWaitDur = 2f;
+        protected float minWaitDur = 2f;
         [SerializeField, Range(0, 20), Tooltip("The maximum wait duration for the characther at each waypoint.")]
-        private float maxWaitDur = 5f;
+        protected float maxWaitDur = 5f;
         [Tooltip("The wait duration for the mob, calculated from a random value between minWaitDuration and maxWaitDuration.")]
-        private float startWaitDur;
+        protected float startWaitDur;
         [Tooltip("The current wait timer, once it reaches the startWaitDuration, mob will proceed to next waypoint.")]
         private float curWaitTimer;
         [SerializeField, Tooltip("The distance at which the mob stops from its target waypoint.")]
-        private float accurayWP = 2f;
+        protected float accurayWP = 2f;
         [SerializeField, Tooltip("The distance at which the mob stops from its current target.")]
-        private float stoppingDistance = 2f;
+        protected float stoppingDistance = 2f;
 
         // Variables for detecting unreachable wps
-        private Vector3 curPos;
-        private Vector3 prevPos;
-        private float unreachableWpCheckTimer = 0f;
+        protected Vector3 curPos;
+        protected Vector3 prevPos;
+        protected float unreachableWpCheckTimer = 0f;
 
         [Header("Pursue State Values")]
         [SerializeField, Tooltip("The range at which the mob can detect targets.")]
-        private float detectionRadius = 5f;
+        protected float detectionRadius = 5f;
         [SerializeField, Tooltip("The range at which the mob will stop pursuing target.")]
-        private float pursueRadius = 7f;
+        protected float pursueRadius = 7f;
         [Tooltip("The tag of the target that the mob can detect and pursue.")]
-        private string targetTag = StringData.PlayerTag;
+        protected string targetTag = StringData.PlayerTag;
         [Tooltip("The targets transform")]
-        private Transform pursueTarget;
-        private IMobController playerController;
+        protected Transform pursueTarget;
+        protected IMobController playerController;
         [Tooltip("Set to true once target is detected.")]
-        private bool targetDetected = false;
+        protected bool targetDetected = false;
 
         [Header("Attack Dash Values")]
         [SerializeField, Tooltip("The attack dashing force applied during basic attack.")]
-        private float atkDashForce = 2f;
-        private float controllerStep;
+        protected float atkDashForce = 2f;
+        protected float controllerStep;
 
         [Header("Knockback Values")]
         [SerializeField, Tooltip("The dive force of the mob.")]
-        private float knockForce = 5f;
+        protected float knockForce = 5f;
         [SerializeField, Range(0, 3), Tooltip("The max distance of dive.")]
-        private float maxKnockbackRange = 1.5f;
+        protected float maxKnockbackRange = 1.5f;
         [SerializeField, Range(0, 1), Tooltip("The max duration of dive.")]
-        private float maxKnockbackDuration = 1f;
-        private float curKnockbackDuration;
-        private Vector3 knockbackDir;
-        private Vector3 knockStartPos;
+        protected float maxKnockbackDuration = 1f;
+        protected float curKnockbackDuration;
+        protected Vector3 knockbackDir;
+        protected Vector3 knockStartPos;
 
         [Header("Fall Check")]
         [SerializeField, Tooltip("Checks if mob should fall off map.")]
-        private float checkFallRange = 2f;
+        protected float checkFallRange = 2f;
         [SerializeField, Tooltip("Timer for enemy death when falling off map.")]
-        private float maxDeathTimerUponFall = 2f;
-        private float deathTimerUponFall;
+        protected float maxDeathTimerUponFall = 2f;
+        protected float deathTimerUponFall;
         [SerializeField]
-        private float fallForce = 0.5f;
+        protected float fallForce = 0.5f;
 
         [Header("Death Values")]
         [SerializeField]
-        private GameObject deathEffect;
+        protected GameObject deathEffect;
         public delegate void OnDeathDel(Transform target);
         public event IMobController.OnDeathDel OnDeathEvent;
 
         // Reference to mob state
         [SerializeField, Tooltip("The current general state of the mob.")]
-        private MobState _curMobState;
+        protected MobState _curMobState;
         public MobState CurMobState { get { return _curMobState; } }
 
         // State Booleans 
         public Transform Transform { get { return transform; } }
         public bool IsInteracting { get { return _isInteracting; } }
-        private bool _isInteracting = false;
+        protected bool _isInteracting = false;
         public bool IsStaggered { get { return _isStaggered; } }
-        private bool _isStaggered = false;
+        protected bool _isStaggered = false;
         public bool IsHardCCed { get { return _isHardCced; } }
-        private bool _isHardCced = false;
+        protected bool _isHardCced = false;
         public bool IsSoftCCed { get { return _isSoftCced; } }
-        private bool _isSoftCced = false;
+        protected bool _isSoftCced = false;
         public bool IsFalling { get { return _isFalling; } }
-        private bool _isFalling = false;
+        protected bool _isFalling = false;
         public bool IsInvulnerable { get; }
-        private bool _isInvulnerable = false;
+        protected bool _isInvulnerable = false;
         public bool IsDead { get { return _isDead; } }
-        private bool _isDead = false;
+        protected bool _isDead = false;
 
         public IMobController Target { get { return _target; } }
-        private IMobController _target;
+        protected IMobController _target;
         #endregion
 
         #region Start & Update Methods
-        private void Start()
+        protected virtual void Start()
         {
             if (nav == null) nav = GetComponent<NavMeshAgent>();
             if (anim == null) anim = GetComponent<Animator>();
@@ -181,7 +181,7 @@ namespace Paraverse.Mob.Controller
         /// <summary>
         /// Responsible for handling and managing mob states.
         /// </summary>
-        private void StateHandler()
+        protected virtual void StateHandler()
         {
             nav.speed = curMoveSpeed;
 
@@ -220,6 +220,7 @@ namespace Paraverse.Mob.Controller
             }
             else
             {
+                
                 nav.updateRotation = true;
                 Patrol();
                 SetGeneralState(MobState.Patrol);
@@ -276,8 +277,6 @@ namespace Paraverse.Mob.Controller
 
             playerController = GameObject.FindGameObjectWithTag(targetTag).GetComponent<IMobController>();
             pursueTarget = GameObject.FindGameObjectWithTag(targetTag).GetComponent<Transform>();
-            Debug.Log("pursue: " + pursueTarget);
-            Debug.Log("controller: " + playerController);
         }
 
         /// <summary>
