@@ -179,9 +179,10 @@ GameObject:
   - component: {fileID: 5194253771473335692}
   - component: {fileID: 4419218316099174442}
   - component: {fileID: 1923618445499783691}
+  - component: {fileID: 3307395192111947688}
   m_Layer: 0
   m_Name: mushroom_2
-  m_TagString: Untagged
+  m_TagString: Enemy
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
@@ -195,7 +196,7 @@ Transform:
   m_GameObject: {fileID: 1404320471278758}
   m_LocalRotation: {x: 0, y: -0, z: -0, w: 1}
   m_LocalPosition: {x: -0, y: 0, z: 0}
-  m_LocalScale: {x: 1.1, y: 1, z: 1.1}
+  m_LocalScale: {x: 1.2, y: 1, z: 1.2}
   m_ConstrainProportionsScale: 0
   m_Children:
   - {fileID: 4558935852201948}
@@ -273,6 +274,7 @@ MonoBehaviour:
     hideHealthBar: 1
     showSelectionAllTimes: 0
     showEnergyBar: 0
+    heightAdjustment: 0
   overrideProperties:
     healthBar: {fileID: 0}
     damageBar: {fileID: 0}
@@ -291,8 +293,24 @@ BoxCollider:
   m_IsTrigger: 0
   m_Enabled: 1
   serializedVersion: 2
-  m_Size: {x: 1, y: 1, z: 1}
+  m_Size: {x: 1, y: 1.5, z: 1}
   m_Center: {x: 0, y: 0.5, z: 0}
+--- !u!54 &3307395192111947688
+Rigidbody:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1404320471278758}
+  serializedVersion: 2
+  m_Mass: 1
+  m_Drag: 0
+  m_AngularDrag: 0.05
+  m_UseGravity: 1
+  m_IsKinematic: 0
+  m_Interpolate: 0
+  m_Constraints: 0
+  m_CollisionDetection: 0
 --- !u!1 &1740716866560304
 GameObject:
   m_ObjectHideFlags: 0

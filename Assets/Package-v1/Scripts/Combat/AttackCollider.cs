@@ -20,6 +20,9 @@ namespace Paraverse
         private bool applyHit = false;
         private float attackPerUnitOfTime = 1f;
 
+        [Header("VFX")]
+        //public GameObject launchFX;
+        public GameObject hitFX;
 
         public void Init(MobCombat mob, IMobStats stats)
         {
@@ -47,13 +50,22 @@ namespace Paraverse
         private void OnTriggerEnter(Collider other)
         {
             if (dot) return;
+
+            // Detecting type of object/enemy hit
             if (other.CompareTag(targetTag) && !hitTargets.Contains(other.gameObject))
             {
                 hitTargets.Add(other.gameObject);
 
-                IMobController controller = other.GetComponent<IMobController>();
-                controller.Stats.UpdateCurrentHealth((int)-stats.AttackDamage.FinalValue);
-                controller.ApplyKnockBack(mob.transform.position);
+                // Enemy-related logic
+                IMobController controller;
+                if (other.TryGetComponent(out controller))
+                {
+                    controller.Stats.UpdateCurrentHealth((int)-stats.AttackDamage.FinalValue);
+                    controller.ApplyKnockBack(mob.transform.position);
+                }
+
+                // General VFX logic
+                if (hitFX) Instantiate(hitFX, other.transform.position + new Vector3(0, 0.5f, 0), Quaternion.identity);
 
                 Debug.Log(other.name + " took " + stats.AttackDamage.FinalValue + " points of damage.");
             }
