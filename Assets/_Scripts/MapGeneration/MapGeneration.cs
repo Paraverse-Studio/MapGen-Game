@@ -10,6 +10,7 @@ using UnityEngine.Events;
 using UnityEngine.Rendering;
 using TMPro;
 using UnityEngine.AI;
+using Paraverse.Mob.Stats;
 
 [System.Serializable]
 public class PropItem
@@ -902,6 +903,14 @@ public class MapGeneration : MonoBehaviour
             enemy.transform.parent = enemiesFolder;
             enemyObjects.Add(enemy);
             EnemiesManager.Instance.AddEnemy(enemy);
+
+            MobStats enemyStats;
+            if (enemy.TryGetComponent(out enemyStats))
+            {
+                float scaleFactor = Mathf.Max(1, M.enemyScalingPerRound * (GameLoopManager.Instance.nextRoundNumber - 1));
+                enemyStats.UpdateAttackDamage(enemyStats.AttackDamage.FinalValue * M.enemyScalingPerRound);
+                enemyStats.UpdateMaxHealth((int)(enemyStats.MaxHealth.FinalValue * M.enemyScalingPerRound));
+            }
         }
     }
 

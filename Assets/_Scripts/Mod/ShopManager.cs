@@ -71,6 +71,7 @@ public class ShopManager : MonoBehaviour
 
     public void CalculateShopItems(int userCurrencyAmount, IEnumerable<SO_Mod> userCurrentMods)
     {
+        Debug.Log("Shop Manager: Shop calculation invoked! Calculating new items.");
         // 1.0  Clear resources
         if (null == AvailableMods || AvailableMods.Count == 0)
         {

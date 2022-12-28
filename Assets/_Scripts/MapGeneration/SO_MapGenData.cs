@@ -127,4 +127,8 @@ public class SO_MapGenData : ScriptableObject
     public int enemySpawnAmount;
     public int enemySpawnOffset;
 
+    [Header("Scaling")]
+    [Min(1)]
+    public float enemyScalingPerRound;
+
 }
