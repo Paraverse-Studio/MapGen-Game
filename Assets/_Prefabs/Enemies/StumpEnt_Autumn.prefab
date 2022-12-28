@@ -207,6 +207,7 @@ GameObject:
   - component: {fileID: 5125661759958323765}
   - component: {fileID: 5125661759958323763}
   - component: {fileID: 5125661759958323762}
+  - component: {fileID: 4281474682663830210}
   m_Layer: 0
   m_Name: Wraith Stump
   m_TagString: Enemy
@@ -323,6 +324,7 @@ MonoBehaviour:
   maxKnockbackDuration: 1
   checkFallRange: 2
   maxDeathTimerUponFall: 2
+  fallForce: 0.5
   deathEffect: {fileID: 8073467667769803130, guid: 75c1b160671ce934fad50936633acef1, type: 3}
   _curMobState: 0
 --- !u!114 &5125661759958323761
@@ -337,9 +339,9 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: b04cd1b06f0908d4c81a8bc7bcea9d24, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  maxHealth: 100
-  _curHealth: 100
-  attackDamage: 10
+  maxHealth: 30
+  _curHealth: 30
+  attackDamage: 15
   abilityPower: 10
   attackSpeed: 0.2
   moveSpeed: 2
@@ -428,6 +430,19 @@ MonoBehaviour:
   OnDeselected:
     m_PersistentCalls:
       m_Calls: []
+--- !u!114 &4281474682663830210
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 5125661759965749517}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 91379af3fa21cc34e8ea9ea8189ce047, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  damageOverTimeEffects: []
 --- !u!1 &5125661759965749519
 GameObject:
   m_ObjectHideFlags: 0

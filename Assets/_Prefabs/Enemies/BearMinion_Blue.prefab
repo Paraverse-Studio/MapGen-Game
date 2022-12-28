@@ -1108,6 +1108,7 @@ GameObject:
   - component: {fileID: 1729720464}
   - component: {fileID: 391566317227412392}
   - component: {fileID: 2728153904193783093}
+  - component: {fileID: 2935847963074044867}
   m_Layer: 15
   m_Name: BearMinion
   m_TagString: Enemy
@@ -1229,6 +1230,7 @@ MonoBehaviour:
   maxKnockbackDuration: 1
   checkFallRange: 2
   maxDeathTimerUponFall: 2
+  fallForce: 0.5
   deathEffect: {fileID: 8073467667769803130, guid: 75c1b160671ce934fad50936633acef1, type: 3}
   _curMobState: 0
 --- !u!114 &3394032382423534312
@@ -1265,8 +1267,8 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: b04cd1b06f0908d4c81a8bc7bcea9d24, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  maxHealth: 55
-  _curHealth: 55
+  maxHealth: 50
+  _curHealth: 50
   attackDamage: 10
   abilityPower: 10
   attackSpeed: 0.3
@@ -1332,6 +1334,19 @@ MonoBehaviour:
   OnDeselected:
     m_PersistentCalls:
       m_Calls: []
+--- !u!114 &2935847963074044867
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 3394032382423534313}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 91379af3fa21cc34e8ea9ea8189ce047, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  damageOverTimeEffects: []
 --- !u!1 &3394032383694911978
 GameObject:
   m_ObjectHideFlags: 0

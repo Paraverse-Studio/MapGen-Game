@@ -382,7 +382,7 @@ public class MapGeneration : MonoBehaviour
         PaintDirtPath();
         step = 5;
 
-        //ApplyRandomElevation();
+        if (M.randomElevation.x != M.randomElevation.y) ApplyRandomElevation();
         //PartitionProgress("Activating props...");
         //yield return processDelay;
 
@@ -612,10 +612,6 @@ public class MapGeneration : MonoBehaviour
                 {
                     if (null == gridOccupants[x, z].block) continue;
 
-                    // Any other conditions
-                    //GameObject firstSpawnedBlock = allObjects[0];
-                    if (gridOccupants[x, z].block.gameObject == null) continue;
-
                     ///////////////////////
 
                     int randomXOffset = Random.Range(-M.lumpOffset, M.lumpOffset + 1);
@@ -833,7 +829,7 @@ public class MapGeneration : MonoBehaviour
 
     private void AddWaterToDips()
     {
-        float yLevelToMeasure = YBoundary.y + _EPSILON;
+        float yLevelToMeasure = M.liquidRiseLevel + _EPSILON;
 
         for (int i = 0; i < allObjects.Count; ++i)
         {
@@ -843,8 +839,6 @@ public class MapGeneration : MonoBehaviour
             {
                 Vector3 spawnSpot = new Vector3(thisObject.position.x, YBoundary.y + M.blockRaiseSize, thisObject.position.z);
 
-                GridOccupant gridSpot = GetGridOccupant(spawnSpot);
-
                 GameObject waterObj = Instantiate(blockPrefab, spawnSpot, Quaternion.identity);
                 waterObj.transform.parent = temporaryObjFolder.transform;
                 if (waterObj)
@@ -853,16 +847,13 @@ public class MapGeneration : MonoBehaviour
                     waterBlock.type = M.blockSet.water;
                     waterBlock.UpdateBlock();
                     waterObjects.Add(waterBlock);
-                    gridSpot.hasWater = true;
                     allObjects[i].hasWater = true;
-
-                    gridSpot.block.gameObject.name = "WHATF";
                 }
             }
         }
 
         // modify this next bit to make water more adaptive and dynamic to whatever size and height you need it
-        WaterVolumeFollowTarget.Instance.overrideY = YBoundary.y + (M.blockRaiseSize * 0.5f); 
+        WaterVolumeFollowTarget.Instance.overrideY = M.liquidRiseLevel + (M.blockRaiseSize * 0.5f);
     }
 
     private void AddImportantProps()
@@ -1045,7 +1036,7 @@ public class MapGeneration : MonoBehaviour
 
             if (null != obj && Mathf.Abs(objPos.y - YBoundary.y) < _EPSILON)
             {
-                ElevateBlock(true, obj, M.edgeRaiseSize);
+                ElevateBlock(true, obj, M.edgeBlockRaiseSize);
             }
         }
     }

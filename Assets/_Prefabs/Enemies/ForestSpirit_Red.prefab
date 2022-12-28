@@ -3031,6 +3031,7 @@ GameObject:
   - component: {fileID: 1810881194}
   - component: {fileID: 6049451608931212569}
   - component: {fileID: 7711031450815146375}
+  - component: {fileID: 4585376326402837706}
   m_Layer: 15
   m_Name: ForestSpirit
   m_TagString: Enemy
@@ -3147,8 +3148,9 @@ MonoBehaviour:
   maxKnockbackDuration: 1
   checkFallRange: 2
   maxDeathTimerUponFall: 2
+  fallForce: 0.5
   deathEffect: {fileID: 8073467667769803130, guid: 75c1b160671ce934fad50936633acef1, type: 3}
-  curState: 0
+  _curMobState: 0
 --- !u!114 &5751539926344400073
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -3183,13 +3185,14 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: b04cd1b06f0908d4c81a8bc7bcea9d24, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  maxHealth: 40
-  _curHealth: 40
+  maxHealth: 35
+  _curHealth: 35
   attackDamage: 15
+  abilityPower: 10
   attackSpeed: 0.5
   moveSpeed: 2.5
   maxEnergy: 100
-  curEnergy: 100
+  _curEnergy: 100
   energyRegen: 25
   _gold: 100
   OnHealthChange:
@@ -3218,6 +3221,7 @@ MonoBehaviour:
     hideHealthBar: 0
     showSelectionAllTimes: 0
     showEnergyBar: 0
+    heightAdjustment: 0
   overrideProperties:
     healthBar: {fileID: 0}
     damageBar: {fileID: 0}
@@ -3248,6 +3252,19 @@ MonoBehaviour:
   OnDeselected:
     m_PersistentCalls:
       m_Calls: []
+--- !u!114 &4585376326402837706
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 9035889900967811526}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 91379af3fa21cc34e8ea9ea8189ce047, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  damageOverTimeEffects: []
 --- !u!1 &9035889901068709625
 GameObject:
   m_ObjectHideFlags: 0

@@ -67,7 +67,7 @@ public class SO_MapGenData : ScriptableObject
 
     [Range(0, 1)]
     [Tooltip("Above, except this is for edge blocks")]
-    public float edgeRaiseSize = 1f;
+    public float edgeBlockRaiseSize = 1f;
 
     [Range(0, 40)]
     public int lumpDensity;
@@ -99,6 +99,11 @@ public class SO_MapGenData : ScriptableObject
 
     [MinMaxSlider(0f, 12f)]
     public Vector2 dirtCutoffLength;
+
+    [Space(30)]
+    [Header("    _____________  MAP LIQUID  _____________")]
+    [Space(40)]
+    public float liquidRiseLevel;
 
     [Space(30)]
     [Header("    _____________  MAP PROPS  _____________")]
