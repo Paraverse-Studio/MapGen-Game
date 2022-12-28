@@ -17,9 +17,14 @@ public class NavMeshBuilder : MonoBehaviour
         Instance = this;
     }
 
-    public void BuildNavMesh()
+    public void BuildNavMesh(NavMeshSurface s = null)
     {
         if (surface) surface.BuildNavMesh();
+        else if (s)
+        {
+            surface = s;
+            s.BuildNavMesh();
+        }
         else
         {
             Debug.LogError("Trying to build Nav Mesh without a NavMeshSurface provided!");
@@ -29,7 +34,6 @@ public class NavMeshBuilder : MonoBehaviour
     public void UpdateNavMesh()
     {
         surface.UpdateNavMesh(surface.navMeshData);
-    } 
-
+    }
 
 }
