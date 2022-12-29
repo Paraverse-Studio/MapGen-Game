@@ -66,8 +66,13 @@ public class SelectableSystem : MonoBehaviour
             selectable.outline.OutlineColor = hostileOutlineColor;
             selectable.outline.OutlineWidth = outlineSize;
 
-            StartCoroutine(DoAfterDelay(0.2f, () => selectable.outline.enabled = false));
+            StartCoroutine(DoAfterDelay(0.05f, () => DisableOutlineAfterProcessingIt(selectable)));
         }
+    }
+
+    private void DisableOutlineAfterProcessingIt(Selectable s)
+    {
+        if (s) s.outline.enabled = false;
     }
 
     public void Remove(Selectable selectable)
