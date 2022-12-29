@@ -84,6 +84,7 @@ public class ShopManager : MonoBehaviour
         for (int i = 0; i < AvailableMods.Count; ++ i)
         {
             if (null == AvailableMods[i]) AvailableMods.Remove(AvailableMods[i]);
+            else AvailableMods[i].AutofillDescription();
         }
 
         // 2.0  Refresh available mods list, sort them by their price
@@ -96,8 +97,6 @@ public class ShopManager : MonoBehaviour
         {
             if (AvailableMods[i].Cost < userCurrencyAmount) userCurrencyIndex = i;
         }
-
-        Debug.Log("Player's purchase index! " + userCurrencyIndex);
 
         // 4.0  Then poll a couple of mods from that price point and below
         for (int i = userCurrencyIndex; i >= 0; --i)

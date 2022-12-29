@@ -10,15 +10,19 @@ MonoBehaviour:
   m_Enabled: 1
   m_EditorHideFlags: 0
   m_Script: {fileID: 11500000, guid: c83ef35b567879c418f2c50b2ca26afb, type: 3}
-  m_Name: S_HealthUp3
+  m_Name: S_BaryonMode
   m_EditorClassIdentifier: 
-  Title: Health Up (III)
-  ID: 1
+  Title: Baryon Mode
+  ID: 0
   Type: 0
-  Image: {fileID: 21300000, guid: b9575611fae012548b8786ba847f50a7, type: 3}
-  Cost: 100
-  Description: 'Gain 40 Health. '
+  Image: {fileID: 21300000, guid: ab4114690ca97cb4c83593c2f7972020, type: 3}
+  Cost: 300
+  Description: 'Gain 50 Attack. Gain 100 Health. '
   PrerequisiteMods: []
   addStats:
+  - type: 0
+    value: 50
   - type: 2
-    value: 40
+    value: 100
+  - type: 5
+    value: 5

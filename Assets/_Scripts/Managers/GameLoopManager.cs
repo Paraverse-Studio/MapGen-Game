@@ -170,9 +170,9 @@ public class GameLoopManager : MonoBehaviour
         }
         if (Input.GetKeyDown(KeyCode.T))
         {
-            playerStats.UpdateGold(25); 
+            playerStats.UpdateGold(5); 
             ShopManager.Instance.ShopWindow.SetActive(!ShopManager.Instance.ShopWindow.activeSelf);
-            ShopManager.Instance.CalculateShopItems(200, new List<SO_Mod>());
+            CalculateShop();
         }
     }
 

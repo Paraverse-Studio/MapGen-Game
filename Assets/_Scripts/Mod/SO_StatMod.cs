@@ -31,6 +31,12 @@ public class SO_StatMod : SO_Mod
 
     private MobStats _player;
 
+
+    private void OnValidate()
+    {
+        Description = "<Stat Mods are autofilled at run-time>";
+    }
+
     public override void Activate(GameObject go)
     {
         base.Activate();
@@ -71,5 +77,43 @@ public class SO_StatMod : SO_Mod
         }        
 
         Debug.Log($"Stat Mod: Mod \"{Title}\" (ID {ID}) activated for {_player.gameObject.name}!");
+    }
+
+    public override void AutofillDescription()
+    {
+        base.AutofillDescription();
+
+        string message = string.Empty;
+
+        foreach (StatPair p in addStats)
+        {
+            message += ((p.value > 0)? "Gain " : "Lose ") + p.value + " ";
+
+            switch (p.type)
+            {
+                case StatType.Attack:
+                    message += "Attack";
+                    break;
+                case StatType.Ability:
+                    message += "Ability";
+                    break;
+                case StatType.Health:
+                    message += "Health";
+                    break;
+                case StatType.Energy:
+                    message += "Energy";
+                    break;
+                case StatType.AttackSpeed:
+                    message += "Attack Speed";
+                    break;
+                case StatType.MoveSpeed:
+                    message += "Movement Speed";
+                    break;
+            }
+
+            message += ". ";
+
+            Description = message;
+        }
     }
 }

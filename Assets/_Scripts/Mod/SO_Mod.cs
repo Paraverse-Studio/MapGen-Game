@@ -22,6 +22,7 @@ public class SO_Mod : ScriptableObject
     public string Description;
     public SO_Mod[] PrerequisiteMods;
 
+
     /// <summary>
     /// takes in a user's currency, and existing mods in numerable, and returns
     /// whether this mod is purchaseable
@@ -48,6 +49,14 @@ public class SO_Mod : ScriptableObject
     /// Logic for activating this mod to the user
     /// </summary>
     public virtual void Activate(GameObject providedObject = null)
+    {
+        // implement in sub classes
+    }
+
+    /// <summary>
+    /// Logic for auto-filling description when applicable
+    /// </summary>
+    public virtual void AutofillDescription()
     {
         // implement in sub classes
     }

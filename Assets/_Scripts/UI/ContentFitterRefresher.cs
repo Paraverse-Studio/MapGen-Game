@@ -18,7 +18,7 @@ public class ContentFitterRefresher : MonoBehaviour
     public void RefreshContentFitters()
     {
         var rectTransform = (RectTransform)transform;
-        if (rectTransform) RefreshContentFitter(rectTransform);
+        if (rectTransform && rectTransform.gameObject.activeSelf) RefreshContentFitter(rectTransform);
     }
 
     private void RefreshContentFitter(RectTransform transform)
