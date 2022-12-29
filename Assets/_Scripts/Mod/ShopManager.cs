@@ -61,6 +61,15 @@ public class ShopManager : MonoBehaviour
         _refresher = ShopWindow.GetComponent<ContentFitterRefresher>();
         _player = GlobalSettings.Instance.player;
         _playerStats = _player.GetComponentInChildren<MobStats>();
+
+        // Load Mods from Resources folder
+        Object[] loadedObjects = Resources.LoadAll("FinalizedMods", typeof(SO_Mod));
+        AvailableMods.Clear();
+
+        foreach (Object obj in loadedObjects)
+        {
+            AvailableMods.Add((SO_Mod)obj);
+        }
     }
 
     private void ClearShop()
