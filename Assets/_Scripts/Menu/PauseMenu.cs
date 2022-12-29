@@ -94,7 +94,6 @@ public class PauseMenu : MonoBehaviour
     {
         SetPause(false);
         events.OnQuitToMainMenu?.Invoke();
-        //SceneManager.LoadScene(SceneManager.GetActiveScene().buildIndex);
     }
 
 

@@ -45,7 +45,7 @@ namespace Bitgem.VFX.StylisedWater
 
         private void OnTransformChildrenChanged()
         {
-            Rebuild();
+            //Rebuild(); // was causing me lag (Ab)
         }
 
         #endregion

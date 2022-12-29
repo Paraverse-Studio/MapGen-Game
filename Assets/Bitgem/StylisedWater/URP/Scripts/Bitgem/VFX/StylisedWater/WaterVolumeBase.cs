@@ -388,7 +388,7 @@ namespace Bitgem.VFX.StylisedWater
             // rebuild if needed
             if (isDirty || (!Application.isPlaying && RealtimeUpdates))
             {
-                Rebuild();
+                //Rebuild(); // was causing me lag (Ab)
             }
         }
 

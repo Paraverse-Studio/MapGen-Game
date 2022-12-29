@@ -161,11 +161,11 @@ public class Block : MonoBehaviour, ITickElement
                 _currentPrefab.transform.SetParent(transform);
                 CheckBoxCollider(_currentPrefab);
                 //CheckNavMeshSurface(_currentPrefab); // this did it to all blocks pre-emptively, not needed
-                _currentPrefab.isStatic = true;
+                //_currentPrefab.isStatic = true;
             }
             else
             {
-                _currentPrefab.isStatic = false;
+                //_currentPrefab.isStatic = false;
                 _currentPrefab.transform.SetParent(GlobalSettings.Instance.waterVolume.transform);
                 TickManager.Instance?.Subscribe(this, gameObject);
             }

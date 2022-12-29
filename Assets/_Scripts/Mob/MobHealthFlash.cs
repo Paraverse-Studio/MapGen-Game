@@ -56,6 +56,8 @@ public class MobHealthFlash : MonoBehaviour
 
     void DamageFlash()
     {
+        if (!gameObject.activeInHierarchy) return;
+
         if (_alreadyRunning)
         {   
             StopCoroutine(_iDamageFlash);
