@@ -60,7 +60,7 @@ public class ShopManager : MonoBehaviour
     {
         _refresher = ShopWindow.GetComponent<ContentFitterRefresher>();
         _player = GlobalSettings.Instance.player;
-        _playerStats = GlobalSettings.Instance.player.GetComponentInChildren<MobStats>();
+        _playerStats = _player.GetComponentInChildren<MobStats>();
     }
 
     private void ClearShop()
@@ -71,7 +71,8 @@ public class ShopManager : MonoBehaviour
 
     public void CalculateShopItems(int userCurrencyAmount, IEnumerable<SO_Mod> userCurrentMods)
     {
-        Debug.Log("Shop Manager: Shop calculation invoked! Calculating new items.");
+        Debug.Log("Shop Manager: Shop calculation invoked! Calculating new items. User gold: " + userCurrencyAmount);
+
         // 1.0  Clear resources
         if (null == AvailableMods || AvailableMods.Count == 0)
         {
@@ -139,6 +140,8 @@ public class ShopManager : MonoBehaviour
         modCard.purchaseButton.onClick.AddListener(() => OnClickPurchaseItem(modCard, modPair));
     }
 
+    // Iterates over displayed Mods in the shop, and refreshes their buy-ability
+    // will disable a mod's button if its cost is greater than user's currency
     private void RefreshShopItemValues()
     {
         for (int i = 0; i < _modCards.Count; ++i)

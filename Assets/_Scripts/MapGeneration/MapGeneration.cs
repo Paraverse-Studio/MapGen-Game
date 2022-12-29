@@ -904,12 +904,12 @@ public class MapGeneration : MonoBehaviour
             enemyObjects.Add(enemy);
             EnemiesManager.Instance.AddEnemy(enemy);
 
-            MobStats enemyStats;
-            if (enemy.TryGetComponent(out enemyStats))
+            MobStats enemyStats = enemy.GetComponentInChildren<MobStats>();
+            if (enemyStats)
             {
-                float scaleFactor = Mathf.Max(1, M.enemyScalingPerRound * (GameLoopManager.Instance.nextRoundNumber - 1));
-                enemyStats.UpdateAttackDamage(enemyStats.AttackDamage.FinalValue * M.enemyScalingPerRound);
-                enemyStats.UpdateMaxHealth((int)(enemyStats.MaxHealth.FinalValue * M.enemyScalingPerRound));
+                float scaleFactor = M.enemyScalingPerRound * (GameLoopManager.Instance.nextRoundNumber - 1);
+                enemyStats.UpdateAttackDamage(enemyStats.AttackDamage.FinalValue * scaleFactor);
+                enemyStats.UpdateMaxHealth((int)(enemyStats.MaxHealth.FinalValue * scaleFactor));
             }
         }
     }

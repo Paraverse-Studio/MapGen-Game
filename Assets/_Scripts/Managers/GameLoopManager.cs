@@ -166,6 +166,7 @@ public class GameLoopManager : MonoBehaviour
             {
                 _m.GetComponentInChildren<MobStats>().UpdateCurrentHealth(-_m.GetComponentInChildren<MobStats>().CurHealth);
             }
+            UtilityFunctions.TeleportObject(player, EndPortal.transform.position);
         }
         if (Input.GetKeyDown(KeyCode.T))
         {
@@ -281,7 +282,7 @@ public class GameLoopManager : MonoBehaviour
 
     public void CalculateShop()
     {
-        ShopManager.Instance.CalculateShopItems(200, new List<SO_Mod>());
+        ShopManager.Instance.CalculateShopItems(playerStats.Gold, new List<SO_Mod>());
     }
 
     public void CompleteRound()
