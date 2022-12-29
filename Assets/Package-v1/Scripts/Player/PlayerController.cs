@@ -172,7 +172,6 @@ namespace Paraverse.Player
             JumpHandler();
             AvoidObjUponLand();
             DiveHandler();
-            //KnockbackHandler();
             KnockbackHandling();
             AttackMovementHandler();
         }

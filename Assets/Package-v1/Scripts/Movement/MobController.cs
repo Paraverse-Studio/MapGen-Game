@@ -168,7 +168,7 @@ namespace Paraverse.Mob.Controller
 
             StateHandler();
             CCHandler();
-            KnockbackHandling();
+            KnockbackHandler();
             AnimatorHandler();
         }
         #endregion
@@ -487,7 +487,7 @@ namespace Paraverse.Mob.Controller
         /// </summary>
         public void ApplyKnockBack(Vector3 mobPos, KnockBackEffect effect)
         {
-            if (IsInvulnerable) return;
+            if (IsInvulnerable || combat.IsAttackLunging) return;
 
             combat.OnAttackInterrupt();
             Vector3 impactDir = (transform.position - mobPos).normalized;
@@ -498,11 +498,29 @@ namespace Paraverse.Mob.Controller
         }
 
         float disFromStartPos;
-        private void KnockbackHandling()
+        private void KnockbackHandler()
         {
             if (null != activeKnockBackEffect)
             {
                 _isStaggered = true;
+
+                // Ensures mob falls when off platform
+                if (CheckFall())
+                {
+                    controller.radius = 0f; 
+                    nav.enabled = false;
+                    knockbackDir.y = GlobalValues.GravityForce;
+                    Vector3 fallDir = new Vector3(knockbackDir.x * activeKnockBackEffect.knockForce, knockbackDir.y * fallForce, knockbackDir.z * activeKnockBackEffect.knockForce);
+                    controller.Move(fallDir * Time.deltaTime);
+
+                    // Kills enemy within death timer upon fall
+                    deathTimerUponFall += Time.deltaTime;
+                    if (deathTimerUponFall >= maxDeathTimerUponFall)
+                        stats.UpdateCurrentHealth(-stats.CurHealth);
+
+                    return;
+                }
+
                 // Moves the mob in the move direction
                 controller.Move(knockbackDir * activeKnockBackEffect.knockForce * Time.deltaTime);
 
@@ -515,41 +533,6 @@ namespace Paraverse.Mob.Controller
                 }
             }
         }
-
-        /// <summary>
-        /// Handles knock back movement and variables in Update().
-        /// </summary>
-        //private void KnockbackHandler()
-        //{
-        //    if (_isStaggered)
-        //    {
-        //        // Updates mob position and dive timer
-        //        float knockBackRange = ParaverseHelper.GetDistance(transform.position, knockStartPos);
-        //        curKnockbackDuration += Time.deltaTime;
-
-        //        if (CheckFall())
-        //        {
-        //            nav.enabled = false;
-        //            knockbackDir.y = GlobalValues.GravityForce;
-        //            Vector3 fallDir = new Vector3(knockbackDir.x * knockForce, knockbackDir.y * fallForce, knockbackDir.z * knockForce);
-        //            controller.Move(fallDir * Time.deltaTime);
-
-        //            // Kills enemy within death timer upon fall
-        //            deathTimerUponFall += Time.deltaTime;
-        //            if (deathTimerUponFall >= maxDeathTimerUponFall)
-        //                stats.UpdateCurrentHealth(-stats.CurHealth);
-
-        //            return;
-        //        }
-        //        controller.Move(knockbackDir * knockForce * Time.deltaTime);
-
-        //        // Stops dive when conditions met
-        //        if (knockBackRange >= maxKnockbackRange || curKnockbackDuration >= maxKnockbackDuration)
-        //        {
-        //            CleanseStagger();
-        //        }
-        //    }
-        //}
 
         private bool CheckFall()
         {
