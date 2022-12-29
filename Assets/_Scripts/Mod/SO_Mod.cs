@@ -49,7 +49,7 @@ public class SO_Mod : ScriptableObject
     /// </summary>
     public virtual void Activate(GameObject providedObject = null)
     {
-        Debug.Log("SO_Mod: base class called Activate() !");
+        // implement in sub classes
     }
 
 
