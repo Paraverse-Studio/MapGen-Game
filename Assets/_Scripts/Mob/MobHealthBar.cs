@@ -76,9 +76,6 @@ public class MobHealthBar : MonoBehaviour
             LoadCustomHealthBar();
         }        
 
-        //UpdateHealthBar();
-        //UpdateEnergyBar();
-
         if (TryGetComponent(out _mobStats))
         {
             _mobStats.OnHealthChange.AddListener(UpdateHealthBar);
@@ -103,6 +100,7 @@ public class MobHealthBar : MonoBehaviour
     void Update()
     {
         if (!_healthBarSetupComplete) return;
+        if (!_mobStats) DestroyImmediate(gameObject);
 
         // Health
         _healthBar.fillAmount = Mathf.Clamp(_health / _totalHealth, 0f, 1f);
@@ -197,7 +195,7 @@ public class MobHealthBar : MonoBehaviour
         _healthBarObject.transform.SetParent(_healthBarsFolder);
         FollowTarget ft = _healthBarObject.GetComponent<FollowTarget>();
         ft.target = bodyToFollow;
-        ft._offset = new Vector3(0, height, 0);
+        ft.offset = new Vector3(0, height, 0);
 
         _healthBarSetupComplete = true;
 
@@ -241,7 +239,6 @@ public class MobHealthBar : MonoBehaviour
         }
     }
 
-
     private void OnDisable()
     {
         if (_healthBarObject) _healthBarObject.SetActive(false);
@@ -252,11 +249,15 @@ public class MobHealthBar : MonoBehaviour
         if (_healthBarObject) _healthBarObject.SetActive(true);        
     }
 
+    private void OnDestroy()
+    {
+        Destroy(_healthBarObject);
+    }
+
     public void ToggleHealthBarReady(bool o)
     {
         _healthBarSetupComplete = o;
     }
-
 
     #region HELPER_FUNCTIONS
     private Bounds GetEncapsulatedBounds(GameObject go)
