@@ -1517,9 +1517,11 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: d1f674ce0f5c3ac46953960fdf978906, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  smoothStepLerp: 0
   target: {fileID: 1293426510}
-  _offset: {x: 0, y: 0, z: 0}
+  usePlayerAsTarget: 0
+  useStartingOffset: 1
+  offset: {x: 0, y: 0, z: 0}
+  smoothStepLerp: 0
   snapToFarDistance: 0
   lerpY: 0
   lerpValue: 0
@@ -1571,6 +1573,8 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   targetTag: Player
   dot: 0
+  knockBackEffect: {fileID: 0}
+  hitFX: {fileID: 0}
 --- !u!65 &107008957
 BoxCollider:
   m_ObjectHideFlags: 0
@@ -1642,6 +1646,8 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   targetTag: Enemy
   dot: 0
+  knockBackEffect: {fileID: 0}
+  hitFX: {fileID: 0}
 --- !u!65 &166201824
 BoxCollider:
   m_ObjectHideFlags: 0
@@ -1829,9 +1835,6 @@ MonoBehaviour:
   detectionRadius: 5
   pursueRadius: 7
   atkDashForce: 2
-  knockForce: 5
-  maxKnockbackRange: 1.5
-  maxKnockbackDuration: 1
   checkFallRange: 2
   maxDeathTimerUponFall: 2
   fallForce: 0.5
@@ -2178,6 +2181,8 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   targetTag: Enemy
   dot: 1
+  knockBackEffect: {fileID: 0}
+  hitFX: {fileID: 0}
 --- !u!1 &511818343
 GameObject:
   m_ObjectHideFlags: 0
@@ -2498,6 +2503,22 @@ PrefabInstance:
     - target: {fileID: 2635677973373248091, guid: 7cd480286f30f724d8b6b177b24d1810, type: 3}
       propertyPath: m_LocalEulerAnglesHint.z
       value: 160.82838
+      objectReference: {fileID: 0}
+    - target: {fileID: 2739856676951319332, guid: 7cd480286f30f724d8b6b177b24d1810, type: 3}
+      propertyPath: knockBackEffect
+      value: 
+      objectReference: {fileID: 11400000, guid: 598974d11fcf1634694fbcf7947f6e76, type: 2}
+    - target: {fileID: 2739856676951319332, guid: 7cd480286f30f724d8b6b177b24d1810, type: 3}
+      propertyPath: knockBackEffect.knockForce
+      value: 10
+      objectReference: {fileID: 0}
+    - target: {fileID: 2739856676951319332, guid: 7cd480286f30f724d8b6b177b24d1810, type: 3}
+      propertyPath: knockBackEffect.maxKnockbackRange
+      value: 1.5
+      objectReference: {fileID: 0}
+    - target: {fileID: 2739856676951319332, guid: 7cd480286f30f724d8b6b177b24d1810, type: 3}
+      propertyPath: knockBackEffect.maxKnockbackDuration
+      value: 1
       objectReference: {fileID: 0}
     - target: {fileID: 2760821536654017157, guid: 7cd480286f30f724d8b6b177b24d1810, type: 3}
       propertyPath: m_LocalEulerAnglesHint.x
@@ -7216,6 +7237,18 @@ PrefabInstance:
       propertyPath: player
       value: 
       objectReference: {fileID: 1293426509}
+    - target: {fileID: 5209993731325677285, guid: e8af1b021cbbfcc4c99ab98996847b6e, type: 3}
+      propertyPath: OnTargetLocked.m_PersistentCalls.m_Calls.Array.data[0].m_Mode
+      value: 2
+      objectReference: {fileID: 0}
+    - target: {fileID: 5209993731325677285, guid: e8af1b021cbbfcc4c99ab98996847b6e, type: 3}
+      propertyPath: OnTargetLocked.m_PersistentCalls.m_Calls.Array.data[0].m_MethodName
+      value: Add
+      objectReference: {fileID: 0}
+    - target: {fileID: 5209993731325677285, guid: e8af1b021cbbfcc4c99ab98996847b6e, type: 3}
+      propertyPath: OnTargetLocked.m_PersistentCalls.m_Calls.Array.data[0].m_Arguments.m_ObjectArgumentAssemblyTypeName
+      value: Selectable, Assembly-CSharp
+      objectReference: {fileID: 0}
     - target: {fileID: 5209993731325677287, guid: e8af1b021cbbfcc4c99ab98996847b6e, type: 3}
       propertyPath: m_Name
       value: TargetLockSystem
@@ -7762,7 +7795,7 @@ PrefabInstance:
       objectReference: {fileID: 0}
     - target: {fileID: 4257800398774748632, guid: feaf9f99f013c334fb69778b3288438e, type: 3}
       propertyPath: m_IsActive
-      value: 0
+      value: 1
       objectReference: {fileID: 0}
     - target: {fileID: 4257800398774748635, guid: feaf9f99f013c334fb69778b3288438e, type: 3}
       propertyPath: m_RootOrder
@@ -12211,6 +12244,22 @@ PrefabInstance:
       propertyPath: m_Name
       value: AttackCollider
       objectReference: {fileID: 0}
+    - target: {fileID: 5827702022029265621, guid: 504274220e31b014bb1f9da275f2fca1, type: 3}
+      propertyPath: knockBackEffect
+      value: 
+      objectReference: {fileID: 11400000, guid: 598974d11fcf1634694fbcf7947f6e76, type: 2}
+    - target: {fileID: 5827702022029265621, guid: 504274220e31b014bb1f9da275f2fca1, type: 3}
+      propertyPath: knockBackEffect.knockForce
+      value: 10
+      objectReference: {fileID: 0}
+    - target: {fileID: 5827702022029265621, guid: 504274220e31b014bb1f9da275f2fca1, type: 3}
+      propertyPath: knockBackEffect.maxKnockbackRange
+      value: 1.5
+      objectReference: {fileID: 0}
+    - target: {fileID: 5827702022029265621, guid: 504274220e31b014bb1f9da275f2fca1, type: 3}
+      propertyPath: knockBackEffect.maxKnockbackDuration
+      value: 1
+      objectReference: {fileID: 0}
     - target: {fileID: 5991204911960586523, guid: 504274220e31b014bb1f9da275f2fca1, type: 3}
       propertyPath: m_LocalEulerAnglesHint.x
       value: 46.58404
@@ -15878,6 +15927,18 @@ PrefabInstance:
       propertyPath: m_IsActive
       value: 0
       objectReference: {fileID: 0}
+    - target: {fileID: 6080363539117558813, guid: aa4e16a1786ed124fa06618210886566, type: 3}
+      propertyPath: knockBackEffect
+      value: 
+      objectReference: {fileID: 11400000, guid: 598974d11fcf1634694fbcf7947f6e76, type: 2}
+    - target: {fileID: 6080363539117558813, guid: aa4e16a1786ed124fa06618210886566, type: 3}
+      propertyPath: knockBackEffect.knockForce
+      value: 10
+      objectReference: {fileID: 0}
+    - target: {fileID: 6080363539117558813, guid: aa4e16a1786ed124fa06618210886566, type: 3}
+      propertyPath: knockBackEffect.maxKnockbackDuration
+      value: 1
+      objectReference: {fileID: 0}
     - target: {fileID: 6495789465226524294, guid: aa4e16a1786ed124fa06618210886566, type: 3}
       propertyPath: m_LocalPosition.x
       value: 0.045099527
@@ -18579,9 +18640,6 @@ MonoBehaviour:
   detectionRadius: 5
   pursueRadius: 7
   atkDashForce: 2
-  knockForce: 5
-  maxKnockbackRange: 1.5
-  maxKnockbackDuration: 1
   checkFallRange: 2
   maxDeathTimerUponFall: 2
   fallForce: 0.5
@@ -18662,11 +18720,6 @@ Transform:
   m_Father: {fileID: 0}
   m_RootOrder: 19
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
---- !u!1 &1833511478 stripped
-GameObject:
-  m_CorrespondingSourceObject: {fileID: 3172601158662907522, guid: b6a20ce6fd9bea0438b8ebf724277a75, type: 3}
-  m_PrefabInstance: {fileID: 3172601158213651636}
-  m_PrefabAsset: {fileID: 0}
 --- !u!114 &1851129750
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -18791,9 +18844,6 @@ MonoBehaviour:
   detectionRadius: 5
   pursueRadius: 7
   atkDashForce: 2
-  knockForce: 5
-  maxKnockbackRange: 1.5
-  maxKnockbackDuration: 1
   checkFallRange: 2
   maxDeathTimerUponFall: 2
   fallForce: 0.5
@@ -24855,9 +24905,6 @@ MonoBehaviour:
   detectionRadius: 10
   pursueRadius: 15
   atkDashForce: 10
-  knockForce: 5
-  maxKnockbackRange: 1.5
-  maxKnockbackDuration: 1
   checkFallRange: 2
   maxDeathTimerUponFall: 2
   fallForce: 0.5
@@ -27761,24 +27808,32 @@ PrefabInstance:
   m_Modification:
     m_TransformParent: {fileID: 0}
     m_Modifications:
-    - target: {fileID: 131609469957833157, guid: b6a20ce6fd9bea0438b8ebf724277a75, type: 3}
-      propertyPath: basicAtkCollider
+    - target: {fileID: 3172601157949767685, guid: b6a20ce6fd9bea0438b8ebf724277a75, type: 3}
+      propertyPath: knockBackEffect
       value: 
-      objectReference: {fileID: 1833511478}
-    - target: {fileID: 131609469957833179, guid: b6a20ce6fd9bea0438b8ebf724277a75, type: 3}
-      propertyPath: m_WarningMessage
+      objectReference: {fileID: 11400000, guid: 748f4316b61c09e4eb46f5136b6b2a06, type: 2}
+    - target: {fileID: 3172601157949767685, guid: b6a20ce6fd9bea0438b8ebf724277a75, type: 3}
+      propertyPath: knockBackEffect.knockForce
+      value: 20
+      objectReference: {fileID: 0}
+    - target: {fileID: 3172601157949767685, guid: b6a20ce6fd9bea0438b8ebf724277a75, type: 3}
+      propertyPath: knockBackEffect.maxKnockbackRange
+      value: 3
+      objectReference: {fileID: 0}
+    - target: {fileID: 3172601158662907532, guid: b6a20ce6fd9bea0438b8ebf724277a75, type: 3}
+      propertyPath: knockBackEffect
       value: 
+      objectReference: {fileID: 11400000, guid: 748f4316b61c09e4eb46f5136b6b2a06, type: 2}
+    - target: {fileID: 3172601158662907532, guid: b6a20ce6fd9bea0438b8ebf724277a75, type: 3}
+      propertyPath: knockBackEffect.knockForce
+      value: 20
       objectReference: {fileID: 0}
-    - target: {fileID: 131609469957833179, guid: b6a20ce6fd9bea0438b8ebf724277a75, type: 3}
-      propertyPath: m_ApplyRootMotion
-      value: 0
+    - target: {fileID: 3172601158662907532, guid: b6a20ce6fd9bea0438b8ebf724277a75, type: 3}
+      propertyPath: knockBackEffect.maxKnockbackRange
+      value: 3
       objectReference: {fileID: 0}
-    - target: {fileID: 3172601157949767707, guid: b6a20ce6fd9bea0438b8ebf724277a75, type: 3}
-      propertyPath: m_IsActive
-      value: 0
-      objectReference: {fileID: 0}
-    - target: {fileID: 3172601158662907522, guid: b6a20ce6fd9bea0438b8ebf724277a75, type: 3}
-      propertyPath: m_IsActive
+    - target: {fileID: 3172601158662907532, guid: b6a20ce6fd9bea0438b8ebf724277a75, type: 3}
+      propertyPath: knockBackEffect.maxKnockbackDuration
       value: 1
       objectReference: {fileID: 0}
     - target: {fileID: 3172601158817656280, guid: b6a20ce6fd9bea0438b8ebf724277a75, type: 3}

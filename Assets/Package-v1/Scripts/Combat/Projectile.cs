@@ -22,6 +22,10 @@ namespace Paraverse
         [SerializeField, Tooltip("Projectile is destroyed after this duration.")]
         private float deathTimer = 5f;
 
+        [Header("Knockback Effect")]
+        [SerializeField]
+        private KnockBackEffect knockBackEffect;
+
         [Header("Special Properties")]
         public bool pierce = false;
 
@@ -83,7 +87,13 @@ namespace Paraverse
             {
                 IMobController controller = other.GetComponent<IMobController>();
                 controller.Stats.UpdateCurrentHealth((int)-damage);
-                //controller.ApplyKnockBack(mob.transform.position);
+
+                // Apply knock back effect
+                if (null != knockBackEffect)
+                {
+                    KnockBackEffect effect = new KnockBackEffect(knockBackEffect);
+                    controller.ApplyKnockBack(mob.transform.position, effect);
+                }
 
                 if (hitFX) Instantiate(hitFX, other.transform.position + new Vector3(0, 0.5f, 0), Quaternion.identity); 
 

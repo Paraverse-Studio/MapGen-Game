@@ -17,12 +17,10 @@ namespace Paraverse.IK
 
         private void OnAnimatorIK()
         {
-            Debug.Log("Head IK: " + transform.name);
             if (anim)
             {
                 if (_lookAtObj != null) 
                 {
-                    Debug.Log("Head IK");
                     anim.SetLookAtWeight(1f);
                     anim.SetLookAtPosition(_lookAtObj.position);
                 }

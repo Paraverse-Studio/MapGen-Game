@@ -3,6 +3,7 @@ using Paraverse.IK;
 using Paraverse.Mob;
 using Paraverse.Mob.Combat;
 using Paraverse.Mob.Stats;
+using System.Collections.Generic;
 using UnityEngine;
 
 namespace Paraverse.Player
@@ -69,13 +70,7 @@ namespace Paraverse.Player
         private float curDiveCd = 0f;
 
         [Header("Knockback Values")]
-        [SerializeField, Tooltip("The knockback force of the mob.")]
-        private float knockForce = 5f;
-        [SerializeField, Range(0, 3), Tooltip("The max distance of knockback.")]
-        private float maxKnockbackRange = 1.5f;
-        [SerializeField, Range(0, 1), Tooltip("The max duration of knockback.")]
-        private float maxKnockbackDuration = 1f;
-        private float curKnockbackDuration;
+        private KnockBackEffect activeKnockBackEffect;
 
         [Header("Attack Dashing Values")]
         [SerializeField, Tooltip("The attack dashing force applied during basic attack.")]
@@ -126,6 +121,7 @@ namespace Paraverse.Player
         // Gets the start positions
         private Vector3 diveStartPos;
         private Vector3 knockStartPos;
+        private Vector3 knockBackDir;
         // Gets the controller horizontal and vertical inputs
         private float horizontal;
         private float vertical;
@@ -176,7 +172,8 @@ namespace Paraverse.Player
             JumpHandler();
             AvoidObjUponLand();
             DiveHandler();
-            KnockbackHandler();
+            //KnockbackHandler();
+            KnockbackHandling();
             AttackMovementHandler();
         }
         #endregion
@@ -440,38 +437,56 @@ namespace Paraverse.Player
         /// <summary>
         /// Invokes knock back action
         /// </summary>
-        public void ApplyKnockBack(Vector3 mobPos)
+        public void ApplyKnockBack(Vector3 mobPos, KnockBackEffect effect)
         {
             if (IsInvulnerable) return;
 
             combat.OnAttackInterrupt();
             Vector3 impactDir = (transform.position - mobPos).normalized;
-            knockStartPos = transform.position;
-            curKnockbackDuration = 0f;
             knockbackDir = new Vector3(impactDir.x, 0f, impactDir.z);
-            _isStaggered = true;
+            activeKnockBackEffect = effect;
+            effect.startPos = transform.position;
             anim.Play(StringData.Hit);
         }
 
         /// <summary>
         /// Handles knock back movement and variables in Update().
         /// </summary>
-        private void KnockbackHandler()
+        //private void KnockbackHandler()
+        //{
+        //    if (_isStaggered)
+        //    {
+        //        // Updates mob position and dive timer
+        //        float knockBackRange = ParaverseHelper.GetDistance(transform.position, knockStartPos);
+        //        curKnockbackDuration += Time.deltaTime;
+
+        //        // Moves the mob in the move direction
+        //        controller.Move(knockbackDir * knockForce * Time.deltaTime);
+
+        //        // Stops dive when conditions met
+        //        if (knockBackRange >= maxKnockbackRange || curKnockbackDuration >= maxKnockbackDuration)
+        //        {
+        //            _isStaggered = false;
+        //            return;
+        //        }
+        //    }
+        //}
+
+        float disFromStartPos;
+        private void KnockbackHandling()
         {
-            if (_isStaggered)
+            if (null != activeKnockBackEffect)
             {
-                // Updates mob position and dive timer
-                float knockBackRange = ParaverseHelper.GetDistance(transform.position, knockStartPos);
-                curKnockbackDuration += Time.deltaTime;
-
+                _isStaggered = true;
                 // Moves the mob in the move direction
-                controller.Move(knockbackDir * knockForce * Time.deltaTime);
+                controller.Move(knockbackDir * activeKnockBackEffect.knockForce * Time.deltaTime);
 
-                // Stops dive when conditions met
-                if (knockBackRange >= maxKnockbackRange || curKnockbackDuration >= maxKnockbackDuration)
+                activeKnockBackEffect.maxKnockbackDuration -= Time.deltaTime;
+                disFromStartPos = ParaverseHelper.GetDistance(activeKnockBackEffect.startPos, transform.position);
+                if (disFromStartPos >= activeKnockBackEffect.maxKnockbackRange || activeKnockBackEffect.maxKnockbackDuration <= 0)
                 {
                     _isStaggered = false;
-                    return;
+                    activeKnockBackEffect = null;
                 }
             }
         }

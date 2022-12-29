@@ -20,6 +20,10 @@ namespace Paraverse
         private bool applyHit = false;
         private float attackPerUnitOfTime = 1f;
 
+        [Header("Knockback Effect")]
+        [SerializeField]
+        private KnockBackEffect knockBackEffect;
+
         [Header("VFX")]
         //public GameObject launchFX;
         public GameObject hitFX;
@@ -61,7 +65,13 @@ namespace Paraverse
                 if (other.TryGetComponent(out controller))
                 {
                     controller.Stats.UpdateCurrentHealth((int)-stats.AttackDamage.FinalValue);
-                    controller.ApplyKnockBack(mob.transform.position);
+                    
+                    // Apply knock back effect
+                    if (null != knockBackEffect)
+                    {
+                        KnockBackEffect effect = new KnockBackEffect(knockBackEffect);
+                        controller.ApplyKnockBack(mob.transform.position, effect);
+                    }
                 }
 
                 // General VFX logic
@@ -81,7 +91,7 @@ namespace Paraverse
 
                 IMobController controller = other.GetComponent<IMobController>();
                 controller.Stats.UpdateCurrentHealth((int)-stats.AttackDamage.FinalValue);
-                controller.ApplyKnockBack(mob.transform.position);
+                controller.ApplyKnockBack(mob.transform.position, knockBackEffect);
                 applyHit = false;
                 timer = attackPerUnitOfTime;
 

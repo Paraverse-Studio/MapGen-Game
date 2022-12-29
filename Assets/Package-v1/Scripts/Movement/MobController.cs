@@ -2,6 +2,7 @@ using Paraverse.Helper;
 using Paraverse.Mob.Combat;
 using Paraverse.Mob.Stats;
 using Paraverse.Stats;
+using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.AI;
 
@@ -79,15 +80,9 @@ namespace Paraverse.Mob.Controller
         protected float controllerStep;
 
         [Header("Knockback Values")]
-        [SerializeField, Tooltip("The dive force of the mob.")]
-        protected float knockForce = 5f;
-        [SerializeField, Range(0, 3), Tooltip("The max distance of dive.")]
-        protected float maxKnockbackRange = 1.5f;
-        [SerializeField, Range(0, 1), Tooltip("The max duration of dive.")]
-        protected float maxKnockbackDuration = 1f;
-        protected float curKnockbackDuration;
-        protected Vector3 knockbackDir;
-        protected Vector3 knockStartPos;
+        private Vector3 knockbackDir;
+        [Tooltip("Active knock back applied to mob.")]
+        private KnockBackEffect activeKnockBackEffect;
 
         [Header("Fall Check")]
         [SerializeField, Tooltip("Checks if mob should fall off map.")]
@@ -173,6 +168,7 @@ namespace Paraverse.Mob.Controller
 
             StateHandler();
             CCHandler();
+            KnockbackHandling();
             AnimatorHandler();
         }
         #endregion
@@ -243,7 +239,6 @@ namespace Paraverse.Mob.Controller
             else if (_isStaggered)
             {
                 curMoveSpeed = 0f;
-                KnockbackHandler();
             }
             else
             {
@@ -490,54 +485,71 @@ namespace Paraverse.Mob.Controller
         /// <summary>
         /// Invokes knock back action
         /// </summary>
-        public void ApplyKnockBack(Vector3 mobPos)
+        public void ApplyKnockBack(Vector3 mobPos, KnockBackEffect effect)
         {
-            if (_isInvulnerable) return;
+            if (IsInvulnerable) return;
 
+            combat.OnAttackInterrupt();
             Vector3 impactDir = (transform.position - mobPos).normalized;
-            knockStartPos = transform.position;
-            curKnockbackDuration = 0f;
             knockbackDir = new Vector3(impactDir.x, 0f, impactDir.z);
-            _isStaggered = true;
-            nav.enabled = false;
-            if (_isInteracting == false)
-                anim.Play(StringData.Hit);
+            activeKnockBackEffect = effect;
+            effect.startPos = transform.position;
+            anim.Play(StringData.Hit);
+        }
+
+        float disFromStartPos;
+        private void KnockbackHandling()
+        {
+            if (null != activeKnockBackEffect)
+            {
+                _isStaggered = true;
+                // Moves the mob in the move direction
+                controller.Move(knockbackDir * activeKnockBackEffect.knockForce * Time.deltaTime);
+
+                activeKnockBackEffect.maxKnockbackDuration -= Time.deltaTime;
+                disFromStartPos = ParaverseHelper.GetDistance(activeKnockBackEffect.startPos, transform.position);
+                if (disFromStartPos >= activeKnockBackEffect.maxKnockbackRange || activeKnockBackEffect.maxKnockbackDuration <= 0)
+                {
+                    _isStaggered = false;
+                    activeKnockBackEffect = null;
+                }
+            }
         }
 
         /// <summary>
         /// Handles knock back movement and variables in Update().
         /// </summary>
-        private void KnockbackHandler()
-        {
-            if (_isStaggered)
-            {
-                // Updates mob position and dive timer
-                float knockBackRange = ParaverseHelper.GetDistance(transform.position, knockStartPos);
-                curKnockbackDuration += Time.deltaTime;
+        //private void KnockbackHandler()
+        //{
+        //    if (_isStaggered)
+        //    {
+        //        // Updates mob position and dive timer
+        //        float knockBackRange = ParaverseHelper.GetDistance(transform.position, knockStartPos);
+        //        curKnockbackDuration += Time.deltaTime;
 
-                if (CheckFall())
-                {
-                    nav.enabled = false;
-                    knockbackDir.y = GlobalValues.GravityForce;
-                    Vector3 fallDir = new Vector3(knockbackDir.x * knockForce, knockbackDir.y * fallForce, knockbackDir.z * knockForce);
-                    controller.Move(fallDir * Time.deltaTime);
+        //        if (CheckFall())
+        //        {
+        //            nav.enabled = false;
+        //            knockbackDir.y = GlobalValues.GravityForce;
+        //            Vector3 fallDir = new Vector3(knockbackDir.x * knockForce, knockbackDir.y * fallForce, knockbackDir.z * knockForce);
+        //            controller.Move(fallDir * Time.deltaTime);
 
-                    // Kills enemy within death timer upon fall
-                    deathTimerUponFall += Time.deltaTime;
-                    if (deathTimerUponFall >= maxDeathTimerUponFall)
-                        stats.UpdateCurrentHealth(-stats.CurHealth);
+        //            // Kills enemy within death timer upon fall
+        //            deathTimerUponFall += Time.deltaTime;
+        //            if (deathTimerUponFall >= maxDeathTimerUponFall)
+        //                stats.UpdateCurrentHealth(-stats.CurHealth);
 
-                    return;
-                }
-                controller.Move(knockbackDir * knockForce * Time.deltaTime);
+        //            return;
+        //        }
+        //        controller.Move(knockbackDir * knockForce * Time.deltaTime);
 
-                // Stops dive when conditions met
-                if (knockBackRange >= maxKnockbackRange || curKnockbackDuration >= maxKnockbackDuration)
-                {
-                    CleanseStagger();
-                }
-            }
-        }
+        //        // Stops dive when conditions met
+        //        if (knockBackRange >= maxKnockbackRange || curKnockbackDuration >= maxKnockbackDuration)
+        //        {
+        //            CleanseStagger();
+        //        }
+        //    }
+        //}
 
         private bool CheckFall()
         {
