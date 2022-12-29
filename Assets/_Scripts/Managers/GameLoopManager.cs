@@ -166,7 +166,7 @@ public class GameLoopManager : MonoBehaviour
             {
                 _m.GetComponentInChildren<MobStats>().UpdateCurrentHealth(-_m.GetComponentInChildren<MobStats>().CurHealth);
             }
-            UtilityFunctions.TeleportObject(player, EndPortal.transform.position);
+            EndRound(true);
         }
         if (Input.GetKeyDown(KeyCode.T))
         {

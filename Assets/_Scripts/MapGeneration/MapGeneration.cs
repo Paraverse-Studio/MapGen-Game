@@ -138,9 +138,12 @@ public class MapGeneration : MonoBehaviour
     private List<Block> waterObjects = new List<Block>();
     private List<GameObject> enemyObjects = new List<GameObject>();
 
+    private ParticleSystem mapVFX = null;
+
     private float progressValue;
     private float progressTotal = 11f;
     private int step = 0; // purely for debugging to detect step progress speed
+    private System.DateTime testingTime;
 
     private WaitForSeconds processDelay;
 
@@ -172,6 +175,8 @@ public class MapGeneration : MonoBehaviour
 
     public IEnumerator ERenegerateMap()
     {
+        testingTime = System.DateTime.Now;
+
         OnMapGenerateStart?.Invoke();
         //PartitionProgress("Clearing & recycling resources...");
 
@@ -328,6 +333,7 @@ public class MapGeneration : MonoBehaviour
             for (int i = 0; i < enemyObjects.Count; ++i) if (enemyObjects[i]) Destroy(enemyObjects[i]);
             enemyObjects.Clear();
 
+            if (mapVFX) Destroy(mapVFX.gameObject);
             // Important Props
 
             temporaryObjFolder = new GameObject("Folder");
@@ -391,6 +397,7 @@ public class MapGeneration : MonoBehaviour
         {
             AddFoundationAndEdgeWork();
             PartitionProgress();
+            step = 55;
             yield return processDelay;
         }
 
@@ -400,27 +407,27 @@ public class MapGeneration : MonoBehaviour
 
         /* * * * * IMPORTANT PROPS ON MAP * * * * * * */
         PartitionProgress("Adding event triggers...");
+        step = 6;
         yield return processDelay;
         AddImportantProps();
-        step = 6;
 
         /* * * * * DECORATIVE PROPS ON MAP * * * * * * */
         currentPaintingBlock = M.blockSet.water;
 
-        AddWaterToDips();
         PartitionProgress("");
-        yield return processDelay;
         step = 7;
+        yield return processDelay;
+        AddWaterToDips();
 
-        if (GlobalSettings.Instance.QualityLevel > 3) AddFoliage();        
         step = 8;
         PartitionProgress("");
         yield return processDelay;
+        if (GlobalSettings.Instance.QualityLevel > 3) AddFoliage();        
 
-        AddProps();
         step = 9;
         PartitionProgress("");
         yield return processDelay;
+        AddProps();
 
 
         /* * * * * * ADDING ENEMIES * * * * * * * * * */
@@ -449,11 +456,9 @@ public class MapGeneration : MonoBehaviour
 
         TeleportPlayer(CenterPointWithY + new Vector3(0, 5f, 0));
 
-        ParticleSystem vfx = null;
-        if (M.mapVFX)
+        if (M.vfx)
         {
-            vfx = Instantiate(M.mapVFX, GlobalSettings.Instance.player.transform);
-            vfx.transform.localPosition = Vector3.zero;
+            mapVFX = Instantiate(M.vfx, Vector3.zero, Quaternion.identity);
         }
         /* * * * * * * * * * * * * * * * * * * * * * */
 
@@ -462,9 +467,11 @@ public class MapGeneration : MonoBehaviour
 
         globalVolume.gameObject.SetActive(GlobalSettings.Instance.QualityLevel > 3);
         QualitySettings.SetQualityLevel(Mathf.Max(0, GlobalSettings.Instance.QualityLevel - 2), true);
-        if (GlobalSettings.Instance.QualityLevel <= 4 && vfx) Destroy(vfx.gameObject);
+        if (GlobalSettings.Instance.QualityLevel <= 4 && mapVFX) Destroy(mapVFX.gameObject);
 
         /* * * * * * * * * * * * * * * * * * * * * * * * * * * */
+        var timeTakenToGenerateMap = System.DateTime.Now - testingTime;
+        Debug.Log($"Map Generation: It took {((int)(timeTakenToGenerateMap.TotalSeconds*100f))/100f} seconds to generate this map!");
 
         OnMapGenerateEnd?.Invoke();
         yield return new WaitForSeconds(0.55f);
