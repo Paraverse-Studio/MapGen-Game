@@ -4,10 +4,14 @@ using UnityEngine;
 
 public class FollowTarget : MonoBehaviour
 {
+    [Header("Target & following")]
+    public Transform target;
+    public bool usePlayerAsTarget;
+    public bool useStartingOffset;
+    public Vector3 offset;
+
     [Header("SmoothStep lerp: ")]
     public float smoothStepLerp = 0;
-    public Transform target;
-    public Vector3 _offset;
 
     [Header("Snap to long distance?")]
     public bool snapToFarDistance = false;
@@ -22,9 +26,14 @@ public class FollowTarget : MonoBehaviour
     // Start is called before the first frame update
     void Awake()
     {
+        if (usePlayerAsTarget)
+        {
+            target = GlobalSettings.Instance.player.transform;
+        }
+
         if (!target) return;
 
-        _offset = transform.position - target.position;
+        if (useStartingOffset) offset = transform.position - target.position;
     }
 
     // Update is called once per frame
@@ -36,7 +45,7 @@ public class FollowTarget : MonoBehaviour
             return;
         }
 
-        Vector3 goalPosition = _offset + target.position;
+        Vector3 goalPosition = offset + target.position;
         Vector3 goalPositionOriginal = goalPosition;
         if (lerpY) goalPosition.y = Mathf.Lerp(transform.position.y, goalPosition.y, Time.deltaTime * lerpValue);
 
