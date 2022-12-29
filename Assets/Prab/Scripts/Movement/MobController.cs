@@ -2,7 +2,6 @@ using Paraverse.Helper;
 using Paraverse.Mob.Combat;
 using Paraverse.Mob.Stats;
 using Paraverse.Stats;
-using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.AI;
 
@@ -216,7 +215,7 @@ namespace Paraverse.Mob.Controller
             }
             else
             {
-                
+
                 nav.updateRotation = true;
                 Patrol();
                 SetGeneralState(MobState.Patrol);
@@ -487,7 +486,7 @@ namespace Paraverse.Mob.Controller
         /// </summary>
         public void ApplyKnockBack(Vector3 mobPos, KnockBackEffect effect)
         {
-            if (IsInvulnerable || combat.IsAttackLunging) return;
+            if (IsInvulnerable || combat.IsBasicAttacking) return;
 
             combat.OnAttackInterrupt();
             Vector3 impactDir = (transform.position - mobPos).normalized;
