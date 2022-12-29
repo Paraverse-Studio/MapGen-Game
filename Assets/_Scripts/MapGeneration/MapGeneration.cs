@@ -401,6 +401,11 @@ public class MapGeneration : MonoBehaviour
             yield return processDelay;
         }
 
+        if (M.raiseDirtLevel) 
+        {
+            RaiseBlocksAboveLiquid();
+        }
+
         /////////       NO SHAPE MODIFICATIONS BEYOND THIS POINT        /////////////////////////
         centerPointWithY = new Vector3(centerPoint.x, gridOccupants[(int)centerPoint.x, (int)centerPoint.z].block.transform.position.y, centerPoint.z);
 
@@ -586,8 +591,24 @@ public class MapGeneration : MonoBehaviour
                     // (design choice: don't want dirt to be covered with water - dirt paths should always be clear to walk on)
                     if (M.raiseDirtLevel && null != replacedBlock && replacedBlock.type == M.blockSet.dirt)
                     {                        
-                        ApplyBlockElevationRestrictions(replacedBlock);
+                        //ApplyBlockElevationRestrictions(replacedBlock);
                     }
+                }
+            }
+        }
+    }
+
+    private void RaiseBlocksAboveLiquid()
+    {
+        for (float i = 0; i <= (M.liquidRiseLevel - YBoundary.y)/M.blockRaiseSize; ++i)
+        {
+            foreach (Block b in allObjects)
+            {
+                if (b.type != M.blockSet.dirt) continue;
+
+                if (b.transform.position.y <= M.liquidRiseLevel)
+                {
+                    ElevateBlock(upOrDown: true, b);
                 }
             }
         }
@@ -602,7 +623,7 @@ public class MapGeneration : MonoBehaviour
                 block.type = M.blockSet.bridge;
                 block.UpdateBlock();
             }
-            ElevateBlock(true, block);
+            ElevateBlock(upOrDown: true, block);
         }
     }
 
@@ -805,7 +826,7 @@ public class MapGeneration : MonoBehaviour
     {
         for (int i = 0; i < pathObjects.Count; i++)
         {
-            // Cuts dirt path - if a cut is too happen (frequency met), then skip i to dirtCutLength
+            // Cuts dirt path - if a cut is to happen (frequency met), then skip i to dirtCutLength
             if (i % M.dirtCutoffFrequency == 0)
             {
                 int dirtCutLength = (int)Random.Range(M.dirtCutoffLength.x, M.dirtCutoffLength.y);
@@ -1052,7 +1073,7 @@ public class MapGeneration : MonoBehaviour
 
             if (null != obj && Mathf.Abs(objPos.y - YBoundary.y) < _EPSILON)
             {
-                ElevateBlock(true, obj, M.edgeBlockRaiseSize);
+                ElevateBlock(upOrDown: true, obj, M.edgeBlockRaiseSize);
             }
         }
     }
