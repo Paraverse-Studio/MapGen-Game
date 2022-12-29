@@ -97,6 +97,8 @@ public class ShopManager : MonoBehaviour
             if (AvailableMods[i].Cost < userCurrencyAmount) userCurrencyIndex = i;
         }
 
+        Debug.Log("Player's purchase index! " + userCurrencyIndex);
+
         // 4.0  Then poll a couple of mods from that price point and below
         for (int i = userCurrencyIndex; i >= 0; --i)
         {

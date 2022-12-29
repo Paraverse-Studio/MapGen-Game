@@ -124,11 +124,12 @@ public class MobHealthBar : MonoBehaviour
         _health = (float)currentHP;
         _totalHealth = (float)totalHP;
 
+        if (_healthValueDisplay) _healthValueDisplay.text = currentHP + " / " + totalHP;
+
         if (!_healthBarSetupComplete) return;
 
         PopupTextOnHealthChange(healthChange);
 
-        if (_healthValueDisplay) _healthValueDisplay.text = currentHP + " / " + totalHP;
     }
 
     public void PopupTextOnHealthChange(int healthChange)

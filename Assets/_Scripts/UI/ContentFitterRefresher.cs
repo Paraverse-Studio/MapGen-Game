@@ -18,7 +18,7 @@ public class ContentFitterRefresher : MonoBehaviour
     public void RefreshContentFitters()
     {
         var rectTransform = (RectTransform)transform;
-        RefreshContentFitter(rectTransform);
+        if (rectTransform) RefreshContentFitter(rectTransform);
     }
 
     private void RefreshContentFitter(RectTransform transform)
