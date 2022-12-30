@@ -79,7 +79,11 @@ public class SO_MapGenData : ScriptableObject
 
     public int lumpOffset = 2;
 
-    public bool addEdgingBlocks = false;
+    [Header("Edges & Foundations")]
+    public bool addEdgeWalls;
+    public bool addEdgeFoundation;
+    public int sizeOfFoundation;
+    public int sizeOfWall;
 
     [Header("Elevation smoothening (flatten)")]
     public int flattenApplicationRounds = 1;

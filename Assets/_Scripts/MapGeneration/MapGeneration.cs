@@ -380,6 +380,8 @@ public class MapGeneration : MonoBehaviour
         //PartitionProgress();
         //yield return processDelay;
 
+
+
         /* * * * * * DECALS ON SHAPE OF MAP * * * * * */
 
         currentPaintingBlock = M.blockSet.dirt;
@@ -393,7 +395,7 @@ public class MapGeneration : MonoBehaviour
         //PartitionProgress("Activating props...");
         //yield return processDelay;
 
-        if (M.addEdgingBlocks)
+        if (M.addEdgeFoundation || M.addEdgeWalls)
         {
             AddFoundationAndEdgeWork();
             PartitionProgress();
@@ -436,6 +438,7 @@ public class MapGeneration : MonoBehaviour
 
 
         /* * * * * * ADDING ENEMIES * * * * * * * * * */
+
         if (M.addEnemies)
         {
             step = 10;
@@ -447,12 +450,12 @@ public class MapGeneration : MonoBehaviour
             navMeshBuilder.BuildNavMesh();
 
             AddEnemies();            
+            enemiesFolder.gameObject.name = "[ Enemies ] - " + enemyObjects.Count;
         }
 
-        enemiesFolder.gameObject.name = "[ Enemies ] - " + enemyObjects.Count;
         /* * * * * * * * * * * * * * * * * * * * * * * */
 
-        /* * * * MISC STEPS (NOT RELATED TO MAP) * * */
+        /* * * * MISC STEPS - FINAL TOUCHES * * * * * * */
         step = 11;
         PartitionProgress("Applying final touches...");
         yield return processDelay;
@@ -475,8 +478,11 @@ public class MapGeneration : MonoBehaviour
         if (GlobalSettings.Instance.QualityLevel <= 4 && mapVFX) Destroy(mapVFX.gameObject);
 
         /* * * * * * * * * * * * * * * * * * * * * * * * * * * */
-        var timeTakenToGenerateMap = System.DateTime.Now - testingTime;
-        Debug.Log($"Map Generation: It took {((int)(timeTakenToGenerateMap.TotalSeconds*100f))/100f} seconds to generate this map!");
+
+        {  // debug
+            var timeTakenToGenerateMap = System.DateTime.Now - testingTime;
+            Debug.Log($"Map Generation: It took {((int)(timeTakenToGenerateMap.TotalSeconds * 100f)) / 100f} seconds to generate this map!");
+        }
 
         OnMapGenerateEnd?.Invoke();
         yield return new WaitForSeconds(0.55f);
@@ -1056,26 +1062,129 @@ public class MapGeneration : MonoBehaviour
 
     private void AddFoundationAndEdgeWork()
     {
-        int size = allObjects.Count;
-        for (int i = 0; i < size; ++i)
+        HashSet<Block> blocksAdded = new();
+        foreach (Block b in allObjects)
         {
-            if (9 == NumOfAdjacentOccupied(allObjects[i].gameObject.transform.position)) continue;
+            if (M.addEdgeWalls)
+            {
+                for (int x = 1; x < 2; ++x)
+                {
+                    for (int z = 1; z < 2; ++z)
+                    {
+                        Vector3 areaToCheck = new Vector3(b.transform.position.x + x, 0, b.transform.position.z + z);
 
-            // RAISING edge blocks (so that anything, ie. water blocks, don't look awkward at edges)
-            Vector3 objPos = allObjects[i].transform.position;
-            Block obj = gridOccupants[(int)objPos.x, (int)objPos.z].block;
+                        if (!IsInGrid(areaToCheck) || null == gridOccupants[(int)areaToCheck.x, (int)areaToCheck.z].block)
+                        {
+                            for (int i = 0; i < M.sizeOfWall; ++i)
+                            {
+                                GameObject obj = Instantiate(blockPrefab, b.transform.position + new Vector3(0, M.blockRaiseSize + i, 0), Quaternion.identity);
 
-            if (M.blockSet.foundation)
-            { 
-                obj.type = M.blockSet.foundation;
-                obj.UpdateBlock();
+                                obj.transform.parent = temporaryObjFolder.transform;
+                                Block block = obj.GetComponent<Block>();
+                                block.type = M.blockSet.grass;
+                                block.UpdateBlock();
+                            }
+                        }
+                    }
+                }
             }
 
-            if (null != obj && Mathf.Abs(objPos.y - YBoundary.y) < _EPSILON)
+            if (M.addEdgeFoundation)
             {
-                ElevateBlock(upOrDown: true, obj, M.edgeBlockRaiseSize);
+                for (int x = -1; x < 1; ++x)
+                {
+                    for (int z = -1; z < 1; ++z)
+                    {
+                        Vector3 areaToCheck = new Vector3(b.transform.position.x + x, 0, b.transform.position.z + z);
+
+                        if ((!IsInGrid(areaToCheck) || null == gridOccupants[(int)areaToCheck.x, (int)areaToCheck.z].block) && blocksAdded.Add(b))
+                        {
+                            for (int i = 0; i < 1; ++i)
+                            {
+                                GameObject obj = Instantiate(blockPrefab, b.transform.position - new Vector3(0, M.blockRaiseSize + i, 0), Quaternion.identity);
+
+                                obj.transform.parent = temporaryObjFolder.transform;
+                                Block block = obj.GetComponent<Block>();
+                                block.type = M.blockSet.foundation;
+                                block.UpdateBlock();
+
+                                blocksAdded.Add(b);
+                            }
+                        }
+                    }
+                }
             }
         }
+
+        // attempt 2 at adding walls to top half of generated map
+        if (false)
+        {
+            List<Block> topEdgeBlocks = new();
+
+            int size = allObjects.Count;
+            for (int i = 0; i < size; ++i)
+            {
+                // reduce iterations to just edge-blocks
+                if (9 == NumOfAdjacentOccupied(allObjects[i].gameObject.transform.position)) continue;
+
+                Vector3 targetPosition = allObjects[i].transform.position + new Vector3(0, 0.9f, 0);
+                RaycastHit hit;
+                if (Physics.Raycast(Camera.main.transform.position, targetPosition - Camera.main.transform.position, out hit))
+                {
+                    if (hit.collider.gameObject.layer != 6)
+                    {
+                        Debug.Log("This one's was Ground!!! " + hit.collider.gameObject + "   layer: " + hit.collider.gameObject.layer);
+                        allObjects[i].transform.localScale = new Vector3(1, 5.5f, 1);
+                        topEdgeBlocks.Add(allObjects[i]);
+                    }
+                }
+                else
+                {
+                    allObjects[i].transform.localScale = new Vector3(1, 5.5f, 1);
+                    topEdgeBlocks.Add(allObjects[i]);
+                }
+            }
+
+            foreach (Block b in topEdgeBlocks)
+            {
+                for (int x = -1; x < 2; ++x)
+                {
+                    for (int z = -1; z < 2; ++z)
+                    {
+                        Vector3 areaToCheck = new Vector3(b.transform.position.x + x, 0, b.transform.position.z + z);
+
+                        if (!IsInGrid(areaToCheck)) continue;
+
+                        Block objectToCheck = gridOccupants[(int)areaToCheck.x, (int)areaToCheck.z].block;
+
+                        if (objectToCheck && 9 != NumOfAdjacentOccupied(objectToCheck.transform.position))
+                        {
+                            objectToCheck.transform.localScale = new Vector3(1, 5.5f, 1);
+                        }
+                    }
+                }
+            }
+        }
+
+
+        // old code to raise edge blocks to cover water
+        if (false) 
+        {
+            // RAISING edge blocks (so that anything, ie. water blocks, don't look awkward at edges)
+            //Vector3 objPos = allObjects[i].transform.position;
+            //Block obj = gridOccupants[(int)objPos.x, (int)objPos.z].block;
+
+            //if (M.blockSet.foundation)
+            //{
+            //    obj.type = M.blockSet.foundation;
+            //    obj.UpdateBlock();
+            //}
+
+            //if (null != obj && Mathf.Abs(objPos.y - YBoundary.y) < _EPSILON)
+            //{
+            //    ElevateBlock(upOrDown: true, obj, M.edgeBlockRaiseSize);
+            //}
+        }        
     }
 
 

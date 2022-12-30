@@ -84,7 +84,7 @@ public class WaterVolumeFollowTarget : MonoBehaviour
     public void UpdateWater()
     {
         waterVolume.Rebuild();
-        waterVolume.Validate();
+        //waterVolume.Validate();
     }
 
 }
