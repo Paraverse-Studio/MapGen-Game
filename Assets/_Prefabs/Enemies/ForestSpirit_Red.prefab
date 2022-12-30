@@ -1345,6 +1345,7 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   targetTag: Player
   dot: 0
+  knockBackEffect: {fileID: 0}
   hitFX: {fileID: 0}
 --- !u!1 &2739856676951319334
 GameObject:
@@ -1459,6 +1460,7 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   targetTag: Player
   dot: 0
+  knockBackEffect: {fileID: 11400000, guid: 598974d11fcf1634694fbcf7947f6e76, type: 2}
   hitFX: {fileID: 0}
 --- !u!1 &3236425430432729743
 GameObject:
@@ -3145,9 +3147,6 @@ MonoBehaviour:
   detectionRadius: 6
   pursueRadius: 10
   atkDashForce: 12
-  knockForce: 5
-  maxKnockbackRange: 1.5
-  maxKnockbackDuration: 1
   checkFallRange: 2
   maxDeathTimerUponFall: 2
   fallForce: 0.5
@@ -3191,7 +3190,7 @@ MonoBehaviour:
   _curHealth: 35
   attackDamage: 15
   abilityPower: 10
-  attackSpeed: 0.5
+  attackSpeed: 0.425
   moveSpeed: 2.5
   maxEnergy: 100
   _curEnergy: 100

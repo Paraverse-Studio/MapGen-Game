@@ -25,7 +25,7 @@ namespace Paraverse.Mob.Stats
         public Stat AbilityPower { get { return _abilityPower; } }
         private Stat _abilityPower;
 
-        [SerializeField, Range(0.2f, 3f), Tooltip("Attacks per second.")]
+        [SerializeField, Range(0.05f, 3f), Tooltip("Attacks per second.")]
         protected float attackSpeed = 0.2f;
         public Stat AttackSpeed { get { return _attackSpeed; } }
         private Stat _attackSpeed;

@@ -3083,9 +3083,6 @@ MonoBehaviour:
   detectionRadius: 20
   pursueRadius: 25
   atkDashForce: 5
-  knockForce: 5
-  maxKnockbackRange: 1.5
-  maxKnockbackDuration: 1
   checkFallRange: 2
   maxDeathTimerUponFall: 2
   fallForce: 0.5
@@ -3333,6 +3330,7 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   targetTag: Player
   dot: 0
+  knockBackEffect: {fileID: 0}
   hitFX: {fileID: 0}
 --- !u!1 &3172601158370812748
 GameObject:
@@ -3505,6 +3503,7 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   targetTag: Player
   dot: 0
+  knockBackEffect: {fileID: 11400000, guid: 748f4316b61c09e4eb46f5136b6b2a06, type: 2}
   hitFX: {fileID: 1281011124605332014, guid: 78283b04fb4620d4fb5afde968967a87, type: 3}
 --- !u!1 &3172601158817656280
 GameObject:
