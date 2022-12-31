@@ -8,20 +8,43 @@ public enum ModType
     StatMod, SkillMod, SkillUpgradeMod, EffectMod
 }
 
+
+
 //[CreateAssetMenu(fileName = "ModName", menuName = "SOs/Mods/SO_Mod")]
 public class SO_Mod : ScriptableObject
 {
+    [System.Serializable]
+    public struct Evolving
+    {
+        public bool canStack;
+        public float valueGrowthFactor;
+        public float costGrowthFactor;
+    }
+
     [Header("——————  BASICS  —————")]
     [Space(10)]
     public string Title;
     public int ID;
     public ModType Type;
     public Sprite Image;
-    public int Cost;
+
+    [SerializeField]
+    protected int Cost;
     [TextArea(1, 4)]
     public string Description;
-    public SO_Mod[] PrerequisiteMods;
 
+    [Header("——————  SPECIAL  —————")]
+    public SO_Mod[] PrerequisiteMods;
+    public Evolving evolve;
+
+    /// <summary>
+    /// in rare cases, this function could be needed to change
+    /// for sub classes
+    /// </summary>
+    public virtual int GetCost()
+    {
+        return Cost;
+    }
 
     /// <summary>
     /// takes in a user's currency, and existing mods in numerable, and returns
@@ -30,7 +53,7 @@ public class SO_Mod : ScriptableObject
     /// </summary>
     public virtual bool CanPurchase(int userCurrencyAmount, IEnumerable<SO_Mod> userCurrentMods)
     {
-        if (userCurrencyAmount < Cost) return false;
+        if (userCurrencyAmount < GetCost()) return false;
 
         if (null != PrerequisiteMods && PrerequisiteMods.Length > 0)
         {
@@ -54,11 +77,29 @@ public class SO_Mod : ScriptableObject
     }
 
     /// <summary>
+    /// Logic for after activated, how does this mod get consumed (used up)
+    /// </summary>
+    public virtual SO_Mod Consume()
+    {
+        return null;
+        // implement in sub classes
+    }
+
+    /// <summary>
     /// Logic for auto-filling description when applicable
     /// </summary>
     public virtual void AutofillDescription()
     {
         // implement in sub classes
+    }
+
+    /// <summary>
+    /// Logic for special cases where SO data needs to be reset after un-playing
+    /// so as to not retain changes made during gameplay
+    /// </summary>
+    public virtual void Reset()
+    {
+        // implement in sub classes (primarily only needed in stat mod)
     }
 
 

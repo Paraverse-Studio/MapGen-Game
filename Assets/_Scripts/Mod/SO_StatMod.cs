@@ -19,15 +19,24 @@ public class SO_StatMod : SO_Mod
     }
 
     [System.Serializable]
-    public struct StatPair
+    public class StatPair
     {
         public StatType type;
         public float value;
+
+        public StatPair(StatType t, float f)
+        {
+            this.type = t;
+            this.value = f;
+        }
     }
 
     [Header("Stats Change")]
     [SerializeField]
-    public List<StatPair> addStats;
+    public List<StatPair> addStats; // reference for original values
+
+    private List<StatPair> _addStatsMutable = null; // mutable
+    private int _CostMutable; // mutable version
 
     private MobStats _player;
 
@@ -35,6 +44,11 @@ public class SO_StatMod : SO_Mod
     private void OnValidate()
     {
         Description = "<Stat Mods are autofilled at run-time>";
+    }
+
+    public override int GetCost()
+    {
+        return _CostMutable;
     }
 
     public override void Activate(GameObject go)
@@ -49,8 +63,10 @@ public class SO_StatMod : SO_Mod
             return;
         }
 
+        if (null == _addStatsMutable) _addStatsMutable = new (addStats);
+
         // Add the stats to the player provided
-        foreach (StatPair statPair in addStats)
+        foreach (StatPair statPair in _addStatsMutable)
         {
             // do something with entry.Value or entry.Key
             switch (statPair.type)
@@ -79,16 +95,33 @@ public class SO_StatMod : SO_Mod
         Debug.Log($"Stat Mod: Mod \"{Title}\" (ID {ID}) activated for {_player.gameObject.name}!");
     }
 
+    public override SO_Mod Consume()
+    {
+        if (evolve.canStack)
+        {
+            for (int i = 0; i < _addStatsMutable.Count; ++i)
+            {
+                _addStatsMutable[i] = new StatPair(_addStatsMutable[i].type, _addStatsMutable[i].value * evolve.valueGrowthFactor);
+            }
+            _CostMutable = (int)(GetCost() * evolve.costGrowthFactor);
+
+            AutofillDescription();
+            return this;
+        }
+        else
+        {
+            return base.Consume();
+        }
+    }
+
     public override void AutofillDescription()
     {
         base.AutofillDescription();
-
         string message = string.Empty;
 
-        foreach (StatPair p in addStats)
+        foreach (StatPair p in _addStatsMutable)
         {
             message += ((p.value > 0)? "Gain " : "Lose ") + p.value + " ";
-
             switch (p.type)
             {
                 case StatType.Attack:
@@ -112,8 +145,16 @@ public class SO_StatMod : SO_Mod
             }
 
             message += ". ";
-
             Description = message;
         }
     }
+
+    public override void Reset()
+    {
+        base.Reset();
+        _CostMutable = Cost;
+        _addStatsMutable = new (addStats);
+        AutofillDescription();
+    }
+
 }

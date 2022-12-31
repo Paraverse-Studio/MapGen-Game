@@ -69,6 +69,7 @@ public class ShopManager : MonoBehaviour
         foreach (Object obj in loadedObjects)
         {
             AvailableMods.Add((SO_Mod)obj);
+            AvailableMods[AvailableMods.Count - 1].Reset();
         }
     }
 
@@ -93,18 +94,21 @@ public class ShopManager : MonoBehaviour
         for (int i = 0; i < AvailableMods.Count; ++ i)
         {
             if (null == AvailableMods[i]) AvailableMods.Remove(AvailableMods[i]);
-            else AvailableMods[i].AutofillDescription();
+            else
+            {
+                AvailableMods[i].AutofillDescription();
+            }
         }
 
         // 2.0  Refresh available mods list, sort them by their price
         goldText.text = _playerStats.Gold.ToString();
-        AvailableMods.Sort((a, b) => a.Cost.CompareTo(b.Cost));
+        AvailableMods.Sort((a, b) => a.GetCost().CompareTo(b.GetCost()));
 
         // 3.0  Find user's currency index point: index of the highest priced item the user can buy
         int userCurrencyIndex = -1;
         for (int i = 0; i < AvailableMods.Count; ++i)
         {
-            if (AvailableMods[i].Cost < userCurrencyAmount) userCurrencyIndex = i;
+            if (AvailableMods[i].GetCost() < userCurrencyAmount) userCurrencyIndex = i;
         }
 
         // 4.0  Then poll a couple of mods from that price point and below
@@ -145,7 +149,7 @@ public class ShopManager : MonoBehaviour
         modCard.titleLabel.text = modPair.mod.Title;
         modCard.imageHolder.sprite = modPair.mod.Image;
         modCard.descriptionLabel.text = modPair.mod.Description;
-        modCard.costLabel.text = modPair.mod.Cost.ToString();
+        modCard.costLabel.text = modPair.mod.GetCost().ToString();
 
         modCard.purchaseButton.onClick.AddListener(() => OnClickPurchaseItem(modCard, modPair));
     }
@@ -168,7 +172,7 @@ public class ShopManager : MonoBehaviour
 
     public void OnClickPurchaseItem(ModCard modCard, ModPair shopItem)
     {
-        if (_playerStats.Gold < shopItem.mod.Cost)
+        if (_playerStats.Gold < shopItem.mod.GetCost())
         {
             // cannot purchase it, notify user of insuffucient gold
             return;
@@ -177,19 +181,23 @@ public class ShopManager : MonoBehaviour
         // Logistics
         Debug.Log($"Purchased item {AvailableMods[shopItem.index].Title}!");
 
-        _playerStats.UpdateGold(-shopItem.mod.Cost);
+        _playerStats.UpdateGold(-shopItem.mod.GetCost());
         goldText.text = _playerStats.Gold.ToString();
 
         _purhasedMods.Add(AvailableMods[shopItem.index]);
-        AvailableMods[shopItem.index] = null; // we do this instead of Remove() to retain index integrity
+
+        // the mod itself handles what the mod will do for the player when activated
+        shopItem.mod.Activate(_player);
+
+        SO_Mod returnValue = shopItem.mod.Consume();
+        // normally returnValue is null cause u bought the mod, so its gone from Available
+        AvailableMods[shopItem.index] = returnValue; 
+
         Destroy(modCard.gameObject);
         OnPurchaseItem?.Invoke();
 
         RefreshShopItemValues();
         _refresher.RefreshContentFitters();
-
-        // the mod itself handles what the mod will do for the player when activated
-        shopItem.mod.Activate(_player);
     }
 
 }

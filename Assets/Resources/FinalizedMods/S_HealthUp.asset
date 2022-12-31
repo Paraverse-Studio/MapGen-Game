@@ -17,8 +17,12 @@ MonoBehaviour:
   Type: 0
   Image: {fileID: 21300000, guid: b9575611fae012548b8786ba847f50a7, type: 3}
   Cost: 50
-  Description: Gain +10 Health
+  Description: <Stat Mods are autofilled at run-time>
   PrerequisiteMods: []
+  evolve:
+    canStack: 1
+    valueGrowthFactor: 2
+    costGrowthFactor: 1.25
   addStats:
   - type: 2
-    value: 10
+    value: 5
