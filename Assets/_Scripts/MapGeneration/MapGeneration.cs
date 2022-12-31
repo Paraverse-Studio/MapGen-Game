@@ -34,6 +34,14 @@ public struct PropSet
     public GameObject[] propPrefabs;
 }
 
+[System.Serializable]
+public struct MapGenDataPair 
+{
+    public SO_MapGenData map;
+    public SO_MapGenData bossMap;
+}
+
+
 public class MapGeneration : MonoBehaviour
 {
     public enum Side
@@ -748,7 +756,7 @@ public class MapGeneration : MonoBehaviour
         block.UpdateBlock();
         block.UpdateHistory("Spawned at " + spawnSpot);
 
-        gridOccupants[(int)vec.x, (int)vec.z].block = block;
+        if (IsInGrid(new Vector3((int)vec.x, 0, (int)vec.z))) gridOccupants[(int)vec.x, (int)vec.z].block = block;
 
         if (utilizeY) return block;
 

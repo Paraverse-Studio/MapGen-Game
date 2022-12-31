@@ -7,7 +7,7 @@ public class KnockBackEffect : ScriptableObject
     [Header("Knockback Values")]
     [Tooltip("The knockback force applied to the target.")]
     public float knockForce = 5f;
-    [Range(0, 1), Tooltip("The max duration of knockback applied to the target.")]
+    [Range(0, 2), Tooltip("The max duration of knockback applied to the target.")]
     public float maxKnockbackDuration = 1f;
     [Tooltip("The max distance applied to the target.")]
     public float maxKnockbackRange = 1.5f;

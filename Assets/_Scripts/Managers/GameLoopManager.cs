@@ -61,6 +61,12 @@ public class GameLoopManager : MonoBehaviour
     [Header("Combat Map")]
     public bool developerMode = false;
 
+    [Space(10)]
+    [Header("Biomes")]
+    public List<MapGenDataPair> maps;
+    [Min(1)]
+    public int switchMapAfterNumOfRounds;
+
     [Space(20)]
     [Header("Screens/Windows/Views")]
     public Animator roundCompleteWindow;
@@ -181,6 +187,13 @@ public class GameLoopManager : MonoBehaviour
 
     public void InitiateRound()
     {
+        // nextRoundNumber starts with 1 just to make it easier for display on inspector what round you're on
+        // so as a result, in code is where we have to reduce by 1 to do the proper calculations
+        int adjustedRoundNumber = nextRoundNumber - 1;
+        int mapIndex = adjustedRoundNumber / switchMapAfterNumOfRounds;
+        bool bossRound = (adjustedRoundNumber != 0)? (adjustedRoundNumber % switchMapAfterNumOfRounds == (switchMapAfterNumOfRounds-1)) : false;
+        MapGeneration.Instance.M = (!bossRound)? maps[mapIndex].map : maps[mapIndex].bossMap;
+
         GameLoopEvents.OnInitiateRound?.Invoke();
 
         ResetStates();
