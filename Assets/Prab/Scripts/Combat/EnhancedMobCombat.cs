@@ -18,6 +18,15 @@ public class EnhancedMobCombat : MobCombat
     public bool IsSkilling { get { return _isSkilling; } }
     protected bool _isSkilling = false;
 
+    protected override void Start()
+    {
+        base.Start();
+        for (int i = 0; i < skills.Count; i++)
+        {
+            skills[i].ActivateSkill(this, anim, stats, player);
+        }
+    }
+
     protected override void Update()
     {
         base.Update();

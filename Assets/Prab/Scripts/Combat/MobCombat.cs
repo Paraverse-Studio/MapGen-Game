@@ -149,7 +149,8 @@ namespace Paraverse.Mob.Combat
         /// </summary>
         protected void EnableBasicAttackCollider()
         {
-            basicAtkCollider.SetActive(true);
+            if (basicAtkCollider != null)
+                basicAtkCollider.SetActive(true);
         }
 
         /// <summary>
@@ -157,7 +158,8 @@ namespace Paraverse.Mob.Combat
         /// </summary>
         protected void DisableBasicAttackCollider()
         {
-            basicAtkCollider.SetActive(false);
+            if (basicAtkCollider != null)
+                basicAtkCollider.SetActive(false);
         }
 
         /// <summary>
