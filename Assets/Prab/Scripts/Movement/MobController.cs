@@ -541,17 +541,6 @@ namespace Paraverse.Mob.Controller
             Vector3 leftOrigin = origin + new Vector3(-nav.radius, 0f, 0f);
             Vector3 rightOrigin = origin + new Vector3(nav.radius, 0f, 0f);
 
-            Debug.DrawRay(topOrigin, dir * checkFallRange, Color.red);
-            Debug.DrawRay(leftOrigin, dir * checkFallRange, Color.red);
-            Debug.DrawRay(rightOrigin, dir * checkFallRange, Color.red);
-
-            Debug.Log(Physics.Raycast(topOrigin, dir * checkFallRange, checkFallRange));
-            Debug.Log(Physics.Raycast(leftOrigin, dir * checkFallRange, checkFallRange));
-            Debug.Log(Physics.Raycast(rightOrigin, dir * checkFallRange, checkFallRange));
-            Debug.Log(Physics.Raycast(topOrigin, dir * checkFallRange, checkFallRange) &&
-            (Physics.Raycast(leftOrigin, dir * checkFallRange, checkFallRange) &&
-            (Physics.Raycast(rightOrigin, dir * checkFallRange, checkFallRange))));
-
             if (Physics.Raycast(topOrigin, dir * checkFallRange, checkFallRange) &&
             (Physics.Raycast(leftOrigin, dir * checkFallRange, checkFallRange) &&
             (Physics.Raycast(rightOrigin, dir * checkFallRange, checkFallRange))))
