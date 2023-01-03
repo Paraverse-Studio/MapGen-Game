@@ -116,6 +116,7 @@ namespace Paraverse.Mob.Controller
         public bool IsFalling { get { return _isFalling; } }
         protected bool _isFalling = false;
         public bool IsInvulnerable { get; }
+        [SerializeField]
         protected bool _isInvulnerable = false;
         public bool IsDead { get { return _isDead; } }
         protected bool _isDead = false;
@@ -486,7 +487,7 @@ namespace Paraverse.Mob.Controller
         /// </summary>
         public void ApplyKnockBack(Vector3 mobPos, KnockBackEffect effect)
         {
-            if (IsInvulnerable || combat.IsBasicAttacking) return;
+            if (IsInvulnerable || combat.IsAttackLunging) return;
 
             combat.OnAttackInterrupt();
             Vector3 impactDir = (transform.position - mobPos).normalized;
@@ -540,17 +541,6 @@ namespace Paraverse.Mob.Controller
             Vector3 topOrigin = origin + new Vector3(0f, 0f, nav.radius);
             Vector3 leftOrigin = origin + new Vector3(-nav.radius, 0f, 0f);
             Vector3 rightOrigin = origin + new Vector3(nav.radius, 0f, 0f);
-
-            Debug.DrawRay(topOrigin, dir * checkFallRange, Color.red);
-            Debug.DrawRay(leftOrigin, dir * checkFallRange, Color.red);
-            Debug.DrawRay(rightOrigin, dir * checkFallRange, Color.red);
-
-            Debug.Log(Physics.Raycast(topOrigin, dir * checkFallRange, checkFallRange));
-            Debug.Log(Physics.Raycast(leftOrigin, dir * checkFallRange, checkFallRange));
-            Debug.Log(Physics.Raycast(rightOrigin, dir * checkFallRange, checkFallRange));
-            Debug.Log(Physics.Raycast(topOrigin, dir * checkFallRange, checkFallRange) &&
-            (Physics.Raycast(leftOrigin, dir * checkFallRange, checkFallRange) &&
-            (Physics.Raycast(rightOrigin, dir * checkFallRange, checkFallRange))));
 
             if (Physics.Raycast(topOrigin, dir * checkFallRange, checkFallRange) &&
             (Physics.Raycast(leftOrigin, dir * checkFallRange, checkFallRange) &&
