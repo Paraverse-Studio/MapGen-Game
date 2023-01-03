@@ -104,7 +104,7 @@ namespace Paraverse.Combat
         /// </summary>
         public virtual void SkillUpdate()
         {
-            if (null != target)
+            if (null != target && mob.IsBasicAttacking == false)
             {
                 Execute();
             }
@@ -151,7 +151,7 @@ namespace Paraverse.Combat
         /// <returns></returns>
         protected virtual bool CanUseSkill()
         {
-            if (IsOffCooldown && HasEnergy && TargetWithinRange)
+            if (IsOffCooldown && HasEnergy && TargetWithinRange && mob.IsBasicAttacking == false)
             {
                 return true;
             }
