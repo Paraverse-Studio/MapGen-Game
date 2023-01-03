@@ -5,9 +5,8 @@ using System.Linq;
 
 public enum ModType
 {
-    StatMod, SkillMod, SkillUpgradeMod, EffectMod
+    Stats, Skill, Effects
 }
-
 
 
 //[CreateAssetMenu(fileName = "ModName", menuName = "SOs/Mods/SO_Mod")]

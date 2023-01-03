@@ -121,6 +121,8 @@ public class ShopManager : MonoBehaviour
             if (_modPool.Count >= pollQuantity) break;
         }
 
+        Debug.Log("Mod Pool here has " + _modPool.Count);
+
         // 5.0  From the polled amount, randomly pick the mods to show on shop
         System.Random rand = new();
         _modPool = _modPool.OrderBy(_ => rand.Next()).ToList();
@@ -150,7 +152,7 @@ public class ShopManager : MonoBehaviour
         modCard.imageHolder.sprite = modPair.mod.Image;
         modCard.descriptionLabel.text = modPair.mod.Description;
         modCard.costLabel.text = modPair.mod.GetCost().ToString();
-
+        modCard.typeLabel.text = modPair.mod.Type.ToString();
         modCard.purchaseButton.onClick.AddListener(() => OnClickPurchaseItem(modCard, modPair));
     }
 

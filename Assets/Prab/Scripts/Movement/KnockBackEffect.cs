@@ -1,7 +1,7 @@
 using System;
 using UnityEngine;
 
-[CreateAssetMenu(fileName = "Knockback Effect", menuName ="SOs/Mods/Knockback Effect")]
+[CreateAssetMenu(fileName = "Knockback Effect", menuName ="SOs/Skills/Knockback Effect")]
 public class KnockBackEffect : ScriptableObject
 {
     [Header("Knockback Values")]
