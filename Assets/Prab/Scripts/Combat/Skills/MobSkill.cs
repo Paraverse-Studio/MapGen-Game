@@ -24,8 +24,10 @@ namespace Paraverse.Combat
         protected string _description = "";
 
         public bool TargetWithinRange { get { return IsInRange(); } }
-        [SerializeField, Tooltip("Skill range value.")]
-        protected float _range = 5f;
+        [SerializeField, Tooltip("Min skill range value.")]
+        protected float _minRange = 0f;
+        [SerializeField, Tooltip("Max skill range value.")]
+        protected float _maxRange = 5f;
         public bool IsOffCooldown { get { return curCooldown <= 0; } }
         [SerializeField, Tooltip("Skill cooldown value.")]
         protected float cooldown = 5f;
@@ -166,7 +168,7 @@ namespace Paraverse.Combat
 
             float disFromTarget = ParaverseHelper.GetDistance(mob.transform.position, target.position);
 
-            return disFromTarget <= _range;
+            return disFromTarget >= _minRange && disFromTarget <= _maxRange;
         }
         #endregion
     }
