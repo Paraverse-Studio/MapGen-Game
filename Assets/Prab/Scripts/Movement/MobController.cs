@@ -526,6 +526,7 @@ namespace Paraverse.Mob.Controller
                 else if (disFromStartPos >= activeKnockBackEffect.maxKnockbackRange || activeKnockBackEffect.maxKnockbackDuration <= 0)
                 {
                     CleanseStagger();
+                    return;
                 }
 
                 // Moves the mob in the move direction

@@ -4,7 +4,6 @@ using UnityEngine;
 
 public class SummonSkill : MobSkill, IMobSkill
 {
-
     #region Variables
     [SerializeField]
     private GameObject summonPf;

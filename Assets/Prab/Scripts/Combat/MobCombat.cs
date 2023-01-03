@@ -1,7 +1,7 @@
-using System;
-using UnityEngine;
 using Paraverse.Helper;
 using Paraverse.Mob.Stats;
+using System;
+using UnityEngine;
 
 namespace Paraverse.Mob.Combat
 {

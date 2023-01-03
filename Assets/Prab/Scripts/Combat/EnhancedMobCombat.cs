@@ -40,7 +40,7 @@ public class EnhancedMobCombat : MobCombat
                 usingSkillIdx = i;
             }
         }
-         anim.SetBool(StringData.IsUsingSkill, usingSkill);
+         //anim.SetBool(StringData.IsUsingSkill, usingSkill);
         _isSkilling = anim.GetBool(StringData.IsSkilling);
     }
 
