@@ -88,7 +88,7 @@ public class MobHealthFlash : MonoBehaviour
     {
         for (int i = 0; i < _renderers.Length; ++i)
         {
-            _renderers[i].material = flashOn? _flashMaterial : _originalMaterials[i];
+            if (_renderers[i]) _renderers[i].material = flashOn? _flashMaterial : _originalMaterials[i];
         }
     }
 

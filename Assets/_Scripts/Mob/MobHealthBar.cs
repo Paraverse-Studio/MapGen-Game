@@ -42,6 +42,7 @@ public class MobHealthBar : MonoBehaviour
     private MobStats _mobStats;
     private Selectable _selectable;
     private bool _healthBarSetupComplete = false;
+    private bool _healthBarShowable = true;
 
     // local copies (for lerping without constant reference)
     private float _health = -1.0f;
@@ -99,7 +100,7 @@ public class MobHealthBar : MonoBehaviour
     // Update is called once per frame
     void Update()
     {
-        if (!_healthBarSetupComplete) return;
+        if (!_healthBarSetupComplete || !_healthBarShowable) return;
         if (!_mobStats) DestroyImmediate(gameObject);
 
         // Health
@@ -126,7 +127,7 @@ public class MobHealthBar : MonoBehaviour
 
         if (_healthValueDisplay) _healthValueDisplay.text = currentHP + " / " + totalHP;
 
-        if (!_healthBarSetupComplete) return;
+        if (!_healthBarSetupComplete || !_healthBarShowable) return;
 
         PopupTextOnHealthChange(healthChange);
 
@@ -257,7 +258,7 @@ public class MobHealthBar : MonoBehaviour
 
     public void ToggleHealthBarReady(bool o)
     {
-        _healthBarSetupComplete = o;
+        _healthBarShowable = o;
     }
 
     #region HELPER_FUNCTIONS

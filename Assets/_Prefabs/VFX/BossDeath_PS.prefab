@@ -285,7 +285,7 @@ ParticleSystem:
     startSize:
       serializedVersion: 2
       minMaxState: 0
-      scalar: 45
+      scalar: 90
       minScalar: 1
       maxCurve:
         serializedVersion: 2
@@ -977,7 +977,7 @@ ParticleSystem:
       countCurve:
         serializedVersion: 2
         minMaxState: 0
-        scalar: 3
+        scalar: 1
         minScalar: 30
         maxCurve:
           serializedVersion: 2
@@ -1027,7 +1027,7 @@ ParticleSystem:
           m_PreInfinity: 2
           m_PostInfinity: 2
           m_RotationOrder: 4
-      cycleCount: 6
+      cycleCount: 1
       repeatInterval: 0.0125
       probability: 1
   SizeModule:
@@ -1041,8 +1041,8 @@ ParticleSystem:
         serializedVersion: 2
         m_Curve:
         - serializedVersion: 3
-          time: 0
-          value: 0.28710556
+          time: 0.00856781
+          value: 0.036403656
           inSlope: 0
           outSlope: 0
           tangentMode: 0
@@ -1051,12 +1051,12 @@ ParticleSystem:
           outWeight: 0
         - serializedVersion: 3
           time: 1
-          value: 0.42577302
-          inSlope: 0
-          outSlope: 0
+          value: 0.9856638
+          inSlope: 1.8258301
+          outSlope: 1.8258301
           tangentMode: 0
           weightedMode: 0
-          inWeight: 0
+          inWeight: 0.105654
           outWeight: 0
         m_PreInfinity: 2
         m_PostInfinity: 2
@@ -1193,7 +1193,7 @@ ParticleSystem:
         m_RotationOrder: 4
     separateAxes: 0
   RotationModule:
-    enabled: 1
+    enabled: 0
     x:
       serializedVersion: 2
       minMaxState: 0
@@ -4844,7 +4844,7 @@ ParticleSystemRenderer:
   m_MeshDistribution: 0
   m_SortMode: 0
   m_MinParticleSize: 0
-  m_MaxParticleSize: 10
+  m_MaxParticleSize: 10000
   m_CameraVelocityScale: 0
   m_VelocityScale: 0
   m_LengthScale: 2
@@ -9793,7 +9793,7 @@ Transform:
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 8564114017555463147}
   m_LocalRotation: {x: 0.7071068, y: 0, z: 0, w: 0.7071068}
-  m_LocalPosition: {x: 0, y: 10, z: 0}
+  m_LocalPosition: {x: 0, y: 4, z: 0}
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_ConstrainProportionsScale: 0
   m_Children: []
@@ -9809,11 +9809,11 @@ Light:
   m_GameObject: {fileID: 8564114017555463147}
   m_Enabled: 1
   serializedVersion: 10
-  m_Type: 1
+  m_Type: 2
   m_Shape: 0
-  m_Color: {r: 1, g: 0.4185806, b: 0, a: 1}
-  m_Intensity: 1.25
-  m_Range: 20
+  m_Color: {r: 1, g: 0.61679775, b: 0, a: 1}
+  m_Intensity: 20
+  m_Range: 12
   m_SpotAngle: 77.519226
   m_InnerSpotAngle: 72.598526
   m_CookieSize: 10
@@ -9908,4 +9908,4 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   _light: {fileID: 6950285632308816243}
-  speed: 1
+  speed: 25
