@@ -66,8 +66,26 @@ namespace Paraverse.Combat
             this.input = input;
             this.anim = anim;
             this.stats = stats;
-            input.OnSkillOneEvent += Execute;
             curCooldown = 0f;
+            if (mob.tag.Equals(StringData.PlayerTag))
+                input.OnSkillOneEvent += Execute;
+
+            if (null == attackCollider && null != attackColliderGO)
+            {
+                attackCollider = attackColliderGO.GetComponent<AttackCollider>();
+                attackCollider.Init(mob, stats);
+            }
+        }
+
+        public virtual void ActivateSkill(MobCombat mob, Animator anim, IMobStats stats, Transform target = null)
+        {
+            this.mob = mob;
+            this.target = target;
+            this.anim = anim;
+            this.stats = stats;
+            curCooldown = 0f;
+            if (mob.tag.Equals(StringData.PlayerTag))
+                input.OnSkillOneEvent += Execute;
 
             if (null == attackCollider && null != attackColliderGO)
             {
@@ -86,6 +104,10 @@ namespace Paraverse.Combat
         /// </summary>
         public virtual void SkillUpdate()
         {
+            if (null != target)
+            {
+                Execute();
+            }
             CooldownHandler();
         }
 
@@ -138,7 +160,7 @@ namespace Paraverse.Combat
             return false;
         }
 
-        protected bool IsInRange()
+        protected virtual bool IsInRange()
         {
             if (target == null) return true;
 

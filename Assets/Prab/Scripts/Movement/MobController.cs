@@ -509,6 +509,7 @@ namespace Paraverse.Mob.Controller
                 // Ensures mob falls when off platform
                 if (CheckFall())
                 {
+                    _isFalling = true;
                     nav.enabled = false;
                     knockbackDir.y = GlobalValues.GravityForce;
                     Vector3 fallDir = new Vector3(knockbackDir.x * activeKnockBackEffect.knockForce, knockbackDir.y * fallForce, knockbackDir.z * activeKnockBackEffect.knockForce);
@@ -543,14 +544,22 @@ namespace Paraverse.Mob.Controller
             Debug.DrawRay(topOrigin, dir * checkFallRange, Color.red);
             Debug.DrawRay(leftOrigin, dir * checkFallRange, Color.red);
             Debug.DrawRay(rightOrigin, dir * checkFallRange, Color.red);
+
+            Debug.Log(Physics.Raycast(topOrigin, dir * checkFallRange, checkFallRange));
+            Debug.Log(Physics.Raycast(leftOrigin, dir * checkFallRange, checkFallRange));
+            Debug.Log(Physics.Raycast(rightOrigin, dir * checkFallRange, checkFallRange));
+            Debug.Log(Physics.Raycast(topOrigin, dir * checkFallRange, checkFallRange) &&
+            (Physics.Raycast(leftOrigin, dir * checkFallRange, checkFallRange) &&
+            (Physics.Raycast(rightOrigin, dir * checkFallRange, checkFallRange))));
+
             if (Physics.Raycast(topOrigin, dir * checkFallRange, checkFallRange) &&
             (Physics.Raycast(leftOrigin, dir * checkFallRange, checkFallRange) &&
             (Physics.Raycast(rightOrigin, dir * checkFallRange, checkFallRange))))
             {
+                _isFalling = false;
             }
             else
             {
-                _isFalling = true;
                 return true;
             }
             return false;
