@@ -116,6 +116,7 @@ namespace Paraverse.Mob.Controller
         public bool IsFalling { get { return _isFalling; } }
         protected bool _isFalling = false;
         public bool IsInvulnerable { get; }
+        [SerializeField]
         protected bool _isInvulnerable = false;
         public bool IsDead { get { return _isDead; } }
         protected bool _isDead = false;
@@ -486,7 +487,7 @@ namespace Paraverse.Mob.Controller
         /// </summary>
         public void ApplyKnockBack(Vector3 mobPos, KnockBackEffect effect)
         {
-            if (IsInvulnerable || combat.IsBasicAttacking) return;
+            if (IsInvulnerable || combat.IsAttackLunging) return;
 
             combat.OnAttackInterrupt();
             Vector3 impactDir = (transform.position - mobPos).normalized;
