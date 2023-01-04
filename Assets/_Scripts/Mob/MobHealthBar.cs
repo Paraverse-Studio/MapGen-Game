@@ -29,6 +29,7 @@ public class MobHealthBar : MonoBehaviour
         public bool showSelectionAllTimes; // this one's not even used
         public bool showEnergyBar;
         public float heightAdjustment;
+        public bool isBoss;
     }
 
     [Header("Health Bar UI")]
@@ -57,6 +58,7 @@ public class MobHealthBar : MonoBehaviour
     private TextMeshProUGUI _healthValueDisplay;
     private Image _energyBar;
     private Image _energyLerpBar;
+    private GameObject _healthBarContainer;
 
     // Start is called before the first frame update
     void Start()
@@ -68,13 +70,13 @@ public class MobHealthBar : MonoBehaviour
 
         gameObject.AddComponent<MobHealthFlash>();
 
-        if (overrideProperties.healthBar == null)
+        if (overrideProperties.healthBar != null || settings.isBoss)
         {
-            CreateHealthBar();
+            LoadCustomHealthBar();
         }
         else 
         {
-            LoadCustomHealthBar();
+            CreateHealthBar();
         }        
 
         if (TryGetComponent(out _mobStats))
@@ -104,16 +106,21 @@ public class MobHealthBar : MonoBehaviour
         if (!_mobStats) DestroyImmediate(gameObject);
 
         // Health
-        _healthBar.fillAmount = Mathf.Clamp(_health / _totalHealth, 0f, 1f);
-        _healthDamageBar.fillAmount = Mathf.Lerp(_healthDamageBar.fillAmount, _healthBar.fillAmount, Time.deltaTime * 2f);
-
+        if (_healthBar)
+        {
+            _healthBar.fillAmount = Mathf.Clamp(_health / _totalHealth, 0f, 1f);
+            _healthDamageBar.fillAmount = Mathf.Lerp(_healthDamageBar.fillAmount, _healthBar.fillAmount, Time.deltaTime * 2f);
+        }
 
         // Energy
-        float goalAmount = _energy / _totalEnergy;
-        if (_energyBar.fillAmount < goalAmount) _energyBar.fillAmount = Mathf.Lerp(_energyBar.fillAmount, goalAmount, Time.deltaTime * 10f);
-        else _energyBar.fillAmount = goalAmount;
+        if (_energyBar)
+        {
+            float goalAmount = _energy / _totalEnergy;
+            if (_energyBar.fillAmount < goalAmount) _energyBar.fillAmount = Mathf.Lerp(_energyBar.fillAmount, goalAmount, Time.deltaTime * 10f);
+            else _energyBar.fillAmount = goalAmount;
 
-        _energyLerpBar.fillAmount = Mathf.Lerp(_energyLerpBar.fillAmount, _energyBar.fillAmount, Time.deltaTime * 2f);
+            _energyLerpBar.fillAmount = Mathf.Lerp(_energyLerpBar.fillAmount, _energyBar.fillAmount, Time.deltaTime * 2f);
+        }
     }
 
     // main updater
@@ -168,23 +175,41 @@ public class MobHealthBar : MonoBehaviour
         _energyLerpBar = controller.energyLerpBar;
         _targetIcon = controller.targetIcon;
         _nameLabel = controller.nameLabel;
+        _healthBarContainer = controller.healthBarContainer;
 
-        // Custom for Player's HP
-        if (null != overrideProperties.healthBar)
+        // Not needed? They're done in LoadCreateBar instead of CreateHealthBar
+        if (false)
         {
-            _healthBar = overrideProperties.healthBar;
-            _healthDamageBar = overrideProperties.damageBar;
-            _healthValueDisplay = overrideProperties.healthValueDisplay;
-            _energyBar = overrideProperties.energyBar;
-            _energyLerpBar = overrideProperties.energyLerpBar;
-            _nameLabel = overrideProperties.nameLabel;
+            // Custom for Player's HP
+            if (null != overrideProperties.healthBar)
+            {
+                _healthBar = overrideProperties.healthBar;
+                _healthDamageBar = overrideProperties.damageBar;
+                _healthValueDisplay = overrideProperties.healthValueDisplay;
+                _energyBar = overrideProperties.energyBar;
+                _energyLerpBar = overrideProperties.energyLerpBar;
+                _nameLabel = overrideProperties.nameLabel;
+            }
+
+            if (settings.isBoss)
+            {
+                BossHealthBarModel model = _healthBarsFolder.GetComponent<BossHealthBarModel>();
+                _healthBar = model.healthBar;
+                _healthDamageBar = model.damageBar;
+                _healthValueDisplay = model.healthValueDisplay;
+                _energyBar = model.energyBar;
+                _energyLerpBar = model.energyLerpBar;
+                _nameLabel = model.nameLabel;
+                _healthBarContainer = model.healthBarContainer;
+                _healthBarContainer.SetActive(true);
+            }
         }
 
         // Settings
-        controller.healthBarContainer.gameObject.SetActive(!settings.hideHealthBar);
-        controller.nameLabel.gameObject.SetActive(!settings.hideName);
-        controller.targetIcon.SetActive(settings.showSelectionAllTimes);
-        controller.energyBarContainer.gameObject.SetActive(settings.showEnergyBar);
+        _healthBarContainer.gameObject.SetActive(!settings.hideHealthBar);
+        _nameLabel.gameObject.SetActive(!settings.hideName);
+        _targetIcon.SetActive(settings.showSelectionAllTimes);
+        controller.energyBarContainer.gameObject.SetActive(settings.showEnergyBar);               
 
         // Find this object's bounds height, using either a collider or mesh renderer
         Collider collider = GetComponentInChildren<Collider>();
@@ -212,13 +237,33 @@ public class MobHealthBar : MonoBehaviour
     }
 
     private void LoadCustomHealthBar()
-    {        
-        _healthBar = overrideProperties.healthBar;
-        _healthDamageBar = overrideProperties.damageBar;
-        _healthValueDisplay = overrideProperties.healthValueDisplay;
-        _energyBar = overrideProperties.energyBar;
-        _energyLerpBar = overrideProperties.energyLerpBar;
-        _nameLabel = overrideProperties.nameLabel;
+    {
+        // Custom for player (HUD health bar)
+        if (overrideProperties.healthBar != null)
+        {
+            _healthBar = overrideProperties.healthBar;
+            _healthDamageBar = overrideProperties.damageBar;
+            _healthValueDisplay = overrideProperties.healthValueDisplay;
+            _energyBar = overrideProperties.energyBar;
+            _energyLerpBar = overrideProperties.energyLerpBar;
+            _nameLabel = overrideProperties.nameLabel;
+            _nameLabel.text = gameObject.name;
+        }
+
+        // custom for bosses (HUD health bar)
+        if (settings.isBoss)
+        {
+            BossHealthBarModel model = _healthBarsFolder.GetComponent<BossHealthBarModel>();
+            _healthBar = model.healthBar;
+            _healthDamageBar = model.damageBar;
+            _healthValueDisplay = model.healthValueDisplay;
+            _energyBar = model.energyBar;
+            _energyLerpBar = model.energyLerpBar;
+            _nameLabel = model.nameLabel;
+            _nameLabel.text = gameObject.name;
+            _healthBarContainer = model.healthBarContainer;
+            _healthBarContainer.SetActive(true);
+        }
 
         _healthBarSetupComplete = true;
     }
@@ -253,6 +298,7 @@ public class MobHealthBar : MonoBehaviour
 
     private void OnDestroy()
     {
+        if (_healthBarContainer) _healthBarContainer.SetActive(false);
         Destroy(_healthBarObject);
     }
 

@@ -1,4 +1,5 @@
 using Paraverse.Stats;
+using System.Collections;
 using UnityEngine;
 
 namespace Paraverse.Mob.Stats
@@ -74,8 +75,9 @@ namespace Paraverse.Mob.Stats
             _curEnergy = (int)MaxEnergy.FinalValue;
         }
 
-        private void Start()
+        private IEnumerator Start()
         {
+            yield return null;
             OnHealthChange?.Invoke(CurHealth, (int)MaxHealth.FinalValue);
             OnEnergyChange?.Invoke((int)CurEnergy, (int)MaxEnergy.FinalValue);            
         }
