@@ -159,7 +159,7 @@ namespace Paraverse.Combat
                 return true;
             }
 
-            Debug.Log(_skillName + " is on cooldown or don't have enough energy!");
+            //Debug.Log(_skillName + " is on cooldown or don't have enough energy!");
             return false;
         }
 

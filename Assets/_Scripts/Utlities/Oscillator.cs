@@ -9,7 +9,6 @@ public class Oscillator : MonoBehaviour
     public float speed;
     public float amplitude;
 
-
     private void Start()
     {
         offset += transform.localPosition;
@@ -18,9 +17,10 @@ public class Oscillator : MonoBehaviour
     // Update is called once per frame
     void Update()
     {
-        transform.localPosition = 
-            new Vector3(offset.x + (direction.x * amplitude * Mathf.Sin(Time.time * speed)), 
-                        offset.y + (direction.y * amplitude * Mathf.Sin(Time.time * speed)),
-                        offset.z + (direction.z * amplitude * Mathf.Sin(Time.time * speed)));
+        float newX = offset.x + (direction.x * amplitude * Mathf.Sin(Time.time * speed));
+        float newY = offset.y + (direction.y * amplitude * Mathf.Sin(Time.time * speed));
+        float newZ = offset.z + (direction.z * amplitude * Mathf.Sin(Time.time * speed));
+
+        transform.localPosition = new Vector3(newX, newY, newZ);
     }
 }
