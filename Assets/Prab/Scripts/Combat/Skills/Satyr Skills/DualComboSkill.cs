@@ -1,5 +1,6 @@
 using Paraverse;
 using Paraverse.Combat;
+using Paraverse.Helper;
 using Paraverse.Mob.Combat;
 using Paraverse.Mob.Stats;
 using Paraverse.Player;
@@ -9,10 +10,11 @@ public class DualComboSkill : MobSkill, IMobSkill
 {
 
     #region Variables
-
     [SerializeField]
     protected GameObject offHandAttackColliderGO;
     protected AttackCollider offHandAttackCollider;
+    [SerializeField]
+    protected float rotSpeed = 100f;
     #endregion
 
     #region Public Methods
@@ -67,7 +69,7 @@ public class DualComboSkill : MobSkill, IMobSkill
 
         if (anim.GetBool(StringData.IsUsingSkill) == false)
             skillOn = false;
-
+        RotateToTarget();
         CooldownHandler();
     }
 
@@ -90,6 +92,17 @@ public class DualComboSkill : MobSkill, IMobSkill
             // if it's a projectile, set its damage to:
             // int damage = (flatPower) + (mobStats.AttackDamage.FinalValue * attackScaling) + (mobStats.AbilityPower.FinalValue * abilityScaling);
         }
+    }
+
+    private void RotateToTarget()
+    {
+        transform.rotation = ParaverseHelper.FaceTarget(transform, target, rotSpeed);
+
+        // Ensures mob is looking at the target before attacking
+        Vector3 dir = (target.position - transform.position).normalized;
+        dir = ParaverseHelper.GetPositionXZ(dir);
+        Quaternion lookRot = Quaternion.LookRotation(dir);
+        float angle = Quaternion.Angle(transform.rotation, lookRot);
     }
 
     public void EnableMainAttackCollider()
