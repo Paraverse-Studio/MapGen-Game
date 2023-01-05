@@ -30,18 +30,28 @@ public class EnhancedMobCombat : MobCombat
     protected override void Update()
     {
         base.Update();
-        bool usingSkill = false;
+        // Gets active skill to run update method for each skill 
         for (int i = 0; i < skills.Count; i++)
         {
             skills[i].SkillUpdate();
             if (skills[i].skillOn)
             {
-                usingSkill = true;
                 usingSkillIdx = i;
             }
         }
-         //anim.SetBool(StringData.IsUsingSkill, usingSkill);
         _isSkilling = anim.GetBool(StringData.IsSkilling);
+    }
+
+    /// <summary>
+    /// Responsible for handling basic attack animation and cooldown.
+    /// </summary>
+    public override void BasicAttackHandler()
+    {
+        if (curBasicAtkCd <= 0 && anim.GetBool(StringData.IsUsingSkill) == false)
+        {
+            anim.Play(StringData.BasicAttack);
+            curBasicAtkCd = GetBasicAttackCooldown();
+        }
     }
 
     public override void FireProjectile()
