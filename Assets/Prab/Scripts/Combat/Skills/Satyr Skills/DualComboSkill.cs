@@ -64,6 +64,10 @@ public class DualComboSkill : MobSkill, IMobSkill
         {
             Execute();
         }
+
+        if (anim.GetBool(StringData.IsUsingSkill) == false)
+            skillOn = false;
+
         CooldownHandler();
     }
 
