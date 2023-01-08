@@ -216,7 +216,6 @@ namespace Paraverse.Mob.Controller
             }
             else
             {
-
                 nav.updateRotation = true;
                 Patrol();
                 SetGeneralState(MobState.Patrol);
@@ -252,6 +251,8 @@ namespace Paraverse.Mob.Controller
         private void AnimatorHandler()
         {
             anim.SetFloat(StringData.Speed, curMoveSpeed);
+            Debug.Log("curMoveSpeed: " + curMoveSpeed);
+            Debug.Log("anim speed: " + anim.GetFloat(StringData.Speed));
             if (_curMobState.Equals(MobState.Pursue) && curMoveSpeed != 0)
                 anim.SetBool(StringData.IsSprinting, true);
             else

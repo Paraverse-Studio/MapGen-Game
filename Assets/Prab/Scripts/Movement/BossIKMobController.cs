@@ -5,7 +5,7 @@ using Paraverse.Mob.Controller;
 public class BossIKMobController : MobController, IMobController
 {
     private HeadIK headIK;
-    
+
     protected override void Start()
     {
         base.Start();
