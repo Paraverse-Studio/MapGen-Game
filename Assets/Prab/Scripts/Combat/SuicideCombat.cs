@@ -1,6 +1,7 @@
 using Paraverse;
 using Paraverse.Helper;
 using Paraverse.Mob.Combat;
+using Paraverse.Mob.Stats;
 using UnityEngine;
 
 public class SuicideCombat : MobCombat
@@ -36,7 +37,7 @@ public class SuicideCombat : MobCombat
     private void Explode()
     {
         GameObject go = Instantiate(explosionEffect, transform.position, transform.rotation);
-        AttackCollider col = go.GetComponent<AttackCollider>();
+        AttackCollider col = go.GetComponentInChildren<AttackCollider>();
         col.Init(this, stats);
         stats.UpdateCurrentHealth(-10000000);
     }

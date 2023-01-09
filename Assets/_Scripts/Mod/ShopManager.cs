@@ -147,13 +147,9 @@ public class ShopManager : MonoBehaviour
     private void InstantiateModCard(ModPair modPair)
     {
         ModCard modCard = Instantiate(shopItemPrefab, shopItemsFolder);
-        _modCards.Add(modCard);
-        modCard.titleLabel.text = modPair.mod.Title;
-        modCard.imageHolder.sprite = modPair.mod.Image;
-        modCard.descriptionLabel.text = modPair.mod.Description;
-        modCard.costLabel.text = modPair.mod.GetCost().ToString();
-        modCard.typeLabel.text = modPair.mod.Type.ToString();
+        modCard.Mod = modPair.mod;
         modCard.purchaseButton.onClick.AddListener(() => OnClickPurchaseItem(modCard, modPair));
+        _modCards.Add(modCard);
     }
 
     // Iterates over displayed Mods in the shop, and refreshes their buy-ability

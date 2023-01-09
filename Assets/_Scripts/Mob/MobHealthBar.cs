@@ -87,8 +87,8 @@ public class MobHealthBar : MonoBehaviour
 
         if (TryGetComponent(out _selectable))
         {
-            _selectable.OnSelected.AddListener(ActivateTargetIcon);
-            _selectable.OnDeselected.AddListener(DeactivateTargetIcon);
+            _selectable.events.OnSelected.AddListener(ActivateTargetIcon);
+            _selectable.events.OnDeselected.AddListener(DeactivateTargetIcon);
         }
     }
 

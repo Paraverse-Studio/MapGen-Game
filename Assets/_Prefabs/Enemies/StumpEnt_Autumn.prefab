@@ -319,14 +319,12 @@ MonoBehaviour:
   detectionRadius: 5
   pursueRadius: 7
   atkDashForce: 16
-  knockForce: 5
-  maxKnockbackRange: 1.5
-  maxKnockbackDuration: 1
   checkFallRange: 2
   maxDeathTimerUponFall: 2
   fallForce: 0.5
   deathEffect: {fileID: 8073467667769803130, guid: 75c1b160671ce934fad50936633acef1, type: 3}
   _curMobState: 0
+  _isInvulnerable: 0
 --- !u!114 &5125661759958323761
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -378,7 +376,7 @@ MonoBehaviour:
     projHeld: {fileID: 0}
     projOrigin: {fileID: 0}
     basicAtkProjSpeed: 10
-  explosionEffect: {fileID: 5971161797261734830, guid: b57686338b6a45841a67921982527613, type: 3}
+  explosionEffect: {fileID: 3357188187496195378, guid: c4687f54de839e54f979bd3771bf99d5, type: 3}
   explosionRadius: 1.5
 --- !u!114 &5125661759958323763
 MonoBehaviour:
@@ -400,6 +398,7 @@ MonoBehaviour:
     showSelectionAllTimes: 0
     showEnergyBar: 0
     heightAdjustment: 0.2
+    isBoss: 0
   overrideProperties:
     healthBar: {fileID: 0}
     damageBar: {fileID: 0}
@@ -424,12 +423,6 @@ MonoBehaviour:
   rangeOverride: -1
   outline: {fileID: 0}
   Range: 0
-  OnSelected:
-    m_PersistentCalls:
-      m_Calls: []
-  OnDeselected:
-    m_PersistentCalls:
-      m_Calls: []
 --- !u!114 &4281474682663830210
 MonoBehaviour:
   m_ObjectHideFlags: 0

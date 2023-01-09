@@ -19,6 +19,12 @@ public class Selectable : MonoBehaviour
         informational
     }
 
+    public struct Events
+    {
+        public UnityEvent OnSelected;
+        public UnityEvent OnDeselected;
+    }
+
     [Header("Selectable Settings")]
     public SelectablePriority priority;
     public SelectableType type;
@@ -37,12 +43,12 @@ public class Selectable : MonoBehaviour
     }
 
     [Header("Events")]
-    public UnityEvent OnSelected = new UnityEvent();
-
-    public UnityEvent OnDeselected = new UnityEvent();
+    public Events events;
 
     private void Awake()
     {
+        events.OnSelected = new();
+        events.OnDeselected = new();
         outline = GetComponent<Outline>();
         if (!outline) outline = gameObject.AddComponent<Outline>();
 
@@ -87,7 +93,7 @@ public class Selectable : MonoBehaviour
         if (_isSelected) return;
 
         _isSelected = true;
-        OnSelected?.Invoke();
+        events.OnSelected?.Invoke();
     }
 
     public void Deselect()
@@ -95,7 +101,7 @@ public class Selectable : MonoBehaviour
         if (!_isSelected) return;
 
         _isSelected = false;
-        OnDeselected?.Invoke();
+        events.OnDeselected?.Invoke();
     }
 
 }
