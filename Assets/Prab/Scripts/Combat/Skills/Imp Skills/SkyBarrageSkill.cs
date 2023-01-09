@@ -32,9 +32,12 @@ public class SkyBarrageSkill : MobSkill, IMobSkill
     {
         if (CanUseSkill())
         {
+            skillOn = true;
             curCooldown = cooldown;
+            skillCurTimer = skillStartTimer;
             stats.UpdateCurrentEnergy(-cost);
             anim.Play(animName);
+            projData.projOrigin.position = target.transform.position + new Vector3(0f, 10f, 0f);
             Debug.Log("Executing skill: " + _skillName + " which takes " + cost + " points of energy out of " + stats.CurEnergy + " point of current energy." +
                 "The max cooldown for this skill is " + cooldown + " and the animation name is " + animName + ".");
         }
@@ -65,6 +68,7 @@ public class SkyBarrageSkill : MobSkill, IMobSkill
     {
         skillCurTimer = skillStartTimer;
         skillOn = false;
+        anim.SetBool(StringData.IsUsingSkill, false);
     }
     #endregion
 }

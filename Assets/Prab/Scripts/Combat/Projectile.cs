@@ -1,7 +1,6 @@
 using Paraverse.Helper;
 using Paraverse.Mob;
 using Paraverse.Mob.Combat;
-using Paraverse.Mob.Stats;
 using UnityEngine;
 
 namespace Paraverse
@@ -21,6 +20,8 @@ namespace Paraverse
         private float damage;
         [SerializeField, Tooltip("Projectile is destroyed after this duration.")]
         private float deathTimer = 5f;
+        [SerializeField]
+        protected bool stationary = false;
 
         [Header("Knockback Effect")]
         [SerializeField]
@@ -48,15 +49,17 @@ namespace Paraverse
         private void Update()
         {
             float distanceFromOrigin = ParaverseHelper.GetDistance(transform.position, origin);
-            if (distanceFromOrigin > range || curdeathTimer >= deathTimer)
+            if (distanceFromOrigin > range && stationary == false || curdeathTimer >= deathTimer)
             {
                 Destroy(gameObject);
             }
 
             curdeathTimer += Time.deltaTime;
-            transform.position += (transform.forward * speed * Time.deltaTime);
+
+            if (stationary == false) transform.position += (transform.forward * speed * Time.deltaTime);
         }
         #endregion
+
         public void Init(MobCombat mob, Vector3 target, float damage)
         {
             this.target = target;
@@ -95,7 +98,7 @@ namespace Paraverse
                     controller.ApplyKnockBack(mob.transform.position, effect);
                 }
 
-                if (hitFX) Instantiate(hitFX, other.transform.position + new Vector3(0, 0.5f, 0), Quaternion.identity); 
+                if (hitFX) Instantiate(hitFX, other.transform.position + new Vector3(0, 0.5f, 0), Quaternion.identity);
 
                 if (!pierce) Destroy(gameObject);
             }

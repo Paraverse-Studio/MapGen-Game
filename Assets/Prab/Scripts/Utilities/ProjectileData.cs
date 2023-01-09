@@ -10,6 +10,8 @@ public class ProjectileData
     public GameObject projHeld;
     [Tooltip("The projectile's origin position.")]
     public Transform projOrigin;
+    [Tooltip("The projectile's rotation. [if null, will get the look rotation from mob to target.]")]
+    public Transform projRotation;
     [Tooltip("The projectile's speed.")]
     public float basicAtkProjSpeed = 10f;
 }
