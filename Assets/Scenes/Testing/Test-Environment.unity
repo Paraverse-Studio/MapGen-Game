@@ -5220,6 +5220,55 @@ PrefabInstance:
       objectReference: {fileID: 0}
     m_RemovedComponents: []
   m_SourcePrefab: {fileID: 100100000, guid: 834dc73c554c9ad4fae808a0fabce9de, type: 3}
+--- !u!1 &656842657
+GameObject:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  serializedVersion: 6
+  m_Component:
+  - component: {fileID: 656842659}
+  - component: {fileID: 656842658}
+  m_Layer: 0
+  m_Name: GameObject
+  m_TagString: Untagged
+  m_Icon: {fileID: 0}
+  m_NavMeshLayer: 0
+  m_StaticEditorFlags: 0
+  m_IsActive: 1
+--- !u!114 &656842658
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 656842657}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 172515602e62fb746b5d573b38a5fe58, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  m_IsGlobal: 1
+  priority: 0
+  blendDistance: 0
+  weight: 1
+  sharedProfile: {fileID: 11400000, guid: b3c5a5a69239adb4d8970121354188bf, type: 2}
+--- !u!4 &656842659
+Transform:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 656842657}
+  m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
+  m_LocalPosition: {x: 29.767937, y: 1.6509355, z: -8.148863}
+  m_LocalScale: {x: 1, y: 1, z: 1}
+  m_ConstrainProportionsScale: 0
+  m_Children: []
+  m_Father: {fileID: 0}
+  m_RootOrder: 36
+  m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
 --- !u!1 &709213267
 GameObject:
   m_ObjectHideFlags: 0
@@ -19215,6 +19264,40 @@ GameObject:
   m_CorrespondingSourceObject: {fileID: 1596251152, guid: 97e29706ecf9310438ad7e1c3f40fcfa, type: 3}
   m_PrefabInstance: {fileID: 1440482017}
   m_PrefabAsset: {fileID: 0}
+--- !u!1 &1687112662 stripped
+GameObject:
+  m_CorrespondingSourceObject: {fileID: 4495370683200027838, guid: 97e29706ecf9310438ad7e1c3f40fcfa, type: 3}
+  m_PrefabInstance: {fileID: 1440482017}
+  m_PrefabAsset: {fileID: 0}
+--- !u!114 &1687112675
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1687112662}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: bc24a35688d7a2c4cac7a2bad6090d62, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  _skillName: SkyBarrageSkill
+  _description: 
+  _minRange: 5
+  _maxRange: 100
+  cooldown: 10
+  cost: 0
+  animName: SkyBarrageSkill
+  attackColliderGO: {fileID: 0}
+  projData:
+    projPf: {fileID: 0}
+    projHeld: {fileID: 0}
+    projOrigin: {fileID: 0}
+    basicAtkProjSpeed: 10
+  flatPower: 1
+  attackScaling: 0
+  abilityScaling: 0
+  skillStartTimer: 5
 --- !u!114 &1702892488
 MonoBehaviour:
   m_ObjectHideFlags: 0
