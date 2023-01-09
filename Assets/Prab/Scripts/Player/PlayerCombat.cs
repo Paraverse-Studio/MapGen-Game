@@ -25,8 +25,6 @@ namespace Paraverse.Player
         private bool _canComboAttackTwo = false;
         public bool CanComboAttackThree { get { return _canComboAttackThree; } }
         private bool _canComboAttackThree = false;
-        public bool IsSkilling { get { return _isSkilling; } }
-        protected bool _isSkilling = false;
 
         // Skills 
         public List<MobSkill> skills = new List<MobSkill>();
@@ -51,11 +49,15 @@ namespace Paraverse.Player
 
         public void ActivateSkill(MobSkill skill)
         {
+
+
             if (skills.Contains(skill))
             {
                 skill.ActivateSkill(this, input, anim, stats);
                 _activeSkill = skill;
             }
+
+
         }
 
         protected override void Update()
@@ -64,18 +66,14 @@ namespace Paraverse.Player
             AnimationHandler();
             BasicAttackComboHandler();
             
-            bool usingSkill = false;
             for (int i = 0; i < skills.Count; i++)
             {
                 skills[i].SkillUpdate();
                 if (skills[i].skillOn)
                 {
-                    usingSkill = true;
                     usingSkillIdx = i;
                 }
             }
-            anim.SetBool(StringData.IsUsingSkill, usingSkill);
-            _isSkilling = anim.GetBool(StringData.IsSkilling);
         }
         #endregion
 
@@ -212,7 +210,7 @@ namespace Paraverse.Player
         {
             ProjectileData data;
 
-            if (IsSkilling)
+            if (anim.GetBool(StringData.IsUsingSkill))
                 data = skills[usingSkillIdx].projData;
             else
                 data = projData;
