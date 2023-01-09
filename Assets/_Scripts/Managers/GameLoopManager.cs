@@ -153,8 +153,8 @@ public class GameLoopManager : MonoBehaviour
 
         if (Input.GetKeyDown(KeyCode.U))
         {
-            if (EndPortal) EndPortal.SetActive(true);
-            GameObject go = Instantiate(GlobalSettings.Instance.testGameObject, player.transform.position + new Vector3(0, 0.5f, 0), player.transform.rotation);
+            //if (EndPortal) EndPortal.SetActive(true);
+            //GameObject go = Instantiate(GlobalSettings.Instance.testGameObject, player.transform.position + new Vector3(0, 0.5f, 0), player.transform.rotation);
         }
         if (Input.GetKeyDown(KeyCode.Y))
         {
@@ -176,7 +176,7 @@ public class GameLoopManager : MonoBehaviour
         }
         if (Input.GetKeyDown(KeyCode.T))
         {
-            playerStats.UpdateGold(5); 
+            playerStats.UpdateGold(50); 
             ShopManager.Instance.ShopWindow.SetActive(!ShopManager.Instance.ShopWindow.activeSelf);
             CalculateShop();
         }

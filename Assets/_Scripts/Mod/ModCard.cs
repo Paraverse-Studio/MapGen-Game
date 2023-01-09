@@ -11,6 +11,7 @@ public class ModCard : MonoBehaviour
     public TextMeshProUGUI titleLabel;
     public Image imageHolder;
     public TextMeshProUGUI descriptionLabel;
+    public TextMeshProUGUI loreLabel;
     public TextMeshProUGUI costLabel;
     public TextMeshProUGUI typeLabel;
 
@@ -19,14 +20,18 @@ public class ModCard : MonoBehaviour
 
     private void Start()
     {
-        UpdateDisplay();
+        if (Mod) UpdateDisplay();
     }
-    public void UpdateDisplay()
+
+    public void UpdateDisplay(System.Action clickCallBack = null)
     {
-        titleLabel.text = Mod.Title;
-        imageHolder.sprite = Mod.Image;
-        descriptionLabel.text = Mod.Description;
-        costLabel.text = Mod.GetCost().ToString();
-        typeLabel.text = Mod.Type.ToString();
+        if (titleLabel) titleLabel.text = Mod.Title;
+        if (imageHolder) imageHolder.sprite = Mod.Image;
+        if (descriptionLabel) descriptionLabel .text = Mod.Description;
+        // if (loreLabel) loreLabel .text = Mod.Lore;
+        if (costLabel) costLabel.text = Mod.GetCost().ToString();
+        if (typeLabel) typeLabel.text = Mod.Type.ToString();
+
+        if (null != clickCallBack) purchaseButton.onClick.AddListener(() => { clickCallBack.Invoke(); });
     }
 }
