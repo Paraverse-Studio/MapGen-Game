@@ -57,7 +57,6 @@ public class EnhancedMobCombat : MobCombat
     public override void FireProjectile()
     {
         ProjectileData data;
-
         if (IsSkilling)
             data = skills[usingSkillIdx].projData;
         else

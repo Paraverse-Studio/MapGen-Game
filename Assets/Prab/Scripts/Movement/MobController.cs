@@ -82,6 +82,7 @@ namespace Paraverse.Mob.Controller
         private Vector3 knockbackDir;
         [Tooltip("Active knock back applied to mob.")]
         private KnockBackEffect activeKnockBackEffect;
+        float disFromStartPos;
 
         [Header("Fall Check")]
         [SerializeField, Tooltip("Checks if mob should fall off map.")]
@@ -115,7 +116,7 @@ namespace Paraverse.Mob.Controller
         protected bool _isSoftCced = false;
         public bool IsFalling { get { return _isFalling; } }
         protected bool _isFalling = false;
-        public bool IsInvulnerable { get; }
+        public bool IsInvulnerable { get { return _isInvulnerable; } }
         [SerializeField]
         protected bool _isInvulnerable = false;
         public bool IsDead { get { return _isDead; } }
@@ -251,7 +252,6 @@ namespace Paraverse.Mob.Controller
         private void AnimatorHandler()
         {
             anim.SetFloat(StringData.Speed, curMoveSpeed);
-
             if (_curMobState.Equals(MobState.Pursue) && curMoveSpeed != 0)
                 anim.SetBool(StringData.IsSprinting, true);
             else
@@ -497,7 +497,6 @@ namespace Paraverse.Mob.Controller
             anim.Play(StringData.Hit);
         }
 
-        float disFromStartPos;
         private void KnockbackHandler()
         {
             if (null != activeKnockBackEffect || _isStaggered)
