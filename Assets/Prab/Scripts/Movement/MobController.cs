@@ -115,7 +115,7 @@ namespace Paraverse.Mob.Controller
         protected bool _isSoftCced = false;
         public bool IsFalling { get { return _isFalling; } }
         protected bool _isFalling = false;
-        public bool IsInvulnerable { get; }
+        public bool IsInvulnerable { get { return _isInvulnerable; } }
         [SerializeField]
         protected bool _isInvulnerable = false;
         public bool IsDead { get { return _isDead; } }
