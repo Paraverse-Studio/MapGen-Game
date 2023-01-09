@@ -3300,7 +3300,8 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   _skillName: Summon Sapling
   _description: 
-  _range: 0
+  _minRange: 0
+  _maxRange: 5
   cooldown: 10
   cost: 0
   animName: SummonSkill
@@ -3330,7 +3331,8 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   _skillName: 'Root '
   _description: 
-  _range: 10
+  _minRange: 0
+  _maxRange: 5
   cooldown: 3
   cost: 0
   animName: RootSkill
@@ -3343,6 +3345,7 @@ MonoBehaviour:
   flatPower: 1
   attackScaling: 0
   abilityScaling: 0
+  rootDuration: 3
 --- !u!1 &175625463678440673
 GameObject:
   m_ObjectHideFlags: 0
@@ -3643,7 +3646,8 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   _skillName: RootSkill
   _description: 
-  _range: 5
+  _minRange: 0
+  _maxRange: 5
   cooldown: 5
   cost: 10
   animName: RootSkill
@@ -3786,7 +3790,7 @@ GameObject:
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
-  m_IsActive: 0
+  m_IsActive: 1
 --- !u!4 &3172601158817656281
 Transform:
   m_ObjectHideFlags: 0
