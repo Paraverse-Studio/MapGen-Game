@@ -31,6 +31,7 @@ public class SummonSkill : MobSkill, IMobSkill
         GameObject go = Instantiate(summonPf, spawnPos, transform.rotation);
         MobController summonedMob = go.GetComponentInChildren<MobController>();
         summonedMob.OnDeathEvent += DecrementSummonCount;
+        skillOn = false;
     }
 
     private void DecrementSummonCount(Transform target)
