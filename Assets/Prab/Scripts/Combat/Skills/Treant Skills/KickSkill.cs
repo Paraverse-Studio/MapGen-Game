@@ -57,8 +57,7 @@ public class KickSkill : MobSkill, IMobSkill
     {
         if (CanUseSkill() && skillOn == false)
         {
-            anim.SetBool(StringData.IsUsingSkill, true);
-            skillOn = true;
+            MarkSkillAsEnabled();
             curCooldown = cooldown;
             stats.UpdateCurrentEnergy(-cost);
             anim.Play(animName);

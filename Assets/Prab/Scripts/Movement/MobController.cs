@@ -589,12 +589,7 @@ namespace Paraverse.Mob.Controller
                     curJumpCheckTimer -= Time.deltaTime;
                 }
 
-                anim.SetBool(StringData.IsGrounded, false);
                 jumpDir.y += GlobalValues.GravityForce * GlobalValues.GravityModifier * Time.deltaTime;
-            }
-            else
-            {
-                anim.SetBool(StringData.IsGrounded, true);
             }
         }
 
@@ -608,7 +603,6 @@ namespace Paraverse.Mob.Controller
             {
                 nav.enabled = true;
                 _isJumping = false;
-                anim.SetBool(StringData.IsGrounded, true);
                 return true;
             }
             else

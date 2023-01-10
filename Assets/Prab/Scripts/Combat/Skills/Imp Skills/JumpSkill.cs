@@ -47,8 +47,7 @@ public class JumpSkill : MobSkill, IMobSkill
         if (CanUseSkill())
         {
             mob.IsSkilling = true;
-            skillOn = true;
-            anim.SetBool(StringData.IsUsingSkill, true);
+            MarkSkillAsEnabled();
             curCooldown = cooldown;
             stats.UpdateCurrentEnergy(-cost);
             anim.Play(animName);
@@ -65,9 +64,9 @@ public class JumpSkill : MobSkill, IMobSkill
 
     #region Private Methods
 
-    private void DisableSkill()
+    protected override void DisableSkill()
     {
-        skillOn = false;
+        base.DisableSkill();
         anim.SetBool(StringData.IsGrounded, true);
     }
     #endregion

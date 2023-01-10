@@ -74,8 +74,7 @@ public class DualComboSkill : MobSkill, IMobSkill
         if (CanUseSkill())
         {
             mob.IsSkilling = true;
-            skillOn = true;
-            anim.SetBool(StringData.IsUsingSkill, true);
+            MarkSkillAsEnabled();
             curCooldown = cooldown;
             stats.UpdateCurrentEnergy(-cost);
             anim.Play(animName);

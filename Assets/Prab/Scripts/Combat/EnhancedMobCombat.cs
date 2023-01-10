@@ -33,15 +33,20 @@ public class EnhancedMobCombat : MobCombat
     protected override void Update()
     {
         base.Update();
+
+        if (anim.GetBool(StringData.IsUsingSkill))
+            IsSkilling = true;
+        else
+            IsSkilling = false;
+
         // Gets active skill to run update method for each skill 
-        IsSkilling = false;
         for (int i = 0; i < skills.Count; i++)
         {
             skills[i].SkillUpdate();
             if (skills[i].skillOn)
             {
                 usingSkillIdx = i;
-                IsSkilling = true;
+                //IsSkilling = true;
             }
         }
     }
@@ -51,7 +56,7 @@ public class EnhancedMobCombat : MobCombat
     /// </summary>
     public override void BasicAttackHandler()
     {
-        if (curBasicAtkCd <= 0 && anim.GetBool(StringData.IsUsingSkill) == false)
+        if (curBasicAtkCd <= 0 && IsSkilling == false)
         {
             anim.Play(StringData.BasicAttack);
             curBasicAtkCd = GetBasicAttackCooldown();

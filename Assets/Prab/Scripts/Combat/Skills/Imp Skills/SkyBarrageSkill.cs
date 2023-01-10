@@ -33,8 +33,7 @@ public class SkyBarrageSkill : MobSkill, IMobSkill
         if (CanUseSkill())
         {
             mob.IsSkilling = true;
-            skillOn = true;
-            anim.SetBool(StringData.IsUsingSkill, true);
+            MarkSkillAsEnabled();
             curCooldown = cooldown;
             skillCurTimer = skillStartTimer;
             stats.UpdateCurrentEnergy(-cost);
@@ -60,17 +59,12 @@ public class SkyBarrageSkill : MobSkill, IMobSkill
                 DisableSkill();
             }
         }
-        else
-        {
-            DisableSkill();
-        }
     }
 
-    protected void DisableSkill()
+    protected override void DisableSkill()
     {
+        base.DisableSkill();
         skillCurTimer = skillStartTimer;
-        skillOn = false;
-        anim.SetBool(StringData.IsUsingSkill, false);
     }
     #endregion
 }
