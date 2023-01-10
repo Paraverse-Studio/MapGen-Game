@@ -20,8 +20,15 @@ namespace Paraverse
         private float damage;
         [SerializeField, Tooltip("Projectile is destroyed after this duration.")]
         private float deathTimer = 5f;
-        [SerializeField]
+        [SerializeField, Tooltip("Stationary projectile.")]
         protected bool stationary = false;
+        [SerializeField, Tooltip("Damage over time.")]
+        protected bool dot = false;
+        [SerializeField, Tooltip("Apply damage upon enter.")]
+        protected bool applyDamageOnEnter = false;
+        [SerializeField, Tooltip("Applies damage every given second.")]
+        protected float dotIntervalTimer = 1f;
+        private float dotTimer = 0f;
 
         [Header("Knockback Effect")]
         [SerializeField]
@@ -56,6 +63,8 @@ namespace Paraverse
 
             curdeathTimer += Time.deltaTime;
 
+            dotTimer += Time.deltaTime;
+
             if (stationary == false) transform.position += (transform.forward * speed * Time.deltaTime);
         }
         #endregion
@@ -86,8 +95,32 @@ namespace Paraverse
 
         private void OnTriggerEnter(Collider other)
         {
+            if (dot && applyDamageOnEnter == false) return;
+
             if (other.CompareTag(targetTag))
             {
+                IMobController controller = other.GetComponent<IMobController>();
+                controller.Stats.UpdateCurrentHealth((int)-damage);
+
+                // Apply knock back effect
+                if (null != knockBackEffect)
+                {
+                    KnockBackEffect effect = new KnockBackEffect(knockBackEffect);
+                    controller.ApplyKnockBack(mob.transform.position, effect);
+                }
+
+                if (hitFX) Instantiate(hitFX, other.transform.position + new Vector3(0, 0.5f, 0), Quaternion.identity);
+
+                if (!pierce) Destroy(gameObject);
+            }
+        }
+
+        private void OnTriggerStay(Collider other)
+        {
+            if (other.CompareTag(targetTag) && dotTimer >= dotIntervalTimer)
+            {
+                dotTimer = 0f;
+
                 IMobController controller = other.GetComponent<IMobController>();
                 controller.Stats.UpdateCurrentHealth((int)-damage);
 

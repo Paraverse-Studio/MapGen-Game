@@ -1609,11 +1609,6 @@ MeshFilter:
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 166201821}
   m_Mesh: {fileID: 10202, guid: 0000000000000000e000000000000000, type: 0}
---- !u!4 &182814346 stripped
-Transform:
-  m_CorrespondingSourceObject: {fileID: 182814346, guid: 97e29706ecf9310438ad7e1c3f40fcfa, type: 3}
-  m_PrefabInstance: {fileID: 1440482017}
-  m_PrefabAsset: {fileID: 0}
 --- !u!114 &187616011
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -1734,6 +1729,10 @@ MonoBehaviour:
   detectionRadius: 5
   pursueRadius: 7
   atkDashForce: 2
+  isGroundedCheckRange: 0.5
+  groundLayer:
+    serializedVersion: 2
+    m_Bits: 0
   checkFallRange: 2
   maxDeathTimerUponFall: 2
   fallForce: 0.5
@@ -16422,38 +16421,6 @@ PrefabInstance:
   m_Modification:
     m_TransformParent: {fileID: 0}
     m_Modifications:
-    - target: {fileID: 182814346, guid: 97e29706ecf9310438ad7e1c3f40fcfa, type: 3}
-      propertyPath: m_LocalRotation.w
-      value: 0.5
-      objectReference: {fileID: 0}
-    - target: {fileID: 182814346, guid: 97e29706ecf9310438ad7e1c3f40fcfa, type: 3}
-      propertyPath: m_LocalRotation.x
-      value: -0.5
-      objectReference: {fileID: 0}
-    - target: {fileID: 182814346, guid: 97e29706ecf9310438ad7e1c3f40fcfa, type: 3}
-      propertyPath: m_LocalRotation.y
-      value: -0.5
-      objectReference: {fileID: 0}
-    - target: {fileID: 182814346, guid: 97e29706ecf9310438ad7e1c3f40fcfa, type: 3}
-      propertyPath: m_LocalRotation.z
-      value: -0.5
-      objectReference: {fileID: 0}
-    - target: {fileID: 182814346, guid: 97e29706ecf9310438ad7e1c3f40fcfa, type: 3}
-      propertyPath: m_LocalEulerAnglesHint.x
-      value: -90
-      objectReference: {fileID: 0}
-    - target: {fileID: 182814346, guid: 97e29706ecf9310438ad7e1c3f40fcfa, type: 3}
-      propertyPath: m_LocalEulerAnglesHint.y
-      value: -90
-      objectReference: {fileID: 0}
-    - target: {fileID: 1687112675, guid: 97e29706ecf9310438ad7e1c3f40fcfa, type: 3}
-      propertyPath: projData.projRotation
-      value: 
-      objectReference: {fileID: 182814346}
-    - target: {fileID: 1692120150, guid: 97e29706ecf9310438ad7e1c3f40fcfa, type: 3}
-      propertyPath: projData.projRotation
-      value: 
-      objectReference: {fileID: 0}
     - target: {fileID: 6977835400567144140, guid: 97e29706ecf9310438ad7e1c3f40fcfa, type: 3}
       propertyPath: m_RootOrder
       value: 17
@@ -18548,6 +18515,10 @@ MonoBehaviour:
   detectionRadius: 5
   pursueRadius: 7
   atkDashForce: 2
+  isGroundedCheckRange: 0.5
+  groundLayer:
+    serializedVersion: 2
+    m_Bits: 0
   checkFallRange: 2
   maxDeathTimerUponFall: 2
   fallForce: 0.5
@@ -18749,6 +18720,10 @@ MonoBehaviour:
   detectionRadius: 5
   pursueRadius: 7
   atkDashForce: 2
+  isGroundedCheckRange: 0.5
+  groundLayer:
+    serializedVersion: 2
+    m_Bits: 0
   checkFallRange: 2
   maxDeathTimerUponFall: 2
   fallForce: 0.5

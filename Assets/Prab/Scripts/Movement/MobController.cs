@@ -79,10 +79,20 @@ namespace Paraverse.Mob.Controller
         protected float controllerStep;
 
         [Header("Knockback Values")]
-        private Vector3 knockbackDir;
+        protected Vector3 knockbackDir;
         [Tooltip("Active knock back applied to mob.")]
-        private KnockBackEffect activeKnockBackEffect;
+        protected KnockBackEffect activeKnockBackEffect;
         float disFromStartPos;
+
+        [Header("Jump Values")]
+        protected float jumpForce = 5f;
+        [SerializeField]
+        protected float isGroundedCheckRange = 0.5f;
+        protected Vector3 jumpDir;
+        [SerializeField]
+        protected LayerMask groundLayer;
+        public delegate void OnLandDel();
+        public event OnLandDel OnLandEvent;
 
         [Header("Fall Check")]
         [SerializeField, Tooltip("Checks if mob should fall off map.")]
@@ -116,6 +126,8 @@ namespace Paraverse.Mob.Controller
         protected bool _isSoftCced = false;
         public bool IsFalling { get { return _isFalling; } }
         protected bool _isFalling = false;
+        public bool IsJumping { get { return _isJumping; } }
+        protected bool _isJumping = false;
         public bool IsInvulnerable { get { return _isInvulnerable; } }
         [SerializeField]
         protected bool _isInvulnerable = false;
@@ -170,6 +182,7 @@ namespace Paraverse.Mob.Controller
             StateHandler();
             CCHandler();
             KnockbackHandler();
+            JumpHandler();
             AnimatorHandler();
         }
         #endregion
@@ -530,6 +543,44 @@ namespace Paraverse.Mob.Controller
 
                 // Moves the mob in the move direction
                 controller.Move(knockbackDir * activeKnockBackEffect.knockForce * Time.deltaTime);
+            }
+        }
+
+        public void ApplyJump(Vector3 mobPos)
+        {
+            if (_isJumping) return;
+
+            _isJumping = true;
+            combat.OnAttackInterrupt();
+            Vector3 targetDir = (mobPos - transform.position).normalized;
+            jumpDir = new Vector3(targetDir.x, targetDir.y, targetDir.z);
+            jumpDir.y += Mathf.Sqrt(jumpForce * -GlobalValues.GravityModifier * GlobalValues.GravityForce);
+        }
+
+        private void JumpHandler()
+        {
+            if (_isJumping)
+            {
+                nav.enabled = false;
+                Vector3 landDir = new Vector3(jumpDir.x * jumpForce, jumpDir.y, jumpDir.z * jumpForce);
+                controller.Move(landDir * Time.deltaTime);
+
+                if (ParaverseHelper.GetDistance(transform.position, playerController.Transform.position) <= 2f)
+                {
+                    Vector3 origin = transform.position;
+                    Vector3 dir = -transform.up;
+                    RaycastHit hit;
+
+                    Debug.DrawRay(origin, dir * isGroundedCheckRange, Color.red);
+                    if (Physics.Raycast(origin, dir * isGroundedCheckRange, out hit, isGroundedCheckRange, groundLayer))
+                    {
+                        nav.enabled = true;
+                        _isJumping = false;
+                        OnLandEvent?.Invoke();
+                        return;
+                    }
+                }
+                jumpDir.y += GlobalValues.GravityForce * GlobalValues.GravityModifier * Time.deltaTime;
             }
         }
 

@@ -4903,6 +4903,7 @@ GameObject:
   - component: {fileID: 1520875604049576416}
   - component: {fileID: 1520875604049576417}
   - component: {fileID: 7335859304462761588}
+  - component: {fileID: 2063311073644177796}
   m_Layer: 0
   m_Name: ImpBarrage
   m_TagString: Untagged
@@ -4919,7 +4920,7 @@ Transform:
   m_GameObject: {fileID: 1520875604049576418}
   m_LocalRotation: {x: -0.7071068, y: 0, z: 0, w: 0.7071068}
   m_LocalPosition: {x: 0, y: 0, z: 0}
-  m_LocalScale: {x: 1, y: 1, z: 1}
+  m_LocalScale: {x: 2, y: 2, z: 2}
   m_ConstrainProportionsScale: 0
   m_Children:
   - {fileID: 1520875604534886475}
@@ -9831,9 +9832,22 @@ MonoBehaviour:
   deathTimer: 5
   stationary: 1
   knockBackEffect: {fileID: 0}
-  pierce: 0
+  pierce: 1
   launchFX: {fileID: 0}
   hitFX: {fileID: 0}
+--- !u!65 &2063311073644177796
+BoxCollider:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1520875604049576418}
+  m_Material: {fileID: 0}
+  m_IsTrigger: 1
+  m_Enabled: 1
+  serializedVersion: 2
+  m_Size: {x: 2.2, y: 2.1, z: 39.444775}
+  m_Center: {x: -0.05894208, y: -0.0073816655, z: -16.110258}
 --- !u!1 &1520875604534886470
 GameObject:
   m_ObjectHideFlags: 0
