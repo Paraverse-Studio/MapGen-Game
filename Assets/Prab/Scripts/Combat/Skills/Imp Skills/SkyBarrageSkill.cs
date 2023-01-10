@@ -32,7 +32,9 @@ public class SkyBarrageSkill : MobSkill, IMobSkill
     {
         if (CanUseSkill())
         {
+            mob.IsSkilling = true;
             skillOn = true;
+            anim.SetBool(StringData.IsUsingSkill, true);
             curCooldown = cooldown;
             skillCurTimer = skillStartTimer;
             stats.UpdateCurrentEnergy(-cost);

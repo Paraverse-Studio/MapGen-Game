@@ -85,7 +85,9 @@ namespace Paraverse.Mob.Controller
         float disFromStartPos;
 
         [Header("Jump Values")]
+        [SerializeField]
         protected float jumpForce = 5f;
+        protected Vector3 landPos;
         [SerializeField]
         protected float isGroundedCheckRange = 0.5f;
         protected Vector3 jumpDir;
@@ -128,6 +130,8 @@ namespace Paraverse.Mob.Controller
         protected bool _isFalling = false;
         public bool IsJumping { get { return _isJumping; } }
         protected bool _isJumping = false;
+        public bool IsGrounded { get { return _isGrounded; } }
+        public bool _isGrounded = true;
         public bool IsInvulnerable { get { return _isInvulnerable; } }
         [SerializeField]
         protected bool _isInvulnerable = false;
@@ -546,13 +550,19 @@ namespace Paraverse.Mob.Controller
             }
         }
 
+        private float curJumpCheckTimer = 0.5f;
+        private float jumpCheckTimer = 0.5f;
+
         public void ApplyJump(Vector3 mobPos)
         {
             if (_isJumping) return;
 
+            curJumpCheckTimer = jumpCheckTimer;
+            nav.enabled = false;
             _isJumping = true;
             combat.OnAttackInterrupt();
             Vector3 targetDir = (mobPos - transform.position).normalized;
+            landPos = mobPos;
             jumpDir = new Vector3(targetDir.x, targetDir.y, targetDir.z);
             jumpDir.y += Mathf.Sqrt(jumpForce * -GlobalValues.GravityModifier * GlobalValues.GravityForce);
         }
@@ -561,18 +571,12 @@ namespace Paraverse.Mob.Controller
         {
             if (_isJumping)
             {
-                nav.enabled = false;
                 Vector3 landDir = new Vector3(jumpDir.x * jumpForce, jumpDir.y, jumpDir.z * jumpForce);
                 controller.Move(landDir * Time.deltaTime);
 
-                if (ParaverseHelper.GetDistance(transform.position, playerController.Transform.position) <= 2f)
+                if (curJumpCheckTimer <= 0)
                 {
-                    Vector3 origin = transform.position;
-                    Vector3 dir = -transform.up;
-                    RaycastHit hit;
-
-                    Debug.DrawRay(origin, dir * isGroundedCheckRange, Color.red);
-                    if (Physics.Raycast(origin, dir * isGroundedCheckRange, out hit, isGroundedCheckRange, groundLayer))
+                    if (IsGroundedCheck())
                     {
                         nav.enabled = true;
                         _isJumping = false;
@@ -580,7 +584,36 @@ namespace Paraverse.Mob.Controller
                         return;
                     }
                 }
+                else
+                {
+                    curJumpCheckTimer -= Time.deltaTime;
+                }
+
+                anim.SetBool(StringData.IsGrounded, false);
                 jumpDir.y += GlobalValues.GravityForce * GlobalValues.GravityModifier * Time.deltaTime;
+            }
+            else
+            {
+                anim.SetBool(StringData.IsGrounded, true);
+            }
+        }
+
+        private bool IsGroundedCheck()
+        {
+            Vector3 origin = transform.position;
+            Vector3 dir = -transform.up;
+            RaycastHit hit;
+
+            if (Physics.Raycast(origin, dir * isGroundedCheckRange, out hit, isGroundedCheckRange, groundLayer))
+            {
+                nav.enabled = true;
+                _isJumping = false;
+                anim.SetBool(StringData.IsGrounded, true);
+                return true;
+            }
+            else
+            {
+                return false;
             }
         }
 

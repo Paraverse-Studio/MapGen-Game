@@ -44,11 +44,11 @@ public class JumpSkill : MobSkill, IMobSkill
     /// </summary>
     public override void Execute()
     {
-        if (CanUseSkill() && skillOn == false)
+        if (CanUseSkill())
         {
-            anim.SetBool(StringData.IsGrounded, false);
-            anim.SetBool(StringData.IsUsingSkill, true);
+            mob.IsSkilling = true;
             skillOn = true;
+            anim.SetBool(StringData.IsUsingSkill, true);
             curCooldown = cooldown;
             stats.UpdateCurrentEnergy(-cost);
             anim.Play(animName);

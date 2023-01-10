@@ -106,7 +106,7 @@ namespace Paraverse.Combat
         /// </summary>
         public virtual void SkillUpdate()
         {
-            if (null != target && mob.IsBasicAttacking == false && anim.GetBool(StringData.IsUsingSkill) == false)
+            if (null != target && mob.IsBasicAttacking == false && anim.GetBool(StringData.IsUsingSkill) == false && skillOn == false && mob.IsSkilling == false)
             {
                 Execute();
             }
@@ -118,10 +118,11 @@ namespace Paraverse.Combat
         /// </summary>
         public virtual void Execute()
         {
-            if (CanUseSkill() && skillOn == false)
+            if (CanUseSkill())
             {
-                anim.SetBool(StringData.IsUsingSkill, true);
+                mob.IsSkilling = true;
                 skillOn = true;
+                anim.SetBool(StringData.IsUsingSkill, true);
                 curCooldown = cooldown;
                 stats.UpdateCurrentEnergy(-cost);
                 anim.Play(animName);

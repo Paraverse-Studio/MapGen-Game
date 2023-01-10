@@ -1609,6 +1609,28 @@ MeshFilter:
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 166201821}
   m_Mesh: {fileID: 10202, guid: 0000000000000000e000000000000000, type: 0}
+--- !u!114 &176279055 stripped
+MonoBehaviour:
+  m_CorrespondingSourceObject: {fileID: 1687112675, guid: 97e29706ecf9310438ad7e1c3f40fcfa, type: 3}
+  m_PrefabInstance: {fileID: 1440482017}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: bc24a35688d7a2c4cac7a2bad6090d62, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+--- !u!114 &176279067 stripped
+MonoBehaviour:
+  m_CorrespondingSourceObject: {fileID: 176279067, guid: 97e29706ecf9310438ad7e1c3f40fcfa, type: 3}
+  m_PrefabInstance: {fileID: 1440482017}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 9dde734c8317a2e4391ebd406597222e, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
 --- !u!114 &187616011
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -1706,6 +1728,7 @@ MonoBehaviour:
     projOrigin: {fileID: 0}
     projRotation: {fileID: 0}
     basicAtkProjSpeed: 10
+  IsSkilling: 0
 --- !u!114 &187616015
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -1729,6 +1752,7 @@ MonoBehaviour:
   detectionRadius: 5
   pursueRadius: 7
   atkDashForce: 2
+  jumpForce: 5
   isGroundedCheckRange: 0.5
   groundLayer:
     serializedVersion: 2
@@ -1738,6 +1762,7 @@ MonoBehaviour:
   fallForce: 0.5
   deathEffect: {fileID: 0}
   _curMobState: 0
+  _isGrounded: 1
   _isInvulnerable: 0
 --- !u!143 &187616016
 CharacterController:
@@ -16421,13 +16446,41 @@ PrefabInstance:
   m_Modification:
     m_TransformParent: {fileID: 0}
     m_Modifications:
+    - target: {fileID: 176279067, guid: 97e29706ecf9310438ad7e1c3f40fcfa, type: 3}
+      propertyPath: _minRange
+      value: 5
+      objectReference: {fileID: 0}
+    - target: {fileID: 1687112675, guid: 97e29706ecf9310438ad7e1c3f40fcfa, type: 3}
+      propertyPath: _minRange
+      value: 7
+      objectReference: {fileID: 0}
+    - target: {fileID: 1692120143, guid: 97e29706ecf9310438ad7e1c3f40fcfa, type: 3}
+      propertyPath: jumpForce
+      value: 8
+      objectReference: {fileID: 0}
+    - target: {fileID: 1692120150, guid: 97e29706ecf9310438ad7e1c3f40fcfa, type: 3}
+      propertyPath: skills.Array.size
+      value: 3
+      objectReference: {fileID: 0}
+    - target: {fileID: 1692120150, guid: 97e29706ecf9310438ad7e1c3f40fcfa, type: 3}
+      propertyPath: skills.Array.data[1]
+      value: 
+      objectReference: {fileID: 176279055}
+    - target: {fileID: 1692120150, guid: 97e29706ecf9310438ad7e1c3f40fcfa, type: 3}
+      propertyPath: skills.Array.data[2]
+      value: 
+      objectReference: {fileID: 176279067}
+    - target: {fileID: 1692120151, guid: 97e29706ecf9310438ad7e1c3f40fcfa, type: 3}
+      propertyPath: _maxRange
+      value: 5
+      objectReference: {fileID: 0}
     - target: {fileID: 6977835400567144140, guid: 97e29706ecf9310438ad7e1c3f40fcfa, type: 3}
       propertyPath: m_RootOrder
       value: 17
       objectReference: {fileID: 0}
     - target: {fileID: 6977835400567144140, guid: 97e29706ecf9310438ad7e1c3f40fcfa, type: 3}
       propertyPath: m_LocalPosition.x
-      value: 30.71
+      value: 38.38
       objectReference: {fileID: 0}
     - target: {fileID: 6977835400567144140, guid: 97e29706ecf9310438ad7e1c3f40fcfa, type: 3}
       propertyPath: m_LocalPosition.y
@@ -16435,7 +16488,7 @@ PrefabInstance:
       objectReference: {fileID: 0}
     - target: {fileID: 6977835400567144140, guid: 97e29706ecf9310438ad7e1c3f40fcfa, type: 3}
       propertyPath: m_LocalPosition.z
-      value: -9.24
+      value: -3.24
       objectReference: {fileID: 0}
     - target: {fileID: 6977835400567144140, guid: 97e29706ecf9310438ad7e1c3f40fcfa, type: 3}
       propertyPath: m_LocalRotation.w
@@ -18492,6 +18545,7 @@ MonoBehaviour:
     projOrigin: {fileID: 0}
     projRotation: {fileID: 0}
     basicAtkProjSpeed: 10
+  IsSkilling: 0
 --- !u!114 &1702892492
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -18515,6 +18569,7 @@ MonoBehaviour:
   detectionRadius: 5
   pursueRadius: 7
   atkDashForce: 2
+  jumpForce: 5
   isGroundedCheckRange: 0.5
   groundLayer:
     serializedVersion: 2
@@ -18524,6 +18579,7 @@ MonoBehaviour:
   fallForce: 0.5
   deathEffect: {fileID: 0}
   _curMobState: 0
+  _isGrounded: 1
   _isInvulnerable: 0
 --- !u!143 &1702892493
 CharacterController:
@@ -18697,6 +18753,7 @@ MonoBehaviour:
     projOrigin: {fileID: 0}
     projRotation: {fileID: 0}
     basicAtkProjSpeed: 10
+  IsSkilling: 0
 --- !u!114 &1851129754
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -18720,6 +18777,7 @@ MonoBehaviour:
   detectionRadius: 5
   pursueRadius: 7
   atkDashForce: 2
+  jumpForce: 5
   isGroundedCheckRange: 0.5
   groundLayer:
     serializedVersion: 2
@@ -18729,6 +18787,7 @@ MonoBehaviour:
   fallForce: 0.5
   deathEffect: {fileID: 0}
   _curMobState: 0
+  _isGrounded: 1
   _isInvulnerable: 0
 --- !u!143 &1851129755
 CharacterController:

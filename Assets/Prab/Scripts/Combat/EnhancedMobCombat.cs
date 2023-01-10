@@ -19,9 +19,14 @@ public class EnhancedMobCombat : MobCombat
     protected override void Start()
     {
         base.Start();
+        IsSkilling = false;
         for (int i = 0; i < skills.Count; i++)
         {
             skills[i].ActivateSkill(this, anim, stats, player);
+            if (skills[i].skillOn)
+            {
+                IsSkilling = true;
+            }
         }
     }
 
@@ -29,12 +34,14 @@ public class EnhancedMobCombat : MobCombat
     {
         base.Update();
         // Gets active skill to run update method for each skill 
+        IsSkilling = false;
         for (int i = 0; i < skills.Count; i++)
         {
             skills[i].SkillUpdate();
             if (skills[i].skillOn)
             {
                 usingSkillIdx = i;
+                IsSkilling = true;
             }
         }
     }
