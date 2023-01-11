@@ -49,15 +49,11 @@ namespace Paraverse.Player
 
         public void ActivateSkill(MobSkill skill)
         {
-
-
             if (skills.Contains(skill))
             {
                 skill.ActivateSkill(this, input, anim, stats);
                 _activeSkill = skill;
             }
-
-
         }
 
         protected override void Update()
@@ -209,9 +205,14 @@ namespace Paraverse.Player
         public override void FireProjectile()
         {
             ProjectileData data;
+            float damage = basicAtkDmgRatio * stats.AttackDamage.FinalValue;
 
             if (anim.GetBool(StringData.IsUsingSkill))
-                data = skills[usingSkillIdx].projData;
+            {
+                MobSkill s = skills[usingSkillIdx];
+                data = s.projData;
+                damage = s.flatPower + (stats.AttackDamage.FinalValue * s.attackScaling) + (stats.AbilityPower.FinalValue * s.abilityScaling);
+            }
             else
                 data = projData;
 
@@ -222,9 +223,10 @@ namespace Paraverse.Player
             //// Instantiate and initialize projectile
             GameObject go = Instantiate(data.projPf, data.projOrigin.position, transform.rotation);
             Projectile proj = go.GetComponent<Projectile>();
-            proj.Init(this, transform.forward, basicAtkDmgRatio * stats.AttackDamage.FinalValue);
+            proj.Init(this, transform.forward, damage);
 
             skills[usingSkillIdx].skillOn = false;
+            IsSkilling = false;
         }
         #endregion
     }

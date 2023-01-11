@@ -47,15 +47,18 @@ namespace Paraverse.Combat
         [Header("Projectile Values")]
         public ProjectileData projData;
 
+        [Header("Uses Target Lock"), Tooltip("If this skill should force mob to face its target")]
+        public bool usesTargetLock;
+
         [Header("Damage & Potency")]
         [SerializeField]
-        protected float flatPower = 1;
+        public float flatPower = 1;
 
-        [SerializeField, Range(0, 1)]
-        protected float attackScaling = 0;
+        [SerializeField, Range(0, 3)]
+        public float attackScaling = 0;
 
-        [SerializeField, Range(0, 1)]
-        protected float abilityScaling = 0;
+        [SerializeField, Range(0, 3)]
+        public float abilityScaling = 0;
 
         public bool skillOn { get; set; }
         #endregion
@@ -106,6 +109,11 @@ namespace Paraverse.Combat
         /// </summary>
         public virtual void SkillUpdate()
         {
+            if (input && usesTargetLock && mob.IsSkilling) // for player's case, need to do enemy's case
+            {
+                RotateToTarget();
+            }
+
             if (null != target && mob.IsBasicAttacking == false && mob.IsSkilling == false)
             {
                 Execute();
@@ -127,15 +135,20 @@ namespace Paraverse.Combat
                 anim.Play(animName);
                 Debug.Log("Executing skill: " + _skillName + " which takes " + cost + " points of energy out of " + stats.CurEnergy + " point of current energy." +
                     "The max cooldown for this skill is " + cooldown + " and the animation name is " + animName + ".");
-
-                // depending on the skill, 
-                // if it's a projectile, set its damage to:
-                // int damage = (flatPower) + (mobStats.AttackDamage.FinalValue * attackScaling) + (mobStats.AbilityPower.FinalValue * abilityScaling);
             }
         }
         #endregion
 
         #region Private Methods
+        private void RotateToTarget()
+        {
+            if (mob.Target)
+            {
+                Vector3 targetDir = ParaverseHelper.GetPositionXZ(mob.Target.position - transform.position).normalized;
+                transform.forward = targetDir;
+            }
+        }
+
         /// <summary>
         /// Run this method everytime a skill is activated
         /// </summary>
@@ -169,7 +182,7 @@ namespace Paraverse.Combat
         /// <returns></returns>
         protected virtual bool CanUseSkill()
         {
-            if (IsOffCooldown && HasEnergy && TargetWithinRange && mob.IsBasicAttacking == false)
+            if (IsOffCooldown && HasEnergy && TargetWithinRange && mob.IsAttackLunging == false)
             {
                 return true;
             }

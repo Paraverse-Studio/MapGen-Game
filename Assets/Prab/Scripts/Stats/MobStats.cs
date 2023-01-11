@@ -22,7 +22,7 @@ namespace Paraverse.Mob.Stats
         private Stat _attackDamage;
 
         [SerializeField]
-        protected float abilityPower = 10f;
+        protected float abilityPower = 0f;
         public Stat AbilityPower { get { return _abilityPower; } }
         private Stat _abilityPower;
 
@@ -87,6 +87,7 @@ namespace Paraverse.Mob.Stats
             _maxHealth = new Stat(maxHealth);
             _maxEnergy = new Stat(maxEnergy);
             _attackDamage = new Stat(attackDamage);
+            _abilityPower = new Stat(abilityPower);
             _attackSpeed = new Stat(attackSpeed);
             _moveSpeed = new Stat(moveSpeed);
             _energyRegen = new Stat(energyRegen);  

@@ -655,8 +655,6 @@ public class MapGeneration : MonoBehaviour
                 {
                     if (!IsInGrid(new Vector3((int)x, 0, (int)z)) || null == gridOccupants[x, z].block) continue;
 
-                    ///////////////////////
-
                     int randomXOffset = Random.Range(-M.lumpOffset, M.lumpOffset + 1);
                     int randomZOffset = Random.Range(-M.lumpOffset, M.lumpOffset + 1);
 
@@ -785,6 +783,10 @@ public class MapGeneration : MonoBehaviour
             for (int z = -1; z < 2; ++z)
             {
                 Vector3 areaToCheck = new Vector3(src.transform.position.x + x, 0, src.transform.position.z + z);
+
+                if (!IsInGrid(new Vector3((int)areaToCheck.x, 0, (int)areaToCheck.z)) 
+                    || null == gridOccupants[(int)areaToCheck.x, (int)areaToCheck.z].block) continue;
+
                 Block objectToCheck = gridOccupants[(int)areaToCheck.x, (int)areaToCheck.z].block;
                 if (objectToCheck != null)
                 {
@@ -1007,7 +1009,7 @@ public class MapGeneration : MonoBehaviour
         {
             for (int z = (int)zBoundary.x; z < zBoundary.y; z += spread)
             {
-                if (null == gridOccupants[x, z].block) continue;
+                if (!IsInGrid(new Vector3(x, 0, z)) || null == gridOccupants[x, z].block) continue;
 
                 // Offset: by default, a tree would be placed in its spot in the grid
                 // with an offset of 1, the tree could appear 1 block away from the center, 2 would be more
