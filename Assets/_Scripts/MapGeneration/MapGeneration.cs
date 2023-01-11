@@ -655,8 +655,6 @@ public class MapGeneration : MonoBehaviour
                 {
                     if (!IsInGrid(new Vector3((int)x, 0, (int)z)) || null == gridOccupants[x, z].block) continue;
 
-                    ///////////////////////
-
                     int randomXOffset = Random.Range(-M.lumpOffset, M.lumpOffset + 1);
                     int randomZOffset = Random.Range(-M.lumpOffset, M.lumpOffset + 1);
 
