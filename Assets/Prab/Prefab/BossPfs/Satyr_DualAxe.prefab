@@ -238,7 +238,7 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   targetTag: Player
   dot: 0
-  knockBackEffect: {fileID: 11400000, guid: 748f4316b61c09e4eb46f5136b6b2a06, type: 2}
+  knockBackEffect: {fileID: 0}
   hitFX: {fileID: 0}
 --- !u!1 &5799079831402301609
 GameObject:
@@ -309,7 +309,7 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   targetTag: Player
   dot: 0
-  knockBackEffect: {fileID: 11400000, guid: 748f4316b61c09e4eb46f5136b6b2a06, type: 2}
+  knockBackEffect: {fileID: 0}
   hitFX: {fileID: 0}
 --- !u!1 &5799079832220890242
 GameObject:
@@ -2221,11 +2221,17 @@ MonoBehaviour:
   detectionRadius: 10
   pursueRadius: 15
   atkDashForce: 25
+  jumpForce: 5
+  isGroundedCheckRange: 0.5
+  groundLayer:
+    serializedVersion: 2
+    m_Bits: 0
   checkFallRange: 2
   maxDeathTimerUponFall: 2
   fallForce: 0.5
   deathEffect: {fileID: 8073467667769803130, guid: 75c1b160671ce934fad50936633acef1, type: 3}
   _curMobState: 0
+  _isGrounded: 1
   _isInvulnerable: 1
 --- !u!114 &8192483365412930203
 MonoBehaviour:
@@ -2248,7 +2254,9 @@ MonoBehaviour:
     projPf: {fileID: 0}
     projHeld: {fileID: 0}
     projOrigin: {fileID: 0}
+    projRotation: {fileID: 0}
     basicAtkProjSpeed: 10
+  IsSkilling: 0
   skills:
   - {fileID: 6182863767563582618}
   animBool: isUsingSkill
@@ -2339,12 +2347,6 @@ MonoBehaviour:
   rangeOverride: -1
   outline: {fileID: 0}
   Range: 0
-  OnSelected:
-    m_PersistentCalls:
-      m_Calls: []
-  OnDeselected:
-    m_PersistentCalls:
-      m_Calls: []
 --- !u!114 &6182863767563582618
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -2369,7 +2371,9 @@ MonoBehaviour:
     projPf: {fileID: 0}
     projHeld: {fileID: 0}
     projOrigin: {fileID: 0}
+    projRotation: {fileID: 0}
     basicAtkProjSpeed: 10
+  usesTargetLock: 0
   flatPower: 1
   attackScaling: 0
   abilityScaling: 0
