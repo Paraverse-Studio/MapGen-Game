@@ -15,21 +15,30 @@ public class EnhancedMobCombat : MobCombat
     protected List<MobSkill> skills = new List<MobSkill>();
     [SerializeField]
     protected string animBool = "isUsingSkill";
-    public bool IsSkilling { get { return _isSkilling; } }
-    protected bool _isSkilling = false;
 
     protected override void Start()
     {
         base.Start();
+        IsSkilling = false;
         for (int i = 0; i < skills.Count; i++)
         {
             skills[i].ActivateSkill(this, anim, stats, player);
+            if (skills[i].skillOn)
+            {
+                IsSkilling = true;
+            }
         }
     }
 
     protected override void Update()
     {
         base.Update();
+
+        if (anim.GetBool(StringData.IsUsingSkill))
+            IsSkilling = true;
+        else
+            IsSkilling = false;
+
         // Gets active skill to run update method for each skill 
         for (int i = 0; i < skills.Count; i++)
         {
@@ -37,9 +46,9 @@ public class EnhancedMobCombat : MobCombat
             if (skills[i].skillOn)
             {
                 usingSkillIdx = i;
+                //IsSkilling = true;
             }
         }
-        _isSkilling = anim.GetBool(StringData.IsSkilling);
     }
 
     /// <summary>
@@ -47,7 +56,7 @@ public class EnhancedMobCombat : MobCombat
     /// </summary>
     public override void BasicAttackHandler()
     {
-        if (curBasicAtkCd <= 0 && anim.GetBool(StringData.IsUsingSkill) == false)
+        if (curBasicAtkCd <= 0 && IsSkilling == false)
         {
             anim.Play(StringData.BasicAttack);
             curBasicAtkCd = GetBasicAttackCooldown();
@@ -57,7 +66,7 @@ public class EnhancedMobCombat : MobCombat
     public override void FireProjectile()
     {
         ProjectileData data;
-        if (IsSkilling)
+        if (anim.GetBool(StringData.IsUsingSkill))
             data = skills[usingSkillIdx].projData;
         else
             data = projData;
@@ -68,10 +77,19 @@ public class EnhancedMobCombat : MobCombat
 
         Vector3 playerPos = new Vector3(player.position.x, player.position.y + 0.5f, player.position.z);
         Vector3 targetDir = (playerPos - transform.position).normalized;
-        Quaternion lookRot = Quaternion.LookRotation(targetDir);
+
+        Quaternion lookRot;
+        if (data.projRotation == null)
+        {
+            lookRot = Quaternion.LookRotation(targetDir);
+        }
+        else
+        {
+            lookRot = data.projRotation.rotation;
+        }
 
         // Instantiate and initialize projectile
-        GameObject go = Instantiate(projData.projPf, projData.projOrigin.position, lookRot);
+        GameObject go = Instantiate(data.projPf, data.projOrigin.position, lookRot);
         Projectile proj = go.GetComponent<Projectile>();
         proj.Init(this, targetDir, projData.basicAtkProjSpeed, basicAtkRange, basicAtkDmgRatio * stats.AttackDamage.FinalValue);
     }

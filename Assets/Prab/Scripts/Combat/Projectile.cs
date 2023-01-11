@@ -1,7 +1,6 @@
 using Paraverse.Helper;
 using Paraverse.Mob;
 using Paraverse.Mob.Combat;
-using Paraverse.Mob.Stats;
 using UnityEngine;
 
 namespace Paraverse
@@ -21,6 +20,15 @@ namespace Paraverse
         private float damage;
         [SerializeField, Tooltip("Projectile is destroyed after this duration.")]
         private float deathTimer = 5f;
+        [SerializeField, Tooltip("Stationary projectile.")]
+        protected bool stationary = false;
+        [SerializeField, Tooltip("Damage over time.")]
+        protected bool dot = false;
+        [SerializeField, Tooltip("Apply damage upon enter.")]
+        protected bool applyDamageOnEnter = false;
+        [SerializeField, Tooltip("Applies damage every given second.")]
+        protected float dotIntervalTimer = 1f;
+        private float dotTimer = 0f;
 
         [Header("Knockback Effect")]
         [SerializeField]
@@ -48,15 +56,19 @@ namespace Paraverse
         private void Update()
         {
             float distanceFromOrigin = ParaverseHelper.GetDistance(transform.position, origin);
-            if (distanceFromOrigin > range || curdeathTimer >= deathTimer)
+            if (distanceFromOrigin > range && stationary == false || curdeathTimer >= deathTimer)
             {
                 Destroy(gameObject);
             }
 
             curdeathTimer += Time.deltaTime;
-            transform.position += (transform.forward * speed * Time.deltaTime);
+
+            dotTimer += Time.deltaTime;
+
+            if (stationary == false) transform.position += (transform.forward * speed * Time.deltaTime);
         }
         #endregion
+
         public void Init(MobCombat mob, Vector3 target, float damage)
         {
             this.target = target;
@@ -83,6 +95,8 @@ namespace Paraverse
 
         private void OnTriggerEnter(Collider other)
         {
+            if (dot && applyDamageOnEnter == false) return;
+
             if (other.CompareTag(targetTag))
             {
                 IMobController controller = other.GetComponent<IMobController>();
@@ -95,7 +109,29 @@ namespace Paraverse
                     controller.ApplyKnockBack(mob.transform.position, effect);
                 }
 
-                if (hitFX) Instantiate(hitFX, other.transform.position + new Vector3(0, 0.5f, 0), Quaternion.identity); 
+                if (hitFX) Instantiate(hitFX, other.transform.position + new Vector3(0, 0.5f, 0), Quaternion.identity);
+
+                if (!pierce) Destroy(gameObject);
+            }
+        }
+
+        private void OnTriggerStay(Collider other)
+        {
+            if (other.CompareTag(targetTag) && dotTimer >= dotIntervalTimer)
+            {
+                dotTimer = 0f;
+
+                IMobController controller = other.GetComponent<IMobController>();
+                controller.Stats.UpdateCurrentHealth((int)-damage);
+
+                // Apply knock back effect
+                if (null != knockBackEffect)
+                {
+                    KnockBackEffect effect = new KnockBackEffect(knockBackEffect);
+                    controller.ApplyKnockBack(mob.transform.position, effect);
+                }
+
+                if (hitFX) Instantiate(hitFX, other.transform.position + new Vector3(0, 0.5f, 0), Quaternion.identity);
 
                 if (!pierce) Destroy(gameObject);
             }

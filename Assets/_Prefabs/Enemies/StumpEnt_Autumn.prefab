@@ -316,14 +316,20 @@ MonoBehaviour:
   maxWaitDur: 5
   accurayWP: 2
   stoppingDistance: 4
-  detectionRadius: 5
-  pursueRadius: 7
+  detectionRadius: 8
+  pursueRadius: 10
   atkDashForce: 16
+  jumpForce: 5
+  isGroundedCheckRange: 0.5
+  groundLayer:
+    serializedVersion: 2
+    m_Bits: 0
   checkFallRange: 2
   maxDeathTimerUponFall: 2
   fallForce: 0.5
   deathEffect: {fileID: 8073467667769803130, guid: 75c1b160671ce934fad50936633acef1, type: 3}
   _curMobState: 0
+  _isGrounded: 1
   _isInvulnerable: 0
 --- !u!114 &5125661759958323761
 MonoBehaviour:
@@ -368,14 +374,16 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   anim: {fileID: 0}
   basicAtkDmgRatio: 1
-  basicAtkRange: 4
+  basicAtkRange: 5
   basicAtkCollider: {fileID: 0}
   projUser: 0
   projData:
     projPf: {fileID: 0}
     projHeld: {fileID: 0}
     projOrigin: {fileID: 0}
+    projRotation: {fileID: 0}
     basicAtkProjSpeed: 10
+  IsSkilling: 0
   explosionEffect: {fileID: 3357188187496195378, guid: c4687f54de839e54f979bd3771bf99d5, type: 3}
   explosionRadius: 1.5
 --- !u!114 &5125661759958323763

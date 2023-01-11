@@ -106,7 +106,7 @@ namespace Paraverse.Combat
         /// </summary>
         public virtual void SkillUpdate()
         {
-            if (null != target && mob.IsBasicAttacking == false && anim.GetBool(StringData.IsUsingSkill) == false)
+            if (null != target && mob.IsBasicAttacking == false && mob.IsSkilling == false)
             {
                 Execute();
             }
@@ -118,10 +118,10 @@ namespace Paraverse.Combat
         /// </summary>
         public virtual void Execute()
         {
-            if (CanUseSkill() && skillOn == false)
+            if (CanUseSkill())
             {
-                anim.SetBool(StringData.IsUsingSkill, true);
-                skillOn = true;
+                mob.IsSkilling = true;
+                MarkSkillAsEnabled();
                 curCooldown = cooldown;
                 stats.UpdateCurrentEnergy(-cost);
                 anim.Play(animName);
@@ -136,6 +136,21 @@ namespace Paraverse.Combat
         #endregion
 
         #region Private Methods
+        /// <summary>
+        /// Run this method everytime a skill is activated
+        /// </summary>
+        protected void MarkSkillAsEnabled()
+        {
+            skillOn = true;
+            anim.SetBool(StringData.IsUsingSkill, true);
+        }
+
+        protected virtual void DisableSkill()
+        {
+            skillOn = false;
+            anim.SetBool(StringData.IsUsingSkill, false);
+        }
+
         /// <summary>
         /// Handles skill cooldown.
         /// </summary>

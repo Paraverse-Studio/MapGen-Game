@@ -62,15 +62,8 @@ public class DualComboSkill : MobSkill, IMobSkill
     /// </summary>
     public override void SkillUpdate()
     {
-        if (null != target && mob.IsBasicAttacking == false && anim.GetBool(StringData.IsUsingSkill) == false)
-        {
-            Execute();
-        }
-
-        if (anim.GetBool(StringData.IsUsingSkill) == false)
-            skillOn = false;
+        base.SkillUpdate();
         RotateToTarget();
-        CooldownHandler();
     }
 
     /// <summary>
@@ -78,10 +71,10 @@ public class DualComboSkill : MobSkill, IMobSkill
     /// </summary>
     public override void Execute()
     {
-        if (CanUseSkill() && skillOn == false)
+        if (CanUseSkill())
         {
-            anim.SetBool(StringData.IsUsingSkill, true);
-            skillOn = true;
+            mob.IsSkilling = true;
+            MarkSkillAsEnabled();
             curCooldown = cooldown;
             stats.UpdateCurrentEnergy(-cost);
             anim.Play(animName);
@@ -130,6 +123,16 @@ public class DualComboSkill : MobSkill, IMobSkill
 
         if (offHandAttackCollider != null)
             offHandAttackColliderGO.SetActive(false);
+    }
+
+    public void DisableSkillAndCollider()
+    {
+        if (attackColliderGO != null)
+            attackColliderGO.SetActive(false);
+        if (offHandAttackCollider != null)
+            offHandAttackColliderGO.SetActive(false);
+
+        skillOn = false;
     }
     #endregion
 }

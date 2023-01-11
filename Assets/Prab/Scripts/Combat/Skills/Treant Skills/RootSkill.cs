@@ -21,6 +21,7 @@ public class RootSkill : MobSkill, IMobSkill
     {
         if (CanUseSkill())
         {
+            mob.IsSkilling = true;
             skillOn = true;
             curRootDuration = rootDuration;
             stats.UpdateCurrentEnergy(-cost);
@@ -41,9 +42,8 @@ public class RootSkill : MobSkill, IMobSkill
 
         if (curRootDuration <= 0)
         {
-            skillOn = false;
+            DisableSkill();
             curCooldown = cooldown;
-            anim.SetBool(StringData.IsUsingSkill, false);
         }
         else
         {
