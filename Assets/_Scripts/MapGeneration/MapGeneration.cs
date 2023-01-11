@@ -1009,7 +1009,7 @@ public class MapGeneration : MonoBehaviour
         {
             for (int z = (int)zBoundary.x; z < zBoundary.y; z += spread)
             {
-                if (null == gridOccupants[x, z].block) continue;
+                if (!IsInGrid(new Vector3(x, 0, z)) || null == gridOccupants[x, z].block) continue;
 
                 // Offset: by default, a tree would be placed in its spot in the grid
                 // with an offset of 1, the tree could appear 1 block away from the center, 2 would be more
