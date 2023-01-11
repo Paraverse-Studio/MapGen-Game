@@ -143,6 +143,7 @@ namespace Paraverse.Mob.Combat
         {
             _isAttackLunging = false;
             DisableBasicAttackCollider();
+            IsSkilling = false;
         }
         #endregion
 
