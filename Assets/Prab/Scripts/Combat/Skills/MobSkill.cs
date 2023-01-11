@@ -109,7 +109,7 @@ namespace Paraverse.Combat
         /// </summary>
         public virtual void SkillUpdate()
         {
-            if (input && usesTargetLock && mob.IsSkilling)
+            if (input && usesTargetLock && mob.IsSkilling) // for player's case, need to do enemy's case
             {
                 RotateToTarget();
             }
@@ -182,7 +182,7 @@ namespace Paraverse.Combat
         /// <returns></returns>
         protected virtual bool CanUseSkill()
         {
-            if (IsOffCooldown && HasEnergy && TargetWithinRange && mob.IsBasicAttacking == false)
+            if (IsOffCooldown && HasEnergy && TargetWithinRange && mob.IsAttackLunging == false)
             {
                 return true;
             }
