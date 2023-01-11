@@ -49,13 +49,13 @@ namespace Paraverse.Combat
 
         [Header("Damage & Potency")]
         [SerializeField]
-        protected float flatPower = 1;
+        public float flatPower = 1;
 
         [SerializeField, Range(0, 1)]
-        protected float attackScaling = 0;
+        public float attackScaling = 0;
 
         [SerializeField, Range(0, 1)]
-        protected float abilityScaling = 0;
+        public float abilityScaling = 0;
 
         public bool skillOn { get; set; }
         #endregion
