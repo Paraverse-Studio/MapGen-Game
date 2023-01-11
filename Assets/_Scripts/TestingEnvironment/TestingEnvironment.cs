@@ -7,7 +7,7 @@ public class TestingEnvironment : MonoBehaviour
 {
     [Header("Properties:")]
     public int radius = 5;
-    public GameObject blockPrefab;
+    public GameObject[] blockPrefabs;
     public GameObject player;
     public Transform blockFolder;
     public GameObject[] enemyPrefabs;
@@ -28,7 +28,7 @@ public class TestingEnvironment : MonoBehaviour
             List<GameObject> xList = new List<GameObject>();
             for (int z = -radius; z < radius; ++z)
             {
-                GameObject obj = Instantiate(blockPrefab, new Vector3(x, 0, z), Quaternion.identity);
+                GameObject obj = Instantiate(blockPrefabs[Random.Range(0, blockPrefabs.Length)], new Vector3(x, 0, z), Quaternion.identity);
                 xList.Add(obj);
                 if (xList.Count == 1) _surface = obj.AddComponent<NavMeshSurface>();
                 obj.transform.SetParent(blockFolder);
@@ -41,7 +41,7 @@ public class TestingEnvironment : MonoBehaviour
             List<GameObject> xList = new List<GameObject>();
             for (int z = -radius; z < radius; ++z)
             {
-                GameObject obj = Instantiate(blockPrefab, new Vector3(x, 0.49f, z), Quaternion.identity);
+                GameObject obj = Instantiate(blockPrefabs[Random.Range(0, blockPrefabs.Length)], new Vector3(x, 0.49f, z), Quaternion.identity);
                 xList.Add(obj);
                 obj.transform.SetParent(blockFolder);
             }

@@ -2878,7 +2878,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: be0291d84a7d63f4681e196406785343, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  developerMode: 1
+  developerMode: 0
   maps:
   - map: {fileID: 11400000, guid: eee651aca9ecf3b4bab685931d03037b, type: 2}
     bossMap: {fileID: 11400000, guid: ca55aae686f041a45b1191ee3b71df97, type: 2}
@@ -22335,7 +22335,9 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   radius: 20
-  blockPrefab: {fileID: 1979290889500462, guid: 98dd8e405a3f26848b63e1b78dfb7c5b, type: 3}
+  blockPrefabs:
+  - {fileID: 6181932867867417379, guid: 955e22e966f79f0449c0f6aa601b9514, type: 3}
+  - {fileID: 1979290889500462, guid: 98dd8e405a3f26848b63e1b78dfb7c5b, type: 3}
   player: {fileID: 1191419013}
   blockFolder: {fileID: 381777741}
   enemyPrefabs:
@@ -26904,11 +26906,11 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: a49d912e0b019f14b99bdde319029bdd, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  _skillName: Launch a golden wave that damages all targets it pierces.
+  _skillName: 
   _description: 
   _minRange: 0
   _maxRange: 5
-  cooldown: 5
+  cooldown: 2
   cost: 60
   animName: SkillTwo
   attackColliderGO: {fileID: 0}
@@ -26918,8 +26920,8 @@ MonoBehaviour:
     projOrigin: {fileID: 1752897470}
     basicAtkProjSpeed: 18
   flatPower: 1
-  attackScaling: 0
-  abilityScaling: 0
+  attackScaling: 1
+  abilityScaling: 1
 --- !u!1 &1756901534
 GameObject:
   m_ObjectHideFlags: 0
@@ -33511,11 +33513,15 @@ PrefabInstance:
     - target: {fileID: 8764965865831667164, guid: 834dc73c554c9ad4fae808a0fabce9de, type: 3}
       propertyPath: testGameObject
       value: 
-      objectReference: {fileID: 3357188187496195378, guid: c4687f54de839e54f979bd3771bf99d5, type: 3}
+      objectReference: {fileID: 0}
     - target: {fileID: 8764965865831667164, guid: 834dc73c554c9ad4fae808a0fabce9de, type: 3}
       propertyPath: healthBarFolder
       value: 
       objectReference: {fileID: 1991103822}
+    - target: {fileID: 8764965865831667164, guid: 834dc73c554c9ad4fae808a0fabce9de, type: 3}
+      propertyPath: healthBarPrefab
+      value: 
+      objectReference: {fileID: 7640659126391647822, guid: 942c49d140fe07349b809a79756e60c9, type: 3}
     - target: {fileID: 8764965865831667164, guid: 834dc73c554c9ad4fae808a0fabce9de, type: 3}
       propertyPath: ScreenSpaceCanvas
       value: 

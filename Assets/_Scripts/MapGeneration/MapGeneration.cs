@@ -653,7 +653,7 @@ public class MapGeneration : MonoBehaviour
             {
                 for (int z = (int)zBoundary.x; z < zBoundary.y; z += spread)
                 {
-                    if (null == gridOccupants[x, z].block) continue;
+                    if (!IsInGrid(new Vector3((int)x, 0, (int)z)) || null == gridOccupants[x, z].block) continue;
 
                     ///////////////////////
 
