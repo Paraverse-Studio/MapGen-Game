@@ -42,6 +42,8 @@ namespace Paraverse.Mob.Combat
 
         // Constantly updates the distance from player
         protected float distanceFromTarget;
+        public Transform Target { get { return _target; } set { _target = value; } }
+        private Transform _target;
 
         public float BasicAtkRange { get { return basicAtkRange; } }
         public bool IsBasicAttacking { get { return _isBasicAttacking; } }

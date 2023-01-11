@@ -226,6 +226,7 @@ namespace Paraverse.Player
             proj.Init(this, transform.forward, damage);
 
             skills[usingSkillIdx].skillOn = false;
+            IsSkilling = false;
         }
         #endregion
     }
