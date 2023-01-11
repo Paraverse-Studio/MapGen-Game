@@ -39,7 +39,7 @@ public class SO_StatMod : SO_Mod
     private int _CostMutable; // mutable version
 
     private MobStats _player;
-
+    private int _modLevel = 1;
 
     private void OnValidate()
     {
@@ -99,9 +99,11 @@ public class SO_StatMod : SO_Mod
     {
         if (evolve.canStack)
         {
+            _modLevel++;
+
             for (int i = 0; i < _addStatsMutable.Count; ++i)
             {
-                _addStatsMutable[i] = new StatPair(_addStatsMutable[i].type, _addStatsMutable[i].value * evolve.valueGrowthFactor);
+                _addStatsMutable[i] = new StatPair(_addStatsMutable[i].type, Mathf.CeilToInt(_addStatsMutable[i].value * evolve.valueGrowthFactor));
             }
             _CostMutable = (int)(GetCost() * evolve.costGrowthFactor);
 

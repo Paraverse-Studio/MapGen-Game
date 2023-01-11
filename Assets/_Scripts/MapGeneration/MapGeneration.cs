@@ -783,6 +783,10 @@ public class MapGeneration : MonoBehaviour
             for (int z = -1; z < 2; ++z)
             {
                 Vector3 areaToCheck = new Vector3(src.transform.position.x + x, 0, src.transform.position.z + z);
+
+                if (!IsInGrid(new Vector3((int)areaToCheck.x, 0, (int)areaToCheck.z)) 
+                    || null == gridOccupants[(int)areaToCheck.x, (int)areaToCheck.z].block) continue;
+
                 Block objectToCheck = gridOccupants[(int)areaToCheck.x, (int)areaToCheck.z].block;
                 if (objectToCheck != null)
                 {

@@ -49,7 +49,7 @@ public class ScoreFormula
         score = (timeScore + damageTakenScore) / 2f;
 
         Debug.Log($"Score Summary: Time taken {timeTaken} (score {(int)timeScore}%), " +
-            $"and damage taken {damageTaken} (score {(int)damageTakenScore}%): Score {(int)score}%");
+            $"and damage taken {damageTaken} [given max HP: {maxHealth}] (score {(int)damageTakenScore}%): Score {(int)score}%");
 
         return score;
     }
@@ -74,7 +74,8 @@ public class ScoreFormula
     // Version 2
     private static float DamageTakenScore2(int maxHealth, int damageTaken)
     {
-        return (-0.0004f * Mathf.Pow(damageTaken, 2f)) - (0.75f * damageTaken) + 107f; 
+        float percentDamageTaken = ((float)damageTaken / (float)maxHealth) * 100.0f;
+        return (-0.0004f * Mathf.Pow(percentDamageTaken, 2f)) - (0.75f * percentDamageTaken) + 107f; 
     }
 
     public static string GetScoreRank(int score)

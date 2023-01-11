@@ -54,10 +54,10 @@ namespace Paraverse.Combat
         [SerializeField]
         public float flatPower = 1;
 
-        [SerializeField, Range(0, 1)]
+        [SerializeField, Range(0, 3)]
         public float attackScaling = 0;
 
-        [SerializeField, Range(0, 1)]
+        [SerializeField, Range(0, 3)]
         public float abilityScaling = 0;
 
         public bool skillOn { get; set; }
