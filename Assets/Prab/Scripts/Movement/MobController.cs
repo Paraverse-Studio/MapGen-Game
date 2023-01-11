@@ -415,7 +415,7 @@ namespace Paraverse.Mob.Controller
             {
                 Vector3 mobPos = ParaverseHelper.GetPositionXZ(transform.position);
                 Vector3 targetPos = ParaverseHelper.GetPositionXZ(pursueTarget.position);
-                float distanceFromTarget = ParaverseHelper.GetDistance(mobPos, targetPos);
+                float distanceFromTarget = ParaverseHelper.GetDistance(transform.position, pursueTarget.position);
 
                 if (distanceFromTarget <= combat.BasicAtkRange)
                 {
