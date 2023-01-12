@@ -96,6 +96,18 @@ namespace Paraverse.Mob.Controller
         public delegate void OnLandDel();
         public event OnLandDel OnLandEvent;
 
+        [Header("Fly Values")]
+        [SerializeField]
+        protected float flyForce = 5f;
+        [SerializeField]
+        protected float flyUpForce = 5f;
+        [SerializeField]
+        protected float flyDownForce = 5f;
+        protected Vector3 flyToPos;
+        protected Vector3 flyDir;
+        public bool isFlyingUp = false;
+        public bool isFlyingDown = false;
+
         [Header("Fall Check")]
         [SerializeField, Tooltip("Checks if mob should fall off map.")]
         protected float checkFallRange = 2f;
@@ -130,6 +142,8 @@ namespace Paraverse.Mob.Controller
         protected bool _isFalling = false;
         public bool IsJumping { get { return _isJumping; } }
         protected bool _isJumping = false;
+        public bool IsFlying { get { return _isFlying; } }
+        protected bool _isFlying = false;
         public bool IsGrounded { get { return _isGrounded; } }
         public bool _isGrounded = true;
         public bool IsInvulnerable { get { return _isInvulnerable; } }
@@ -186,7 +200,9 @@ namespace Paraverse.Mob.Controller
             StateHandler();
             CCHandler();
             KnockbackHandler();
-            JumpHandler();
+            JumpHandler(); 
+            FlyUpHandler();
+            FlyDownHandler();
             AnimatorHandler();
         }
         #endregion
@@ -200,7 +216,7 @@ namespace Paraverse.Mob.Controller
             nav.speed = curMoveSpeed;
 
             // Ensures nav is enabled after switching it off
-            if (_isStaggered == false && combat.IsAttackLunging == false)
+            if (_isStaggered == false && combat.IsAttackLunging == false && IsFlying == false)
                 nav.enabled = true;
 
             if (_isInteracting && IsFalling == false)
@@ -550,14 +566,14 @@ namespace Paraverse.Mob.Controller
             }
         }
 
-        private float curJumpCheckTimer = 0.5f;
+        private float curAirCheckTimer = 0.5f;
         private float jumpCheckTimer = 0.5f;
 
         public void ApplyJump(Vector3 mobPos)
         {
             if (_isJumping) return;
 
-            curJumpCheckTimer = jumpCheckTimer;
+            curAirCheckTimer = jumpCheckTimer;
             nav.enabled = false;
             _isJumping = true;
             combat.OnAttackInterrupt();
@@ -574,7 +590,7 @@ namespace Paraverse.Mob.Controller
                 Vector3 landDir = new Vector3(jumpDir.x * jumpForce, jumpDir.y, jumpDir.z * jumpForce);
                 controller.Move(landDir * Time.deltaTime);
 
-                if (curJumpCheckTimer <= 0)
+                if (curAirCheckTimer <= 0)
                 {
                     if (IsGroundedCheck())
                     {
@@ -586,7 +602,7 @@ namespace Paraverse.Mob.Controller
                 }
                 else
                 {
-                    curJumpCheckTimer -= Time.deltaTime;
+                    curAirCheckTimer -= Time.deltaTime;
                 }
 
                 jumpDir.y += GlobalValues.GravityForce * GlobalValues.GravityModifier * Time.deltaTime;
@@ -599,10 +615,9 @@ namespace Paraverse.Mob.Controller
             Vector3 dir = -transform.up;
             RaycastHit hit;
 
+            Debug.DrawRay(origin, dir * isGroundedCheckRange, Color.red);
             if (Physics.Raycast(origin, dir * isGroundedCheckRange, out hit, isGroundedCheckRange, groundLayer))
             {
-                nav.enabled = true;
-                _isJumping = false;
                 return true;
             }
             else
@@ -631,6 +646,73 @@ namespace Paraverse.Mob.Controller
                 return true;
             }
             return false;
+        }
+
+        public void ApplyFlyUp(Vector3 mobPos, Vector3 dir)
+        {
+            if (isFlyingUp) return;
+
+            curAirCheckTimer = jumpCheckTimer;
+            nav.enabled = false;
+            _isFlying = true;
+            isFlyingUp = true;
+            combat.OnAttackInterrupt();
+            flyDir = dir;
+            landPos = mobPos;
+            //flyDir.y += Mathf.Sqrt(flyUpForce * -GlobalValues.GravityModifier * GlobalValues.GravityForce);
+        }
+
+        public void ApplyFlyDown(Vector3 mobPos)
+        {
+            if (isFlyingDown) return;
+
+            nav.enabled = false;
+            _isFlying = true;
+            isFlyingDown = true;
+            combat.OnAttackInterrupt();
+            Vector3 targetDir = (mobPos - transform.position).normalized;
+            landPos = mobPos;
+            flyDir = new Vector3(targetDir.x, targetDir.y, targetDir.z);
+            //flyDir.y += Mathf.Sqrt(flyDownForce * -GlobalValues.GravityModifier * GlobalValues.GravityForce);
+        }
+
+        private void FlyUpHandler()
+        {
+            if (_isFlying && isFlyingUp)
+            {
+                Vector3 dir = flyDir * flyUpForce;
+                controller.Move(dir * Time.deltaTime);
+
+                if (curAirCheckTimer <= 0)
+                {
+                    isFlyingUp = false;
+                    return;
+                }
+                else
+                {
+                    curAirCheckTimer -= Time.deltaTime;
+                }
+            }
+        }
+
+        private void FlyDownHandler()
+        {
+            if (_isFlying && isFlyingDown)
+            {
+                Vector3 dir = flyDir * flyDownForce;
+                controller.Move(dir * Time.deltaTime);
+
+                if (IsGroundedCheck())
+                {
+                    nav.enabled = true;
+                    _isFlying = false;
+                    isFlyingUp = false;
+                    isFlyingDown = false;
+                    OnLandEvent?.Invoke();
+                    return;
+                }
+                //flyDir.y += Mathf.Sqrt(flyDownForce * -GlobalValues.GravityModifier * GlobalValues.GravityForce);
+            }
         }
         #endregion
 
