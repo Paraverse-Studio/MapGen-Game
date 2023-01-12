@@ -10,11 +10,12 @@ using UnityEngine;
 public class SlamDownPunch : MobSkill, IMobSkill
 {
     #region Variables
-
+    [SerializeField]
+    protected GameObject mainHandAttackColliderGO;
+    protected AttackCollider mainHandAttackCollider;
     #endregion
 
     #region Public Methods
-
     public void ChargePunch()
     {
         GetComponent<MobController>().ApplyFlyUp(mob.transform.position, transform.up);
@@ -28,6 +29,18 @@ public class SlamDownPunch : MobSkill, IMobSkill
     public void UnleashPunch()
     {
         GetComponent<MobController>().ApplyFlyDown(target.transform.position);
+    }
+
+    public void EnableOffAttackCollider()
+    {
+        if (mainHandAttackCollider != null)
+            mainHandAttackColliderGO.SetActive(false);
+    }
+
+    public void DisableOffAttackCollider()
+    {
+        if (mainHandAttackCollider != null)
+            mainHandAttackColliderGO.SetActive(false);
     }
     #endregion
 
