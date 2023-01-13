@@ -73,6 +73,16 @@ namespace Paraverse.Player
                 IsSkilling = true;
             else
                 IsSkilling = false;
+
+            // Gets active skill to run update method for each skill 
+            for (int i = 0; i < skills.Count; i++)
+            {
+                skills[i].SkillUpdate();
+                if (skills[i].skillOn)
+                {
+                    usingSkillIdx = i;
+                }
+            }
         }
         #endregion
 
@@ -115,7 +125,8 @@ namespace Paraverse.Player
             }
             else if (basicAtkComboIdx == 0)
             {
-                anim.Play(StringData.BasicAttack);
+                if (controller.IsDiving) anim.Play(StringData.BasicAttackTwo); // dash-attacking
+                else anim.Play(StringData.BasicAttack);
             }
 
             // Increment combo index upon basic attack
