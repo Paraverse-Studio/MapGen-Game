@@ -13,6 +13,7 @@ GameObject:
   - component: {fileID: 9141826968971381388}
   - component: {fileID: 4305759036624487773}
   - component: {fileID: 4080902578395853962}
+  - component: {fileID: 6596854562201515528}
   m_Layer: 0
   m_Name: TreantVines_PS
   m_TagString: Untagged
@@ -226,7 +227,7 @@ ParticleSystem:
       serializedVersion: 2
       minMaxState: 2
       minColor: {r: 0, g: 0, b: 0, a: 1}
-      maxColor: {r: 0.49056602, g: 0.31340688, b: 0.15457456, a: 1}
+      maxColor: {r: 0.7264151, g: 0.41229397, b: 0.12609467, a: 1}
       maxGradient:
         serializedVersion: 2
         key0: {r: 1, g: 1, b: 1, a: 1}
@@ -981,7 +982,7 @@ ParticleSystem:
         serializedVersion: 2
         minMaxState: 3
         scalar: 1.5
-        minScalar: 2
+        minScalar: 1
         maxCurve:
           serializedVersion: 2
           m_Curve:
@@ -3709,7 +3710,7 @@ ParticleSystem:
         m_NumAlphaKeys: 2
     range: {x: 0, y: 1}
   CollisionModule:
-    enabled: 0
+    enabled: 1
     serializedVersion: 4
     type: 1
     collisionMode: 0
@@ -3827,7 +3828,7 @@ ParticleSystem:
     m_EnergyLossOnCollision:
       serializedVersion: 2
       minMaxState: 0
-      scalar: 0
+      scalar: 0.9
       minScalar: 0
       maxCurve:
         serializedVersion: 2
@@ -3879,18 +3880,18 @@ ParticleSystem:
         m_RotationOrder: 4
     minKillSpeed: 0
     maxKillSpeed: 10000
-    radiusScale: 1
+    radiusScale: 50
     collidesWith:
       serializedVersion: 2
-      m_Bits: 16384
+      m_Bits: 32768
     maxCollisionShapes: 256
     quality: 0
     voxelSize: 0.5
-    collisionMessages: 0
+    collisionMessages: 1
     collidesWithDynamic: 1
     interiorCollisions: 0
   TriggerModule:
-    enabled: 1
+    enabled: 0
     serializedVersion: 2
     inside: 1
     outside: 0
@@ -4030,7 +4031,7 @@ ParticleSystem:
     lifetime:
       serializedVersion: 2
       minMaxState: 0
-      scalar: 0.2
+      scalar: 0.3
       minScalar: 1
       maxCurve:
         serializedVersion: 2
@@ -4085,7 +4086,7 @@ ParticleSystem:
     ribbonCount: 1
     shadowBias: 0.5
     worldSpace: 0
-    dieWithParticles: 1
+    dieWithParticles: 0
     sizeAffectsWidth: 0
     sizeAffectsLifetime: 0
     inheritParticleColor: 1
@@ -4094,22 +4095,22 @@ ParticleSystem:
     attachRibbonsToTransform: 0
     colorOverLifetime:
       serializedVersion: 2
-      minMaxState: 2
+      minMaxState: 1
       minColor: {r: 1, g: 0, b: 0, a: 1}
       maxColor: {r: 0.14150941, g: 0.06686839, b: 0.0032039825, a: 1}
       maxGradient:
         serializedVersion: 2
-        key0: {r: 1, g: 1, b: 1, a: 1}
-        key1: {r: 1, g: 1, b: 1, a: 1}
-        key2: {r: 0, g: 0.5019608, b: 1, a: 0}
+        key0: {r: 0.16037738, g: 0.071293235, b: 0, a: 1}
+        key1: {r: 0, g: 0, b: 0, a: 1}
+        key2: {r: 0.16037738, g: 0.071293235, b: 0, a: 0}
         key3: {r: 0.3301887, g: 0.1858508, b: 0.0728907, a: 0}
         key4: {r: 0.16037738, g: 0.071293235, b: 0, a: 0}
         key5: {r: 0.4056604, g: 0.4056604, b: 0.4056604, a: 0}
         key6: {r: 0, g: 0, b: 0, a: 0}
         key7: {r: 0, g: 0, b: 0, a: 0}
         ctime0: 0
-        ctime1: 65535
-        ctime2: 65535
+        ctime1: 12278
+        ctime2: 22446
         ctime3: 34532
         ctime4: 48154
         ctime5: 59089
@@ -4124,7 +4125,7 @@ ParticleSystem:
         atime6: 0
         atime7: 0
         m_Mode: 0
-        m_NumColorKeys: 2
+        m_NumColorKeys: 6
         m_NumAlphaKeys: 2
       minGradient:
         serializedVersion: 2
@@ -4158,7 +4159,7 @@ ParticleSystem:
     widthOverTrail:
       serializedVersion: 2
       minMaxState: 1
-      scalar: 0.5
+      scalar: 0.8
       minScalar: 1
       maxCurve:
         serializedVersion: 2
@@ -4173,8 +4174,26 @@ ParticleSystem:
           inWeight: 0
           outWeight: 0
         - serializedVersion: 3
+          time: 0.10015283
+          value: 0.35603702
+          inSlope: 2.663182
+          outSlope: 2.663182
+          tangentMode: 0
+          weightedMode: 0
+          inWeight: 0.33333334
+          outWeight: 0.33333334
+        - serializedVersion: 3
+          time: 0.23981594
+          value: 0.31308427
+          inSlope: 2.9669604
+          outSlope: 2.9669604
+          tangentMode: 0
+          weightedMode: 0
+          inWeight: 0.33333334
+          outWeight: 0.33333334
+        - serializedVersion: 3
           time: 0.26529512
-          value: 0.5633278
+          value: 0.6569481
           inSlope: -1.0840061
           outSlope: -1.0840061
           tangentMode: 0
@@ -4182,8 +4201,17 @@ ParticleSystem:
           inWeight: 0.20593925
           outWeight: 0.46604854
         - serializedVersion: 3
-          time: 0.45902404
-          value: 0.6442956
+          time: 0.37834525
+          value: 0.1705176
+          inSlope: 0.3559629
+          outSlope: 0.3559629
+          tangentMode: 0
+          weightedMode: 0
+          inWeight: 0.33333334
+          outWeight: 0.33333334
+        - serializedVersion: 3
+          time: 0.45150146
+          value: 0.8613137
           inSlope: 1.1951089
           outSlope: 1.1951089
           tangentMode: 0
@@ -4191,8 +4219,17 @@ ParticleSystem:
           inWeight: 0.44225615
           outWeight: 0.33333334
         - serializedVersion: 3
+          time: 0.56948614
+          value: 0.08860552
+          inSlope: -2.3170216
+          outSlope: -2.3170216
+          tangentMode: 0
+          weightedMode: 0
+          inWeight: 0.33333334
+          outWeight: 0.33333334
+        - serializedVersion: 3
           time: 0.6118036
-          value: 0.42993584
+          value: 0.5448345
           inSlope: -0.32957438
           outSlope: -0.32957438
           tangentMode: 0
@@ -4200,10 +4237,37 @@ ParticleSystem:
           inWeight: 0.33333334
           outWeight: 0.880722
         - serializedVersion: 3
-          time: 0.7877342
-          value: 0.44824216
+          time: 0.71231645
+          value: 0.22922918
+          inSlope: 0.41752782
+          outSlope: 0.41752782
+          tangentMode: 0
+          weightedMode: 0
+          inWeight: 0.33333334
+          outWeight: 0.33333334
+        - serializedVersion: 3
+          time: 0.8027794
+          value: 0.65675354
           inSlope: -1.3485299
           outSlope: -1.3485299
+          tangentMode: 0
+          weightedMode: 0
+          inWeight: 0.33333334
+          outWeight: 0.33333334
+        - serializedVersion: 3
+          time: 0.84624106
+          value: 0.13395296
+          inSlope: -4.4926953
+          outSlope: -4.4926953
+          tangentMode: 0
+          weightedMode: 0
+          inWeight: 0.33333334
+          outWeight: 0.33333334
+        - serializedVersion: 3
+          time: 0.90970784
+          value: 0.2700002
+          inSlope: -2.6445253
+          outSlope: -2.6445253
           tangentMode: 0
           weightedMode: 0
           inWeight: 0.33333334
@@ -4252,7 +4316,7 @@ ParticleSystem:
       maxGradient:
         serializedVersion: 2
         key0: {r: 0.46226418, g: 0.20294525, b: 0, a: 1}
-        key1: {r: 0.23584908, g: 0.10388591, b: 0, a: 1}
+        key1: {r: 0, g: 0, b: 0, a: 1}
         key2: {r: 0.29191762, g: 0.16003248, b: 0.056463018, a: 0}
         key3: {r: 0.29191762, g: 0.16003248, b: 0.056463018, a: 0}
         key4: {r: 0.29191762, g: 0.16003248, b: 0.056463018, a: 0}
@@ -4958,10 +5022,10 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: da994605506af4b4e97a93c0cd9fd885, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  offset: {x: -4.89703, y: 1.5699997, z: 3.854017}
+  offset: {x: -4.89703, y: 1.3, z: 3.854017}
   direction: {x: 0, y: 1, z: 0}
   speed: 12
-  amplitude: 9
+  amplitude: 12
   ps: {fileID: 3952309683927661345}
 --- !u!114 &4080902578395853962
 MonoBehaviour:
@@ -4976,6 +5040,31 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   lifetime: 2.4
+--- !u!114 &6596854562201515528
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1460401963545366043}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: bf60a5c01c4a2184dbd3a58e77d18e90, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  targetTag: Player
+  speed: 0
+  range: 0
+  damage: 2
+  deathTimer: 5
+  stationary: 0
+  dot: 0
+  applyDamageOnEnter: 0
+  dotIntervalTimer: 1
+  knockBackEffect: {fileID: 0}
+  pierce: 0
+  launchFX: {fileID: 0}
+  hitFX: {fileID: 0}
 --- !u!1 &4822042532150697457
 GameObject:
   m_ObjectHideFlags: 0
