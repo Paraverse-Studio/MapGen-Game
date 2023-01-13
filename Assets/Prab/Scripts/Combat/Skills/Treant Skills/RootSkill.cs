@@ -3,7 +3,6 @@ using UnityEngine;
 
 public class RootSkill : MobSkill, IMobSkill
 {
-
     #region Variables
     [SerializeField]
     private float rootDuration = 3f;
@@ -11,31 +10,36 @@ public class RootSkill : MobSkill, IMobSkill
     #endregion
 
 
-    #region Public Methods
+    #region Inherited Methods
     public override void SkillUpdate()
     {
         base.SkillUpdate();
         RootHandler();
     }
-    public override void Execute()
-    {
-        if (CanUseSkill())
-        {
-            mob.IsSkilling = true;
-            skillOn = true;
-            curRootDuration = rootDuration;
-            stats.UpdateCurrentEnergy(-cost);
-            anim.Play(animName);
-            Debug.Log("Executing skill: " + _skillName + " which takes " + cost + " points of energy out of " + stats.CurEnergy + " point of current energy." +
-                "The max cooldown for this skill is " + cooldown + " and the animation name is " + animName + ".");
 
-            // depending on the skill, 
-            // if it's a projectile, set its damage to:
-            // int damage = (flatPower) + (mobStats.AttackDamage.FinalValue * attackScaling) + (mobStats.AbilityPower.FinalValue * abilityScaling);
+    protected override void ExecuteSkillLogic()
+    {
+        mob.IsSkilling = true;
+        skillOn = true;
+        anim.SetBool(StringData.IsUsingSkill, true);
+        curRootDuration = rootDuration;
+        stats.UpdateCurrentEnergy(-cost);
+        anim.Play(animName);
+    }
+
+    protected override bool CanUseSkill()
+    {
+        if (IsOffCooldown && HasEnergy && TargetWithinRange)
+        {
+            return true;
         }
+
+        Debug.Log(_skillName + " is on cooldown or don't have enough energy!");
+        return false;
     }
     #endregion
 
+    #region Private Methods
     private void RootHandler()
     {
         if (skillOn == false) return;
@@ -49,21 +53,6 @@ public class RootSkill : MobSkill, IMobSkill
         {
             curRootDuration -= Time.deltaTime;
         }
-
     }
-
-    /// <summary>
-    /// Returns true if skill conditions are met. 
-    /// </summary>
-    /// <returns></returns>
-    protected override bool CanUseSkill()
-    {
-        if (IsOffCooldown && HasEnergy && TargetWithinRange)
-        {
-            return true;
-        }
-
-        Debug.Log(_skillName + " is on cooldown or don't have enough energy!");
-        return false;
-    }
+    #endregion
 }

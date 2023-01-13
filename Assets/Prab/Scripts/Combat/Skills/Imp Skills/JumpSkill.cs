@@ -1,7 +1,4 @@
-using Paraverse;
 using Paraverse.Combat;
-using Paraverse.Helper;
-using Paraverse.Mob.Combat;
 using Paraverse.Mob.Controller;
 using Paraverse.Mob.Stats;
 using Paraverse.Player;
@@ -13,24 +10,13 @@ public class JumpSkill : MobSkill, IMobSkill
     protected MobController mobController;
     #endregion
 
-    #region Public Methods
-    public override void ActivateSkill(MobCombat mob, Animator anim, IMobStats stats, Transform target = null)
-    {
-        this.mob = mob;
-        mobController = mob.GetComponent<MobController>();
-        mobController.OnLandEvent += DisableSkill;
-        this.target = target;
-        this.anim = anim;
-        this.stats = stats;
-        curCooldown = 0f;
-        if (mob.tag.Equals(StringData.PlayerTag))
-            input.OnSkillOneEvent += Execute;
 
-        if (null == attackCollider && null != attackColliderGO)
-        {
-            attackCollider = attackColliderGO.GetComponent<AttackCollider>();
-            attackCollider.Init(mob, stats);
-        }
+    #region Inherited Methods
+    public override void ActivateSkill(EnhancedMobCombat mob, Animator anim, IMobStats stats, Transform target = null)
+    {
+        base.ActivateSkill(mob, anim, stats, target);
+        mobController.OnLandEvent += DisableSkill;
+        mobController = mob.GetComponent<MobController>();
     }
 
     public override void DeactivateSkill(PlayerInputControls input)
@@ -39,30 +25,16 @@ public class JumpSkill : MobSkill, IMobSkill
         mobController.OnLandEvent -= DisableSkill;
     }
 
-    /// <summary>
-    /// Responsible for executing skill on button press.
-    /// </summary>
-    public override void Execute()
+    protected override void ExecuteSkillLogic()
     {
-        if (CanUseSkill())
-        {
-            mob.IsSkilling = true;
-            MarkSkillAsEnabled();
-            curCooldown = cooldown;
-            stats.UpdateCurrentEnergy(-cost);
-            anim.Play(animName);
-            mobController.ApplyJump(target.transform.position);
-            Debug.Log("Executing skill: " + _skillName + " which takes " + cost + " points of energy out of " + stats.CurEnergy + " point of current energy." +
-                "The max cooldown for this skill is " + cooldown + " and the animation name is " + animName + ".");
-
-            // depending on the skill, 
-            // if it's a projectile, set its damage to:
-            // int damage = (flatPower) + (mobStats.AttackDamage.FinalValue * attackScaling) + (mobStats.AbilityPower.FinalValue * abilityScaling);
-        }
+        mob.IsSkilling = true;
+        skillOn = true;
+        anim.SetBool(StringData.IsUsingSkill, true);
+        curCooldown = cooldown;
+        stats.UpdateCurrentEnergy(-cost);
+        anim.Play(animName);
+        mobController.ApplyJump(target.transform.position);
     }
-    #endregion
-
-    #region Private Methods
 
     protected override void DisableSkill()
     {

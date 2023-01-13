@@ -30,9 +30,9 @@ namespace Paraverse.Mob.Combat
 
         [Header("Only For Melee Attackers")]
         [SerializeField, Tooltip("Basic attack weapon collider [Only required for melee weapon users].")]
-        protected GameObject basicAtkCollider;
+        protected GameObject basicAttackColliderGO;
         [Tooltip("AttackCollider script of basic attack collider.")]
-        protected AttackCollider basicAtkColScript;
+        protected AttackCollider basicAttackCollider;
 
         [Header("Projectile Values")]
         [SerializeField, Tooltip("Set as true if mob is a projectile user.")]
@@ -56,11 +56,13 @@ namespace Paraverse.Mob.Combat
         public bool IsSkilling = false;
         #endregion
 
+
         #region Start & Update Methods
         protected virtual void Start()
         {
             if (anim == null) anim = GetComponent<Animator>();
             if (player == null) player = GameObject.FindGameObjectWithTag(targetTag).GetComponent<Transform>();
+            if (player != null) _target = player;
             if (stats == null) stats = GetComponent<IMobStats>();
             if (controller == null) controller = GetComponent<IMobController>();
 
@@ -90,15 +92,15 @@ namespace Paraverse.Mob.Combat
             if (projUser == false)
             {
                 // Checks if melee users have basic attack collider script on weapon
-                if (basicAtkCollider == null)
+                if (null == basicAttackColliderGO)
                 {
                     Debug.LogWarning(gameObject.name + " needs to have a basic attack collider!");
                     return;
                 }
-                basicAtkCollider.SetActive(true);
-                basicAtkColScript = basicAtkCollider.GetComponent<AttackCollider>();
-                basicAtkColScript.Init(this, stats);
-                basicAtkCollider.SetActive(false);
+                basicAttackColliderGO.SetActive(true);
+                basicAttackCollider = basicAttackColliderGO.GetComponent<AttackCollider>();
+                basicAttackCollider.Init(this, stats);
+                basicAttackColliderGO.SetActive(false);
             }
         }
         #endregion
@@ -153,8 +155,8 @@ namespace Paraverse.Mob.Combat
         /// </summary>
         protected void EnableBasicAttackCollider()
         {
-            if (basicAtkCollider != null)
-                basicAtkCollider.SetActive(true);
+            if (basicAttackColliderGO != null)
+                basicAttackColliderGO.SetActive(true);
         }
 
         /// <summary>
@@ -162,8 +164,8 @@ namespace Paraverse.Mob.Combat
         /// </summary>
         protected void DisableBasicAttackCollider()
         {
-            if (basicAtkCollider != null)
-                basicAtkCollider.SetActive(false);
+            if (basicAttackColliderGO != null)
+                basicAttackColliderGO.SetActive(false);
         }
 
         /// <summary>

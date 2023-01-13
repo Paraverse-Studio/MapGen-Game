@@ -8,7 +8,6 @@ using UnityEngine;
 
 public class DualComboSkill : MobSkill, IMobSkill
 {
-
     #region Variables
     [SerializeField]
     protected GameObject offHandAttackColliderGO;
@@ -17,44 +16,39 @@ public class DualComboSkill : MobSkill, IMobSkill
     protected float rotSpeed = 100f;
     #endregion
 
-    #region Public Methods
-    public override void ActivateSkill(MobCombat mob, Animator anim, IMobStats stats, Transform target = null)
+
+    #region Inherited Methods
+    public override void ActivateSkill(EnhancedMobCombat mob, Animator anim, IMobStats stats, Transform target = null)
     {
-        this.mob = mob;
-        this.target = target;
-        this.anim = anim;
-        this.stats = stats;
-        curCooldown = 0f;
-        if (mob.tag.Equals(StringData.PlayerTag))
-            input.OnSkillOneEvent += Execute;
-
-        if (null == attackCollider && null != attackColliderGO)
-        {
-            attackCollider = attackColliderGO.GetComponent<AttackCollider>();
-            attackCollider.Init(mob, stats);
-        }
-
-        // Checks if melee users have basic attack collider script on weapon
-        if (attackColliderGO == null)
-        {
-            Debug.LogWarning(gameObject.name + " needs to have a basic attack collider!");
-            return;
-        }
-        attackColliderGO.SetActive(true);
-        attackCollider = attackColliderGO.GetComponent<AttackCollider>();
-        attackCollider.Init(mob, stats);
-        attackColliderGO.SetActive(false);
+        base.ActivateSkill(mob, anim, stats, target);
 
         // Checks if melee users have basic attack collider script on weapon
         if (offHandAttackColliderGO == null)
         {
-            Debug.LogWarning(gameObject.name + " needs to have a basic attack collider!");
+            Debug.LogWarning(gameObject.name + " doesn't have an attack collider.");
             return;
         }
         offHandAttackColliderGO.SetActive(true);
         offHandAttackCollider = offHandAttackColliderGO.GetComponent<AttackCollider>();
         offHandAttackCollider.Init(mob, stats);
         offHandAttackColliderGO.SetActive(false);
+
+        mob.OnEnableMainHandColliderEvent += EnableMainHandAttackCollider;
+        mob.OnDisableMainHandColliderEvent += DisableMainHandAttackCollider;
+        mob.OnEnableOffHandColliderEvent += EnableOffHandAttackCollider;
+        mob.OnDisableOffHandColliderEvent += DisableOffHandAttackCollider;
+        mob.OnDisableSkillEvent += DisableSkillAndCollider;
+    }
+
+    public override void DeactivateSkill(PlayerInputControls input)
+    {
+        base.DeactivateSkill(input);
+
+        mob.OnEnableMainHandColliderEvent -= EnableMainHandAttackCollider;
+        mob.OnDisableMainHandColliderEvent -= DisableMainHandAttackCollider;
+        mob.OnEnableOffHandColliderEvent -= EnableOffHandAttackCollider;
+        mob.OnDisableOffHandColliderEvent -= DisableOffHandAttackCollider;
+        mob.OnDisableSkillEvent -= DisableSkillAndCollider;
     }
 
     /// <summary>
@@ -66,45 +60,25 @@ public class DualComboSkill : MobSkill, IMobSkill
         RotateToTarget();
     }
 
-    /// <summary>
-    /// Responsible for executing skill on button press.
-    /// </summary>
-    public override void Execute()
+    protected override void ExecuteSkillLogic()
     {
-        if (CanUseSkill())
-        {
-            mob.IsSkilling = true;
-            MarkSkillAsEnabled();
-            curCooldown = cooldown;
-            stats.UpdateCurrentEnergy(-cost);
-            anim.Play(animName);
-            Debug.Log("Executing skill: " + _skillName + " which takes " + cost + " points of energy out of " + stats.CurEnergy + " point of current energy." +
-                "The max cooldown for this skill is " + cooldown + " and the animation name is " + animName + ".");
-
-            // depending on the skill, 
-            // if it's a projectile, set its damage to:
-            // int damage = (flatPower) + (mobStats.AttackDamage.FinalValue * attackScaling) + (mobStats.AbilityPower.FinalValue * abilityScaling);
-        }
+        mob.IsSkilling = true;
+        skillOn = true;
+        anim.SetBool(StringData.IsUsingSkill, true);
+        curCooldown = cooldown;
+        stats.UpdateCurrentEnergy(-cost);
+        anim.Play(animName);
     }
+    #endregion
 
-    private void RotateToTarget()
-    {
-        transform.rotation = ParaverseHelper.FaceTarget(transform, target, rotSpeed);
-
-        // Ensures mob is looking at the target before attacking
-        Vector3 dir = (target.position - transform.position).normalized;
-        dir = ParaverseHelper.GetPositionXZ(dir);
-        Quaternion lookRot = Quaternion.LookRotation(dir);
-        float angle = Quaternion.Angle(transform.rotation, lookRot);
-    }
-
-    public void EnableMainAttackCollider()
+    #region Animation Events
+    public void EnableMainHandAttackCollider()
     {
         if (attackColliderGO != null)
             attackColliderGO.SetActive(true);
     }
 
-    public void DisableMainAttackCollider()
+    public void DisableMainHandAttackCollider()
     {
         if (attackColliderGO != null)
             attackColliderGO.SetActive(false);

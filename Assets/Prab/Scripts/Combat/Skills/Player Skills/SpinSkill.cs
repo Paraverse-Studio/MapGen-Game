@@ -6,6 +6,7 @@ using UnityEngine;
 
 public class SpinSkill : MobSkill, IMobSkill
 {
+    #region Variables
     PlayerController controller;
     [SerializeField]
     protected float skillStartTimer = 3f;
@@ -13,8 +14,11 @@ public class SpinSkill : MobSkill, IMobSkill
     [SerializeField]
     private float skillMoveSpeed = 3f;
 
-    #region Public Methods
-    public override void ActivateSkill(MobCombat mob, PlayerInputControls input, Animator anim, IMobStats stats, Transform target = null)
+    #endregion
+
+
+    #region Inherited Methods
+    public override void ActivateSkill(EnhancedMobCombat mob, PlayerInputControls input, Animator anim, IMobStats stats, Transform target = null)
     {
         base.ActivateSkill(mob, input, anim, stats, target);
         if (null == controller) controller = mob.GetComponent<PlayerController>();
@@ -29,24 +33,14 @@ public class SpinSkill : MobSkill, IMobSkill
         SkillHander();
     }
 
-    /// <summary>
-    /// Responsible for executing skill on button press.
-    /// </summary>
-    public override void Execute()
+    protected override void ExecuteSkillLogic()
     {
-        if (CanUseSkill())
-        {
-            curCooldown = cooldown;
-            stats.UpdateCurrentEnergy(-cost);
-            anim.Play(animName);
-            EnableColldier();
-            Debug.Log("Executing skill: " + _skillName + " which takes " + cost + " points of energy out of " + stats.CurEnergy + " point of current energy." +
-                "The max cooldown for this skill is " + cooldown + " and the animation name is " + animName + ".");
-        }
+        curCooldown = cooldown;
+        stats.UpdateCurrentEnergy(-cost);
+        anim.Play(animName);
+        EnableColldier();
     }
-    #endregion
 
-    #region Private Methods
     protected void SkillHander()
     {
         if (skillOn)
@@ -66,12 +60,13 @@ public class SpinSkill : MobSkill, IMobSkill
             DisableColldier();
         }
     }
+    #endregion
 
+    #region Animation Events
     protected void EnableColldier()
     {
         attackColliderGO.SetActive(true);
         skillCurTimer = skillStartTimer;
-        //controller.IsInvulnerable = true;
         skillOn = true;
     }
 
@@ -79,7 +74,6 @@ public class SpinSkill : MobSkill, IMobSkill
     {
         attackColliderGO.SetActive(false);
         skillCurTimer = skillStartTimer;
-        //controller.IsInvulnerable = false;
         skillOn = false;
     }
     #endregion

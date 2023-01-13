@@ -10,11 +10,37 @@ using UnityEngine;
 /// </summary>
 public class EnhancedMobCombat : MobCombat
 {
-    private int usingSkillIdx;
+    #region Variables
+    protected int usingSkillIdx;
     [SerializeField, Tooltip("Mob skills.")]
     protected List<MobSkill> skills = new List<MobSkill>();
     [SerializeField]
     protected string animBool = "isUsingSkill";
+
+    public delegate void OnEnableMainHandColliderDel();
+    public event OnEnableMainHandColliderDel OnEnableMainHandColliderEvent;
+    public delegate void OnDisableMainHandColliderDel();
+    public event OnEnableMainHandColliderDel OnDisableMainHandColliderEvent;
+    public delegate void OnEnableOffHandColliderDel();
+    public event OnEnableOffHandColliderDel OnEnableOffHandColliderEvent;
+    public delegate void OnDisableOffHandColliderDel();
+    public event OnDisableOffHandColliderDel OnDisableOffHandColliderEvent;
+    public delegate void OnEnableSkillColliderDel();
+    public event OnEnableSkillColliderDel OnEnableSkillColliderEvent;
+    public delegate void OnDisableSkillColliderDel();
+    public event OnDisableSkillColliderDel OnDisableSkillColliderEvent;
+    public delegate void OnChargeSkillDel();
+    public event OnChargeSkillDel OnChargeSkillEvent;
+    public delegate void OnChargeCancelSkillDel();
+    public event OnChargeSkillDel OnChargeCancelSkillEvent;
+    public delegate void OnEnableChargeReleaseSkillDel();
+    public event OnEnableChargeReleaseSkillDel OnEnableChargeReleaseSkillEvent;
+    public delegate void OnDisableSkillDel();
+    public event OnDisableSkillDel OnDisableSkillEvent;
+    public delegate void OnSummonSkillDel();
+    public event OnSummonSkillDel OnSummonSkillEvent;
+    #endregion
+
 
     protected override void Start()
     {
@@ -46,7 +72,6 @@ public class EnhancedMobCombat : MobCombat
             if (skills[i].skillOn)
             {
                 usingSkillIdx = i;
-                //IsSkilling = true;
             }
         }
     }
@@ -63,6 +88,7 @@ public class EnhancedMobCombat : MobCombat
         }
     }
 
+    #region Animation Events
     public override void FireProjectile()
     {
         ProjectileData data;
@@ -93,4 +119,60 @@ public class EnhancedMobCombat : MobCombat
         Projectile proj = go.GetComponent<Projectile>();
         proj.Init(this, targetDir, projData.basicAtkProjSpeed, basicAtkRange, basicAtkDmgRatio * stats.AttackDamage.FinalValue);
     }
+
+    public virtual void AEventEnableMainHandCollider()
+    {
+        OnEnableMainHandColliderEvent?.Invoke();
+    }
+
+    public virtual void AEventDisableMainHandCollider()
+    {
+        OnDisableMainHandColliderEvent?.Invoke();
+    }
+
+    public virtual void AEventEnableOffHandCollider()
+    {
+        OnEnableOffHandColliderEvent?.Invoke();
+    }
+
+    public virtual void AEventDisableOffHandCollider()
+    {
+        OnDisableOffHandColliderEvent?.Invoke();
+    }
+
+    public virtual void AEventEnableSkillCollider()
+    {
+        OnEnableSkillColliderEvent?.Invoke();
+    }
+
+    public virtual void AEventDisableSkillCollider()
+    {
+        OnDisableSkillColliderEvent?.Invoke();
+    }
+
+    public virtual void AEventChargeSkill()
+    {
+        OnChargeSkillEvent?.Invoke();
+    }
+
+    public virtual void AEventChargeCancelSkill()
+    {
+        OnChargeCancelSkillEvent?.Invoke();
+    }
+
+    public virtual void AEventChargeReleaseSkill()
+    {
+        OnEnableChargeReleaseSkillEvent?.Invoke();
+    }
+
+    public virtual void AEventDisableSkill()
+    {
+        OnDisableSkillEvent?.Invoke();
+    }
+
+    public virtual void AEventSummonSkill()
+    {
+        OnSummonSkillEvent?.Invoke();
+    }
+    #endregion
 }

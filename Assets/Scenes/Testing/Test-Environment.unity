@@ -1494,6 +1494,39 @@ MonoBehaviour:
   snapToFarDistance: 0
   lerpY: 0
   lerpValue: 0
+--- !u!1 &94371558
+GameObject:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  serializedVersion: 6
+  m_Component:
+  - component: {fileID: 94371559}
+  m_Layer: 0
+  m_Name: SkillHolder
+  m_TagString: Untagged
+  m_Icon: {fileID: 0}
+  m_NavMeshLayer: 0
+  m_StaticEditorFlags: 0
+  m_IsActive: 1
+--- !u!4 &94371559
+Transform:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 94371558}
+  m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
+  m_LocalPosition: {x: 0, y: 0, z: 0}
+  m_LocalScale: {x: 1, y: 1, z: 1}
+  m_ConstrainProportionsScale: 0
+  m_Children:
+  - {fileID: 1262949475}
+  - {fileID: 1626988167}
+  m_Father: {fileID: 2123677101}
+  m_RootOrder: 1
+  m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
 --- !u!1 &166201821
 GameObject:
   m_ObjectHideFlags: 0
@@ -1609,6 +1642,37 @@ MeshFilter:
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 166201821}
   m_Mesh: {fileID: 10202, guid: 0000000000000000e000000000000000, type: 0}
+--- !u!1 &184662015
+GameObject:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  serializedVersion: 6
+  m_Component:
+  - component: {fileID: 184662016}
+  m_Layer: 0
+  m_Name: LaserOrigin
+  m_TagString: Untagged
+  m_Icon: {fileID: 6519382022992737161, guid: 0000000000000000d000000000000000, type: 0}
+  m_NavMeshLayer: 0
+  m_StaticEditorFlags: 0
+  m_IsActive: 1
+--- !u!4 &184662016
+Transform:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 184662015}
+  m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
+  m_LocalPosition: {x: -0.087, y: 0.229, z: -0}
+  m_LocalScale: {x: 1, y: 1, z: 1}
+  m_ConstrainProportionsScale: 0
+  m_Children: []
+  m_Father: {fileID: 2885280591144908008}
+  m_RootOrder: 5
+  m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
 --- !u!114 &187616011
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -1698,7 +1762,7 @@ MonoBehaviour:
   anim: {fileID: 0}
   basicAtkDmgRatio: 1
   basicAtkRange: 2
-  basicAtkCollider: {fileID: 0}
+  basicAttackColliderGO: {fileID: 0}
   projUser: 0
   projData:
     projPf: {fileID: 0}
@@ -1735,7 +1799,6 @@ MonoBehaviour:
   groundLayer:
     serializedVersion: 2
     m_Bits: 0
-  flyForce: 5
   flyUpForce: 5
   flyDownForce: 5
   isFlyingUp: 0
@@ -1787,6 +1850,44 @@ NavMeshAgent:
   m_BaseOffset: 0
   m_WalkableMask: 4294967295
   m_ObstacleAvoidanceType: 4
+--- !u!4 &302521377 stripped
+Transform:
+  m_CorrespondingSourceObject: {fileID: 2657095163666507577, guid: bb48c0a6c7c30e44fb01328c0709dc77, type: 3}
+  m_PrefabInstance: {fileID: 2657095164593021778}
+  m_PrefabAsset: {fileID: 0}
+--- !u!1 &328033261
+GameObject:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  serializedVersion: 6
+  m_Component:
+  - component: {fileID: 328033262}
+  m_Layer: 0
+  m_Name: SkillsHolder
+  m_TagString: Untagged
+  m_Icon: {fileID: 0}
+  m_NavMeshLayer: 0
+  m_StaticEditorFlags: 0
+  m_IsActive: 1
+--- !u!4 &328033262
+Transform:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 328033261}
+  m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
+  m_LocalPosition: {x: 0, y: 0, z: 0}
+  m_LocalScale: {x: 1, y: 1, z: 1}
+  m_ConstrainProportionsScale: 0
+  m_Children:
+  - {fileID: 1350275662}
+  - {fileID: 2119796147}
+  m_Father: {fileID: 1606181325}
+  m_RootOrder: 1
+  m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
 --- !u!1 &424829410
 GameObject:
   m_ObjectHideFlags: 0
@@ -12379,6 +12480,21 @@ PrefabInstance:
       objectReference: {fileID: 0}
     m_RemovedComponents: []
   m_SourcePrefab: {fileID: 100100000, guid: 504274220e31b014bb1f9da275f2fca1, type: 3}
+--- !u!1 &1036632041 stripped
+GameObject:
+  m_CorrespondingSourceObject: {fileID: 5799079830667434978, guid: cdaaa706734c4eb4faae2ede8cfde726, type: 3}
+  m_PrefabInstance: {fileID: 5799079832122337080}
+  m_PrefabAsset: {fileID: 0}
+--- !u!4 &1081910737 stripped
+Transform:
+  m_CorrespondingSourceObject: {fileID: 131609469950685087, guid: b6a20ce6fd9bea0438b8ebf724277a75, type: 3}
+  m_PrefabInstance: {fileID: 3172601158213651636}
+  m_PrefabAsset: {fileID: 0}
+--- !u!1 &1104780714 stripped
+GameObject:
+  m_CorrespondingSourceObject: {fileID: 2657095164408987043, guid: bb48c0a6c7c30e44fb01328c0709dc77, type: 3}
+  m_PrefabInstance: {fileID: 2657095164593021778}
+  m_PrefabAsset: {fileID: 0}
 --- !u!1 &1137198931
 GameObject:
   m_ObjectHideFlags: 0
@@ -15009,7 +15125,7 @@ MonoBehaviour:
   anim: {fileID: 2835571147293332753}
   basicAtkDmgRatio: 1
   basicAtkRange: 5
-  basicAtkCollider: {fileID: 2033857870}
+  basicAttackColliderGO: {fileID: 2033857870}
   projUser: 0
   projData:
     projPf: {fileID: 0}
@@ -15019,7 +15135,8 @@ MonoBehaviour:
     basicAtkProjSpeed: 10
   IsSkilling: 0
   skills:
-  - {fileID: 8859148464752793042}
+  - {fileID: 1350275663}
+  - {fileID: 2119796148}
   animBool: isUsingSkill
 --- !u!114 &1221689348
 MonoBehaviour:
@@ -15049,7 +15166,6 @@ MonoBehaviour:
   groundLayer:
     serializedVersion: 2
     m_Bits: 524215
-  flyForce: 5
   flyUpForce: 10
   flyDownForce: 25
   isFlyingUp: 0
@@ -15285,6 +15401,69 @@ Transform:
   m_Father: {fileID: 0}
   m_RootOrder: 11
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
+--- !u!1 &1262949474
+GameObject:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  serializedVersion: 6
+  m_Component:
+  - component: {fileID: 1262949475}
+  - component: {fileID: 1262949476}
+  m_Layer: 0
+  m_Name: RootSkill
+  m_TagString: Untagged
+  m_Icon: {fileID: 0}
+  m_NavMeshLayer: 0
+  m_StaticEditorFlags: 0
+  m_IsActive: 1
+--- !u!4 &1262949475
+Transform:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1262949474}
+  m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
+  m_LocalPosition: {x: 0, y: 0, z: 0}
+  m_LocalScale: {x: 1, y: 1, z: 1}
+  m_ConstrainProportionsScale: 0
+  m_Children: []
+  m_Father: {fileID: 94371559}
+  m_RootOrder: 0
+  m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
+--- !u!114 &1262949476
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1262949474}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: d8c6b82868550044f88d57ad6cf3b029, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  _skillName: 'Root '
+  _description: 
+  _minRange: 7
+  _maxRange: 100
+  cooldown: 4
+  cost: 0
+  animName: RootSkill
+  attackColliderGO: {fileID: 0}
+  projData:
+    projPf: {fileID: 1460401963545366043, guid: 83bfd872f9c72e74787b25ee8b0e618e, type: 3}
+    projHeld: {fileID: 0}
+    projOrigin: {fileID: 1081910737}
+    projRotation: {fileID: 0}
+    basicAtkProjSpeed: 10
+  usesTargetLock: 0
+  flatPower: 1
+  attackScaling: 0
+  abilityScaling: 0
+  rootDuration: 3
 --- !u!1 &1264230141
 GameObject:
   m_ObjectHideFlags: 0
@@ -15764,7 +15943,7 @@ PrefabInstance:
       objectReference: {fileID: 0}
     - target: {fileID: 2956618024134931112, guid: aa4e16a1786ed124fa06618210886566, type: 3}
       propertyPath: skills.Array.size
-      value: 1
+      value: 2
       objectReference: {fileID: 0}
     - target: {fileID: 2956618024134931112, guid: aa4e16a1786ed124fa06618210886566, type: 3}
       propertyPath: SKILLS.Array.data[0]
@@ -15789,7 +15968,11 @@ PrefabInstance:
     - target: {fileID: 2956618024134931112, guid: aa4e16a1786ed124fa06618210886566, type: 3}
       propertyPath: skills.Array.data[1]
       value: 
-      objectReference: {fileID: 1264230142}
+      objectReference: {fileID: 480862771}
+    - target: {fileID: 2956618024134931112, guid: aa4e16a1786ed124fa06618210886566, type: 3}
+      propertyPath: basicAttackColliderGO
+      value: 
+      objectReference: {fileID: 1699026894}
     - target: {fileID: 2956618024134931112, guid: aa4e16a1786ed124fa06618210886566, type: 3}
       propertyPath: ActiveSkills.Array.size
       value: 1
@@ -16482,7 +16665,8 @@ PrefabInstance:
       propertyPath: m_LocalRotation.z
       value: 0.3785919
       objectReference: {fileID: 0}
-    m_RemovedComponents: []
+    m_RemovedComponents:
+    - {fileID: 1752897488, guid: aa4e16a1786ed124fa06618210886566, type: 3}
   m_SourcePrefab: {fileID: 100100000, guid: aa4e16a1786ed124fa06618210886566, type: 3}
 --- !u!1 &1293426509 stripped
 GameObject:
@@ -16507,6 +16691,68 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   damageOverTimeEffects: []
+--- !u!1 &1350275661
+GameObject:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  serializedVersion: 6
+  m_Component:
+  - component: {fileID: 1350275662}
+  - component: {fileID: 1350275663}
+  m_Layer: 0
+  m_Name: FlyingPunch
+  m_TagString: Untagged
+  m_Icon: {fileID: 0}
+  m_NavMeshLayer: 0
+  m_StaticEditorFlags: 0
+  m_IsActive: 1
+--- !u!4 &1350275662
+Transform:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1350275661}
+  m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
+  m_LocalPosition: {x: 0, y: 0, z: 0}
+  m_LocalScale: {x: 1, y: 1, z: 1}
+  m_ConstrainProportionsScale: 0
+  m_Children: []
+  m_Father: {fileID: 328033262}
+  m_RootOrder: 0
+  m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
+--- !u!114 &1350275663
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1350275661}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 3811bd6034f8b4a419a2bee5958a7f8b, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  _skillName: Slam Punch
+  _description: 
+  _minRange: 0
+  _maxRange: 7
+  cooldown: 5
+  cost: 0
+  animName: Attack01
+  attackColliderGO: {fileID: 1639788620}
+  projData:
+    projPf: {fileID: 0}
+    projHeld: {fileID: 0}
+    projOrigin: {fileID: 0}
+    projRotation: {fileID: 0}
+    basicAtkProjSpeed: 10
+  usesTargetLock: 0
+  flatPower: 1
+  attackScaling: 0
+  abilityScaling: 0
 --- !u!1 &1375431600
 GameObject:
   m_ObjectHideFlags: 0
@@ -16622,6 +16868,11 @@ MonoBehaviour:
   m_ShadowLayerMask: 1
   m_LightCookieSize: {x: 1, y: 1}
   m_LightCookieOffset: {x: 0, y: 0}
+--- !u!1 &1433628275 stripped
+GameObject:
+  m_CorrespondingSourceObject: {fileID: 5799079831402301609, guid: cdaaa706734c4eb4faae2ede8cfde726, type: 3}
+  m_PrefabInstance: {fileID: 5799079832122337080}
+  m_PrefabAsset: {fileID: 0}
 --- !u!1 &1460544159
 GameObject:
   m_ObjectHideFlags: 0
@@ -18575,9 +18826,75 @@ Transform:
   m_ConstrainProportionsScale: 0
   m_Children:
   - {fileID: 8194814350548651883}
+  - {fileID: 328033262}
   m_Father: {fileID: 0}
   m_RootOrder: 19
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
+--- !u!1 &1626988166
+GameObject:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  serializedVersion: 6
+  m_Component:
+  - component: {fileID: 1626988167}
+  - component: {fileID: 1626988168}
+  m_Layer: 0
+  m_Name: SummonSkill
+  m_TagString: Untagged
+  m_Icon: {fileID: 0}
+  m_NavMeshLayer: 0
+  m_StaticEditorFlags: 0
+  m_IsActive: 1
+--- !u!4 &1626988167
+Transform:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1626988166}
+  m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
+  m_LocalPosition: {x: 0, y: 0, z: 0}
+  m_LocalScale: {x: 1, y: 1, z: 1}
+  m_ConstrainProportionsScale: 0
+  m_Children: []
+  m_Father: {fileID: 94371559}
+  m_RootOrder: 1
+  m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
+--- !u!114 &1626988168
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1626988166}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 37bb2c33e49492d45800ff6871c5969c, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  _skillName: Summon Sapling
+  _description: 
+  _minRange: 0
+  _maxRange: 100
+  cooldown: 5
+  cost: 0
+  animName: SummonSkill
+  attackColliderGO: {fileID: 0}
+  projData:
+    projPf: {fileID: 0}
+    projHeld: {fileID: 0}
+    projOrigin: {fileID: 0}
+    projRotation: {fileID: 0}
+    basicAtkProjSpeed: 10
+  usesTargetLock: 0
+  flatPower: 1
+  attackScaling: 0
+  abilityScaling: 0
+  summonPf: {fileID: 7898848738789558338, guid: da4c325d14569204bb33863f10b1e815, type: 3}
+  maxSummonCount: 1
+  curSummonCount: 0
 --- !u!1 &1639788620
 GameObject:
   m_ObjectHideFlags: 0
@@ -18591,7 +18908,7 @@ GameObject:
   - component: {fileID: 1639788623}
   - component: {fileID: 1639788622}
   m_Layer: 0
-  m_Name: MainHandAttackCollider
+  m_Name: OffHandCollider
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
@@ -18606,7 +18923,7 @@ Transform:
   m_GameObject: {fileID: 1639788620}
   m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
   m_LocalPosition: {x: 0, y: 0, z: 0}
-  m_LocalScale: {x: 1, y: 1.5, z: 1.3}
+  m_LocalScale: {x: 1, y: 2, z: 2}
   m_ConstrainProportionsScale: 0
   m_Children: []
   m_Father: {fileID: 1148461502126412271}
@@ -18649,6 +18966,45 @@ MeshFilter:
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 1639788620}
   m_Mesh: {fileID: 10202, guid: 0000000000000000e000000000000000, type: 0}
+--- !u!1 &1678626640
+GameObject:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  serializedVersion: 6
+  m_Component:
+  - component: {fileID: 1678626641}
+  m_Layer: 0
+  m_Name: SkillsHolder
+  m_TagString: Untagged
+  m_Icon: {fileID: 0}
+  m_NavMeshLayer: 0
+  m_StaticEditorFlags: 0
+  m_IsActive: 1
+--- !u!4 &1678626641
+Transform:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1678626640}
+  m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
+  m_LocalPosition: {x: 0, y: 0, z: 0}
+  m_LocalScale: {x: 1, y: 1, z: 1}
+  m_ConstrainProportionsScale: 0
+  m_Children:
+  - {fileID: 1908622637}
+  - {fileID: 1719642823}
+  - {fileID: 1849899258}
+  m_Father: {fileID: 1887625450}
+  m_RootOrder: 3
+  m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
+--- !u!1 &1699026894 stripped
+GameObject:
+  m_CorrespondingSourceObject: {fileID: 6080363539117558812, guid: aa4e16a1786ed124fa06618210886566, type: 3}
+  m_PrefabInstance: {fileID: 1293426508}
+  m_PrefabAsset: {fileID: 0}
 --- !u!114 &1702892488
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -18738,7 +19094,7 @@ MonoBehaviour:
   anim: {fileID: 0}
   basicAtkDmgRatio: 1
   basicAtkRange: 2
-  basicAtkCollider: {fileID: 0}
+  basicAttackColliderGO: {fileID: 0}
   projUser: 0
   projData:
     projPf: {fileID: 0}
@@ -18775,7 +19131,6 @@ MonoBehaviour:
   groundLayer:
     serializedVersion: 2
     m_Bits: 0
-  flyForce: 5
   flyUpForce: 5
   flyDownForce: 5
   isFlyingUp: 0
@@ -18827,6 +19182,69 @@ NavMeshAgent:
   m_BaseOffset: 0
   m_WalkableMask: 4294967295
   m_ObstacleAvoidanceType: 4
+--- !u!1 &1719642822
+GameObject:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  serializedVersion: 6
+  m_Component:
+  - component: {fileID: 1719642823}
+  - component: {fileID: 1719642824}
+  m_Layer: 0
+  m_Name: SkyBarrageSkill
+  m_TagString: Untagged
+  m_Icon: {fileID: 0}
+  m_NavMeshLayer: 0
+  m_StaticEditorFlags: 0
+  m_IsActive: 1
+--- !u!4 &1719642823
+Transform:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1719642822}
+  m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
+  m_LocalPosition: {x: 0, y: 0, z: 0}
+  m_LocalScale: {x: 1, y: 1, z: 1}
+  m_ConstrainProportionsScale: 0
+  m_Children: []
+  m_Father: {fileID: 1678626641}
+  m_RootOrder: 1
+  m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
+--- !u!114 &1719642824
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1719642822}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: bc24a35688d7a2c4cac7a2bad6090d62, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  _skillName: SkyBarrageSkill
+  _description: 
+  _minRange: 7
+  _maxRange: 100
+  cooldown: 10
+  cost: 0
+  animName: SkyBarrageSkill
+  attackColliderGO: {fileID: 0}
+  projData:
+    projPf: {fileID: 1520875604049576418, guid: 881f129da2d31e446ae5b376b6629684, type: 3}
+    projHeld: {fileID: 0}
+    projOrigin: {fileID: 302521377}
+    projRotation: {fileID: 302521377}
+    basicAtkProjSpeed: 0
+  usesTargetLock: 0
+  flatPower: 20
+  attackScaling: 0
+  abilityScaling: 0
+  skillStartTimer: 5
 --- !u!1 &1726692097
 GameObject:
   m_ObjectHideFlags: 0
@@ -18862,6 +19280,105 @@ Transform:
   m_Father: {fileID: 0}
   m_RootOrder: 23
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
+--- !u!1 &1735941463 stripped
+GameObject:
+  m_CorrespondingSourceObject: {fileID: 8360375805597731609, guid: cdaaa706734c4eb4faae2ede8cfde726, type: 3}
+  m_PrefabInstance: {fileID: 5799079832122337080}
+  m_PrefabAsset: {fileID: 0}
+--- !u!114 &1735941465
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1735941463}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 43081201aa9258742b6c2a34ca9248ed, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  _skillName: ComboSkillOne
+  _description: 
+  _minRange: 0
+  _maxRange: 5
+  cooldown: 5
+  cost: 10
+  animName: ComboSkillOne 1
+  attackColliderGO: {fileID: 1036632041}
+  projData:
+    projPf: {fileID: 0}
+    projHeld: {fileID: 0}
+    projOrigin: {fileID: 0}
+    projRotation: {fileID: 0}
+    basicAtkProjSpeed: 10
+  usesTargetLock: 0
+  flatPower: 1
+  attackScaling: 0
+  abilityScaling: 0
+  offHandAttackColliderGO: {fileID: 1433628275}
+  rotSpeed: 100
+--- !u!1 &1849899257
+GameObject:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  serializedVersion: 6
+  m_Component:
+  - component: {fileID: 1849899258}
+  - component: {fileID: 1849899259}
+  m_Layer: 0
+  m_Name: JumpSkill
+  m_TagString: Untagged
+  m_Icon: {fileID: 0}
+  m_NavMeshLayer: 0
+  m_StaticEditorFlags: 0
+  m_IsActive: 1
+--- !u!4 &1849899258
+Transform:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1849899257}
+  m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
+  m_LocalPosition: {x: 0, y: 0, z: 0}
+  m_LocalScale: {x: 1, y: 1, z: 1}
+  m_ConstrainProportionsScale: 0
+  m_Children: []
+  m_Father: {fileID: 1678626641}
+  m_RootOrder: 2
+  m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
+--- !u!114 &1849899259
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1849899257}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 9dde734c8317a2e4391ebd406597222e, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  _skillName: Jump
+  _description: 
+  _minRange: 5
+  _maxRange: 30
+  cooldown: 5
+  cost: 0
+  animName: JumpStart
+  attackColliderGO: {fileID: 0}
+  projData:
+    projPf: {fileID: 0}
+    projHeld: {fileID: 0}
+    projOrigin: {fileID: 0}
+    projRotation: {fileID: 0}
+    basicAtkProjSpeed: 10
+  usesTargetLock: 0
+  flatPower: 1
+  attackScaling: 0
+  abilityScaling: 0
 --- !u!114 &1851129750
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -18951,7 +19468,7 @@ MonoBehaviour:
   anim: {fileID: 0}
   basicAtkDmgRatio: 1
   basicAtkRange: 2
-  basicAtkCollider: {fileID: 0}
+  basicAttackColliderGO: {fileID: 0}
   projUser: 0
   projData:
     projPf: {fileID: 0}
@@ -18988,7 +19505,6 @@ MonoBehaviour:
   groundLayer:
     serializedVersion: 2
     m_Bits: 0
-  flyForce: 5
   flyUpForce: 5
   flyDownForce: 5
   isFlyingUp: 0
@@ -19040,6 +19556,75 @@ NavMeshAgent:
   m_BaseOffset: 0
   m_WalkableMask: 4294967295
   m_ObstacleAvoidanceType: 4
+--- !u!4 &1887625450 stripped
+Transform:
+  m_CorrespondingSourceObject: {fileID: 4902631821647716223, guid: bb48c0a6c7c30e44fb01328c0709dc77, type: 3}
+  m_PrefabInstance: {fileID: 2657095164593021778}
+  m_PrefabAsset: {fileID: 0}
+--- !u!1 &1908622636
+GameObject:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  serializedVersion: 6
+  m_Component:
+  - component: {fileID: 1908622637}
+  - component: {fileID: 1908622638}
+  m_Layer: 0
+  m_Name: DualComboAttack
+  m_TagString: Untagged
+  m_Icon: {fileID: 0}
+  m_NavMeshLayer: 0
+  m_StaticEditorFlags: 0
+  m_IsActive: 1
+--- !u!4 &1908622637
+Transform:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1908622636}
+  m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
+  m_LocalPosition: {x: 0, y: 0, z: 0}
+  m_LocalScale: {x: 1, y: 1, z: 1}
+  m_ConstrainProportionsScale: 0
+  m_Children: []
+  m_Father: {fileID: 1678626641}
+  m_RootOrder: 0
+  m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
+--- !u!114 &1908622638
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1908622636}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 43081201aa9258742b6c2a34ca9248ed, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  _skillName: Attack01
+  _description: 
+  _minRange: 0
+  _maxRange: 5
+  cooldown: 5
+  cost: 0
+  animName: AttackCombo
+  attackColliderGO: {fileID: 1997281759}
+  projData:
+    projPf: {fileID: 0}
+    projHeld: {fileID: 0}
+    projOrigin: {fileID: 0}
+    projRotation: {fileID: 0}
+    basicAtkProjSpeed: 10
+  usesTargetLock: 0
+  flatPower: 5
+  attackScaling: 0
+  abilityScaling: 0
+  offHandAttackColliderGO: {fileID: 1104780714}
+  rotSpeed: 100
 --- !u!1 &1949719424
 GameObject:
   m_ObjectHideFlags: 0
@@ -19102,6 +19687,11 @@ Transform:
   m_Father: {fileID: 1726692098}
   m_RootOrder: 3
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
+--- !u!1 &1997281759 stripped
+GameObject:
+  m_CorrespondingSourceObject: {fileID: 2657095164191216732, guid: bb48c0a6c7c30e44fb01328c0709dc77, type: 3}
+  m_PrefabInstance: {fileID: 2657095164593021778}
+  m_PrefabAsset: {fileID: 0}
 --- !u!1 &2002084665
 GameObject:
   m_ObjectHideFlags: 0
@@ -19522,7 +20112,7 @@ GameObject:
   - component: {fileID: 2033857873}
   - component: {fileID: 2033857872}
   m_Layer: 0
-  m_Name: AttackCollider
+  m_Name: BasicAttackCollider
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
@@ -19536,8 +20126,8 @@ Transform:
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 2033857870}
   m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
-  m_LocalPosition: {x: 0, y: 0, z: 0}
-  m_LocalScale: {x: 1, y: 1.5, z: 1.5}
+  m_LocalPosition: {x: 0, y: 0.24, z: 0.29}
+  m_LocalScale: {x: 1, y: 2, z: 2}
   m_ConstrainProportionsScale: 0
   m_Children: []
   m_Father: {fileID: 2885280591144908008}
@@ -19641,6 +20231,74 @@ PrefabInstance:
       objectReference: {fileID: 0}
     m_RemovedComponents: []
   m_SourcePrefab: {fileID: 100100000, guid: aaf094092601a20469d539650f835281, type: 3}
+--- !u!1 &2119796146
+GameObject:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  serializedVersion: 6
+  m_Component:
+  - component: {fileID: 2119796147}
+  - component: {fileID: 2119796148}
+  m_Layer: 0
+  m_Name: Laser
+  m_TagString: Untagged
+  m_Icon: {fileID: 0}
+  m_NavMeshLayer: 0
+  m_StaticEditorFlags: 0
+  m_IsActive: 1
+--- !u!4 &2119796147
+Transform:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 2119796146}
+  m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
+  m_LocalPosition: {x: 0, y: 0, z: 0}
+  m_LocalScale: {x: 1, y: 1, z: 1}
+  m_ConstrainProportionsScale: 0
+  m_Children: []
+  m_Father: {fileID: 328033262}
+  m_RootOrder: 1
+  m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
+--- !u!114 &2119796148
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 2119796146}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: bc24a35688d7a2c4cac7a2bad6090d62, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  _skillName: Laser
+  _description: 
+  _minRange: 0
+  _maxRange: 25
+  cooldown: 5
+  cost: 0
+  animName: SpellPrepare
+  attackColliderGO: {fileID: 0}
+  projData:
+    projPf: {fileID: 1957473457009372, guid: f3b003594429b6645a337e8244cf01e3, type: 3}
+    projHeld: {fileID: 0}
+    projOrigin: {fileID: 184662016}
+    projRotation: {fileID: 184662016}
+    basicAtkProjSpeed: 0
+  usesTargetLock: 1
+  flatPower: 1
+  attackScaling: 0
+  abilityScaling: 3
+  skillStartTimer: 5
+--- !u!4 &2123677101 stripped
+Transform:
+  m_CorrespondingSourceObject: {fileID: 3172601158817656281, guid: b6a20ce6fd9bea0438b8ebf724277a75, type: 3}
+  m_PrefabInstance: {fileID: 3172601158213651636}
+  m_PrefabAsset: {fileID: 0}
 --- !u!1 &111316035992125082
 GameObject:
   m_ObjectHideFlags: 0
@@ -22174,7 +22832,7 @@ Transform:
   m_Children: []
   m_Father: {fileID: 5584834531495632395}
   m_RootOrder: 0
-  m_LocalEulerAnglesHint: {x: 12.625326, y: 0.9857082, z: -79.818535}
+  m_LocalEulerAnglesHint: {x: 12.653901, y: 0.9749692, z: -84.02871}
 --- !u!1 &582710385028980178
 GameObject:
   m_ObjectHideFlags: 0
@@ -22206,7 +22864,7 @@ Transform:
   - {fileID: 5016442731541384059}
   m_Father: {fileID: 1420871407249152609}
   m_RootOrder: 0
-  m_LocalEulerAnglesHint: {x: -24.217913, y: -97.359116, z: 37.31246}
+  m_LocalEulerAnglesHint: {x: -27.909328, y: -95.9852, z: 40.977947}
 --- !u!4 &727488258946003193
 Transform:
   m_ObjectHideFlags: 0
@@ -22353,7 +23011,7 @@ Transform:
   - {fileID: 1639788621}
   m_Father: {fileID: 5335212860991567275}
   m_RootOrder: 0
-  m_LocalEulerAnglesHint: {x: 13.374638, y: -1.0803581, z: 11.22561}
+  m_LocalEulerAnglesHint: {x: 18.993282, y: -1.3455589, z: 7.9965916}
 --- !u!1 &1181125659325847961
 GameObject:
   m_ObjectHideFlags: 0
@@ -22495,7 +23153,7 @@ Transform:
   m_Children: []
   m_Father: {fileID: 8366612789837334523}
   m_RootOrder: 0
-  m_LocalEulerAnglesHint: {x: -4.310716, y: 0.89271694, z: -83.326866}
+  m_LocalEulerAnglesHint: {x: -4.2453194, y: 0.89267397, z: -87.5343}
 --- !u!4 &2102106343783605997
 Transform:
   m_ObjectHideFlags: 0
@@ -22510,7 +23168,7 @@ Transform:
   m_Children: []
   m_Father: {fileID: 5568172129941276769}
   m_RootOrder: 0
-  m_LocalEulerAnglesHint: {x: -0.12184177, y: 0.569256, z: -61.96352}
+  m_LocalEulerAnglesHint: {x: -0.073807076, y: 0.53669256, z: -66.17099}
 --- !u!4 &2115913547945202405
 Transform:
   m_ObjectHideFlags: 0
@@ -23391,7 +24049,7 @@ Transform:
   m_Children: []
   m_Father: {fileID: 9133586935409606999}
   m_RootOrder: 0
-  m_LocalEulerAnglesHint: {x: 0.66691375, y: 4.0838785, z: -99.51162}
+  m_LocalEulerAnglesHint: {x: 0.6770506, y: 4.0806727, z: -101.14527}
 --- !u!4 &2456331091129657086
 Transform:
   m_ObjectHideFlags: 0
@@ -23406,7 +24064,7 @@ Transform:
   m_Children: []
   m_Father: {fileID: 6596228718286253635}
   m_RootOrder: 10
-  m_LocalEulerAnglesHint: {x: 0.08126345, y: -85.74381, z: 0.14426222}
+  m_LocalEulerAnglesHint: {x: 0.08254433, y: -86.23334, z: 0.14356428}
 --- !u!4 &2508509352761297864
 Transform:
   m_ObjectHideFlags: 0
@@ -23422,7 +24080,7 @@ Transform:
   - {fileID: 6423634088608631765}
   m_Father: {fileID: 3263334079527618237}
   m_RootOrder: 1
-  m_LocalEulerAnglesHint: {x: 24.075104, y: -162.19658, z: -108.66985}
+  m_LocalEulerAnglesHint: {x: 26.150991, y: -163.34119, z: -109.1211}
 --- !u!1001 &2657095164593021778
 PrefabInstance:
   m_ObjectHideFlags: 0
@@ -23430,6 +24088,18 @@ PrefabInstance:
   m_Modification:
     m_TransformParent: {fileID: 0}
     m_Modifications:
+    - target: {fileID: 2657095164308100581, guid: bb48c0a6c7c30e44fb01328c0709dc77, type: 3}
+      propertyPath: skills.Array.data[0]
+      value: 
+      objectReference: {fileID: 1908622638}
+    - target: {fileID: 2657095164308100581, guid: bb48c0a6c7c30e44fb01328c0709dc77, type: 3}
+      propertyPath: skills.Array.data[1]
+      value: 
+      objectReference: {fileID: 1719642824}
+    - target: {fileID: 2657095164308100581, guid: bb48c0a6c7c30e44fb01328c0709dc77, type: 3}
+      propertyPath: skills.Array.data[2]
+      value: 
+      objectReference: {fileID: 1849899259}
     - target: {fileID: 4902631821647716223, guid: bb48c0a6c7c30e44fb01328c0709dc77, type: 3}
       propertyPath: m_RootOrder
       value: 17
@@ -23482,7 +24152,10 @@ PrefabInstance:
       propertyPath: m_IsActive
       value: 0
       objectReference: {fileID: 0}
-    m_RemovedComponents: []
+    m_RemovedComponents:
+    - {fileID: 2657095163664691112, guid: bb48c0a6c7c30e44fb01328c0709dc77, type: 3}
+    - {fileID: 2657095164308100580, guid: bb48c0a6c7c30e44fb01328c0709dc77, type: 3}
+    - {fileID: 2657095164302649936, guid: bb48c0a6c7c30e44fb01328c0709dc77, type: 3}
   m_SourcePrefab: {fileID: 100100000, guid: bb48c0a6c7c30e44fb01328c0709dc77, type: 3}
 --- !u!137 &2703395961880465864
 SkinnedMeshRenderer:
@@ -25308,7 +25981,7 @@ Transform:
   - {fileID: 5547118917286500230}
   m_Father: {fileID: 1148461502126412271}
   m_RootOrder: 3
-  m_LocalEulerAnglesHint: {x: 9.004275, y: -84.40185, z: -50.8598}
+  m_LocalEulerAnglesHint: {x: 9.046064, y: -84.3791, z: -52.49559}
 --- !u!1 &2781375687384600174
 GameObject:
   m_ObjectHideFlags: 0
@@ -25362,9 +26035,10 @@ Transform:
   - {fileID: 8366612789837334523}
   - {fileID: 4812043676292376110}
   - {fileID: 2033857871}
+  - {fileID: 184662016}
   m_Father: {fileID: 5016442731541384059}
   m_RootOrder: 0
-  m_LocalEulerAnglesHint: {x: 1.3840172, y: 16.553333, z: 49.380474}
+  m_LocalEulerAnglesHint: {x: 2.1526556, y: 15.141399, z: 48.370083}
 --- !u!4 &2927569842883513036
 Transform:
   m_ObjectHideFlags: 0
@@ -25379,7 +26053,7 @@ Transform:
   m_Children: []
   m_Father: {fileID: 3507695417611688713}
   m_RootOrder: 0
-  m_LocalEulerAnglesHint: {x: -3.052737, y: -12.799052, z: -94.239555}
+  m_LocalEulerAnglesHint: {x: -3.0504227, y: -12.788637, z: -95.87335}
 --- !u!4 &3033548054522553669
 Transform:
   m_ObjectHideFlags: 0
@@ -25395,7 +26069,7 @@ Transform:
   - {fileID: 3938468614296367290}
   m_Father: {fileID: 5012862507742928325}
   m_RootOrder: 0
-  m_LocalEulerAnglesHint: {x: -9.051726, y: -11.687479, z: -4.5969787}
+  m_LocalEulerAnglesHint: {x: -9.006582, y: -11.099445, z: -4.617857}
 --- !u!1 &3144874625709842699
 GameObject:
   m_ObjectHideFlags: 0
@@ -25435,6 +26109,14 @@ PrefabInstance:
       propertyPath: _minRange
       value: 7
       objectReference: {fileID: 0}
+    - target: {fileID: 131609469957833157, guid: b6a20ce6fd9bea0438b8ebf724277a75, type: 3}
+      propertyPath: skills.Array.data[0]
+      value: 
+      objectReference: {fileID: 1262949476}
+    - target: {fileID: 131609469957833157, guid: b6a20ce6fd9bea0438b8ebf724277a75, type: 3}
+      propertyPath: skills.Array.data[1]
+      value: 
+      objectReference: {fileID: 1626988168}
     - target: {fileID: 2386268173074310836, guid: b6a20ce6fd9bea0438b8ebf724277a75, type: 3}
       propertyPath: _isInvulnerable
       value: 1
@@ -25491,7 +26173,9 @@ PrefabInstance:
       propertyPath: m_LocalEulerAnglesHint.z
       value: 0
       objectReference: {fileID: 0}
-    m_RemovedComponents: []
+    m_RemovedComponents:
+    - {fileID: 404579186, guid: b6a20ce6fd9bea0438b8ebf724277a75, type: 3}
+    - {fileID: 404579187, guid: b6a20ce6fd9bea0438b8ebf724277a75, type: 3}
   m_SourcePrefab: {fileID: 100100000, guid: b6a20ce6fd9bea0438b8ebf724277a75, type: 3}
 --- !u!4 &3263334079527618237
 Transform:
@@ -25510,7 +26194,7 @@ Transform:
   - {fileID: 8111301010138218910}
   m_Father: {fileID: 3938468614296367290}
   m_RootOrder: 0
-  m_LocalEulerAnglesHint: {x: -9.768973, y: -33.782146, z: -2.2554815}
+  m_LocalEulerAnglesHint: {x: -9.723109, y: -33.898922, z: -1.5149804}
 --- !u!4 &3278710169349995468
 Transform:
   m_ObjectHideFlags: 0
@@ -25558,7 +26242,7 @@ Transform:
   - {fileID: 2927569842883513036}
   m_Father: {fileID: 1148461502126412271}
   m_RootOrder: 1
-  m_LocalEulerAnglesHint: {x: -2.128538, y: 0.6217258, z: -78.21863}
+  m_LocalEulerAnglesHint: {x: -2.1312943, y: 0.6304442, z: -79.85262}
 --- !u!4 &3552268788829065566
 Transform:
   m_ObjectHideFlags: 0
@@ -25589,7 +26273,7 @@ Transform:
   - {fileID: 3263334079527618237}
   m_Father: {fileID: 3033548054522553669}
   m_RootOrder: 0
-  m_LocalEulerAnglesHint: {x: -12.852497, y: -18.69675, z: -14.753549}
+  m_LocalEulerAnglesHint: {x: -12.70999, y: -22.864422, z: -13.459863}
 --- !u!95 &4172167853474465625
 Animator:
   serializedVersion: 4
@@ -25625,7 +26309,7 @@ Transform:
   - {fileID: 6540242657933033400}
   m_Father: {fileID: 3278710169349995468}
   m_RootOrder: 0
-  m_LocalEulerAnglesHint: {x: 0.97306114, y: -83.71425, z: 71.36851}
+  m_LocalEulerAnglesHint: {x: 1.8823253, y: -86.36273, z: 69.325356}
 --- !u!1 &4306898290109270323
 GameObject:
   m_ObjectHideFlags: 0
@@ -25741,7 +26425,7 @@ Transform:
   - {fileID: 6101504006677846792}
   m_Father: {fileID: 2885280591144908008}
   m_RootOrder: 3
-  m_LocalEulerAnglesHint: {x: -5.0125337, y: -83.99514, z: -26.423252}
+  m_LocalEulerAnglesHint: {x: -5.0132422, y: -83.953, z: -30.62941}
 --- !u!1 &4835646579243146278
 GameObject:
   m_ObjectHideFlags: 0
@@ -25773,7 +26457,7 @@ Transform:
   - {fileID: 6496212376324139483}
   m_Father: {fileID: 1148461502126412271}
   m_RootOrder: 2
-  m_LocalEulerAnglesHint: {x: 2.1009686, y: 8.502868, z: -67.65241}
+  m_LocalEulerAnglesHint: {x: 2.0539255, y: 8.512709, z: -69.3004}
 --- !u!4 &5012862507742928325
 Transform:
   m_ObjectHideFlags: 0
@@ -25789,7 +26473,7 @@ Transform:
   - {fileID: 3033548054522553669}
   m_Father: {fileID: 8091812154564774709}
   m_RootOrder: 0
-  m_LocalEulerAnglesHint: {x: -3.3823972, y: -9.283137, z: -175.95135}
+  m_LocalEulerAnglesHint: {x: -2.0202165, y: -12.75976, z: -176.13957}
 --- !u!4 &5016442731541384059
 Transform:
   m_ObjectHideFlags: 0
@@ -25805,7 +26489,7 @@ Transform:
   - {fileID: 2885280591144908008}
   m_Father: {fileID: 694486707321265121}
   m_RootOrder: 0
-  m_LocalEulerAnglesHint: {x: -1.3849955, y: -78.43691, z: -43.320103}
+  m_LocalEulerAnglesHint: {x: -0.022110745, y: -86.106094, z: -44.67784}
 --- !u!1 &5110390774742598235
 GameObject:
   m_ObjectHideFlags: 0
@@ -25868,7 +26552,7 @@ Transform:
   - {fileID: 1148461502126412271}
   m_Father: {fileID: 6423634088608631765}
   m_RootOrder: 0
-  m_LocalEulerAnglesHint: {x: -63.352207, y: -24.062775, z: -77.975525}
+  m_LocalEulerAnglesHint: {x: -65.165535, y: -14.739799, z: -87.451996}
 --- !u!4 &5547118917286500230
 Transform:
   m_ObjectHideFlags: 0
@@ -25883,7 +26567,7 @@ Transform:
   m_Children: []
   m_Father: {fileID: 2710357354110623532}
   m_RootOrder: 0
-  m_LocalEulerAnglesHint: {x: 4.320626, y: 0.000012736005, z: -52.127213}
+  m_LocalEulerAnglesHint: {x: 4.3206573, y: 0.000017659228, z: -53.760597}
 --- !u!4 &5568172129941276769
 Transform:
   m_ObjectHideFlags: 0
@@ -25899,7 +26583,7 @@ Transform:
   - {fileID: 2102106343783605997}
   m_Father: {fileID: 2885280591144908008}
   m_RootOrder: 1
-  m_LocalEulerAnglesHint: {x: -14.057608, y: -0.35235882, z: -20.132408}
+  m_LocalEulerAnglesHint: {x: -14.074582, y: -0.33841676, z: -24.335102}
 --- !u!4 &5584834531495632395
 Transform:
   m_ObjectHideFlags: 0
@@ -25915,7 +26599,7 @@ Transform:
   - {fileID: 565116363454348830}
   m_Father: {fileID: 2885280591144908008}
   m_RootOrder: 0
-  m_LocalEulerAnglesHint: {x: -33.43929, y: -30.95132, z: 9.980007}
+  m_LocalEulerAnglesHint: {x: -33.496754, y: -30.90368, z: 5.7356644}
 --- !u!4 &5757371119054824122
 Transform:
   m_ObjectHideFlags: 0
@@ -25938,6 +26622,10 @@ PrefabInstance:
   m_Modification:
     m_TransformParent: {fileID: 0}
     m_Modifications:
+    - target: {fileID: 8360375805597731609, guid: cdaaa706734c4eb4faae2ede8cfde726, type: 3}
+      propertyPath: m_Name
+      value: DualComboAttack
+      objectReference: {fileID: 0}
     - target: {fileID: 8360375806123484181, guid: cdaaa706734c4eb4faae2ede8cfde726, type: 3}
       propertyPath: m_RootOrder
       value: 14
@@ -26006,7 +26694,7 @@ Transform:
   m_Children: []
   m_Father: {fileID: 4812043676292376110}
   m_RootOrder: 0
-  m_LocalEulerAnglesHint: {x: 11.414016, y: 3.4475667, z: -61.085297}
+  m_LocalEulerAnglesHint: {x: 11.397653, y: 3.434468, z: -65.29405}
 --- !u!1 &6391748218044834831
 GameObject:
   m_ObjectHideFlags: 0
@@ -26054,7 +26742,7 @@ Transform:
   - {fileID: 5335212860991567275}
   m_Father: {fileID: 2508509352761297864}
   m_RootOrder: 0
-  m_LocalEulerAnglesHint: {x: -10.707647, y: -12.199015, z: -80.855995}
+  m_LocalEulerAnglesHint: {x: -5.5011854, y: -12.5724745, z: -76.81268}
 --- !u!4 &6496212376324139483
 Transform:
   m_ObjectHideFlags: 0
@@ -26069,7 +26757,7 @@ Transform:
   m_Children: []
   m_Father: {fileID: 4903374183649548860}
   m_RootOrder: 0
-  m_LocalEulerAnglesHint: {x: -4.277752, y: -0.0000081333, z: -106.7141}
+  m_LocalEulerAnglesHint: {x: -4.2777543, y: 0.000008133293, z: -108.34748}
 --- !u!4 &6540242657933033400
 Transform:
   m_ObjectHideFlags: 0
@@ -26127,7 +26815,7 @@ Transform:
   - {fileID: 2456331091129657086}
   m_Father: {fileID: 8111301010138218910}
   m_RootOrder: 0
-  m_LocalEulerAnglesHint: {x: -3.692825, y: 68.77917, z: -3.7207003}
+  m_LocalEulerAnglesHint: {x: -1.7151396, y: 75.838905, z: -2.683563}
 --- !u!1 &6690195717900759538
 GameObject:
   m_ObjectHideFlags: 0
@@ -26503,7 +27191,7 @@ Transform:
   - {fileID: 5012862507742928325}
   m_Father: {fileID: 6540242657933033400}
   m_RootOrder: 0
-  m_LocalEulerAnglesHint: {x: -2.3890157, y: -32.644333, z: -3.8914406}
+  m_LocalEulerAnglesHint: {x: -1.2451202, y: -33.5246, z: -2.2918453}
 --- !u!4 &8111301010138218910
 Transform:
   m_ObjectHideFlags: 0
@@ -26519,7 +27207,7 @@ Transform:
   - {fileID: 6596228718286253635}
   m_Father: {fileID: 3263334079527618237}
   m_RootOrder: 2
-  m_LocalEulerAnglesHint: {x: 18.469229, y: -47.01365, z: -23.250536}
+  m_LocalEulerAnglesHint: {x: 18.861427, y: -46.14024, z: -23.801094}
 --- !u!4 &8194814350548651883
 Transform:
   m_ObjectHideFlags: 0
@@ -26584,7 +27272,7 @@ Transform:
   - {fileID: 1902124387044965308}
   m_Father: {fileID: 2885280591144908008}
   m_RootOrder: 2
-  m_LocalEulerAnglesHint: {x: -13.643511, y: 3.3178554, z: -55.931393}
+  m_LocalEulerAnglesHint: {x: -13.649191, y: 3.2644124, z: -60.130875}
 --- !u!1 &8503507318379231918
 GameObject:
   m_ObjectHideFlags: 0
@@ -26635,7 +27323,6 @@ GameObject:
   - component: {fileID: 1221689350}
   - component: {fileID: 1221689351}
   - component: {fileID: 1221689352}
-  - component: {fileID: 8859148464752793042}
   - component: {fileID: 8859148464752793043}
   m_Layer: 0
   m_Name: CrystalElemental
@@ -26644,37 +27331,6 @@ GameObject:
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
   m_IsActive: 1
---- !u!114 &8859148464752793042
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 8859148464752793041}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 3811bd6034f8b4a419a2bee5958a7f8b, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: 
-  _skillName: Slam Punch
-  _description: 
-  _minRange: 0
-  _maxRange: 7
-  cooldown: 5
-  cost: 0
-  animName: Attack01
-  attackColliderGO: {fileID: 2033857870}
-  projData:
-    projPf: {fileID: 0}
-    projHeld: {fileID: 0}
-    projOrigin: {fileID: 0}
-    projRotation: {fileID: 0}
-    basicAtkProjSpeed: 10
-  usesTargetLock: 0
-  flatPower: 1
-  attackScaling: 0
-  abilityScaling: 0
-  mainHandAttackColliderGO: {fileID: 1639788620}
 --- !u!114 &8859148464752793043
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -26719,7 +27375,7 @@ Transform:
   - {fileID: 2410800252960544679}
   m_Father: {fileID: 1148461502126412271}
   m_RootOrder: 0
-  m_LocalEulerAnglesHint: {x: -14.3162775, y: -8.45479, z: -62.02957}
+  m_LocalEulerAnglesHint: {x: -14.301217, y: -8.462463, z: -63.66374}
 --- !u!1 &9143018060768070888
 GameObject:
   m_ObjectHideFlags: 0

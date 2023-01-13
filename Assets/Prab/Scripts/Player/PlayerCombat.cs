@@ -1,11 +1,11 @@
 using Paraverse.Combat;
-using Paraverse.Mob.Combat;
-using System.Collections.Generic;
+using Paraverse.Helper;
+using Paraverse.Mob.Stats;
 using UnityEngine;
 
 namespace Paraverse.Player
 {
-    public class PlayerCombat : MobCombat
+    public class PlayerCombat : EnhancedMobCombat
     {
         #region Variables
         private new PlayerController controller;
@@ -19,24 +19,27 @@ namespace Paraverse.Player
         private float maxComboResetTimer = 1f;
         private float curCombatResetTimer;
 
-        private int usingSkillIdx;
-
         public bool CanComboAttackTwo { get { return _canComboAttackTwo; } }
         private bool _canComboAttackTwo = false;
         public bool CanComboAttackThree { get { return _canComboAttackThree; } }
         private bool _canComboAttackThree = false;
 
         // Skills 
-        public List<MobSkill> skills = new List<MobSkill>();
-
         private MobSkill _activeSkill;
         public MobSkill ActiveSkill { get { return _activeSkill; } }
         #endregion
 
+
         #region Start & Update Methods
         protected override void Start()
         {
-            base.Start();
+            if (anim == null) anim = GetComponent<Animator>();
+            if (player == null) player = GameObject.FindGameObjectWithTag(targetTag).GetComponent<Transform>();
+            if (stats == null) stats = GetComponent<IMobStats>();
+            if (controller == null) controller = GetComponent<PlayerController>();
+
+            Initialize();
+
             controller = gameObject.GetComponent<PlayerController>();
             input = GetComponent<PlayerInputControls>();
             input.OnBasicAttackEvent += ApplyBasicAttack;
@@ -58,18 +61,18 @@ namespace Paraverse.Player
 
         protected override void Update()
         {
-            base.Update();
-            AnimationHandler();
+            if (controller.IsDead) return;
+
+            distanceFromTarget = ParaverseHelper.GetDistance(transform.position, player.position);
+            _isBasicAttacking = anim.GetBool(StringData.IsBasicAttacking);
             BasicAttackComboHandler();
-            
-            for (int i = 0; i < skills.Count; i++)
-            {
-                skills[i].SkillUpdate();
-                if (skills[i].skillOn)
-                {
-                    usingSkillIdx = i;
-                }
-            }
+            AttackCooldownHandler();
+            AnimationHandler();
+
+            if (anim.GetBool(StringData.IsUsingSkill))
+                IsSkilling = true;
+            else
+                IsSkilling = false;
         }
         #endregion
 
@@ -165,8 +168,8 @@ namespace Paraverse.Player
                 return;
             }
             if (skills.Count > 0)
-                RemoveFromActiveSkills(skills[skills.Count-1]);
-            
+                RemoveFromActiveSkills(skills[skills.Count - 1]);
+
             skills.Add(skill);
             skill.ActivateSkill(this, input, anim, stats);
         }

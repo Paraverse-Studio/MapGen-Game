@@ -91,6 +91,8 @@ namespace Paraverse.Mob.Controller
         [SerializeField]
         protected float isGroundedCheckRange = 0.5f;
         protected Vector3 jumpDir;
+        private float curAirCheckTimer = 0.5f;
+        private float jumpCheckTimer = 0.5f;
         [SerializeField]
         protected LayerMask groundLayer;
         public delegate void OnLandDel();
@@ -98,12 +100,9 @@ namespace Paraverse.Mob.Controller
 
         [Header("Fly Values")]
         [SerializeField]
-        protected float flyForce = 5f;
-        [SerializeField]
         protected float flyUpForce = 5f;
         [SerializeField]
         protected float flyDownForce = 5f;
-        protected Vector3 flyToPos;
         protected Vector3 flyDir;
         public bool isFlyingUp = false;
         public bool isFlyingDown = false;
@@ -520,7 +519,7 @@ namespace Paraverse.Mob.Controller
         /// </summary>
         public void ApplyKnockBack(Vector3 mobPos, KnockBackEffect effect)
         {
-            if (IsInvulnerable || combat.IsAttackLunging) return;
+            if (combat.IsAttackLunging) return;
 
             combat.OnAttackInterrupt();
             Vector3 impactDir = (transform.position - mobPos).normalized;
@@ -565,10 +564,9 @@ namespace Paraverse.Mob.Controller
                 controller.Move(knockbackDir * activeKnockBackEffect.knockForce * Time.deltaTime);
             }
         }
+        #endregion
 
-        private float curAirCheckTimer = 0.5f;
-        private float jumpCheckTimer = 0.5f;
-
+        #region Jump Methods
         public void ApplyJump(Vector3 mobPos)
         {
             if (_isJumping) return;
@@ -647,8 +645,10 @@ namespace Paraverse.Mob.Controller
             }
             return false;
         }
+        #endregion
 
-        public void ApplyFlyUp(Vector3 mobPos, Vector3 dir)
+        #region Fly Methods
+        public void ApplyFlyUp(Vector3 mobPos)
         {
             if (isFlyingUp) return;
 
@@ -657,9 +657,8 @@ namespace Paraverse.Mob.Controller
             _isFlying = true;
             isFlyingUp = true;
             combat.OnAttackInterrupt();
-            flyDir = dir;
+            flyDir = transform.up;
             landPos = mobPos;
-            //flyDir.y += Mathf.Sqrt(flyUpForce * -GlobalValues.GravityModifier * GlobalValues.GravityForce);
         }
 
         public void ApplyFlyDown(Vector3 mobPos)
@@ -673,7 +672,6 @@ namespace Paraverse.Mob.Controller
             Vector3 targetDir = (mobPos - transform.position).normalized;
             landPos = mobPos;
             flyDir = new Vector3(targetDir.x, targetDir.y, targetDir.z);
-            //flyDir.y += Mathf.Sqrt(flyDownForce * -GlobalValues.GravityModifier * GlobalValues.GravityForce);
         }
 
         private void FlyUpHandler()
@@ -692,6 +690,7 @@ namespace Paraverse.Mob.Controller
                 {
                     curAirCheckTimer -= Time.deltaTime;
                 }
+                transform.rotation = ParaverseHelper.FaceTarget(transform, pursueTarget, rotSpeed);
             }
         }
 

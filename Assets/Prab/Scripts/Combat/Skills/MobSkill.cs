@@ -9,7 +9,7 @@ namespace Paraverse.Combat
     public class MobSkill : MonoBehaviour, IMobSkill
     {
         #region Variables
-        protected MobCombat mob;
+        protected EnhancedMobCombat mob;
         protected Transform target;
         protected PlayerInputControls input;
         protected Animator anim;
@@ -63,8 +63,9 @@ namespace Paraverse.Combat
         public bool skillOn { get; set; }
         #endregion
 
-        #region Public Methods
-        public virtual void ActivateSkill(MobCombat mob, PlayerInputControls input, Animator anim, IMobStats stats, Transform target = null)
+
+        #region Inheritable Methods
+        public virtual void ActivateSkill(EnhancedMobCombat mob, PlayerInputControls input, Animator anim, IMobStats stats, Transform target = null)
         {
             this.mob = mob;
             this.target = target;
@@ -75,14 +76,18 @@ namespace Paraverse.Combat
             if (mob.tag.Equals(StringData.PlayerTag))
                 input.OnSkillOneEvent += Execute;
 
-            if (null == attackCollider && null != attackColliderGO)
+            if (null == attackColliderGO)
             {
-                attackCollider = attackColliderGO.GetComponent<AttackCollider>();
-                attackCollider.Init(mob, stats);
+                Debug.LogWarning(gameObject.name + " doesn't have an attack collider."); 
+                return;
             }
+            attackColliderGO.SetActive(true);
+            attackCollider = attackColliderGO.GetComponent<AttackCollider>();
+            attackCollider.Init(mob, stats);
+            attackColliderGO.SetActive(false);
         }
 
-        public virtual void ActivateSkill(MobCombat mob, Animator anim, IMobStats stats, Transform target = null)
+        public virtual void ActivateSkill(EnhancedMobCombat mob, Animator anim, IMobStats stats, Transform target = null)
         {
             this.mob = mob;
             this.target = target;
@@ -92,11 +97,15 @@ namespace Paraverse.Combat
             if (mob.tag.Equals(StringData.PlayerTag))
                 input.OnSkillOneEvent += Execute;
 
-            if (null == attackCollider && null != attackColliderGO)
+            if (null == attackColliderGO)
             {
-                attackCollider = attackColliderGO.GetComponent<AttackCollider>();
-                attackCollider.Init(mob, stats);
+                Debug.LogWarning(gameObject.name + " doesn't have an attack collider.");
+                return;
             }
+            attackColliderGO.SetActive(true);
+            attackCollider = attackColliderGO.GetComponent<AttackCollider>();
+            attackCollider.Init(mob, stats);
+            attackColliderGO.SetActive(false);
         }
 
         public virtual void DeactivateSkill(PlayerInputControls input)
@@ -109,7 +118,7 @@ namespace Paraverse.Combat
         /// </summary>
         public virtual void SkillUpdate()
         {
-            if (input && usesTargetLock && mob.IsSkilling) // for player's case, need to do enemy's case
+            if (usesTargetLock && mob.IsSkilling) // for player's case, need to do enemy's case
             {
                 RotateToTarget();
             }
@@ -122,40 +131,16 @@ namespace Paraverse.Combat
         }
 
         /// <summary>
-        /// Responsible for executing skill on button press.
-        /// </summary>
-        public virtual void Execute()
-        {
-            if (CanUseSkill())
-            {
-                mob.IsSkilling = true;
-                MarkSkillAsEnabled();
-                curCooldown = cooldown;
-                stats.UpdateCurrentEnergy(-cost);
-                anim.Play(animName);
-                Debug.Log("Executing skill: " + _skillName + " which takes " + cost + " points of energy out of " + stats.CurEnergy + " point of current energy." +
-                    "The max cooldown for this skill is " + cooldown + " and the animation name is " + animName + ".");
-            }
-        }
-        #endregion
-
-        #region Private Methods
-        private void RotateToTarget()
-        {
-            if (mob.Target)
-            {
-                Vector3 targetDir = ParaverseHelper.GetPositionXZ(mob.Target.position - transform.position).normalized;
-                transform.forward = targetDir;
-            }
-        }
-
-        /// <summary>
         /// Run this method everytime a skill is activated
         /// </summary>
-        protected void MarkSkillAsEnabled()
+        protected virtual void ExecuteSkillLogic()
         {
+            mob.IsSkilling = true;
             skillOn = true;
             anim.SetBool(StringData.IsUsingSkill, true);
+            curCooldown = cooldown;
+            stats.UpdateCurrentEnergy(-cost);
+            anim.Play(animName);
         }
 
         protected virtual void DisableSkill()
@@ -198,6 +183,31 @@ namespace Paraverse.Combat
             float disFromTarget = ParaverseHelper.GetDistance(mob.transform.position, target.position);
 
             return disFromTarget >= _minRange && disFromTarget <= _maxRange;
+        }
+        #endregion
+
+        #region Private Methods
+
+        /// <summary>
+        /// Responsible for executing skill on button press.
+        /// </summary>
+        protected void Execute()
+        {
+            if (CanUseSkill())
+            {
+                ExecuteSkillLogic();
+                Debug.Log("Executing skill: " + _skillName + " which takes " + cost + " points of energy out of " + stats.CurEnergy + " point of current energy." +
+                    "The max cooldown for this skill is " + cooldown + " and the animation name is " + animName + ".");
+            }
+        }
+
+        protected void RotateToTarget()
+        {
+            if (input && mob.Target)
+            {
+                Vector3 targetDir = ParaverseHelper.GetPositionXZ(mob.Target.position - transform.position).normalized;
+                transform.forward = targetDir;
+            }
         }
         #endregion
     }
