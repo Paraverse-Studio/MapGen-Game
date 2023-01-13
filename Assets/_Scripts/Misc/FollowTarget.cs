@@ -24,7 +24,7 @@ public class FollowTarget : MonoBehaviour
     
 
     // Start is called before the first frame update
-    void Awake()
+    void Start()
     {
         if (usePlayerAsTarget)
         {
