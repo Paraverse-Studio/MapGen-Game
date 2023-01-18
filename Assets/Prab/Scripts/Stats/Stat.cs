@@ -5,7 +5,7 @@ using UnityEngine;
 namespace Paraverse.Stats
 {
     [Serializable]
-    public class Stat : MonoBehaviour
+    public class Stat
     {
         public float BaseValue { get; }
         public float FinalValue { get { return BaseValue + StatModifierSumValue() + TempStatModifierSumValue(); } }

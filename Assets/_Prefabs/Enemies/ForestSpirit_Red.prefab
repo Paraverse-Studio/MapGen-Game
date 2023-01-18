@@ -3147,11 +3147,22 @@ MonoBehaviour:
   detectionRadius: 6
   pursueRadius: 10
   atkDashForce: 12
+  jumpForce: 5
+  isGroundedCheckRange: 0.5
+  groundLayer:
+    serializedVersion: 2
+    m_Bits: 0
+  flyUpForce: 5
+  flyDownForce: 5
+  isFlyingUp: 0
+  isFlyingDown: 0
   checkFallRange: 2
   maxDeathTimerUponFall: 2
   fallForce: 0.5
   deathEffect: {fileID: 8073467667769803130, guid: 75c1b160671ce934fad50936633acef1, type: 3}
   _curMobState: 0
+  _isGrounded: 1
+  _isInvulnerable: 0
 --- !u!114 &5751539926344400073
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -3167,13 +3178,15 @@ MonoBehaviour:
   anim: {fileID: 2363846120556484870}
   basicAtkDmgRatio: 1
   basicAtkRange: 3
-  basicAtkCollider: {fileID: 2739856676951319334}
+  basicAttackColliderGO: {fileID: 2739856676951319334}
   projUser: 0
   projData:
     projPf: {fileID: 0}
     projHeld: {fileID: 0}
     projOrigin: {fileID: 0}
+    projRotation: {fileID: 0}
     basicAtkProjSpeed: 10
+  IsSkilling: 0
 --- !u!114 &1810881194
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -3223,6 +3236,7 @@ MonoBehaviour:
     showSelectionAllTimes: 0
     showEnergyBar: 0
     heightAdjustment: 0
+    isBoss: 0
   overrideProperties:
     healthBar: {fileID: 0}
     damageBar: {fileID: 0}
@@ -3247,12 +3261,6 @@ MonoBehaviour:
   rangeOverride: -1
   outline: {fileID: 0}
   Range: 0
-  OnSelected:
-    m_PersistentCalls:
-      m_Calls: []
-  OnDeselected:
-    m_PersistentCalls:
-      m_Calls: []
 --- !u!114 &4585376326402837706
 MonoBehaviour:
   m_ObjectHideFlags: 0

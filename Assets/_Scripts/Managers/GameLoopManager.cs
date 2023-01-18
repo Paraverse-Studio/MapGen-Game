@@ -33,6 +33,7 @@ public class GameLoopManager : MonoBehaviour
         public TextMeshProUGUI scoreText;
         public TextMeshProUGUI rankText;
         public TextMeshProUGUI goldText;
+        public GameObject shopButton;
     }
 
     [System.Serializable]
@@ -101,9 +102,9 @@ public class GameLoopManager : MonoBehaviour
     private int totalEnemiesSpawned;
     private int lastHealthSaved = -1;
     private int playerMaxHealth;
-    private int goldRewarded = 0;
+    private int goldToReward = 0;
 
-    private bool _roundReady = false;
+    private bool _roundIsActive = false;
     private bool _isBossRound = false;
     private bool _isPaused = false;
     public bool IsPaused => _isPaused;
@@ -140,7 +141,7 @@ public class GameLoopManager : MonoBehaviour
         if (Time.frameCount % 60 == 0)
         {
             if (null == _predicate) MakeCompletionPredicate(CompletionPredicate);
-            if (_predicate(_roundReady)) EndPortal.SetActive(true);
+            if (_predicate(_roundIsActive)) EndPortal.SetActive(true);
         }
 
         if (player.transform.position.y <= -25f)
@@ -193,16 +194,16 @@ public class GameLoopManager : MonoBehaviour
         // so as a result, in code is where we have to reduce by 1 to do the proper calculations
         int adjustedRoundNumber = nextRoundNumber - 1;
         int mapIndex = adjustedRoundNumber / switchMapAfterNumOfRounds;
-        bool bossRound = (adjustedRoundNumber != 0)? (nextRoundNumber % bossAfterNumOfRounds == 0) : false;
-        MapGeneration.Instance.M = (!bossRound)? maps[mapIndex].map : maps[mapIndex].bossMap;
+        _isBossRound = (adjustedRoundNumber != 0)? (nextRoundNumber % bossAfterNumOfRounds == 0) : false;
+        MapGeneration.Instance.M = (!_isBossRound) ? maps[mapIndex].map : maps[mapIndex].bossMap;
 
         GameLoopEvents.OnInitiateRound?.Invoke();
 
-        ResetStates();
     }
 
     public void StartRound()
     {
+        ResetStates();
         GameLoopEvents.OnStartRound?.Invoke();
 
         totalEnemiesSpawned = EnemiesManager.Instance.EnemiesCount;
@@ -211,7 +212,7 @@ public class GameLoopManager : MonoBehaviour
         playerStats.OnHealthChange.AddListener(AccrueDamageTaken);
         playerController.OnDeathEvent += EndRoundPremature;
 
-        _roundReady = true;
+        _roundIsActive = true;
     }
 
     public void ResetStates()
@@ -220,9 +221,8 @@ public class GameLoopManager : MonoBehaviour
         totalEnemiesSpawned = 0;
         lastHealthSaved = -1;
         playerMaxHealth = 0;
-        goldRewarded = 0;
-        _isBossRound = false;
-        _roundReady = false;
+        goldToReward = 0;
+        _roundIsActive = false;
     }
 
     public void MakeCompletionPredicate(CompletionPredicateType predicate)
@@ -243,17 +243,19 @@ public class GameLoopManager : MonoBehaviour
         }
     }
 
+    // This means round is ended solely because player was defeated
     private void EndRoundPremature(Transform t)
     {
         roundCompletionType = RoundCompletionType.Failed;
         EndRound(successfulRound: false);
     }
 
+    // Means the round has ended (successful = won/completed, otherwise, failed)
     public void EndRound(bool successfulRound) => StartCoroutine(IEndRound(successfulRound));
 
     public IEnumerator IEndRound(bool successfulRound)
     {
-        _roundReady = false;
+        _roundIsActive = false;
         roundTimer.PauseTimer();
 
         // DETERMINE HOW ROUND ENDED (SUCCESSFUL OR FAILED OR BOSS DEFEATED?)
@@ -267,8 +269,7 @@ public class GameLoopManager : MonoBehaviour
             roundCompletionType = RoundCompletionType.Failed;
         }
 
-        // here ...
-
+        // here ... (what here?)
 
         Animator roundEndWindow = new Animator();
         switch (roundCompletionType)
@@ -296,10 +297,6 @@ public class GameLoopManager : MonoBehaviour
         CompleteRound();
     }
 
-    public void CalculateShop()
-    {
-        ShopManager.Instance.CalculateShopItems(playerStats.Gold, new List<SO_Mod>());
-    }
 
     public void CompleteRound()
     {
@@ -309,17 +306,18 @@ public class GameLoopManager : MonoBehaviour
         Destroy(EndPortal);
 
         float score = ScoreFormula.CalculateScore(totalEnemiesSpawned * 10f, roundTimer.GetTime(), playerMaxHealth, damageTaken);
-        goldRewarded = (int)(score * 1);
-
-        playerStats.UpdateGold(goldRewarded); // save it to db
+        goldToReward = (int)(score * 1);
 
         if (roundCompletionType == RoundCompletionType.Failed)
         {
             resultScreen.scoreText.text = "Score: " + "N/A";
             resultScreen.rankText.text = "F";
+            resultScreen.shopButton.SetActive(false);
         }
         else
         {
+            resultScreen.shopButton.SetActive(true);
+            playerStats.UpdateGold(goldToReward); // save it to db
             resultScreen.scoreText.text = "Score: " + (int)score + "%";
             resultScreen.rankText.text = ScoreFormula.GetScoreRank((int)score);
 
@@ -335,7 +333,6 @@ public class GameLoopManager : MonoBehaviour
 
         // save it in database here, we need to save stats in db asap so players
         // who might d/c right after ending get their stuff saved
-
 
 
         ResetStates();
@@ -379,10 +376,8 @@ public class GameLoopManager : MonoBehaviour
         yield return null;
         //SceneManager.LoadScene(SceneManager.GetActiveScene().buildIndex);
         GameLoopEvents.OnBootupGame?.Invoke();
-        yield return new WaitForSeconds(1.5f);
         loadingScreen.SetActive(false);
     }
-
 
     public void AccrueDamageTaken(int playerCurrentHealth, int _playerMaxHealth)
     {
@@ -400,7 +395,10 @@ public class GameLoopManager : MonoBehaviour
         lastHealthSaved = playerCurrentHealth;
     }
 
-
+    public void CalculateShop()
+    {
+        ShopManager.Instance.CalculateShopItems(playerStats.Gold, new List<SO_Mod>());
+    }
     #endregion
 
     private IEnumerator DelayedAction(float s, Action a)

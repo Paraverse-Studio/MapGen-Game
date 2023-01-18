@@ -194,7 +194,6 @@ namespace Paraverse.Player
             anim.SetBool(StringData.IsKnockedBack, IsStaggered);
             _isInteracting = anim.GetBool(StringData.IsInteracting);
             _isBasicAttacking = anim.GetBool(StringData.IsBasicAttacking);
-            _isUsingSkill = anim.GetBool(StringData.IsSkilling);
         }
 
         private void MovementHandler()
@@ -497,6 +496,10 @@ namespace Paraverse.Player
         private void AttackMovementHandler()
         {
             if (combat.IsAttackLunging && combat.BasicAttackComboIdx == 0)
+            {
+                controller.Move(transform.forward * atkThreeDashForce * Time.deltaTime);
+            }
+            else if (combat.IsAttackLunging && IsDiving) // if dash-attacking, use the stronger dash value
             {
                 controller.Move(transform.forward * atkThreeDashForce * Time.deltaTime);
             }
