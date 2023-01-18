@@ -57,7 +57,6 @@ public class DualComboSkill : MobSkill, IMobSkill
     public override void SkillUpdate()
     {
         base.SkillUpdate();
-        RotateToTarget();
     }
 
     protected override void ExecuteSkillLogic()

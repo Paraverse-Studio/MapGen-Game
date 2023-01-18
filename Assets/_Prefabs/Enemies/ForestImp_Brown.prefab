@@ -1,5 +1,228 @@
 %YAML 1.1
 %TAG !u! tag:unity3d.com,2011:
+--- !u!1 &1678626640
+GameObject:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  serializedVersion: 6
+  m_Component:
+  - component: {fileID: 1678626641}
+  m_Layer: 0
+  m_Name: SkillsHolder
+  m_TagString: Untagged
+  m_Icon: {fileID: 0}
+  m_NavMeshLayer: 0
+  m_StaticEditorFlags: 0
+  m_IsActive: 1
+--- !u!4 &1678626641
+Transform:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1678626640}
+  m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
+  m_LocalPosition: {x: 0, y: 0, z: 0}
+  m_LocalScale: {x: 1, y: 1, z: 1}
+  m_ConstrainProportionsScale: 0
+  m_Children:
+  - {fileID: 1908622637}
+  - {fileID: 1719642823}
+  - {fileID: 1849899258}
+  m_Father: {fileID: 4902631821647716223}
+  m_RootOrder: 3
+  m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
+--- !u!1 &1719642822
+GameObject:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  serializedVersion: 6
+  m_Component:
+  - component: {fileID: 1719642823}
+  - component: {fileID: 1719642824}
+  m_Layer: 0
+  m_Name: SkyBarrageSkill
+  m_TagString: Untagged
+  m_Icon: {fileID: 0}
+  m_NavMeshLayer: 0
+  m_StaticEditorFlags: 0
+  m_IsActive: 1
+--- !u!4 &1719642823
+Transform:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1719642822}
+  m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
+  m_LocalPosition: {x: 0, y: 0, z: 0}
+  m_LocalScale: {x: 1, y: 1, z: 1}
+  m_ConstrainProportionsScale: 0
+  m_Children: []
+  m_Father: {fileID: 1678626641}
+  m_RootOrder: 1
+  m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
+--- !u!114 &1719642824
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1719642822}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: bc24a35688d7a2c4cac7a2bad6090d62, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  _skillName: SkyBarrageSkill
+  _description: 
+  _minRange: 7
+  _maxRange: 100
+  cooldown: 10
+  cost: 0
+  animName: SkyBarrageSkill
+  attackColliderGO: {fileID: 0}
+  projData:
+    projPf: {fileID: 1520875604049576418, guid: 881f129da2d31e446ae5b376b6629684, type: 3}
+    projHeld: {fileID: 0}
+    projOrigin: {fileID: 2657095163666507577}
+    projRotation: {fileID: 2657095163666507577}
+    basicAtkProjSpeed: 0
+  usesTargetLock: 0
+  flatPower: 20
+  attackScaling: 0
+  abilityScaling: 0
+  skillStartTimer: 5
+--- !u!1 &1849899257
+GameObject:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  serializedVersion: 6
+  m_Component:
+  - component: {fileID: 1849899258}
+  - component: {fileID: 1849899259}
+  m_Layer: 0
+  m_Name: JumpSkill
+  m_TagString: Untagged
+  m_Icon: {fileID: 0}
+  m_NavMeshLayer: 0
+  m_StaticEditorFlags: 0
+  m_IsActive: 1
+--- !u!4 &1849899258
+Transform:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1849899257}
+  m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
+  m_LocalPosition: {x: 0, y: 0, z: 0}
+  m_LocalScale: {x: 1, y: 1, z: 1}
+  m_ConstrainProportionsScale: 0
+  m_Children: []
+  m_Father: {fileID: 1678626641}
+  m_RootOrder: 2
+  m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
+--- !u!114 &1849899259
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1849899257}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 9dde734c8317a2e4391ebd406597222e, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  _skillName: Jump
+  _description: 
+  _minRange: 5
+  _maxRange: 30
+  cooldown: 5
+  cost: 0
+  animName: JumpStart
+  attackColliderGO: {fileID: 0}
+  projData:
+    projPf: {fileID: 0}
+    projHeld: {fileID: 0}
+    projOrigin: {fileID: 0}
+    projRotation: {fileID: 0}
+    basicAtkProjSpeed: 10
+  usesTargetLock: 0
+  flatPower: 1
+  attackScaling: 0
+  abilityScaling: 0
+--- !u!1 &1908622636
+GameObject:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  serializedVersion: 6
+  m_Component:
+  - component: {fileID: 1908622637}
+  - component: {fileID: 1908622638}
+  m_Layer: 0
+  m_Name: DualComboAttack
+  m_TagString: Untagged
+  m_Icon: {fileID: 0}
+  m_NavMeshLayer: 0
+  m_StaticEditorFlags: 0
+  m_IsActive: 1
+--- !u!4 &1908622637
+Transform:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1908622636}
+  m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
+  m_LocalPosition: {x: 0, y: 0, z: 0}
+  m_LocalScale: {x: 1, y: 1, z: 1}
+  m_ConstrainProportionsScale: 0
+  m_Children: []
+  m_Father: {fileID: 1678626641}
+  m_RootOrder: 0
+  m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
+--- !u!114 &1908622638
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1908622636}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 43081201aa9258742b6c2a34ca9248ed, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  _skillName: Attack01
+  _description: 
+  _minRange: 0
+  _maxRange: 5
+  cooldown: 5
+  cost: 0
+  animName: AttackCombo
+  attackColliderGO: {fileID: 2657095164191216732}
+  projData:
+    projPf: {fileID: 0}
+    projHeld: {fileID: 0}
+    projOrigin: {fileID: 0}
+    projRotation: {fileID: 0}
+    basicAtkProjSpeed: 10
+  usesTargetLock: 0
+  flatPower: 5
+  attackScaling: 0
+  abilityScaling: 0
+  offHandAttackColliderGO: {fileID: 2657095164408987043}
+  rotSpeed: 100
 --- !u!1 &1926738171508432033
 GameObject:
   m_ObjectHideFlags: 0
@@ -1891,9 +2114,6 @@ GameObject:
   - component: {fileID: 2657095164308100576}
   - component: {fileID: 2657095164308100604}
   - component: {fileID: 2657095164308100581}
-  - component: {fileID: 2657095164302649936}
-  - component: {fileID: 2657095164308100580}
-  - component: {fileID: 2657095163664691112}
   - component: {fileID: 2657095164308100577}
   - component: {fileID: 8124308719308895491}
   - component: {fileID: 2657095164308100579}
@@ -2039,6 +2259,10 @@ MonoBehaviour:
   groundLayer:
     serializedVersion: 2
     m_Bits: 524215
+  flyUpForce: 5
+  flyDownForce: 5
+  isFlyingUp: 0
+  isFlyingDown: 0
   checkFallRange: 2
   maxDeathTimerUponFall: 2
   fallForce: 0.5
@@ -2061,7 +2285,7 @@ MonoBehaviour:
   anim: {fileID: 1926738171499081581}
   basicAtkDmgRatio: 1
   basicAtkRange: 5
-  basicAtkCollider: {fileID: 2657095163120786646}
+  basicAttackColliderGO: {fileID: 2657095163120786646}
   projUser: 1
   projData:
     projPf: {fileID: 7922565735799238133, guid: 581c3b128b7afa640a13128e4969f3e4, type: 3}
@@ -2071,100 +2295,10 @@ MonoBehaviour:
     basicAtkProjSpeed: 10
   IsSkilling: 0
   skills:
-  - {fileID: 2657095164308100580}
-  - {fileID: 2657095164302649936}
-  - {fileID: 2657095163664691112}
+  - {fileID: 1908622638}
+  - {fileID: 1719642824}
+  - {fileID: 1849899259}
   animBool: isUsingSkill
---- !u!114 &2657095164302649936
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 1926738171508432141}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: bc24a35688d7a2c4cac7a2bad6090d62, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: 
-  _skillName: SkyBarrageSkill
-  _description: 
-  _minRange: 7
-  _maxRange: 100
-  cooldown: 10
-  cost: 0
-  animName: SkyBarrageSkill
-  attackColliderGO: {fileID: 0}
-  projData:
-    projPf: {fileID: 1520875604049576418, guid: 881f129da2d31e446ae5b376b6629684, type: 3}
-    projHeld: {fileID: 0}
-    projOrigin: {fileID: 2657095163666507577}
-    projRotation: {fileID: 2657095163666507577}
-    basicAtkProjSpeed: 0
-  flatPower: 20
-  attackScaling: 0
-  abilityScaling: 0
-  skillStartTimer: 5
---- !u!114 &2657095164308100580
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 1926738171508432141}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 43081201aa9258742b6c2a34ca9248ed, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: 
-  _skillName: Attack01
-  _description: 
-  _minRange: 0
-  _maxRange: 5
-  cooldown: 5
-  cost: 0
-  animName: AttackCombo
-  attackColliderGO: {fileID: 2657095164191216732}
-  projData:
-    projPf: {fileID: 0}
-    projHeld: {fileID: 0}
-    projOrigin: {fileID: 0}
-    projRotation: {fileID: 0}
-    basicAtkProjSpeed: 10
-  flatPower: 5
-  attackScaling: 0
-  abilityScaling: 0
-  offHandAttackColliderGO: {fileID: 2657095164408987043}
-  rotSpeed: 100
---- !u!114 &2657095163664691112
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 1926738171508432141}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 9dde734c8317a2e4391ebd406597222e, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: 
-  _skillName: Jump
-  _description: 
-  _minRange: 5
-  _maxRange: 30
-  cooldown: 5
-  cost: 0
-  animName: JumpStart
-  attackColliderGO: {fileID: 0}
-  projData:
-    projPf: {fileID: 0}
-    projHeld: {fileID: 0}
-    projOrigin: {fileID: 0}
-    projRotation: {fileID: 0}
-    basicAtkProjSpeed: 10
-  flatPower: 1
-  attackScaling: 0
-  abilityScaling: 0
 --- !u!114 &2657095164308100577
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -3202,7 +3336,7 @@ Transform:
   m_PrefabInstance: {fileID: 0}
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 6492552972653870374}
-  m_LocalRotation: {x: -0, y: -0, z: -0, w: 1}
+  m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
   m_LocalPosition: {x: 38.38, y: -0.00000047683716, z: -3.24}
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_ConstrainProportionsScale: 0
@@ -3210,6 +3344,7 @@ Transform:
   - {fileID: 1926738171508654317}
   - {fileID: 4312025611824425035}
   - {fileID: 2657095163666507577}
+  - {fileID: 1678626641}
   m_Father: {fileID: 0}
   m_RootOrder: 0
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}

@@ -1,5 +1,166 @@
 %YAML 1.1
 %TAG !u! tag:unity3d.com,2011:
+--- !u!1 &94371558
+GameObject:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  serializedVersion: 6
+  m_Component:
+  - component: {fileID: 94371559}
+  m_Layer: 0
+  m_Name: SkillHolder
+  m_TagString: Untagged
+  m_Icon: {fileID: 0}
+  m_NavMeshLayer: 0
+  m_StaticEditorFlags: 0
+  m_IsActive: 1
+--- !u!4 &94371559
+Transform:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 94371558}
+  m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
+  m_LocalPosition: {x: 0, y: 0, z: 0}
+  m_LocalScale: {x: 1, y: 1, z: 1}
+  m_ConstrainProportionsScale: 0
+  m_Children:
+  - {fileID: 1262949475}
+  - {fileID: 1626988167}
+  m_Father: {fileID: 3172601158817656281}
+  m_RootOrder: 1
+  m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
+--- !u!1 &1262949474
+GameObject:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  serializedVersion: 6
+  m_Component:
+  - component: {fileID: 1262949475}
+  - component: {fileID: 1262949476}
+  m_Layer: 0
+  m_Name: RootSkill
+  m_TagString: Untagged
+  m_Icon: {fileID: 0}
+  m_NavMeshLayer: 0
+  m_StaticEditorFlags: 0
+  m_IsActive: 1
+--- !u!4 &1262949475
+Transform:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1262949474}
+  m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
+  m_LocalPosition: {x: 0, y: 0, z: 0}
+  m_LocalScale: {x: 1, y: 1, z: 1}
+  m_ConstrainProportionsScale: 0
+  m_Children: []
+  m_Father: {fileID: 94371559}
+  m_RootOrder: 0
+  m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
+--- !u!114 &1262949476
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1262949474}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: d8c6b82868550044f88d57ad6cf3b029, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  _skillName: 'Root '
+  _description: 
+  _minRange: 7
+  _maxRange: 100
+  cooldown: 4
+  cost: 0
+  animName: RootSkill
+  attackColliderGO: {fileID: 0}
+  projData:
+    projPf: {fileID: 1460401963545366043, guid: 83bfd872f9c72e74787b25ee8b0e618e, type: 3}
+    projHeld: {fileID: 0}
+    projOrigin: {fileID: 131609469950685087}
+    projRotation: {fileID: 0}
+    basicAtkProjSpeed: 10
+  usesTargetLock: 0
+  flatPower: 1
+  attackScaling: 0
+  abilityScaling: 0
+  rootDuration: 3
+--- !u!1 &1626988166
+GameObject:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  serializedVersion: 6
+  m_Component:
+  - component: {fileID: 1626988167}
+  - component: {fileID: 1626988168}
+  m_Layer: 0
+  m_Name: SummonSkill
+  m_TagString: Untagged
+  m_Icon: {fileID: 0}
+  m_NavMeshLayer: 0
+  m_StaticEditorFlags: 0
+  m_IsActive: 1
+--- !u!4 &1626988167
+Transform:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1626988166}
+  m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
+  m_LocalPosition: {x: 0, y: 0, z: 0}
+  m_LocalScale: {x: 1, y: 1, z: 1}
+  m_ConstrainProportionsScale: 0
+  m_Children: []
+  m_Father: {fileID: 94371559}
+  m_RootOrder: 1
+  m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
+--- !u!114 &1626988168
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1626988166}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 37bb2c33e49492d45800ff6871c5969c, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  _skillName: Summon Sapling
+  _description: 
+  _minRange: 0
+  _maxRange: 100
+  cooldown: 5
+  cost: 0
+  animName: SummonSkill
+  attackColliderGO: {fileID: 0}
+  projData:
+    projPf: {fileID: 0}
+    projHeld: {fileID: 0}
+    projOrigin: {fileID: 0}
+    projRotation: {fileID: 0}
+    basicAtkProjSpeed: 10
+  usesTargetLock: 0
+  flatPower: 1
+  attackScaling: 0
+  abilityScaling: 0
+  summonPf: {fileID: 7898848738789558338, guid: da4c325d14569204bb33863f10b1e815, type: 3}
+  maxSummonCount: 1
+  curSummonCount: 0
 --- !u!1 &131609469950587393
 GameObject:
   m_ObjectHideFlags: 0
@@ -2975,8 +3136,6 @@ GameObject:
   - component: {fileID: 3172601158616173550}
   - component: {fileID: 3172601158616173549}
   - component: {fileID: 5949769728584070256}
-  - component: {fileID: 404579186}
-  - component: {fileID: 404579187}
   m_Layer: 0
   m_Name: Treant
   m_TagString: Enemy
@@ -3085,12 +3244,22 @@ MonoBehaviour:
   detectionRadius: 20
   pursueRadius: 25
   atkDashForce: 10
+  jumpForce: 5
+  isGroundedCheckRange: 0.5
+  groundLayer:
+    serializedVersion: 2
+    m_Bits: 0
+  flyUpForce: 5
+  flyDownForce: 5
+  isFlyingUp: 0
+  isFlyingDown: 0
   checkFallRange: 2
   maxDeathTimerUponFall: 2
   fallForce: 0.5
   deathEffect: {fileID: 8073467667769803130, guid: 898d55a940dccf54bad15d1c1cca8aad, type: 3}
   _curMobState: 0
-  _isInvulnerable: 0
+  _isGrounded: 1
+  _isInvulnerable: 1
 --- !u!114 &131609469957833157
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -3106,16 +3275,18 @@ MonoBehaviour:
   anim: {fileID: 131609469957833179}
   basicAtkDmgRatio: 1
   basicAtkRange: 5
-  basicAtkCollider: {fileID: 3172601158662907522}
+  basicAttackColliderGO: {fileID: 3172601158662907522}
   projUser: 0
   projData:
     projPf: {fileID: 0}
     projHeld: {fileID: 0}
     projOrigin: {fileID: 0}
+    projRotation: {fileID: 0}
     basicAtkProjSpeed: 10
+  IsSkilling: 0
   skills:
-  - {fileID: 404579186}
-  - {fileID: 404579187}
+  - {fileID: 1262949476}
+  - {fileID: 1626988168}
   animBool: isUsingSkill
 --- !u!114 &3172601158616173551
 MonoBehaviour:
@@ -3217,66 +3388,6 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   _lookAtObj: {fileID: 0}
---- !u!114 &404579186
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 131609469950587903}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 37bb2c33e49492d45800ff6871c5969c, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: 
-  _skillName: Summon Sapling
-  _description: 
-  _minRange: 0
-  _maxRange: 10
-  cooldown: 20000
-  cost: 0
-  animName: SummonSkill
-  attackColliderGO: {fileID: 0}
-  projData:
-    projPf: {fileID: 0}
-    projHeld: {fileID: 0}
-    projOrigin: {fileID: 0}
-    basicAtkProjSpeed: 10
-  flatPower: 1
-  attackScaling: 0
-  abilityScaling: 0
-  summonPf: {fileID: 7898848738789558338, guid: da4c325d14569204bb33863f10b1e815, type: 3}
-  maxSummonCount: 1
-  curSummonCount: 0
---- !u!114 &404579187
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 131609469950587903}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: d8c6b82868550044f88d57ad6cf3b029, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: 
-  _skillName: 'Root '
-  _description: 
-  _minRange: 0
-  _maxRange: 10
-  cooldown: 4
-  cost: 0
-  animName: RootSkill
-  attackColliderGO: {fileID: 0}
-  projData:
-    projPf: {fileID: 1460401963545366043, guid: 83bfd872f9c72e74787b25ee8b0e618e, type: 3}
-    projHeld: {fileID: 0}
-    projOrigin: {fileID: 131609469950685087}
-    basicAtkProjSpeed: 10
-  flatPower: 1
-  attackScaling: 0
-  abilityScaling: 0
-  rootDuration: 3
 --- !u!1 &175625463678440673
 GameObject:
   m_ObjectHideFlags: 0
@@ -3675,6 +3786,7 @@ Transform:
   m_ConstrainProportionsScale: 0
   m_Children:
   - {fileID: 131609469950685087}
+  - {fileID: 94371559}
   m_Father: {fileID: 0}
   m_RootOrder: 0
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}

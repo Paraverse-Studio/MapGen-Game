@@ -73,7 +73,6 @@ namespace Paraverse.Mob.Combat
         {
             if (controller.IsDead) return;
 
-            distanceFromTarget = ParaverseHelper.GetDistance(transform.position, player.position);
             _isBasicAttacking = anim.GetBool(StringData.IsBasicAttacking);
             AttackCooldownHandler();
         }

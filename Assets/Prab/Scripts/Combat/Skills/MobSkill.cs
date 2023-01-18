@@ -118,16 +118,27 @@ namespace Paraverse.Combat
         /// </summary>
         public virtual void SkillUpdate()
         {
-            if (usesTargetLock && mob.IsSkilling) // for player's case, need to do enemy's case
-            {
-                RotateToTarget();
-            }
-
             if (null != target && mob.IsBasicAttacking == false && mob.IsSkilling == false)
             {
                 Execute();
             }
+            RotateToTarget();
             CooldownHandler();
+        }
+
+        protected virtual void RotateToTarget()
+        {
+            if (skillOn == false) return;
+            if (usesTargetLock && input && mob.Target)
+            {
+                Vector3 targetDir = ParaverseHelper.GetPositionXZ(mob.Target.position - transform.position).normalized;
+                transform.forward = targetDir;
+            }
+            else if (usesTargetLock && mob.Target)
+            {
+                mob.transform.rotation = ParaverseHelper.FaceTarget(mob.transform, target.transform, 100f);
+                Debug.Log("Rotating: " + usesTargetLock);
+            }
         }
 
         /// <summary>
@@ -198,15 +209,6 @@ namespace Paraverse.Combat
                 ExecuteSkillLogic();
                 Debug.Log("Executing skill: " + _skillName + " which takes " + cost + " points of energy out of " + stats.CurEnergy + " point of current energy." +
                     "The max cooldown for this skill is " + cooldown + " and the animation name is " + animName + ".");
-            }
-        }
-
-        protected void RotateToTarget()
-        {
-            if (input && mob.Target)
-            {
-                Vector3 targetDir = ParaverseHelper.GetPositionXZ(mob.Target.position - transform.position).normalized;
-                transform.forward = targetDir;
             }
         }
         #endregion
