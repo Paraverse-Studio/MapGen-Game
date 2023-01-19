@@ -15,7 +15,7 @@ public class JumpSkill : MobSkill, IMobSkill
     public override void ActivateSkill(EnhancedMobCombat mob, Animator anim, IMobStats stats, Transform target = null)
     {
         base.ActivateSkill(mob, anim, stats, target);
-        mobController = mob.GetComponent<MobController>();
+        if (mobController == null) mobController = mob.GetComponent<MobController>();
         mobController.OnLandEvent += DisableSkill;
     }
 

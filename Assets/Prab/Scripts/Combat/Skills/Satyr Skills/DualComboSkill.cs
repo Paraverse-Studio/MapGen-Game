@@ -33,22 +33,22 @@ public class DualComboSkill : MobSkill, IMobSkill
         offHandAttackCollider.Init(mob, stats);
         offHandAttackColliderGO.SetActive(false);
 
-        mob.OnEnableMainHandColliderEvent += EnableMainHandAttackCollider;
-        mob.OnDisableMainHandColliderEvent += DisableMainHandAttackCollider;
-        mob.OnEnableOffHandColliderEvent += EnableOffHandAttackCollider;
-        mob.OnDisableOffHandColliderEvent += DisableOffHandAttackCollider;
-        mob.OnDisableSkillEvent += DisableSkillAndCollider;
+        mob.OnEnableMainHandColliderSOneEvent += EnableMainHandAttackCollider;
+        mob.OnDisableMainHandColliderSOneEvent += DisableMainHandAttackCollider;
+        mob.OnEnableOffHandColliderSOneEvent += EnableOffHandAttackCollider;
+        mob.OnDisableOffHandColliderSOneEvent += DisableOffHandAttackCollider;
+        mob.OnDisableSkillOneEvent += DisableSkillAndCollider;
     }
 
     public override void DeactivateSkill(PlayerInputControls input)
     {
         base.DeactivateSkill(input);
 
-        mob.OnEnableMainHandColliderEvent -= EnableMainHandAttackCollider;
-        mob.OnDisableMainHandColliderEvent -= DisableMainHandAttackCollider;
-        mob.OnEnableOffHandColliderEvent -= EnableOffHandAttackCollider;
-        mob.OnDisableOffHandColliderEvent -= DisableOffHandAttackCollider;
-        mob.OnDisableSkillEvent -= DisableSkillAndCollider;
+        mob.OnEnableMainHandColliderSOneEvent -= EnableMainHandAttackCollider;
+        mob.OnDisableMainHandColliderSOneEvent -= DisableMainHandAttackCollider;
+        mob.OnEnableOffHandColliderSOneEvent -= EnableOffHandAttackCollider;
+        mob.OnDisableOffHandColliderSOneEvent -= DisableOffHandAttackCollider;
+        mob.OnDisableSkillOneEvent -= DisableSkillAndCollider;
     }
 
     /// <summary>
@@ -103,6 +103,7 @@ public class DualComboSkill : MobSkill, IMobSkill
             offHandAttackColliderGO.SetActive(false);
 
         skillOn = false;
+        UnsubscribeAnimationEventListeners();
     }
     #endregion
 }

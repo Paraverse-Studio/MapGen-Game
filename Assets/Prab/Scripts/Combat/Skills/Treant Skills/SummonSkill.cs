@@ -20,13 +20,13 @@ public class SummonSkill : MobSkill, IMobSkill
     public override void ActivateSkill(EnhancedMobCombat mob, Animator anim, IMobStats stats, Transform target = null)
     {
         base.ActivateSkill(mob, anim, stats, target);
-        mob.OnSummonSkillEvent += SummonSapling;
+        mob.OnSummonSkillOneEvent += SummonSapling;
     }
 
     public override void DeactivateSkill(PlayerInputControls input)
     {
         base.DeactivateSkill(input);
-        mob.OnSummonSkillEvent -= SummonSapling;
+        mob.OnSummonSkillOneEvent -= SummonSapling;
     }
 
     protected override bool CanUseSkill()

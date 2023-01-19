@@ -110,7 +110,24 @@ namespace Paraverse.Combat
 
         public virtual void DeactivateSkill(PlayerInputControls input)
         {
-            input.OnSkillOneEvent -= Execute;
+            if (mob.tag.Equals(StringData.PlayerTag))
+                input.OnSkillOneEvent -= Execute;
+        }
+
+        /// <summary>
+        /// Registers the skills animation events to the animation event methods in combat script.
+        /// </summary>
+        public virtual void SubscribeAnimationEventListeners()
+        {
+
+        }
+
+        /// <summary>
+        /// Unsubscribes the skills animation events to the animation event methods in combat script.
+        /// </summary>
+        public virtual void UnsubscribeAnimationEventListeners()
+        {
+
         }
 
         /// <summary>
@@ -137,7 +154,6 @@ namespace Paraverse.Combat
             else if (usesTargetLock && mob.Target)
             {
                 mob.transform.rotation = ParaverseHelper.FaceTarget(mob.transform, target.transform, 100f);
-                Debug.Log("Rotating: " + usesTargetLock);
             }
         }
 
@@ -158,6 +174,8 @@ namespace Paraverse.Combat
         {
             skillOn = false;
             anim.SetBool(StringData.IsUsingSkill, false);
+
+            UnsubscribeAnimationEventListeners();
         }
 
         /// <summary>
@@ -206,6 +224,7 @@ namespace Paraverse.Combat
         {
             if (CanUseSkill())
             {
+                SubscribeAnimationEventListeners();
                 ExecuteSkillLogic();
                 Debug.Log("Executing skill: " + _skillName + " which takes " + cost + " points of energy out of " + stats.CurEnergy + " point of current energy." +
                     "The max cooldown for this skill is " + cooldown + " and the animation name is " + animName + ".");

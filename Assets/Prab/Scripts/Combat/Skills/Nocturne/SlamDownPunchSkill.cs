@@ -15,24 +15,35 @@ public class SlamDownPunchSkill : MobSkill, IMobSkill
     {
         base.ActivateSkill(mob, anim, stats, target);
 
-        controller = mob.GetComponent<MobController>();
-
-        mob.OnChargeSkillEvent += ChargePunch;
-        mob.OnChargeCancelSkillEvent += ChargePunchCancel;
-        mob.OnEnableChargeReleaseSkillEvent += UnleashPunch;
-        mob.OnEnableOffHandColliderEvent += EnableOffHandAttackCollider;
-        mob.OnDisableOffHandColliderEvent += DisableOffHandAttackCollider;
+        if (controller == null)
+            controller = mob.GetComponent<MobController>();
     }
 
     public override void DeactivateSkill(PlayerInputControls input)
     {
         base.DeactivateSkill(input);
+    }
 
-        mob.OnEnableMainHandColliderEvent -= ChargePunch;
-        mob.OnDisableMainHandColliderEvent -= ChargePunchCancel;
-        mob.OnEnableOffHandColliderEvent -= UnleashPunch;
-        mob.OnDisableOffHandColliderEvent -= EnableOffHandAttackCollider;
-        mob.OnDisableSkillEvent -= DisableOffHandAttackCollider;
+    public override void SubscribeAnimationEventListeners()
+    {
+        base.SubscribeAnimationEventListeners();
+
+        mob.OnChargeSkillOneEvent += ChargePunch;
+        mob.OnChargeCancelSkillOneEvent += ChargePunchCancel;
+        mob.OnEnableChargeReleaseSkillOneEvent += UnleashPunch;
+        mob.OnEnableOffHandColliderSOneEvent += EnableOffHandAttackCollider;
+        mob.OnDisableOffHandColliderSOneEvent += DisableOffHandAttackCollider;
+    }
+
+    public override void UnsubscribeAnimationEventListeners()
+    {
+        base.UnsubscribeAnimationEventListeners();
+
+        mob.OnEnableMainHandColliderSOneEvent -= ChargePunch;
+        mob.OnDisableMainHandColliderSOneEvent -= ChargePunchCancel;
+        mob.OnEnableOffHandColliderSOneEvent -= UnleashPunch;
+        mob.OnDisableOffHandColliderSOneEvent -= EnableOffHandAttackCollider;
+        mob.OnDisableSkillOneEvent -= DisableOffHandAttackCollider;
     }
     #endregion
 
