@@ -2226,6 +2226,10 @@ MonoBehaviour:
   groundLayer:
     serializedVersion: 2
     m_Bits: 0
+  flyUpForce: 5
+  flyDownForce: 5
+  isFlyingUp: 0
+  isFlyingDown: 0
   checkFallRange: 2
   maxDeathTimerUponFall: 2
   fallForce: 0.5
@@ -2248,7 +2252,7 @@ MonoBehaviour:
   anim: {fileID: 8192483365412930220}
   basicAtkDmgRatio: 1
   basicAtkRange: 2
-  basicAtkCollider: {fileID: 8360375807055940225}
+  basicAttackColliderGO: {fileID: 0}
   projUser: 0
   projData:
     projPf: {fileID: 0}
@@ -3050,8 +3054,9 @@ GameObject:
   serializedVersion: 6
   m_Component:
   - component: {fileID: 8360375805597731608}
+  - component: {fileID: 1735941465}
   m_Layer: 0
-  m_Name: SkillOne
+  m_Name: DualComboAttack
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
@@ -3072,6 +3077,38 @@ Transform:
   m_Father: {fileID: 8360375807364289806}
   m_RootOrder: 0
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
+--- !u!114 &1735941465
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 8360375805597731609}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 43081201aa9258742b6c2a34ca9248ed, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  _skillName: ComboSkillOne
+  _description: 
+  _minRange: 0
+  _maxRange: 5
+  cooldown: 5
+  cost: 10
+  animName: ComboSkillOne 1
+  attackColliderGO: {fileID: 5799079830667434978}
+  projData:
+    projPf: {fileID: 0}
+    projHeld: {fileID: 0}
+    projOrigin: {fileID: 0}
+    projRotation: {fileID: 0}
+    basicAtkProjSpeed: 10
+  usesTargetLock: 0
+  flatPower: 1
+  attackScaling: 0
+  abilityScaling: 0
+  offHandAttackColliderGO: {fileID: 5799079831402301609}
+  rotSpeed: 100
 --- !u!1 &8360375805699707947
 GameObject:
   m_ObjectHideFlags: 0
@@ -3149,7 +3186,7 @@ GameObject:
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
-  m_IsActive: 1
+  m_IsActive: 0
 --- !u!4 &8360375806123484181
 Transform:
   m_ObjectHideFlags: 0
@@ -3157,7 +3194,7 @@ Transform:
   m_PrefabInstance: {fileID: 0}
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 8360375806123484182}
-  m_LocalRotation: {x: -0, y: -0, z: -0, w: 1}
+  m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
   m_LocalPosition: {x: 20.98, y: 0, z: -8.32}
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_ConstrainProportionsScale: 0

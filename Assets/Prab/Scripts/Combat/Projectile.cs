@@ -35,7 +35,12 @@ namespace Paraverse
         private KnockBackEffect knockBackEffect;
 
         [Header("Special Properties")]
-        public bool pierce = false;
+        [SerializeField, Tooltip("Projectile is not destroyed upon impact.")]
+        protected bool pierce = false;
+        [SerializeField, Tooltip("Applies hit animation to target.")]
+        protected bool applyHitAnim = true;
+        [SerializeField, Tooltip("The projectile is a beam.")]
+        protected bool isBeam = false;
 
         [Header("VFX")]
         public GameObject launchFX;
@@ -61,11 +66,11 @@ namespace Paraverse
                 Destroy(gameObject);
             }
 
+            dotTimer += Time.deltaTime;
             curdeathTimer += Time.deltaTime;
 
-            dotTimer += Time.deltaTime;
-
-            if (stationary == false) transform.position += (transform.forward * speed * Time.deltaTime);
+            if (stationary == false) 
+                transform.position += (transform.forward * speed * Time.deltaTime);
         }
         #endregion
 
@@ -130,6 +135,8 @@ namespace Paraverse
                     KnockBackEffect effect = new KnockBackEffect(knockBackEffect);
                     controller.ApplyKnockBack(mob.transform.position, effect);
                 }
+                else if (applyHitAnim)
+                    controller.ApplyHitAnimation();
 
                 if (hitFX) Instantiate(hitFX, other.transform.position + new Vector3(0, 0.5f, 0), Quaternion.identity);
 

@@ -8,6 +8,11 @@ public class SlamDownPunchSkill : MobSkill, IMobSkill
 {
     #region Variables
     protected MobController controller;
+    [SerializeField]
+    private GameObject impactFX;
+    [SerializeField]
+    private Transform impactOrigin;
+
     #endregion
 
     #region Inherited Methods
@@ -17,6 +22,7 @@ public class SlamDownPunchSkill : MobSkill, IMobSkill
 
         if (controller == null)
             controller = mob.GetComponent<MobController>();
+        controller.OnLandEvent += OnLand;
     }
 
     public override void DeactivateSkill(PlayerInputControls input)
@@ -73,6 +79,13 @@ public class SlamDownPunchSkill : MobSkill, IMobSkill
     {
         if (attackColliderGO != null)
             attackColliderGO.SetActive(false);
+    }
+    #endregion
+
+    #region Private Methods
+    private void OnLand()
+    {
+        Instantiate(impactFX, impactOrigin.position, impactOrigin.rotation);
     }
     #endregion
 }

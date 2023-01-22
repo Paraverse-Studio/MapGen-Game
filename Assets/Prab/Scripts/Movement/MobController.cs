@@ -2,6 +2,7 @@ using Paraverse.Helper;
 using Paraverse.Mob.Combat;
 using Paraverse.Mob.Stats;
 using Paraverse.Stats;
+using System.Security.Policy;
 using UnityEngine;
 using UnityEngine.AI;
 
@@ -510,6 +511,11 @@ namespace Paraverse.Mob.Controller
 
             if (angle <= 0)
                 combat.BasicAttackHandler();
+        }
+
+        public void ApplyHitAnimation()
+        {
+            anim.Play(StringData.Hit);
         }
         #endregion
 
