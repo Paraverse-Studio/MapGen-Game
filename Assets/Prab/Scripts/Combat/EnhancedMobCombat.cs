@@ -47,6 +47,11 @@ public class EnhancedMobCombat : MobCombat
     // Used to summon 
     public delegate void OnSummonSkillOneDel();
     public event OnSummonSkillOneDel OnSummonSkillOneEvent;
+    // Used to instantiate FXs
+    public delegate void OnInstantiateFXOneDel();
+    public event OnInstantiateFXOneDel OnInstantiateFXOneEvent;
+    public delegate void OnSummonSkillTwoDel();
+    public event OnSummonSkillTwoDel OnInstantiateFXTwoEvent;
     #endregion
 
     //#region Skill Two Delegates and Events
@@ -191,6 +196,16 @@ public class EnhancedMobCombat : MobCombat
         GameObject go = Instantiate(data.projPf, data.projOrigin.position, lookRot);
         Projectile proj = go.GetComponent<Projectile>();
         proj.Init(this, targetDir, projData.basicAtkProjSpeed, basicAtkRange, basicAtkDmgRatio * stats.AttackDamage.FinalValue);
+    }
+
+    public virtual void AEventInstantiateFXOne()
+    {
+        OnInstantiateFXOneEvent?.Invoke();
+    }
+
+    public virtual void AEventInstantiateFXTwo()
+    {
+        OnInstantiateFXTwoEvent?.Invoke();
     }
 
     public virtual void AEventEnableMainHandCollider()
