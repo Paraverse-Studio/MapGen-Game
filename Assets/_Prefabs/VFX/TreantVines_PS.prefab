@@ -3828,7 +3828,7 @@ ParticleSystem:
     m_EnergyLossOnCollision:
       serializedVersion: 2
       minMaxState: 0
-      scalar: 0.9
+      scalar: 0.95
       minScalar: 0
       maxCurve:
         serializedVersion: 2
@@ -3883,7 +3883,7 @@ ParticleSystem:
     radiusScale: 50
     collidesWith:
       serializedVersion: 2
-      m_Bits: 32768
+      m_Bits: 49152
     maxCollisionShapes: 256
     quality: 0
     voxelSize: 0.5
@@ -5054,15 +5054,17 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   targetTag: Player
   speed: 0
-  range: 0
+  range: 20
   damage: 2
-  deathTimer: 5
-  stationary: 0
+  deathTimer: 20
+  stationary: 1
   dot: 0
   applyDamageOnEnter: 0
   dotIntervalTimer: 1
   knockBackEffect: {fileID: 0}
-  pierce: 0
+  pierce: 1
+  applyHitAnim: 1
+  isBeam: 0
   launchFX: {fileID: 0}
   hitFX: {fileID: 0}
 --- !u!1 &4822042532150697457

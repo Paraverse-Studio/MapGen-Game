@@ -2,17 +2,25 @@ using Paraverse.Combat;
 using Paraverse.Mob.Controller;
 using Paraverse.Mob.Stats;
 using Paraverse.Player;
+using System.Collections;
 using UnityEngine;
 
 public class SummonSkill : MobSkill, IMobSkill
 {
     #region Variables
+    [Header("Summon Skill")]
     [SerializeField]
     private GameObject summonPf;
     [SerializeField]
     private int maxSummonCount = 3;
     [SerializeField]
     private int curSummonCount;
+    [SerializeField]
+    private float delaySpawnActivation;
+    [Header("VFX")]
+    public GameObject launchFX;
+
+    private MobController _summonedMob;
     #endregion
 
 
@@ -71,16 +79,27 @@ public class SummonSkill : MobSkill, IMobSkill
             Debug.LogError("Please add a summon prefab to the skill: " + _skillName);
 
         // Get random position around mob
-        float posX = Random.Range(1, 2);
-        float posY = Random.Range(1, 2);
-        float posZ = Random.Range(1, 2);
-        Vector3 spawnPos = mob.transform.position + new Vector3(posX, posY, posZ);
+        float posX = Random.Range(-3, 3);
+        float posZ = Random.Range(-3, 3);
+        Vector3 spawnPos = mob.transform.position + new Vector3(posX, 0, posZ);
         ++curSummonCount;
 
-        GameObject go = Instantiate(summonPf, spawnPos, transform.rotation);
-        MobController summonedMob = go.GetComponentInChildren<MobController>();
-        summonedMob.OnDeathEvent += DecrementSummonCount;
-        skillOn = false;
+        StartCoroutine(IDelayedSpawn(() => 
+        {
+            GameObject go = Instantiate(summonPf, spawnPos, transform.rotation);
+            _summonedMob = go.GetComponentInChildren<MobController>();
+            _summonedMob.OnDeathEvent += DecrementSummonCount;
+            skillOn = false;
+        }, 
+        delaySpawnActivation));
+
+        if (launchFX) Instantiate(launchFX, spawnPos, Quaternion.identity);
+    }
+
+    private IEnumerator IDelayedSpawn(System.Action a, float f)
+    {
+        yield return new WaitForSeconds(f);
+        a?.Invoke();
     }
     #endregion
 }

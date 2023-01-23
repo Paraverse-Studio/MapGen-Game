@@ -98,14 +98,14 @@ namespace Paraverse
             this.damage = damage;
         }
 
-        private void OnTriggerEnter(Collider other)
+        protected void OnTriggerEnter(Collider other)
         {
             if (dot && applyDamageOnEnter == false) return;
 
             if (other.CompareTag(targetTag))
             {
                 IMobController controller = other.GetComponent<IMobController>();
-                controller.Stats.UpdateCurrentHealth((int)-damage);
+                controller.Stats.UpdateCurrentHealth(-Mathf.CeilToInt(damage));
 
                 // Apply knock back effect
                 if (null != knockBackEffect)
@@ -127,7 +127,7 @@ namespace Paraverse
                 dotTimer = 0f;
 
                 IMobController controller = other.GetComponent<IMobController>();
-                controller.Stats.UpdateCurrentHealth((int)-damage);
+                controller.Stats.UpdateCurrentHealth(-Mathf.CeilToInt(damage));
 
                 // Apply knock back effect
                 if (null != knockBackEffect)

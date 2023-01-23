@@ -51,6 +51,7 @@ public class Selectable : MonoBehaviour
         events.OnDeselected = new();
         outline = GetComponent<Outline>();
         if (!outline) outline = gameObject.AddComponent<Outline>();
+        outline.enabled = false;
 
         Range = 5f;
         switch (type)

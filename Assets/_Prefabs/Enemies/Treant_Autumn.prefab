@@ -78,10 +78,11 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   _skillName: 'Root '
-  _description: 
-  _minRange: 7
+  _description: 'He reaches for the ground, and spawns vines that move toward player,
+    and root player for 2 seconds. '
+  _minRange: 0
   _maxRange: 100
-  cooldown: 4
+  cooldown: 6
   cost: 0
   animName: RootSkill
   attackColliderGO: {fileID: 0}
@@ -89,12 +90,12 @@ MonoBehaviour:
     projPf: {fileID: 1460401963545366043, guid: 83bfd872f9c72e74787b25ee8b0e618e, type: 3}
     projHeld: {fileID: 0}
     projOrigin: {fileID: 131609469950685087}
-    projRotation: {fileID: 0}
+    projRotation: {fileID: 131609469950685087}
     basicAtkProjSpeed: 10
   usesTargetLock: 0
   flatPower: 1
   attackScaling: 0
-  abilityScaling: 0
+  abilityScaling: 0.1
   rootDuration: 3
 --- !u!1 &1626988166
 GameObject:
@@ -144,7 +145,7 @@ MonoBehaviour:
   _description: 
   _minRange: 0
   _maxRange: 100
-  cooldown: 5
+  cooldown: 6
   cost: 0
   animName: SummonSkill
   attackColliderGO: {fileID: 0}
@@ -161,6 +162,8 @@ MonoBehaviour:
   summonPf: {fileID: 7898848738789558338, guid: da4c325d14569204bb33863f10b1e815, type: 3}
   maxSummonCount: 1
   curSummonCount: 0
+  delaySpawnActivation: 0.85
+  launchFX: {fileID: 8073467667769803130, guid: d71832d81f004f1439903eff37f970f8, type: 3}
 --- !u!1 &131609469950587393
 GameObject:
   m_ObjectHideFlags: 0
@@ -3243,7 +3246,7 @@ MonoBehaviour:
   stoppingDistance: 2
   detectionRadius: 20
   pursueRadius: 25
-  atkDashForce: 10
+  atkDashForce: 20
   jumpForce: 5
   isGroundedCheckRange: 0.5
   groundLayer:
@@ -3304,7 +3307,7 @@ MonoBehaviour:
   _curHealth: 400
   attackDamage: 25
   abilityPower: 25
-  attackSpeed: 0.35
+  attackSpeed: 0.5
   moveSpeed: 1.65
   maxEnergy: 100
   _curEnergy: 100
@@ -3772,7 +3775,7 @@ GameObject:
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
-  m_IsActive: 0
+  m_IsActive: 1
 --- !u!4 &3172601158817656281
 Transform:
   m_ObjectHideFlags: 0

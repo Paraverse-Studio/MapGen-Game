@@ -5,6 +5,7 @@ public class RootSkill : MobSkill, IMobSkill
 {
     #region Variables
     [SerializeField]
+    [Header("Root Skill")]
     private float rootDuration = 3f;
     private float curRootDuration;
     #endregion
@@ -34,7 +35,7 @@ public class RootSkill : MobSkill, IMobSkill
             return true;
         }
 
-        Debug.Log(_skillName + " is on cooldown or don't have enough energy!");
+        // Debug.Log(_skillName + " is on cooldown or don't have enough energy!");
         return false;
     }
     #endregion
