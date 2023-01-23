@@ -81,7 +81,7 @@ public class SummonSkill : MobSkill, IMobSkill
         // Get random position around mob
         float posX = Random.Range(-3, 3);
         float posZ = Random.Range(-3, 3);
-        Vector3 spawnPos = mob.transform.position + new Vector3(posX, 0, posZ);
+        Vector3 spawnPos = mob.transform.position + new Vector3(posX, 0.25f, posZ);
         ++curSummonCount;
 
         StartCoroutine(IDelayedSpawn(() => 

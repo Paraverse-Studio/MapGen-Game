@@ -113,6 +113,8 @@ namespace Paraverse
                     KnockBackEffect effect = new KnockBackEffect(knockBackEffect);
                     controller.ApplyKnockBack(mob.transform.position, effect);
                 }
+                else if (applyHitAnim)
+                    controller.ApplyHitAnimation();
 
                 if (hitFX) Instantiate(hitFX, other.transform.position + new Vector3(0, 0.5f, 0), Quaternion.identity);
 

@@ -504,10 +504,6 @@ namespace Paraverse.Player
             {
                 controller.Move(transform.forward * atkThreeDashForce * Time.deltaTime);
             }
-            else if (combat.IsAttackLunging && IsDiving) // if dash-attacking, use the stronger dash value
-            {
-                controller.Move(transform.forward * atkThreeDashForce * Time.deltaTime);
-            }
             else if (combat.IsAttackLunging)
             {
                 controller.Move(transform.forward * atkDashForce * Time.deltaTime);
