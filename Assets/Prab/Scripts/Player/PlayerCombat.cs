@@ -222,7 +222,7 @@ namespace Paraverse.Player
             ProjectileData data;
             float damage = basicAtkDmgRatio * stats.AttackDamage.FinalValue;
 
-            if (anim.GetBool(StringData.IsUsingSkill))
+            if (IsSkilling)
             {
                 MobSkill s = skills[usingSkillIdx];
                 data = s.projData;

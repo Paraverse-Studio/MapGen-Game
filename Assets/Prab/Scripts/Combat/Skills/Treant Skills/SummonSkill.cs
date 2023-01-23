@@ -2,17 +2,25 @@ using Paraverse.Combat;
 using Paraverse.Mob.Controller;
 using Paraverse.Mob.Stats;
 using Paraverse.Player;
+using System.Collections;
 using UnityEngine;
 
 public class SummonSkill : MobSkill, IMobSkill
 {
     #region Variables
+    [Header("Summon Skill")]
     [SerializeField]
     private GameObject summonPf;
     [SerializeField]
     private int maxSummonCount = 3;
     [SerializeField]
     private int curSummonCount;
+    [SerializeField]
+    private int delaySpawnActivation;
+    [Header("VFX")]
+    public GameObject launchFX;
+
+    private MobController _summonedMob;
     #endregion
 
 
@@ -77,10 +85,22 @@ public class SummonSkill : MobSkill, IMobSkill
         Vector3 spawnPos = mob.transform.position + new Vector3(posX, posY, posZ);
         ++curSummonCount;
 
-        GameObject go = Instantiate(summonPf, spawnPos, transform.rotation);
-        MobController summonedMob = go.GetComponentInChildren<MobController>();
-        summonedMob.OnDeathEvent += DecrementSummonCount;
-        skillOn = false;
+        StartCoroutine(IDelayedSpawn(() => 
+        {
+            GameObject go = Instantiate(summonPf, spawnPos, transform.rotation);
+            _summonedMob = go.GetComponentInChildren<MobController>();
+            _summonedMob.OnDeathEvent += DecrementSummonCount;
+            skillOn = false;
+        }, 
+        delaySpawnActivation));
+
+        if (launchFX) Instantiate(launchFX, spawnPos, Quaternion.identity);
+    }
+
+    private IEnumerator IDelayedSpawn(System.Action a, float f)
+    {
+        yield return new WaitForSeconds(f);
+        a?.Invoke();
     }
     #endregion
 }

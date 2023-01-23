@@ -170,8 +170,14 @@ public class EnhancedMobCombat : MobCombat
     public override void FireProjectile()
     {
         ProjectileData data;
-        if (anim.GetBool(StringData.IsUsingSkill))
-            data = skills[usingSkillIdx].projData;
+        float damage = basicAtkDmgRatio * stats.AttackDamage.FinalValue; 
+
+        if (IsSkilling)
+        {
+            MobSkill s = skills[usingSkillIdx];
+            data = s.projData;
+            damage = s.flatPower + (stats.AttackDamage.FinalValue * s.attackScaling) + (stats.AbilityPower.FinalValue * s.abilityScaling);
+        }
         else
             data = projData;
 
@@ -195,7 +201,7 @@ public class EnhancedMobCombat : MobCombat
         // Instantiate and initialize projectile
         GameObject go = Instantiate(data.projPf, data.projOrigin.position, lookRot);
         Projectile proj = go.GetComponent<Projectile>();
-        proj.Init(this, targetDir, projData.basicAtkProjSpeed, basicAtkRange, basicAtkDmgRatio * stats.AttackDamage.FinalValue);
+        proj.Init(this, targetDir, projData.basicAtkProjSpeed, basicAtkRange, damage);
     }
 
     public virtual void AEventInstantiateFXOne()

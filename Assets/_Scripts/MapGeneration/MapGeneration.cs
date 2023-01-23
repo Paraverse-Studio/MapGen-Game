@@ -953,7 +953,8 @@ public class MapGeneration : MonoBehaviour
             {
                 float scaleFactor = M.enemyScalingPerRound * (GameLoopManager.Instance.nextRoundNumber - 1);
                 enemyStats.UpdateAttackDamage(enemyStats.AttackDamage.FinalValue * scaleFactor);
-                enemyStats.UpdateMaxHealth((int)(enemyStats.MaxHealth.FinalValue * scaleFactor));
+                enemyStats.UpdateAbilityPower(enemyStats.AbilityPower.FinalValue * scaleFactor);
+                enemyStats.UpdateMaxHealth(Mathf.CeilToInt(enemyStats.MaxHealth.FinalValue * scaleFactor));
             }
         }
     }
