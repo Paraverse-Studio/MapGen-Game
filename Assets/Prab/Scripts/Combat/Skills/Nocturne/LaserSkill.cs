@@ -1,6 +1,5 @@
 using Paraverse.Combat;
 using Paraverse.Mob.Stats;
-using Paraverse.Player;
 using PolygonArsenal;
 using UnityEngine;
 
@@ -19,9 +18,22 @@ public class LaserSkill : MobSkill, IMobSkill
     {
         base.ActivateSkill(mob, input, anim, stats, target);
         skillCurTimer = skillStartTimer;
+    }
+
+    public override void SubscribeAnimationEventListeners()
+    {
+        base.SubscribeAnimationEventListeners();
 
         mob.OnInstantiateFXOneEvent += InstantiateChargeFX;
         mob.OnInstantiateFXTwoEvent += InstantiateBeamFX;
+    }
+
+    public override void UnsubscribeAnimationEventListeners()
+    {
+        base.UnsubscribeAnimationEventListeners();
+
+        mob.OnInstantiateFXOneEvent -= InstantiateChargeFX;
+        mob.OnInstantiateFXTwoEvent -= InstantiateBeamFX;
     }
 
     public override void SkillUpdate()
@@ -37,6 +49,7 @@ public class LaserSkill : MobSkill, IMobSkill
             if (skillCurTimer > 0)
             {
                 skillCurTimer -= Time.deltaTime;
+                //Quaternion.Slerp(chargeOrigin.rotation, transform.rotation, 10f);
             }
             else
             {
@@ -53,23 +66,23 @@ public class LaserSkill : MobSkill, IMobSkill
         skillCurTimer = skillStartTimer;
         stats.UpdateCurrentEnergy(-cost);
         anim.Play(animName);
-        projData.projOrigin.position = target.transform.position + new Vector3(0f, 10f, 0f);
     }
 
     protected override void DisableSkill()
     {
         base.DisableSkill();
         curCooldown = cooldown;
+        UnsubscribeAnimationEventListeners();
     }
-    
+
     public void InstantiateChargeFX()
     {
-        Instantiate(chargeFX, chargeOrigin.position, chargeOrigin.rotation);
+        Instantiate(chargeFX, chargeOrigin);
     }
 
     public virtual void InstantiateBeamFX()
     {
-        GameObject go = Instantiate(projData.projPf, projData.projOrigin, projData.projOrigin);
+        GameObject go = Instantiate(projData.projPf, projData.projOrigin);
         PolygonBeamStatic beam = go.GetComponent<PolygonBeamStatic>();
         beam.SpawnBeam();
     }

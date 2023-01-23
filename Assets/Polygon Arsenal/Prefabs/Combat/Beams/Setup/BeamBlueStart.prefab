@@ -4910,9 +4910,9 @@ Transform:
   m_PrefabInstance: {fileID: 0}
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 1450890654167080}
-  m_LocalRotation: {x: -0.50000006, y: -0.49999994, z: 0.5, w: 0.50000006}
+  m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
   m_LocalPosition: {x: 0, y: 0, z: 0}
-  m_LocalScale: {x: 1, y: 1, z: 1}
+  m_LocalScale: {x: 3, y: 3, z: 3}
   m_ConstrainProportionsScale: 0
   m_Children:
   - {fileID: 4009456311260968}
@@ -4920,7 +4920,7 @@ Transform:
   - {fileID: 4890314786066336}
   m_Father: {fileID: 0}
   m_RootOrder: 0
-  m_LocalEulerAnglesHint: {x: -180, y: 89.99999, z: -90}
+  m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
 --- !u!198 &198460587821389584
 ParticleSystem:
   m_ObjectHideFlags: 0
@@ -9937,7 +9937,7 @@ MonoBehaviour:
   beamEndPrefab: {fileID: 1124451057500510, guid: 59b8686ac2191c145aa7aeb4f3ee4f37, type: 3}
   alwaysOn: 1
   beamCollides: 1
-  beamLength: 100
+  beamLength: 40
   beamEndOffset: 0
   textureScrollSpeed: 0
   textureLengthScale: 1
@@ -9957,15 +9957,15 @@ MonoBehaviour:
   speed: 0
   range: 0
   damage: 0
-  deathTimer: 5
-  stationary: 0
-  dot: 0
+  deathTimer: 3.5
+  stationary: 1
+  dot: 1
   applyDamageOnEnter: 0
   dotIntervalTimer: 1
   knockBackEffect: {fileID: 0}
-  pierce: 0
+  pierce: 1
   applyHitAnim: 1
-  isBeam: 0
+  isBeam: 1
   launchFX: {fileID: 0}
   hitFX: {fileID: 0}
 --- !u!1 &1516870378216048

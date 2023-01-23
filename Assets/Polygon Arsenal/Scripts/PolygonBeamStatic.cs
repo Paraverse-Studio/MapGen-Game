@@ -36,7 +36,7 @@ public class PolygonBeamStatic : MonoBehaviour
 
             Vector3 end;
             RaycastHit hit;
-            if (beamCollides && Physics.Raycast(transform.position, transform.forward, out hit)) //Checks for collision
+            if (beamCollides && Physics.CapsuleCast(transform.position, transform.forward, 3.5f, transform.forward, out hit, beamLength)) //Checks for collision
                 end = hit.point - (transform.forward * beamEndOffset);
             else
                 end = transform.position + (transform.forward * beamLength);
