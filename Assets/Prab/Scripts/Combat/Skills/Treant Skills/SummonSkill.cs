@@ -16,7 +16,7 @@ public class SummonSkill : MobSkill, IMobSkill
     [SerializeField]
     private int curSummonCount;
     [SerializeField]
-    private int delaySpawnActivation;
+    private float delaySpawnActivation;
     [Header("VFX")]
     public GameObject launchFX;
 
@@ -79,10 +79,9 @@ public class SummonSkill : MobSkill, IMobSkill
             Debug.LogError("Please add a summon prefab to the skill: " + _skillName);
 
         // Get random position around mob
-        float posX = Random.Range(1, 2);
-        float posY = Random.Range(1, 2);
-        float posZ = Random.Range(1, 2);
-        Vector3 spawnPos = mob.transform.position + new Vector3(posX, posY, posZ);
+        float posX = Random.Range(-3, 3);
+        float posZ = Random.Range(-3, 3);
+        Vector3 spawnPos = mob.transform.position + new Vector3(posX, 0, posZ);
         ++curSummonCount;
 
         StartCoroutine(IDelayedSpawn(() => 

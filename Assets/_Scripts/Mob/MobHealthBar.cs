@@ -126,18 +126,22 @@ public class MobHealthBar : MonoBehaviour
     // main updater
     public void UpdateHealthBar(int currentHP = -1, int totalHP = -1)
     {
+        bool firstInvocation = false; // if this is the first time this function is called (to set up)
         int healthChange = (int)_health - currentHP;
-        if (_health == -1f) healthChange = totalHP - currentHP;
+        if (_health == -1f)
+        {
+            firstInvocation = true;
+            healthChange = totalHP - currentHP;
+        }
 
         _health = (float)currentHP;
         _totalHealth = (float)totalHP;
 
         if (_healthValueDisplay) _healthValueDisplay.text = currentHP + " / " + totalHP;
 
-        if (!_healthBarSetupComplete || !_healthBarShowable) return;
+        if (!_healthBarSetupComplete || !_healthBarShowable || firstInvocation) return;
 
         PopupTextOnHealthChange(healthChange);
-
     }
 
     public void PopupTextOnHealthChange(int healthChange)
