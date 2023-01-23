@@ -103,7 +103,8 @@ namespace Paraverse.Player
         {
             if (controller.IsAvoidingObjUponLanding) return;
 
-            if (controller.IsInteracting == false || anim.GetBool(StringData.CanBasicAttackTwo) || anim.GetBool(StringData.CanBasicAttackThree))
+            if (controller.IsInteracting == false || anim.GetBool(StringData.CanBasicAttackTwo) || anim.GetBool(StringData.CanBasicAttackThree) ||
+                controller.IsDiving)
             {
                 PlayBasicAttackCombo();
             }
