@@ -103,7 +103,6 @@ public class MobHealthBar : MonoBehaviour
     void Update()
     {
         if (!_healthBarSetupComplete || !_healthBarShowable) return;
-        if (!_mobStats) DestroyImmediate(gameObject);
 
         // Health
         if (_healthBar)
