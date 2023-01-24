@@ -820,6 +820,7 @@ GameObject:
   - component: {fileID: 1752897480}
   - component: {fileID: 1293426518}
   - component: {fileID: 1752897488}
+  - component: {fileID: 6490283456238913585}
   m_Layer: 14
   m_Name: Player
   m_TagString: Player
@@ -973,7 +974,7 @@ MonoBehaviour:
   anim: {fileID: 2956618024134931115}
   basicAtkDmgRatio: 1
   basicAtkRange: 2
-  basicAttackColliderGO: {fileID: 0}
+  basicAttackColliderGO: {fileID: 6080363539117558812}
   projUser: 0
   projData:
     projPf: {fileID: 0}
@@ -983,7 +984,7 @@ MonoBehaviour:
     basicAtkProjSpeed: 10
   IsSkilling: 0
   skills:
-  - {fileID: 1752897488}
+  - {fileID: 6490283456238913585}
   animBool: isUsingSkill
   maxComboResetTimer: 0.5
 --- !u!114 &1752897480
@@ -1050,13 +1051,43 @@ MonoBehaviour:
   projData:
     projPf: {fileID: 98397111005207279, guid: 9b601de79a043e140a973529dec2522a, type: 3}
     projHeld: {fileID: 0}
-    projOrigin: {fileID: 3351448952234461169}
+    projOrigin: {fileID: 6080363539117558809}
     projRotation: {fileID: 0}
     basicAtkProjSpeed: 18
-  usesTargetLock: 0
-  flatPower: 1
-  attackScaling: 1
+  usesTargetLock: 1
+  flatPower: 30
+  attackScaling: 0
   abilityScaling: 1
+--- !u!114 &6490283456238913585
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 2722828104521882955}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: a49d912e0b019f14b99bdde319029bdd, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  _skillName: 
+  _description: 
+  _minRange: 0
+  _maxRange: 5
+  cooldown: 2
+  cost: 60
+  animName: SkillTwo
+  attackColliderGO: {fileID: 0}
+  projData:
+    projPf: {fileID: 8405287011954069530, guid: d61d85160a2c8c148a924f92aa6fcaf8, type: 3}
+    projHeld: {fileID: 0}
+    projOrigin: {fileID: 6080363539117558809}
+    projRotation: {fileID: 0}
+    basicAtkProjSpeed: 25
+  usesTargetLock: 1
+  flatPower: 10
+  attackScaling: 0
+  abilityScaling: 1.35
 --- !u!1 &3042775459034123614
 GameObject:
   m_ObjectHideFlags: 0
