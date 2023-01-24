@@ -27102,7 +27102,7 @@ PrefabInstance:
       objectReference: {fileID: 0}
     - target: {fileID: 1752897488, guid: aa4e16a1786ed124fa06618210886566, type: 3}
       propertyPath: _skillName
-      value: test
+      value: Regal Crescent
       objectReference: {fileID: 0}
     - target: {fileID: 1752897488, guid: aa4e16a1786ed124fa06618210886566, type: 3}
       propertyPath: attackScaling
@@ -27124,6 +27124,10 @@ PrefabInstance:
       propertyPath: m_Name
       value: Player
       objectReference: {fileID: 0}
+    - target: {fileID: 2956618024134931112, guid: aa4e16a1786ed124fa06618210886566, type: 3}
+      propertyPath: skills.Array.data[0]
+      value: 
+      objectReference: {fileID: 1752897489}
     - target: {fileID: 2956618024134931112, guid: aa4e16a1786ed124fa06618210886566, type: 3}
       propertyPath: basicAttackColliderGO
       value: 
@@ -27231,6 +27235,36 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: f1360b5e821afee43bb7656851bcc9d0, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+--- !u!114 &1752897489
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1191419013}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: a49d912e0b019f14b99bdde319029bdd, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  _skillName: Moonlight Slash
+  _description: 
+  _minRange: 0
+  _maxRange: 5
+  cooldown: 1
+  cost: 10
+  animName: SkillTwo
+  attackColliderGO: {fileID: 0}
+  projData:
+    projPf: {fileID: 8405287011954069530, guid: d61d85160a2c8c148a924f92aa6fcaf8, type: 3}
+    projHeld: {fileID: 0}
+    projOrigin: {fileID: 96926586}
+    projRotation: {fileID: 0}
+    basicAtkProjSpeed: 25
+  usesTargetLock: 1
+  flatPower: 10
+  attackScaling: 0
+  abilityScaling: 1.25
 --- !u!1 &1756901534
 GameObject:
   m_ObjectHideFlags: 0
@@ -33939,6 +33973,10 @@ PrefabInstance:
       propertyPath: waterVolume
       value: 
       objectReference: {fileID: 991567769}
+    - target: {fileID: 8764965865831667164, guid: 834dc73c554c9ad4fae808a0fabce9de, type: 3}
+      propertyPath: testGameObject
+      value: 
+      objectReference: {fileID: 8405287011954069530, guid: d61d85160a2c8c148a924f92aa6fcaf8, type: 3}
     - target: {fileID: 8764965865831667164, guid: 834dc73c554c9ad4fae808a0fabce9de, type: 3}
       propertyPath: healthBarFolder
       value: 
