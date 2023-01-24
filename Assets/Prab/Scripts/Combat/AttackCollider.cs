@@ -28,6 +28,17 @@ namespace Paraverse
         //public GameObject launchFX;
         public GameObject hitFX;
 
+        [SerializeField]
+        protected bool isBasicAttackCollider = false;
+
+        public delegate void OnBasicAttackLandPreDmgDel();
+        public event OnBasicAttackLandPreDmgDel OnBasicAttackPreHitEvent;
+        public delegate void OnBasicAttackApplyDamageDel();
+        public event OnBasicAttackApplyDamageDel OnBasicAttackApplyDamageEvent;
+        public delegate void OnBasicAttackLandPostDmgDel();
+        public event OnBasicAttackLandPostDmgDel OnBasicAttackPostHitEvent;
+
+
         public void Init(MobCombat mob, IMobStats stats)
         {
             this.mob = mob;
@@ -58,14 +69,21 @@ namespace Paraverse
             // Detecting type of object/enemy hit
             if (other.CompareTag(targetTag) && !hitTargets.Contains(other.gameObject))
             {
+                // Pre Basic Attack Hit Event
+                if (isBasicAttackCollider)
+                    OnBasicAttackPreHitEvent?.Invoke();
+                
                 hitTargets.Add(other.gameObject);
 
                 // Enemy-related logic
-                IMobController controller;
-                if (other.TryGetComponent(out controller))
+                if (other.TryGetComponent(out IMobController controller))
                 {
+                    // Apply damage
                     controller.Stats.UpdateCurrentHealth((int)-stats.AttackDamage.FinalValue);
-                    
+                    // On Damage Applied Event
+                    if (isBasicAttackCollider)
+                        OnBasicAttackApplyDamageEvent?.Invoke();
+
                     // Apply knock back effect
                     if (null != knockBackEffect)
                     {
@@ -76,6 +94,10 @@ namespace Paraverse
 
                 // General VFX logic
                 if (hitFX) Instantiate(hitFX, other.transform.position + new Vector3(0, 0.5f, 0), Quaternion.identity);
+
+                // Post Basic Attack Hit Event
+                if (isBasicAttackCollider)
+                    OnBasicAttackPostHitEvent?.Invoke();
 
                 Debug.Log(other.name + " took " + stats.AttackDamage.FinalValue + " points of damage.");
             }
