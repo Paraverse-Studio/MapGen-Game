@@ -146,9 +146,9 @@ namespace Paraverse.Mob.Controller
         protected bool _isFlying = false;
         public bool IsGrounded { get { return _isGrounded; } }
         public bool _isGrounded = true;
-        public bool IsInvulnerable { get { return _isInvulnerable; } }
+        public bool IsUnstaggerable { get { return _isUnstaggerable; } }
         [SerializeField]
-        protected bool _isInvulnerable = false;
+        protected bool _isUnstaggerable = false;
         public bool IsDead { get { return _isDead; } }
         protected bool _isDead = false;
 
@@ -525,7 +525,7 @@ namespace Paraverse.Mob.Controller
         /// </summary>
         public void ApplyKnockBack(Vector3 mobPos, KnockBackEffect effect)
         {
-            if (combat.IsAttackLunging) return;
+            if (combat.IsAttackLunging || IsUnstaggerable) return;
 
             combat.OnAttackInterrupt();
             Vector3 impactDir = (transform.position - mobPos).normalized;

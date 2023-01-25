@@ -46,6 +46,9 @@ namespace Paraverse
         public GameObject launchFX;
         public GameObject hitFX;
 
+        [Header("Motion")]
+        public float decreaseByLerp = -1f;
+
         private float curdeathTimer = 0f;
         private Vector3 origin;
         #endregion
@@ -69,8 +72,11 @@ namespace Paraverse
             dotTimer += Time.deltaTime;
             curdeathTimer += Time.deltaTime;
 
-            if (stationary == false) 
-                transform.position += (transform.forward * speed * Time.deltaTime);
+            if (stationary == false)
+            {
+                transform.position += transform.forward * speed * Time.deltaTime;
+                if (decreaseByLerp > 0) speed = Mathf.Lerp(speed, 0, decreaseByLerp * Time.deltaTime);
+            }
         }
         #endregion
 

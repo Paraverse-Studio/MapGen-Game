@@ -180,6 +180,7 @@ GameObject:
   - component: {fileID: 4419218316099174442}
   - component: {fileID: 1923618445499783691}
   - component: {fileID: 3307395192111947688}
+  - component: {fileID: 7092528979075865563}
   m_Layer: 0
   m_Name: mushroom_2
   m_TagString: Enemy
@@ -265,7 +266,7 @@ MonoBehaviour:
   settings:
     showWhenSelected: 1
     hideName: 0
-    hideHealthBar: 1
+    hideHealthBar: 0
     showSelectionAllTimes: 0
     showEnergyBar: 0
     heightAdjustment: 0
@@ -302,10 +303,39 @@ Rigidbody:
   m_Drag: 0
   m_AngularDrag: 0.05
   m_UseGravity: 0
-  m_IsKinematic: 0
+  m_IsKinematic: 1
   m_Interpolate: 0
   m_Constraints: 0
   m_CollisionDetection: 2
+--- !u!114 &7092528979075865563
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1404320471278758}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: b04cd1b06f0908d4c81a8bc7bcea9d24, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  maxHealth: 100000000
+  _curHealth: 100
+  attackDamage: 5
+  abilityPower: 0
+  attackSpeed: 0.2
+  moveSpeed: 2
+  maxEnergy: 100
+  _curEnergy: 100
+  energyRegen: 25
+  _gold: 100
+  OnHealthChange:
+    m_PersistentCalls:
+      m_Calls: []
+  OnEnergyChange:
+    m_PersistentCalls:
+      m_Calls: []
+  diveEnergyCost: 30
 --- !u!1 &1740716866560304
 GameObject:
   m_ObjectHideFlags: 0

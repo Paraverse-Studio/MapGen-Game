@@ -10,7 +10,7 @@ namespace Paraverse.Mob
         public bool IsStaggered { get; }
         public bool IsHardCCed { get; }
         public bool IsSoftCCed { get; }
-        public bool IsInvulnerable { get; }
+        public bool IsUnstaggerable { get; }
         public bool IsDead { get; }
         public IMobStats Stats { get; }
         public void ApplyHitAnimation();
