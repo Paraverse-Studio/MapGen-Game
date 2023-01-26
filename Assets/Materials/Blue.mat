@@ -9,14 +9,16 @@ Material:
   m_PrefabAsset: {fileID: 0}
   m_Name: Blue
   m_Shader: {fileID: 4800000, guid: 933532a4fcc9baf4fa0491de14d08ed7, type: 3}
-  m_ShaderKeywords: _EMISSION
+  m_ShaderKeywords: _EMISSION _SPECULAR_SETUP _SURFACE_TYPE_TRANSPARENT
   m_LightmapFlags: 2
   m_EnableInstancingVariants: 0
   m_DoubleSidedGI: 0
-  m_CustomRenderQueue: 2000
+  m_CustomRenderQueue: 3000
   stringTagMap:
-    RenderType: Opaque
-  disabledShaderPasses: []
+    RenderType: Transparent
+  disabledShaderPasses:
+  - DepthOnly
+  - SHADOWCASTER
   m_SavedProperties:
     serializedVersion: 3
     m_TexEnvs:
@@ -100,7 +102,7 @@ Material:
     - _Cutoff: 0.5
     - _DetailAlbedoMapScale: 1
     - _DetailNormalMapScale: 1
-    - _DstBlend: 0
+    - _DstBlend: 10
     - _EnvironmentReflections: 1
     - _GlossMapScale: 1
     - _Glossiness: 0.5
@@ -112,27 +114,27 @@ Material:
     - _QueueOffset: 0
     - _ReceiveShadows: 1
     - _Shininess: 0.2
-    - _Smoothness: 0.521
-    - _SmoothnessTextureChannel: 0
+    - _Smoothness: 0
+    - _SmoothnessTextureChannel: 1
     - _SpecularHighlights: 1
-    - _SrcBlend: 1
+    - _SrcBlend: 5
     - _Stencil: 0
     - _StencilComp: 8
     - _StencilOp: 0
     - _StencilReadMask: 255
     - _StencilWriteMask: 255
     - _Strength: 0.2
-    - _Surface: 0
+    - _Surface: 1
     - _UVSec: 0
     - _UseUIAlphaClip: 0
-    - _WorkflowMode: 1
-    - _ZWrite: 1
+    - _WorkflowMode: 0
+    - _ZWrite: 0
     m_Colors:
-    - _BaseColor: {r: 0.11676748, g: 0.4462004, b: 0.754717, a: 1}
-    - _Color: {r: 0.11676744, g: 0.4462003, b: 0.75471693, a: 1}
+    - _BaseColor: {r: 0, g: 0.17194983, b: 1, a: 0.5882353}
+    - _Color: {r: 0, g: 0.1719498, b: 1, a: 0.5882353}
     - _EmisColor: {r: 0.19999996, g: 0.19999996, b: 0.19999996, a: 0}
     - _Emission: {r: 0, g: 0, b: 0, a: 0}
-    - _EmissionColor: {r: 0, g: 0.085106134, b: 0.8207547, a: 0}
+    - _EmissionColor: {r: 0, g: 0.26666668, b: 1.4196079, a: 0}
     - _SpecColor: {r: 0.19999996, g: 0.19999996, b: 0.19999996, a: 1}
     - _Specular: {r: 0, g: 0, b: 0, a: 0}
   m_BuildTextureStacks: []

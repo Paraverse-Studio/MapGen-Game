@@ -2867,7 +2867,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: be0291d84a7d63f4681e196406785343, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  developerMode: 1
+  developerMode: 0
   maps:
   - map: {fileID: 11400000, guid: eee651aca9ecf3b4bab685931d03037b, type: 2}
     bossMap: {fileID: 11400000, guid: ca55aae686f041a45b1191ee3b71df97, type: 2}
@@ -10968,6 +10968,17 @@ CanvasRenderer:
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 651474262}
   m_CullTransparentMesh: 1
+--- !u!114 &659387408 stripped
+MonoBehaviour:
+  m_CorrespondingSourceObject: {fileID: 7206159263684620266, guid: aa4e16a1786ed124fa06618210886566, type: 3}
+  m_PrefabInstance: {fileID: 1752897469}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: a49d912e0b019f14b99bdde319029bdd, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
 --- !u!1 &694504334
 GameObject:
   m_ObjectHideFlags: 0
@@ -22531,7 +22542,7 @@ MonoBehaviour:
   blockFolder: {fileID: 381777741}
   enemyPrefabs:
   - {fileID: 3172601158817656280, guid: b6a20ce6fd9bea0438b8ebf724277a75, type: 3}
-  numOfEnemies: 1
+  numOfEnemies: 0
 --- !u!1 &1401916346
 GameObject:
   m_ObjectHideFlags: 0
@@ -27125,9 +27136,13 @@ PrefabInstance:
       value: Player
       objectReference: {fileID: 0}
     - target: {fileID: 2956618024134931112, guid: aa4e16a1786ed124fa06618210886566, type: 3}
+      propertyPath: skills.Array.size
+      value: 1
+      objectReference: {fileID: 0}
+    - target: {fileID: 2956618024134931112, guid: aa4e16a1786ed124fa06618210886566, type: 3}
       propertyPath: skills.Array.data[0]
       value: 
-      objectReference: {fileID: 1752897489}
+      objectReference: {fileID: 659387408}
     - target: {fileID: 2956618024134931112, guid: aa4e16a1786ed124fa06618210886566, type: 3}
       propertyPath: basicAttackColliderGO
       value: 
@@ -27184,6 +27199,14 @@ PrefabInstance:
       propertyPath: m_LocalEulerAnglesHint.z
       value: 0
       objectReference: {fileID: 0}
+    - target: {fileID: 7206159263684620266, guid: aa4e16a1786ed124fa06618210886566, type: 3}
+      propertyPath: animName
+      value: VerticalSlash
+      objectReference: {fileID: 0}
+    - target: {fileID: 7729823372941932531, guid: aa4e16a1786ed124fa06618210886566, type: 3}
+      propertyPath: animName
+      value: SkillTwo
+      objectReference: {fileID: 0}
     m_RemovedComponents: []
   m_SourcePrefab: {fileID: 100100000, guid: aa4e16a1786ed124fa06618210886566, type: 3}
 --- !u!4 &1752897470 stripped
@@ -27235,36 +27258,6 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: f1360b5e821afee43bb7656851bcc9d0, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
---- !u!114 &1752897489
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 1191419013}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: a49d912e0b019f14b99bdde319029bdd, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: 
-  _skillName: Moonlight Slash
-  _description: 
-  _minRange: 0
-  _maxRange: 5
-  cooldown: 1
-  cost: 10
-  animName: SkillTwo
-  attackColliderGO: {fileID: 0}
-  projData:
-    projPf: {fileID: 8405287011954069530, guid: d61d85160a2c8c148a924f92aa6fcaf8, type: 3}
-    projHeld: {fileID: 0}
-    projOrigin: {fileID: 96926586}
-    projRotation: {fileID: 0}
-    basicAtkProjSpeed: 25
-  usesTargetLock: 1
-  flatPower: 10
-  attackScaling: 0
-  abilityScaling: 1.25
 --- !u!1 &1756901534
 GameObject:
   m_ObjectHideFlags: 0
@@ -33976,7 +33969,7 @@ PrefabInstance:
     - target: {fileID: 8764965865831667164, guid: 834dc73c554c9ad4fae808a0fabce9de, type: 3}
       propertyPath: testGameObject
       value: 
-      objectReference: {fileID: 8405287011954069530, guid: d61d85160a2c8c148a924f92aa6fcaf8, type: 3}
+      objectReference: {fileID: 98397111005207279, guid: 9b601de79a043e140a973529dec2522a, type: 3}
     - target: {fileID: 8764965865831667164, guid: 834dc73c554c9ad4fae808a0fabce9de, type: 3}
       propertyPath: healthBarFolder
       value: 

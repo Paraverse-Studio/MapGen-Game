@@ -105,7 +105,7 @@ namespace Paraverse.Player
         private bool _isHardCced = false;
         public bool IsSoftCCed { get { return _isSoftCced; } }
         private bool _isSoftCced = false;
-        public bool IsInvulnerable { get; }
+        public bool IsUnstaggerable { get; }
         private bool _isInvulnerable = false;
         public bool IsDead { get { return _isDead; } }
         private bool _isDead = false;
@@ -444,7 +444,7 @@ namespace Paraverse.Player
         /// </summary>
         public void ApplyKnockBack(Vector3 mobPos, KnockBackEffect effect)
         {
-            if (IsInvulnerable) return;
+            if (IsUnstaggerable) return;
 
             combat.OnAttackInterrupt();
             Vector3 impactDir = (transform.position - mobPos).normalized;
