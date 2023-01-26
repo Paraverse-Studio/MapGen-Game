@@ -27125,9 +27125,13 @@ PrefabInstance:
       value: Player
       objectReference: {fileID: 0}
     - target: {fileID: 2956618024134931112, guid: aa4e16a1786ed124fa06618210886566, type: 3}
+      propertyPath: skills.Array.size
+      value: 1
+      objectReference: {fileID: 0}
+    - target: {fileID: 2956618024134931112, guid: aa4e16a1786ed124fa06618210886566, type: 3}
       propertyPath: skills.Array.data[0]
       value: 
-      objectReference: {fileID: 1752897489}
+      objectReference: {fileID: 2055665933}
     - target: {fileID: 2956618024134931112, guid: aa4e16a1786ed124fa06618210886566, type: 3}
       propertyPath: basicAttackColliderGO
       value: 
@@ -27184,6 +27188,10 @@ PrefabInstance:
       propertyPath: m_LocalEulerAnglesHint.z
       value: 0
       objectReference: {fileID: 0}
+    - target: {fileID: 7729823372941932531, guid: aa4e16a1786ed124fa06618210886566, type: 3}
+      propertyPath: animName
+      value: SkillTwo
+      objectReference: {fileID: 0}
     m_RemovedComponents: []
   m_SourcePrefab: {fileID: 100100000, guid: aa4e16a1786ed124fa06618210886566, type: 3}
 --- !u!4 &1752897470 stripped
@@ -27235,36 +27243,6 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: f1360b5e821afee43bb7656851bcc9d0, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
---- !u!114 &1752897489
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 1191419013}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: a49d912e0b019f14b99bdde319029bdd, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: 
-  _skillName: Moonlight Slash
-  _description: 
-  _minRange: 0
-  _maxRange: 5
-  cooldown: 1
-  cost: 10
-  animName: SkillTwo
-  attackColliderGO: {fileID: 0}
-  projData:
-    projPf: {fileID: 8405287011954069530, guid: d61d85160a2c8c148a924f92aa6fcaf8, type: 3}
-    projHeld: {fileID: 0}
-    projOrigin: {fileID: 96926586}
-    projRotation: {fileID: 0}
-    basicAtkProjSpeed: 25
-  usesTargetLock: 1
-  flatPower: 10
-  attackScaling: 0
-  abilityScaling: 1.25
 --- !u!1 &1756901534
 GameObject:
   m_ObjectHideFlags: 0
@@ -31254,6 +31232,17 @@ CanvasRenderer:
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 2047826286}
   m_CullTransparentMesh: 1
+--- !u!114 &2055665933 stripped
+MonoBehaviour:
+  m_CorrespondingSourceObject: {fileID: 7729823372941932531, guid: aa4e16a1786ed124fa06618210886566, type: 3}
+  m_PrefabInstance: {fileID: 1752897469}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: f343599928a560d42b50c8b702ec6411, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
 --- !u!1 &2056556021
 GameObject:
   m_ObjectHideFlags: 0

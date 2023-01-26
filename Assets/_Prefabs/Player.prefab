@@ -819,8 +819,6 @@ GameObject:
   - component: {fileID: 2956618024134931112}
   - component: {fileID: 1752897480}
   - component: {fileID: 1293426518}
-  - component: {fileID: 1752897488}
-  - component: {fileID: 6490283456238913585}
   m_Layer: 14
   m_Name: Player
   m_TagString: Player
@@ -845,6 +843,7 @@ Transform:
   - {fileID: 7808392385410960503}
   - {fileID: 1507034558144014907}
   - {fileID: 1484700597309983845}
+  - {fileID: 4241460780824340472}
   m_Father: {fileID: 0}
   m_RootOrder: 0
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
@@ -984,7 +983,9 @@ MonoBehaviour:
     basicAtkProjSpeed: 10
   IsSkilling: 0
   skills:
-  - {fileID: 6490283456238913585}
+  - {fileID: 6660368564526815167}
+  - {fileID: 7206159263684620266}
+  - {fileID: 7729823372941932531}
   animBool: isUsingSkill
   maxComboResetTimer: 0.5
 --- !u!114 &1752897480
@@ -1028,49 +1029,52 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   _lookAtObj: {fileID: 0}
---- !u!114 &1752897488
+--- !u!1 &2855684083200414171
+GameObject:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  serializedVersion: 6
+  m_Component:
+  - component: {fileID: 5320827716646319745}
+  - component: {fileID: 7206159263684620266}
+  m_Layer: 14
+  m_Name: MoonlightSlash
+  m_TagString: Untagged
+  m_Icon: {fileID: 0}
+  m_NavMeshLayer: 0
+  m_StaticEditorFlags: 0
+  m_IsActive: 1
+--- !u!4 &5320827716646319745
+Transform:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 2855684083200414171}
+  m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
+  m_LocalPosition: {x: 0, y: 0, z: 0}
+  m_LocalScale: {x: 1, y: 1, z: 1}
+  m_ConstrainProportionsScale: 0
+  m_Children: []
+  m_Father: {fileID: 4241460780824340472}
+  m_RootOrder: 1
+  m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
+--- !u!114 &7206159263684620266
 MonoBehaviour:
   m_ObjectHideFlags: 0
   m_CorrespondingSourceObject: {fileID: 0}
   m_PrefabInstance: {fileID: 0}
   m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 2722828104521882955}
+  m_GameObject: {fileID: 2855684083200414171}
   m_Enabled: 1
   m_EditorHideFlags: 0
   m_Script: {fileID: 11500000, guid: a49d912e0b019f14b99bdde319029bdd, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  _skillName: 
-  _description: 
-  _minRange: 0
-  _maxRange: 5
-  cooldown: 2
-  cost: 60
-  animName: SkillTwo
-  attackColliderGO: {fileID: 0}
-  projData:
-    projPf: {fileID: 98397111005207279, guid: 9b601de79a043e140a973529dec2522a, type: 3}
-    projHeld: {fileID: 0}
-    projOrigin: {fileID: 6080363539117558809}
-    projRotation: {fileID: 0}
-    basicAtkProjSpeed: 18
-  usesTargetLock: 1
-  flatPower: 30
-  attackScaling: 0
-  abilityScaling: 1
---- !u!114 &6490283456238913585
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 2722828104521882955}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: a49d912e0b019f14b99bdde319029bdd, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: 
-  _skillName: 
+  _skillName: Moonlight Slash
+  _ID: -1
   _description: 
   _minRange: 0
   _maxRange: 5
@@ -1365,6 +1369,40 @@ MeshRenderer:
   m_SortingLayer: 0
   m_SortingOrder: 0
   m_AdditionalVertexStreams: {fileID: 0}
+--- !u!1 &3540498901168353900
+GameObject:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  serializedVersion: 6
+  m_Component:
+  - component: {fileID: 4241460780824340472}
+  m_Layer: 14
+  m_Name: SkillHolder
+  m_TagString: Untagged
+  m_Icon: {fileID: 0}
+  m_NavMeshLayer: 0
+  m_StaticEditorFlags: 0
+  m_IsActive: 1
+--- !u!4 &4241460780824340472
+Transform:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 3540498901168353900}
+  m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
+  m_LocalPosition: {x: 0, y: 0, z: 0}
+  m_LocalScale: {x: 1, y: 1, z: 1}
+  m_ConstrainProportionsScale: 0
+  m_Children:
+  - {fileID: 6064873476859588082}
+  - {fileID: 5320827716646319745}
+  - {fileID: 5003580198363948209}
+  m_Father: {fileID: 3351448952234461169}
+  m_RootOrder: 5
+  m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
 --- !u!1 &3570064203102365594
 GameObject:
   m_ObjectHideFlags: 0
@@ -1588,6 +1626,72 @@ Transform:
   m_Father: {fileID: 3972081836552158376}
   m_RootOrder: 1
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
+--- !u!1 &4320554377093141923
+GameObject:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  serializedVersion: 6
+  m_Component:
+  - component: {fileID: 5003580198363948209}
+  - component: {fileID: 7729823372941932531}
+  m_Layer: 14
+  m_Name: AzuriteInfusion
+  m_TagString: Untagged
+  m_Icon: {fileID: 0}
+  m_NavMeshLayer: 0
+  m_StaticEditorFlags: 0
+  m_IsActive: 1
+--- !u!4 &5003580198363948209
+Transform:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 4320554377093141923}
+  m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
+  m_LocalPosition: {x: 0, y: 0, z: 0}
+  m_LocalScale: {x: 1, y: 1, z: 1}
+  m_ConstrainProportionsScale: 0
+  m_Children: []
+  m_Father: {fileID: 4241460780824340472}
+  m_RootOrder: 2
+  m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
+--- !u!114 &7729823372941932531
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 4320554377093141923}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: f343599928a560d42b50c8b702ec6411, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  _skillName: Azurite Infusion
+  _ID: -1
+  _description: 
+  _minRange: 0
+  _maxRange: 5
+  cooldown: 25
+  cost: 90
+  animName: 
+  attackColliderGO: {fileID: 0}
+  projData:
+    projPf: {fileID: 0}
+    projHeld: {fileID: 0}
+    projOrigin: {fileID: 0}
+    projRotation: {fileID: 0}
+    basicAtkProjSpeed: 10
+  usesTargetLock: 0
+  flatPower: 5
+  attackScaling: 0
+  abilityScaling: 0.2
+  weaponBuffVFX: {fileID: 3588532860561885775, guid: 462bf3cfddfdfda4d8396a6263584db3, type: 3}
+  buffDuration: 10
+  userWeapon: {fileID: 4287253211477925105}
 --- !u!1 &4341391563712786853
 GameObject:
   m_ObjectHideFlags: 0
@@ -2963,6 +3067,69 @@ MeshRenderer:
   m_SortingLayer: 0
   m_SortingOrder: 0
   m_AdditionalVertexStreams: {fileID: 0}
+--- !u!1 &8378819048905109966
+GameObject:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  serializedVersion: 6
+  m_Component:
+  - component: {fileID: 6064873476859588082}
+  - component: {fileID: 6660368564526815167}
+  m_Layer: 14
+  m_Name: RegalCrescent
+  m_TagString: Untagged
+  m_Icon: {fileID: 0}
+  m_NavMeshLayer: 0
+  m_StaticEditorFlags: 0
+  m_IsActive: 1
+--- !u!4 &6064873476859588082
+Transform:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 8378819048905109966}
+  m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
+  m_LocalPosition: {x: 0, y: 0, z: 0}
+  m_LocalScale: {x: 1, y: 1, z: 1}
+  m_ConstrainProportionsScale: 0
+  m_Children: []
+  m_Father: {fileID: 4241460780824340472}
+  m_RootOrder: 0
+  m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
+--- !u!114 &6660368564526815167
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 8378819048905109966}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: a49d912e0b019f14b99bdde319029bdd, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  _skillName: Regal Crescent
+  _ID: -1
+  _description: 
+  _minRange: 0
+  _maxRange: 5
+  cooldown: 2
+  cost: 60
+  animName: SkillTwo
+  attackColliderGO: {fileID: 0}
+  projData:
+    projPf: {fileID: 98397111005207279, guid: 9b601de79a043e140a973529dec2522a, type: 3}
+    projHeld: {fileID: 0}
+    projOrigin: {fileID: 6080363539117558809}
+    projRotation: {fileID: 0}
+    basicAtkProjSpeed: 18
+  usesTargetLock: 1
+  flatPower: 30
+  attackScaling: 0
+  abilityScaling: 0.9
 --- !u!1 &8451214602931165222
 GameObject:
   m_ObjectHideFlags: 0

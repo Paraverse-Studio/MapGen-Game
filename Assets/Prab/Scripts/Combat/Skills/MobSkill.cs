@@ -19,6 +19,10 @@ namespace Paraverse.Combat
         [SerializeField, Tooltip("Skill name.")]
         protected string _skillName = "";
 
+        public int ID { get { return _ID; } set { _ID = value; } }
+        [SerializeField, Tooltip("Skill ID.")]
+        protected int _ID = -1;
+
         public string Description { get { return _description; } set { _skillName = value; } }
         [SerializeField, TextArea(2, 3), Tooltip("Skill description.")]
         protected string _description = "";
