@@ -229,7 +229,9 @@ namespace Paraverse.Player
 
         public override void FireProjectile()
         {
-            ProjectileData data;
+            if (!IsSkilling) Debug.Log("Called FireProjectile but with IsSkilling OFF...");
+
+            ProjectileData data = null;
             float damage = basicAtkDmgRatio * stats.AttackDamage.FinalValue;
 
             if (IsSkilling)
@@ -246,12 +248,16 @@ namespace Paraverse.Player
                 data.projHeld.SetActive(false);
 
             //// Instantiate and initialize projectile
-            GameObject go = Instantiate(data.projPf, data.projOrigin.position, transform.rotation);
-            Projectile proj = go.GetComponent<Projectile>();
-            proj.Init(this, transform.forward, damage);
+            if (null != data.projOrigin)
+            {
+                GameObject go = Instantiate(data.projPf, data.projOrigin.position, transform.rotation);
+                Projectile proj = go.GetComponent<Projectile>();
+                proj.Init(this, transform.forward, damage);
+            }
+            else Debug.LogError("A skill invoked PlayerCombat's FireProjectile without providing proper projectile data, and no default data.");
 
             _activeSkill.skillOn = false;
-            IsSkilling = false;
+            anim.SetBool(StringData.IsUsingSkill, false);
         }
         #endregion
     }
