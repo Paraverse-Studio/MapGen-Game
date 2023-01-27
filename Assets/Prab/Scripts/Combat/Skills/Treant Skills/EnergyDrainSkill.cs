@@ -17,16 +17,19 @@ public class EnergyDrainSkill : MobSkill, IMobSkill
     public override void ActivateSkill(EnhancedMobCombat mob, Animator anim, IMobStats stats, Transform target = null)
     {
         base.ActivateSkill(mob, anim, stats, target);
-        attackCollider.Init(mob, stats, null, true);
-        mob.basicAttackCollider.OnBasicAttackApplyDamageEvent += ApplyLiftSteal;
-        mob.OnDisableSkillOneEvent += DisableSkill;
+        attackCollider.Init(mob, stats, scalingStatData, true);
+        attackCollider.OnBasicAttackApplyDamageEvent += ApplyLiftSteal;
+        mob.OnEnableSkillColliderSOneEvent += EnableCollider;
+        mob.OnDisableSkillColliderSOneEvent += DisableCollider;
     }
 
     public override void DeactivateSkill(PlayerInputControls input)
     {
         base.DeactivateSkill(input);
-        mob.basicAttackCollider.OnBasicAttackApplyDamageEvent -= ApplyLiftSteal;
-        mob.OnDisableSkillOneEvent -= DisableSkill;
+        attackCollider.OnBasicAttackApplyDamageEvent -= ApplyLiftSteal;
+        mob.OnEnableSkillColliderSOneEvent -= EnableCollider;
+        mob.OnDisableSkillColliderSOneEvent -= DisableCollider;
+
     }
     #endregion
 
@@ -35,6 +38,21 @@ public class EnergyDrainSkill : MobSkill, IMobSkill
     {
         float healAmount = dmg * lifeStealRatio;
         stats.UpdateCurrentHealth((int)healAmount);
+        Debug.Log(healAmount);
+    }
+    #endregion
+
+    #region Animation Events
+    public void EnableCollider()
+    {
+        Debug.Log("ENABLE COLL: " + attackColliderGO.name);
+        attackColliderGO.SetActive(true);
+    }
+
+    public void DisableCollider()
+    {
+        Debug.Log("DISABLE COLL: " + attackColliderGO.name);
+        attackColliderGO.SetActive(false);
     }
     #endregion
 }

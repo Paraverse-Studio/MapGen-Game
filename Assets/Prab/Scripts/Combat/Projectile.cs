@@ -51,6 +51,8 @@ namespace Paraverse
 
         private float curdeathTimer = 0f;
         private Vector3 origin;
+
+        public ScalingStatData scalingStatData;
         #endregion
 
         #region Start & Update
@@ -113,7 +115,7 @@ namespace Paraverse
                 IMobController controller = other.GetComponent<IMobController>();
                 if (null != controller)
                 {
-                    controller.Stats.UpdateCurrentHealth(-Mathf.CeilToInt(damage));
+                    ApplyCustomDamage(controller);
 
                     // Apply knock back effect
                     if (null != knockBackEffect)
@@ -140,21 +142,38 @@ namespace Paraverse
                 dotTimer = 0f;
 
                 IMobController controller = other.GetComponent<IMobController>();
-                controller.Stats.UpdateCurrentHealth(-Mathf.CeilToInt(damage));
-
-                // Apply knock back effect
-                if (null != knockBackEffect)
+                if (null != controller)
                 {
-                    KnockBackEffect effect = new KnockBackEffect(knockBackEffect);
-                    controller.ApplyKnockBack(mob.transform.position, effect);
+                    ApplyCustomDamage(controller);
+
+                    // Apply knock back effect
+                    if (null != knockBackEffect)
+                    {
+                        KnockBackEffect effect = new KnockBackEffect(knockBackEffect);
+                        controller.ApplyKnockBack(mob.transform.position, effect);
+                    }
+                    else if (applyHitAnim)
+                        controller.ApplyHitAnimation();
                 }
-                else if (applyHitAnim)
-                    controller.ApplyHitAnimation();
 
                 if (hitFX) Instantiate(hitFX, other.transform.position + new Vector3(0, 0.5f, 0), Quaternion.identity);
 
                 if (!pierce) Destroy(gameObject);
             }
+        }
+
+        /// <summary>
+        /// useCustomDamage needs to be set to true on AttackCollider.cs inorder to apply this.
+        /// </summary>
+        public float ApplyCustomDamage(IMobController controller)
+        {
+            float totalDmg =
+                scalingStatData.flatPower +
+                (controller.Stats.AttackDamage.FinalValue * scalingStatData.attackScaling) +
+                (controller.Stats.AbilityPower.FinalValue * scalingStatData.abilityScaling);
+
+            controller.Stats.UpdateCurrentHealth(-Mathf.CeilToInt(totalDmg));
+            return totalDmg;
         }
     }
 }

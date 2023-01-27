@@ -53,70 +53,6 @@ public class EnhancedMobCombat : MobCombat
     public delegate void OnSummonSkillTwoDel();
     public event OnSummonSkillTwoDel OnInstantiateFXTwoEvent;
     #endregion
-
-    //#region Skill Two Delegates and Events
-    //// SKILL Two
-    //// Enable/Disables main hand collider for Skill One
-    //public delegate void OnEnableMainHandColliderSTwoDel();
-    //public event OnEnableMainHandColliderSTwoDel OnEnableMainHandColliderSTwoEvent;
-    //public delegate void OnDisableMainHandColliderSTwoDel();
-    //public event OnDisableMainHandColliderSTwoDel OnDisableMainHandColliderSTwoEvent;
-    //// Enable/Disables off hand collider for Skill One
-    //public delegate void OnEnableOffHandColliderSTwoDel();
-    //public event OnEnableOffHandColliderSTwoDel OnEnableOffHandColliderSTwoEvent;
-    //public delegate void OnDisableOffHandColliderSTwoDel();
-    //public event OnDisableOffHandColliderSTwoDel OnDisableOffHandColliderSTwoEvent;
-    //// Enables/Disables special skill collider for Skill One
-    //public delegate void OnEnableSkillColliderSTwoDel();
-    //public event OnEnableSkillColliderSTwoDel OnEnableSkillColliderSTwoEvent;
-    //public delegate void OnDisableSkillColliderSTwoDel();
-    //public event OnDisableSkillColliderSTwoDel OnDisableSkillColliderSTwoEvent;
-    //// Handler special charging/releasing skills for Skill One
-    //public delegate void OnChargeSkillTwoDel();
-    //public event OnChargeSkillTwoDel OnChargeSkillTwoEvent;
-    //public delegate void OnChargeCancelSkillTwoDel();
-    //public event OnChargeCancelSkillTwoDel OnChargeCancelSkillTwoEvent;
-    //public delegate void OnEnableChargeReleaseSkillTwoDel();
-    //public event OnEnableChargeReleaseSkillTwoDel OnEnableChargeReleaseSkillTwoEvent;
-    //// Used to disable anything at the end 
-    //public delegate void OnDisableSkillTwoDel();
-    //public event OnDisableSkillTwoDel OnDisableSkillTwoEvent;
-    //// Used to summon 
-    //public delegate void OnSummonSkillTwoDel();
-    //public event OnSummonSkillTwoDel OnSummonSkillTwoEvent;
-    //#endregion
-
-    //#region Skill Three Delegates and Events
-    //// SKILL THREE
-    //// Enable/Disables main hand collider for Skill One
-    //public delegate void OnEnableMainHandColliderSThreeDel();
-    //public event OnEnableMainHandColliderSThreeDel OnEnableMainHandColliderSThreeEvent;
-    //public delegate void OnDisableMainHandColliderSThreeDel();
-    //public event OnDisableMainHandColliderSThreeDel OnDisableMainHandColliderSThreeEvent;
-    //// Enable/Disables off hand collider for Skill One
-    //public delegate void OnEnableOffHandColliderSThreeDel();
-    //public event OnEnableOffHandColliderSThreeDel OnEnableOffHandColliderSThreeEvent;
-    //public delegate void OnDisableOffHandColliderSThreeDel();
-    //public event OnDisableOffHandColliderSThreeDel OnDisableOffHandColliderSThreeEvent;
-    //// Enables/Disables special skill collider for Skill One
-    //public delegate void OnEnableSkillColliderSThreeDel();
-    //public event OnEnableSkillColliderSThreeDel OnEnableSkillColliderSThreeEvent;
-    //public delegate void OnDisableSkillColliderSThreeDel();
-    //public event OnDisableSkillColliderSThreeDel OnDisableSkillColliderSThreeEvent;
-    //// Handler special charging/releasing skills for Skill One
-    //public delegate void OnChargeSkillThreeDel();
-    //public event OnChargeSkillOneDel OnChargeSkillThreeEvent;
-    //public delegate void OnChargeCancelSkillThreeDel();
-    //public event OnChargeCancelSkillThreeDel OnChargeCancelSkillThreeEvent;
-    //public delegate void OnEnableChargeReleaseSkillThreeDel();
-    //public event OnEnableChargeReleaseSkillThreeDel OnEnableChargeReleaseSkillThreeEvent;
-    //// Used to disable anything at the end 
-    //public delegate void OnDisableSkillThreeDel();
-    //public event OnDisableSkillThreeDel OnDisableSkillThreeEvent;
-    //// Used to summon 
-    //public delegate void OnSummonSkillThreeDel();
-    //public event OnSummonSkillThreeDel OnSummonSkillThreeEvent;
-    //#endregion
     #endregion
 
 
@@ -236,11 +172,13 @@ public class EnhancedMobCombat : MobCombat
 
     public virtual void AEventEnableSkillCollider()
     {
+        Debug.Log("A EVENT ENABLE SKILL COL");
         OnEnableSkillColliderSOneEvent?.Invoke();
     }
 
     public virtual void AEventDisableSkillCollider()
     {
+        Debug.Log("A EVENT DISABLE SKILL COL");
         OnDisableSkillColliderSOneEvent?.Invoke();
     }
 
