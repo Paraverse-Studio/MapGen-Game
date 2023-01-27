@@ -54,15 +54,8 @@ namespace Paraverse.Combat
         [Header("Uses Target Lock"), Tooltip("If this skill should force mob to face its target")]
         public bool usesTargetLock;
 
-        [Header("Damage & Potency")]
-        [SerializeField]
-        public float flatPower = 1;
-
-        [SerializeField, Range(0, 3)]
-        public float attackScaling = 0;
-
-        [SerializeField, Range(0, 3)]
-        public float abilityScaling = 0;
+        [HideInInspector]
+        public ScalingStatData scalingStatData;
 
         public bool skillOn { get; set; }
         #endregion
@@ -87,7 +80,7 @@ namespace Paraverse.Combat
             }
             attackColliderGO.SetActive(true);
             attackCollider = attackColliderGO.GetComponent<AttackCollider>();
-            attackCollider.Init(mob, stats);
+            attackCollider.Init(mob, stats, scalingStatData, true);
             attackColliderGO.SetActive(false);
         }
 
@@ -108,7 +101,7 @@ namespace Paraverse.Combat
             }
             attackColliderGO.SetActive(true);
             attackCollider = attackColliderGO.GetComponent<AttackCollider>();
-            attackCollider.Init(mob, stats);
+            attackCollider.Init(mob, stats, scalingStatData, true);
             attackColliderGO.SetActive(false);
         }
 

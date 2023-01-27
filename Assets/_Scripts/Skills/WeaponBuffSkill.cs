@@ -80,7 +80,7 @@ public class WeaponBuffSkill : MobSkill, IMobSkill
 
     private float GetPowerAmount()
     {
-        return flatPower + (stats.AttackDamage.FinalValue * attackScaling) + (stats.AbilityPower.FinalValue * abilityScaling);
+        return scalingStatData.flatPower + (stats.AttackDamage.FinalValue * scalingStatData.attackScaling) + (stats.AbilityPower.FinalValue * scalingStatData.abilityScaling);
     }
 
     private void ToggleParticleSystem(bool turnParticlesOn)

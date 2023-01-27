@@ -10,6 +10,8 @@ public class SuicideCombat : MobCombat
     private GameObject explosionEffect;
     [SerializeField]
     private float explosionRadius = 3f;
+    [SerializeField]
+    private ScalingStatData scalingStatData;
 
 
     protected override void Update()
@@ -38,7 +40,7 @@ public class SuicideCombat : MobCombat
     {
         GameObject go = Instantiate(explosionEffect, transform.position, transform.rotation);
         AttackCollider col = go.GetComponentInChildren<AttackCollider>();
-        col.Init(this, stats);
+        col.Init(this, stats, scalingStatData, true);
         stats.UpdateCurrentHealth(-10000000);
     }
 }

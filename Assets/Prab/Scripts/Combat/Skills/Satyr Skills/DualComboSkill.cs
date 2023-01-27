@@ -30,7 +30,7 @@ public class DualComboSkill : MobSkill, IMobSkill
         }
         offHandAttackColliderGO.SetActive(true);
         offHandAttackCollider = offHandAttackColliderGO.GetComponent<AttackCollider>();
-        offHandAttackCollider.Init(mob, stats);
+        offHandAttackCollider.Init(mob, stats, scalingStatData, true);
         offHandAttackColliderGO.SetActive(false);
 
         mob.OnEnableMainHandColliderSOneEvent += EnableMainHandAttackCollider;

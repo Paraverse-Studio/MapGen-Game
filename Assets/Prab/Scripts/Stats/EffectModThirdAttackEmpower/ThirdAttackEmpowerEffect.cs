@@ -36,7 +36,7 @@ public class ThirdAttackEmpowerEffect : MonoBehaviour
         }
     }
 
-    private void RemoveMod()
+    private void RemoveMod(float empty = 0)
     {
         stats.AttackDamage.RemoveMod(mod);
     }
