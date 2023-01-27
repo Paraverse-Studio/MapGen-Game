@@ -11,6 +11,7 @@ public class WeaponBuffSkill : MobSkill, IMobSkill
     [SerializeField] private GameObject weaponBuffVFX;
     [SerializeField] private float buffDuration;
     [SerializeField] private Transform userWeapon;
+    [SerializeField] private float attackRangeLengthen = 0f;
 
     private float _buffDurationElapsed = 0f;
     private GameObject _weaponVFX = null;
@@ -39,11 +40,15 @@ public class WeaponBuffSkill : MobSkill, IMobSkill
             _buff = new StatModifier(GetPowerAmount());
             stats.AttackDamage.AddMod(_buff);
         }
+
+        Vector3 scale = attackColliderGO.transform.localScale;
+        attackColliderGO.transform.localScale = new Vector3(scale.x, scale.y + attackRangeLengthen, scale.z);
+        Debug.Log("HUH??? " + attackColliderGO.transform.localScale);
     }
 
     private void BuffDurationHandler()
     {
-        if (_buffDurationElapsed <= 0)
+        if (_buffDurationElapsed <= 0 && _buffDurationElapsed > -10f)
         {
             DisableSkill();
         }
@@ -56,6 +61,7 @@ public class WeaponBuffSkill : MobSkill, IMobSkill
     protected override void DisableSkill()
     {
         base.DisableSkill();
+        _buffDurationElapsed = -11f;
 
         if (_weaponVFX) 
         {
@@ -66,7 +72,10 @@ public class WeaponBuffSkill : MobSkill, IMobSkill
         {
             stats.AttackDamage.RemoveMod(_buff);
             _buff = null;
-        }
+
+            Vector3 scale = attackColliderGO.transform.localScale;
+            attackColliderGO.transform.localScale = new Vector3(scale.x, scale.y - attackRangeLengthen, scale.z);
+        }                    
     }
 
     private float GetPowerAmount()

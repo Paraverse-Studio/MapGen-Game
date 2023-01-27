@@ -98,7 +98,7 @@ namespace Paraverse.Combat
             this.anim = anim;
             this.stats = stats;
             curCooldown = 0f;
-            if (mob.tag.Equals(StringData.PlayerTag))
+            if (mob.gameObject.CompareTag(StringData.PlayerTag))
                 input.OnSkillOneEvent += Execute;
 
             if (null == attackColliderGO)
@@ -143,6 +143,7 @@ namespace Paraverse.Combat
             {
                 Execute();
             }
+
             RotateToTarget();
             CooldownHandler();
         }
@@ -150,10 +151,12 @@ namespace Paraverse.Combat
         protected virtual void RotateToTarget()
         {
             if (skillOn == false) return;
+
             if (usesTargetLock && input && mob.Target)
             {
-                Vector3 targetDir = ParaverseHelper.GetPositionXZ(mob.Target.position - transform.position).normalized;
-                transform.forward = targetDir;
+
+                Vector3 targetDir = ParaverseHelper.GetPositionXZ(mob.Target.position - mob.transform.position).normalized;
+                mob.transform.forward = targetDir;
             }
             else if (usesTargetLock && mob.Target)
             {

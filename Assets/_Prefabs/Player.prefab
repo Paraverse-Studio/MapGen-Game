@@ -957,7 +957,7 @@ MonoBehaviour:
   OnEnergyChange:
     m_PersistentCalls:
       m_Calls: []
-  diveEnergyCost: 30
+  diveEnergyCost: 10
 --- !u!114 &2956618024134931112
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -983,9 +983,7 @@ MonoBehaviour:
     basicAtkProjSpeed: 10
   IsSkilling: 0
   skills:
-  - {fileID: 6660368564526815167}
   - {fileID: 7206159263684620266}
-  - {fileID: 7729823372941932531}
   animBool: isUsingSkill
   maxComboResetTimer: 0.5
 --- !u!114 &1752897480
@@ -1078,7 +1076,7 @@ MonoBehaviour:
   _description: 
   _minRange: 0
   _maxRange: 5
-  cooldown: 2
+  cooldown: 3
   cost: 30
   animName: SkillTwo
   attackColliderGO: {fileID: 0}
@@ -1675,10 +1673,10 @@ MonoBehaviour:
   _description: 
   _minRange: 0
   _maxRange: 5
-  cooldown: 25
+  cooldown: 6
   cost: 90
-  animName: 
-  attackColliderGO: {fileID: 0}
+  animName: DrawSword
+  attackColliderGO: {fileID: 6080363539117558812}
   projData:
     projPf: {fileID: 0}
     projHeld: {fileID: 0}
@@ -1688,10 +1686,11 @@ MonoBehaviour:
   usesTargetLock: 0
   flatPower: 5
   attackScaling: 0
-  abilityScaling: 0.2
+  abilityScaling: 0.25
   weaponBuffVFX: {fileID: 3588532860561885775, guid: 462bf3cfddfdfda4d8396a6263584db3, type: 3}
-  buffDuration: 10
+  buffDuration: 5
   userWeapon: {fileID: 4287253211477925105}
+  attackRangeLengthen: 0.5
 --- !u!1 &4341391563712786853
 GameObject:
   m_ObjectHideFlags: 0
@@ -2111,7 +2110,7 @@ Transform:
   m_GameObject: {fileID: 6080363539117558812}
   m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
   m_LocalPosition: {x: 0.000000031585, y: 0.575, z: -0.000000024746}
-  m_LocalScale: {x: 0.6476289, y: 1.8402133, z: 0.28545}
+  m_LocalScale: {x: 1, y: 1, z: 1}
   m_ConstrainProportionsScale: 0
   m_Children:
   - {fileID: 3370958072789552210}
@@ -2179,8 +2178,8 @@ BoxCollider:
   m_IsTrigger: 1
   m_Enabled: 1
   serializedVersion: 2
-  m_Size: {x: 0.85, y: 1.0323875, z: 0.64557695}
-  m_Center: {x: 0.01868131, y: 0.016194027, z: -0.042395163}
+  m_Size: {x: 0.5, y: 1.5, z: 0.25}
+  m_Center: {x: 0, y: 0.075, z: 0}
 --- !u!114 &6080363539117558813
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -3116,9 +3115,9 @@ MonoBehaviour:
   _description: 
   _minRange: 0
   _maxRange: 5
-  cooldown: 2
+  cooldown: 5
   cost: 60
-  animName: SkillTwo
+  animName: HorizontalSlice
   attackColliderGO: {fileID: 0}
   projData:
     projPf: {fileID: 98397111005207279, guid: 9b601de79a043e140a973529dec2522a, type: 3}

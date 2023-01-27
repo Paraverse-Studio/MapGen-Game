@@ -111,16 +111,21 @@ namespace Paraverse
             if (other.CompareTag(targetTag))
             {
                 IMobController controller = other.GetComponent<IMobController>();
-                controller.Stats.UpdateCurrentHealth(-Mathf.CeilToInt(damage));
-
-                // Apply knock back effect
-                if (null != knockBackEffect)
+                if (null != controller)
                 {
-                    KnockBackEffect effect = new KnockBackEffect(knockBackEffect);
-                    controller.ApplyKnockBack(mob.transform.position, effect);
+                    controller.Stats.UpdateCurrentHealth(-Mathf.CeilToInt(damage));
+
+                    // Apply knock back effect
+                    if (null != knockBackEffect)
+                    {
+                        KnockBackEffect effect = new KnockBackEffect(knockBackEffect);
+                        controller.ApplyKnockBack(mob.transform.position, effect);
+                    }
+                    else if (applyHitAnim)
+                    {
+                        controller.ApplyHitAnimation();
+                    }
                 }
-                else if (applyHitAnim)
-                    controller.ApplyHitAnimation();
 
                 if (hitFX) Instantiate(hitFX, other.transform.position + new Vector3(0, 0.5f, 0), Quaternion.identity);
 
