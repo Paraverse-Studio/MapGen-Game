@@ -256,9 +256,8 @@ public class MobHealthBar : MonoBehaviour
         }
 
         // custom for bosses (HUD health bar)
-        if (settings.isBoss)
+        if (settings.isBoss && _healthBarsFolder.TryGetComponent(out BossHealthBarModel model))
         {
-            BossHealthBarModel model = _healthBarsFolder.GetComponent<BossHealthBarModel>();
             _healthBar = model.healthBar;
             _healthDamageBar = model.damageBar;
             _healthValueDisplay = model.healthValueDisplay;
