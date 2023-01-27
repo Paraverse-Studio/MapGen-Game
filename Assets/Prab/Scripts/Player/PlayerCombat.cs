@@ -37,6 +37,8 @@ namespace Paraverse.Player
         private TextMeshProUGUI _skillLabel;
         [SerializeField]
         private Image _skillIcon;
+        [SerializeField] 
+        private ContentFitterRefresher _refresher;
 
         #endregion
 
@@ -85,6 +87,7 @@ namespace Paraverse.Player
             _activeSkill = skill;
             _skillLabel.text = skill.Name;
             _skillIcon.sprite = skill.Image;
+            _refresher.RefreshContentFitters();
         }
 
         protected override void Update()
