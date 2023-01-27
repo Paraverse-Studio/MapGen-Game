@@ -41,7 +41,6 @@ namespace Paraverse
         public event OnBasicAttackLandPostDmgDel OnBasicAttackPostHitEvent;
 
         // Updated via Mob Skill
-        [HideInInspector]
         public ScalingStatData scalingStatData;
 
 
@@ -53,6 +52,12 @@ namespace Paraverse
             this.scalingStatData.attackScaling = scalingStatData.attackScaling;
             this.scalingStatData.abilityScaling = scalingStatData.abilityScaling;
             this.isSkill = isSkill;
+        }
+        
+        public void Init(MobCombat mob, IMobStats stats)
+        {
+            this.mob = mob;
+            this.stats = stats;
         }
 
         private void OnEnable()
@@ -91,7 +96,6 @@ namespace Paraverse
                     // Apply damage
                     float dmg = ApplyCustomDamage(controller);
 
-
                     // On Damage Applied Event
                     if (isBasicAttackCollider)
                         OnBasicAttackApplyDamageEvent?.Invoke(dmg);
@@ -121,13 +125,10 @@ namespace Paraverse
 
             if (other.CompareTag(targetTag) && !hitTargets.Contains(other.gameObject) && applyHit)
             {
-                hitTargets.Add(other.gameObject);
-
-                IMobController controller = other.GetComponent<IMobController>();
-                controller.Stats.UpdateCurrentHealth((int)-stats.AttackDamage.FinalValue);
-                controller.ApplyKnockBack(mob.transform.position, knockBackEffect);
-                applyHit = false;
+                OnTriggerEnter(other);
                 timer = attackPerUnitOfTime;
+                hitTargets.Add(other.gameObject);
+                applyHit = false;
 
                 Debug.Log(other.name + " took " + stats.AttackDamage.FinalValue + " points of damage.");
             }
@@ -138,19 +139,12 @@ namespace Paraverse
         /// </summary>
         public float ApplyCustomDamage(IMobController controller)
         {
-            float phyDmg = controller.Stats.AttackDamage.FinalValue * scalingStatData.flatPower;
-            float abilityDmg = controller.Stats.AbilityPower.FinalValue;
-            float totalDmg = phyDmg;
+            float totalDmg =
+                scalingStatData.flatPower + 
+                (stats.AttackDamage.FinalValue * scalingStatData.attackScaling) + 
+                (stats.AbilityPower.FinalValue * scalingStatData.abilityScaling);            
 
-            phyDmg += phyDmg * scalingStatData.attackScaling;
-            abilityDmg += abilityDmg * scalingStatData.abilityScaling;
-
-            if (isSkill)
-            {
-                totalDmg = phyDmg + abilityDmg;
-            }
-
-            controller.Stats.UpdateCurrentHealth((int)-totalDmg);
+            controller.Stats.UpdateCurrentHealth(-Mathf.CeilToInt(totalDmg));
             return totalDmg;
         }
     }

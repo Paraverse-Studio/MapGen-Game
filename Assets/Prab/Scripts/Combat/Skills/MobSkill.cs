@@ -54,7 +54,6 @@ namespace Paraverse.Combat
         [Header("Uses Target Lock"), Tooltip("If this skill should force mob to face its target")]
         public bool usesTargetLock;
 
-        [HideInInspector]
         public ScalingStatData scalingStatData;
 
         public bool skillOn { get; set; }
@@ -73,15 +72,15 @@ namespace Paraverse.Combat
             if (mob.tag.Equals(StringData.PlayerTag))
                 input.OnSkillOneEvent += Execute;
 
-            if (null == attackColliderGO)
-            {
-                Debug.LogWarning(gameObject.name + " doesn't have an attack collider."); 
-                return;
-            }
-            attackColliderGO.SetActive(true);
-            attackCollider = attackColliderGO.GetComponent<AttackCollider>();
-            attackCollider.Init(mob, stats, scalingStatData, true);
-            attackColliderGO.SetActive(false);
+            //if (null == attackColliderGO)
+            //{
+            //    Debug.LogWarning(gameObject.name + " doesn't have an attack collider."); 
+            //    return;
+            //}
+            //attackColliderGO.SetActive(true);
+            //attackCollider = attackColliderGO.GetComponent<AttackCollider>();
+            //attackCollider.Init(mob, stats);
+            //attackColliderGO.SetActive(false);
         }
 
         public virtual void ActivateSkill(EnhancedMobCombat mob, Animator anim, IMobStats stats, Transform target = null)

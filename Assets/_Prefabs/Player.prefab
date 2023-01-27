@@ -974,6 +974,7 @@ MonoBehaviour:
   basicAtkDmgRatio: 1
   basicAtkRange: 2
   basicAttackColliderGO: {fileID: 6080363539117558812}
+  basicAttackCollider: {fileID: 0}
   projUser: 0
   projData:
     projPf: {fileID: 0}
@@ -981,6 +982,10 @@ MonoBehaviour:
     projOrigin: {fileID: 0}
     projRotation: {fileID: 0}
     basicAtkProjSpeed: 10
+    scalingStatData:
+      flatPower: 1
+      attackScaling: 0
+      abilityScaling: 0
   IsSkilling: 0
   skills:
   - {fileID: 7729823372941932531}
@@ -1086,10 +1091,15 @@ MonoBehaviour:
     projOrigin: {fileID: 6080363539117558809}
     projRotation: {fileID: 0}
     basicAtkProjSpeed: 25
+    scalingStatData:
+      flatPower: 1
+      attackScaling: 0
+      abilityScaling: 0
   usesTargetLock: 1
-  flatPower: 10
-  attackScaling: 0
-  abilityScaling: 1.35
+  scalingStatData:
+    flatPower: 1
+    attackScaling: 0
+    abilityScaling: 0
 --- !u!1 &3042775459034123614
 GameObject:
   m_ObjectHideFlags: 0
@@ -1683,10 +1693,15 @@ MonoBehaviour:
     projOrigin: {fileID: 0}
     projRotation: {fileID: 0}
     basicAtkProjSpeed: 10
+    scalingStatData:
+      flatPower: 1
+      attackScaling: 0
+      abilityScaling: 0
   usesTargetLock: 0
-  flatPower: 5
-  attackScaling: 0
-  abilityScaling: 0.25
+  scalingStatData:
+    flatPower: 5
+    attackScaling: 0
+    abilityScaling: 0.25
   weaponBuffVFX: {fileID: 3588532860561885775, guid: 462bf3cfddfdfda4d8396a6263584db3, type: 3}
   buffDuration: 30
   userWeapon: {fileID: 4287253211477925105}
@@ -2196,6 +2211,11 @@ MonoBehaviour:
   dot: 0
   knockBackEffect: {fileID: 11400000, guid: 598974d11fcf1634694fbcf7947f6e76, type: 2}
   hitFX: {fileID: 1281011124605332014, guid: 78283b04fb4620d4fb5afde968967a87, type: 3}
+  isBasicAttackCollider: 0
+  scalingStatData:
+    flatPower: 0
+    attackScaling: 1
+    abilityScaling: 0
 --- !u!1 &6229009748062782238
 GameObject:
   m_ObjectHideFlags: 0
@@ -3125,10 +3145,15 @@ MonoBehaviour:
     projOrigin: {fileID: 6080363539117558809}
     projRotation: {fileID: 0}
     basicAtkProjSpeed: 18
+    scalingStatData:
+      flatPower: 1
+      attackScaling: 0
+      abilityScaling: 0
   usesTargetLock: 1
-  flatPower: 30
-  attackScaling: 0
-  abilityScaling: 0.9
+  scalingStatData:
+    flatPower: 1
+    attackScaling: 0
+    abilityScaling: 0
 --- !u!1 &8451214602931165222
 GameObject:
   m_ObjectHideFlags: 0
