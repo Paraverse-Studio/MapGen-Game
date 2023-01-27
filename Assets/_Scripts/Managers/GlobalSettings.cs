@@ -51,5 +51,14 @@ public class GlobalSettings : MonoBehaviour
     public GameObject testGameObject;
 
 
+    private void Update()
+    {
+        if (Input.GetKeyDown(KeyCode.U))
+        {
+            if (GlobalSettings.Instance.testGameObject)
+                Instantiate(GlobalSettings.Instance.testGameObject, player.transform.position + new Vector3(0, 0.5f, 0), player.transform.rotation);
+        }
+    }
+
 
 }

@@ -156,8 +156,6 @@ public class GameLoopManager : MonoBehaviour
         if (Input.GetKeyDown(KeyCode.U))
         {
             if (EndPortal) EndPortal.SetActive(true);
-            if (GlobalSettings.Instance.testGameObject) 
-                Instantiate(GlobalSettings.Instance.testGameObject, player.transform.position + new Vector3(0, 0.5f, 0), player.transform.rotation);
         }
         if (Input.GetKeyDown(KeyCode.Y))
         {
