@@ -229,8 +229,6 @@ namespace Paraverse.Player
 
         public override void FireProjectile()
         {
-            if (!IsSkilling) Debug.Log("Called FireProjectile but with IsSkilling OFF...");
-
             ProjectileData data = null;
             float damage = basicAtkDmgRatio * stats.AttackDamage.FinalValue;
 

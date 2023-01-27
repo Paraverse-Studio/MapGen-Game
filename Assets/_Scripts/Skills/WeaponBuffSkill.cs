@@ -50,7 +50,7 @@ public class WeaponBuffSkill : MobSkill, IMobSkill
 
     private void BuffDurationHandler()
     {
-        if (_buffDurationElapsed <= 0 && _buffDurationElapsed > -10f)
+        if (_buffDurationElapsed <= 0 && null != _buff)
         {
             DisableSkill();
         }
@@ -63,7 +63,6 @@ public class WeaponBuffSkill : MobSkill, IMobSkill
     protected override void DisableSkill()
     {
         base.DisableSkill();
-        _buffDurationElapsed = -11f;
 
         if (_weaponVFX) 
         {
