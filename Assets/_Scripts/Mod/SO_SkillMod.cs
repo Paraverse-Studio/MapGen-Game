@@ -28,11 +28,12 @@ public class SO_SkillMod : SO_Mod
         // ---> stat, info, logistics and lore of the skill is provided from mod card to skill
         // ---> skill CD, range, damage and these things are to be put right on skill prefab
         Skill.Name = Title;
-        Skill.Description = Description;
         Skill.ID = ID;
+        Skill.Description = Description;
+        Skill.Image = Image;
+        Debug.Log($"Put... {Image} into skill's image... {Skill.Image}");
 
         // Add this skill to the player's list of skills, and also activate this one
-        //_player.skills.Add(Skill);
         _player.ActivateSkill(Skill);
         
         Debug.Log($"Skill Mod: Mod \"{Title}\" (ID {ID}) activated for {_player.gameObject.name}!");
