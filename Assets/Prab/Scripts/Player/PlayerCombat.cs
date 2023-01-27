@@ -18,7 +18,9 @@ namespace Paraverse.Player
         [SerializeField, Tooltip("Max cooldown to allow next combo attack.")]
         private float maxComboResetTimer = 1f;
         private float curCombatResetTimer;
-
+        [SerializeField]
+        private Transform _skillHolder;
+        public Transform SkillHolder => _skillHolder;
         public bool CanComboAttackTwo { get { return _canComboAttackTwo; } }
         private bool _canComboAttackTwo = false;
         public bool CanComboAttackThree { get { return _canComboAttackThree; } }
@@ -52,11 +54,22 @@ namespace Paraverse.Player
 
         public void ActivateSkill(MobSkill skill)
         {
-            if (skills.Contains(skill))
+            if (null == skill) return;
+            if (null != _activeSkill) _activeSkill.DeactivateSkill(input);
+
+            foreach (MobSkill sk in skills)
             {
-                skill.ActivateSkill(this, input, anim, stats);
-                _activeSkill = skill;
+                if (sk.ID == skill.ID)
+                {
+                    sk.ActivateSkill(this, input, anim, stats);
+                    _activeSkill = sk;
+                    return;
+                }
             }
+            MobSkill newSkill = Instantiate(skill, SkillHolder);
+            skills.Add(newSkill);
+            newSkill.ActivateSkill(this, input, anim, stats);
+            _activeSkill = newSkill;
         }
 
         protected override void Update()
@@ -79,10 +92,6 @@ namespace Paraverse.Player
             for (int i = 0; i < skills.Count; i++)
             {
                 skills[i].SkillUpdate();
-                if (skills[i].skillOn)
-                {
-                    usingSkillIdx = i;
-                }
             }
         }
         #endregion
@@ -220,12 +229,14 @@ namespace Paraverse.Player
 
         public override void FireProjectile()
         {
-            ProjectileData data;
+            if (!IsSkilling) Debug.Log("Called FireProjectile but with IsSkilling OFF...");
+
+            ProjectileData data = null;
             float damage = basicAtkDmgRatio * stats.AttackDamage.FinalValue;
 
             if (IsSkilling)
             {
-                MobSkill s = skills[usingSkillIdx];
+                MobSkill s = _activeSkill;
                 data = s.projData;
                 damage = s.scalingStatData.flatPower + (stats.AttackDamage.FinalValue * s.scalingStatData.attackScaling) + (stats.AbilityPower.FinalValue * s.scalingStatData.abilityScaling);
             }
@@ -237,12 +248,16 @@ namespace Paraverse.Player
                 data.projHeld.SetActive(false);
 
             //// Instantiate and initialize projectile
-            GameObject go = Instantiate(data.projPf, data.projOrigin.position, transform.rotation);
-            Projectile proj = go.GetComponent<Projectile>();
-            proj.Init(this, transform.forward, damage);
+            if (null != data.projOrigin)
+            {
+                GameObject go = Instantiate(data.projPf, data.projOrigin.position, transform.rotation);
+                Projectile proj = go.GetComponent<Projectile>();
+                proj.Init(this, transform.forward, damage);
+            }
+            else Debug.LogError("A skill invoked PlayerCombat's FireProjectile without providing proper projectile data, and no default data.");
 
-            skills[usingSkillIdx].skillOn = false;
-            IsSkilling = false;
+            _activeSkill.skillOn = false;
+            anim.SetBool(StringData.IsUsingSkill, false);
         }
         #endregion
     }

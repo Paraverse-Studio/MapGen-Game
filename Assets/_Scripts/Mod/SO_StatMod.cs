@@ -36,19 +36,28 @@ public class SO_StatMod : SO_Mod
     public List<StatPair> addStats; // reference for original values
 
     private List<StatPair> _addStatsMutable = null; // mutable
-    private int _CostMutable; // mutable version
+    private float _CostMutable; // mutable version
 
     private MobStats _player;
     private int _modLevel = 1;
+
+    public int ModLevel => _modLevel;
 
     private void OnValidate()
     {
         Description = "<Stat Mods are autofilled at run-time>";
     }
 
+    public override string GetTitle()
+    {
+        if (!evolve.canStack) return Title;
+
+        return Title + " " + UtilityFunctions.ToRoman(ModLevel);
+    }
+
     public override int GetCost()
     {
-        return _CostMutable;
+        return Mathf.CeilToInt(_CostMutable);
     }
 
     public override void Activate(GameObject go)
@@ -72,16 +81,16 @@ public class SO_StatMod : SO_Mod
             switch (statPair.type)
             {
                 case StatType.Attack:
-                    _player.UpdateAttackDamage(statPair.value);
+                    _player.UpdateAttackDamage(Mathf.CeilToInt(statPair.value));
                     break;
                 case StatType.Ability:
-                    _player.UpdateAbilityPower(statPair.value);
+                    _player.UpdateAbilityPower(Mathf.CeilToInt(statPair.value));
                     break;
                 case StatType.Health:
-                    _player.UpdateMaxHealth((int)statPair.value);
+                    _player.UpdateMaxHealth(Mathf.CeilToInt(statPair.value));
                     break;
                 case StatType.Energy:
-                    _player.UpdateMaxEnergy(statPair.value);
+                    _player.UpdateMaxEnergy(Mathf.CeilToInt(statPair.value));
                     break;
                 case StatType.AttackSpeed:
                     _player.UpdateAttackSpeed(statPair.value);
@@ -103,9 +112,9 @@ public class SO_StatMod : SO_Mod
 
             for (int i = 0; i < _addStatsMutable.Count; ++i)
             {
-                _addStatsMutable[i] = new StatPair(_addStatsMutable[i].type, Mathf.CeilToInt(_addStatsMutable[i].value * evolve.valueGrowthFactor));
+                _addStatsMutable[i] = new StatPair(_addStatsMutable[i].type, _addStatsMutable[i].value * evolve.valueGrowthFactor);
             }
-            _CostMutable = (int)(GetCost() * evolve.costGrowthFactor);
+            _CostMutable = (GetCost() * evolve.costGrowthFactor);
 
             AutofillDescription();
             return this;
@@ -123,7 +132,7 @@ public class SO_StatMod : SO_Mod
 
         foreach (StatPair p in _addStatsMutable)
         {
-            message += ((p.value > 0)? "Gain " : "Lose ") + p.value + " ";
+            message += ((p.value > 0)? "Gain " : "Lose ") + Mathf.CeilToInt(p.value) + " ";
             switch (p.type)
             {
                 case StatType.Attack:
@@ -156,6 +165,7 @@ public class SO_StatMod : SO_Mod
         base.Reset();
         _CostMutable = Cost;
         _addStatsMutable = new (addStats);
+        _modLevel = 1;
         AutofillDescription();
     }
 

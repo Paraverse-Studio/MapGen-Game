@@ -29,6 +29,8 @@ public class WeaponBuffSkill : MobSkill, IMobSkill
     protected override void ExecuteSkillLogic()
     {
         base.ExecuteSkillLogic();
+
+        userWeapon = attackColliderGO.transform.parent;
         _buffDurationElapsed = buffDuration;
 
         // Add the buff VFX and stats to the player

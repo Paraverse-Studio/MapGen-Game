@@ -987,10 +987,10 @@ MonoBehaviour:
       attackScaling: 0
       abilityScaling: 0
   IsSkilling: 0
-  skills:
-  - {fileID: 7729823372941932531}
+  skills: []
   animBool: isUsingSkill
   maxComboResetTimer: 0.5
+  _skillHolder: {fileID: 4241460780824340472}
 --- !u!114 &1752897480
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -1032,74 +1032,6 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   _lookAtObj: {fileID: 0}
---- !u!1 &2855684083200414171
-GameObject:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  serializedVersion: 6
-  m_Component:
-  - component: {fileID: 5320827716646319745}
-  - component: {fileID: 7206159263684620266}
-  m_Layer: 14
-  m_Name: MoonlightSlash
-  m_TagString: Untagged
-  m_Icon: {fileID: 0}
-  m_NavMeshLayer: 0
-  m_StaticEditorFlags: 0
-  m_IsActive: 1
---- !u!4 &5320827716646319745
-Transform:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 2855684083200414171}
-  m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
-  m_LocalPosition: {x: 0, y: 0, z: 0}
-  m_LocalScale: {x: 1, y: 1, z: 1}
-  m_ConstrainProportionsScale: 0
-  m_Children: []
-  m_Father: {fileID: 4241460780824340472}
-  m_RootOrder: 1
-  m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
---- !u!114 &7206159263684620266
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 2855684083200414171}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: a49d912e0b019f14b99bdde319029bdd, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: 
-  _skillName: Moonlight Slash
-  _ID: -1
-  _description: 
-  _minRange: 0
-  _maxRange: 5
-  cooldown: 3
-  cost: 30
-  animName: SkillTwo
-  attackColliderGO: {fileID: 0}
-  projData:
-    projPf: {fileID: 8405287011954069530, guid: d61d85160a2c8c148a924f92aa6fcaf8, type: 3}
-    projHeld: {fileID: 0}
-    projOrigin: {fileID: 6080363539117558809}
-    projRotation: {fileID: 0}
-    basicAtkProjSpeed: 25
-    scalingStatData:
-      flatPower: 1
-      attackScaling: 0
-      abilityScaling: 0
-  usesTargetLock: 1
-  scalingStatData:
-    flatPower: 1
-    attackScaling: 0
-    abilityScaling: 0
 --- !u!1 &3042775459034123614
 GameObject:
   m_ObjectHideFlags: 0
@@ -1404,10 +1336,7 @@ Transform:
   m_LocalPosition: {x: 0, y: 0, z: 0}
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_ConstrainProportionsScale: 0
-  m_Children:
-  - {fileID: 6064873476859588082}
-  - {fileID: 5320827716646319745}
-  - {fileID: 5003580198363948209}
+  m_Children: []
   m_Father: {fileID: 3351448952234461169}
   m_RootOrder: 5
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
@@ -1634,78 +1563,6 @@ Transform:
   m_Father: {fileID: 3972081836552158376}
   m_RootOrder: 1
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
---- !u!1 &4320554377093141923
-GameObject:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  serializedVersion: 6
-  m_Component:
-  - component: {fileID: 5003580198363948209}
-  - component: {fileID: 7729823372941932531}
-  m_Layer: 14
-  m_Name: AzuriteInfusion
-  m_TagString: Untagged
-  m_Icon: {fileID: 0}
-  m_NavMeshLayer: 0
-  m_StaticEditorFlags: 0
-  m_IsActive: 1
---- !u!4 &5003580198363948209
-Transform:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 4320554377093141923}
-  m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
-  m_LocalPosition: {x: 0, y: 0, z: 0}
-  m_LocalScale: {x: 1, y: 1, z: 1}
-  m_ConstrainProportionsScale: 0
-  m_Children: []
-  m_Father: {fileID: 4241460780824340472}
-  m_RootOrder: 2
-  m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
---- !u!114 &7729823372941932531
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 4320554377093141923}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: f343599928a560d42b50c8b702ec6411, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: 
-  _skillName: Azurite Infusion
-  _ID: -1
-  _description: 
-  _minRange: 0
-  _maxRange: 5
-  cooldown: 35
-  cost: 90
-  animName: DrawSword
-  attackColliderGO: {fileID: 6080363539117558812}
-  projData:
-    projPf: {fileID: 0}
-    projHeld: {fileID: 0}
-    projOrigin: {fileID: 0}
-    projRotation: {fileID: 0}
-    basicAtkProjSpeed: 10
-    scalingStatData:
-      flatPower: 1
-      attackScaling: 0
-      abilityScaling: 0
-  usesTargetLock: 0
-  scalingStatData:
-    flatPower: 5
-    attackScaling: 0
-    abilityScaling: 0.25
-  weaponBuffVFX: {fileID: 3588532860561885775, guid: 462bf3cfddfdfda4d8396a6263584db3, type: 3}
-  buffDuration: 30
-  userWeapon: {fileID: 4287253211477925105}
-  attackRangeLengthen: 0.5
 --- !u!1 &4341391563712786853
 GameObject:
   m_ObjectHideFlags: 0
@@ -3086,74 +2943,6 @@ MeshRenderer:
   m_SortingLayer: 0
   m_SortingOrder: 0
   m_AdditionalVertexStreams: {fileID: 0}
---- !u!1 &8378819048905109966
-GameObject:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  serializedVersion: 6
-  m_Component:
-  - component: {fileID: 6064873476859588082}
-  - component: {fileID: 6660368564526815167}
-  m_Layer: 14
-  m_Name: RegalCrescent
-  m_TagString: Untagged
-  m_Icon: {fileID: 0}
-  m_NavMeshLayer: 0
-  m_StaticEditorFlags: 0
-  m_IsActive: 1
---- !u!4 &6064873476859588082
-Transform:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 8378819048905109966}
-  m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
-  m_LocalPosition: {x: 0, y: 0, z: 0}
-  m_LocalScale: {x: 1, y: 1, z: 1}
-  m_ConstrainProportionsScale: 0
-  m_Children: []
-  m_Father: {fileID: 4241460780824340472}
-  m_RootOrder: 0
-  m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
---- !u!114 &6660368564526815167
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 8378819048905109966}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: a49d912e0b019f14b99bdde319029bdd, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: 
-  _skillName: Regal Crescent
-  _ID: -1
-  _description: 
-  _minRange: 0
-  _maxRange: 5
-  cooldown: 5
-  cost: 60
-  animName: HorizontalSlice
-  attackColliderGO: {fileID: 0}
-  projData:
-    projPf: {fileID: 98397111005207279, guid: 9b601de79a043e140a973529dec2522a, type: 3}
-    projHeld: {fileID: 0}
-    projOrigin: {fileID: 6080363539117558809}
-    projRotation: {fileID: 0}
-    basicAtkProjSpeed: 18
-    scalingStatData:
-      flatPower: 1
-      attackScaling: 0
-      abilityScaling: 0
-  usesTargetLock: 1
-  scalingStatData:
-    flatPower: 1
-    attackScaling: 0
-    abilityScaling: 0
 --- !u!1 &8451214602931165222
 GameObject:
   m_ObjectHideFlags: 0

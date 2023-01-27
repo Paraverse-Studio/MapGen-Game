@@ -22,7 +22,8 @@ public class SO_Mod : ScriptableObject
 
     [Header("——————  BASICS  —————")]
     [Space(10)]
-    public string Title;
+    [SerializeField]
+    protected string Title;
     public int ID;
     public ModType Type;
     public Sprite Image;
@@ -31,10 +32,22 @@ public class SO_Mod : ScriptableObject
     protected int Cost;
     [TextArea(1, 4)]
     public string Description;
+    [Header("——————  DETAILS  —————")]
+    [SerializeField]
+    private bool _removeOnPurchase;
 
     [Header("——————  SPECIAL  —————")]
     public SO_Mod[] PrerequisiteMods;
     public Evolving evolve;
+
+    /// <summary>
+    /// in rare cases, this function could be needed to change
+    /// for sub classes
+    /// </summary>
+    public virtual string GetTitle()
+    {
+        return Title;
+    }
 
     /// <summary>
     /// in rare cases, this function could be needed to change
@@ -80,7 +93,8 @@ public class SO_Mod : ScriptableObject
     /// </summary>
     public virtual SO_Mod Consume()
     {
-        return null;
+        if (_removeOnPurchase) return null;
+        return this;
         // implement in sub classes
     }
 

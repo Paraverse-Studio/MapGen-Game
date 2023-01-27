@@ -100,7 +100,14 @@ namespace Paraverse.Mob.Combat
                 }
                 basicAttackColliderGO.SetActive(true);
                 basicAttackCollider = basicAttackColliderGO.GetComponent<AttackCollider>();
-                basicAttackCollider.Init(this, stats, projData.scalingStatData);
+                if (gameObject.CompareTag(StringData.PlayerTag))
+                {
+                    basicAttackCollider.Init(this, stats);
+                }
+                else
+                {
+                    basicAttackCollider.Init(this, stats, projData.scalingStatData);
+                }
                 basicAttackColliderGO.SetActive(false);
             }
         }
