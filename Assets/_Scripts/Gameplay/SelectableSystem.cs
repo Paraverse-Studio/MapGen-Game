@@ -10,8 +10,7 @@ public class SelectableSystem : MonoBehaviour
 {
     public static SelectableSystem Instance;
 
-    [Header("References")]
-    public GameObject player;
+    [Header("(Run-time)")]
     public Selectable Target;
 
     [Header("Target Outline")]
@@ -33,12 +32,18 @@ public class SelectableSystem : MonoBehaviour
     public TransformEvent OnTargetLocked = new TransformEvent();
     public TransformEvent OnTargetUnlocked = new TransformEvent();
 
+    private GameObject _player;
     private float _targetSelectedDuration = 0f;
 
 
     private void Awake()
     {
         Instance = this;
+    }
+
+    private void Start()
+    {
+        _player = GlobalSettings.Instance.player;
     }
 
     private void Update()
@@ -49,7 +54,7 @@ public class SelectableSystem : MonoBehaviour
 
             if (Time.frameCount % 20 == 0 && 
                 _targetSelectedDuration > TargetMinimumDuration &&
-                (player.transform.position - Target.transform.position).sqrMagnitude > (Target.Range * Target.Range))
+                (_player.transform.position - Target.transform.position).sqrMagnitude > (Target.Range * Target.Range))
             {
                 DeselectTarget();
             }
@@ -116,7 +121,7 @@ public class SelectableSystem : MonoBehaviour
 
         foreach (Selectable obj in _selectables)
         {            
-            float dist = Vector3.Distance(player.transform.position, obj.transform.position);
+            float dist = Vector3.Distance(_player.transform.position, obj.transform.position);
 
             if (dist > obj.Range) continue;
 
