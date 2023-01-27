@@ -1,5 +1,3 @@
-using UnityEngine;
-
 namespace Paraverse.Stats
 {
     public class StatModifier

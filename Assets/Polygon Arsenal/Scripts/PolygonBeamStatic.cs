@@ -27,7 +27,6 @@ public class PolygonBeamStatic : MonoBehaviour
     public float textureLengthScale = 1f;   //Set this to the horizontal length of your texture relative to the vertical. 
                                             //Example: if texture is 200 pixels in height and 600 in length, set this to 3
 
-
     void FixedUpdate()
     {
         if (beam) //Updates the beam
@@ -36,7 +35,7 @@ public class PolygonBeamStatic : MonoBehaviour
 
             Vector3 end;
             RaycastHit hit;
-            if (beamCollides && Physics.Raycast(transform.position, transform.forward, out hit)) //Checks for collision
+            if (beamCollides && Physics.CapsuleCast(transform.position + (transform.forward * 0.5f), transform.position + (transform.up * -0.5f), 2f, transform.forward, out hit, beamLength)) //Checks for collision
                 end = hit.point - (transform.forward * beamEndOffset);
             else
                 end = transform.position + (transform.forward * beamLength);

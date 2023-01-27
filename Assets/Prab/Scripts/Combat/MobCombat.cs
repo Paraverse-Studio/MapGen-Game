@@ -32,7 +32,7 @@ namespace Paraverse.Mob.Combat
         [SerializeField, Tooltip("Basic attack weapon collider [Only required for melee weapon users].")]
         protected GameObject basicAttackColliderGO;
         [Tooltip("AttackCollider script of basic attack collider.")]
-        protected AttackCollider basicAttackCollider;
+        public AttackCollider basicAttackCollider;
 
         [Header("Projectile Values")]
         [SerializeField, Tooltip("Set as true if mob is a projectile user.")]
@@ -100,7 +100,7 @@ namespace Paraverse.Mob.Combat
                 }
                 basicAttackColliderGO.SetActive(true);
                 basicAttackCollider = basicAttackColliderGO.GetComponent<AttackCollider>();
-                basicAttackCollider.Init(this, stats);
+                basicAttackCollider.Init(this, stats, projData.scalingStatData);
                 basicAttackColliderGO.SetActive(false);
             }
         }

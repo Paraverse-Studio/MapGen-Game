@@ -122,6 +122,28 @@ AnimatorStateTransition:
   m_InterruptionSource: 0
   m_OrderedInterruption: 1
   m_CanTransitionToSelf: 1
+--- !u!1101 &-6718710911271197819
+AnimatorStateTransition:
+  m_ObjectHideFlags: 1
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_Name: 
+  m_Conditions: []
+  m_DstStateMachine: {fileID: 0}
+  m_DstState: {fileID: 0}
+  m_Solo: 0
+  m_Mute: 0
+  m_IsExit: 1
+  serializedVersion: 3
+  m_TransitionDuration: 0.25
+  m_TransitionOffset: 0
+  m_ExitTime: 0.75
+  m_HasExitTime: 1
+  m_HasFixedDuration: 1
+  m_InterruptionSource: 0
+  m_OrderedInterruption: 1
+  m_CanTransitionToSelf: 1
 --- !u!1102 &-6530127676696636288
 AnimatorState:
   serializedVersion: 6
@@ -176,6 +198,23 @@ AnimatorState:
   m_MirrorParameter: 
   m_CycleOffsetParameter: 
   m_TimeParameter: 
+--- !u!114 &-6235440989634230471
+MonoBehaviour:
+  m_ObjectHideFlags: 1
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 42945beeedb30a04584257d5ef725971, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  parameter: isBasicAttacking
+  disableUponEnter: 0
+  enableUponExit: 0
+  useDelay: 0
+  enableAfterAnimPercentage: 0
 --- !u!1102 &-5970416967866164432
 AnimatorState:
   serializedVersion: 6
@@ -265,6 +304,35 @@ MonoBehaviour:
   enableUponExit: 1
   useDelay: 0
   enableAfterAnimPercentage: 0
+--- !u!1102 &-5158161196402507361
+AnimatorState:
+  serializedVersion: 6
+  m_ObjectHideFlags: 1
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_Name: BasicAttack
+  m_Speed: 1
+  m_CycleOffset: 0
+  m_Transitions:
+  - {fileID: -6718710911271197819}
+  m_StateMachineBehaviours:
+  - {fileID: 6420398669487052030}
+  - {fileID: -6235440989634230471}
+  m_Position: {x: 50, y: 50, z: 0}
+  m_IKOnFeet: 0
+  m_WriteDefaultValues: 1
+  m_Mirror: 0
+  m_SpeedParameterActive: 0
+  m_MirrorParameterActive: 0
+  m_CycleOffsetParameterActive: 0
+  m_TimeParameterActive: 0
+  m_Motion: {fileID: 7400000, guid: d4e55c3b2d47d4f4e9f8f185012f3049, type: 2}
+  m_Tag: 
+  m_SpeedParameter: 
+  m_MirrorParameter: 
+  m_CycleOffsetParameter: 
+  m_TimeParameter: 
 --- !u!114 &-3656423728985699370
 MonoBehaviour:
   m_ObjectHideFlags: 1
@@ -449,23 +517,6 @@ AnimatorState:
   m_MirrorParameter: 
   m_CycleOffsetParameter: 
   m_TimeParameter: 
---- !u!114 &-832305659200651806
-MonoBehaviour:
-  m_ObjectHideFlags: 1
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 0}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 42945beeedb30a04584257d5ef725971, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: 
-  parameter: isBasicAttacking
-  disableUponEnter: 0
-  enableUponExit: 0
-  useDelay: 0
-  enableAfterAnimPercentage: 0
 --- !u!91 &9100000
 AnimatorController:
   m_ObjectHideFlags: 0
@@ -599,19 +650,19 @@ AnimatorStateMachine:
     m_Position: {x: 270, y: 120, z: 0}
   - serializedVersion: 1
     m_State: {fileID: 5454321749811370939}
-    m_Position: {x: 110, y: 290, z: 0}
+    m_Position: {x: 140, y: 290, z: 0}
   - serializedVersion: 1
     m_State: {fileID: 5254641023802904555}
-    m_Position: {x: 700, y: 180, z: 0}
+    m_Position: {x: 800, y: 150, z: 0}
   - serializedVersion: 1
     m_State: {fileID: -5552789614350050330}
-    m_Position: {x: 340, y: 210, z: 0}
+    m_Position: {x: 340, y: 240, z: 0}
   - serializedVersion: 1
     m_State: {fileID: -6335194122088436719}
     m_Position: {x: 550, y: -120, z: 0}
   - serializedVersion: 1
     m_State: {fileID: 2172982517644407217}
-    m_Position: {x: 700, y: 230, z: 0}
+    m_Position: {x: 800, y: 200, z: 0}
   - serializedVersion: 1
     m_State: {fileID: 4261870491198785726}
     m_Position: {x: 510, y: 120, z: 0}
@@ -620,7 +671,7 @@ AnimatorStateMachine:
     m_Position: {x: 550, y: -70, z: 0}
   - serializedVersion: 1
     m_State: {fileID: -2063909866411434119}
-    m_Position: {x: 700, y: 280, z: 0}
+    m_Position: {x: 800, y: 250, z: 0}
   - serializedVersion: 1
     m_State: {fileID: -6530127676696636288}
     m_Position: {x: 380, y: 40, z: 0}
@@ -642,6 +693,9 @@ AnimatorStateMachine:
   - serializedVersion: 1
     m_State: {fileID: 3474408656069215664}
     m_Position: {x: 220, y: 360, z: 0}
+  - serializedVersion: 1
+    m_State: {fileID: -5158161196402507361}
+    m_Position: {x: 550, y: 290, z: 0}
   m_ChildStateMachines: []
   m_AnyStateTransitions: []
   m_EntryTransitions: []
@@ -864,14 +918,14 @@ AnimatorState:
   m_CorrespondingSourceObject: {fileID: 0}
   m_PrefabInstance: {fileID: 0}
   m_PrefabAsset: {fileID: 0}
-  m_Name: BasicAttack
+  m_Name: LifeStealAttack
   m_Speed: 1.4
   m_CycleOffset: 0
   m_Transitions:
   - {fileID: 7407536574100715206}
   m_StateMachineBehaviours:
   - {fileID: -3656423728985699370}
-  - {fileID: -832305659200651806}
+  - {fileID: 5522539996760993894}
   m_Position: {x: 50, y: 50, z: 0}
   m_IKOnFeet: 0
   m_WriteDefaultValues: 1
@@ -915,6 +969,23 @@ AnimatorState:
   m_MirrorParameter: 
   m_CycleOffsetParameter: 
   m_TimeParameter: 
+--- !u!114 &5522539996760993894
+MonoBehaviour:
+  m_ObjectHideFlags: 1
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 42945beeedb30a04584257d5ef725971, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  parameter: isUsingSkill
+  disableUponEnter: 0
+  enableUponExit: 0
+  useDelay: 0
+  enableAfterAnimPercentage: 0
 --- !u!1101 &5549964042446967272
 AnimatorStateTransition:
   m_ObjectHideFlags: 1
@@ -940,6 +1011,23 @@ AnimatorStateTransition:
   m_InterruptionSource: 0
   m_OrderedInterruption: 1
   m_CanTransitionToSelf: 1
+--- !u!114 &6420398669487052030
+MonoBehaviour:
+  m_ObjectHideFlags: 1
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 42945beeedb30a04584257d5ef725971, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  parameter: isInteracting
+  disableUponEnter: 0
+  enableUponExit: 0
+  useDelay: 0
+  enableAfterAnimPercentage: 0
 --- !u!1101 &6748255225757093468
 AnimatorStateTransition:
   m_ObjectHideFlags: 1

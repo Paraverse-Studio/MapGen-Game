@@ -227,7 +227,7 @@ namespace Paraverse.Player
             {
                 MobSkill s = skills[usingSkillIdx];
                 data = s.projData;
-                damage = s.flatPower + (stats.AttackDamage.FinalValue * s.attackScaling) + (stats.AbilityPower.FinalValue * s.abilityScaling);
+                damage = s.scalingStatData.flatPower + (stats.AttackDamage.FinalValue * s.scalingStatData.attackScaling) + (stats.AbilityPower.FinalValue * s.scalingStatData.abilityScaling);
             }
             else
                 data = projData;
