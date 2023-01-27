@@ -70,7 +70,14 @@ namespace Paraverse.Combat
             this.stats = stats;
             curCooldown = 0f;
             if (mob.tag.Equals(StringData.PlayerTag))
+            {
                 input.OnSkillOneEvent += Execute;
+
+                attackColliderGO = mob.basicAttackCollider.gameObject;
+                attackCollider = attackColliderGO.GetComponent<AttackCollider>();
+                if (null == projData.projOrigin) projData.projOrigin = attackColliderGO.transform;
+            }
+
 
             //if (null == attackColliderGO)
             //{
