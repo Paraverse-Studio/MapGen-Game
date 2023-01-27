@@ -81,9 +81,7 @@ public class ShopManager : MonoBehaviour
 
     public void CalculateShopItems(int userCurrencyAmount, IEnumerable<SO_Mod> userCurrentMods)
     {
-        Debug.Log("Shop Manager: Shop calculation invoked! Calculating new items. User gold: " + userCurrencyAmount);
-
-        // 1.0  Clear resources
+        // 1.0  Clear resources, and ready available mods
         if (null == AvailableMods || AvailableMods.Count == 0)
         {
             Debug.Log("Shop Manager: There are no available mods in the list.");
@@ -100,7 +98,7 @@ public class ShopManager : MonoBehaviour
             }
         }
 
-        // 2.0  Refresh available mods list, sort them by their price
+        // 2.0  Sort remaining available mods by their price
         goldText.text = _playerStats.Gold.ToString();
         AvailableMods.Sort((a, b) => a.GetCost().CompareTo(b.GetCost()));
 
@@ -120,8 +118,6 @@ public class ShopManager : MonoBehaviour
             }
             if (_modPool.Count >= pollQuantity) break;
         }
-
-        Debug.Log("Mod Pool here has " + _modPool.Count);
 
         // 5.0  From the polled amount, randomly pick the mods to show on shop
         System.Random rand = new();

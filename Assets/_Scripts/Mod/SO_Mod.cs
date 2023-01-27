@@ -30,6 +30,7 @@ public class SO_Mod : ScriptableObject
 
     [SerializeField]
     protected int Cost;
+    public string Lore;
     [TextArea(1, 4)]
     public string Description;
     [Header("——————  DETAILS  —————")]
