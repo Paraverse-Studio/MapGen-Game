@@ -1676,7 +1676,7 @@ MonoBehaviour:
   cooldown: 6
   cost: 90
   animName: DrawSword
-  attackColliderGO: {fileID: 0}
+  attackColliderGO: {fileID: 6080363539117558812}
   projData:
     projPf: {fileID: 0}
     projHeld: {fileID: 0}
@@ -1686,10 +1686,11 @@ MonoBehaviour:
   usesTargetLock: 0
   flatPower: 5
   attackScaling: 0
-  abilityScaling: 0.2
+  abilityScaling: 0.25
   weaponBuffVFX: {fileID: 3588532860561885775, guid: 462bf3cfddfdfda4d8396a6263584db3, type: 3}
   buffDuration: 5
   userWeapon: {fileID: 4287253211477925105}
+  attackRangeLengthen: 0.5
 --- !u!1 &4341391563712786853
 GameObject:
   m_ObjectHideFlags: 0
@@ -2109,7 +2110,7 @@ Transform:
   m_GameObject: {fileID: 6080363539117558812}
   m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
   m_LocalPosition: {x: 0.000000031585, y: 0.575, z: -0.000000024746}
-  m_LocalScale: {x: 0.6476289, y: 1.8402133, z: 0.28545}
+  m_LocalScale: {x: 1, y: 1, z: 1}
   m_ConstrainProportionsScale: 0
   m_Children:
   - {fileID: 3370958072789552210}
@@ -2177,8 +2178,8 @@ BoxCollider:
   m_IsTrigger: 1
   m_Enabled: 1
   serializedVersion: 2
-  m_Size: {x: 0.85, y: 1.0323875, z: 0.64557695}
-  m_Center: {x: 0.01868131, y: 0.016194027, z: -0.042395163}
+  m_Size: {x: 0.5, y: 1.5, z: 0.25}
+  m_Center: {x: 0, y: 0.075, z: 0}
 --- !u!114 &6080363539117558813
 MonoBehaviour:
   m_ObjectHideFlags: 0
