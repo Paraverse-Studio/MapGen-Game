@@ -45,14 +45,13 @@ public class EnergyDrainSkill : MobSkill, IMobSkill
     #region Animation Events
     public void EnableCollider()
     {
-        Debug.Log("ENABLE COLL: " + attackColliderGO.name);
         attackColliderGO.SetActive(true);
     }
 
     public void DisableCollider()
     {
-        Debug.Log("DISABLE COLL: " + attackColliderGO.name);
         attackColliderGO.SetActive(false);
+        DisableSkill();
     }
     #endregion
 }

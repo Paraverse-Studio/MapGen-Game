@@ -172,13 +172,11 @@ public class EnhancedMobCombat : MobCombat
 
     public virtual void AEventEnableSkillCollider()
     {
-        Debug.Log("A EVENT ENABLE SKILL COL");
         OnEnableSkillColliderSOneEvent?.Invoke();
     }
 
     public virtual void AEventDisableSkillCollider()
     {
-        Debug.Log("A EVENT DISABLE SKILL COL");
         OnDisableSkillColliderSOneEvent?.Invoke();
     }
 

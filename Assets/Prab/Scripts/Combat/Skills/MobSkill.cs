@@ -77,17 +77,6 @@ namespace Paraverse.Combat
                 attackCollider = attackColliderGO.GetComponent<AttackCollider>();
                 if (null == projData.projOrigin) projData.projOrigin = attackColliderGO.transform;
             }
-
-
-            //if (null == attackColliderGO)
-            //{
-            //    Debug.LogWarning(gameObject.name + " doesn't have an attack collider."); 
-            //    return;
-            //}
-            //attackColliderGO.SetActive(true);
-            //attackCollider = attackColliderGO.GetComponent<AttackCollider>();
-            //attackCollider.Init(mob, stats);
-            //attackColliderGO.SetActive(false);
         }
 
         public virtual void ActivateSkill(EnhancedMobCombat mob, Animator anim, IMobStats stats, Transform target = null)
