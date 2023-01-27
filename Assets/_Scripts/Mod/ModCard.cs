@@ -25,7 +25,7 @@ public class ModCard : MonoBehaviour
 
     public void UpdateDisplay(System.Action clickCallBack = null)
     {
-        if (titleLabel) titleLabel.text = Mod.Title;
+        if (titleLabel) titleLabel.text = Mod.GetTitle();
         if (imageHolder) imageHolder.sprite = Mod.Image;
         if (descriptionLabel) descriptionLabel .text = Mod.Description;
         // if (loreLabel) loreLabel .text = Mod.Lore;

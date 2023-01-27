@@ -157,15 +157,6 @@ public class GameLoopManager : MonoBehaviour
         {
             if (EndPortal) EndPortal.SetActive(true);
         }
-        if (Input.GetKeyDown(KeyCode.Y))
-        {
-            playerStats.SetFullHealth();
-            List<MobController> m = EnemiesManager.Instance.Enemies;
-            foreach (MobController _m in m)
-            {
-                _m.GetComponentInChildren<MobStats>().SetFullHealth();
-            }
-        }
         if (Input.GetKeyDown(KeyCode.I))
         {
             List<MobController> m = EnemiesManager.Instance.Enemies;

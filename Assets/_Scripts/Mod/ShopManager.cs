@@ -177,7 +177,7 @@ public class ShopManager : MonoBehaviour
         }
 
         // Logistics
-        Debug.Log($"Purchased item {AvailableMods[shopItem.index].Title}!");
+        Debug.Log($"Purchased item {AvailableMods[shopItem.index].GetTitle()}!");
 
         _playerStats.UpdateGold(-shopItem.mod.GetCost());
         goldText.text = _playerStats.Gold.ToString();
