@@ -112,26 +112,7 @@ namespace Paraverse
 
             if (other.CompareTag(targetTag))
             {
-                IMobController controller = other.GetComponent<IMobController>();
-                if (null != controller)
-                {
-                    ApplyCustomDamage(controller);
-
-                    // Apply knock back effect
-                    if (null != knockBackEffect)
-                    {
-                        KnockBackEffect effect = new KnockBackEffect(knockBackEffect);
-                        controller.ApplyKnockBack(mob.transform.position, effect);
-                    }
-                    else if (applyHitAnim)
-                    {
-                        controller.ApplyHitAnimation();
-                    }
-                }
-
-                if (hitFX) Instantiate(hitFX, other.transform.position + new Vector3(0, 0.5f, 0), Quaternion.identity);
-
-                if (!pierce) Destroy(gameObject);
+                DamageLogic(other);
             }
         }
 
@@ -140,25 +121,7 @@ namespace Paraverse
             if (other.CompareTag(targetTag) && dotTimer >= dotIntervalTimer)
             {
                 dotTimer = 0f;
-
-                IMobController controller = other.GetComponent<IMobController>();
-                if (null != controller)
-                {
-                    ApplyCustomDamage(controller);
-
-                    // Apply knock back effect
-                    if (null != knockBackEffect)
-                    {
-                        KnockBackEffect effect = new KnockBackEffect(knockBackEffect);
-                        controller.ApplyKnockBack(mob.transform.position, effect);
-                    }
-                    else if (applyHitAnim)
-                        controller.ApplyHitAnimation();
-                }
-
-                if (hitFX) Instantiate(hitFX, other.transform.position + new Vector3(0, 0.5f, 0), Quaternion.identity);
-
-                if (!pierce) Destroy(gameObject);
+                DamageLogic(other);
             }
         }
 
@@ -175,9 +138,29 @@ namespace Paraverse
             controller.Stats.UpdateCurrentHealth(-Mathf.CeilToInt(totalDmg));
             return totalDmg;
         }
+
         private void DamageLogic(Collider other)
         {
+            IMobController controller = other.GetComponent<IMobController>();
+            if (null != controller)
+            {
+                ApplyCustomDamage(controller);
 
+                // Apply knock back effect
+                if (null != knockBackEffect)
+                {
+                    KnockBackEffect effect = new KnockBackEffect(knockBackEffect);
+                    controller.ApplyKnockBack(mob.transform.position, effect);
+                }
+                else if (applyHitAnim)
+                {
+                    controller.ApplyHitAnimation();
+                }
+            }
+
+            if (hitFX) Instantiate(hitFX, other.transform.position + new Vector3(0, 0.5f, 0), Quaternion.identity);
+
+            if (!pierce) Destroy(gameObject);
         }
     }
 }

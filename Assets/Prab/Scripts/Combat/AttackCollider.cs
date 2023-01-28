@@ -86,38 +86,7 @@ namespace Paraverse
             // Detecting type of object/enemy hit
             if (other.CompareTag(targetTag) && !hitTargets.Contains(other.gameObject))
             {
-                // Pre Basic Attack Hit Event
-                if (isBasicAttackCollider)
-                    OnBasicAttackPreHitEvent?.Invoke();
-                
-                hitTargets.Add(other.gameObject);
-
-                // Enemy-related logic
-                if (other.TryGetComponent(out IMobController controller))
-                {
-                    // Apply damage
-                    float dmg = ApplyCustomDamage(controller);
-
-                    // On Damage Applied Event
-                    if (isBasicAttackCollider)
-                        OnBasicAttackApplyDamageEvent?.Invoke(dmg);
-
-                    // Apply knock back effect
-                    if (null != knockBackEffect)
-                    {
-                        KnockBackEffect effect = new KnockBackEffect(knockBackEffect);
-                        controller.ApplyKnockBack(mob.transform.position, effect);
-                    }
-                }
-
-                // General VFX logic
-                if (hitFX) Instantiate(hitFX, other.transform.position + new Vector3(0, 0.5f, 0), Quaternion.identity);
-
-                // Post Basic Attack Hit Event
-                if (isBasicAttackCollider)
-                    OnBasicAttackPostHitEvent?.Invoke();
-
-                Debug.Log(other.name + " took " + stats.AttackDamage.FinalValue + " points of damage.");
+                DamageLogic(other);
             }
         }
 
@@ -127,7 +96,7 @@ namespace Paraverse
 
             if (other.CompareTag(targetTag) && !hitTargets.Contains(other.gameObject) && applyHit)
             {
-                OnTriggerEnter(other);
+                DamageLogic(other);
                 timer = attackPerUnitOfTime;
                 hitTargets.Add(other.gameObject);
                 applyHit = false;
@@ -148,6 +117,42 @@ namespace Paraverse
 
             controller.Stats.UpdateCurrentHealth(-Mathf.CeilToInt(totalDmg));
             return totalDmg;
+        }
+
+        private void DamageLogic(Collider other)
+        {
+            // Pre Basic Attack Hit Event
+            if (isBasicAttackCollider)
+                OnBasicAttackPreHitEvent?.Invoke();
+
+            hitTargets.Add(other.gameObject);
+
+            // Enemy-related logic
+            if (other.TryGetComponent(out IMobController controller))
+            {
+                // Apply damage
+                float dmg = ApplyCustomDamage(controller);
+
+                // On Damage Applied Event
+                if (isBasicAttackCollider)
+                    OnBasicAttackApplyDamageEvent?.Invoke(dmg);
+
+                // Apply knock back effect
+                if (null != knockBackEffect)
+                {
+                    KnockBackEffect effect = new KnockBackEffect(knockBackEffect);
+                    controller.ApplyKnockBack(mob.transform.position, effect);
+                }
+            }
+
+            // General VFX logic
+            if (hitFX) Instantiate(hitFX, other.transform.position + new Vector3(0, 0.5f, 0), Quaternion.identity);
+
+            // Post Basic Attack Hit Event
+            if (isBasicAttackCollider)
+                OnBasicAttackPostHitEvent?.Invoke();
+
+            Debug.Log(other.name + " took " + stats.AttackDamage.FinalValue + " points of damage.");
         }
     }
 }
