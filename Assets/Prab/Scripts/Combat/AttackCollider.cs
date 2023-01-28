@@ -17,6 +17,8 @@ namespace Paraverse
 
         [SerializeField, Tooltip("Set turn for damage over time.")]
         private bool dot = false;
+        [SerializeField, Tooltip("Apply damage upon enter.")]
+        protected bool dontApplyDamageOnEnter = false;
         private float timer = 0f;
         private bool applyHit = false;
         private float attackPerUnitOfTime = 1f;
@@ -79,7 +81,7 @@ namespace Paraverse
 
         private void OnTriggerEnter(Collider other)
         {
-            if (dot) return;
+            if (dontApplyDamageOnEnter == true) return;
 
             // Detecting type of object/enemy hit
             if (other.CompareTag(targetTag) && !hitTargets.Contains(other.gameObject))

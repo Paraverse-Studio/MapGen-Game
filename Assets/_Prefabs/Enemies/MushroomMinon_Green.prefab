@@ -3552,7 +3552,7 @@ MonoBehaviour:
   deathEffect: {fileID: 8073467667769803130, guid: 75c1b160671ce934fad50936633acef1, type: 3}
   _curMobState: 0
   _isGrounded: 1
-  _isInvulnerable: 0
+  _isUnstaggerable: 0
 --- !u!114 &8586723283797941117
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -3569,6 +3569,7 @@ MonoBehaviour:
   basicAtkDmgRatio: 1
   basicAtkRange: 10
   basicAttackColliderGO: {fileID: 0}
+  basicAttackCollider: {fileID: 0}
   projUser: 1
   projData:
     projPf: {fileID: 2144149555977180084, guid: 0e39962d2117a454ebbfa439711be5df, type: 3}
@@ -3576,6 +3577,10 @@ MonoBehaviour:
     projOrigin: {fileID: 1374451527}
     projRotation: {fileID: 0}
     basicAtkProjSpeed: 12
+    scalingStatData:
+      flatPower: 1
+      attackScaling: 0
+      abilityScaling: 0
   IsSkilling: 0
 --- !u!114 &1376336924
 MonoBehaviour:

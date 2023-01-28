@@ -25,7 +25,7 @@ namespace Paraverse
         [SerializeField, Tooltip("Damage over time.")]
         protected bool dot = false;
         [SerializeField, Tooltip("Apply damage upon enter.")]
-        protected bool applyDamageOnEnter = false;
+        protected bool dontApplyDamageOnEnter = false;
         [SerializeField, Tooltip("Applies damage every given second.")]
         protected float dotIntervalTimer = 1f;
         private float dotTimer = 0f;
@@ -108,7 +108,7 @@ namespace Paraverse
 
         protected void OnTriggerEnter(Collider other)
         {
-            if (dot && applyDamageOnEnter == false) return;
+            if (dontApplyDamageOnEnter == true) return;
 
             if (other.CompareTag(targetTag))
             {
@@ -174,6 +174,10 @@ namespace Paraverse
 
             controller.Stats.UpdateCurrentHealth(-Mathf.CeilToInt(totalDmg));
             return totalDmg;
+        }
+        private void DamageLogic(Collider other)
+        {
+
         }
     }
 }
