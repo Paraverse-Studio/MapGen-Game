@@ -1,7 +1,9 @@
 using Paraverse.Combat;
 using Paraverse.Helper;
 using Paraverse.Mob.Stats;
+using TMPro;
 using UnityEngine;
+using UnityEngine.UI;
 
 namespace Paraverse.Player
 {
@@ -29,6 +31,15 @@ namespace Paraverse.Player
         // Skills 
         private MobSkill _activeSkill;
         public MobSkill ActiveSkill { get { return _activeSkill; } }
+
+        [Header("U.I.")]
+        [SerializeField]
+        private TextMeshProUGUI _skillLabel;
+        [SerializeField]
+        private Image _skillIcon;
+        [SerializeField] 
+        private ContentFitterRefresher _refresher;
+
         #endregion
 
 
@@ -61,15 +72,22 @@ namespace Paraverse.Player
             {
                 if (sk.ID == skill.ID)
                 {
-                    sk.ActivateSkill(this, input, anim, stats);
-                    _activeSkill = sk;
+                    ActivateSkillWithUI(sk);
                     return;
                 }
             }
-            MobSkill newSkill = Instantiate(skill, SkillHolder);
-            skills.Add(newSkill);
-            newSkill.ActivateSkill(this, input, anim, stats);
-            _activeSkill = newSkill;
+            Instantiate(skill, SkillHolder);
+            skills.Add(skill);
+            ActivateSkillWithUI(skill);
+        }
+
+        private void ActivateSkillWithUI(MobSkill skill)
+        {
+            skill.ActivateSkill(this, input, anim, stats);
+            _activeSkill = skill;
+            _skillLabel.text = skill.Name;
+            _skillIcon.sprite = skill.Image;
+            _refresher.RefreshContentFitters();
         }
 
         protected override void Update()

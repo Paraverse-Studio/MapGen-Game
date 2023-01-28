@@ -23,6 +23,9 @@ namespace Paraverse.Combat
         [SerializeField, Tooltip("Skill ID.")]
         protected int _ID = -1;
 
+        public Sprite Image { get { return _image; } set { _image = value; } }
+        protected Sprite _image = null;
+
         public string Description { get { return _description; } set { _description = value; } }
         [SerializeField, TextArea(2, 3), Tooltip("Skill description.")]
         protected string _description = "";
@@ -221,8 +224,6 @@ namespace Paraverse.Combat
             {
                 SubscribeAnimationEventListeners();
                 ExecuteSkillLogic();
-                Debug.Log("Executing skill: " + _skillName + " which takes " + cost + " points of energy out of " + stats.CurEnergy + " point of current energy." +
-                    "The max cooldown for this skill is " + cooldown + " and the animation name is " + animName + ".");
             }
         }
         #endregion
