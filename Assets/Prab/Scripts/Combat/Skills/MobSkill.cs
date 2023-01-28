@@ -235,8 +235,6 @@ namespace Paraverse.Combat
             {
                 SubscribeAnimationEventListeners();
                 ExecuteSkillLogic();
-                Debug.Log("Executing skill: " + _skillName + " which takes " + cost + " points of energy out of " + stats.CurEnergy + " point of current energy." +
-                    "The max cooldown for this skill is " + cooldown + " and the animation name is " + animName + ".");
             }
         }
         #endregion
