@@ -95,11 +95,23 @@ public class EnhancedMobCombat : MobCombat
     /// </summary>
     public override void BasicAttackHandler()
     {
-        if (curBasicAtkCd <= 0 && IsSkilling == false)
+        if (curBasicAtkCd <= 0 && IsSkilling == false && IsSkillReady() == false)
         {
             anim.Play(StringData.BasicAttack);
             curBasicAtkCd = GetBasicAttackCooldown();
         }
+    }
+
+    private bool IsSkillReady()
+    {
+        for (int i = 0; i < skills.Count; ++i)
+        {
+            if (skills[i].IsOffCooldown && skills[i].TargetWithinRange)
+            {
+                return true;
+            }
+        }
+        return false;
     }
 
     #region Animation Events Skill One
