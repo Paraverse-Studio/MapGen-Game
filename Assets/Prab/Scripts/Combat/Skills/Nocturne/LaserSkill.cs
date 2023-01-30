@@ -49,7 +49,6 @@ public class LaserSkill : MobSkill, IMobSkill
             if (skillCurTimer > 0)
             {
                 skillCurTimer -= Time.deltaTime;
-                //Quaternion.Slerp(chargeOrigin.rotation, transform.rotation, 10f);
             }
             else
             {

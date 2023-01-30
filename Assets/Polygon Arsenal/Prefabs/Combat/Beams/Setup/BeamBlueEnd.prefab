@@ -4921,7 +4921,7 @@ GameObject:
   - component: {fileID: 4884042998854238}
   - component: {fileID: 198459408452168600}
   - component: {fileID: 199569283844206870}
-  - component: {fileID: 3688656308877163348}
+  - component: {fileID: 8640058048529080109}
   m_Layer: 0
   m_Name: BeamBlueEnd
   m_TagString: Untagged
@@ -9852,7 +9852,7 @@ ParticleSystemRenderer:
   m_MeshWeighting2: 1
   m_MeshWeighting3: 1
   m_MaskInteraction: 0
---- !u!114 &3688656308877163348
+--- !u!114 &8640058048529080109
 MonoBehaviour:
   m_ObjectHideFlags: 0
   m_CorrespondingSourceObject: {fileID: 0}
@@ -9868,10 +9868,10 @@ MonoBehaviour:
   speed: 0
   range: 0
   damage: 0
-  deathTimer: 3.5
+  deathTimer: 3
   stationary: 1
-  dot: 1
-  applyDamageOnEnter: 0
+  dot: 0
+  dontApplyDamageOnEnter: 1
   dotIntervalTimer: 1
   knockBackEffect: {fileID: 0}
   pierce: 1
@@ -9879,6 +9879,11 @@ MonoBehaviour:
   isBeam: 1
   launchFX: {fileID: 0}
   hitFX: {fileID: 0}
+  decreaseByLerp: -1
+  scalingStatData:
+    flatPower: 0
+    attackScaling: 1
+    abilityScaling: 0
 --- !u!1 &1161243248889922
 GameObject:
   m_ObjectHideFlags: 0

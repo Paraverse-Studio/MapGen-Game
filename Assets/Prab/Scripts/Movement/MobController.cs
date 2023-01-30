@@ -2,7 +2,6 @@ using Paraverse.Helper;
 using Paraverse.Mob.Combat;
 using Paraverse.Mob.Stats;
 using Paraverse.Stats;
-using System.Security.Policy;
 using UnityEngine;
 using UnityEngine.AI;
 
@@ -200,7 +199,7 @@ namespace Paraverse.Mob.Controller
             StateHandler();
             CCHandler();
             KnockbackHandler();
-            JumpHandler(); 
+            JumpHandler();
             FlyUpHandler();
             FlyDownHandler();
             AnimatorHandler();

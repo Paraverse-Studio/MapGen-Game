@@ -3827,6 +3827,7 @@ MonoBehaviour:
     flatPower: 1
     attackScaling: 0
     abilityScaling: 0
+  rotSpeed: 100
   skillStartTimer: 3
   skillMoveSpeed: 3
 --- !u!1 &511818343
@@ -6347,6 +6348,17 @@ PrefabInstance:
       objectReference: {fileID: 0}
     m_RemovedComponents: []
   m_SourcePrefab: {fileID: 100100000, guid: 834dc73c554c9ad4fae808a0fabce9de, type: 3}
+--- !u!114 &663584507 stripped
+MonoBehaviour:
+  m_CorrespondingSourceObject: {fileID: 3787384781304995309, guid: 4c52fd3d7cd16394f9446b8af4cd921f, type: 3}
+  m_PrefabInstance: {fileID: 3787384780079605949}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 826f6eeb6329df94c861cd0c08b9574e, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
 --- !u!1 &669780039
 GameObject:
   m_ObjectHideFlags: 0
@@ -12083,7 +12095,7 @@ PrefabInstance:
       objectReference: {fileID: 0}
     - target: {fileID: 834749840821475308, guid: 504274220e31b014bb1f9da275f2fca1, type: 3}
       propertyPath: m_IsActive
-      value: 1
+      value: 0
       objectReference: {fileID: 0}
     - target: {fileID: 834749840821475311, guid: 504274220e31b014bb1f9da275f2fca1, type: 3}
       propertyPath: m_RootOrder
@@ -14922,6 +14934,7 @@ MonoBehaviour:
     flatPower: 1
     attackScaling: 0
     abilityScaling: 0
+  rotSpeed: 100
 --- !u!4 &1264230143
 Transform:
   m_ObjectHideFlags: 0
@@ -17464,6 +17477,7 @@ MonoBehaviour:
     flatPower: 1
     attackScaling: 0
     abilityScaling: 0
+  rotSpeed: 100
 --- !u!4 &1949719426
 Transform:
   m_ObjectHideFlags: 0
@@ -17532,6 +17546,7 @@ MonoBehaviour:
     flatPower: 1
     attackScaling: 0
     abilityScaling: 0
+  rotSpeed: 100
 --- !u!4 &2002084667
 Transform:
   m_ObjectHideFlags: 0
@@ -23242,6 +23257,10 @@ PrefabInstance:
   m_Modification:
     m_TransformParent: {fileID: 0}
     m_Modifications:
+    - target: {fileID: 632686499, guid: 4c52fd3d7cd16394f9446b8af4cd921f, type: 3}
+      propertyPath: rotSpeed
+      value: 1
+      objectReference: {fileID: 0}
     - target: {fileID: 3787384780742576496, guid: 4c52fd3d7cd16394f9446b8af4cd921f, type: 3}
       propertyPath: m_RootOrder
       value: 16
@@ -23292,8 +23311,16 @@ PrefabInstance:
       objectReference: {fileID: 0}
     - target: {fileID: 3787384780742576497, guid: 4c52fd3d7cd16394f9446b8af4cd921f, type: 3}
       propertyPath: m_IsActive
-      value: 0
+      value: 1
       objectReference: {fileID: 0}
+    - target: {fileID: 3787384781022177465, guid: 4c52fd3d7cd16394f9446b8af4cd921f, type: 3}
+      propertyPath: _isUnstaggerable
+      value: 1
+      objectReference: {fileID: 0}
+    - target: {fileID: 3787384781022177470, guid: 4c52fd3d7cd16394f9446b8af4cd921f, type: 3}
+      propertyPath: basicAttackCollider
+      value: 
+      objectReference: {fileID: 663584507}
     m_RemovedComponents: []
   m_SourcePrefab: {fileID: 100100000, guid: 4c52fd3d7cd16394f9446b8af4cd921f, type: 3}
 --- !u!1001 &5799079832122337080

@@ -4895,7 +4895,7 @@ GameObject:
   - component: {fileID: 199159920115183208}
   - component: {fileID: 82696311886392364}
   - component: {fileID: 5739916283554643842}
-  - component: {fileID: 3809179839124180522}
+  - component: {fileID: -6900898884270100452}
   m_Layer: 0
   m_Name: BeamBlueStart
   m_TagString: Untagged
@@ -9941,7 +9941,15 @@ MonoBehaviour:
   beamEndOffset: 0
   textureScrollSpeed: 0
   textureLengthScale: 1
---- !u!114 &3809179839124180522
+  targetTag: Player
+  dotIntervalTimer: 0.5
+  knockBackEffect: {fileID: 0}
+  applyHitAnim: 1
+  scalingStatData:
+    flatPower: 5
+    attackScaling: 0
+    abilityScaling: 1
+--- !u!114 &-6900898884270100452
 MonoBehaviour:
   m_ObjectHideFlags: 0
   m_CorrespondingSourceObject: {fileID: 0}
@@ -9957,10 +9965,10 @@ MonoBehaviour:
   speed: 0
   range: 0
   damage: 0
-  deathTimer: 3.5
+  deathTimer: 3
   stationary: 1
-  dot: 1
-  applyDamageOnEnter: 0
+  dot: 0
+  dontApplyDamageOnEnter: 1
   dotIntervalTimer: 1
   knockBackEffect: {fileID: 0}
   pierce: 1
@@ -9968,6 +9976,11 @@ MonoBehaviour:
   isBeam: 1
   launchFX: {fileID: 0}
   hitFX: {fileID: 0}
+  decreaseByLerp: -1
+  scalingStatData:
+    flatPower: 0
+    attackScaling: 1
+    abilityScaling: 0
 --- !u!1 &1516870378216048
 GameObject:
   m_ObjectHideFlags: 0

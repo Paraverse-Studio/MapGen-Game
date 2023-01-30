@@ -1,5 +1,4 @@
 using Paraverse.Helper;
-using Paraverse.Mob.Combat;
 using Paraverse.Mob.Stats;
 using Paraverse.Player;
 using UnityEngine;
@@ -139,19 +138,23 @@ namespace Paraverse.Combat
             CooldownHandler();
         }
 
+        [SerializeField] float rotSpeed = 100f;
+
         protected virtual void RotateToTarget()
         {
             if (skillOn == false) return;
 
             if (usesTargetLock && input && mob.Target)
             {
-
                 Vector3 targetDir = ParaverseHelper.GetPositionXZ(mob.Target.position - mob.transform.position).normalized;
                 mob.transform.forward = targetDir;
             }
             else if (usesTargetLock && mob.Target)
             {
-                mob.transform.rotation = ParaverseHelper.FaceTarget(mob.transform, target.transform, 100f);
+                //mob.transform.rotation = ParaverseHelper.FaceTarget(mob.transform, target.transform, 100f);
+                Vector3 lookDir = (target.transform.position - mob.transform.position).normalized;
+                Quaternion lookRot = Quaternion.LookRotation(lookDir);
+                mob.transform.rotation = Quaternion.Slerp(mob.transform.rotation, lookRot, rotSpeed * Time.deltaTime);
             }
         }
 
