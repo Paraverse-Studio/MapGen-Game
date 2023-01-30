@@ -55,6 +55,8 @@ namespace Paraverse.Combat
 
         [Header("Uses Target Lock"), Tooltip("If this skill should force mob to face its target")]
         public bool usesTargetLock;
+        [SerializeField, Tooltip("Speed of rotation during skill.")] 
+        protected float rotSpeed = 100f;
 
         public ScalingStatData scalingStatData;
 
@@ -138,8 +140,6 @@ namespace Paraverse.Combat
             CooldownHandler();
         }
 
-        [SerializeField] float rotSpeed = 100f;
-
         protected virtual void RotateToTarget()
         {
             if (skillOn == false) return;
@@ -198,11 +198,8 @@ namespace Paraverse.Combat
         protected virtual bool CanUseSkill()
         {
             if (IsOffCooldown && HasEnergy && TargetWithinRange && mob.IsAttackLunging == false)
-            {
                 return true;
-            }
-
-            //Debug.Log(_skillName + " is on cooldown or don't have enough energy!");
+            
             return false;
         }
 
