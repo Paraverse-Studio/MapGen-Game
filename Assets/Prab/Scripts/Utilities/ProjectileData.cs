@@ -16,6 +16,5 @@ public class ProjectileData
     public float basicAtkProjSpeed = 10f;
 
     // Updated via Mob Skill
-    [HideInInspector]
     public ScalingStatData scalingStatData;
 }
