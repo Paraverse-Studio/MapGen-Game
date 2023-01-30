@@ -95,11 +95,21 @@ public class EnhancedMobCombat : MobCombat
     /// </summary>
     public override void BasicAttackHandler()
     {
-        if (curBasicAtkCd <= 0 && IsSkilling == false)
+        if (curBasicAtkCd <= 0 && IsSkilling == false && IsSkillReady() == false)
         {
             anim.Play(StringData.BasicAttack);
             curBasicAtkCd = GetBasicAttackCooldown();
         }
+    }
+
+    private bool IsSkillReady()
+    {
+        for (int i = 0; i < skills.Count; ++i)
+        {
+            if (skills[i].IsOffCooldown && skills[i].TargetWithinRange)
+                return true;
+        }
+        return false;
     }
 
     #region Animation Events Skill One
@@ -205,118 +215,4 @@ public class EnhancedMobCombat : MobCombat
         OnSummonSkillOneEvent?.Invoke();
     }
     #endregion
-
-    //#region Animation Events Skill Two
-    //public virtual void AEventEnableMainHandColliderSkillTwo()
-    //{
-    //    OnEnableMainHandColliderSTwoEvent?.Invoke();
-    //}
-
-    //public virtual void AEventDisableMainHandColliderSkillTwo()
-    //{
-    //    OnDisableMainHandColliderSTwoEvent?.Invoke();
-    //}
-
-    //public virtual void AEventEnableOffHandColliderSkillTwo()
-    //{
-    //    OnEnableOffHandColliderSTwoEvent?.Invoke();
-    //}
-
-    //public virtual void AEventDisableOffHandColliderSkillTwo()
-    //{
-    //    OnDisableOffHandColliderSTwoEvent?.Invoke();
-    //}
-
-    //public virtual void AEventEnableSkillTwoCollider()
-    //{
-    //    OnEnableSkillColliderSTwoEvent?.Invoke();
-    //}
-
-    //public virtual void AEventDisableSkillTwoCollider()
-    //{
-    //    OnDisableSkillColliderSTwoEvent?.Invoke();
-    //}
-
-    //public virtual void AEventChargeSkillTwo()
-    //{
-    //    OnChargeSkillTwoEvent?.Invoke();
-    //}
-
-    //public virtual void AEventChargeCancelSkillTwo()
-    //{
-    //    OnChargeCancelSkillTwoEvent?.Invoke();
-    //}
-
-    //public virtual void AEventChargeReleaseSkillTwo()
-    //{
-    //    OnEnableChargeReleaseSkillTwoEvent?.Invoke();
-    //}
-
-    //public virtual void AEventDisableSkillTwo()
-    //{
-    //    OnDisableSkillTwoEvent?.Invoke();
-    //}
-
-    //public virtual void AEventSummonSkillTwo()
-    //{
-    //    OnSummonSkillTwoEvent?.Invoke();
-    //}
-    //#endregion
-
-    //#region Animation Events Skill Three
-    //public virtual void AEventEnableMainHandColliderSkillThree()
-    //{
-    //    OnEnableMainHandColliderSThreeEvent?.Invoke();
-    //}
-
-    //public virtual void AEventDisableMainHandColliderSkillThree()
-    //{
-    //    OnDisableMainHandColliderSThreeEvent?.Invoke();
-    //}
-
-    //public virtual void AEventEnableOffHandColliderSkillThree()
-    //{
-    //    OnEnableOffHandColliderSThreeEvent?.Invoke();
-    //}
-
-    //public virtual void AEventDisableOffHandColliderSkillThree()
-    //{
-    //    OnDisableOffHandColliderSThreeEvent?.Invoke();
-    //}
-
-    //public virtual void AEventEnableSkillThreeCollider()
-    //{
-    //    OnEnableSkillColliderSThreeEvent?.Invoke();
-    //}
-
-    //public virtual void AEventDisableSkillThreeCollider()
-    //{
-    //    OnDisableSkillColliderSThreeEvent?.Invoke();
-    //}
-
-    //public virtual void AEventChargeSkillThree()
-    //{
-    //    OnChargeSkillThreeEvent?.Invoke();
-    //}
-
-    //public virtual void AEventChargeCancelSkillThree()
-    //{
-    //    OnChargeCancelSkillThreeEvent?.Invoke();
-    //}
-
-    //public virtual void AEventChargeReleaseSkillThree()
-    //{
-    //    OnEnableChargeReleaseSkillThreeEvent?.Invoke();
-    //}
-
-    //public virtual void AEventDisableSkillThree()
-    //{
-    //    OnDisableSkillThreeEvent?.Invoke();
-    //}
-
-    //public virtual void AEventSummonSkillThree()
-    //{
-    //    OnSummonSkillThreeEvent?.Invoke();
-    //}
-    //#endregion
 }

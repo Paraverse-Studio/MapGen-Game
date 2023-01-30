@@ -130,7 +130,6 @@ namespace PolygonArsenal
             return totalDmg;
         }
 
-
         private void DamageLogic(Collider other)
         {
             IMobController controller = other.GetComponent<IMobController>();
