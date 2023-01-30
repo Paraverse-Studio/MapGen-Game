@@ -54,6 +54,7 @@ namespace Paraverse.Mob.Combat
         public bool IsAttackLunging { get { return _isAttackLunging; } }
         protected bool _isAttackLunging = false;
         public bool IsSkilling { get; set; }
+        public bool IsInCombat { get { return IsSkilling || IsBasicAttacking; } }
         #endregion
 
 

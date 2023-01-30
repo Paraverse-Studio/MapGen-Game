@@ -73,24 +73,32 @@ public class DualComboSkill : MobSkill, IMobSkill
     {
         if (attackColliderGO != null)
             attackColliderGO.SetActive(true);
+
+        skillOn = true;
     }
 
     public void DisableMainHandAttackCollider()
     {
         if (attackColliderGO != null)
             attackColliderGO.SetActive(false);
+
+        skillOn = false;
     }
 
     public void EnableOffHandAttackCollider()
     {
         if (offHandAttackCollider != null)
             offHandAttackColliderGO.SetActive(true);
+
+        skillOn = true;
     }
 
     public void DisableOffHandAttackCollider()
     {
         if (offHandAttackCollider != null)
             offHandAttackColliderGO.SetActive(false);
+
+        skillOn = false;
     }
 
     public void DisableSkillAndCollider()

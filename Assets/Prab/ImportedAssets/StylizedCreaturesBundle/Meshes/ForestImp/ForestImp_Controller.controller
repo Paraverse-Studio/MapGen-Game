@@ -69,6 +69,8 @@ MonoBehaviour:
   parameter: isInteracting
   disableUponEnter: 0
   enableUponExit: 1
+  useDelay: 0
+  enableAfterAnimPercentage: 0
 --- !u!1101 &-8346041958587659969
 AnimatorStateTransition:
   m_ObjectHideFlags: 1
@@ -135,6 +137,8 @@ MonoBehaviour:
   parameter: isInteracting
   disableUponEnter: 0
   enableUponExit: 0
+  useDelay: 0
+  enableAfterAnimPercentage: 0
 --- !u!114 &-7336069520465377003
 MonoBehaviour:
   m_ObjectHideFlags: 1
@@ -150,6 +154,8 @@ MonoBehaviour:
   parameter: isUsingSkill
   disableUponEnter: 0
   enableUponExit: 0
+  useDelay: 0
+  enableAfterAnimPercentage: 0
 --- !u!1101 &-7153006203993983734
 AnimatorStateTransition:
   m_ObjectHideFlags: 1
@@ -193,6 +199,8 @@ MonoBehaviour:
   parameter: isInteracting
   disableUponEnter: 0
   enableUponExit: 0
+  useDelay: 0
+  enableAfterAnimPercentage: 0
 --- !u!114 &-6838879189765392952
 MonoBehaviour:
   m_ObjectHideFlags: 1
@@ -208,6 +216,8 @@ MonoBehaviour:
   parameter: isUsingSkill
   disableUponEnter: 0
   enableUponExit: 1
+  useDelay: 0
+  enableAfterAnimPercentage: 0
 --- !u!1102 &-6544727487952063520
 AnimatorState:
   serializedVersion: 6
@@ -306,6 +316,8 @@ MonoBehaviour:
   parameter: isInteracting
   disableUponEnter: 0
   enableUponExit: 1
+  useDelay: 0
+  enableAfterAnimPercentage: 0
 --- !u!1101 &-5656464728994777966
 AnimatorStateTransition:
   m_ObjectHideFlags: 1
@@ -368,6 +380,8 @@ MonoBehaviour:
   parameter: isUsingSkill
   disableUponEnter: 0
   enableUponExit: 1
+  useDelay: 0
+  enableAfterAnimPercentage: 0
 --- !u!114 &-4668954279178362165
 MonoBehaviour:
   m_ObjectHideFlags: 1
@@ -383,6 +397,8 @@ MonoBehaviour:
   parameter: isUsingSkill
   disableUponEnter: 0
   enableUponExit: 0
+  useDelay: 0
+  enableAfterAnimPercentage: 0
 --- !u!114 &-4526305294913269564
 MonoBehaviour:
   m_ObjectHideFlags: 1
@@ -398,6 +414,8 @@ MonoBehaviour:
   parameter: isInteracting
   disableUponEnter: 0
   enableUponExit: 1
+  useDelay: 0
+  enableAfterAnimPercentage: 0
 --- !u!114 &-3353134832803650535
 MonoBehaviour:
   m_ObjectHideFlags: 1
@@ -413,6 +431,8 @@ MonoBehaviour:
   parameter: isUsingSkill
   disableUponEnter: 0
   enableUponExit: 0
+  useDelay: 0
+  enableAfterAnimPercentage: 0
 --- !u!114 &-3274773911031406526
 MonoBehaviour:
   m_ObjectHideFlags: 1
@@ -428,6 +448,8 @@ MonoBehaviour:
   parameter: isInteracting
   disableUponEnter: 0
   enableUponExit: 0
+  useDelay: 0
+  enableAfterAnimPercentage: 0
 --- !u!114 &-3252473225235819750
 MonoBehaviour:
   m_ObjectHideFlags: 1
@@ -443,6 +465,8 @@ MonoBehaviour:
   parameter: isInteracting
   disableUponEnter: 0
   enableUponExit: 0
+  useDelay: 0
+  enableAfterAnimPercentage: 0
 --- !u!1102 &-3230002372583752454
 AnimatorState:
   serializedVersion: 6
@@ -487,6 +511,8 @@ MonoBehaviour:
   parameter: isInteracting
   disableUponEnter: 0
   enableUponExit: 1
+  useDelay: 0
+  enableAfterAnimPercentage: 0
 --- !u!1101 &-2218491837561302612
 AnimatorStateTransition:
   m_ObjectHideFlags: 1
@@ -553,6 +579,8 @@ MonoBehaviour:
   parameter: isInteracting
   disableUponEnter: 0
   enableUponExit: 1
+  useDelay: 0
+  enableAfterAnimPercentage: 0
 --- !u!1101 &-517327992936126165
 AnimatorStateTransition:
   m_ObjectHideFlags: 1
@@ -593,6 +621,8 @@ MonoBehaviour:
   parameter: isUsingSkill
   disableUponEnter: 0
   enableUponExit: 0
+  useDelay: 0
+  enableAfterAnimPercentage: 0
 --- !u!114 &-374536970053155969
 MonoBehaviour:
   m_ObjectHideFlags: 1
@@ -608,6 +638,8 @@ MonoBehaviour:
   parameter: isUsingSkill
   disableUponEnter: 0
   enableUponExit: 0
+  useDelay: 0
+  enableAfterAnimPercentage: 0
 --- !u!1102 &-112754412373273734
 AnimatorState:
   serializedVersion: 6
@@ -673,37 +705,37 @@ AnimatorController:
     m_DefaultFloat: 0
     m_DefaultInt: 0
     m_DefaultBool: 0
-    m_Controller: {fileID: 0}
+    m_Controller: {fileID: 9100000}
   - m_Name: isSprinting
     m_Type: 4
     m_DefaultFloat: 0
     m_DefaultInt: 0
     m_DefaultBool: 0
-    m_Controller: {fileID: 0}
+    m_Controller: {fileID: 9100000}
   - m_Name: isInteracting
     m_Type: 4
     m_DefaultFloat: 0
     m_DefaultInt: 0
     m_DefaultBool: 0
-    m_Controller: {fileID: 0}
+    m_Controller: {fileID: 9100000}
   - m_Name: isBasicAttacking
     m_Type: 4
     m_DefaultFloat: 0
     m_DefaultInt: 0
     m_DefaultBool: 0
-    m_Controller: {fileID: 0}
+    m_Controller: {fileID: 9100000}
   - m_Name: isUsingSkill
     m_Type: 4
     m_DefaultFloat: 0
     m_DefaultInt: 0
     m_DefaultBool: 0
-    m_Controller: {fileID: 0}
+    m_Controller: {fileID: 9100000}
   - m_Name: isGrounded
     m_Type: 4
     m_DefaultFloat: 0
     m_DefaultInt: 0
     m_DefaultBool: 0
-    m_Controller: {fileID: 0}
+    m_Controller: {fileID: 9100000}
   m_AnimatorLayers:
   - serializedVersion: 5
     m_Name: Base Layer
@@ -757,6 +789,8 @@ MonoBehaviour:
   parameter: isUsingSkill
   disableUponEnter: 0
   enableUponExit: 1
+  useDelay: 0
+  enableAfterAnimPercentage: 0
 --- !u!1102 &1102030712913265130
 AnimatorState:
   serializedVersion: 6
@@ -997,6 +1031,8 @@ MonoBehaviour:
   parameter: isInteracting
   disableUponEnter: 0
   enableUponExit: 1
+  useDelay: 0
+  enableAfterAnimPercentage: 0
 --- !u!1101 &2423034849661694077
 AnimatorStateTransition:
   m_ObjectHideFlags: 1
@@ -1158,6 +1194,8 @@ MonoBehaviour:
   parameter: isInteracting
   disableUponEnter: 0
   enableUponExit: 0
+  useDelay: 0
+  enableAfterAnimPercentage: 0
 --- !u!1102 &8472498562227046254
 AnimatorState:
   serializedVersion: 6
@@ -1314,3 +1352,5 @@ MonoBehaviour:
   parameter: isUsingSkill
   disableUponEnter: 0
   enableUponExit: 1
+  useDelay: 0
+  enableAfterAnimPercentage: 0

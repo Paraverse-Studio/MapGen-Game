@@ -83,7 +83,7 @@ MonoBehaviour:
   _description: 
   _minRange: 7
   _maxRange: 100
-  cooldown: 5000
+  cooldown: 10
   cost: 0
   animName: SkyBarrageSkill
   attackColliderGO: {fileID: 0}
@@ -153,7 +153,7 @@ MonoBehaviour:
   _description: 
   _minRange: 5
   _maxRange: 30
-  cooldown: 2
+  cooldown: 3
   cost: 0
   animName: JumpStart
   attackColliderGO: {fileID: 0}
@@ -222,7 +222,7 @@ MonoBehaviour:
   _description: 
   _minRange: 0
   _maxRange: 5
-  cooldown: 5000
+  cooldown: 5
   cost: 0
   animName: AttackCombo
   attackColliderGO: {fileID: 2657095164191216732}
@@ -2213,7 +2213,7 @@ NavMeshAgent:
   m_Speed: 3.5
   m_Acceleration: 8
   avoidancePriority: 50
-  m_AngularSpeed: 60
+  m_AngularSpeed: 999
   m_StoppingDistance: 0
   m_AutoTraverseOffMeshLink: 1
   m_AutoBraking: 1
@@ -2265,7 +2265,7 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   walkSpeedRatio: 1
   sprintSpeedRatio: 2.5
-  rotSpeed: 90
+  rotSpeed: 100
   wps: []
   minWaitDur: 2
   maxWaitDur: 5
@@ -2319,9 +2319,9 @@ MonoBehaviour:
       attackScaling: 1
       abilityScaling: 0
   skills:
-  - {fileID: 1908622638}
-  - {fileID: 1719642824}
   - {fileID: 1849899259}
+  - {fileID: 1719642824}
+  - {fileID: 1908622638}
   animBool: isUsingSkill
 --- !u!114 &2657095164308100577
 MonoBehaviour:

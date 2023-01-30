@@ -195,7 +195,7 @@ namespace Paraverse.Mob.Controller
 
             DeathHandler();
             if (_isDead) return;
-
+            Debug.Log("NAV ROTATION: " + nav.updateRotation);
             StateHandler();
             CCHandler();
             KnockbackHandler();
@@ -235,13 +235,13 @@ namespace Paraverse.Mob.Controller
             }
 
             if (nav.enabled == false) return;
-            if (TargetDetected() && combat.CanBasicAtk == false && false == combat.IsSkilling && playerController.IsDead == false)
+            if (TargetDetected() && combat.IsInCombat == false && playerController.IsDead == false)
             {
                 PursueTarget();
                 SetGeneralState(MobState.Pursue);
                 //Debug.Log("Pursue State");
             }
-            else if (TargetDetected() && (combat.CanBasicAtk || combat.IsSkilling) && playerController.IsDead == false)
+            else if (TargetDetected() && combat.IsInCombat == true && playerController.IsDead == false)
             {
                 CombatHandler();
                 SetGeneralState(MobState.Combat);
@@ -428,8 +428,8 @@ namespace Paraverse.Mob.Controller
         {
             if (pursueTarget != null)
             {
-                Vector3 mobPos = ParaverseHelper.GetPositionXZ(transform.position);
-                Vector3 targetPos = ParaverseHelper.GetPositionXZ(pursueTarget.position);
+                //Vector3 mobPos = ParaverseHelper.GetPositionXZ(transform.position);
+                //Vector3 targetPos = ParaverseHelper.GetPositionXZ(pursueTarget.position);
                 float distanceFromTarget = ParaverseHelper.GetDistance(transform.position, pursueTarget.position);
 
                 if (distanceFromTarget <= combat.BasicAtkRange)
@@ -584,6 +584,7 @@ namespace Paraverse.Mob.Controller
             landPos = mobPos;
             jumpDir = new Vector3(targetDir.x, targetDir.y, targetDir.z);
             jumpDir.y += Mathf.Sqrt(jumpForce * -GlobalValues.GravityModifier * GlobalValues.GravityForce);
+            //SetGeneralState(MobState.Combat);
         }
 
         private void JumpHandler()
@@ -592,6 +593,7 @@ namespace Paraverse.Mob.Controller
             {
                 Vector3 landDir = new Vector3(jumpDir.x * jumpForce, jumpDir.y, jumpDir.z * jumpForce);
                 controller.Move(landDir * Time.deltaTime);
+                nav.updateRotation = false;
 
                 if (curAirCheckTimer <= 0)
                 {
