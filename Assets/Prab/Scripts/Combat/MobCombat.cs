@@ -53,7 +53,7 @@ namespace Paraverse.Mob.Combat
         // Sets to true when character is doing an action (Attack, Stun).
         public bool IsAttackLunging { get { return _isAttackLunging; } }
         protected bool _isAttackLunging = false;
-        public bool IsSkilling = false;
+        public bool IsSkilling { get; set; }
         #endregion
 
 

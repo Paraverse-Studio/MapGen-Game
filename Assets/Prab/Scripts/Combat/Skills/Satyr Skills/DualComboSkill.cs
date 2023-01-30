@@ -12,8 +12,6 @@ public class DualComboSkill : MobSkill, IMobSkill
     [SerializeField]
     protected GameObject offHandAttackColliderGO;
     protected AttackCollider offHandAttackCollider;
-    [SerializeField]
-    protected float rotSpeed = 100f;
     #endregion
 
 

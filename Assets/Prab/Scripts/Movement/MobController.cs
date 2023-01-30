@@ -235,13 +235,13 @@ namespace Paraverse.Mob.Controller
             }
 
             if (nav.enabled == false) return;
-            if (TargetDetected() && combat.CanBasicAtk == false && playerController.IsDead == false)
+            if (TargetDetected() && combat.CanBasicAtk == false && false == combat.IsSkilling && playerController.IsDead == false)
             {
                 PursueTarget();
                 SetGeneralState(MobState.Pursue);
                 //Debug.Log("Pursue State");
             }
-            else if (TargetDetected() && combat.CanBasicAtk && playerController.IsDead == false)
+            else if (TargetDetected() && (combat.CanBasicAtk || combat.IsSkilling) && playerController.IsDead == false)
             {
                 CombatHandler();
                 SetGeneralState(MobState.Combat);

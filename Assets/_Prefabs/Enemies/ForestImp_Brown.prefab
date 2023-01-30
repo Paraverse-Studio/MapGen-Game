@@ -83,7 +83,7 @@ MonoBehaviour:
   _description: 
   _minRange: 7
   _maxRange: 100
-  cooldown: 10
+  cooldown: 5000
   cost: 0
   animName: SkyBarrageSkill
   attackColliderGO: {fileID: 0}
@@ -98,6 +98,7 @@ MonoBehaviour:
       attackScaling: 1
       abilityScaling: 0
   usesTargetLock: 0
+  rotSpeed: 100
   scalingStatData:
     flatPower: 0
     attackScaling: 1
@@ -152,7 +153,7 @@ MonoBehaviour:
   _description: 
   _minRange: 5
   _maxRange: 30
-  cooldown: 5
+  cooldown: 2
   cost: 0
   animName: JumpStart
   attackColliderGO: {fileID: 0}
@@ -166,7 +167,8 @@ MonoBehaviour:
       flatPower: 0
       attackScaling: 1
       abilityScaling: 0
-  usesTargetLock: 1
+  usesTargetLock: 0
+  rotSpeed: 0
   scalingStatData:
     flatPower: 0
     attackScaling: 1
@@ -220,7 +222,7 @@ MonoBehaviour:
   _description: 
   _minRange: 0
   _maxRange: 5
-  cooldown: 5
+  cooldown: 5000
   cost: 0
   animName: AttackCombo
   attackColliderGO: {fileID: 2657095164191216732}
@@ -235,12 +237,12 @@ MonoBehaviour:
       attackScaling: 1
       abilityScaling: 0
   usesTargetLock: 1
+  rotSpeed: 5
   scalingStatData:
     flatPower: 0
     attackScaling: 1
     abilityScaling: 0
   offHandAttackColliderGO: {fileID: 2657095164408987043}
-  rotSpeed: 100
 --- !u!1 &1926738171508432033
 GameObject:
   m_ObjectHideFlags: 0
@@ -2211,7 +2213,7 @@ NavMeshAgent:
   m_Speed: 3.5
   m_Acceleration: 8
   avoidancePriority: 50
-  m_AngularSpeed: 120
+  m_AngularSpeed: 60
   m_StoppingDistance: 0
   m_AutoTraverseOffMeshLink: 1
   m_AutoBraking: 1
@@ -2263,14 +2265,14 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   walkSpeedRatio: 1
   sprintSpeedRatio: 2.5
-  rotSpeed: 100
+  rotSpeed: 90
   wps: []
   minWaitDur: 2
   maxWaitDur: 5
   accurayWP: 2
   stoppingDistance: 3
-  detectionRadius: 10
-  pursueRadius: 15
+  detectionRadius: 50
+  pursueRadius: 100
   atkDashForce: 20
   jumpForce: 8
   isGroundedCheckRange: 0.5
@@ -2316,7 +2318,6 @@ MonoBehaviour:
       flatPower: 0
       attackScaling: 1
       abilityScaling: 0
-  IsSkilling: 0
   skills:
   - {fileID: 1908622638}
   - {fileID: 1719642824}
