@@ -43,8 +43,6 @@ public class SummonSkill : MobSkill, IMobSkill
         {
             return true;
         }
-
-        Debug.Log(_skillName + " is on cooldown or don't have enough energy!");
         return false;
     }
 
