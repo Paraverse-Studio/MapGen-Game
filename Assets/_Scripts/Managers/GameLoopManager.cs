@@ -302,6 +302,8 @@ public class GameLoopManager : MonoBehaviour
             resultScreen.scoreText.text = "Score: " + "N/A";
             resultScreen.rankText.text = "F";
             resultScreen.shopButton.SetActive(false);
+
+            nextRoundNumber = 1; // restart the playthrough
         }
         else
         {
