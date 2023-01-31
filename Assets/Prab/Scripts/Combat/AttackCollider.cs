@@ -35,12 +35,17 @@ namespace Paraverse
         protected bool isBasicAttackCollider = false;
         private bool isSkill = false;
 
+
+        // Basic Attack Events Pre/During/Post
         public delegate void OnBasicAttackLandPreDmgDel();
         public event OnBasicAttackLandPreDmgDel OnBasicAttackPreHitEvent;
         public delegate void OnBasicAttackApplyDamageDel(float dmg);
         public event OnBasicAttackApplyDamageDel OnBasicAttackApplyDamageEvent;
         public delegate void OnBasicAttackLandPostDmgDel();
         public event OnBasicAttackLandPostDmgDel OnBasicAttackPostHitEvent;
+
+        // 
+
 
         // Updated via Mob Skill
         public ScalingStatData scalingStatData;
@@ -111,9 +116,7 @@ namespace Paraverse
         public float ApplyCustomDamage(IMobController controller)
         {
             float totalDmg =
-                scalingStatData.flatPower + 
-                (stats.AttackDamage.FinalValue * scalingStatData.attackScaling) + 
-                (stats.AbilityPower.FinalValue * scalingStatData.abilityScaling);            
+                scalingStatData.FinalValue(stats);            
 
             controller.Stats.UpdateCurrentHealth(-Mathf.CeilToInt(totalDmg));
             return totalDmg;

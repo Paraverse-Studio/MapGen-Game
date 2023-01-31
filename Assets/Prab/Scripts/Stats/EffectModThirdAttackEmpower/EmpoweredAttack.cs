@@ -16,6 +16,7 @@ public class EmpoweredAttack : MonoBehaviour
     private int _hitCounter = 0;
     private StatModifier _mod;
 
+
     private void Awake()
     {
         _stats = GameObject.FindGameObjectWithTag(StringData.PlayerTag).GetComponent<MobStats>();

@@ -3507,6 +3507,7 @@ MonoBehaviour:
     flatPower: 1
     attackScaling: 0
     abilityScaling: 0
+    healthScaling: 0
 --- !u!65 &166201824
 BoxCollider:
   m_ObjectHideFlags: 0
@@ -3822,12 +3823,14 @@ MonoBehaviour:
       flatPower: 1
       attackScaling: 0
       abilityScaling: 0
+      healthScaling: 0
   usesTargetLock: 0
   rotSpeed: 100
   scalingStatData:
     flatPower: 1
     attackScaling: 0
     abilityScaling: 0
+    healthScaling: 0
   skillStartTimer: 3
   skillMoveSpeed: 3
 --- !u!1 &511818343
@@ -12095,7 +12098,7 @@ PrefabInstance:
       objectReference: {fileID: 0}
     - target: {fileID: 834749840821475308, guid: 504274220e31b014bb1f9da275f2fca1, type: 3}
       propertyPath: m_IsActive
-      value: 0
+      value: 1
       objectReference: {fileID: 0}
     - target: {fileID: 834749840821475311, guid: 504274220e31b014bb1f9da275f2fca1, type: 3}
       propertyPath: m_RootOrder
@@ -14940,12 +14943,14 @@ MonoBehaviour:
       flatPower: 1
       attackScaling: 0
       abilityScaling: 0
+      healthScaling: 0
   usesTargetLock: 0
   rotSpeed: 100
   scalingStatData:
     flatPower: 1
     attackScaling: 0
     abilityScaling: 0
+    healthScaling: 0
 --- !u!4 &1264230143
 Transform:
   m_ObjectHideFlags: 0
@@ -14979,6 +14984,10 @@ PrefabInstance:
   m_Modification:
     m_TransformParent: {fileID: 0}
     m_Modifications:
+    - target: {fileID: 1366090545, guid: aa4e16a1786ed124fa06618210886566, type: 3}
+      propertyPath: m_Enabled
+      value: 0
+      objectReference: {fileID: 0}
     - target: {fileID: 2722828104521882955, guid: aa4e16a1786ed124fa06618210886566, type: 3}
       propertyPath: m_Name
       value: Player
@@ -15039,6 +15048,26 @@ Transform:
   m_CorrespondingSourceObject: {fileID: 3351448952234461169, guid: aa4e16a1786ed124fa06618210886566, type: 3}
   m_PrefabInstance: {fileID: 1366090532}
   m_PrefabAsset: {fileID: 0}
+--- !u!114 &1366090544
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1366090533}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 693692e7f70da2341b94fb68d1265449, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  targetTag: Enemy
+  _col: {fileID: 0}
+  _effectRadius: 3
+  _empoweredScaling:
+    flatPower: 1
+    attackScaling: 0
+    abilityScaling: 0
+    healthScaling: 0.1
 --- !u!1 &1375431600
 GameObject:
   m_ObjectHideFlags: 0
@@ -17117,6 +17146,7 @@ MonoBehaviour:
       flatPower: 1
       attackScaling: 0
       abilityScaling: 0
+      healthScaling: 0
 --- !u!114 &1702892492
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -17333,6 +17363,7 @@ MonoBehaviour:
       flatPower: 1
       attackScaling: 0
       abilityScaling: 0
+      healthScaling: 0
 --- !u!114 &1851129754
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -17492,12 +17523,14 @@ MonoBehaviour:
       flatPower: 1
       attackScaling: 0
       abilityScaling: 0
+      healthScaling: 0
   usesTargetLock: 0
   rotSpeed: 100
   scalingStatData:
     flatPower: 1
     attackScaling: 0
     abilityScaling: 0
+    healthScaling: 0
 --- !u!4 &1949719426
 Transform:
   m_ObjectHideFlags: 0
@@ -17561,12 +17594,14 @@ MonoBehaviour:
       flatPower: 1
       attackScaling: 0
       abilityScaling: 0
+      healthScaling: 0
   usesTargetLock: 0
   rotSpeed: 100
   scalingStatData:
     flatPower: 1
     attackScaling: 0
     abilityScaling: 0
+    healthScaling: 0
 --- !u!4 &2002084667
 Transform:
   m_ObjectHideFlags: 0
@@ -20283,6 +20318,7 @@ MonoBehaviour:
       flatPower: 1
       attackScaling: 0
       abilityScaling: 0
+      healthScaling: 0
 --- !u!4 &411949311067432046
 Transform:
   m_ObjectHideFlags: 0
@@ -21439,7 +21475,7 @@ PrefabInstance:
       objectReference: {fileID: 0}
     - target: {fileID: 6492552972653870374, guid: bb48c0a6c7c30e44fb01328c0709dc77, type: 3}
       propertyPath: m_IsActive
-      value: 1
+      value: 0
       objectReference: {fileID: 0}
     m_RemovedComponents: []
   m_SourcePrefab: {fileID: 100100000, guid: bb48c0a6c7c30e44fb01328c0709dc77, type: 3}
