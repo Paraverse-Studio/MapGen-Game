@@ -10,10 +10,10 @@ public class WeaponBuffSkill : MobSkill, IMobSkill
     [Header("Weapon Buff Skill:")]
     [SerializeField] private GameObject weaponBuffVFX;
     [SerializeField] private float buffDuration;
-    [SerializeField] private Transform userWeapon;
     [SerializeField] private float attackRangeLengthen = 0f;
 
     private float _buffDurationElapsed = 0f;
+    private Transform _userWeapon = null;
     private GameObject _weaponVFX = null;
     private StatModifier _buff = null;
     #endregion
@@ -30,11 +30,11 @@ public class WeaponBuffSkill : MobSkill, IMobSkill
     {
         base.ExecuteSkillLogic();
 
-        userWeapon = attackColliderGO.transform.parent;
+        _userWeapon = attackColliderGO.transform.parent;
         _buffDurationElapsed = buffDuration;
 
         // Add the buff VFX and stats to the player
-        if (null == _weaponVFX) _weaponVFX = Instantiate(weaponBuffVFX, userWeapon);
+        if (null == _weaponVFX) _weaponVFX = Instantiate(weaponBuffVFX, _userWeapon);
         ToggleParticleSystem(turnParticlesOn: true);
 
         if (null == _buff)

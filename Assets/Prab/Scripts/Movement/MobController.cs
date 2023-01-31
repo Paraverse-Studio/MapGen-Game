@@ -195,7 +195,6 @@ namespace Paraverse.Mob.Controller
 
             DeathHandler();
             if (_isDead) return;
-            Debug.Log("NAV ROTATION: " + nav.updateRotation);
             StateHandler();
             CCHandler();
             KnockbackHandler();

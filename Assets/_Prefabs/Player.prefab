@@ -988,7 +988,6 @@ MonoBehaviour:
       flatPower: 1
       attackScaling: 0
       abilityScaling: 0
-  IsSkilling: 0
   skills: []
   animBool: isUsingSkill
   maxComboResetTimer: 0.5
@@ -1049,7 +1048,11 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: ddf38f08fd8f57141a0669a6a8db21da, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  attackStatValue: 50
+  _empoweredHitIndex: 0
+  _empoweredScaling:
+    flatPower: 0
+    attackScaling: 1
+    abilityScaling: 0
 --- !u!1 &3042775459034123614
 GameObject:
   m_ObjectHideFlags: 0
@@ -1399,6 +1402,7 @@ GameObject:
   serializedVersion: 6
   m_Component:
   - component: {fileID: 3781554212329764893}
+  - component: {fileID: 88474853784963697}
   m_Layer: 14
   m_Name: EffectsHolder
   m_TagString: Untagged
@@ -1421,6 +1425,23 @@ Transform:
   m_Father: {fileID: 3351448952234461169}
   m_RootOrder: 6
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
+--- !u!114 &88474853784963697
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 3576272903191472116}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: ddf38f08fd8f57141a0669a6a8db21da, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  _empoweredHitIndex: 3
+  _empoweredScaling:
+    flatPower: 0
+    attackScaling: 3
+    abilityScaling: 0
 --- !u!1 &3850062111544328507
 GameObject:
   m_ObjectHideFlags: 0

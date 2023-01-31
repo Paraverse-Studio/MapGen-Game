@@ -63,7 +63,7 @@ public class Selectable : MonoBehaviour
                 Range = 4f;
                 break;
             case SelectableType.informational:
-                Range = 4f;
+                Range = 5f;
                 break;
         }
         if (rangeOverride > 0) Range = rangeOverride;
