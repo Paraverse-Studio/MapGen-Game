@@ -13,7 +13,7 @@ public class ScalingStatData
     [Range(0, 3)]
     public float healthScaling = 0;
 
-    public float FinalValue(Paraverse.Mob.Stats.MobStats stats)
+    public float FinalValue(Paraverse.Mob.Stats.IMobStats stats)
     {
         return  flatPower + 
                 (stats.AttackDamage.FinalValue * attackScaling) + 

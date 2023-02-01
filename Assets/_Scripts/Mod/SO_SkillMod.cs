@@ -37,7 +37,6 @@ public class SO_SkillMod : SO_Mod
         Skill.ID = ID;
         Skill.Description = Description;
         Skill.Image = Image;
-        Debug.Log($"Put... {Image} into skill's image... {Skill.Image}");
 
         // Add this skill to the player's list of skills, and also activate this one
         _player.ActivateSkill(Skill);
@@ -50,7 +49,7 @@ public class SO_SkillMod : SO_Mod
         string msg = "";
         if (Skill.scalingStatData.flatPower != 0)
         {
-            msg += $"<b>{Skill.scalingStatData.flatPower}</b>";
+            msg += $"{Skill.scalingStatData.flatPower}";
         }
         if (Skill.scalingStatData.attackScaling != 0)
         {
@@ -62,6 +61,7 @@ public class SO_SkillMod : SO_Mod
             if (!string.IsNullOrWhiteSpace(msg)) msg += " + ";
             msg += $"<color=#83C5FF>({Skill.scalingStatData.abilityScaling * 100f}% Ability)</color>";
         }
+        msg = "<b>" + msg + "</b>";
         return msg;
     }
 

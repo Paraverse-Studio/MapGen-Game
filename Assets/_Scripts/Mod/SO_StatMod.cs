@@ -132,7 +132,7 @@ public class SO_StatMod : SO_Mod
 
         foreach (StatPair p in _addStatsMutable)
         {
-            message += ((p.value > 0)? "Gain " : "Lose ") + Mathf.CeilToInt(p.value) + " ";
+            message += ((p.value > 0)? "Gain " : "Lose ") + "<b>" + Mathf.CeilToInt(p.value) + " ";
             switch (p.type)
             {
                 case StatType.Attack:
@@ -155,9 +155,9 @@ public class SO_StatMod : SO_Mod
                     break;
             }
 
-            message += ". ";
-            Description = message;
+            message += "</b>. ";
         }
+        Description = message;
     }
 
     public override void Reset()

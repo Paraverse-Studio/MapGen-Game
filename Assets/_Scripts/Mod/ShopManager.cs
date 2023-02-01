@@ -25,6 +25,7 @@ public class ShopManager : MonoBehaviour
     [Header("Elements:")]
     public ModCard shopItemPrefab;
     public Transform shopItemsFolder;
+    public TextMeshProUGUI descriptionMessage;
 
     [Header("Shop Algorithm:")]
     [Tooltip("Number of mod cards to display")]
@@ -144,6 +145,7 @@ public class ShopManager : MonoBehaviour
     {
         ModCard modCard = Instantiate(shopItemPrefab, shopItemsFolder);
         modCard.Mod = modPair.mod;
+        modCard.descriptionLabel = descriptionMessage;
         modCard.purchaseButton.onClick.AddListener(() => OnClickPurchaseItem(modCard, modPair));
         _modCards.Add(modCard);
     }

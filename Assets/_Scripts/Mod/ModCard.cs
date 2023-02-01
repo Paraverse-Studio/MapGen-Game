@@ -28,10 +28,16 @@ public class ModCard : MonoBehaviour
         if (titleLabel) titleLabel.text = Mod.GetTitle();
         if (imageHolder) imageHolder.sprite = Mod.Image;
         if (descriptionLabel) descriptionLabel .text = Mod.GetDescription();
-        // if (loreLabel) loreLabel .text = Mod.Lore;
+        if (loreLabel) loreLabel.text = Mod.Lore;
         if (costLabel) costLabel.text = Mod.GetCost().ToString();
         if (typeLabel) typeLabel.text = Mod.Type.ToString();
 
         if (null != clickCallBack) purchaseButton.onClick.AddListener(() => { clickCallBack.Invoke(); });
     }
+
+    public void UpdateDescription()
+    {
+        if (descriptionLabel) descriptionLabel.text = Mod.GetDescription();
+    }
+
 }

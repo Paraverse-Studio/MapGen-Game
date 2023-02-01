@@ -171,6 +171,7 @@ MonoBehaviour:
   goldText: {fileID: 233310355}
   shopItemPrefab: {fileID: 8225186734693155774, guid: f37b2400fa6eaa44bb3eb622e93e0884, type: 3}
   shopItemsFolder: {fileID: 1971469739}
+  descriptionMessage: {fileID: 1640884458}
   cardsQuantity: 5
   pollQuantity: 8
   AvailableMods:
@@ -4551,7 +4552,7 @@ RectTransform:
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
   m_AnchorMin: {x: 0, y: 0}
   m_AnchorMax: {x: 0.24, y: 1}
-  m_AnchoredPosition: {x: -50.000214, y: 100}
+  m_AnchoredPosition: {x: -50.000458, y: 100}
   m_SizeDelta: {x: -100, y: -420}
   m_Pivot: {x: 1, y: 0}
 --- !u!114 &248483446
@@ -6192,7 +6193,7 @@ RectTransform:
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
   m_AnchorMin: {x: 0, y: 1}
   m_AnchorMax: {x: 0, y: 1}
-  m_AnchoredPosition: {x: 960, y: -224}
+  m_AnchoredPosition: {x: 960, y: -160}
   m_SizeDelta: {x: 1920, y: 64}
   m_Pivot: {x: 0.5, y: 0.5}
 --- !u!114 &337309858
@@ -7917,7 +7918,7 @@ RectTransform:
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
   m_AnchorMin: {x: 0, y: 0}
   m_AnchorMax: {x: 1, y: 0}
-  m_AnchoredPosition: {x: -35.000122, y: 25}
+  m_AnchoredPosition: {x: -35.00006, y: 25}
   m_SizeDelta: {x: -60, y: 50}
   m_Pivot: {x: 1, y: 0}
 --- !u!114 &500510013
@@ -8827,11 +8828,11 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   text: {fileID: 542880963}
-  messageOptions:
+  MessageOptions:
   - Continue the current session.
   - View your playthrough progress, and stats.
   - View options.
-  - Quit to Main Menu. All progress in this round will be lost.
+  - Quit to Main Menu. All progress in this session will be lost.
 --- !u!1 &546910196
 GameObject:
   m_ObjectHideFlags: 0
@@ -9040,7 +9041,7 @@ RectTransform:
   m_AnchorMin: {x: 0, y: 0}
   m_AnchorMax: {x: 1, y: 1}
   m_AnchoredPosition: {x: 0, y: 0}
-  m_SizeDelta: {x: 0, y: 281.70215}
+  m_SizeDelta: {x: 0, y: 282.08545}
   m_Pivot: {x: 0, y: 1}
 --- !u!114 &549406282
 MonoBehaviour:
@@ -10736,10 +10737,9 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   text: {fileID: 640085763}
-  messageOptions:
-  - Continue the current playthrough.
-  - View your playthrough progress, and stats.
-  - Delete current playthrough and start again from round one (this cannot be undone).
+  MessageOptions:
+  - Start a new playthrough.
+  - View your playthrough records.
   - View options.
   - Quit to desktop.
 --- !u!114 &640085763
@@ -13232,7 +13232,7 @@ GameObject:
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
-  m_IsActive: 1
+  m_IsActive: 0
 --- !u!224 &808190105
 RectTransform:
   m_ObjectHideFlags: 0
@@ -22217,7 +22217,7 @@ RectTransform:
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
   m_AnchorMin: {x: 0.5, y: 0}
   m_AnchorMax: {x: 0.5, y: 0}
-  m_AnchoredPosition: {x: 0, y: -20}
+  m_AnchoredPosition: {x: 0, y: -19.999939}
   m_SizeDelta: {x: 1922, y: 1229.9604}
   m_Pivot: {x: 0.5, y: 1}
 --- !u!114 &1368238360
@@ -29966,7 +29966,7 @@ RectTransform:
   m_AnchorMin: {x: 0, y: 0}
   m_AnchorMax: {x: 1, y: 0}
   m_AnchoredPosition: {x: 0, y: 0}
-  m_SizeDelta: {x: 0, y: 501.6}
+  m_SizeDelta: {x: 0, y: 475}
   m_Pivot: {x: 0.5, y: 0}
 --- !u!114 &1939185064
 MonoBehaviour:
@@ -33732,7 +33732,7 @@ RectTransform:
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
   m_AnchorMin: {x: 0, y: 1}
   m_AnchorMax: {x: 0, y: 1}
-  m_AnchoredPosition: {x: 960, y: -288}
+  m_AnchoredPosition: {x: 960, y: -224}
   m_SizeDelta: {x: 1920, y: 64}
   m_Pivot: {x: 0.5, y: 0.5}
 --- !u!114 &2127492764

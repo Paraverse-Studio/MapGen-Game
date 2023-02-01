@@ -7,7 +7,7 @@ public class ContextMessageHandler : MonoBehaviour
 {
     [SerializeField] private TextMeshProUGUI text;
 
-    public string[] messageOptions;
+    public List<string> MessageOptions;
 
     // Start is called before the first frame update
     void Awake()
@@ -20,7 +20,7 @@ public class ContextMessageHandler : MonoBehaviour
     //   -1    for clearing the message
     public void DisplayMessage(int i = 0)
     {
-        text.text = i < 0 ? "" : messageOptions[i];
+        text.text = i < 0 ? "" : MessageOptions[i];
     }
 
 
