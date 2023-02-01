@@ -427,7 +427,6 @@ namespace Paraverse.Player
             _target = SelectableSystem.Instance.ToggleSelect();
             combat.Target = _target;
 
-            Debug.Log("Pressed shift, target is: " + _target);
             //headIK.SetLookAtObj(_target);
         }
 
