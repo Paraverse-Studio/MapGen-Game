@@ -1,6 +1,7 @@
 using Paraverse.Helper;
 using Paraverse.Mob;
 using Paraverse.Mob.Combat;
+using System.Runtime.InteropServices.ComTypes;
 using UnityEngine;
 
 namespace Paraverse
@@ -52,7 +53,7 @@ namespace Paraverse
         private float curdeathTimer = 0f;
         private Vector3 origin;
 
-        public ScalingStatData scalingStatData;
+        private ScalingStatData scalingStatData;
         #endregion
 
         #region Start & Update
@@ -82,28 +83,19 @@ namespace Paraverse
         }
         #endregion
 
-        public void Init(MobCombat mob, Vector3 target, float damage)
+        public void Init(MobCombat mob, Vector3 target, ScalingStatData statData)
         {
             this.target = target;
             this.mob = mob;
-            this.damage = damage;
+            scalingStatData = statData;
         }
 
-        public void Init(MobCombat mob, Vector3 target, float range, float damage)
-        {
-            this.target = target;
-            this.mob = mob;
-            this.range = range;
-            this.damage = damage;
-        }
-
-        public void Init(MobCombat mob, Vector3 target, float speed, float range, float damage)
+        public void Init(MobCombat mob, Vector3 target, float speed, ScalingStatData statData)
         {
             this.target = target;
             this.mob = mob;
             this.speed = speed;
-            this.range = range;
-            this.damage = damage;
+            scalingStatData = statData;
         }
 
         protected void OnTriggerEnter(Collider other)

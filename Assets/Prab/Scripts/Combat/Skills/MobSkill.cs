@@ -5,14 +5,14 @@ using UnityEngine;
 
 namespace Paraverse.Combat
 {
-    public class MobSkill : MonoBehaviour, IMobSkill
+    public class MobSkill : MonoBehaviour
     {
         #region Variables
         protected EnhancedMobCombat mob;
         protected Transform target;
         protected PlayerInputControls input;
         protected Animator anim;
-        protected IMobStats stats;
+        protected MobStats stats;
 
         public string Name { get { return _skillName; } set { _skillName = value; } }
         [SerializeField, Tooltip("Skill name.")]
@@ -65,7 +65,7 @@ namespace Paraverse.Combat
 
 
         #region Inheritable Methods
-        public virtual void ActivateSkill(EnhancedMobCombat mob, PlayerInputControls input, Animator anim, IMobStats stats, Transform target = null)
+        public virtual void ActivateSkill(EnhancedMobCombat mob, PlayerInputControls input, Animator anim, MobStats stats, Transform target = null)
         {
             this.mob = mob;
             this.target = target;
@@ -83,7 +83,7 @@ namespace Paraverse.Combat
             }
         }
 
-        public virtual void ActivateSkill(EnhancedMobCombat mob, Animator anim, IMobStats stats, Transform target = null)
+        public virtual void ActivateSkill(EnhancedMobCombat mob, Animator anim, MobStats stats, Transform target = null)
         {
             this.mob = mob;
             this.target = target;

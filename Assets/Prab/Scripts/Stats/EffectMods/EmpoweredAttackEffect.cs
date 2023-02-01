@@ -1,34 +1,32 @@
 using Paraverse.Mob.Stats;
-using Paraverse.Player;
 using Paraverse.Stats;
 using UnityEngine;
 
-public class EmpoweredAttack : MonoBehaviour
-{
-    private MobStats _stats;
-    private PlayerCombat _combat;
 
+public class EmpoweredAttackEffect : MobEffect
+{
     [SerializeField, Range(1, 10), Header("Empowered attack every X hit:")]
     private int _empoweredHitIndex;
-    [SerializeField, Header("Empowered attack scaling:")]
-    private ScalingStatData _empoweredScaling;
 
     private int _hitCounter = 0;
     private StatModifier _mod;
 
 
-    private void Awake()
+    public override void ActivateEffect(MobStats stats)
     {
-        _stats = GameObject.FindGameObjectWithTag(StringData.PlayerTag).GetComponent<MobStats>();
-        _combat = _stats.GetComponent<PlayerCombat>();
-    }
-
-    private void OnEnable()
-    {
+        base.ActivateEffect(stats);
         _mod = new StatModifier(_empoweredScaling.FinalValue(_stats));
         _hitCounter = 0;
         _combat.basicAttackCollider.OnBasicAttackPreHitEvent += IncrementBasicAttackCounter;
         _combat.basicAttackCollider.OnBasicAttackApplyDamageEvent += RemoveMod;
+    }
+
+    public override void DeactivateEffect()
+    {
+        base.DeactivateEffect();
+        RemoveMod();
+        _combat.basicAttackCollider.OnBasicAttackPreHitEvent -= IncrementBasicAttackCounter;
+        _combat.basicAttackCollider.OnBasicAttackApplyDamageEvent -= RemoveMod;
     }
 
     private void IncrementBasicAttackCounter()
@@ -46,11 +44,4 @@ public class EmpoweredAttack : MonoBehaviour
         _stats.AttackDamage.RemoveMod(_mod);
     }
 
-
-    private void OnDisable()
-    {
-        RemoveMod();
-        _combat.basicAttackCollider.OnBasicAttackPreHitEvent -= IncrementBasicAttackCounter;
-        _combat.basicAttackCollider.OnBasicAttackApplyDamageEvent -= RemoveMod;
-    }
 }

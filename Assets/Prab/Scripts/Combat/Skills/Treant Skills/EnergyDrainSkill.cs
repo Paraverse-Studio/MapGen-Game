@@ -14,7 +14,7 @@ public class EnergyDrainSkill : MobSkill, IMobSkill
     #endregion
 
     #region Inherited Methods
-    public override void ActivateSkill(EnhancedMobCombat mob, Animator anim, IMobStats stats, Transform target = null)
+    public override void ActivateSkill(EnhancedMobCombat mob, Animator anim, MobStats stats, Transform target = null)
     {
         base.ActivateSkill(mob, anim, stats, target);
         attackCollider.Init(mob, stats, scalingStatData, true);

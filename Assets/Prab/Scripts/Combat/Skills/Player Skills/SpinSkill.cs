@@ -18,7 +18,7 @@ public class SpinSkill : MobSkill, IMobSkill
 
 
     #region Inherited Methods
-    public override void ActivateSkill(EnhancedMobCombat mob, PlayerInputControls input, Animator anim, IMobStats stats, Transform target = null)
+    public override void ActivateSkill(EnhancedMobCombat mob, PlayerInputControls input, Animator anim, MobStats stats, Transform target = null)
     {
         base.ActivateSkill(mob, input, anim, stats, target);
         if (null == controller) controller = mob.GetComponent<PlayerController>();

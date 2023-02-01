@@ -14,6 +14,8 @@ public class EnhancedMobCombat : MobCombat
     protected int usingSkillIdx;
     [SerializeField, Tooltip("Mob skills.")]
     protected List<MobSkill> skills = new List<MobSkill>();
+    [SerializeField, Tooltip("Mob effects.")]
+    protected List<MobEffect> effects = new List<MobEffect>();
     [SerializeField]
     protected string animBool = "isUsingSkill";
 
@@ -52,6 +54,8 @@ public class EnhancedMobCombat : MobCombat
     public event OnInstantiateFXOneDel OnInstantiateFXOneEvent;
     public delegate void OnSummonSkillTwoDel();
     public event OnSummonSkillTwoDel OnInstantiateFXTwoEvent;
+
+    public ScalingStatData statData;
     #endregion
     #endregion
 
@@ -116,13 +120,12 @@ public class EnhancedMobCombat : MobCombat
     public override void FireProjectile()
     {
         ProjectileData data;
-        float damage = basicAtkDmgRatio * stats.AttackDamage.FinalValue; 
+        float damage = projData.scalingStatData.FinalValue(stats); 
 
+        // Updates proj data to mob skill's proj data when firing skill
         if (IsSkilling)
         {
-            MobSkill s = skills[usingSkillIdx];
-            data = s.projData;
-            damage = s.scalingStatData.flatPower + (stats.AttackDamage.FinalValue * s.scalingStatData.attackScaling) + (stats.AbilityPower.FinalValue * s.scalingStatData.abilityScaling);
+            data = skills[usingSkillIdx].projData;
         }
         else
             data = projData;
@@ -147,7 +150,7 @@ public class EnhancedMobCombat : MobCombat
         // Instantiate and initialize projectile
         GameObject go = Instantiate(data.projPf, data.projOrigin.position, lookRot);
         Projectile proj = go.GetComponent<Projectile>();
-        proj.Init(this, targetDir, projData.basicAtkProjSpeed, basicAtkRange, damage);
+        proj.Init(this, targetDir, projData.basicAtkProjSpeed, projData.scalingStatData);
     }
 
     public virtual void AEventInstantiateFXOne()

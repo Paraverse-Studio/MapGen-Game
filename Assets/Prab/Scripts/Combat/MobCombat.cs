@@ -13,7 +13,7 @@ namespace Paraverse.Mob.Combat
         protected Animator anim;
 
         // Required reference scripts
-        protected IMobStats stats;
+        protected MobStats stats;
         protected IMobController controller;
 
         [Header("Target Values")]
@@ -64,7 +64,7 @@ namespace Paraverse.Mob.Combat
             if (anim == null) anim = GetComponent<Animator>();
             if (player == null) player = GameObject.FindGameObjectWithTag(targetTag).GetComponent<Transform>();
             if (player != null) _target = player;
-            if (stats == null) stats = GetComponent<IMobStats>();
+            if (stats == null) stats = GetComponent<MobStats>();
             if (controller == null) controller = GetComponent<IMobController>();
 
             Initialize();
@@ -209,7 +209,7 @@ namespace Paraverse.Mob.Combat
             // Instantiate and initialize projectile
             GameObject go = Instantiate(projData.projPf, projData.projOrigin.position, lookRot);
             Projectile proj = go.GetComponent<Projectile>();
-            proj.Init(this, targetDir, projData.basicAtkProjSpeed, basicAtkRange, basicAtkDmgRatio * stats.AttackDamage.FinalValue);
+            proj.Init(this, targetDir, projData.scalingStatData);
         }
 
         /// <summary>

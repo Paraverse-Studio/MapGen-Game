@@ -40,7 +40,7 @@ namespace Paraverse.Player
         private TextMeshProUGUI _skillLabel;
         [SerializeField]
         private Image _skillIcon;
-        [SerializeField] 
+        [SerializeField]
         private ContentFitterRefresher _refresher;
 
         #endregion
@@ -51,7 +51,7 @@ namespace Paraverse.Player
         {
             if (anim == null) anim = GetComponent<Animator>();
             if (player == null) player = GameObject.FindGameObjectWithTag(targetTag).GetComponent<Transform>();
-            if (stats == null) stats = GetComponent<IMobStats>();
+            if (stats == null) stats = GetComponent<MobStats>();
             if (controller == null) controller = GetComponent<PlayerController>();
 
             Initialize();
@@ -63,6 +63,10 @@ namespace Paraverse.Player
             for (int i = 0; i < skills.Count; i++)
             {
                 skills[i].ActivateSkill(this, input, anim, stats);
+            }
+            for (int i = 0; i < effects.Count; i++)
+            {
+                effects[i].ActivateEffect(stats);
             }
         }
 
@@ -251,13 +255,10 @@ namespace Paraverse.Player
         public override void FireProjectile()
         {
             ProjectileData data = null;
-            float damage = basicAtkDmgRatio * stats.AttackDamage.FinalValue;
 
             if (IsSkilling)
             {
-                MobSkill s = _activeSkill;
-                data = s.projData;
-                damage = s.scalingStatData.FinalValue(stats);
+                data = _activeSkill.projData;
             }
             else
             {
@@ -274,7 +275,7 @@ namespace Paraverse.Player
             {
                 GameObject go = Instantiate(data.projPf, data.projOrigin.position, transform.rotation);
                 Projectile proj = go.GetComponent<Projectile>();
-                proj.Init(this, transform.forward, damage);
+                proj.Init(this, transform.forward, data.scalingStatData);
             }
             else Debug.LogError("A skill invoked PlayerCombat's FireProjectile without providing proper projectile data, and no default data.");
 

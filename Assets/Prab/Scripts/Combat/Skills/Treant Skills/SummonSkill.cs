@@ -25,7 +25,7 @@ public class SummonSkill : MobSkill, IMobSkill
 
 
     #region Inherited Methods
-    public override void ActivateSkill(EnhancedMobCombat mob, Animator anim, IMobStats stats, Transform target = null)
+    public override void ActivateSkill(EnhancedMobCombat mob, Animator anim, MobStats stats, Transform target = null)
     {
         base.ActivateSkill(mob, anim, stats, target);
         mob.OnSummonSkillOneEvent += SummonSapling;
