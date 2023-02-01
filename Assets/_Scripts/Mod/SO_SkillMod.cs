@@ -55,7 +55,7 @@ public class SO_SkillMod : SO_Mod
         if (Skill.scalingStatData.attackScaling != 0)
         {
             if (!string.IsNullOrWhiteSpace(msg)) msg += " + ";
-            msg += $"<color=#FFA172>({Skill.scalingStatData.attackScaling * 100f}% Attack)</color>";
+            msg += $"<color=#FF977B>({Skill.scalingStatData.attackScaling * 100f}% Attack)</color>";
         }
         if (Skill.scalingStatData.abilityScaling != 0)
         {
