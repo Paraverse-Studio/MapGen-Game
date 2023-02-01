@@ -12,6 +12,12 @@ public class SO_SkillMod : SO_Mod
 
     private PlayerCombat _player;
 
+
+    public override string GetDescription()
+    {
+        return Description.Replace("[DMG]", GetScalingText());
+    }
+
     public override void Activate(GameObject go)
     {
         base.Activate();
@@ -31,11 +37,32 @@ public class SO_SkillMod : SO_Mod
         Skill.ID = ID;
         Skill.Description = Description;
         Skill.Image = Image;
-        Debug.Log($"Put... {Image} into skill's image... {Skill.Image}");
 
         // Add this skill to the player's list of skills, and also activate this one
         _player.ActivateSkill(Skill);
         
         Debug.Log($"Skill Mod: Mod \"{Title}\" (ID {ID}) activated for {_player.gameObject.name}!");
     }
+
+    private string GetScalingText()
+    {
+        string msg = "";
+        if (Skill.scalingStatData.flatPower != 0)
+        {
+            msg += $"{Skill.scalingStatData.flatPower}";
+        }
+        if (Skill.scalingStatData.attackScaling != 0)
+        {
+            if (!string.IsNullOrWhiteSpace(msg)) msg += " + ";
+            msg += $"<color=#FF977B>({Skill.scalingStatData.attackScaling * 100f}% Attack)</color>";
+        }
+        if (Skill.scalingStatData.abilityScaling != 0)
+        {
+            if (!string.IsNullOrWhiteSpace(msg)) msg += " + ";
+            msg += $"<color=#83C5FF>({Skill.scalingStatData.abilityScaling * 100f}% Ability)</color>";
+        }
+        msg = "<b>" + msg + "</b>";
+        return msg;
+    }
+
 }

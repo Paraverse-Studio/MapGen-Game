@@ -1,4 +1,5 @@
 using Paraverse.Mob.Stats;
+using Paraverse.Player;
 using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
@@ -6,10 +7,10 @@ using UnityEngine;
 [CreateAssetMenu(fileName = "ModName", menuName = "SOs/Mods/Effect Mod")]
 public class SO_EffectMod : SO_Mod
 {
-    [Header("Effects Obtained")]
-    //public Effect[] effects;
+    [Header("Obtained Effects")]
+    public MonoBehaviour Effect;
 
-    private MobStats _player;
+    private PlayerCombat _player;
 
     public override void Activate(GameObject go)
     {
@@ -19,20 +20,18 @@ public class SO_EffectMod : SO_Mod
         // activate() should be called from shop, and supplied with the player to act upon
         if (!go.TryGetComponent(out _player))
         {
-            Debug.LogError("Skill Mod: Activate() called with a non-player parameter.");
+            Debug.LogError("Effect Mod: Activate() called with a non-player parameter.");
             return;
         }
 
         // Set some info from mod card to skill 
-        // ---> logistics and lore of the skill is provided from mod card to skill
+        // ---> stat, info, logistics and lore of the skill is provided from mod card to skill
         // ---> skill CD, range, damage and these things are to be put right on skill prefab
-        //Skill.Name = Title;
-        //Skill.Description = Description;
 
-        //// Add this skill to the player's list of skills, and also activate this one
-        //_player.skills.Add(Skill);
-        //_player.ActivateSkill(Skill);
+        // Add this skill to the player's list of skills, and also activate this one
+        Instantiate(Effect.gameObject, _player.EffectsHolder);
 
         Debug.Log($"Effect Mod: Mod \"{Title}\" (ID {ID}) activated for {_player.gameObject.name}!");
     }
+
 }

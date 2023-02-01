@@ -23,6 +23,9 @@ namespace Paraverse.Player
         [SerializeField]
         private Transform _skillHolder;
         public Transform SkillHolder => _skillHolder;
+        [SerializeField]
+        private Transform _effectsHolder;
+        public Transform EffectsHolder => _effectsHolder;
         public bool CanComboAttackTwo { get { return _canComboAttackTwo; } }
         private bool _canComboAttackTwo = false;
         public bool CanComboAttackThree { get { return _canComboAttackThree; } }
@@ -254,10 +257,13 @@ namespace Paraverse.Player
             {
                 MobSkill s = _activeSkill;
                 data = s.projData;
-                damage = s.scalingStatData.flatPower + (stats.AttackDamage.FinalValue * s.scalingStatData.attackScaling) + (stats.AbilityPower.FinalValue * s.scalingStatData.abilityScaling);
+                damage = s.scalingStatData.FinalValue(stats);
             }
             else
+            {
                 data = projData;
+                Debug.LogError("Invoked PlayerCombat's FireProjectile without providing proper projectile data.");
+            }
 
             // Archers may hold an arrow which needs to be set to off/on when firing
             if (data.projHeld != null)

@@ -128,15 +128,9 @@ namespace Paraverse
         /// <summary>
         /// useCustomDamage needs to be set to true on AttackCollider.cs inorder to apply this.
         /// </summary>
-        public float ApplyCustomDamage(IMobController controller)
+        public void ApplyCustomDamage(IMobController controller)
         {
-            float totalDmg =
-                scalingStatData.flatPower +
-                (controller.Stats.AttackDamage.FinalValue * scalingStatData.attackScaling) +
-                (controller.Stats.AbilityPower.FinalValue * scalingStatData.abilityScaling);
-
-            controller.Stats.UpdateCurrentHealth(-Mathf.CeilToInt(totalDmg));
-            return totalDmg;
+            controller.Stats.UpdateCurrentHealth(-Mathf.CeilToInt(damage));
         }
 
         private void DamageLogic(Collider other)
