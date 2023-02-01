@@ -12,6 +12,12 @@ public class SO_SkillMod : SO_Mod
 
     private PlayerCombat _player;
 
+
+    public override string GetDescription()
+    {
+        return Description.Replace("[DMG]", GetScalingText());
+    }
+
     public override void Activate(GameObject go)
     {
         base.Activate();
@@ -38,4 +44,25 @@ public class SO_SkillMod : SO_Mod
         
         Debug.Log($"Skill Mod: Mod \"{Title}\" (ID {ID}) activated for {_player.gameObject.name}!");
     }
+
+    private string GetScalingText()
+    {
+        string msg = "";
+        if (Skill.scalingStatData.flatPower != 0)
+        {
+            msg += $"<b>{Skill.scalingStatData.flatPower}</b>";
+        }
+        if (Skill.scalingStatData.attackScaling != 0)
+        {
+            if (!string.IsNullOrWhiteSpace(msg)) msg += " + ";
+            msg += $"<color=#FFA172>({Skill.scalingStatData.attackScaling * 100f}% Attack)</color>";
+        }
+        if (Skill.scalingStatData.abilityScaling != 0)
+        {
+            if (!string.IsNullOrWhiteSpace(msg)) msg += " + ";
+            msg += $"<color=#83C5FF>({Skill.scalingStatData.abilityScaling * 100f}% Ability)</color>";
+        }
+        return msg;
+    }
+
 }

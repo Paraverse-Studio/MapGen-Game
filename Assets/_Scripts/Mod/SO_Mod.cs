@@ -31,8 +31,8 @@ public class SO_Mod : ScriptableObject
     [SerializeField]
     protected int Cost;
     public string Lore;
-    [TextArea(1, 4)]
-    public string Description;
+    [SerializeField, TextArea(1, 4)]
+    protected string Description;
     [Header("——————  DETAILS  —————")]
     [SerializeField]
     private bool _removeOnPurchase;
@@ -48,6 +48,15 @@ public class SO_Mod : ScriptableObject
     public virtual string GetTitle()
     {
         return Title;
+    }
+
+    /// <summary>
+    /// in rare cases, this function could be needed to change
+    /// for sub classes
+    /// </summary>
+    public virtual string GetDescription()
+    {
+        return Description;
     }
 
     /// <summary>
