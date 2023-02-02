@@ -1,3 +1,4 @@
+using Paraverse.Combat;
 using Paraverse.Helper;
 using Paraverse.Mob.Stats;
 using System;
@@ -38,8 +39,10 @@ namespace Paraverse.Mob.Combat
         [Header("Projectile Values")]
         [SerializeField, Tooltip("Set as true if mob is a projectile user.")]
         protected bool projUser = false;
+        //[SerializeField]
+        //protected ProjectileData projData;
         [SerializeField]
-        protected ProjectileData projData;
+        protected MobSkill basicAttackSkill;
 
         // Constantly updates the distance from player
         protected float distanceFromTarget;
@@ -108,7 +111,7 @@ namespace Paraverse.Mob.Combat
                 }
                 else
                 {
-                    basicAttackCollider.Init(this, stats, projData.scalingStatData);
+                    basicAttackCollider.Init(this, stats, basicAttackSkill.scalingStatData);
                 }
                 basicAttackColliderGO.SetActive(false);
             }
@@ -143,7 +146,7 @@ namespace Paraverse.Mob.Combat
         {
             if (curBasicAtkCd <= 0)
             {
-                anim.Play(StringData.BasicAttack);
+                anim.Play(basicAttackSkill.animName);
                 curBasicAtkCd = GetBasicAttackCooldown();
             }
         }
@@ -200,19 +203,17 @@ namespace Paraverse.Mob.Combat
         public virtual void FireProjectile()
         {
             // Archers may hold an arrow which needs to be set to off/on when firing
-            if (projData.projHeld != null)
-                projData.projHeld.SetActive(false);
+            if (basicAttackSkill.projData.projHeld != null)
+                basicAttackSkill.projData.projHeld.SetActive(false);
 
             Vector3 playerPos = (player.position - transform.position).normalized;
             Vector3 targetDir = new Vector3(transform.forward.x, playerPos.y, transform.forward.z);
             Quaternion lookRot = Quaternion.LookRotation(targetDir);
 
             // Instantiate and initialize projectile
-            GameObject go = Instantiate(projData.projPf, projData.projOrigin.position, lookRot);
+            GameObject go = Instantiate(basicAttackSkill.projData.projPf, basicAttackSkill.projData.projOrigin.position, lookRot);
             Projectile proj = go.GetComponent<Projectile>();
-            Debug.Log("Proj GO: " + go);
-            Debug.Log("Proj: " + proj);
-            proj.Init(this, targetDir, projData.scalingStatData);
+            proj.Init(this, targetDir, basicAttackSkill.scalingStatData);
         }
 
         /// <summary>
@@ -220,13 +221,13 @@ namespace Paraverse.Mob.Combat
         /// </summary>
         public void EnableHeldProjectile()
         {
-            if (projData.projHeld == null)
+            if (basicAttackSkill.projData.projHeld == null)
             {
                 Debug.LogError("There is no reference to the projHeld variable.");
                 return;
             }
 
-            projData.projHeld.SetActive(true);
+            basicAttackSkill.projData.projHeld.SetActive(true);
         }
         #endregion
     }

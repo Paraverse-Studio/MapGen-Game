@@ -254,28 +254,28 @@ namespace Paraverse.Player
 
         public override void FireProjectile()
         {
-            ProjectileData data = null;
+            MobSkill skill = null;
 
             if (IsSkilling)
             {
-                data = _activeSkill.projData;
+                skill = _activeSkill;
             }
             else
             {
-                data = projData;
+                skill = basicAttackSkill;
                 Debug.LogError("Invoked PlayerCombat's FireProjectile without providing proper projectile data.");
             }
 
             // Archers may hold an arrow which needs to be set to off/on when firing
-            if (data.projHeld != null)
-                data.projHeld.SetActive(false);
+            if (basicAttackSkill.projData.projHeld != null)
+                basicAttackSkill.projData.projHeld.SetActive(false);
 
             //// Instantiate and initialize projectile
-            if (null != data.projOrigin)
+            if (null != skill.projData.projHeld)
             {
-                GameObject go = Instantiate(data.projPf, data.projOrigin.position, transform.rotation);
+                GameObject go = Instantiate(skill.projData.projPf, skill.projData.projOrigin.position, transform.rotation);
                 Projectile proj = go.GetComponent<Projectile>();
-                proj.Init(this, transform.forward, data.scalingStatData);
+                proj.Init(this, transform.forward, skill.scalingStatData);
             }
             else Debug.LogError("A skill invoked PlayerCombat's FireProjectile without providing proper projectile data, and no default data.");
 
