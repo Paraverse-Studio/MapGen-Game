@@ -44,8 +44,8 @@ namespace Paraverse.Combat
         [SerializeField, Tooltip("Required energy cost to execute skill.")]
         protected float cost = 10f;
 
-        [SerializeField, Tooltip("Name of skill animation to play.")]
-        protected string animName = "";
+        [Tooltip("Name of skill animation to play.")]
+        public string animName = "";
 
         [SerializeField]
         protected GameObject attackColliderGO;

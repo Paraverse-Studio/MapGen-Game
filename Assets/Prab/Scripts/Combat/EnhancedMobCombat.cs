@@ -119,37 +119,36 @@ public class EnhancedMobCombat : MobCombat
     #region Animation Events Skill One
     public override void FireProjectile()
     {
-        ProjectileData data;
+        MobSkill skill;
 
-        // Updates proj data to mob skill's proj data when firing skill
         if (IsSkilling)
         {
-            data = skills[usingSkillIdx].projData;
+            skill = skills[usingSkillIdx];
         }
         else
-            data = projData;
+            skill = basicAttackSkill;
 
         // Archers may hold an arrow which needs to be set to off/on when firing
-        if (data.projHeld != null)
-            data.projHeld.SetActive(false);
+        if (skill.projData.projHeld != null)
+            skill.projData.projHeld.SetActive(false);
 
         Vector3 playerPos = new Vector3(player.position.x, player.position.y + 0.5f, player.position.z);
         Vector3 targetDir = (playerPos - transform.position).normalized;
 
         Quaternion lookRot;
-        if (data.projRotation == null)
+        if (skill.projData.projRotation == null)
         {
             lookRot = Quaternion.LookRotation(targetDir);
         }
         else
         {
-            lookRot = data.projRotation.rotation;
+            lookRot = skill.projData.projRotation.rotation;
         }
 
         // Instantiate and initialize projectile
-        GameObject go = Instantiate(data.projPf, data.projOrigin.position, lookRot);
+        GameObject go = Instantiate(skill.projData.projPf, skill.projData.projOrigin.position, lookRot);
         Projectile proj = go.GetComponent<Projectile>();
-        proj.Init(this, targetDir, projData.basicAtkProjSpeed, projData.scalingStatData);
+        proj.Init(this, targetDir, skill.projData.basicAtkProjSpeed, skill.scalingStatData);
     }
 
     public virtual void AEventInstantiateFXOne()

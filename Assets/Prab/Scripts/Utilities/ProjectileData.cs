@@ -16,5 +16,5 @@ public class ProjectileData
     public float basicAtkProjSpeed = 10f;
 
     // Updated via Mob Skill
-    public ScalingStatData scalingStatData;
+    //public ScalingStatData scalingStatData;
 }

@@ -1,5 +1,71 @@
 %YAML 1.1
 %TAG !u! tag:unity3d.com,2011:
+--- !u!1 &80345159
+GameObject:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  serializedVersion: 6
+  m_Component:
+  - component: {fileID: 80345160}
+  - component: {fileID: 80345161}
+  m_Layer: 0
+  m_Name: BasicAttack
+  m_TagString: Untagged
+  m_Icon: {fileID: 0}
+  m_NavMeshLayer: 0
+  m_StaticEditorFlags: 0
+  m_IsActive: 1
+--- !u!4 &80345160
+Transform:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 80345159}
+  m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
+  m_LocalPosition: {x: 0, y: 0, z: 0}
+  m_LocalScale: {x: 1, y: 1, z: 1}
+  m_ConstrainProportionsScale: 0
+  m_Children: []
+  m_Father: {fileID: 1678626641}
+  m_RootOrder: 3
+  m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
+--- !u!114 &80345161
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 80345159}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: a49d912e0b019f14b99bdde319029bdd, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  _skillName: Imp Basic Attack
+  _ID: -1
+  _description: 
+  _minRange: 0
+  _maxRange: 5
+  cooldown: 5
+  cost: 10
+  animName: BasicAttack
+  attackColliderGO: {fileID: 0}
+  projData:
+    projPf: {fileID: 0}
+    projHeld: {fileID: 0}
+    projOrigin: {fileID: 0}
+    projRotation: {fileID: 0}
+    basicAtkProjSpeed: 10
+  usesTargetLock: 0
+  rotSpeed: 100
+  scalingStatData:
+    flatPower: 0
+    attackScaling: 0
+    abilityScaling: 1
+    healthScaling: 0
 --- !u!1 &1678626640
 GameObject:
   m_ObjectHideFlags: 0
@@ -31,6 +97,7 @@ Transform:
   - {fileID: 1908622637}
   - {fileID: 1719642823}
   - {fileID: 1849899258}
+  - {fileID: 80345160}
   m_Father: {fileID: 4902631821647716223}
   m_RootOrder: 3
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
@@ -93,16 +160,13 @@ MonoBehaviour:
     projOrigin: {fileID: 2657095163666507577}
     projRotation: {fileID: 2657095163666507577}
     basicAtkProjSpeed: 0
-    scalingStatData:
-      flatPower: 0
-      attackScaling: 1
-      abilityScaling: 0
   usesTargetLock: 0
   rotSpeed: 100
   scalingStatData:
     flatPower: 0
-    attackScaling: 1
-    abilityScaling: 0
+    attackScaling: 0
+    abilityScaling: 1
+    healthScaling: 0
   skillStartTimer: 3
 --- !u!1 &1849899257
 GameObject:
@@ -163,16 +227,13 @@ MonoBehaviour:
     projOrigin: {fileID: 0}
     projRotation: {fileID: 0}
     basicAtkProjSpeed: 10
-    scalingStatData:
-      flatPower: 0
-      attackScaling: 1
-      abilityScaling: 0
   usesTargetLock: 0
   rotSpeed: 0
   scalingStatData:
     flatPower: 0
     attackScaling: 1
     abilityScaling: 0
+    healthScaling: 0
 --- !u!1 &1908622636
 GameObject:
   m_ObjectHideFlags: 0
@@ -232,16 +293,13 @@ MonoBehaviour:
     projOrigin: {fileID: 0}
     projRotation: {fileID: 0}
     basicAtkProjSpeed: 10
-    scalingStatData:
-      flatPower: 0
-      attackScaling: 1
-      abilityScaling: 0
   usesTargetLock: 1
   rotSpeed: 5
   scalingStatData:
     flatPower: 0
     attackScaling: 1
     abilityScaling: 0
+    healthScaling: 0
   offHandAttackColliderGO: {fileID: 2657095164408987043}
 --- !u!1 &1926738171508432033
 GameObject:
@@ -2236,8 +2294,8 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   maxHealth: 100
   _curHealth: 100
-  attackDamage: 5
-  abilityPower: 10
+  attackDamage: 15
+  abilityPower: 5
   attackSpeed: 0.2
   moveSpeed: 2
   maxEnergy: 100
@@ -2303,26 +2361,24 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   anim: {fileID: 1926738171499081581}
+  stats: {fileID: 0}
   basicAtkDmgRatio: 1
   basicAtkRange: 5
   basicAttackColliderGO: {fileID: 2657095163120786646}
   basicAttackCollider: {fileID: 0}
   projUser: 1
-  projData:
-    projPf: {fileID: 7922565735799238133, guid: 581c3b128b7afa640a13128e4969f3e4, type: 3}
-    projHeld: {fileID: 0}
-    projOrigin: {fileID: 2657095164103751762}
-    projRotation: {fileID: 0}
-    basicAtkProjSpeed: 10
-    scalingStatData:
-      flatPower: 0
-      attackScaling: 1
-      abilityScaling: 0
+  basicAttackSkill: {fileID: 80345161}
   skills:
   - {fileID: 1849899259}
   - {fileID: 1719642824}
   - {fileID: 1908622638}
+  effects: []
   animBool: isUsingSkill
+  statData:
+    flatPower: 0
+    attackScaling: 1
+    abilityScaling: 0
+    healthScaling: 0
 --- !u!114 &2657095164308100577
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -3022,6 +3078,7 @@ MonoBehaviour:
     flatPower: 0
     attackScaling: 1
     abilityScaling: 0
+    healthScaling: 0
 --- !u!1 &2657095163666507578
 GameObject:
   m_ObjectHideFlags: 0
@@ -3077,7 +3134,7 @@ Transform:
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 2657095164103751763}
   m_LocalRotation: {x: -0.249587, y: -0.15847597, z: -0.10718181, w: 0.9492649}
-  m_LocalPosition: {x: -0.064, y: 0.162, z: 0.274}
+  m_LocalPosition: {x: -0.09, y: 0.3, z: 0.61}
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_ConstrainProportionsScale: 0
   m_Children: []
@@ -3204,6 +3261,7 @@ MonoBehaviour:
     flatPower: 0
     attackScaling: 1
     abilityScaling: 0
+    healthScaling: 0
 --- !u!1 &2657095164408987043
 GameObject:
   m_ObjectHideFlags: 0
@@ -3324,6 +3382,7 @@ MonoBehaviour:
     flatPower: 0
     attackScaling: 1
     abilityScaling: 0
+    healthScaling: 0
 --- !u!1 &3871775514117018162
 GameObject:
   m_ObjectHideFlags: 0

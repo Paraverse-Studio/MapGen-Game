@@ -7,7 +7,8 @@ namespace PolygonArsenal
 
     public class PolygonBeamStatic : MonoBehaviour
     {
-        private MobCombat mob;
+        public MobCombat mob;
+        private MobCombat targetMob;
 
         [Header("Prefabs")]
         public GameObject beamLineRendererPrefab; //Put a prefab with a line renderer onto here.
@@ -56,8 +57,9 @@ namespace PolygonArsenal
 
                     if (hit.transform.CompareTag(targetTag) && dotTimer >= dotIntervalTimer)
                     {
-                        if (null == mob)
-                            mob = hit.transform.GetComponentInChildren<MobCombat>();
+                        if (null == targetMob)
+                            targetMob = hit.transform.GetComponentInChildren<MobCombat>();
+
                         dotTimer = 0f;
                         DamageLogic(hit.collider);
                     }
@@ -83,7 +85,7 @@ namespace PolygonArsenal
                 line.material.mainTextureOffset -= new Vector2(Time.deltaTime * textureScrollSpeed, 0); //This scrolls the texture along the beam if not set to 0
             }
             else
-                mob = null;
+                targetMob = null;
         }
 
         public void SpawnBeam() //This function spawns the prefab with linerenderer
@@ -121,13 +123,8 @@ namespace PolygonArsenal
         /// </summary>
         public float ApplyCustomDamage(IMobController controller)
         {
-            float totalDmg =
-                scalingStatData.flatPower +
-                (controller.Stats.AttackDamage.FinalValue * scalingStatData.attackScaling) +
-                (controller.Stats.AbilityPower.FinalValue * scalingStatData.abilityScaling);
-
-            controller.Stats.UpdateCurrentHealth(-Mathf.CeilToInt(totalDmg));
-            return totalDmg;
+            controller.Stats.UpdateCurrentHealth(-Mathf.CeilToInt(scalingStatData.FinalValue(mob.stats)));
+            return Mathf.CeilToInt(scalingStatData.FinalValue(targetMob.stats));
         }
 
         private void DamageLogic(Collider other)
@@ -141,7 +138,7 @@ namespace PolygonArsenal
                 if (null != knockBackEffect)
                 {
                     KnockBackEffect effect = new KnockBackEffect(knockBackEffect);
-                    controller.ApplyKnockBack(mob.transform.position, effect);
+                    controller.ApplyKnockBack(targetMob.transform.position, effect);
                 }
                 else if (applyHitAnim)
                 {

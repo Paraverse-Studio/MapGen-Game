@@ -154,6 +154,7 @@ Transform:
   - {fileID: 1262949475}
   - {fileID: 1626988167}
   - {fileID: 1256454454}
+  - {fileID: 1826455184}
   m_Father: {fileID: 3172601158817656281}
   m_RootOrder: 1
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
@@ -203,7 +204,6 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   _skillName: Energy Drain
   _ID: -1
-  _image: {fileID: 0}
   _description: 
   _minRange: 0
   _maxRange: 5
@@ -217,17 +217,12 @@ MonoBehaviour:
     projOrigin: {fileID: 0}
     projRotation: {fileID: 0}
     basicAtkProjSpeed: 10
-    scalingStatData:
-      flatPower: 1
-      attackScaling: 0
-      abilityScaling: 0
-      healthScaling: 0
   usesTargetLock: 1
   rotSpeed: 10
   scalingStatData:
     flatPower: 0
     attackScaling: 1
-    abilityScaling: 0.4
+    abilityScaling: 0.5
     healthScaling: 0
   lifeStealRatio: 1
 --- !u!1 &1262949474
@@ -276,7 +271,6 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   _skillName: 'Root '
   _ID: -1
-  _image: {fileID: 0}
   _description: 'He reaches for the ground, and spawns vines that move toward player,
     and root player for 2 seconds. '
   _minRange: 0
@@ -291,17 +285,12 @@ MonoBehaviour:
     projOrigin: {fileID: 131609469950685087}
     projRotation: {fileID: 131609469950685087}
     basicAtkProjSpeed: 10
-    scalingStatData:
-      flatPower: 1
-      attackScaling: 0
-      abilityScaling: 0
-      healthScaling: 0
   usesTargetLock: 0
   rotSpeed: 100
   scalingStatData:
     flatPower: 0
     attackScaling: 0
-    abilityScaling: 1
+    abilityScaling: 0.5
     healthScaling: 0
   rootDuration: 1.5
 --- !u!1 &1626988166
@@ -350,7 +339,6 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   _skillName: Summon Sapling
   _ID: -1
-  _image: {fileID: 0}
   _description: 
   _minRange: 0
   _maxRange: 100
@@ -364,11 +352,6 @@ MonoBehaviour:
     projOrigin: {fileID: 0}
     projRotation: {fileID: 0}
     basicAtkProjSpeed: 10
-    scalingStatData:
-      flatPower: 1
-      attackScaling: 0
-      abilityScaling: 0
-      healthScaling: 0
   usesTargetLock: 0
   rotSpeed: 100
   scalingStatData:
@@ -521,6 +504,72 @@ TrailRenderer:
   m_MinVertexDistance: 0.0001
   m_Autodestruct: 0
   m_Emitting: 1
+--- !u!1 &1826455183
+GameObject:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  serializedVersion: 6
+  m_Component:
+  - component: {fileID: 1826455184}
+  - component: {fileID: 1826455185}
+  m_Layer: 0
+  m_Name: BasicAttack
+  m_TagString: Untagged
+  m_Icon: {fileID: 0}
+  m_NavMeshLayer: 0
+  m_StaticEditorFlags: 0
+  m_IsActive: 1
+--- !u!4 &1826455184
+Transform:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1826455183}
+  m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
+  m_LocalPosition: {x: 0, y: 0, z: 0}
+  m_LocalScale: {x: 1, y: 1, z: 1}
+  m_ConstrainProportionsScale: 0
+  m_Children: []
+  m_Father: {fileID: 94371559}
+  m_RootOrder: 3
+  m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
+--- !u!114 &1826455185
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1826455183}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: a49d912e0b019f14b99bdde319029bdd, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  _skillName: Treant Basic Attack
+  _ID: -1
+  _description: 
+  _minRange: 0
+  _maxRange: 5
+  cooldown: 5
+  cost: 10
+  animName: BasicAttack
+  attackColliderGO: {fileID: 0}
+  projData:
+    projPf: {fileID: 0}
+    projHeld: {fileID: 0}
+    projOrigin: {fileID: 0}
+    projRotation: {fileID: 0}
+    basicAtkProjSpeed: 10
+  usesTargetLock: 0
+  rotSpeed: 100
+  scalingStatData:
+    flatPower: 0
+    attackScaling: 0
+    abilityScaling: 1
+    healthScaling: 0
 --- !u!1 &131609469950587393
 GameObject:
   m_ObjectHideFlags: 0
@@ -3634,22 +3683,13 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   anim: {fileID: 131609469957833179}
+  stats: {fileID: 0}
   basicAtkDmgRatio: 1
   basicAtkRange: 5
   basicAttackColliderGO: {fileID: 3172601157949767707}
   basicAttackCollider: {fileID: 3172601157949767685}
   projUser: 0
-  projData:
-    projPf: {fileID: 0}
-    projHeld: {fileID: 0}
-    projOrigin: {fileID: 0}
-    projRotation: {fileID: 0}
-    basicAtkProjSpeed: 10
-    scalingStatData:
-      flatPower: 0
-      attackScaling: 1
-      abilityScaling: 0
-      healthScaling: 0
+  basicAttackSkill: {fileID: 1826455185}
   skills:
   - {fileID: 1256454455}
   - {fileID: 1262949476}

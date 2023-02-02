@@ -35,13 +35,13 @@ namespace Paraverse.Player
         private MobSkill _activeSkill;
         public MobSkill ActiveSkill { get { return _activeSkill; } }
 
-        [Header("SKill U.I.")]
-        [SerializeField] private TextMeshProUGUI _skillLabel;
-        [SerializeField] private TextMeshProUGUI _skillCDTime;
-        [SerializeField] private Image _skillCDFill;
-        [SerializeField] private Image _skillIcon;
-        [SerializeField] private Animation _skillIconReady;
-        [SerializeField] private ContentFitterRefresher _refresher;
+        [Header("U.I.")]
+        [SerializeField]
+        private TextMeshProUGUI _skillLabel;
+        [SerializeField]
+        private Image _skillIcon;
+        [SerializeField]
+        private ContentFitterRefresher _refresher;
 
         #endregion
 
@@ -70,9 +70,9 @@ namespace Paraverse.Player
             }
         }
 
-        public void ActivateSkill(GameObject obj)
+        public void ActivateSkill(MobSkill skill)
         {
-            MobSkill skill = obj.GetComponent<MobSkill>();
+            if (null == skill) return;
             if (null != _activeSkill) _activeSkill.DeactivateSkill(input);
 
             foreach (MobSkill sk in skills)
@@ -83,9 +83,9 @@ namespace Paraverse.Player
                     return;
                 }
             }
-            MobSkill skillInstance = Instantiate(obj, SkillHolder).GetComponent<MobSkill>();
-            skills.Add(skillInstance);
-            ActivateSkillWithUI(skillInstance);
+            Instantiate(skill, SkillHolder);
+            skills.Add(skill);
+            ActivateSkillWithUI(skill);
         }
 
         private void ActivateSkillWithUI(MobSkill skill)
@@ -93,27 +93,8 @@ namespace Paraverse.Player
             skill.ActivateSkill(this, input, anim, stats);
             _activeSkill = skill;
             _skillLabel.text = skill.Name;
-            _skillLabel.transform.parent.gameObject.SetActive(true);
             _skillIcon.sprite = skill.Image;
             _refresher.RefreshContentFitters();
-        }
-
-        public void ActivateEffect(GameObject obj)
-        {
-            MobEffect effect = obj.GetComponent<MobEffect>();
-            if (null == effect) return;
-
-            foreach (MobEffect eff in effects)
-            {
-                if (eff.ID == effect.ID)
-                {
-                    eff.ActivateEffect(stats);
-                    return;
-                }
-            }
-            MobEffect effectObj = Instantiate(obj, EffectsHolder).GetComponent<MobEffect>();
-            effects.Add(effectObj);
-            effectObj.ActivateEffect(stats);
         }
 
         protected override void Update()
@@ -136,7 +117,6 @@ namespace Paraverse.Player
             for (int i = 0; i < skills.Count; i++)
             {
                 skills[i].SkillUpdate();
-                SkillUIHandler();
             }
         }
         #endregion
@@ -147,30 +127,7 @@ namespace Paraverse.Player
             _canComboAttackTwo = anim.GetBool(StringData.CanBasicAttackTwo);
             _canComboAttackThree = anim.GetBool(StringData.CanBasicAttackThree);
         }
-        #endregion
-
-        #region Skill Update UI Handler
-        /// <summary>
-        /// Updates the current active skill's UI components (visuals)
-        /// </summary>
-        private void SkillUIHandler()
-        {
-            if (_activeSkill)
-            {
-                if (_activeSkill.IsOffCooldown)
-                {
-                    if (_skillCDFill.gameObject.activeSelf) _skillIconReady.Play();
-                    _skillCDFill.gameObject.SetActive(false);
-                }
-                else
-                {
-                    _skillCDFill.gameObject.SetActive(true);
-                    _skillCDFill.fillAmount = _activeSkill.CurCooldown / _activeSkill.Cooldown;
-                    _skillCDTime.text = Mathf.CeilToInt(_activeSkill.CurCooldown).ToString();
-                }
-            }
-        }
-        #endregion
+        #endregion 
 
         #region Basic Attack Methods
         /// <summary>
@@ -297,30 +254,28 @@ namespace Paraverse.Player
 
         public override void FireProjectile()
         {
-            ProjectileData data = null;
+            MobSkill skill = null;
 
             if (IsSkilling)
             {
-                data = _activeSkill.projData;
-                Debug.Log("DATA IS: " + data.scalingStatData.flatPower);
+                skill = _activeSkill;
             }
             else
             {
-                data = projData;
+                skill = basicAttackSkill;
                 Debug.LogError("Invoked PlayerCombat's FireProjectile without providing proper projectile data.");
             }
 
             // Archers may hold an arrow which needs to be set to off/on when firing
-            if (data.projHeld != null)
-                data.projHeld.SetActive(false);
+            if (basicAttackSkill.projData.projHeld != null)
+                basicAttackSkill.projData.projHeld.SetActive(false);
 
             //// Instantiate and initialize projectile
-            if (null != data.projOrigin)
+            if (null != skill.projData.projHeld)
             {
-                GameObject go = Instantiate(data.projPf, data.projOrigin.position, transform.rotation);
+                GameObject go = Instantiate(skill.projData.projPf, skill.projData.projOrigin.position, transform.rotation);
                 Projectile proj = go.GetComponent<Projectile>();
-                Debug.Log("PASSING IN THIS: " + data.scalingStatData.flatPower);
-                proj.Init(this, transform.forward, data.scalingStatData);
+                proj.Init(this, transform.forward, skill.scalingStatData);
             }
             else Debug.LogError("A skill invoked PlayerCombat's FireProjectile without providing proper projectile data, and no default data.");
 
