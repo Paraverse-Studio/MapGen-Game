@@ -23,6 +23,7 @@ namespace Paraverse.Combat
         protected int _ID = -1;
 
         public Sprite Image { get { return _image; } set { _image = value; } }
+        [SerializeField]
         protected Sprite _image = null;
 
         public string Description { get { return _description; } set { _description = value; } }

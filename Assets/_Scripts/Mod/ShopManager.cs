@@ -92,11 +92,8 @@ public class ShopManager : MonoBehaviour
         _modPool.Clear();
         for (int i = 0; i < AvailableMods.Count; ++ i)
         {
-            if (null == AvailableMods[i]) AvailableMods.Remove(AvailableMods[i]);
-            else
-            {
-                AvailableMods[i].AutofillDescription();
-            }
+            if (null == AvailableMods[i]) AvailableMods.RemoveAt(i);            
+            else AvailableMods[i].AutofillDescription();            
         }
 
         // 2.0  Sort remaining available mods by their price
