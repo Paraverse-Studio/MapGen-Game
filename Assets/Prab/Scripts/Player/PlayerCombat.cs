@@ -40,6 +40,7 @@ namespace Paraverse.Player
         [SerializeField] private TextMeshProUGUI _skillCDTime;
         [SerializeField] private Image _skillCDFill;
         [SerializeField] private Image _skillIcon;
+        [SerializeField] private Animation _skillIconReady;
         [SerializeField] private ContentFitterRefresher _refresher;
 
         #endregion
@@ -158,6 +159,7 @@ namespace Paraverse.Player
             {
                 if (_activeSkill.IsOffCooldown)
                 {
+                    if (_skillCDFill.gameObject.activeSelf) _skillIconReady.Play();
                     _skillCDFill.gameObject.SetActive(false);
                 }
                 else

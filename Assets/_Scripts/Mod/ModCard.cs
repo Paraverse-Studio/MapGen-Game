@@ -64,7 +64,7 @@ public class ModCard : MonoBehaviour
         if (costLabel) costLabel.text = Mod.GetCost().ToString();
         if (typeLabel) typeLabel.text = Mod.Type.ToString();
 
-        if (CardBG) CardBG.color = GetModColor();
+        if (CardBG) CardBG.color = GetModColor(CardBG);
         if (CardOtherBG) CardOtherBG.color = GetModColor();
         if (TypeLabel) TypeLabel.color = GetModColor(typeTwo: true);
         if (null != CardHighlights && CardHighlights.Length > 0) 
