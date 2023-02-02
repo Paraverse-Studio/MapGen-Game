@@ -10,17 +10,19 @@ namespace Paraverse
     {
         #region Variables
         private MobCombat mob;
+
+        [Header("Projectile Stats")]
         [SerializeField, Tooltip("Speed of the projectile.")]
         private string targetTag = "Player";
         private Vector3 target = Vector3.forward;
         [SerializeField, Tooltip("Speed of the projectile.")]
-        private float speed;
+        private float speed = 20f;
         [SerializeField, Tooltip("Range of the projectile.")]
-        private float range;
-        [SerializeField, Tooltip("Range of the projectile.")]
-        private float damage;
+        private float range = 10f;
         [SerializeField, Tooltip("Projectile is destroyed after this duration.")]
         private float deathTimer = 5f;
+
+        [Header("Projectile Properties")]
         [SerializeField, Tooltip("Stationary projectile.")]
         protected bool stationary = false;
         [SerializeField, Tooltip("Damage over time.")]
@@ -122,7 +124,7 @@ namespace Paraverse
         /// </summary>
         public void ApplyCustomDamage(IMobController controller)
         {
-            controller.Stats.UpdateCurrentHealth(-Mathf.CeilToInt(damage));
+            controller.Stats.UpdateCurrentHealth(-Mathf.CeilToInt(scalingStatData.FinalValue(mob.stats)));
         }
 
         private void DamageLogic(Collider other)
