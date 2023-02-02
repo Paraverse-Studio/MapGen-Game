@@ -35,13 +35,12 @@ namespace Paraverse.Player
         private MobSkill _activeSkill;
         public MobSkill ActiveSkill { get { return _activeSkill; } }
 
-        [Header("U.I.")]
-        [SerializeField]
-        private TextMeshProUGUI _skillLabel;
-        [SerializeField]
-        private Image _skillIcon;
-        [SerializeField]
-        private ContentFitterRefresher _refresher;
+        [Header("SKill U.I.")]
+        [SerializeField] private TextMeshProUGUI _skillLabel;
+        [SerializeField] private TextMeshProUGUI _skillCDTime;
+        [SerializeField] private Image _skillCDFill;
+        [SerializeField] private Image _skillIcon;
+        [SerializeField] private ContentFitterRefresher _refresher;
 
         #endregion
 
@@ -93,6 +92,7 @@ namespace Paraverse.Player
             skill.ActivateSkill(this, input, anim, stats);
             _activeSkill = skill;
             _skillLabel.text = skill.Name;
+            _skillLabel.transform.parent.gameObject.SetActive(true);
             _skillIcon.sprite = skill.Image;
             _refresher.RefreshContentFitters();
         }
@@ -135,6 +135,7 @@ namespace Paraverse.Player
             for (int i = 0; i < skills.Count; i++)
             {
                 skills[i].SkillUpdate();
+                SkillUIHandler();
             }
         }
         #endregion
@@ -145,7 +146,29 @@ namespace Paraverse.Player
             _canComboAttackTwo = anim.GetBool(StringData.CanBasicAttackTwo);
             _canComboAttackThree = anim.GetBool(StringData.CanBasicAttackThree);
         }
-        #endregion 
+        #endregion
+
+        #region Skill Update UI Handler
+        /// <summary>
+        /// Updates the current active skill's UI components (visuals)
+        /// </summary>
+        private void SkillUIHandler()
+        {
+            if (_activeSkill)
+            {
+                if (_activeSkill.IsOffCooldown)
+                {
+                    _skillCDFill.gameObject.SetActive(false);
+                }
+                else
+                {
+                    _skillCDFill.gameObject.SetActive(true);
+                    _skillCDFill.fillAmount = _activeSkill.CurCooldown / _activeSkill.Cooldown;
+                    _skillCDTime.text = Mathf.CeilToInt(_activeSkill.CurCooldown).ToString();
+                }
+            }
+        }
+        #endregion
 
         #region Basic Attack Methods
         /// <summary>
@@ -277,6 +300,7 @@ namespace Paraverse.Player
             if (IsSkilling)
             {
                 data = _activeSkill.projData;
+                Debug.Log("DATA IS: " + data.scalingStatData.flatPower);
             }
             else
             {
@@ -293,6 +317,7 @@ namespace Paraverse.Player
             {
                 GameObject go = Instantiate(data.projPf, data.projOrigin.position, transform.rotation);
                 Projectile proj = go.GetComponent<Projectile>();
+                Debug.Log("PASSING IN THIS: " + data.scalingStatData.flatPower);
                 proj.Init(this, transform.forward, data.scalingStatData);
             }
             else Debug.LogError("A skill invoked PlayerCombat's FireProjectile without providing proper projectile data, and no default data.");

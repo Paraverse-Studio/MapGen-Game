@@ -37,8 +37,8 @@ namespace Paraverse.Combat
         protected float _maxRange = 5f;
         public bool IsOffCooldown { get { return curCooldown <= 0; } }
         [SerializeField, Tooltip("Skill cooldown value.")]
-        protected float cooldown = 5f;
-        protected float curCooldown;
+        protected float cooldown = 5f; public float Cooldown => cooldown;
+        protected float curCooldown; public float CurCooldown => curCooldown;
 
         public bool HasEnergy { get { return cost <= stats.CurEnergy; } }
         [SerializeField, Tooltip("Required energy cost to execute skill.")]

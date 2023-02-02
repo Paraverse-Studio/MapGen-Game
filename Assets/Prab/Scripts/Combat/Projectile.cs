@@ -87,9 +87,13 @@ namespace Paraverse
 
         public void Init(MobCombat mob, Vector3 target, ScalingStatData statData)
         {
+            Debug.Log("GOT THIS: " + statData.flatPower);
+
             this.target = target;
             this.mob = mob;
             scalingStatData = statData;
+            Debug.Log("NOW ITS THIS: " + scalingStatData.flatPower);
+
         }
 
         public void Init(MobCombat mob, Vector3 target, float speed, ScalingStatData statData)

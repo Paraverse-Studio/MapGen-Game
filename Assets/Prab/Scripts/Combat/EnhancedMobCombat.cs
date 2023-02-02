@@ -120,7 +120,6 @@ public class EnhancedMobCombat : MobCombat
     public override void FireProjectile()
     {
         ProjectileData data;
-        float damage = projData.scalingStatData.FinalValue(stats); 
 
         // Updates proj data to mob skill's proj data when firing skill
         if (IsSkilling)
