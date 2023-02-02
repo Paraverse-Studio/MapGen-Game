@@ -35,13 +35,13 @@ namespace Paraverse.Player
         private MobSkill _activeSkill;
         public MobSkill ActiveSkill { get { return _activeSkill; } }
 
-        [Header("U.I.")]
-        [SerializeField]
-        private TextMeshProUGUI _skillLabel;
-        [SerializeField]
-        private Image _skillIcon;
-        [SerializeField]
-        private ContentFitterRefresher _refresher;
+        [Header("SKill U.I.")]
+        [SerializeField] private TextMeshProUGUI _skillLabel;
+        [SerializeField] private TextMeshProUGUI _skillCDTime;
+        [SerializeField] private Image _skillCDFill;
+        [SerializeField] private Image _skillIcon;
+        [SerializeField] private Animation _skillCDGlow;
+        [SerializeField] private ContentFitterRefresher _refresher;
 
         #endregion
 
@@ -70,9 +70,9 @@ namespace Paraverse.Player
             }
         }
 
-        public void ActivateSkill(MobSkill skill)
+        public void ActivateSkill(GameObject obj)
         {
-            if (null == skill) return;
+            MobSkill skill = obj.GetComponent<MobSkill>();
             if (null != _activeSkill) _activeSkill.DeactivateSkill(input);
 
             foreach (MobSkill sk in skills)
@@ -83,9 +83,9 @@ namespace Paraverse.Player
                     return;
                 }
             }
-            Instantiate(skill, SkillHolder);
-            skills.Add(skill);
-            ActivateSkillWithUI(skill);
+            MobSkill skillInstance = Instantiate(obj, SkillHolder).GetComponent<MobSkill>();
+            skills.Add(skillInstance);
+            ActivateSkillWithUI(skillInstance);
         }
 
         private void ActivateSkillWithUI(MobSkill skill)
@@ -93,8 +93,27 @@ namespace Paraverse.Player
             skill.ActivateSkill(this, input, anim, stats);
             _activeSkill = skill;
             _skillLabel.text = skill.Name;
+            _skillLabel.transform.parent.gameObject.SetActive(true);
             _skillIcon.sprite = skill.Image;
             _refresher.RefreshContentFitters();
+        }
+
+        public void ActivateEffect(GameObject obj)
+        {
+            MobEffect effect = obj.GetComponent<MobEffect>();
+            if (null == effect) return;
+
+            foreach (MobEffect eff in effects)
+            {
+                if (eff.ID == effect.ID)
+                {
+                    eff.ActivateEffect(stats);
+                    return;
+                }
+            }
+            MobEffect effectObj = Instantiate(obj, EffectsHolder).GetComponent<MobEffect>();
+            effects.Add(effectObj);
+            effectObj.ActivateEffect(stats);
         }
 
         protected override void Update()
@@ -117,6 +136,7 @@ namespace Paraverse.Player
             for (int i = 0; i < skills.Count; i++)
             {
                 skills[i].SkillUpdate();
+                SkillUIHandler();
             }
         }
         #endregion
@@ -128,6 +148,29 @@ namespace Paraverse.Player
             _canComboAttackThree = anim.GetBool(StringData.CanBasicAttackThree);
         }
         #endregion 
+
+        #region Skill Update UI Handler
+        /// <summary>
+        /// Updates the current active skill's UI components (visuals)
+        /// </summary>
+        private void SkillUIHandler()
+        {
+            if (_activeSkill)
+            {
+                if (_activeSkill.IsOffCooldown)
+                {
+                    if (_skillCDFill.gameObject.activeSelf) _skillCDGlow.Play();
+                    _skillCDFill.gameObject.SetActive(false);
+                }
+                else
+                {
+                    _skillCDFill.gameObject.SetActive(true);
+                    _skillCDFill.fillAmount = _activeSkill.CurCooldown / _activeSkill.Cooldown;
+                    _skillCDTime.text = Mathf.CeilToInt(_activeSkill.CurCooldown).ToString();
+                }
+            }
+        }
+        #endregion
 
         #region Basic Attack Methods
         /// <summary>
@@ -271,7 +314,7 @@ namespace Paraverse.Player
                 basicAttackSkill.projData.projHeld.SetActive(false);
 
             //// Instantiate and initialize projectile
-            if (null != skill.projData.projHeld)
+            if (null != skill.projData.projPf)
             {
                 GameObject go = Instantiate(skill.projData.projPf, skill.projData.projOrigin.position, transform.rotation);
                 Projectile proj = go.GetComponent<Projectile>();

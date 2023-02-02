@@ -521,6 +521,73 @@ Transform:
   m_Father: {fileID: 3351448952234461169}
   m_RootOrder: 4
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
+--- !u!1 &1588179095110375024
+GameObject:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  serializedVersion: 6
+  m_Component:
+  - component: {fileID: 7707741650206842203}
+  - component: {fileID: 1475609044564924983}
+  m_Layer: 14
+  m_Name: BasicAttack
+  m_TagString: Untagged
+  m_Icon: {fileID: 0}
+  m_NavMeshLayer: 0
+  m_StaticEditorFlags: 0
+  m_IsActive: 1
+--- !u!4 &7707741650206842203
+Transform:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1588179095110375024}
+  m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
+  m_LocalPosition: {x: 0, y: 0, z: 0}
+  m_LocalScale: {x: 1, y: 1, z: 1}
+  m_ConstrainProportionsScale: 0
+  m_Children: []
+  m_Father: {fileID: 4241460780824340472}
+  m_RootOrder: 0
+  m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
+--- !u!114 &1475609044564924983
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1588179095110375024}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: a49d912e0b019f14b99bdde319029bdd, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  _skillName: 
+  _ID: -1
+  _image: {fileID: 0}
+  _description: 
+  _minRange: 0
+  _maxRange: 5
+  cooldown: 5
+  cost: 10
+  animName: BasicAttack
+  attackColliderGO: {fileID: 0}
+  projData:
+    projPf: {fileID: 0}
+    projHeld: {fileID: 0}
+    projOrigin: {fileID: 0}
+    projRotation: {fileID: 0}
+    basicAtkProjSpeed: 10
+  usesTargetLock: 0
+  rotSpeed: 100
+  scalingStatData:
+    flatPower: 0
+    attackScaling: 1
+    abilityScaling: 0
+    healthScaling: 0
 --- !u!1 &1606775507151456573
 GameObject:
   m_ObjectHideFlags: 0
@@ -972,22 +1039,13 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   anim: {fileID: 2956618024134931115}
+  stats: {fileID: 0}
   basicAtkDmgRatio: 1
   basicAtkRange: 2
   basicAttackColliderGO: {fileID: 6080363539117558812}
   basicAttackCollider: {fileID: 6080363539117558813}
   projUser: 0
-  projData:
-    projPf: {fileID: 0}
-    projHeld: {fileID: 0}
-    projOrigin: {fileID: 0}
-    projRotation: {fileID: 0}
-    basicAtkProjSpeed: 10
-    scalingStatData:
-      flatPower: 1
-      attackScaling: 0
-      abilityScaling: 0
-      healthScaling: 0
+  basicAttackSkill: {fileID: 1475609044564924983}
   skills: []
   effects: []
   animBool: isUsingSkill
@@ -1347,7 +1405,8 @@ Transform:
   m_LocalPosition: {x: 0, y: 0, z: 0}
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_ConstrainProportionsScale: 0
-  m_Children: []
+  m_Children:
+  - {fileID: 7707741650206842203}
   m_Father: {fileID: 3351448952234461169}
   m_RootOrder: 5
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
