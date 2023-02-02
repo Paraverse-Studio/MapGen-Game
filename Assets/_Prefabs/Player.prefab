@@ -819,7 +819,6 @@ GameObject:
   - component: {fileID: 2956618024134931112}
   - component: {fileID: 1752897480}
   - component: {fileID: 1293426518}
-  - component: {fileID: 1366090545}
   m_Layer: 14
   m_Name: Player
   m_TagString: Player
@@ -990,7 +989,13 @@ MonoBehaviour:
       abilityScaling: 0
       healthScaling: 0
   skills: []
+  effects: []
   animBool: isUsingSkill
+  statData:
+    flatPower: 0
+    attackScaling: 1
+    abilityScaling: 0
+    healthScaling: 0
   maxComboResetTimer: 0.5
   _skillHolder: {fileID: 4241460780824340472}
   _effectsHolder: {fileID: 3781554212329764893}
@@ -1038,24 +1043,6 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   _lookAtObj: {fileID: 0}
---- !u!114 &1366090545
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 2722828104521882955}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: ddf38f08fd8f57141a0669a6a8db21da, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: 
-  _empoweredHitIndex: 0
-  _empoweredScaling:
-    flatPower: 0
-    attackScaling: 1
-    abilityScaling: 0
-    healthScaling: 0
 --- !u!1 &3042775459034123614
 GameObject:
   m_ObjectHideFlags: 0

@@ -70,9 +70,9 @@ namespace Paraverse.Player
             }
         }
 
-        public void ActivateSkill(MobSkill skill)
+        public void ActivateSkill(GameObject obj)
         {
-            if (null == skill) return;
+            MobSkill skill = obj.GetComponent<MobSkill>();
             if (null != _activeSkill) _activeSkill.DeactivateSkill(input);
 
             foreach (MobSkill sk in skills)
@@ -83,9 +83,9 @@ namespace Paraverse.Player
                     return;
                 }
             }
-            Instantiate(skill, SkillHolder);
-            skills.Add(skill);
-            ActivateSkillWithUI(skill);
+            MobSkill skillInstance = Instantiate(obj, SkillHolder).GetComponent<MobSkill>();
+            skills.Add(skillInstance);
+            ActivateSkillWithUI(skillInstance);
         }
 
         private void ActivateSkillWithUI(MobSkill skill)
@@ -95,6 +95,24 @@ namespace Paraverse.Player
             _skillLabel.text = skill.Name;
             _skillIcon.sprite = skill.Image;
             _refresher.RefreshContentFitters();
+        }
+
+        public void ActivateEffect(GameObject obj)
+        {
+            MobEffect effect = obj.GetComponent<MobEffect>();
+            if (null == effect) return;
+
+            foreach (MobEffect eff in effects)
+            {
+                if (eff.ID == effect.ID)
+                {
+                    eff.ActivateEffect(stats);
+                    return;
+                }
+            }
+            MobEffect effectObj = Instantiate(obj, EffectsHolder).GetComponent<MobEffect>();
+            effects.Add(effectObj);
+            effectObj.ActivateEffect(stats);
         }
 
         protected override void Update()

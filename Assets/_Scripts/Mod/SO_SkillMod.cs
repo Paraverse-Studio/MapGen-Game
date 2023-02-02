@@ -8,13 +8,14 @@ using UnityEngine;
 public class SO_SkillMod : SO_Mod
 {
     [Header("Obtained Skills")]
-    public MobSkill Skill;
+    public GameObject Skill;
 
     private PlayerCombat _player;
-
+    private MobSkill _skill;
 
     public override string GetDescription()
     {
+        if (!_skill) _skill = Skill.GetComponent<MobSkill>();
         return Description.Replace("[DMG]", GetScalingText());
     }
 
@@ -33,10 +34,11 @@ public class SO_SkillMod : SO_Mod
         // Set some info from mod card to skill 
         // ---> stat, info, logistics and lore of the skill is provided from mod card to skill
         // ---> skill CD, range, damage and these things are to be put right on skill prefab
-        Skill.Name = Title;
-        Skill.ID = ID;
-        Skill.Description = Description;
-        Skill.Image = Image;
+        if (!_skill) _skill = Skill.GetComponent<MobSkill>();
+        _skill.Name = Title;
+        _skill.ID = ID;
+        _skill.Description = Description;
+        _skill.Image = Image;
 
         // Add this skill to the player's list of skills, and also activate this one
         _player.ActivateSkill(Skill);
@@ -47,19 +49,19 @@ public class SO_SkillMod : SO_Mod
     private string GetScalingText()
     {
         string msg = "";
-        if (Skill.scalingStatData.flatPower != 0)
+        if (_skill.scalingStatData.flatPower != 0)
         {
-            msg += $"{Skill.scalingStatData.flatPower}";
+            msg += $"{_skill.scalingStatData.flatPower}";
         }
-        if (Skill.scalingStatData.attackScaling != 0)
+        if (_skill.scalingStatData.attackScaling != 0)
         {
             if (!string.IsNullOrWhiteSpace(msg)) msg += " + ";
-            msg += $"<color=#FF977B>({Skill.scalingStatData.attackScaling * 100f}% Attack)</color>";
+            msg += $"<color=#FF977B>({_skill.scalingStatData.attackScaling * 100f}% Attack)</color>";
         }
-        if (Skill.scalingStatData.abilityScaling != 0)
+        if (_skill.scalingStatData.abilityScaling != 0)
         {
             if (!string.IsNullOrWhiteSpace(msg)) msg += " + ";
-            msg += $"<color=#83C5FF>({Skill.scalingStatData.abilityScaling * 100f}% Ability)</color>";
+            msg += $"<color=#83C5FF>({_skill.scalingStatData.abilityScaling * 100f}% Ability)</color>";
         }
         msg = "<b>" + msg + "</b>";
         return msg;

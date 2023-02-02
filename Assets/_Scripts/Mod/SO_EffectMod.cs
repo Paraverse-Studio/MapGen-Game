@@ -8,7 +8,7 @@ using UnityEngine;
 public class SO_EffectMod : SO_Mod
 {
     [Header("Obtained Effects")]
-    public MonoBehaviour Effect;
+    public GameObject Effect;
 
     private PlayerCombat _player;
 
@@ -27,9 +27,14 @@ public class SO_EffectMod : SO_Mod
         // Set some info from mod card to skill 
         // ---> stat, info, logistics and lore of the skill is provided from mod card to skill
         // ---> skill CD, range, damage and these things are to be put right on skill prefab
+        //Effect.Name = Title;
+        Effect.GetComponent<MobEffect>().ID = ID;
+        //Skill.Description = Description;
+        //Skill.Image = Image;
+
 
         // Add this skill to the player's list of skills, and also activate this one
-        Instantiate(Effect.gameObject, _player.EffectsHolder);
+        _player.ActivateEffect(Effect); 
 
         Debug.Log($"Effect Mod: Mod \"{Title}\" (ID {ID}) activated for {_player.gameObject.name}!");
     }

@@ -12,6 +12,9 @@ public abstract class MobEffect : MonoBehaviour
 
     [SerializeField]
     protected string targetTag = StringData.EnemyTag;
+    public int ID { get { return _ID; } set { _ID = value; } }
+    [SerializeField, Tooltip("Effect ID")]
+    protected int _ID = -1;
 
     [Header("Damage Over Time Properties")]
     [SerializeField]

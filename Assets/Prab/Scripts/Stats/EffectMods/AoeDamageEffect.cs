@@ -6,7 +6,7 @@ public class AoeDamageEffect : MobEffect
 {
     [Header("Effect Properties")]
     [SerializeField]
-    protected CapsuleCollider _col;
+    protected CapsuleCollider _col = null;
     [SerializeField]
     protected float _effectRadius = 3f;
 
@@ -15,8 +15,9 @@ public class AoeDamageEffect : MobEffect
     {
         base.ActivateEffect(stats);
         if (null == _col)
-            _col = _stats.gameObject.AddComponent<CapsuleCollider>();
-
+        {
+            _col = gameObject.AddComponent<CapsuleCollider>();
+        }
         _col.gameObject.SetActive(true);
         _col.radius = _effectRadius;
         _col.isTrigger = true;
