@@ -122,6 +122,7 @@ MonoBehaviour:
     flatPower: 0
     attackScaling: 1
     abilityScaling: 0
+    healthScaling: 0
 --- !u!1 &94371558
 GameObject:
   m_ObjectHideFlags: 0
@@ -202,6 +203,7 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   _skillName: Energy Drain
   _ID: -1
+  _image: {fileID: 0}
   _description: 
   _minRange: 0
   _maxRange: 5
@@ -219,12 +221,14 @@ MonoBehaviour:
       flatPower: 1
       attackScaling: 0
       abilityScaling: 0
+      healthScaling: 0
   usesTargetLock: 1
+  rotSpeed: 10
   scalingStatData:
     flatPower: 0
     attackScaling: 1
-    abilityScaling: 0.5
-  rotSpeed: 10
+    abilityScaling: 0.4
+    healthScaling: 0
   lifeStealRatio: 1
 --- !u!1 &1262949474
 GameObject:
@@ -272,6 +276,7 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   _skillName: 'Root '
   _ID: -1
+  _image: {fileID: 0}
   _description: 'He reaches for the ground, and spawns vines that move toward player,
     and root player for 2 seconds. '
   _minRange: 0
@@ -290,12 +295,14 @@ MonoBehaviour:
       flatPower: 1
       attackScaling: 0
       abilityScaling: 0
+      healthScaling: 0
   usesTargetLock: 0
+  rotSpeed: 100
   scalingStatData:
     flatPower: 0
     attackScaling: 0
     abilityScaling: 1
-  rotSpeed: 100
+    healthScaling: 0
   rootDuration: 1.5
 --- !u!1 &1626988166
 GameObject:
@@ -343,6 +350,7 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   _skillName: Summon Sapling
   _ID: -1
+  _image: {fileID: 0}
   _description: 
   _minRange: 0
   _maxRange: 100
@@ -360,12 +368,14 @@ MonoBehaviour:
       flatPower: 1
       attackScaling: 0
       abilityScaling: 0
+      healthScaling: 0
   usesTargetLock: 0
+  rotSpeed: 100
   scalingStatData:
     flatPower: 0
     attackScaling: 0
     abilityScaling: 0
-  rotSpeed: 100
+    healthScaling: 0
   summonPf: {fileID: 7898848738789558338, guid: da4c325d14569204bb33863f10b1e815, type: 3}
   maxSummonCount: 3
   curSummonCount: 0
@@ -3639,12 +3649,18 @@ MonoBehaviour:
       flatPower: 0
       attackScaling: 1
       abilityScaling: 0
-  IsSkilling: 0
+      healthScaling: 0
   skills:
   - {fileID: 1256454455}
   - {fileID: 1262949476}
   - {fileID: 1626988168}
+  effects: []
   animBool: isUsingSkill
+  statData:
+    flatPower: 0
+    attackScaling: 1
+    abilityScaling: 0
+    healthScaling: 0
 --- !u!114 &3172601158616173551
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -4005,6 +4021,7 @@ MonoBehaviour:
     flatPower: 0
     attackScaling: 1
     abilityScaling: 0
+    healthScaling: 0
 --- !u!1 &3172601158662907522
 GameObject:
   m_ObjectHideFlags: 0
@@ -4126,6 +4143,7 @@ MonoBehaviour:
     flatPower: 0
     attackScaling: 1
     abilityScaling: 0
+    healthScaling: 0
 --- !u!1 &3172601158817656280
 GameObject:
   m_ObjectHideFlags: 0
