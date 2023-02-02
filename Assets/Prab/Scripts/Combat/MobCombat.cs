@@ -13,7 +13,8 @@ namespace Paraverse.Mob.Combat
         protected Animator anim;
 
         // Required reference scripts
-        protected MobStats stats;
+        [HideInInspector]
+        public MobStats stats;
         protected IMobController controller;
 
         [Header("Target Values")]
@@ -209,6 +210,8 @@ namespace Paraverse.Mob.Combat
             // Instantiate and initialize projectile
             GameObject go = Instantiate(projData.projPf, projData.projOrigin.position, lookRot);
             Projectile proj = go.GetComponent<Projectile>();
+            Debug.Log("Proj GO: " + go);
+            Debug.Log("Proj: " + proj);
             proj.Init(this, targetDir, projData.scalingStatData);
         }
 
