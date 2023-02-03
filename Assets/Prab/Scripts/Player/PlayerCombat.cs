@@ -31,6 +31,10 @@ namespace Paraverse.Player
         public bool CanComboAttackThree { get { return _canComboAttackThree; } }
         private bool _canComboAttackThree = false;
 
+        public GameObject AttackColliderGO => _attackColliderGO;
+        [SerializeField]
+        private GameObject _attackColliderGO;
+
         // Skills 
         private MobSkill _activeSkill;
         public MobSkill ActiveSkill { get { return _activeSkill; } }
@@ -73,6 +77,7 @@ namespace Paraverse.Player
         public void ActivateSkill(GameObject obj)
         {
             MobSkill skill = obj.GetComponent<MobSkill>();
+
             if (null != _activeSkill) _activeSkill.DeactivateSkill(input);
 
             foreach (MobSkill sk in skills)
@@ -164,7 +169,7 @@ namespace Paraverse.Player
                 else
                 {
                     _skillCDFill.gameObject.SetActive(true);
-                    _skillCDFill.fillAmount = _activeSkill.CurCooldown / _activeSkill.CurCooldown;
+                    _skillCDFill.fillAmount = _activeSkill.CurCooldown / _activeSkill.Cooldown;
                     _skillCDTime.text = Mathf.CeilToInt(_activeSkill.CurCooldown).ToString();
                 }
             }
@@ -315,7 +320,7 @@ namespace Paraverse.Player
             //// Instantiate and initialize projectile
             if (null != skill.projData.projPf)
             {
-                GameObject go = Instantiate(skill.projData.projPf, skill.projData.projOrigin.position, transform.rotation);
+                GameObject go = Instantiate(skill.projData.projPf, transform.position, transform.rotation);
                 Projectile proj = go.GetComponent<Projectile>();
                 proj.Init(this, transform.forward, skill.scalingStatData);
             }
