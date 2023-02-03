@@ -124,7 +124,6 @@ namespace Paraverse.Player
 
             _isBasicAttacking = anim.GetBool(StringData.IsBasicAttacking);
             BasicAttackComboHandler();
-            AttackCooldownHandler();
             AnimationHandler();
 
             if (anim.GetBool(StringData.IsUsingSkill))
@@ -165,7 +164,7 @@ namespace Paraverse.Player
                 else
                 {
                     _skillCDFill.gameObject.SetActive(true);
-                    _skillCDFill.fillAmount = _activeSkill.CurCooldown / _activeSkill.Cooldown;
+                    _skillCDFill.fillAmount = _activeSkill.CurCooldown / _activeSkill.CurCooldown;
                     _skillCDTime.text = Mathf.CeilToInt(_activeSkill.CurCooldown).ToString();
                 }
             }
