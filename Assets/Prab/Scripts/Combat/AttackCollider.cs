@@ -113,6 +113,7 @@ namespace Paraverse
         /// </summary>
         public float ApplyCustomDamage(IMobController controller)
         {
+            Debug.Log("SCALING DATA USED: " + scalingStatData.flatPower + " and " + scalingStatData.abilityScaling);
             float totalDmg = scalingStatData.FinalValue(stats);            
 
             controller.Stats.UpdateCurrentHealth(-Mathf.CeilToInt(totalDmg));
@@ -152,7 +153,7 @@ namespace Paraverse
             if (isBasicAttackCollider)
                 OnBasicAttackPostHitEvent?.Invoke();
 
-            Debug.Log(other.name + " took " + stats.AttackDamage.FinalValue + " points of damage.");
+            Debug.Log(other.name + " took " + scalingStatData.FinalValue(stats) + " points of damage.");
         }
     }
 }

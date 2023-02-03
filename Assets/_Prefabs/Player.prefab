@@ -567,13 +567,15 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   _skillName: 
   _ID: -1
+  _image: {fileID: 0}
   _description: 
   _minRange: 0
   _maxRange: 5
   cooldown: 5
   cost: 10
   animName: BasicAttack
-  isBasicAttack: 0
+  isBasicAttack: 1
+  _isMelee: 1
   attackColliderGO: {fileID: 6080363539117558812}
   attackCollider: {fileID: 6080363539117558813}
   projData:
@@ -1049,6 +1051,7 @@ MonoBehaviour:
   maxComboResetTimer: 0.5
   _skillHolder: {fileID: 4241460780824340472}
   _effectsHolder: {fileID: 3781554212329764893}
+  _attackColliderGO: {fileID: 6080363539117558812}
   _skillLabel: {fileID: 0}
   _skillCDTime: {fileID: 0}
   _skillCDFill: {fileID: 0}
@@ -2068,7 +2071,7 @@ GameObject:
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
-  m_IsActive: 1
+  m_IsActive: 0
 --- !u!4 &6080363539117558809
 Transform:
   m_ObjectHideFlags: 0

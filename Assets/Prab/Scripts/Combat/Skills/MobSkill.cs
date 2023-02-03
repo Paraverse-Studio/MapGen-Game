@@ -50,11 +50,13 @@ namespace Paraverse.Combat
 
         [Tooltip("Name of skill animation to play.")]
         public string animName = "";
+
         [SerializeField]
         protected bool isBasicAttack = false;
         public bool IsBasicAttack { get { return isBasicAttack; } }
-        protected bool _isBasicAttacking = false;
-        public bool IsBasicAttacking { get { return _isBasicAttacking; } }
+
+        public bool IsMelee => _isMelee;
+        [SerializeField] protected bool _isMelee;
 
         public GameObject attackColliderGO;
         public AttackCollider attackCollider;
@@ -74,7 +76,7 @@ namespace Paraverse.Combat
 
 
         #region Inheritable Methods
-        public virtual void ActivateSkill(MobCombat mob, PlayerInputControls input, Animator anim, MobStats stats, Transform target = null)
+        public virtual void ActivateSkill(PlayerCombat mob, PlayerInputControls input, Animator anim, MobStats stats, Transform target = null)
         {
             this.mob = mob;
             this.target = target;
@@ -87,13 +89,15 @@ namespace Paraverse.Combat
 
             if (null == attackColliderGO)
             {
-                Debug.LogWarning(gameObject.name + " doesn't have an attack collider.");
-                return;
+                attackColliderGO = mob.AttackColliderGO;
             }
-            attackColliderGO.SetActive(true);
-            attackCollider = attackColliderGO.GetComponent<AttackCollider>();
-            attackCollider.Init(mob, stats, scalingStatData);
             attackColliderGO.SetActive(false);
+
+            if (_isMelee)
+            {
+                attackCollider = attackColliderGO.GetComponent<AttackCollider>();
+                attackCollider.Init(mob, stats, scalingStatData);
+            }
         }
 
         public virtual void ActivateSkill(MobCombat mob, Animator anim, MobStats stats, Transform target = null)
@@ -109,10 +113,8 @@ namespace Paraverse.Combat
                 Debug.LogWarning(gameObject.name + " doesn't have an attack collider.");
                 return;
             }
-            attackColliderGO.SetActive(true);
             attackCollider = attackColliderGO.GetComponent<AttackCollider>();
             attackCollider.Init(mob, stats, scalingStatData);
-            attackColliderGO.SetActive(false);
         }
 
         public virtual void DeactivateSkill(PlayerInputControls input)
