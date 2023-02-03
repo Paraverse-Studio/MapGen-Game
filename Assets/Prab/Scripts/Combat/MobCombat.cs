@@ -2,6 +2,7 @@ using Paraverse.Combat;
 using Paraverse.Helper;
 using Paraverse.Mob.Stats;
 using System;
+using System.Collections.Generic;
 using UnityEngine;
 
 namespace Paraverse.Mob.Combat
@@ -23,18 +24,11 @@ namespace Paraverse.Mob.Combat
         protected string targetTag = "Player";
         protected Transform player;
 
-        [Header("Basic Attack Values")]
-        [SerializeField, Range(0, 1), Tooltip("Basic attack damage ratio of attack damage stat.")]
-        protected float basicAtkDmgRatio = 1f;
-        protected float curBasicAtkCd;
-        [SerializeField, Tooltip("Basic attack range.")]
-        protected float basicAtkRange = 2f;
-
-        [Header("Only For Melee Attackers")]
-        [SerializeField, Tooltip("Basic attack weapon collider [Only required for melee weapon users].")]
-        protected GameObject basicAttackColliderGO;
-        [Tooltip("AttackCollider script of basic attack collider.")]
-        public AttackCollider basicAttackCollider;
+        //[Header("Only For Melee Attackers")]
+        //[SerializeField, Tooltip("Basic attack weapon collider [Only required for melee weapon users].")]
+        //protected GameObject basicAttackColliderGO;
+        //[Tooltip("AttackCollider script of basic attack collider.")]
+        //public AttackCollider basicAttackCollider;
 
         [Header("Projectile Values")]
         [SerializeField, Tooltip("Set as true if mob is a projectile user.")]
@@ -42,23 +36,71 @@ namespace Paraverse.Mob.Combat
         //[SerializeField]
         //protected ProjectileData projData;
         [SerializeField]
-        protected MobSkill basicAttackSkill;
+        protected BasicAttackSkill basicAttackSkill;
+        public BasicAttackSkill BasicAttackSkill { get { return basicAttackSkill; } }
 
         // Constantly updates the distance from player
         protected float distanceFromTarget;
         public Transform Target { get { return _target; } set { _target = value; } }
         private Transform _target;
 
-        public float BasicAtkRange { get { return basicAtkRange; } }
+        public float BasicAtkRange { get { return basicAttackSkill.MaxRange; } }
         public bool IsBasicAttacking { get { return _isBasicAttacking; } }
         protected bool _isBasicAttacking = false;
         // Returns true when character is within basic attack range and cooldown is 0.
-        public bool CanBasicAtk { get { return distanceFromTarget <= basicAtkRange && curBasicAtkCd <= 0; } }
+        public bool CanBasicAtk { get { return distanceFromTarget <= basicAttackSkill.MaxRange && basicAttackSkill.CurCooldown <= 0; } }
         // Sets to true when character is doing an action (Attack, Stun).
         public bool IsAttackLunging { get { return _isAttackLunging; } }
         protected bool _isAttackLunging = false;
         public bool IsSkilling { get; set; }
         public bool IsInCombat { get { return IsSkilling || IsBasicAttacking; } }
+
+        [SerializeField, Tooltip("Mob skills.")]
+        protected List<MobSkill> skills = new List<MobSkill>();
+        [SerializeField, Tooltip("Mob effects.")]
+        protected List<MobEffect> effects = new List<MobEffect>();
+
+        protected int usingSkillIdx;
+        [SerializeField]
+        protected string animBool = "isUsingSkill";
+
+
+        #region Skill One Delegates and Events
+        // SKILL ONE
+        // Enable/Disables main hand collider for Skill One
+        public delegate void OnEnableMainHandColliderSOneDel();
+        public event OnEnableMainHandColliderSOneDel OnEnableMainHandColliderSOneEvent;
+        public delegate void OnDisableMainHandColliderSOneDel();
+        public event OnEnableMainHandColliderSOneDel OnDisableMainHandColliderSOneEvent;
+        // Enable/Disables off hand collider for Skill One
+        public delegate void OnEnableOffHandColliderSOneDel();
+        public event OnEnableOffHandColliderSOneDel OnEnableOffHandColliderSOneEvent;
+        public delegate void OnDisableOffHandColliderSOneDel();
+        public event OnDisableOffHandColliderSOneDel OnDisableOffHandColliderSOneEvent;
+        // Enables/Disables special skill collider for Skill One
+        public delegate void OnEnableSkillColliderSOneDel();
+        public event OnEnableSkillColliderSOneDel OnEnableSkillColliderSOneEvent;
+        public delegate void OnDisableSkillColliderSOneDel();
+        public event OnDisableSkillColliderSOneDel OnDisableSkillColliderSOneEvent;
+        // Handler special charging/releasing skills for Skill One
+        public delegate void OnChargeSkillOneDel();
+        public event OnChargeSkillOneDel OnChargeSkillOneEvent;
+        public delegate void OnChargeCancelSkillOneDel();
+        public event OnChargeCancelSkillOneDel OnChargeCancelSkillOneEvent;
+        public delegate void OnEnableChargeReleaseSkillOneDel();
+        public event OnEnableChargeReleaseSkillOneDel OnEnableChargeReleaseSkillOneEvent;
+        // Used to disable anything at the end 
+        public delegate void OnDisableSkillOneDel();
+        public event OnDisableSkillOneDel OnDisableSkillOneEvent;
+        // Used to summon 
+        public delegate void OnSummonSkillOneDel();
+        public event OnSummonSkillOneDel OnSummonSkillOneEvent;
+        // Used to instantiate FXs
+        public delegate void OnInstantiateFXOneDel();
+        public event OnInstantiateFXOneDel OnInstantiateFXOneEvent;
+        public delegate void OnSummonSkillTwoDel();
+        public event OnSummonSkillTwoDel OnInstantiateFXTwoEvent;
+        #endregion
         #endregion
 
 
@@ -70,6 +112,7 @@ namespace Paraverse.Mob.Combat
             if (player != null) _target = player;
             if (stats == null) stats = GetComponent<MobStats>();
             if (controller == null) controller = GetComponent<IMobController>();
+            if (basicAttackSkill == null) Debug.LogError(transform.name + " has no basic attack skill! Please add a basic attack skill...");
 
             Initialize();
         }
@@ -81,7 +124,22 @@ namespace Paraverse.Mob.Combat
             distanceFromTarget = ParaverseHelper.GetDistance(transform.position, player.position);
 
             _isBasicAttacking = anim.GetBool(StringData.IsBasicAttacking);
-            AttackCooldownHandler();
+
+            if (anim.GetBool(StringData.IsUsingSkill))
+                IsSkilling = true;
+            else
+                IsSkilling = false;
+
+            // Gets active skill to run update method for each skill 
+            for (int i = 0; i < skills.Count; i++)
+            {
+                skills[i].SkillUpdate();
+                if (skills[i].skillOn)
+                {
+                    usingSkillIdx = i;
+                }
+            }
+            basicAttackSkill.SkillUpdate();
         }
         #endregion
 
@@ -94,40 +152,20 @@ namespace Paraverse.Mob.Combat
             // Gets distance from target on start
             distanceFromTarget = ParaverseHelper.GetDistance(transform.position, player.position);
 
-            // Gets and initiates attack collider script on the enemy 
-            if (projUser == false)
+            IsSkilling = false;
+            basicAttackSkill.ActivateSkill(this, anim, stats, player);
+            for (int i = 0; i < skills.Count; i++)
             {
-                // Checks if melee users have basic attack collider script on weapon
-                if (null == basicAttackColliderGO)
+                skills[i].ActivateSkill(this, anim, stats, player);
+                if (skills[i].skillOn)
                 {
-                    Debug.LogWarning(gameObject.name + " needs to have a basic attack collider!");
-                    return;
+                    IsSkilling = true;
                 }
-                basicAttackColliderGO.SetActive(true);
-                basicAttackCollider = basicAttackColliderGO.GetComponent<AttackCollider>();
-                if (gameObject.CompareTag(StringData.PlayerTag))
-                {
-                    basicAttackCollider.Init(this, stats);
-                }
-                else
-                {
-                    basicAttackCollider.Init(this, stats, basicAttackSkill.scalingStatData);
-                }
-                basicAttackColliderGO.SetActive(false);
             }
         }
         #endregion
 
         #region Basic Attack Logic
-        /// <summary>
-        /// Handles basic attack cooldowns
-        /// </summary>
-        protected virtual void AttackCooldownHandler()
-        {
-            curBasicAtkCd -= Time.deltaTime;
-            curBasicAtkCd = Mathf.Clamp(curBasicAtkCd, 0f, GetBasicAttackCooldown());
-        }
-
         /// <summary>
         /// Returns the basic attack cooldown based on attack speed value in stats.
         /// </summary>
@@ -138,19 +176,6 @@ namespace Paraverse.Mob.Combat
         }
         #endregion
 
-        #region Public Methods
-        /// <summary>
-        /// Responsible for handling basic attack animation and cooldown.
-        /// </summary>
-        public virtual void BasicAttackHandler()
-        {
-            if (curBasicAtkCd <= 0)
-            {
-                anim.Play(basicAttackSkill.animName);
-                curBasicAtkCd = GetBasicAttackCooldown();
-            }
-        }
-
         /// <summary>
         /// Resets booelans when mob is interrupted during attack. 
         /// </summary>
@@ -160,7 +185,6 @@ namespace Paraverse.Mob.Combat
             DisableBasicAttackCollider();
             IsSkilling = false;
         }
-        #endregion
 
         #region Animation Event Methods
         /// <summary>
@@ -168,8 +192,8 @@ namespace Paraverse.Mob.Combat
         /// </summary>
         protected void EnableBasicAttackCollider()
         {
-            if (basicAttackColliderGO != null)
-                basicAttackColliderGO.SetActive(true);
+            if (null != basicAttackSkill.attackColliderGO)
+                basicAttackSkill.attackColliderGO.SetActive(true);
         }
 
         /// <summary>
@@ -177,8 +201,8 @@ namespace Paraverse.Mob.Combat
         /// </summary>
         protected void DisableBasicAttackCollider()
         {
-            if (basicAttackColliderGO != null)
-                basicAttackColliderGO.SetActive(false);
+            if (null != basicAttackSkill.attackColliderGO)
+                basicAttackSkill.attackColliderGO.SetActive(false);
         }
 
         /// <summary>
@@ -202,18 +226,32 @@ namespace Paraverse.Mob.Combat
         /// </summary>
         public virtual void FireProjectile()
         {
-            // Archers may hold an arrow which needs to be set to off/on when firing
-            if (basicAttackSkill.projData.projHeld != null)
-                basicAttackSkill.projData.projHeld.SetActive(false);
+            MobSkill skill;
 
-            Vector3 playerPos = (player.position - transform.position).normalized;
-            Vector3 targetDir = new Vector3(transform.forward.x, playerPos.y, transform.forward.z);
-            Quaternion lookRot = Quaternion.LookRotation(targetDir);
+            if (IsSkilling)
+            {
+                skill = skills[usingSkillIdx];
+            }
+            else
+                skill = basicAttackSkill;
+
+            // Archers may hold an arrow which needs to be set to off/on when firing
+            if (skill.projData.projHeld != null)
+                skill.projData.projHeld.SetActive(false);
+
+            Vector3 playerPos = new Vector3(player.position.x, player.position.y + 0.5f, player.position.z);
+            Vector3 targetDir = (playerPos - transform.position).normalized;
+
+            Quaternion lookRot;
+            if (skill.projData.projRotation == null)
+                lookRot = Quaternion.LookRotation(targetDir);
+            else
+                lookRot = skill.projData.projRotation.rotation;
 
             // Instantiate and initialize projectile
-            GameObject go = Instantiate(basicAttackSkill.projData.projPf, basicAttackSkill.projData.projOrigin.position, lookRot);
+            GameObject go = Instantiate(skill.projData.projPf, skill.projData.projOrigin.position, lookRot);
             Projectile proj = go.GetComponent<Projectile>();
-            proj.Init(this, targetDir, basicAttackSkill.scalingStatData);
+            proj.Init(this, targetDir, skill.scalingStatData);
         }
 
         /// <summary>
@@ -230,5 +268,70 @@ namespace Paraverse.Mob.Combat
             basicAttackSkill.projData.projHeld.SetActive(true);
         }
         #endregion
+
+        public virtual void AEventInstantiateFXOne()
+        {
+            OnInstantiateFXOneEvent?.Invoke();
+        }
+
+        public virtual void AEventInstantiateFXTwo()
+        {
+            OnInstantiateFXTwoEvent?.Invoke();
+        }
+
+        public virtual void AEventEnableMainHandCollider()
+        {
+            OnEnableMainHandColliderSOneEvent?.Invoke();
+        }
+
+        public virtual void AEventDisableMainHandCollider()
+        {
+            OnDisableMainHandColliderSOneEvent?.Invoke();
+        }
+
+        public virtual void AEventEnableOffHandCollider()
+        {
+            OnEnableOffHandColliderSOneEvent?.Invoke();
+        }
+
+        public virtual void AEventDisableOffHandCollider()
+        {
+            OnDisableOffHandColliderSOneEvent?.Invoke();
+        }
+
+        public virtual void AEventEnableSkillCollider()
+        {
+            OnEnableSkillColliderSOneEvent?.Invoke();
+        }
+
+        public virtual void AEventDisableSkillCollider()
+        {
+            OnDisableSkillColliderSOneEvent?.Invoke();
+        }
+
+        public virtual void AEventChargeSkill()
+        {
+            OnChargeSkillOneEvent?.Invoke();
+        }
+
+        public virtual void AEventChargeCancelSkill()
+        {
+            OnChargeCancelSkillOneEvent?.Invoke();
+        }
+
+        public virtual void AEventChargeReleaseSkill()
+        {
+            OnEnableChargeReleaseSkillOneEvent?.Invoke();
+        }
+
+        public virtual void AEventDisableSkill()
+        {
+            OnDisableSkillOneEvent?.Invoke();
+        }
+
+        public virtual void AEventSummonSkill()
+        {
+            OnSummonSkillOneEvent?.Invoke();
+        }
     }
 }

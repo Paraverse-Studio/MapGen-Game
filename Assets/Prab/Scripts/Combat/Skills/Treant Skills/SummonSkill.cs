@@ -1,4 +1,5 @@
 using Paraverse.Combat;
+using Paraverse.Mob.Combat;
 using Paraverse.Mob.Controller;
 using Paraverse.Mob.Stats;
 using Paraverse.Player;
@@ -25,7 +26,7 @@ public class SummonSkill : MobSkill, IMobSkill
 
 
     #region Inherited Methods
-    public override void ActivateSkill(EnhancedMobCombat mob, Animator anim, MobStats stats, Transform target = null)
+    public override void ActivateSkill(MobCombat mob, Animator anim, MobStats stats, Transform target = null)
     {
         base.ActivateSkill(mob, anim, stats, target);
         mob.OnSummonSkillOneEvent += SummonSapling;

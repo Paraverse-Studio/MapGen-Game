@@ -41,7 +41,7 @@ MonoBehaviour:
   m_GameObject: {fileID: 274115227}
   m_Enabled: 1
   m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: a49d912e0b019f14b99bdde319029bdd, type: 3}
+  m_Script: {fileID: 11500000, guid: 5ff88d084135b4240baee58ee284d528, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
   _skillName: Bear Minon Basic Attack
@@ -50,21 +50,23 @@ MonoBehaviour:
   _minRange: 0
   _maxRange: 5
   cooldown: 5
-  cost: 10
+  cost: 0
   animName: BasicAttack
-  attackColliderGO: {fileID: 0}
+  isBasicAttack: 1
+  attackColliderGO: {fileID: 5827702022029265610}
+  attackCollider: {fileID: 5827702022029265621}
   projData:
     projPf: {fileID: 0}
     projHeld: {fileID: 0}
     projOrigin: {fileID: 0}
     projRotation: {fileID: 0}
-    basicAtkProjSpeed: 30
+    basicAtkProjSpeed: 10
   usesTargetLock: 0
   rotSpeed: 100
   scalingStatData:
     flatPower: 0
-    attackScaling: 0
-    abilityScaling: 1
+    attackScaling: 1
+    abilityScaling: 0
     healthScaling: 0
 --- !u!1 &1627162889
 GameObject:
@@ -1354,12 +1356,11 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   anim: {fileID: 8264661669935483433}
   stats: {fileID: 0}
-  basicAtkDmgRatio: 1
-  basicAtkRange: 3
-  basicAttackColliderGO: {fileID: 5827702022029265610}
-  basicAttackCollider: {fileID: 0}
   projUser: 0
   basicAttackSkill: {fileID: 274115229}
+  skills: []
+  effects: []
+  animBool: isUsingSkill
 --- !u!114 &1729720464
 MonoBehaviour:
   m_ObjectHideFlags: 0

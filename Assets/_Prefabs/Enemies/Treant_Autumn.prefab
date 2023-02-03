@@ -210,7 +210,9 @@ MonoBehaviour:
   cooldown: 4.5
   cost: 0
   animName: LifeStealAttack
+  isBasicAttack: 0
   attackColliderGO: {fileID: 42969047}
+  attackCollider: {fileID: 0}
   projData:
     projPf: {fileID: 0}
     projHeld: {fileID: 0}
@@ -278,7 +280,9 @@ MonoBehaviour:
   cooldown: 7
   cost: 0
   animName: RootSkill
+  isBasicAttack: 0
   attackColliderGO: {fileID: 0}
+  attackCollider: {fileID: 0}
   projData:
     projPf: {fileID: 1460401963545366043, guid: 83bfd872f9c72e74787b25ee8b0e618e, type: 3}
     projHeld: {fileID: 0}
@@ -345,7 +349,9 @@ MonoBehaviour:
   cooldown: 14
   cost: 0
   animName: SummonSkill
+  isBasicAttack: 0
   attackColliderGO: {fileID: 0}
+  attackCollider: {fileID: 0}
   projData:
     projPf: {fileID: 0}
     projHeld: {fileID: 0}
@@ -514,6 +520,7 @@ GameObject:
   m_Component:
   - component: {fileID: 1826455184}
   - component: {fileID: 1826455185}
+  - component: {fileID: 1826455186}
   m_Layer: 0
   m_Name: BasicAttack
   m_TagString: Untagged
@@ -556,7 +563,9 @@ MonoBehaviour:
   cooldown: 5
   cost: 10
   animName: BasicAttack
+  isBasicAttack: 0
   attackColliderGO: {fileID: 0}
+  attackCollider: {fileID: 0}
   projData:
     projPf: {fileID: 0}
     projHeld: {fileID: 0}
@@ -569,6 +578,42 @@ MonoBehaviour:
     flatPower: 0
     attackScaling: 0
     abilityScaling: 1
+    healthScaling: 0
+--- !u!114 &1826455186
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1826455183}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 5ff88d084135b4240baee58ee284d528, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  _skillName: Treant Basic Attack
+  _ID: -1
+  _description: 
+  _minRange: 0
+  _maxRange: 5
+  cooldown: 5
+  cost: 0
+  animName: BasicAttack
+  isBasicAttack: 1
+  attackColliderGO: {fileID: 3172601157949767707}
+  attackCollider: {fileID: 3172601157949767685}
+  projData:
+    projPf: {fileID: 0}
+    projHeld: {fileID: 0}
+    projOrigin: {fileID: 0}
+    projRotation: {fileID: 0}
+    basicAtkProjSpeed: 10
+  usesTargetLock: 0
+  rotSpeed: 100
+  scalingStatData:
+    flatPower: 0
+    attackScaling: 1
+    abilityScaling: 0
     healthScaling: 0
 --- !u!1 &131609469950587393
 GameObject:
@@ -3684,23 +3729,14 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   anim: {fileID: 131609469957833179}
   stats: {fileID: 0}
-  basicAtkDmgRatio: 1
-  basicAtkRange: 5
-  basicAttackColliderGO: {fileID: 3172601157949767707}
-  basicAttackCollider: {fileID: 3172601157949767685}
   projUser: 0
-  basicAttackSkill: {fileID: 1826455185}
+  basicAttackSkill: {fileID: 1826455186}
   skills:
   - {fileID: 1256454455}
   - {fileID: 1262949476}
   - {fileID: 1626988168}
   effects: []
   animBool: isUsingSkill
-  statData:
-    flatPower: 0
-    attackScaling: 1
-    abilityScaling: 0
-    healthScaling: 0
 --- !u!114 &3172601158616173551
 MonoBehaviour:
   m_ObjectHideFlags: 0

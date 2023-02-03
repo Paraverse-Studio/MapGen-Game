@@ -508,7 +508,7 @@ namespace Paraverse.Mob.Controller
             float angle = Quaternion.Angle(transform.rotation, lookRot);
 
             if (angle <= 0)
-                combat.BasicAttackHandler();
+                combat.BasicAttackSkill.ExecuteBasicAttack();
         }
 
         public void ApplyHitAnimation()

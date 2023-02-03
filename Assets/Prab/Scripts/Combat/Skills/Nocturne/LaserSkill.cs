@@ -1,4 +1,5 @@
 using Paraverse.Combat;
+using Paraverse.Mob.Combat;
 using Paraverse.Mob.Stats;
 using PolygonArsenal;
 using UnityEngine;
@@ -14,9 +15,9 @@ public class LaserSkill : MobSkill, IMobSkill
     protected float skillCurTimer = 3f;
 
     #region Inherited Methods
-    public override void ActivateSkill(EnhancedMobCombat mob, Animator anim, MobStats stats, Transform target = null)
+    public override void ActivateSkill(MobCombat mob, Animator anim, MobStats stats, Transform target = null)
     {
-        base.ActivateSkill(mob, input, anim, stats, target);
+        base.ActivateSkill(mob, anim, stats, target);
         skillCurTimer = skillStartTimer;
     }
 

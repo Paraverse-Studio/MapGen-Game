@@ -1371,6 +1371,63 @@ PrefabInstance:
       objectReference: {fileID: 0}
     m_RemovedComponents: []
   m_SourcePrefab: {fileID: 100100000, guid: c4ca1772369431a458a6a3896f69f990, type: 3}
+--- !u!1 &77710889 stripped
+GameObject:
+  m_CorrespondingSourceObject: {fileID: 6080363539117558812, guid: aa4e16a1786ed124fa06618210886566, type: 3}
+  m_PrefabInstance: {fileID: 1366090532}
+  m_PrefabAsset: {fileID: 0}
+--- !u!114 &77710890 stripped
+MonoBehaviour:
+  m_CorrespondingSourceObject: {fileID: 6080363539117558813, guid: aa4e16a1786ed124fa06618210886566, type: 3}
+  m_PrefabInstance: {fileID: 1366090532}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 77710889}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 826f6eeb6329df94c861cd0c08b9574e, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+--- !u!1 &80345159 stripped
+GameObject:
+  m_CorrespondingSourceObject: {fileID: 80345159, guid: bb48c0a6c7c30e44fb01328c0709dc77, type: 3}
+  m_PrefabInstance: {fileID: 2657095164593021778}
+  m_PrefabAsset: {fileID: 0}
+--- !u!114 &80345161
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 80345159}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 5ff88d084135b4240baee58ee284d528, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  _skillName: Imp Basic Attack
+  _ID: -1
+  _description: 
+  _minRange: 0
+  _maxRange: 5
+  cooldown: 5
+  cost: 0
+  animName: BasicAttack
+  isBasicAttack: 1
+  attackColliderGO: {fileID: 0}
+  attackCollider: {fileID: 0}
+  projData:
+    projPf: {fileID: 7922565735799238133, guid: 006b9638db8673b489ecc9214ffbfa4e, type: 3}
+    projHeld: {fileID: 0}
+    projOrigin: {fileID: 454388704}
+    projRotation: {fileID: 0}
+    basicAtkProjSpeed: 20
+  usesTargetLock: 0
+  rotSpeed: 100
+  scalingStatData:
+    flatPower: 0
+    attackScaling: 0
+    abilityScaling: 1
+    healthScaling: 0
 --- !u!1 &84880962
 GameObject:
   m_ObjectHideFlags: 0
@@ -3760,6 +3817,11 @@ Transform:
   m_Father: {fileID: 0}
   m_RootOrder: 26
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
+--- !u!4 &454388704 stripped
+Transform:
+  m_CorrespondingSourceObject: {fileID: 2657095164103751762, guid: bb48c0a6c7c30e44fb01328c0709dc77, type: 3}
+  m_PrefabInstance: {fileID: 2657095164593021778}
+  m_PrefabAsset: {fileID: 0}
 --- !u!1 &480862768
 GameObject:
   m_ObjectHideFlags: 0
@@ -3812,7 +3874,9 @@ MonoBehaviour:
   cooldown: 1
   cost: 10
   animName: SpinSlash
+  isBasicAttack: 0
   attackColliderGO: {fileID: 0}
+  attackCollider: {fileID: 0}
   projData:
     projPf: {fileID: 98397111005207279, guid: 9b601de79a043e140a973529dec2522a, type: 3}
     projHeld: {fileID: 0}
@@ -3980,6 +4044,10 @@ PrefabInstance:
     - target: {fileID: 1491135451762375406, guid: 7cd480286f30f724d8b6b177b24d1810, type: 3}
       propertyPath: m_Name
       value: ForestSpirit_Red
+      objectReference: {fileID: 0}
+    - target: {fileID: 1491135451762375406, guid: 7cd480286f30f724d8b6b177b24d1810, type: 3}
+      propertyPath: m_IsActive
+      value: 0
       objectReference: {fileID: 0}
     m_RemovedComponents: []
   m_SourcePrefab: {fileID: 100100000, guid: 7cd480286f30f724d8b6b177b24d1810, type: 3}
@@ -8470,6 +8538,10 @@ PrefabInstance:
       propertyPath: m_Name
       value: MushroomMinon_Green
       objectReference: {fileID: 0}
+    - target: {fileID: 4257800398774748632, guid: feaf9f99f013c334fb69778b3288438e, type: 3}
+      propertyPath: m_IsActive
+      value: 0
+      objectReference: {fileID: 0}
     - target: {fileID: 4257800398774748635, guid: feaf9f99f013c334fb69778b3288438e, type: 3}
       propertyPath: m_RootOrder
       value: 12
@@ -12076,6 +12148,10 @@ PrefabInstance:
       propertyPath: m_Name
       value: BearMinion_Blue
       objectReference: {fileID: 0}
+    - target: {fileID: 834749840821475308, guid: 504274220e31b014bb1f9da275f2fca1, type: 3}
+      propertyPath: m_IsActive
+      value: 0
+      objectReference: {fileID: 0}
     - target: {fileID: 834749840821475311, guid: 504274220e31b014bb1f9da275f2fca1, type: 3}
       propertyPath: m_RootOrder
       value: 11
@@ -14790,6 +14866,10 @@ PrefabInstance:
       propertyPath: m_SizeDelta.y
       value: 0
       objectReference: {fileID: 0}
+    - target: {fileID: 7311448671115723015, guid: b0089e7a57060c94592e590afc510844, type: 3}
+      propertyPath: m_AnchoredPosition.y
+      value: -20.000061
+      objectReference: {fileID: 0}
     - target: {fileID: 7311448671347971881, guid: b0089e7a57060c94592e590afc510844, type: 3}
       propertyPath: m_AnchorMax.y
       value: 0
@@ -15222,6 +15302,10 @@ PrefabInstance:
       propertyPath: m_AnchoredPosition.x
       value: 100
       objectReference: {fileID: 0}
+    - target: {fileID: 7311448672384992556, guid: b0089e7a57060c94592e590afc510844, type: 3}
+      propertyPath: m_AnchoredPosition.x
+      value: -35
+      objectReference: {fileID: 0}
     - target: {fileID: 7311448672392100026, guid: b0089e7a57060c94592e590afc510844, type: 3}
       propertyPath: m_AnchorMax.y
       value: 0
@@ -15309,6 +15393,10 @@ PrefabInstance:
     - target: {fileID: 7311448672543741917, guid: b0089e7a57060c94592e590afc510844, type: 3}
       propertyPath: m_AnchoredPosition.y
       value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 7311448672604579429, guid: b0089e7a57060c94592e590afc510844, type: 3}
+      propertyPath: m_AnchoredPosition.x
+      value: -50.00125
       objectReference: {fileID: 0}
     m_RemovedComponents: []
   m_SourcePrefab: {fileID: 100100000, guid: b0089e7a57060c94592e590afc510844, type: 3}
@@ -15575,7 +15663,9 @@ MonoBehaviour:
   cooldown: 10
   cost: 10
   animName: SkillTwo
+  isBasicAttack: 0
   attackColliderGO: {fileID: 0}
+  attackCollider: {fileID: 0}
   projData:
     projPf: {fileID: 98397111005207279, guid: 9b601de79a043e140a973529dec2522a, type: 3}
     projHeld: {fileID: 0}
@@ -15749,7 +15839,7 @@ MonoBehaviour:
   m_GameObject: {fileID: 1366090533}
   m_Enabled: 1
   m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: a49d912e0b019f14b99bdde319029bdd, type: 3}
+  m_Script: {fileID: 11500000, guid: 5ff88d084135b4240baee58ee284d528, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
   _skillName: Basic Attack
@@ -15760,7 +15850,9 @@ MonoBehaviour:
   cooldown: 5
   cost: 0
   animName: 
-  attackColliderGO: {fileID: 0}
+  isBasicAttack: 1
+  attackColliderGO: {fileID: 77710889}
+  attackCollider: {fileID: 77710890}
   projData:
     projPf: {fileID: 0}
     projHeld: {fileID: 0}
@@ -17838,12 +17930,11 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   anim: {fileID: 0}
   stats: {fileID: 0}
-  basicAtkDmgRatio: 1
-  basicAtkRange: 2
-  basicAttackColliderGO: {fileID: 0}
-  basicAttackCollider: {fileID: 0}
   projUser: 0
   basicAttackSkill: {fileID: 0}
+  skills: []
+  effects: []
+  animBool: isUsingSkill
 --- !u!114 &1702892492
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -18046,12 +18137,11 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   anim: {fileID: 0}
   stats: {fileID: 0}
-  basicAtkDmgRatio: 1
-  basicAtkRange: 2
-  basicAttackColliderGO: {fileID: 0}
-  basicAttackCollider: {fileID: 0}
   projUser: 0
   basicAttackSkill: {fileID: 0}
+  skills: []
+  effects: []
+  animBool: isUsingSkill
 --- !u!114 &1851129754
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -18200,7 +18290,9 @@ MonoBehaviour:
   cooldown: 20
   cost: 20
   animName: SkillFour
+  isBasicAttack: 0
   attackColliderGO: {fileID: 0}
+  attackCollider: {fileID: 0}
   projData:
     projPf: {fileID: 0}
     projHeld: {fileID: 0}
@@ -18266,7 +18358,9 @@ MonoBehaviour:
   cooldown: 13
   cost: 15
   animName: SkillThree
+  isBasicAttack: 0
   attackColliderGO: {fileID: 0}
+  attackCollider: {fileID: 0}
   projData:
     projPf: {fileID: 0}
     projHeld: {fileID: 0}
@@ -20982,12 +21076,11 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   anim: {fileID: 0}
   stats: {fileID: 0}
-  basicAtkDmgRatio: 1
-  basicAtkRange: 2
-  basicAttackColliderGO: {fileID: 0}
-  basicAttackCollider: {fileID: 0}
   projUser: 0
   basicAttackSkill: {fileID: 0}
+  skills: []
+  effects: []
+  animBool: isUsingSkill
 --- !u!4 &411949311067432046
 Transform:
   m_ObjectHideFlags: 0
@@ -22050,6 +22143,10 @@ PrefabInstance:
   m_Modification:
     m_TransformParent: {fileID: 0}
     m_Modifications:
+    - target: {fileID: 2657095164308100581, guid: bb48c0a6c7c30e44fb01328c0709dc77, type: 3}
+      propertyPath: basicAttackSkill
+      value: 
+      objectReference: {fileID: 80345161}
     - target: {fileID: 4902631821647716223, guid: bb48c0a6c7c30e44fb01328c0709dc77, type: 3}
       propertyPath: m_RootOrder
       value: 15

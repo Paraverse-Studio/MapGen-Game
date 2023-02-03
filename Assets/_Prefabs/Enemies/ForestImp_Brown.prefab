@@ -9,7 +9,6 @@ GameObject:
   serializedVersion: 6
   m_Component:
   - component: {fileID: 80345160}
-  - component: {fileID: 80345161}
   m_Layer: 0
   m_Name: BasicAttack
   m_TagString: Untagged
@@ -32,40 +31,6 @@ Transform:
   m_Father: {fileID: 1678626641}
   m_RootOrder: 3
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
---- !u!114 &80345161
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 80345159}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: a49d912e0b019f14b99bdde319029bdd, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: 
-  _skillName: Imp Basic Attack
-  _ID: -1
-  _description: 
-  _minRange: 0
-  _maxRange: 5
-  cooldown: 5
-  cost: 10
-  animName: BasicAttack
-  attackColliderGO: {fileID: 0}
-  projData:
-    projPf: {fileID: 0}
-    projHeld: {fileID: 0}
-    projOrigin: {fileID: 0}
-    projRotation: {fileID: 0}
-    basicAtkProjSpeed: 10
-  usesTargetLock: 0
-  rotSpeed: 100
-  scalingStatData:
-    flatPower: 0
-    attackScaling: 0
-    abilityScaling: 1
-    healthScaling: 0
 --- !u!1 &1678626640
 GameObject:
   m_ObjectHideFlags: 0
@@ -153,7 +118,9 @@ MonoBehaviour:
   cooldown: 10
   cost: 0
   animName: SkyBarrageSkill
+  isBasicAttack: 0
   attackColliderGO: {fileID: 0}
+  attackCollider: {fileID: 0}
   projData:
     projPf: {fileID: 5932505143654540056, guid: 7b4ebbffc2f4a794791e00ed1bbb5b7e, type: 3}
     projHeld: {fileID: 0}
@@ -220,7 +187,9 @@ MonoBehaviour:
   cooldown: 3
   cost: 0
   animName: JumpStart
+  isBasicAttack: 0
   attackColliderGO: {fileID: 0}
+  attackCollider: {fileID: 0}
   projData:
     projPf: {fileID: 0}
     projHeld: {fileID: 0}
@@ -286,7 +255,9 @@ MonoBehaviour:
   cooldown: 5
   cost: 0
   animName: AttackCombo
+  isBasicAttack: 0
   attackColliderGO: {fileID: 2657095164191216732}
+  attackCollider: {fileID: 0}
   projData:
     projPf: {fileID: 0}
     projHeld: {fileID: 0}
@@ -2362,23 +2333,14 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   anim: {fileID: 1926738171499081581}
   stats: {fileID: 0}
-  basicAtkDmgRatio: 1
-  basicAtkRange: 5
-  basicAttackColliderGO: {fileID: 2657095163120786646}
-  basicAttackCollider: {fileID: 0}
   projUser: 1
-  basicAttackSkill: {fileID: 80345161}
+  basicAttackSkill: {fileID: 0}
   skills:
   - {fileID: 1849899259}
   - {fileID: 1719642824}
   - {fileID: 1908622638}
   effects: []
   animBool: isUsingSkill
-  statData:
-    flatPower: 0
-    attackScaling: 1
-    abilityScaling: 0
-    healthScaling: 0
 --- !u!114 &2657095164308100577
 MonoBehaviour:
   m_ObjectHideFlags: 0
