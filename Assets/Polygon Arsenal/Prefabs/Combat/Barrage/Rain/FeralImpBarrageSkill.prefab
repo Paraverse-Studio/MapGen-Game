@@ -14760,8 +14760,7 @@ GameObject:
   - component: {fileID: 5932505143654540061}
   - component: {fileID: 5932505143654540058}
   - component: {fileID: 5932505143654540059}
-  - component: {fileID: 74232792537530814}
-  - component: {fileID: 1256190699977504979}
+  - component: {fileID: 4392110641524855996}
   m_Layer: 0
   m_Name: FeralImpBarrageSkill
   m_TagString: Untagged
@@ -18611,14 +18610,14 @@ ParticleSystem:
         m_RotationOrder: 4
     minKillSpeed: 0
     maxKillSpeed: 10000
-    radiusScale: 0.09
+    radiusScale: 2
     collidesWith:
       serializedVersion: 2
-      m_Bits: 4294967295
+      m_Bits: 16384
     maxCollisionShapes: 256
     quality: 0
     voxelSize: 0.5
-    collisionMessages: 0
+    collisionMessages: 1
     collidesWithDynamic: 1
     interiorCollisions: 0
   TriggerModule:
@@ -19677,7 +19676,7 @@ ParticleSystemRenderer:
   m_MeshWeighting2: 1
   m_MeshWeighting3: 1
   m_MaskInteraction: 0
---- !u!114 &74232792537530814
+--- !u!114 &4392110641524855996
 MonoBehaviour:
   m_ObjectHideFlags: 0
   m_CorrespondingSourceObject: {fileID: 0}
@@ -19686,36 +19685,23 @@ MonoBehaviour:
   m_GameObject: {fileID: 5932505143654540056}
   m_Enabled: 1
   m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: db6e1f98e37880845ac630a0e329ccb0, type: 3}
+  m_Script: {fileID: 11500000, guid: bf60a5c01c4a2184dbd3a58e77d18e90, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
   targetTag: Player
-  speed: 0
-  range: 0
-  damage: 0
+  speed: 20
+  range: 10
   deathTimer: 5
-  stationary: 1
-  dot: 1
-  applyDamageOnEnter: 0
+  stationary: 0
+  dot: 0
+  dontApplyDamageOnEnter: 0
   dotIntervalTimer: 1
   knockBackEffect: {fileID: 0}
   pierce: 1
   applyHitAnim: 1
   launchFX: {fileID: 0}
   hitFX: {fileID: 0}
---- !u!65 &1256190699977504979
-BoxCollider:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 5932505143654540056}
-  m_Material: {fileID: 0}
-  m_IsTrigger: 1
-  m_Enabled: 1
-  serializedVersion: 2
-  m_Size: {x: 2, y: 2, z: 20}
-  m_Center: {x: 0, y: 0, z: 0}
+  decreaseByLerp: -1
 --- !u!1 &5932505144238678716
 GameObject:
   m_ObjectHideFlags: 0

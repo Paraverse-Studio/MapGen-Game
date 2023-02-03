@@ -234,6 +234,7 @@ namespace Paraverse.Mob.Controller
             }
 
             if (nav.enabled == false) return;
+
             if (TargetDetected() && combat.IsInCombat == false && combat.CanBasicAtk == false && playerController.IsDead == false)
             {
                 PursueTarget();
@@ -769,7 +770,7 @@ namespace Paraverse.Mob.Controller
         {
             Debug.Log("Player has died!");
             Instantiate(deathEffect, transform.position, transform.rotation);
-            Destroy(gameObject);
+            Destroy(gameObject.transform.parent.gameObject);
         }
         #endregion
     }

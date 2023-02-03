@@ -530,7 +530,7 @@ GameObject:
   serializedVersion: 6
   m_Component:
   - component: {fileID: 7707741650206842203}
-  - component: {fileID: 1475609044564924983}
+  - component: {fileID: 1269613722003654902}
   m_Layer: 14
   m_Name: BasicAttack
   m_TagString: Untagged
@@ -553,7 +553,7 @@ Transform:
   m_Father: {fileID: 4241460780824340472}
   m_RootOrder: 0
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
---- !u!114 &1475609044564924983
+--- !u!114 &1269613722003654902
 MonoBehaviour:
   m_ObjectHideFlags: 0
   m_CorrespondingSourceObject: {fileID: 0}
@@ -562,19 +562,20 @@ MonoBehaviour:
   m_GameObject: {fileID: 1588179095110375024}
   m_Enabled: 1
   m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: a49d912e0b019f14b99bdde319029bdd, type: 3}
+  m_Script: {fileID: 11500000, guid: 5ff88d084135b4240baee58ee284d528, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
   _skillName: 
   _ID: -1
-  _image: {fileID: 0}
   _description: 
   _minRange: 0
   _maxRange: 5
   cooldown: 5
   cost: 10
   animName: BasicAttack
-  attackColliderGO: {fileID: 0}
+  isBasicAttack: 0
+  attackColliderGO: {fileID: 6080363539117558812}
+  attackCollider: {fileID: 6080363539117558813}
   projData:
     projPf: {fileID: 0}
     projHeld: {fileID: 0}
@@ -582,7 +583,7 @@ MonoBehaviour:
     projRotation: {fileID: 0}
     basicAtkProjSpeed: 10
   usesTargetLock: 0
-  rotSpeed: 100
+  rotSpeed: 110
   scalingStatData:
     flatPower: 0
     attackScaling: 1
@@ -1040,25 +1041,19 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   anim: {fileID: 2956618024134931115}
   stats: {fileID: 0}
-  basicAtkDmgRatio: 1
-  basicAtkRange: 2
-  basicAttackColliderGO: {fileID: 6080363539117558812}
-  basicAttackCollider: {fileID: 6080363539117558813}
   projUser: 0
-  basicAttackSkill: {fileID: 1475609044564924983}
+  basicAttackSkill: {fileID: 1269613722003654902}
   skills: []
   effects: []
   animBool: isUsingSkill
-  statData:
-    flatPower: 0
-    attackScaling: 1
-    abilityScaling: 0
-    healthScaling: 0
   maxComboResetTimer: 0.5
   _skillHolder: {fileID: 4241460780824340472}
   _effectsHolder: {fileID: 3781554212329764893}
   _skillLabel: {fileID: 0}
+  _skillCDTime: {fileID: 0}
+  _skillCDFill: {fileID: 0}
   _skillIcon: {fileID: 0}
+  _skillCDGlow: {fileID: 0}
   _refresher: {fileID: 0}
 --- !u!114 &1752897480
 MonoBehaviour:

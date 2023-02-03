@@ -14,30 +14,44 @@ namespace Paraverse.Animations
         private bool enableUponExit = false;
 
         [SerializeField, Header ("Enables parameter after a delay"), Tooltip("Enable boolean after a % of the animation clip has already played")]
-        private bool useDelay;
+        private bool useEnableDelay;
         [SerializeField, Range(0.1f, 0.9f)]
         private float enableAfterAnimPercentage = 0f;
-        private float timer = 0;
+        private float eTimer = 0;
+
+        [SerializeField, Header("Disables parameter after a delay"), Tooltip("Disable boolean after a % of the animation clip has already played")]
+        private bool useDisableDelay;
+        [SerializeField, Range(0.1f, 0.9f)]
+        private float disableBeforeAnimPercentage = 0f;
+        private float dTimer = 0;
 
         // OnStateEnter is called when a transition starts and the state machine starts to evaluate this state
         override public void OnStateEnter(Animator animator, AnimatorStateInfo stateInfo, int layerIndex)
         {
-            timer = 0f;
+            eTimer = 0f;
+            dTimer = 0f;
 
             if (disableUponEnter)
                 animator.SetBool(parameter, false);
-            else if (!useDelay)
+            else if (!useEnableDelay)
                 animator.SetBool(parameter, true);
         }
 
         //OnStateUpdate is called on each Update frame between OnStateEnter and OnStateExit callbacks
         override public void OnStateUpdate(Animator animator, AnimatorStateInfo stateInfo, int layerIndex)
         {
-            if (useDelay)
+            if (useEnableDelay) // when you want a parameter to get enabled after a % of the animation is done
             {
-                timer += Time.deltaTime;
-                if ((timer / stateInfo.length) >= enableAfterAnimPercentage)
+                eTimer += Time.deltaTime;
+                if ((eTimer / stateInfo.length) >= enableAfterAnimPercentage)
                     animator.SetBool(parameter, true);
+            }
+
+            if (useDisableDelay && !enableUponExit) // when you want a parameter to get disabled after a % of the animation is done
+            {
+                dTimer += Time.deltaTime;
+                if ((dTimer / stateInfo.length) >= disableBeforeAnimPercentage)
+                    animator.SetBool(parameter, false);
             }
         }
 

@@ -12,6 +12,7 @@ public class EnemiesManager : MonoBehaviour, ITickElement
     public ParticleSystem deathVFX;
 
     [Header("Performance")]
+    public bool hideFarEnemies;
     public float hideEnemyDistance;
     public TickDelayOption checkDistanceDelay;
 
@@ -45,7 +46,7 @@ public class EnemiesManager : MonoBehaviour, ITickElement
     void Start()
     {
         _player = GlobalSettings.Instance.player.transform;
-        TickManager.Instance?.Subscribe(this, gameObject, checkDistanceDelay);
+        if (hideFarEnemies) TickManager.Instance?.Subscribe(this, gameObject, checkDistanceDelay);
     }
 
     public void Tick()
