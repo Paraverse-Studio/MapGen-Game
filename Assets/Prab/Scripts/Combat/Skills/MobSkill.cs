@@ -63,7 +63,7 @@ namespace Paraverse.Combat
         [Header("Uses Target Lock"), Tooltip("If this skill should force mob to face its target")]
         public bool usesTargetLock;
         [SerializeField, Tooltip("Speed of rotation during skill.")] 
-        protected float rotSpeed = 100f;
+        protected float rotSpeed = 110f;
 
         public ScalingStatData scalingStatData;
 
