@@ -17,16 +17,16 @@ public class EmpoweredAttackEffect : MobEffect
         base.ActivateEffect(stats);
         _mod = new StatModifier(_empoweredScaling.FinalValue(_stats));
         _hitCounter = 0;
-        _combat.basicAttackCollider.OnBasicAttackPreHitEvent += IncrementBasicAttackCounter;
-        _combat.basicAttackCollider.OnBasicAttackApplyDamageEvent += RemoveMod;
+        _combat.BasicAttackSkill.attackCollider.OnBasicAttackPreHitEvent += IncrementBasicAttackCounter;
+        _combat.BasicAttackSkill.attackCollider.OnBasicAttackApplyDamageEvent += RemoveMod;
     }
 
     public override void DeactivateEffect()
     {
         base.DeactivateEffect();
         RemoveMod();
-        _combat.basicAttackCollider.OnBasicAttackPreHitEvent -= IncrementBasicAttackCounter;
-        _combat.basicAttackCollider.OnBasicAttackApplyDamageEvent -= RemoveMod;
+        _combat.BasicAttackSkill.attackCollider.OnBasicAttackPreHitEvent -= IncrementBasicAttackCounter;
+        _combat.BasicAttackSkill.attackCollider.OnBasicAttackApplyDamageEvent -= RemoveMod;
     }
 
     private void IncrementBasicAttackCounter()

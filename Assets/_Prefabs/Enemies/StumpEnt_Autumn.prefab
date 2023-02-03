@@ -1,5 +1,37 @@
 %YAML 1.1
 %TAG !u! tag:unity3d.com,2011:
+--- !u!1 &4004319895975023549
+GameObject:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  serializedVersion: 6
+  m_Component:
+  - component: {fileID: 3469968825766202167}
+  m_Layer: 0
+  m_Name: MobSkills
+  m_TagString: Untagged
+  m_Icon: {fileID: 0}
+  m_NavMeshLayer: 0
+  m_StaticEditorFlags: 0
+  m_IsActive: 1
+--- !u!4 &3469968825766202167
+Transform:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 4004319895975023549}
+  m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
+  m_LocalPosition: {x: 0, y: 0, z: 0}
+  m_LocalScale: {x: 1, y: 1, z: 1}
+  m_ConstrainProportionsScale: 0
+  m_Children:
+  - {fileID: 4865048700238484271}
+  m_Father: {fileID: 7898848738789558339}
+  m_RootOrder: 2
+  m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
 --- !u!1 &5125661759965749505
 GameObject:
   m_ObjectHideFlags: 0
@@ -376,29 +408,20 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 31b2fe413c995db46ab92bb45b7ca9ee, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  anim: {fileID: 0}
-  basicAtkDmgRatio: 1
-  basicAtkRange: 5
-  basicAttackColliderGO: {fileID: 0}
-  basicAttackCollider: {fileID: 0}
+  anim: {fileID: 5125661759958323917}
+  stats: {fileID: 0}
   projUser: 0
-  projData:
-    projPf: {fileID: 0}
-    projHeld: {fileID: 0}
-    projOrigin: {fileID: 0}
-    projRotation: {fileID: 0}
-    basicAtkProjSpeed: 10
-    scalingStatData:
-      flatPower: 1
-      attackScaling: 0
-      abilityScaling: 0
-  IsSkilling: 0
+  basicAttackSkill: {fileID: 1862365032519942122}
+  skills: []
+  effects: []
+  animBool: isUsingSkill
   explosionEffect: {fileID: 3357188187496195378, guid: c4687f54de839e54f979bd3771bf99d5, type: 3}
   explosionRadius: 1.5
   scalingStatData:
     flatPower: 0
     attackScaling: 0
     abilityScaling: 1
+    healthScaling: 0
 --- !u!114 &5125661759958323763
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -1101,6 +1124,75 @@ Transform:
   m_Children:
   - {fileID: 5125661759965265197}
   - {fileID: 7898848737085797153}
+  - {fileID: 3469968825766202167}
   m_Father: {fileID: 0}
   m_RootOrder: 0
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
+--- !u!1 &9190496419088927380
+GameObject:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  serializedVersion: 6
+  m_Component:
+  - component: {fileID: 4865048700238484271}
+  - component: {fileID: 1862365032519942122}
+  m_Layer: 0
+  m_Name: BasicAttack
+  m_TagString: Untagged
+  m_Icon: {fileID: 0}
+  m_NavMeshLayer: 0
+  m_StaticEditorFlags: 0
+  m_IsActive: 1
+--- !u!4 &4865048700238484271
+Transform:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 9190496419088927380}
+  m_LocalRotation: {x: -0, y: -0, z: -0, w: 1}
+  m_LocalPosition: {x: -0.18783188, y: 1.0420071, z: 0.99387145}
+  m_LocalScale: {x: 1, y: 1, z: 1}
+  m_ConstrainProportionsScale: 0
+  m_Children: []
+  m_Father: {fileID: 3469968825766202167}
+  m_RootOrder: 0
+  m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
+--- !u!114 &1862365032519942122
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 9190496419088927380}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: a49d912e0b019f14b99bdde319029bdd, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  _skillName: Stump Basic Attack
+  _ID: -1
+  _description: 
+  _minRange: 0
+  _maxRange: 5
+  cooldown: 5
+  cost: 0
+  animName: BasicAttack
+  isBasicAttack: 1
+  attackColliderGO: {fileID: 0}
+  attackCollider: {fileID: 0}
+  projData:
+    projPf: {fileID: 0}
+    projHeld: {fileID: 0}
+    projOrigin: {fileID: 0}
+    projRotation: {fileID: 0}
+    basicAtkProjSpeed: 10
+  usesTargetLock: 0
+  rotSpeed: 100
+  scalingStatData:
+    flatPower: 10
+    attackScaling: 0
+    abilityScaling: 0
+    healthScaling: 0

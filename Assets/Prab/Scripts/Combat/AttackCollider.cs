@@ -33,7 +33,6 @@ namespace Paraverse
 
         [SerializeField]
         protected bool isBasicAttackCollider = false;
-        private bool isSkill = false;
 
 
         // Basic Attack Events Pre/During/Post
@@ -51,14 +50,13 @@ namespace Paraverse
         public ScalingStatData scalingStatData;
 
 
-        public void Init(MobCombat mob, IMobStats stats, ScalingStatData scalingStatData, bool isSkill = false)
+        public void Init(MobCombat mob, IMobStats stats, ScalingStatData scalingStatData)
         {
             this.mob = mob;
             this.stats = stats;
             this.scalingStatData.flatPower = scalingStatData.flatPower;
             this.scalingStatData.attackScaling = scalingStatData.attackScaling;
             this.scalingStatData.abilityScaling = scalingStatData.abilityScaling;
-            this.isSkill = isSkill;
         }
         
         public void Init(MobCombat mob, IMobStats stats)

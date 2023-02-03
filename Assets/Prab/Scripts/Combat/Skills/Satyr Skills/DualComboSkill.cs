@@ -16,7 +16,7 @@ public class DualComboSkill : MobSkill, IMobSkill
 
 
     #region Inherited Methods
-    public override void ActivateSkill(EnhancedMobCombat mob, Animator anim, MobStats stats, Transform target = null)
+    public override void ActivateSkill(MobCombat mob, Animator anim, MobStats stats, Transform target = null)
     {
         base.ActivateSkill(mob, anim, stats, target);
 
@@ -28,7 +28,7 @@ public class DualComboSkill : MobSkill, IMobSkill
         }
         offHandAttackColliderGO.SetActive(true);
         offHandAttackCollider = offHandAttackColliderGO.GetComponent<AttackCollider>();
-        offHandAttackCollider.Init(mob, stats, scalingStatData, true);
+        offHandAttackCollider.Init(mob, stats, scalingStatData);
         offHandAttackColliderGO.SetActive(false);
 
         mob.OnEnableMainHandColliderSOneEvent += EnableMainHandAttackCollider;

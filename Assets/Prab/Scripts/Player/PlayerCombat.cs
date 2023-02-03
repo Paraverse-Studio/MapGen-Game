@@ -42,7 +42,6 @@ namespace Paraverse.Player
         private Image _skillIcon;
         [SerializeField]
         private ContentFitterRefresher _refresher;
-
         #endregion
 
 
@@ -105,7 +104,7 @@ namespace Paraverse.Player
 
             _isBasicAttacking = anim.GetBool(StringData.IsBasicAttacking);
             BasicAttackComboHandler();
-            AttackCooldownHandler();
+            //AttackCooldownHandler();
             AnimationHandler();
 
             if (anim.GetBool(StringData.IsUsingSkill))
@@ -118,6 +117,8 @@ namespace Paraverse.Player
             {
                 skills[i].SkillUpdate();
             }
+            Debug.Log(basicAttackSkill);
+            basicAttackSkill.SkillUpdate();
         }
         #endregion
 
@@ -257,14 +258,9 @@ namespace Paraverse.Player
             MobSkill skill = null;
 
             if (IsSkilling)
-            {
                 skill = _activeSkill;
-            }
             else
-            {
                 skill = basicAttackSkill;
-                Debug.LogError("Invoked PlayerCombat's FireProjectile without providing proper projectile data.");
-            }
 
             // Archers may hold an arrow which needs to be set to off/on when firing
             if (basicAttackSkill.projData.projHeld != null)

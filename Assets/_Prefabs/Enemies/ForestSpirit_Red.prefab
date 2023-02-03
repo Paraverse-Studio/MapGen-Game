@@ -9,7 +9,7 @@ GameObject:
   serializedVersion: 6
   m_Component:
   - component: {fileID: 1448618252}
-  - component: {fileID: 1448618253}
+  - component: {fileID: 2229417013032440403}
   m_Layer: 0
   m_Name: BasicAttack
   m_TagString: Untagged
@@ -32,7 +32,7 @@ Transform:
   m_Father: {fileID: 1606808564}
   m_RootOrder: 0
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
---- !u!114 &1448618253
+--- !u!114 &2229417013032440403
 MonoBehaviour:
   m_ObjectHideFlags: 0
   m_CorrespondingSourceObject: {fileID: 0}
@@ -41,18 +41,20 @@ MonoBehaviour:
   m_GameObject: {fileID: 1448618251}
   m_Enabled: 1
   m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: a49d912e0b019f14b99bdde319029bdd, type: 3}
+  m_Script: {fileID: 11500000, guid: 5ff88d084135b4240baee58ee284d528, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
   _skillName: Forest Spirit Basic Attack
   _ID: -1
   _description: 
   _minRange: 0
-  _maxRange: 5
+  _maxRange: 3
   cooldown: 5
-  cost: 10
+  cost: 0
   animName: BasicAttack
-  attackColliderGO: {fileID: 0}
+  isBasicAttack: 1
+  attackColliderGO: {fileID: 2739856676951319334}
+  attackCollider: {fileID: 2739856676951319332}
   projData:
     projPf: {fileID: 0}
     projHeld: {fileID: 0}
@@ -63,8 +65,8 @@ MonoBehaviour:
   rotSpeed: 100
   scalingStatData:
     flatPower: 0
-    attackScaling: 0
-    abilityScaling: 1
+    attackScaling: 1
+    abilityScaling: 0
     healthScaling: 0
 --- !u!1 &1606808563
 GameObject:
@@ -3290,12 +3292,11 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   anim: {fileID: 2363846120556484870}
   stats: {fileID: 0}
-  basicAtkDmgRatio: 1
-  basicAtkRange: 3
-  basicAttackColliderGO: {fileID: 2739856676951319334}
-  basicAttackCollider: {fileID: 0}
   projUser: 0
-  basicAttackSkill: {fileID: 1448618253}
+  basicAttackSkill: {fileID: 2229417013032440403}
+  skills: []
+  effects: []
+  animBool: isUsingSkill
 --- !u!114 &1810881194
 MonoBehaviour:
   m_ObjectHideFlags: 0

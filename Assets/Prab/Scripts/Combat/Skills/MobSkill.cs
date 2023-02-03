@@ -1,4 +1,5 @@
 using Paraverse.Helper;
+using Paraverse.Mob.Combat;
 using Paraverse.Mob.Stats;
 using Paraverse.Player;
 using UnityEngine;
@@ -8,7 +9,7 @@ namespace Paraverse.Combat
     public class MobSkill : MonoBehaviour
     {
         #region Variables
-        protected EnhancedMobCombat mob;
+        protected MobCombat mob;
         protected Transform target;
         protected PlayerInputControls input;
         protected Animator anim;
@@ -34,10 +35,12 @@ namespace Paraverse.Combat
         protected float _minRange = 0f;
         [SerializeField, Tooltip("Max skill range value.")]
         protected float _maxRange = 5f;
+        public float MaxRange { get { return _maxRange; } }
         public bool IsOffCooldown { get { return curCooldown <= 0; } }
         [SerializeField, Tooltip("Skill cooldown value.")]
         protected float cooldown = 5f;
         protected float curCooldown;
+        public float CurCooldown { get { return curCooldown; } }
 
         public bool HasEnergy { get { return cost <= stats.CurEnergy; } }
         [SerializeField, Tooltip("Required energy cost to execute skill.")]
@@ -45,10 +48,14 @@ namespace Paraverse.Combat
 
         [Tooltip("Name of skill animation to play.")]
         public string animName = "";
-
         [SerializeField]
-        protected GameObject attackColliderGO;
-        protected AttackCollider attackCollider;
+        protected bool isBasicAttack = false;
+        public bool IsBasicAttack { get { return isBasicAttack; } }
+        protected bool _isBasicAttacking = false;
+        public bool IsBasicAttacking { get { return _isBasicAttacking; } }
+
+        public GameObject attackColliderGO;
+        public AttackCollider attackCollider;
 
         [Header("Projectile Values")]
         public ProjectileData projData;
@@ -65,7 +72,7 @@ namespace Paraverse.Combat
 
 
         #region Inheritable Methods
-        public virtual void ActivateSkill(EnhancedMobCombat mob, PlayerInputControls input, Animator anim, MobStats stats, Transform target = null)
+        public virtual void ActivateSkill(MobCombat mob, PlayerInputControls input, Animator anim, MobStats stats, Transform target = null)
         {
             this.mob = mob;
             this.target = target;
@@ -73,24 +80,7 @@ namespace Paraverse.Combat
             this.anim = anim;
             this.stats = stats;
             curCooldown = 0f;
-            if (mob.tag.Equals(StringData.PlayerTag))
-            {
-                input.OnSkillOneEvent += Execute;
-
-                attackColliderGO = mob.basicAttackCollider.gameObject;
-                attackCollider = attackColliderGO.GetComponent<AttackCollider>();
-                if (null == projData.projOrigin) projData.projOrigin = attackColliderGO.transform;
-            }
-        }
-
-        public virtual void ActivateSkill(EnhancedMobCombat mob, Animator anim, MobStats stats, Transform target = null)
-        {
-            this.mob = mob;
-            this.target = target;
-            this.anim = anim;
-            this.stats = stats;
-            curCooldown = 0f;
-            if (mob.gameObject.CompareTag(StringData.PlayerTag))
+            if (mob.gameObject.CompareTag(StringData.PlayerTag) && isBasicAttack == false)
                 input.OnSkillOneEvent += Execute;
 
             if (null == attackColliderGO)
@@ -100,7 +90,26 @@ namespace Paraverse.Combat
             }
             attackColliderGO.SetActive(true);
             attackCollider = attackColliderGO.GetComponent<AttackCollider>();
-            attackCollider.Init(mob, stats, scalingStatData, true);
+            attackCollider.Init(mob, stats, scalingStatData);
+            attackColliderGO.SetActive(false);
+        }
+
+        public virtual void ActivateSkill(MobCombat mob, Animator anim, MobStats stats, Transform target = null)
+        {
+            this.mob = mob;
+            this.target = target;
+            this.anim = anim;
+            this.stats = stats;
+            curCooldown = 0f;
+
+            if (null == attackColliderGO)
+            {
+                Debug.LogWarning(gameObject.name + " doesn't have an attack collider.");
+                return;
+            }
+            attackColliderGO.SetActive(true);
+            attackCollider = attackColliderGO.GetComponent<AttackCollider>();
+            attackCollider.Init(mob, stats, scalingStatData);
             attackColliderGO.SetActive(false);
         }
 
@@ -189,6 +198,7 @@ namespace Paraverse.Combat
                 curCooldown -= Time.deltaTime;
             }
             curCooldown = Mathf.Clamp(curCooldown, 0f, cooldown);
+            Debug.Log(Name + "cooldown");
         }
 
         /// <summary>

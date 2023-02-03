@@ -41,7 +41,7 @@ GameObject:
   serializedVersion: 6
   m_Component:
   - component: {fileID: 1061767021}
-  - component: {fileID: 1061767022}
+  - component: {fileID: 1061767023}
   m_Layer: 0
   m_Name: BasicAttack
   m_TagString: Untagged
@@ -64,7 +64,7 @@ Transform:
   m_Father: {fileID: 122805004}
   m_RootOrder: 0
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
---- !u!114 &1061767022
+--- !u!114 &1061767023
 MonoBehaviour:
   m_ObjectHideFlags: 0
   m_CorrespondingSourceObject: {fileID: 0}
@@ -73,18 +73,20 @@ MonoBehaviour:
   m_GameObject: {fileID: 1061767020}
   m_Enabled: 1
   m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: a49d912e0b019f14b99bdde319029bdd, type: 3}
+  m_Script: {fileID: 11500000, guid: 5ff88d084135b4240baee58ee284d528, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
   _skillName: Mushroom Minon Basic Attack
   _ID: -1
   _description: 
   _minRange: 0
-  _maxRange: 5
+  _maxRange: 9
   cooldown: 5
   cost: 10
   animName: BasicAttack
+  isBasicAttack: 1
   attackColliderGO: {fileID: 0}
+  attackCollider: {fileID: 0}
   projData:
     projPf: {fileID: 2144149555977180084, guid: 0e39962d2117a454ebbfa439711be5df, type: 3}
     projHeld: {fileID: 8962721783346320102}
@@ -95,8 +97,8 @@ MonoBehaviour:
   rotSpeed: 100
   scalingStatData:
     flatPower: 0
-    attackScaling: 0
-    abilityScaling: 1
+    attackScaling: 1
+    abilityScaling: 0
     healthScaling: 0
 --- !u!1 &1374451526
 GameObject:
@@ -3666,12 +3668,11 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   anim: {fileID: 2434766801564320006}
   stats: {fileID: 0}
-  basicAtkDmgRatio: 1
-  basicAtkRange: 10
-  basicAttackColliderGO: {fileID: 0}
-  basicAttackCollider: {fileID: 0}
   projUser: 1
-  basicAttackSkill: {fileID: 1061767022}
+  basicAttackSkill: {fileID: 1061767023}
+  skills: []
+  effects: []
+  animBool: isUsingSkill
 --- !u!114 &1376336924
 MonoBehaviour:
   m_ObjectHideFlags: 0

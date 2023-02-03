@@ -1,4 +1,5 @@
 using Paraverse.Combat;
+using Paraverse.Mob.Combat;
 using Paraverse.Mob.Controller;
 using Paraverse.Mob.Stats;
 using Paraverse.Player;
@@ -14,10 +15,10 @@ public class EnergyDrainSkill : MobSkill, IMobSkill
     #endregion
 
     #region Inherited Methods
-    public override void ActivateSkill(EnhancedMobCombat mob, Animator anim, MobStats stats, Transform target = null)
+    public override void ActivateSkill(MobCombat mob, Animator anim, MobStats stats, Transform target = null)
     {
         base.ActivateSkill(mob, anim, stats, target);
-        attackCollider.Init(mob, stats, scalingStatData, true);
+        attackCollider.Init(mob, stats, scalingStatData);
         attackCollider.OnBasicAttackApplyDamageEvent += ApplyLiftSteal;
         mob.OnEnableSkillColliderSOneEvent += EnableCollider;
         mob.OnDisableSkillColliderSOneEvent += DisableCollider;
