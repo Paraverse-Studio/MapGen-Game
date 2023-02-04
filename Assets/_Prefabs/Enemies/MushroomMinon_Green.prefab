@@ -78,13 +78,15 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   _skillName: Mushroom Minon Basic Attack
   _ID: -1
+  _image: {fileID: 0}
   _description: 
   _minRange: 0
   _maxRange: 9
-  cooldown: 5
+  cooldown: 2
   cost: 10
   animName: BasicAttack
   isBasicAttack: 1
+  _isMelee: 0
   attackColliderGO: {fileID: 0}
   attackCollider: {fileID: 0}
   projData:
@@ -3585,7 +3587,7 @@ NavMeshAgent:
   m_Acceleration: 8
   avoidancePriority: 50
   m_AngularSpeed: 120
-  m_StoppingDistance: 0
+  m_StoppingDistance: 1
   m_AutoTraverseOffMeshLink: 1
   m_AutoBraking: 0
   m_AutoRepath: 1
@@ -3688,7 +3690,7 @@ MonoBehaviour:
   maxHealth: 25
   _curHealth: 25
   attackDamage: 12
-  abilityPower: 10
+  abilityPower: 12
   attackSpeed: 0.45
   moveSpeed: 3
   maxEnergy: 100

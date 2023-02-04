@@ -46,13 +46,15 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   _skillName: Forest Spirit Basic Attack
   _ID: -1
+  _image: {fileID: 0}
   _description: 
   _minRange: 0
   _maxRange: 3
-  cooldown: 5
+  cooldown: 2.5
   cost: 0
   animName: BasicAttack
   isBasicAttack: 1
+  _isMelee: 0
   attackColliderGO: {fileID: 2739856676951319334}
   attackCollider: {fileID: 2739856676951319332}
   projData:
@@ -3152,7 +3154,7 @@ GameObject:
   - component: {fileID: 7711031450815146375}
   - component: {fileID: 4585376326402837706}
   m_Layer: 15
-  m_Name: ForestSpirit
+  m_Name: Damien
   m_TagString: Enemy
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
@@ -3258,10 +3260,10 @@ MonoBehaviour:
   minWaitDur: 5
   maxWaitDur: 10
   accurayWP: 2
-  stoppingDistance: 1.5
+  stoppingDistance: 3
   detectionRadius: 6
   pursueRadius: 10
-  atkDashForce: 8
+  atkDashForce: 10
   jumpForce: 5
   isGroundedCheckRange: 0.5
   groundLayer:

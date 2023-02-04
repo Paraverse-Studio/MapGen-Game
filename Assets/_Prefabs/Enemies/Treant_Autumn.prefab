@@ -204,6 +204,7 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   _skillName: Energy Drain
   _ID: -1
+  _image: {fileID: 0}
   _description: 
   _minRange: 0
   _maxRange: 5
@@ -211,6 +212,7 @@ MonoBehaviour:
   cost: 0
   animName: LifeStealAttack
   isBasicAttack: 0
+  _isMelee: 0
   attackColliderGO: {fileID: 42969047}
   attackCollider: {fileID: 0}
   projData:
@@ -273,6 +275,7 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   _skillName: 'Root '
   _ID: -1
+  _image: {fileID: 0}
   _description: 'He reaches for the ground, and spawns vines that move toward player,
     and root player for 2 seconds. '
   _minRange: 0
@@ -281,6 +284,7 @@ MonoBehaviour:
   cost: 0
   animName: RootSkill
   isBasicAttack: 0
+  _isMelee: 0
   attackColliderGO: {fileID: 0}
   attackCollider: {fileID: 0}
   projData:
@@ -343,6 +347,7 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   _skillName: Summon Sapling
   _ID: -1
+  _image: {fileID: 0}
   _description: 
   _minRange: 0
   _maxRange: 100
@@ -350,6 +355,7 @@ MonoBehaviour:
   cost: 0
   animName: SummonSkill
   isBasicAttack: 0
+  _isMelee: 0
   attackColliderGO: {fileID: 0}
   attackCollider: {fileID: 0}
   projData:
@@ -519,7 +525,6 @@ GameObject:
   serializedVersion: 6
   m_Component:
   - component: {fileID: 1826455184}
-  - component: {fileID: 1826455185}
   - component: {fileID: 1826455186}
   m_Layer: 0
   m_Name: BasicAttack
@@ -543,42 +548,6 @@ Transform:
   m_Father: {fileID: 94371559}
   m_RootOrder: 3
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
---- !u!114 &1826455185
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 1826455183}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: a49d912e0b019f14b99bdde319029bdd, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: 
-  _skillName: Treant Basic Attack
-  _ID: -1
-  _description: 
-  _minRange: 0
-  _maxRange: 5
-  cooldown: 5
-  cost: 10
-  animName: BasicAttack
-  isBasicAttack: 0
-  attackColliderGO: {fileID: 0}
-  attackCollider: {fileID: 0}
-  projData:
-    projPf: {fileID: 0}
-    projHeld: {fileID: 0}
-    projOrigin: {fileID: 0}
-    projRotation: {fileID: 0}
-    basicAtkProjSpeed: 10
-  usesTargetLock: 0
-  rotSpeed: 100
-  scalingStatData:
-    flatPower: 0
-    attackScaling: 0
-    abilityScaling: 1
-    healthScaling: 0
 --- !u!114 &1826455186
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -593,13 +562,15 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   _skillName: Treant Basic Attack
   _ID: -1
+  _image: {fileID: 0}
   _description: 
   _minRange: 0
   _maxRange: 5
-  cooldown: 5
+  cooldown: 2.5
   cost: 0
   animName: BasicAttack
   isBasicAttack: 1
+  _isMelee: 0
   attackColliderGO: {fileID: 3172601157949767707}
   attackCollider: {fileID: 3172601157949767685}
   projData:

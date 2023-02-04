@@ -46,13 +46,15 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   _skillName: Bear Minon Basic Attack
   _ID: -1
+  _image: {fileID: 0}
   _description: 
   _minRange: 0
-  _maxRange: 5
-  cooldown: 5
+  _maxRange: 3.5
+  cooldown: 3
   cost: 0
   animName: BasicAttack
   isBasicAttack: 1
+  _isMelee: 0
   attackColliderGO: {fileID: 5827702022029265610}
   attackCollider: {fileID: 5827702022029265621}
   projData:
@@ -1211,7 +1213,7 @@ GameObject:
   - component: {fileID: 2728153904193783093}
   - component: {fileID: 2935847963074044867}
   m_Layer: 15
-  m_Name: BearMinion
+  m_Name: Hogbear
   m_TagString: Enemy
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
@@ -1273,7 +1275,7 @@ NavMeshAgent:
   m_Acceleration: 8
   avoidancePriority: 50
   m_AngularSpeed: 270
-  m_StoppingDistance: 0
+  m_StoppingDistance: 1
   m_AutoTraverseOffMeshLink: 1
   m_AutoBraking: 0
   m_AutoRepath: 1
@@ -1322,10 +1324,10 @@ MonoBehaviour:
   minWaitDur: 5
   maxWaitDur: 10
   accurayWP: 2
-  stoppingDistance: 3
+  stoppingDistance: 2
   detectionRadius: 6
   pursueRadius: 10
-  atkDashForce: 5.5
+  atkDashForce: 7
   jumpForce: 5
   isGroundedCheckRange: 0.5
   groundLayer:
@@ -2127,7 +2129,7 @@ GameObject:
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
-  m_IsActive: 1
+  m_IsActive: 0
 --- !u!4 &5827702022029265609
 Transform:
   m_ObjectHideFlags: 0
