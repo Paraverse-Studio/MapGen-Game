@@ -395,7 +395,7 @@ namespace Paraverse.Player
                 controller.detectCollisions = false;
                 diveDir = new Vector3(goalDir.x, 0f, goalDir.z);
                 anim.Play(StringData.Dive);
-                OnStartDiveEvent.Invoke();
+                OnStartDiveEvent?.Invoke();
             }
         }
 
@@ -418,7 +418,7 @@ namespace Paraverse.Player
                 {
                     controller.detectCollisions = true;
                     _isDiving = false;
-                    OnEndDiveEvent.Invoke();
+                    OnEndDiveEvent?.Invoke();
                     return;
                 }
             }
