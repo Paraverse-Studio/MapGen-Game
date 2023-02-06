@@ -3,7 +3,6 @@ using Paraverse.IK;
 using Paraverse.Mob;
 using Paraverse.Mob.Combat;
 using Paraverse.Mob.Stats;
-using System.Collections.Generic;
 using UnityEngine;
 
 namespace Paraverse.Player
@@ -68,6 +67,10 @@ namespace Paraverse.Player
         [SerializeField, Range(0, 2), Tooltip("Time required to wait in between each dive.")]
         private float diveCd = 0.5f;
         private float curDiveCd = 0f;
+        public delegate void OnStartDiveDel();
+        public event OnStartDiveDel OnStartDiveEvent;
+        public delegate void OnEndDiveDel();
+        public event OnEndDiveDel OnEndDiveEvent;
 
         [Header("Knockback Values")]
         private KnockBackEffect activeKnockBackEffect;
@@ -392,6 +395,7 @@ namespace Paraverse.Player
                 controller.detectCollisions = false;
                 diveDir = new Vector3(goalDir.x, 0f, goalDir.z);
                 anim.Play(StringData.Dive);
+                OnStartDiveEvent.Invoke();
             }
         }
 
@@ -414,6 +418,7 @@ namespace Paraverse.Player
                 {
                     controller.detectCollisions = true;
                     _isDiving = false;
+                    OnEndDiveEvent.Invoke();
                     return;
                 }
             }
