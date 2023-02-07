@@ -390,7 +390,7 @@ namespace Paraverse.Mob.Controller
             {
                 wps[curWPIdx].transform.position = transform.position;
                 unreachableWpCheckTimer = 0f;
-                Debug.Log(transform.name + "'s wp is out of reach! Updated out of reach wp to current position: " + transform.position);
+                //Debug.Log(transform.name + "'s wp is out of reach! Updated out of reach wp to current position: " + transform.position);
             }
             prevPos = curPos;
         }
