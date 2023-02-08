@@ -113,7 +113,6 @@ namespace Paraverse
         /// </summary>
         public float ApplyCustomDamage(IMobController controller)
         {
-            Debug.Log("SCALING DATA USED: " + scalingStatData.flatPower + " and " + scalingStatData.abilityScaling);
             float totalDmg = scalingStatData.FinalValue(stats);            
 
             controller.Stats.UpdateCurrentHealth(-Mathf.CeilToInt(totalDmg));

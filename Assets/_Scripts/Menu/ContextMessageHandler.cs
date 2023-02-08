@@ -6,6 +6,7 @@ using UnityEngine;
 public class ContextMessageHandler : MonoBehaviour
 {
     [SerializeField] private TextMeshProUGUI text;
+    [SerializeField] private int defaultIndex = -1;
 
     public List<string> MessageOptions;
 
@@ -13,7 +14,7 @@ public class ContextMessageHandler : MonoBehaviour
     void Awake()
     {
         if (!text) text = GetComponent<TextMeshProUGUI>();
-        DisplayMessage(-1);
+        DisplayMessage(defaultIndex);
     }
 
     //  0 - 9  for all the option messages
