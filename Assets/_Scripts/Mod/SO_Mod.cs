@@ -39,7 +39,10 @@ public class SO_Mod : ScriptableObject
     private bool _removeOnPurchase;
 
     [Header("——————  SPECIAL  —————")]
+    [Tooltip("This mod is only available if all of prereqMods are purchased.")]
     public SO_Mod[] PrerequisiteMods;
+    [Tooltip("This mod is removed if any of blockedByMods are purchased.")]
+    public SO_Mod[] BlockedByMods;
     public Evolving evolve;
 
     /// <summary>
@@ -83,6 +86,16 @@ public class SO_Mod : ScriptableObject
             foreach (SO_Mod _modRequired in PrerequisiteMods)
             {
                 if (!userCurrentMods.Contains(_modRequired))
+                {
+                    return false;
+                }
+            }
+        }
+        if (null != BlockedByMods && BlockedByMods.Length > 0)
+        {
+            foreach (SO_Mod _blockingMod in BlockedByMods)
+            {
+                if (userCurrentMods.Contains(_blockingMod))
                 {
                     return false;
                 }
