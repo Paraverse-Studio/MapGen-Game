@@ -32,7 +32,9 @@ public class GameLoopManager : MonoBehaviour
     {
         public TextMeshProUGUI scoreText;
         public TextMeshProUGUI rankText;
-        public TextMeshProUGUI goldText;
+        public TextMeshProUGUI timeTakenText;
+        public TextMeshProUGUI damageTakenText;
+        public TextMeshProUGUI goldEarnedText;
         public GameObject shopButton;
         public GameObject mainMenuButton;
     }
@@ -206,8 +208,7 @@ public class GameLoopManager : MonoBehaviour
         totalEnemiesSpawned = EnemiesManager.Instance.EnemiesCount;
         playerMaxHealth = (int)playerStats.MaxHealth.FinalValue;
 
-        playerStats.OnHealthChange.AddListener(AccrueDamageTaken);
-        playerController.OnDeathEvent += EndRoundPremature;
+        GameplayListeners(attachOrRemove: true);
 
         _roundIsActive = true;
     }
@@ -254,6 +255,7 @@ public class GameLoopManager : MonoBehaviour
     {
         _roundIsActive = false;
         roundTimer.PauseTimer();
+        GameplayListeners(attachOrRemove: false);
 
         // DETERMINE HOW ROUND ENDED (SUCCESSFUL OR FAILED OR BOSS DEFEATED?)
         if (successfulRound)
@@ -266,9 +268,7 @@ public class GameLoopManager : MonoBehaviour
             roundCompletionType = RoundCompletionType.Failed;
         }
 
-        // here ... (what here?)
-
-        Animator roundEndWindow = new Animator();
+        Animator roundEndWindow = new();
         switch (roundCompletionType)
         {
             case RoundCompletionType.Completed:
@@ -297,18 +297,21 @@ public class GameLoopManager : MonoBehaviour
 
     public void CompleteRound()
     {
-        playerStats.OnHealthChange.RemoveListener(AccrueDamageTaken);
-        playerController.OnDeathEvent -= EndRoundPremature;
         EnemiesManager.Instance.ResetEnemiesList();
         Destroy(EndPortal);
 
-        float score = ScoreFormula.CalculateScore(totalEnemiesSpawned * 10f, roundTimer.GetTime(), playerMaxHealth, damageTaken);
+        float score = ScoreFormula.CalculateScore(totalEnemiesSpawned * (_isBossRound? 50f : 10f), roundTimer.GetTime(), playerMaxHealth, damageTaken);
         goldToReward = (int)(score * 1);
+
+        resultScreen.timeTakenText.text = UtilityFunctions.GetFormattedTime(roundTimer.GetTime());
+        resultScreen.damageTakenText.text = $"{damageTaken} ({(int)(((float)damageTaken/(float)playerMaxHealth)*100.0f)}%)";
+        
 
         if (roundCompletionType == RoundCompletionType.Failed)
         {
             resultScreen.scoreText.text = "Score: " + "N/A";
             resultScreen.rankText.text = "F";
+            resultScreen.goldEarnedText.text = "0";
             resultScreen.shopButton.SetActive(false);
             resultScreen.mainMenuButton.SetActive(true);
             nextRoundNumber = 1; // restart the playthrough
@@ -317,10 +320,10 @@ public class GameLoopManager : MonoBehaviour
         {
             resultScreen.shopButton.SetActive(true);
             resultScreen.mainMenuButton.SetActive(false);
+            resultScreen.goldEarnedText.text = goldToReward + "";
             playerStats.UpdateGold(goldToReward); // save it to db
             resultScreen.scoreText.text = "Score: " + (int)score + "%";
             resultScreen.rankText.text = ScoreFormula.GetScoreRank((int)score);
-
             nextRoundNumber++;
         }
 
@@ -377,6 +380,20 @@ public class GameLoopManager : MonoBehaviour
         //SceneManager.LoadScene(SceneManager.GetActiveScene().buildIndex);
         GameLoopEvents.OnBootupGame?.Invoke();
         loadingScreen.SetActive(false);
+    }
+
+    private void GameplayListeners(bool attachOrRemove)
+    {
+        if (attachOrRemove)
+        {
+            playerStats.OnHealthChange.AddListener(AccrueDamageTaken);
+            playerController.OnDeathEvent += EndRoundPremature;
+        }
+        else
+        {
+            playerStats.OnHealthChange.RemoveListener(AccrueDamageTaken);
+            playerController.OnDeathEvent -= EndRoundPremature;
+        }
     }
 
     public void AccrueDamageTaken(int playerCurrentHealth, int _playerMaxHealth)
