@@ -987,6 +987,7 @@ MonoBehaviour:
   groundedLayers:
     serializedVersion: 2
     m_Bits: 98295
+  jumpGravity: -40
   disToEnemyCheck: 1
   isNotGroundedMaxDur: 1.5
   avoidLayers:
@@ -995,8 +996,8 @@ MonoBehaviour:
   avoidanceForce: 10
   downwardAvoidanceForceRatio: 2
   diveForce: 10
-  maxDiveRange: 3.5
-  maxDiveDuration: 0.5
+  maxDiveRange: 3
+  maxDiveDuration: 0.45
   diveCd: 0.5
   atkDashForce: 12
   atkThreeDashForce: 16
@@ -1021,7 +1022,7 @@ MonoBehaviour:
   maxEnergy: 100
   _curEnergy: 100
   energyRegen: 10
-  _gold: 0
+  _gold: 80
   OnHealthChange:
     m_PersistentCalls:
       m_Calls: []

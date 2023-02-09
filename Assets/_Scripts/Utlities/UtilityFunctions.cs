@@ -37,6 +37,13 @@ public static class UtilityFunctions
         }
     }
 
+    public static string GetFormattedTime(float time)
+    {
+        int minutes = Mathf.FloorToInt(time / 60f);
+        int seconds = Mathf.FloorToInt(time - minutes * 60f);
+        return string.Format("{0:0}:{1:00}", minutes, seconds);
+    }
+
     public static void TeleportObject(GameObject obj, Vector3 spot)
     {
         CharacterController cc;

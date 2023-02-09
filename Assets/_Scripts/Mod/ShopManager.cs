@@ -104,7 +104,7 @@ public class ShopManager : MonoBehaviour
         int userCurrencyIndex = -1;
         for (int i = 0; i < AvailableMods.Count; ++i)
         {
-            if (AvailableMods[i].GetCost() < userCurrencyAmount) userCurrencyIndex = i;
+            if (AvailableMods[i].GetCost() <= userCurrencyAmount) userCurrencyIndex = i;
         }
 
         // 4.0  Then poll a couple of mods from that price point and below

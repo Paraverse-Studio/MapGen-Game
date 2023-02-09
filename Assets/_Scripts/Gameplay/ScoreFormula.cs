@@ -2,6 +2,14 @@ using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 
+// planned for use later if the returned object from this script should give more than just float score
+public class ScoreData
+{
+    public float Score;
+
+}
+
+
 public class ScoreFormula 
 {
     /*
