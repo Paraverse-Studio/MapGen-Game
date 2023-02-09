@@ -108,6 +108,8 @@ public class MapGeneration : MonoBehaviour
     [Range(0f, 1f)]
     public float delayAfterPercentDeleted = 0.06f;
     public TextMeshProUGUI seedText;
+    public TextMeshProUGUI qualityText;
+
 
     public static MapGeneration Instance;
 
@@ -213,6 +215,7 @@ public class MapGeneration : MonoBehaviour
         int randomSeedNumber = randomSeed > -1 ? randomSeed : Random.Range(0, 99999);
         Random.InitState(randomSeedNumber);
         seedText.text = "Seed  " + randomSeedNumber;
+        qualityText.text = "Quality Level: " + GlobalSettings.Instance.QualityLevel;
 
         progressValue = -1f;
 
@@ -482,7 +485,7 @@ public class MapGeneration : MonoBehaviour
         /* * * * * QUALITY SETTINGS (PERFORMANCE) * * * * * * */
 
         globalVolume.gameObject.SetActive(GlobalSettings.Instance.QualityLevel > 3);
-        QualitySettings.SetQualityLevel(Mathf.Max(0, GlobalSettings.Instance.QualityLevel - 2), true);
+        QualitySettings.SetQualityLevel(Mathf.Max(0, GlobalSettings.Instance.QualityLevel - 1), true);
         if (GlobalSettings.Instance.QualityLevel <= 4 && mapVFX) Destroy(mapVFX.gameObject);
 
         /* * * * * * * * * * * * * * * * * * * * * * * * * * * */

@@ -34,6 +34,7 @@ public class GameLoopManager : MonoBehaviour
         public TextMeshProUGUI rankText;
         public TextMeshProUGUI goldText;
         public GameObject shopButton;
+        public GameObject mainMenuButton;
     }
 
     [System.Serializable]
@@ -150,8 +151,11 @@ public class GameLoopManager : MonoBehaviour
             Invoke("PlayerFallDamage", 0.15f);
         }
 
-        if (Input.GetKeyDown(KeyCode.F1)) GlobalSettings.Instance.QualityLevel = 1;
-        if (Input.GetKeyDown(KeyCode.F5)) GlobalSettings.Instance.QualityLevel = 5;
+        if (Input.GetKeyDown(KeyCode.Alpha1)) GlobalSettings.Instance.QualityLevel = 1;
+        if (Input.GetKeyDown(KeyCode.Alpha2)) GlobalSettings.Instance.QualityLevel = 2;
+        if (Input.GetKeyDown(KeyCode.Alpha3)) GlobalSettings.Instance.QualityLevel = 3;
+        if (Input.GetKeyDown(KeyCode.Alpha4)) GlobalSettings.Instance.QualityLevel = 4;
+        if (Input.GetKeyDown(KeyCode.Alpha5)) GlobalSettings.Instance.QualityLevel = 5;
 
         if (Input.GetKeyDown(KeyCode.U))
         {
@@ -176,7 +180,11 @@ public class GameLoopManager : MonoBehaviour
 
 
     #region MAIN_MENU
-
+    public void InitiateSession()
+    {
+        nextRoundNumber = 1;
+        InitiateRound();
+    }
     public void InitiateRound()
     {
         // nextRoundNumber starts with 1 just to make it easier for display on inspector what round you're on
@@ -302,12 +310,13 @@ public class GameLoopManager : MonoBehaviour
             resultScreen.scoreText.text = "Score: " + "N/A";
             resultScreen.rankText.text = "F";
             resultScreen.shopButton.SetActive(false);
-
+            resultScreen.mainMenuButton.SetActive(true);
             nextRoundNumber = 1; // restart the playthrough
         }
         else
         {
             resultScreen.shopButton.SetActive(true);
+            resultScreen.mainMenuButton.SetActive(false);
             playerStats.UpdateGold(goldToReward); // save it to db
             resultScreen.scoreText.text = "Score: " + (int)score + "%";
             resultScreen.rankText.text = ScoreFormula.GetScoreRank((int)score);

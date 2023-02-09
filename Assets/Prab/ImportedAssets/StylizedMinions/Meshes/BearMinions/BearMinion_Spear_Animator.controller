@@ -89,7 +89,7 @@ AnimatorState:
   m_PrefabInstance: {fileID: 0}
   m_PrefabAsset: {fileID: 0}
   m_Name: BasicAttack
-  m_Speed: 0.8
+  m_Speed: 1
   m_CycleOffset: 0
   m_Transitions:
   - {fileID: 6836551017031747797}
@@ -641,8 +641,10 @@ MonoBehaviour:
   parameter: isInteracting
   disableUponEnter: 0
   enableUponExit: 0
-  useDelay: 0
+  useEnableDelay: 0
   enableAfterAnimPercentage: 0
+  useDisableDelay: 0
+  disableBeforeAnimPercentage: 0
 --- !u!114 &4838087909775026219
 MonoBehaviour:
   m_ObjectHideFlags: 1
@@ -722,8 +724,10 @@ MonoBehaviour:
   parameter: isBasicAttacking
   disableUponEnter: 0
   enableUponExit: 0
-  useDelay: 0
+  useEnableDelay: 0
   enableAfterAnimPercentage: 0
+  useDisableDelay: 0
+  disableBeforeAnimPercentage: 0
 --- !u!1102 &5445518928477771438
 AnimatorState:
   serializedVersion: 6
@@ -900,8 +904,10 @@ MonoBehaviour:
   parameter: isInteracting
   disableUponEnter: 0
   enableUponExit: 0
-  useDelay: 0
+  useEnableDelay: 0
   enableAfterAnimPercentage: 0
+  useDisableDelay: 0
+  disableBeforeAnimPercentage: 0
 --- !u!1102 &8492982569105560096
 AnimatorState:
   serializedVersion: 6

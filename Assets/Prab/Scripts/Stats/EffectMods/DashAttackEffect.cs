@@ -12,8 +12,8 @@ public class DashAttackEffect : MobEffect
 
     public override void ActivateEffect(MobStats stats)
     {
-        controller = GetComponent<PlayerController>();
         _stats = stats;
+        controller = _stats.GetComponent<PlayerController>();
         _combat = _stats.GetComponent<PlayerCombat>();
         isActive = true;
 
