@@ -42,6 +42,8 @@ namespace Paraverse.Player
         private float curJumpCd = 0f;
         [SerializeField, Tooltip("Detect these layers to consider mob is grounded.")]
         private LayerMask groundedLayers;
+        [SerializeField]
+        private float jumpGravity = -40f;
 
         [Header("Landing Avoidance")]
         [SerializeField, Tooltip("Raycast distance to check for enemies below for land avoidance.")]
@@ -315,7 +317,7 @@ namespace Paraverse.Player
             }
 
             // Applies gravity and jump movement
-            jumpDir.y += GlobalValues.GravityForce * GlobalValues.GravityModifier * Time.deltaTime;
+            jumpDir.y += jumpGravity * Time.deltaTime;
         }
 
         /// <summary>
