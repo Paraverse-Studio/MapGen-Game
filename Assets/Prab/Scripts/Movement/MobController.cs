@@ -542,12 +542,12 @@ namespace Paraverse.Mob.Controller
 
                 activeKnockBackEffect.maxKnockbackDuration -= Time.deltaTime;
                 disFromStartPos = ParaverseHelper.GetDistance(activeKnockBackEffect.startPos, transform.position);
+                nav.enabled = false;
 
                 // Ensures mob falls when off platform
                 if (CheckFall())
                 {
                     _isFalling = true;
-                    nav.enabled = false;
                     knockbackDir.y = GlobalValues.GravityForce;
                     Vector3 fallDir = new Vector3(knockbackDir.x * activeKnockBackEffect.knockForce, knockbackDir.y * fallForce, knockbackDir.z * activeKnockBackEffect.knockForce);
                     controller.Move(fallDir * Time.deltaTime);
@@ -562,6 +562,7 @@ namespace Paraverse.Mob.Controller
                 else if (disFromStartPos >= activeKnockBackEffect.maxKnockbackRange || activeKnockBackEffect.maxKnockbackDuration <= 0)
                 {
                     CleanseStagger();
+                    nav.enabled = true;
                     return;
                 }
 
@@ -584,7 +585,6 @@ namespace Paraverse.Mob.Controller
             landPos = mobPos;
             jumpDir = new Vector3(targetDir.x, targetDir.y, targetDir.z);
             jumpDir.y += Mathf.Sqrt(jumpForce * -GlobalValues.GravityModifier * GlobalValues.GravityForce);
-            //SetGeneralState(MobState.Combat);
         }
 
         private void JumpHandler()
@@ -640,14 +640,21 @@ namespace Paraverse.Mob.Controller
             Vector3 leftOrigin = origin + new Vector3(-nav.radius, 0f, 0f);
             Vector3 rightOrigin = origin + new Vector3(nav.radius, 0f, 0f);
 
+            Debug.DrawRay(topOrigin, dir * checkFallRange, Color.red);
+            Debug.DrawRay(leftOrigin, dir * checkFallRange, Color.red);
+            Debug.DrawRay(rightOrigin, dir * checkFallRange, Color.red);
+
+            Debug.Log("Checking Fall");
             if (Physics.Raycast(topOrigin, dir * checkFallRange, checkFallRange) &&
             (Physics.Raycast(leftOrigin, dir * checkFallRange, checkFallRange) &&
             (Physics.Raycast(rightOrigin, dir * checkFallRange, checkFallRange))))
             {
                 _isFalling = false;
+                Debug.Log("Is Not falling");
             }
             else
             {
+                Debug.Log(transform.name + " Is Falling.");
                 return true;
             }
             return false;

@@ -438,11 +438,6 @@ namespace Paraverse.Player
 
         #endregion
 
-        public void ApplyHitAnimation()
-        {
-            anim.Play(StringData.Hit);
-        }
-
         #region KnockBack Methods
         /// <summary>
         /// Invokes knock back action
@@ -476,6 +471,11 @@ namespace Paraverse.Player
                 }
             }
         }
+        public void ApplyHitAnimation()
+        {
+            anim.Play(StringData.Hit);
+        }
+
         #endregion
 
         #region Attack Movement
