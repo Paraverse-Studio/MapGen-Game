@@ -159,6 +159,7 @@ public class GameLoopManager : MonoBehaviour
         if (Input.GetKeyDown(KeyCode.Alpha4)) GlobalSettings.Instance.QualityLevel = 4;
         if (Input.GetKeyDown(KeyCode.Alpha5)) GlobalSettings.Instance.QualityLevel = 5;
 
+#if UNITY_EDITOR
         if (Input.GetKeyDown(KeyCode.U))
         {
             if (EndPortal) EndPortal.SetActive(true);
@@ -178,6 +179,8 @@ public class GameLoopManager : MonoBehaviour
             ShopManager.Instance.ShopWindow.SetActive(!ShopManager.Instance.ShopWindow.activeSelf);
             CalculateShop();
         }
+#endif
+
     }
 
 

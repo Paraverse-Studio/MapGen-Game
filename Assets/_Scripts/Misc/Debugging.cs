@@ -5,7 +5,7 @@ using UnityEngine;
 
 public class Debugging : MonoBehaviour
 {
-
+#if UNITY_EDITOR
 
     // Update is called once per frame
     void Update()
@@ -25,6 +25,6 @@ public class Debugging : MonoBehaviour
 
 
     }
-
+#if UNITY_EDITOR
 
 }
