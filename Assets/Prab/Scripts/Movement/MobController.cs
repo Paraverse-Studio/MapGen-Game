@@ -542,11 +542,12 @@ namespace Paraverse.Mob.Controller
 
                 activeKnockBackEffect.maxKnockbackDuration -= Time.deltaTime;
                 disFromStartPos = ParaverseHelper.GetDistance(activeKnockBackEffect.startPos, transform.position);
-                nav.enabled = false;
 
                 // Ensures mob falls when off platform
                 if (CheckFall())
                 {
+                    nav.enabled = false;
+                    Debug.Log("Enable nav");
                     _isFalling = true;
                     knockbackDir.y = GlobalValues.GravityForce;
                     Vector3 fallDir = new Vector3(knockbackDir.x * activeKnockBackEffect.knockForce, knockbackDir.y * fallForce, knockbackDir.z * activeKnockBackEffect.knockForce);
@@ -563,6 +564,7 @@ namespace Paraverse.Mob.Controller
                 {
                     CleanseStagger();
                     nav.enabled = true;
+                    Debug.Log("Disable nav");
                     return;
                 }
 

@@ -1,4 +1,6 @@
+using Paraverse.Mob.Combat;
 using UnityEngine;
+using UnityEngine.Events;
 
 namespace Paraverse.Animations
 {
@@ -12,8 +14,11 @@ namespace Paraverse.Animations
 
         [SerializeField, Tooltip("Enable boolean upon exiting state. [By Default, boolean is enabled and disabled upon entering and exiting state]")]
         private bool enableUponExit = false;
+                
+        [SerializeField, Header("Disable Attacking End-State"), Tooltip("Disables all attacking properties at the end of this state.")]
+        private bool disableAttackEndState = false;
 
-        [SerializeField, Header ("Enables parameter after a delay"), Tooltip("Enable boolean after a % of the animation clip has already played")]
+        [SerializeField, Header("Enables parameter after a delay"), Tooltip("Enable boolean after a % of the animation clip has already played")]
         private bool useEnableDelay;
         [SerializeField, Range(0.1f, 0.9f)]
         private float enableAfterAnimPercentage = 0f;
@@ -62,18 +67,24 @@ namespace Paraverse.Animations
                 animator.SetBool(parameter, true);
             else
                 animator.SetBool(parameter, false);
+        
+
+            if (animator.gameObject.TryGetComponent(out MobCombat mobbie) && disableAttackEndState)
+            {
+                mobbie.OnAttackInterrupt();
+            }
         }
 
-        // OnStateMove is called right after Animator.OnAnimatorMove()
-        //override public void OnStateMove(Animator animator, AnimatorStateInfo stateInfo, int layerIndex)
-        //{
-        //    // Implement code that processes and affects root motion
-        //}
+    // OnStateMove is called right after Animator.OnAnimatorMove()
+    //override public void OnStateMove(Animator animator, AnimatorStateInfo stateInfo, int layerIndex)
+    //{
+    //    // Implement code that processes and affects root motion
+    //}
 
-        // OnStateIK is called right after Animator.OnAnimatorIK()
-        //override public void OnStateIK(Animator animator, AnimatorStateInfo stateInfo, int layerIndex)
-        //{
-        //    // Implement code that sets up animation IK (inverse kinematics)
-        //}
-    }
+    // OnStateIK is called right after Animator.OnAnimatorIK()
+    //override public void OnStateIK(Animator animator, AnimatorStateInfo stateInfo, int layerIndex)
+    //{
+    //    // Implement code that sets up animation IK (inverse kinematics)
+    //}
+}
 }
