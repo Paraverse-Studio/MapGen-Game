@@ -1,11 +1,12 @@
 using Paraverse.Mob.Stats;
 using System.Collections;
 using System.Collections.Generic;
+#if UNITY_EDITOR
+
 using UnityEngine;
 
 public class Debugging : MonoBehaviour
 {
-#if UNITY_EDITOR
 
     // Update is called once per frame
     void Update()
@@ -20,11 +21,9 @@ public class Debugging : MonoBehaviour
                 s.GetComponentInChildren<MobStats>().SetFullHealth();
             }
         }
-
-
-
-
     }
-#if UNITY_EDITOR
+
 
 }
+
+#endif
