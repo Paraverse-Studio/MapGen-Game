@@ -924,7 +924,7 @@ public class MapGeneration : MonoBehaviour
         // We don't want enemies to start right from beginning of path
         // because we want player to spawn peacefully and digest the air
         // before encountering something hostile
-        int gapOfTilesBeforeFirstEnemy = 10;
+        int gapOfTilesBeforeFirstEnemy = 14;
 
         int enemyFrequency = (pathObjects.Count - gapOfTilesBeforeFirstEnemy) / M.enemySpawnAmount;
 
