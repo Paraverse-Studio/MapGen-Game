@@ -640,21 +640,14 @@ namespace Paraverse.Mob.Controller
             Vector3 leftOrigin = origin + new Vector3(-nav.radius, 0f, 0f);
             Vector3 rightOrigin = origin + new Vector3(nav.radius, 0f, 0f);
 
-            Debug.DrawRay(topOrigin, dir * checkFallRange, Color.red);
-            Debug.DrawRay(leftOrigin, dir * checkFallRange, Color.red);
-            Debug.DrawRay(rightOrigin, dir * checkFallRange, Color.red);
-
-            Debug.Log("Checking Fall");
             if (Physics.Raycast(topOrigin, dir * checkFallRange, checkFallRange) &&
             (Physics.Raycast(leftOrigin, dir * checkFallRange, checkFallRange) &&
             (Physics.Raycast(rightOrigin, dir * checkFallRange, checkFallRange))))
             {
                 _isFalling = false;
-                Debug.Log("Is Not falling");
             }
             else
             {
-                Debug.Log(transform.name + " Is Falling.");
                 return true;
             }
             return false;
