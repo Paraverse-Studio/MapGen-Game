@@ -57,12 +57,14 @@ namespace Paraverse
             this.scalingStatData.flatPower = scalingStatData.flatPower;
             this.scalingStatData.attackScaling = scalingStatData.attackScaling;
             this.scalingStatData.abilityScaling = scalingStatData.abilityScaling;
+            gameObject.SetActive(false);
         }
         
         public void Init(MobCombat mob, IMobStats stats)
         {
             this.mob = mob;
             this.stats = stats;
+            gameObject.SetActive(false);
         }
 
         private void OnEnable()

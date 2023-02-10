@@ -76,6 +76,7 @@ namespace Paraverse.Player
 
         [Header("Knockback Values")]
         private KnockBackEffect activeKnockBackEffect;
+        private float disFromStartPos;
 
         [Header("Attack Dashing Values")]
         [SerializeField, Tooltip("The attack dashing force applied during basic attack.")]
@@ -125,8 +126,6 @@ namespace Paraverse.Player
         private Vector3 knockbackDir;
         // Gets the start positions
         private Vector3 diveStartPos;
-        private Vector3 knockStartPos;
-        private Vector3 knockBackDir;
         // Gets the controller horizontal and vertical inputs
         private float horizontal;
         private float vertical;
@@ -366,16 +365,16 @@ namespace Paraverse.Player
             }
 
             // Apply avoidance force if mob is not grounded within isNotGroundedMaxDur
-            if (_isGrounded == false)
-            {
-                isNotGroundedDur += Time.deltaTime;
-                if (isNotGroundedDur >= isNotGroundedMaxDur)
-                    _isAvoidingObjUponLanding = true;
-            }
-            else
-            {
-                isNotGroundedDur = 0f;
-            }
+            //if (_isGrounded == false)
+            //{
+            //    isNotGroundedDur += Time.deltaTime;
+            //    if (isNotGroundedDur >= isNotGroundedMaxDur)
+            //        _isAvoidingObjUponLanding = true;
+            //}
+            //else
+            //{
+            //    isNotGroundedDur = 0f;
+            //}
         }
         #endregion
 
@@ -439,11 +438,6 @@ namespace Paraverse.Player
 
         #endregion
 
-        public void ApplyHitAnimation()
-        {
-            anim.Play(StringData.Hit);
-        }
-
         #region KnockBack Methods
         /// <summary>
         /// Invokes knock back action
@@ -460,30 +454,6 @@ namespace Paraverse.Player
             anim.Play(StringData.Hit);
         }
 
-        /// <summary>
-        /// Handles knock back movement and variables in Update().
-        /// </summary>
-        //private void KnockbackHandler()
-        //{
-        //    if (_isStaggered)
-        //    {
-        //        // Updates mob position and dive timer
-        //        float knockBackRange = ParaverseHelper.GetDistance(transform.position, knockStartPos);
-        //        curKnockbackDuration += Time.deltaTime;
-
-        //        // Moves the mob in the move direction
-        //        controller.Move(knockbackDir * knockForce * Time.deltaTime);
-
-        //        // Stops dive when conditions met
-        //        if (knockBackRange >= maxKnockbackRange || curKnockbackDuration >= maxKnockbackDuration)
-        //        {
-        //            _isStaggered = false;
-        //            return;
-        //        }
-        //    }
-        //}
-
-        float disFromStartPos;
         private void KnockbackHandling()
         {
             if (null != activeKnockBackEffect)
@@ -501,6 +471,11 @@ namespace Paraverse.Player
                 }
             }
         }
+        public void ApplyHitAnimation()
+        {
+            anim.Play(StringData.Hit);
+        }
+
         #endregion
 
         #region Attack Movement

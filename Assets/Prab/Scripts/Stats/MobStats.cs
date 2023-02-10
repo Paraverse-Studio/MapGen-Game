@@ -65,6 +65,8 @@ namespace Paraverse.Mob.Stats
         [SerializeField, Tooltip("Energy cost for mob dive.")]
         private float diveEnergyCost = 30f;
 
+        public bool unkillable = false;
+
         #endregion
 
         #region Start & Update Methods
@@ -104,6 +106,7 @@ namespace Paraverse.Mob.Stats
 
         public void UpdateCurrentHealth(int amount)
         {
+            if (unkillable) return;
             _curHealth += amount;
             OnHealthChange?.Invoke(CurHealth, (int)MaxHealth.FinalValue);
         }
