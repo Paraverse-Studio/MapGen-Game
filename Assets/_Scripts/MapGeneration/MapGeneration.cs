@@ -631,30 +631,44 @@ public class MapGeneration : MonoBehaviour
         }
     }
 
-    private void ApplyBlockElevationRestrictions(Block block)
+    private void SmoothRaise(bool upOrDown, Vector3 area, float radius)
     {
-        if (Mathf.Abs(block.transform.position.y - YBoundary.y) < _EPSILON)
+        if (radius <= 0f) return;
+
+        for (float x = -radius; x < radius; x += 1f)
         {
-            if (M.blockSet.bridge)
+            for (float z = -radius; z < radius; z += 1f)
             {
-                block.type = M.blockSet.bridge;
-                block.UpdateBlock();
+                Vector3 newSpot = area + new Vector3(x, 0, z);
+
+                if (!IsInGrid(new Vector3((int)newSpot.x, 0, (int)newSpot.z))) continue;
+
+                Block potentialObj = gridOccupants[(int)newSpot.x, (int)newSpot.z].block;
+
+                if (potentialObj != null)
+                {
+                    float factor = 0.11f;
+
+                    ElevateBlock(upOrDown, potentialObj, factor, ignoreBounds: true);
+                    //potentialObj.transform.position += new Vector3(0, (upOrDown? 1f : -1f)* factor, 0);
+                    //ElevateBlock(upOrDown, potentialObj);
+                }
             }
-            ElevateBlock(upOrDown: true, block);
         }
+        SmoothRaise(upOrDown, area, radius - 1f);
     }
 
     private void AddRandomLumps()
     {
         //// By default, lumps will spawn in a grid fashion
         // Spread determines how far lumps are apart (spread = 2, means a lump will appear every 2 blocks)
-        int spread = M.lumpDensity;
+        int spread2 = M.lumpDensity;
 
         for (int upOrDown = 0; upOrDown < M.lumpApplicationRounds; ++upOrDown)
         {
-            for (int x = (int)xBoundary.x; x < xBoundary.y; x += spread)
+            for (int x = (int)xBoundary.x; x < xBoundary.y; x += spread2)
             {
-                for (int z = (int)zBoundary.x; z < zBoundary.y; z += spread)
+                for (int z = (int)zBoundary.x; z < zBoundary.y; z += spread2)
                 {
                     if (!IsInGrid(new Vector3((int)x, 0, (int)z)) || null == gridOccupants[x, z].block) continue;
 
@@ -664,7 +678,39 @@ public class MapGeneration : MonoBehaviour
                     x += randomXOffset;
                     z += randomZOffset;
 
+                    //SmoothRaise(z % 2 == 0 ? true : false, new Vector3(x, 0, z), Random.Range(M.lumpRadius.x, M.lumpRadius.y));
                     ElevateCircle(z % 2 == 0 ? true : false, new Vector3(x, 0, z), Random.Range(M.lumpRadius.x, M.lumpRadius.y));
+                }
+            }
+        }
+
+
+
+
+
+
+        if (false)
+        {
+            //// By default, lumps will spawn in a grid fashion
+            // Spread determines how far lumps are apart (spread = 2, means a lump will appear every 2 blocks)
+            int spread = M.lumpDensity;
+
+            for (int upOrDown = 0; upOrDown < M.lumpApplicationRounds; ++upOrDown)
+            {
+                for (int x = (int)xBoundary.x; x < xBoundary.y; x += spread)
+                {
+                    for (int z = (int)zBoundary.x; z < zBoundary.y; z += spread)
+                    {
+                        if (!IsInGrid(new Vector3((int)x, 0, (int)z)) || null == gridOccupants[x, z].block) continue;
+
+                        int randomXOffset = Random.Range(-M.lumpOffset, M.lumpOffset + 1);
+                        int randomZOffset = Random.Range(-M.lumpOffset, M.lumpOffset + 1);
+
+                        x += randomXOffset;
+                        z += randomZOffset;
+
+                        ElevateCircle(z % 2 == 0 ? true : false, new Vector3(x, 0, z), Random.Range(M.lumpRadius.x, M.lumpRadius.y));
+                    }
                 }
             }
         }
@@ -701,7 +747,7 @@ public class MapGeneration : MonoBehaviour
 
     // Given an object obj, and an elevation direction, lift/lower the object in that direction BUT
     // with the condition that no block around this block in 3x3 should end up 2-block vertically distanced
-    private void ElevateBlock(bool upOrDown, Block obj, float overrideElevationSize = -1f)
+    private void ElevateBlock(bool upOrDown, Block obj, float overrideElevationSize = -1f, bool ignoreBounds = false)
     {
         float extremeY;
         extremeY = GetExtremestAdjacentElevation(upOrDown ? ElevationLevel.lowest : ElevationLevel.highest, obj.gameObject);
@@ -712,7 +758,7 @@ public class MapGeneration : MonoBehaviour
         float yValue = extremeY + ((upOrDown ? 1f : -1f) * elevationSize);
 
         // this is so that these elevations don't create new extreme ends. That is to be determined purely from lump application rounds
-        yValue = Mathf.Clamp(yValue, YBoundary.y, YBoundary.x); 
+        if (!ignoreBounds) yValue = Mathf.Clamp(yValue, YBoundary.y, YBoundary.x); 
 
         obj.transform.position = new Vector3(obj.transform.position.x, yValue, obj.transform.position.z);
 
@@ -1052,28 +1098,6 @@ public class MapGeneration : MonoBehaviour
         }
     }
 
-    private void SmoothenElevation(int roundsOfSmoothening = 1)
-    {
-        for (int count = 0; count < roundsOfSmoothening; ++count)
-        {
-            for (int i = 0; i < allObjects.Count; ++i)
-            {
-                Block obj = allObjects[i];
-                if (NumOfAdjacentOccupied(obj.transform.position, true) < M.flattenIfSurroundedByLessThan)
-                {
-                    if (Mathf.Abs(obj.transform.position.y - YBoundary.x) < Mathf.Abs(obj.transform.position.y - YBoundary.y))
-                    {
-                        ElevateBlock(false, obj);
-                    }
-                    else
-                    {
-                        ElevateBlock(true, obj);
-                    }
-                }
-            }
-        }
-    }
-
     private void AddFoundationAndEdgeWork()
     {
         HashSet<Block> blocksAdded = new();
@@ -1128,76 +1152,6 @@ public class MapGeneration : MonoBehaviour
                     }
                 }
             }
-        }
-
-        // attempt 2 at adding walls to top half of generated map
-        if (false)
-        {
-            List<Block> topEdgeBlocks = new();
-
-            int size = allObjects.Count;
-            for (int i = 0; i < size; ++i)
-            {
-                // reduce iterations to just edge-blocks
-                if (9 == NumOfAdjacentOccupied(allObjects[i].gameObject.transform.position)) continue;
-
-                Vector3 targetPosition = allObjects[i].transform.position + new Vector3(0, 0.9f, 0);
-                RaycastHit hit;
-                if (Physics.Raycast(Camera.main.transform.position, targetPosition - Camera.main.transform.position, out hit))
-                {
-                    if (hit.collider.gameObject.layer != 6)
-                    {
-                        Debug.Log("This one's was Ground!!! " + hit.collider.gameObject + "   layer: " + hit.collider.gameObject.layer);
-                        allObjects[i].transform.localScale = new Vector3(1, 5.5f, 1);
-                        topEdgeBlocks.Add(allObjects[i]);
-                    }
-                }
-                else
-                {
-                    allObjects[i].transform.localScale = new Vector3(1, 5.5f, 1);
-                    topEdgeBlocks.Add(allObjects[i]);
-                }
-            }
-
-            foreach (Block b in topEdgeBlocks)
-            {
-                for (int x = -1; x < 2; ++x)
-                {
-                    for (int z = -1; z < 2; ++z)
-                    {
-                        Vector3 areaToCheck = new Vector3(b.transform.position.x + x, 0, b.transform.position.z + z);
-
-                        if (!IsInGrid(areaToCheck)) continue;
-
-                        Block objectToCheck = gridOccupants[(int)areaToCheck.x, (int)areaToCheck.z].block;
-
-                        if (objectToCheck && 9 != NumOfAdjacentOccupied(objectToCheck.transform.position))
-                        {
-                            objectToCheck.transform.localScale = new Vector3(1, 5.5f, 1);
-                        }
-                    }
-                }
-            }
-        }
-
-
-        // old code to raise edge blocks to cover water
-        if (false) 
-        {
-            // RAISING edge blocks (so that anything, ie. water blocks, don't look awkward at edges)
-            //Vector3 objPos = allObjects[i].transform.position;
-            //Block obj = gridOccupants[(int)objPos.x, (int)objPos.z].block;
-
-            //if (M.blockSet.foundation)
-            //{
-            //    obj.type = M.blockSet.foundation;
-            //    obj.UpdateBlock();
-            //}
-
-            //if (null != obj && Mathf.Abs(objPos.y - YBoundary.y) < _EPSILON)
-            //{
-            //    ElevateBlock(upOrDown: true, obj, M.edgeBlockRaiseSize);
-            //}
         }        
     }
 
