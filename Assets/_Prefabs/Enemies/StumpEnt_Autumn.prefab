@@ -320,7 +320,7 @@ CharacterController:
   m_Height: 2
   m_Radius: 0.5
   m_SlopeLimit: 35
-  m_StepOffset: 0.65
+  m_StepOffset: 0.7
   m_SkinWidth: 0.08
   m_MinMoveDistance: 0.001
   m_Center: {x: 0, y: 1, z: 0}
@@ -396,6 +396,7 @@ MonoBehaviour:
     m_PersistentCalls:
       m_Calls: []
   diveEnergyCost: 30
+  unkillable: 0
 --- !u!114 &5125661759958323765
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -411,7 +412,7 @@ MonoBehaviour:
   anim: {fileID: 5125661759958323917}
   stats: {fileID: 0}
   projUser: 0
-  basicAttackSkill: {fileID: 1862365032519942122}
+  basicAttackSkill: {fileID: 0}
   skills: []
   effects: []
   animBool: isUsingSkill
@@ -1174,6 +1175,7 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   _skillName: Stump Basic Attack
   _ID: -1
+  _image: {fileID: 0}
   _description: 
   _minRange: 0
   _maxRange: 5
@@ -1181,6 +1183,7 @@ MonoBehaviour:
   cost: 0
   animName: BasicAttack
   isBasicAttack: 1
+  _isMelee: 0
   attackColliderGO: {fileID: 0}
   attackCollider: {fileID: 0}
   projData:

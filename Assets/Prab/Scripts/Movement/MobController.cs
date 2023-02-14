@@ -76,7 +76,6 @@ namespace Paraverse.Mob.Controller
         [Header("Attack Dash Values")]
         [SerializeField, Tooltip("The attack dashing force applied during basic attack.")]
         protected float atkDashForce = 2f;
-        protected float controllerStep;
 
         [Header("Knockback Values")]
         protected Vector3 knockbackDir;
@@ -164,7 +163,6 @@ namespace Paraverse.Mob.Controller
             if (combat == null) combat = GetComponent<IMobCombat>();
             if (stats == null) stats = GetComponent<IMobStats>();
             if (statusEffectManager == null) statusEffectManager = GetComponent<StatusEffectManager>();
-            controllerStep = controller.stepOffset;
 
             // Ensure basic attack range is >= to stopping distance
             if (combat.BasicAtkRange < stoppingDistance)
@@ -223,10 +221,6 @@ namespace Paraverse.Mob.Controller
                 {
                     CleanseStagger();
                     AttackMovementHandler();
-                }
-                else
-                {
-                    controller.stepOffset = controllerStep;
                 }
 
                 curMoveSpeed = 0f;
@@ -741,7 +735,6 @@ namespace Paraverse.Mob.Controller
         {
             if (combat.IsAttackLunging)
             {
-                controller.stepOffset = 0.1f;
                 nav.enabled = false;
                 controller.Move(transform.forward * atkDashForce * Time.deltaTime);
             }

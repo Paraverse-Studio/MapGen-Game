@@ -106,7 +106,7 @@ namespace Paraverse.Combat
             this.target = target;
             this.anim = anim;
             this.stats = stats;
-            curCooldown = 0f;
+            curCooldown = cooldown;
 
             if (null == attackColliderGO)
             {
