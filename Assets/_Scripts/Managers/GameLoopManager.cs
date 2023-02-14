@@ -71,6 +71,7 @@ public class GameLoopManager : MonoBehaviour
     [Min(1)]
     public int switchMapAfterNumOfRounds;
     public int bossAfterNumOfRounds;
+    public float enemyScalingPerRound;
 
     [Space(20)]
     [Header("Screens/Windows/Views")]
@@ -196,7 +197,7 @@ public class GameLoopManager : MonoBehaviour
         // so as a result, in code is where we have to reduce by 1 to do the proper calculations
         int adjustedRoundNumber = nextRoundNumber - 1;
         int mapIndex = adjustedRoundNumber / switchMapAfterNumOfRounds;
-        _isBossRound = (adjustedRoundNumber != 0)? (nextRoundNumber % bossAfterNumOfRounds == 0) : false;
+        _isBossRound = (adjustedRoundNumber != 0)? (nextRoundNumber % bossAfterNumOfRounds == 0) : bossAfterNumOfRounds == 0;
         MapGeneration.Instance.M = (!_isBossRound) ? maps[mapIndex].map : maps[mapIndex].bossMap;
 
         GameLoopEvents.OnInitiateRound?.Invoke();

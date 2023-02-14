@@ -1000,7 +1000,8 @@ public class MapGeneration : MonoBehaviour
             MobStats enemyStats = enemy.GetComponentInChildren<MobStats>();
             if (enemyStats)
             {
-                float scaleFactor = M.enemyScalingPerRound * (GameLoopManager.Instance.nextRoundNumber - 1);
+                float scaleFactor = GameLoopManager.Instance.enemyScalingPerRound * (GameLoopManager.Instance.nextRoundNumber - 1);
+
                 enemyStats.UpdateAttackDamage(enemyStats.AttackDamage.FinalValue * scaleFactor);
                 enemyStats.UpdateAbilityPower(enemyStats.AbilityPower.FinalValue * scaleFactor);
                 enemyStats.UpdateMaxHealth(Mathf.CeilToInt(enemyStats.MaxHealth.FinalValue * scaleFactor));
@@ -1022,7 +1023,7 @@ public class MapGeneration : MonoBehaviour
                 Block b = GetGridOccupant(location).block;
                 SO_BlockItem type = b.type;
 
-                if (Random.Range(0, 1.0f) > b.type.propSpawnChance) continue;
+                if (Random.Range(0, 1.0f) > b.type.foliageSpawnChance) continue;
                 
                 for (int x = -1; x < 2; ++x)
                 {
@@ -1032,7 +1033,7 @@ public class MapGeneration : MonoBehaviour
                         if (!IsInGrid(location2) || null == GetGridOccupant(location2).block) continue;
                         GridOccupant gridOccupant = GetGridOccupant(location2);
                         Block b2 = gridOccupant.block;
-                        if (b2.hasWater) continue;
+                        if (b2.hasWater || b2.hasProp) continue;
                         if (gridOccupant.hasProp || gridOccupant.hasWater) continue;
                         if (type != b2.type) continue;
 
