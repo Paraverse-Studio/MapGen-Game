@@ -78,6 +78,8 @@ public class MapGeneration : MonoBehaviour
     public SO_MapGenData M;
     [Header("Post Processing Data ")]
     public Volume globalVolume;
+    public Light globalLight;
+
     [Header("NavMesh Data ")]
     public NavMeshBuilder navMeshBuilder;
 
@@ -178,7 +180,9 @@ public class MapGeneration : MonoBehaviour
     void Update()
     {
         UpdateLine();
-        if (Input.GetKeyDown(KeyCode.R)) RegenerateMap();
+
+        if (Input.GetKeyDown(KeyCode.F10)) 
+            GlobalSettings.Instance.waterVolume.gameObject.SetActive(!GlobalSettings.Instance.waterVolume.gameObject.activeSelf);
     }
 
     public void RegenerateMap() => StartCoroutine(ERenegerateMap());
@@ -406,7 +410,7 @@ public class MapGeneration : MonoBehaviour
         //PartitionProgress("Activating props...");
         //yield return processDelay;
 
-        if (M.addEdgeFoundation || M.addEdgeWalls)
+        if ((M.addEdgeFoundation || M.addEdgeWalls) && (GlobalSettings.Instance.QualityLevel >= 3))
         {
             AddFoundationAndEdgeWork();
             PartitionProgress();
@@ -483,8 +487,8 @@ public class MapGeneration : MonoBehaviour
 
 
         /* * * * * QUALITY SETTINGS (PERFORMANCE) * * * * * * */
-
-        globalVolume.gameObject.SetActive(GlobalSettings.Instance.QualityLevel > 3);
+        globalLight.gameObject.SetActive(GlobalSettings.Instance.QualityLevel >= 3);
+        globalVolume.gameObject.SetActive(GlobalSettings.Instance.QualityLevel >= 3);
         QualitySettings.SetQualityLevel(Mathf.Max(0, GlobalSettings.Instance.QualityLevel - 1), true);
         if (GlobalSettings.Instance.QualityLevel <= 4 && mapVFX) Destroy(mapVFX.gameObject);
 
@@ -683,10 +687,6 @@ public class MapGeneration : MonoBehaviour
                 }
             }
         }
-
-
-
-
 
 
         if (false)
