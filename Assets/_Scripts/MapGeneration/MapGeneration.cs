@@ -460,8 +460,8 @@ public class MapGeneration : MonoBehaviour
             PartitionProgress("Spawning dangerous enemies...");
             yield return processDelay;
 
-            foreach (Block b in allObjects) b.CheckNavMeshSurface(b.CurrentPrefab);
-            navMeshBuilder.surface = allObjects[0].GetComponentInChildren<NavMeshSurface>();
+            // Based on testing, NavMeshSurface isn't needed on every block, just 1, and then it bakes navmesh map
+            navMeshBuilder.surface = allObjects[0].CheckNavMeshSurface(allObjects[0].CurrentPrefab);
             navMeshBuilder.BuildNavMesh();
 
             AddEnemies();            
