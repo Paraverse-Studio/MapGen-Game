@@ -953,12 +953,11 @@ public class MapGeneration : MonoBehaviour
     private void AddImportantProps()
     {
         // EndPoint
-        Vector3 spawnSpot = pathObjects[pathObjects.Count - 1].transform.position + new Vector3(0, 1, 0);
+        Vector3 spawnSpot = pathObjects[pathObjects.Count - 1].transform.position + new Vector3(0, 0.5f, 0);
         GameObject obj = Instantiate(importantProps.endPoint, spawnSpot, Quaternion.identity);
         obj.name = "END PORTAL (Special)";
         UtilityFunctions.UpdateLODlevels(obj.transform);
-        GameLoopManager.Instance.EndPortal = obj;
-        obj.SetActive(false);
+        GameLoopManager.Instance.EndPortal = obj.GetComponent<EndPointTrigger>();
         propObjects.Add(obj);
         obj.transform.parent = temporaryObjFolder.transform;
     }

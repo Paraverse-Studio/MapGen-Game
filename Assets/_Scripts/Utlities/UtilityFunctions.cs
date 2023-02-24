@@ -21,19 +21,27 @@ public static class UtilityFunctions
             LOD[] lods = lod.GetLODs();
 
             int size = lods.Length;
-            int index = 0;
-            for (int i = size - 1; i >= 0; --i)
+            //int index = 0;
+            // For normal RPG-esque camera culling
+            //for (int i = size - 1; i >= 0; --i)
+            //{
+            //    lods[i].screenRelativeTransitionHeight = 0.015f + (0.020f * index);
+            //    index++;
+            //}
+            // lod.SetLODs(lods);
+            lod.ForceLOD(0);
+
+            if (GlobalSettings.Instance.QualityLevel <= 4)
             {
-                lods[i].screenRelativeTransitionHeight = 0.015f + (0.020f * index);
-                index++;
+                lod.ForceLOD(1); // 0 is the highest, size is the lowest (culled level)
+                // if setting is 4 or lower, do the second highest lod level
             }
 
-            if (GlobalSettings.Instance.QualityLevel == 1)
+            if (GlobalSettings.Instance.QualityLevel <= 2)
             {
-                lod.ForceLOD(size - 1);
-            }
+                lod.ForceLOD(size - 1); // if settings low, do lowest aside from culling
+            }            
             
-            lod.SetLODs(lods);
         }
     }
 

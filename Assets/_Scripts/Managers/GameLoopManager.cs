@@ -75,6 +75,7 @@ public class GameLoopManager : MonoBehaviour
 
     [Space(20)]
     [Header("Screens/Windows/Views")]
+    public Animator roundStartWindow;
     public Animator roundCompleteWindow;
     public Animator roundFailedWindow;
     public Animator bossDefeatedWindow;
@@ -84,7 +85,7 @@ public class GameLoopManager : MonoBehaviour
     public PauseMenuViewController pauseMenu;
 
     [Header("End Portal")]
-    public GameObject EndPortal;
+    public EndPointTrigger EndPortal;
 
     [Header("Predicate")]
     public CompletionPredicateType CompletionPredicate;
@@ -145,7 +146,7 @@ public class GameLoopManager : MonoBehaviour
         if (Time.frameCount % 60 == 0)
         {
             if (null == _predicate) MakeCompletionPredicate(CompletionPredicate);
-            if (_predicate(_roundIsActive)) EndPortal.SetActive(true);
+            if (_predicate(_roundIsActive)) EndPortal.Activate(true);
         }
 
         if (player.transform.position.y <= -25f)
@@ -163,7 +164,7 @@ public class GameLoopManager : MonoBehaviour
 #if UNITY_EDITOR
         if (Input.GetKeyDown(KeyCode.U))
         {
-            if (EndPortal) EndPortal.SetActive(true);
+            if (EndPortal) EndPortal.Activate(true);
         }
         if (Input.GetKeyDown(KeyCode.I))
         {
@@ -215,6 +216,8 @@ public class GameLoopManager : MonoBehaviour
         GameplayListeners(attachOrRemove: true);
 
         _roundIsActive = true;
+
+        StartCoroutine(PlayTriggerAnimation(roundStartWindow, 4f));
     }
 
     public void ResetStates()
@@ -288,8 +291,8 @@ public class GameLoopManager : MonoBehaviour
 
         GameLoopEvents.OnEndRound?.Invoke();
         roundEndWindow.gameObject.SetActive(true);
-        roundEndWindow.SetTrigger("Entry");
         Time.timeScale = 0.4f;
+        roundEndWindow.SetTrigger("Entry");
         yield return new WaitForSecondsRealtime(3f);
         roundEndWindow.SetTrigger("Exit");
         yield return new WaitForSecondsRealtime(1.5f);
@@ -428,6 +431,15 @@ public class GameLoopManager : MonoBehaviour
         a?.Invoke();
     }
 
+    private IEnumerator PlayTriggerAnimation(Animator animator, float delay)
+    {
+        animator.gameObject.SetActive(true);
+        animator.SetTrigger("Entry");
+        yield return new WaitForSecondsRealtime(delay);
+        animator.SetTrigger("Exit");
+        yield return new WaitForSecondsRealtime(1.5f);
+        animator.gameObject.SetActive(false);
+    }
 
     /* * * * * * *  P R E D I C A T E S  * * * * * * * * */
     public bool KillAllEnemies(bool mapReady)
