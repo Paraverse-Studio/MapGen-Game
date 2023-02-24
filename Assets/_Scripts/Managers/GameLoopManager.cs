@@ -155,11 +155,11 @@ public class GameLoopManager : MonoBehaviour
             Invoke("PlayerFallDamage", 0.15f);
         }
 
-        if (Input.GetKeyDown(KeyCode.Alpha1)) GlobalSettings.Instance.QualityLevel = 1;
-        if (Input.GetKeyDown(KeyCode.Alpha2)) GlobalSettings.Instance.QualityLevel = 2;
-        if (Input.GetKeyDown(KeyCode.Alpha3)) GlobalSettings.Instance.QualityLevel = 3;
-        if (Input.GetKeyDown(KeyCode.Alpha4)) GlobalSettings.Instance.QualityLevel = 4;
-        if (Input.GetKeyDown(KeyCode.Alpha5)) GlobalSettings.Instance.QualityLevel = 5;
+        if (Input.GetKeyDown(KeyCode.Alpha1)) QualityManager.Instance.SetQualityLevel(1);
+        if (Input.GetKeyDown(KeyCode.Alpha2)) QualityManager.Instance.SetQualityLevel(2);
+        if (Input.GetKeyDown(KeyCode.Alpha3)) QualityManager.Instance.SetQualityLevel(3);
+        if (Input.GetKeyDown(KeyCode.Alpha4)) QualityManager.Instance.SetQualityLevel(4);
+        if (Input.GetKeyDown(KeyCode.Alpha5)) QualityManager.Instance.SetQualityLevel(5);
 
 #if UNITY_EDITOR
         if (Input.GetKeyDown(KeyCode.U))

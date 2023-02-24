@@ -23,10 +23,6 @@ public class GlobalSettings : MonoBehaviour
     public static GlobalSettings Instance;
     private void Awake() => Instance = this;
 
-    [Header("Quality Level:")]
-    [Range(1, 5)]
-    public int QualityLevel;
-
     [Header("Folders for objects ")]
     public Canvas ScreenSpaceCanvas;
     public Transform uiFolder;

@@ -22,7 +22,10 @@ public enum TickDelayOption
     t20 = 20, 
     t30 = 30, 
     t60 = 60, 
-    t120 = 120
+    t120 = 120,
+    t300 = 300,
+    t600 = 600,
+    t900 = 900
 }
 
 [System.Serializable]

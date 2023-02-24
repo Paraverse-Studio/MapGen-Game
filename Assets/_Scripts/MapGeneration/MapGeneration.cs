@@ -219,7 +219,7 @@ public class MapGeneration : MonoBehaviour
         int randomSeedNumber = randomSeed > -1 ? randomSeed : Random.Range(0, 99999);
         Random.InitState(randomSeedNumber);
         seedText.text = "Seed  " + randomSeedNumber;
-        qualityText.text = "Quality Level: " + GlobalSettings.Instance.QualityLevel;
+        qualityText.text = "Quality Level: " + QualityManager.QualityLevel;
 
         progressValue = -1f;
 
@@ -410,7 +410,7 @@ public class MapGeneration : MonoBehaviour
         //PartitionProgress("Activating props...");
         //yield return processDelay;
 
-        if ((M.addEdgeFoundation || M.addEdgeWalls) && (GlobalSettings.Instance.QualityLevel >= 3))
+        if ((M.addEdgeFoundation || M.addEdgeWalls) && (QualityManager.QualityLevel >= 3))
         {
             AddFoundationAndEdgeWork();
             PartitionProgress();
@@ -444,7 +444,7 @@ public class MapGeneration : MonoBehaviour
         step = 8;
         PartitionProgress("");
         yield return processDelay;
-        if (GlobalSettings.Instance.QualityLevel > 3) AddFoliage();        
+        if (QualityManager.QualityLevel > 3) AddFoliage();        
 
         step = 9;
         PartitionProgress("");
@@ -487,10 +487,10 @@ public class MapGeneration : MonoBehaviour
 
 
         /* * * * * QUALITY SETTINGS (PERFORMANCE) * * * * * * */
-        globalLight.gameObject.SetActive(GlobalSettings.Instance.QualityLevel >= 3);
-        globalVolume.gameObject.SetActive(GlobalSettings.Instance.QualityLevel >= 3);
-        QualitySettings.SetQualityLevel(Mathf.Max(0, GlobalSettings.Instance.QualityLevel - 1), true);
-        if (GlobalSettings.Instance.QualityLevel <= 4 && mapVFX) Destroy(mapVFX.gameObject);
+        globalLight.gameObject.SetActive(QualityManager.QualityLevel >= 3);
+        globalVolume.gameObject.SetActive(QualityManager.QualityLevel >= 3);
+        QualitySettings.SetQualityLevel(Mathf.Max(0, QualityManager.QualityLevel - 1), true);
+        if (QualityManager.QualityLevel <= 4 && mapVFX) Destroy(mapVFX.gameObject);
 
         /* * * * * * * * * * * * * * * * * * * * * * * * * * * */
 

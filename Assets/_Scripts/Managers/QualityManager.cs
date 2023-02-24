@@ -2,29 +2,34 @@ using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 
-public class QualityManager : MonoBehaviour
+public class QualityManager : MonoBehaviour, ITickElement
 {
     public static int QualityLevel;
+    public static QualityManager Instance;
 
-    [Range(1,5)]
-    public int qualityLevel;
+    [Range(1, 5), SerializeField]
+    private int _qualityLevel = 5;
+
+    [SerializeField]
+    public TickDelayOption _checkDistanceDelay;
+
+    private void Awake()
+    {
+        Instance = this;
+        SetQualityLevel(_qualityLevel);
+    }
 
     // Start is called before the first frame update
     void Start()
     {
-        
-    }
-
-    // Update is called once per frame
-    void Update()
-    {
-        
+        //TickManager.Instance?.Subscribe(this, gameObject, _checkDistanceDelay);
+        DetectQualitySetting();
     }
 
     public void SetQualityLevel(int level)
     {
-        qualityLevel = Mathf.Clamp(level, 1, 5);
-        QualityLevel = qualityLevel;
+        _qualityLevel = Mathf.Clamp(level, 1, 5);
+        QualityLevel = _qualityLevel;
     }
 
     public void DetectQualitySetting()
@@ -35,20 +40,28 @@ public class QualityManager : MonoBehaviour
     private IEnumerator IQualitySettingsCheck()
     {
         yield return new WaitForSecondsRealtime(1f);
-        Debug.Log("Global Settings: Detecting game performance...");
+        Debug.Log("Quality Manager: Detecting game performance...");
         float sum = 0;
-        int sampleCount = 30;
+        int sampleCount = 10;
+        string sampleMessage = "Samples: ";
         for (int i = 0; i < sampleCount; ++i)
         {
             sum += FPSCounter.FPS;
-            Debug.Log("Sample: " + FPSCounter.FPS);
-            yield return new WaitForSecondsRealtime(0.1f);
+            sampleMessage += (int)FPSCounter.FPS +", ";
+            yield return new WaitForSecondsRealtime(0.2f);
         }
         float averageFPS = sum / sampleCount;
-        if (averageFPS >= 60) QualityLevel = 5;
-        else if (averageFPS >= 30) QualityLevel = 3;
-        else QualityLevel = 1;
-        Debug.Log($"Global Settings: Average FPS: {averageFPS} ({sum} over {sampleCount} samples)  =>  Quality applied: {QualityLevel}!");
+        if (averageFPS >= 60) SetQualityLevel(5);
+        else if (averageFPS >= 30) SetQualityLevel(3);
+        else SetQualityLevel(1);
+        Debug.Log("(" + sampleMessage+")");
+        Debug.Log($"Quality Manager: Average FPS: {averageFPS} ({sum} over {sampleCount} samples)  =>  Quality applied: {QualityLevel}!");
+
+        
     }
 
+    public void Tick()
+    {
+        //DetectQualitySetting();
+    }
 }

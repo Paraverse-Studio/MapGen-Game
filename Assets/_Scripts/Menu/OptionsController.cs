@@ -17,14 +17,14 @@ public class OptionsController : MonoBehaviour
 
     public void UpdateDisplay()
     {
-        qualityLabel.text = GlobalSettings.Instance.QualityLevel + "";
-        qualitySlider.value = GlobalSettings.Instance.QualityLevel / 5f;
+        qualityLabel.text = QualityManager.QualityLevel + "";
+        qualitySlider.value = QualityManager.QualityLevel / 5f;
     }
 
     public void UpdateQualityLevel()
     {
         int val = Mathf.RoundToInt(qualitySlider.value * 4f) + 1;
         qualityLabel.text = val + "";
-        GlobalSettings.Instance.QualityLevel = val;
+        QualityManager.Instance.SetQualityLevel(val);
     }
 }

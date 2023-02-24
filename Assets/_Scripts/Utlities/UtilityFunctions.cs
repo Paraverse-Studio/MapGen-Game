@@ -31,13 +31,13 @@ public static class UtilityFunctions
             // lod.SetLODs(lods);
             lod.ForceLOD(0);
 
-            if (GlobalSettings.Instance.QualityLevel <= 4)
+            if (QualityManager.QualityLevel <= 4)
             {
                 lod.ForceLOD(1); // 0 is the highest, size is the lowest (culled level)
                 // if setting is 4 or lower, do the second highest lod level
             }
 
-            if (GlobalSettings.Instance.QualityLevel <= 2)
+            if (QualityManager.QualityLevel <= 2)
             {
                 lod.ForceLOD(size - 1); // if settings low, do lowest aside from culling
             }            
