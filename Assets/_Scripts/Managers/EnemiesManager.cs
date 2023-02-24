@@ -46,16 +46,18 @@ public class EnemiesManager : MonoBehaviour, ITickElement
     void Start()
     {
         _player = GlobalSettings.Instance.player.transform;
-        if (hideFarEnemies) TickManager.Instance?.Subscribe(this, gameObject, checkDistanceDelay);
+        TickManager.Instance?.Subscribe(this, gameObject, checkDistanceDelay);
     }
 
     public void Tick()
     {
-        for(int i = 0; i < Enemies.Count; ++i)
+        if (!hideFarEnemies) return;
+
+        for (int i = 0; i < Enemies.Count; ++i)
         {
             if ((Enemies[i].transform.position - _player.position).sqrMagnitude > (hideEnemyDistance * hideEnemyDistance))
             {
-                Enemies[i].gameObject.SetActive(false);
+                // Enemies[i].gameObject.SetActive(false); // for now, we will enable them upon distance and keep them enabled until death
             }
             else
             {
@@ -78,7 +80,8 @@ public class EnemiesManager : MonoBehaviour, ITickElement
             OnEnemiesListUpdated?.Invoke(Enemies);
 
             enemy.OnDeathEvent += RemoveEnemy;
-            //enemy.OnDeathEvent += SpawnDeathVFX;
+
+            if (hideFarEnemies) enemy.gameObject.SetActive(false);
         }
     }
 
