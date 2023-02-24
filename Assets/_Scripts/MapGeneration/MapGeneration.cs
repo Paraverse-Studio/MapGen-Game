@@ -98,6 +98,9 @@ public class MapGeneration : MonoBehaviour
     private GameObject temporaryObjFolder;
     public GameObject[] foundationPrefabs;
 
+    [Header("(Experimental) Preloader")]
+    public GameObject[] preloadingObjects;
+
     [Header("Line (GPS)")]
     public LineRenderer line;
     public bool drawLine = true;
@@ -354,6 +357,13 @@ public class MapGeneration : MonoBehaviour
             temporaryObjFolder = new GameObject("Folder");
             temporaryObjFolder.transform.parent = blocksFolder;
 
+            for (int i = 0; i < preloadingObjects.Length; ++i)
+            {
+                if (null == preloadingObjects[i]) continue;
+                GameObject g = Instantiate(preloadingObjects[i]);
+                Destroy(g, Random.Range(0.1f, 0.5f));
+            }
+
             #endregion
         }            
     }
@@ -487,7 +497,7 @@ public class MapGeneration : MonoBehaviour
 
 
         /* * * * * QUALITY SETTINGS (PERFORMANCE) * * * * * * */
-        globalLight.gameObject.SetActive(QualityManager.QualityLevel >= 3);
+        globalLight.gameObject.SetActive(QualityManager.QualityLevel >= 2);
         globalVolume.gameObject.SetActive(QualityManager.QualityLevel >= 3);
         QualitySettings.SetQualityLevel(Mathf.Max(0, QualityManager.QualityLevel - 1), true);
         if (QualityManager.QualityLevel <= 4 && mapVFX) Destroy(mapVFX.gameObject);
