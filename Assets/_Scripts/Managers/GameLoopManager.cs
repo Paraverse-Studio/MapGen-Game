@@ -194,6 +194,7 @@ public class GameLoopManager : MonoBehaviour
         nextRoundNumber = 1;
         InitiateRound();
     }
+
     public void InitiateRound()
     {
         // nextRoundNumber starts with 1 just to make it easier for display on inspector what round you're on
@@ -204,7 +205,6 @@ public class GameLoopManager : MonoBehaviour
         MapGeneration.Instance.M = (!_isBossRound) ? maps[mapIndex].map : maps[mapIndex].bossMap;
 
         GameLoopEvents.OnInitiateRound?.Invoke();
-
     }
 
     public void StartRound()
@@ -218,8 +218,6 @@ public class GameLoopManager : MonoBehaviour
         GameplayListeners(attachOrRemove: true);
 
         _roundIsActive = true;
-
-        StartCoroutine(PlayTriggerAnimation(roundStartWindow, 2f));
     }
 
     public void ResetStates()
