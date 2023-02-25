@@ -18,6 +18,7 @@ public class FollowTarget : MonoBehaviour
 
     [Header("Lerp on y-value?")]
     public bool lerpY;
+    public bool dontFollowY;
     public float lerpValue;
 
     private Vector3 velocity;
@@ -47,7 +48,9 @@ public class FollowTarget : MonoBehaviour
 
         Vector3 goalPosition = offset + target.position;
         Vector3 goalPositionOriginal = goalPosition;
+
         if (lerpY) goalPosition.y = Mathf.Lerp(transform.position.y, goalPosition.y, Time.deltaTime * lerpValue);
+        if (dontFollowY) goalPosition.y = transform.position.y;
 
         if (smoothStepLerp > 0)
         {
