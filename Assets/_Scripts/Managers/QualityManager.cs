@@ -11,7 +11,7 @@ public class QualityManager : MonoBehaviour, ITickElement
     private int _qualityLevel = 5;
 
     [SerializeField]
-    public TickDelayOption _checkDistanceDelay;
+    private TickDelayOption _checkDistanceDelay;
 
     private void Awake()
     {

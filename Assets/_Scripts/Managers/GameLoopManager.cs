@@ -164,7 +164,9 @@ public class GameLoopManager : MonoBehaviour
 #if UNITY_EDITOR
         if (Input.GetKeyDown(KeyCode.U))
         {
-            if (EndPortal) EndPortal.Activate(true);
+            if (EndPortal) EndPortal.Activate(true);                        
+            AnnouncementManager.Instance.QueueAnnouncement(new Announcement().AddType(0).AddTitle("hii").AddText("portal is open now LMAO :p"));
+            AnnouncementManager.Instance.QueueAnnouncement(new Announcement().AddType(1).AddTitle("hii").AddText("portal is open now LMAO :p"));
         }
         if (Input.GetKeyDown(KeyCode.I))
         {
@@ -217,7 +219,7 @@ public class GameLoopManager : MonoBehaviour
 
         _roundIsActive = true;
 
-        StartCoroutine(PlayTriggerAnimation(roundStartWindow, 4f));
+        StartCoroutine(PlayTriggerAnimation(roundStartWindow, 2f));
     }
 
     public void ResetStates()

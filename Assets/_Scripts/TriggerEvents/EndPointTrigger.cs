@@ -15,13 +15,21 @@ public class EndPointTrigger : MonoBehaviour
 
     public void Activate(bool o)
     {
+        if (!_activated)
+        {
+            AnnouncementManager.Instance.QueueAnnouncement(new Announcement().AddType(1).AddText("All enemies are defeated —— gate is open!"));
+        }
         portal.SetActive(o);
         _activated = true;
     }
 
     private void OnTriggerEnter(Collider other)
     {
-        if (!_activated) return;
+        if (!_activated)
+        {
+            AnnouncementManager.Instance.QueueAnnouncementUnique(new Announcement().AddText("Defeat all enemies to open the gate!"));
+            return;
+        }
 
         if (other.CompareTag("Player"))
         {
