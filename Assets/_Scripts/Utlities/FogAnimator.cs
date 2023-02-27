@@ -23,7 +23,7 @@ public class FogAnimator : MonoBehaviour
         mat.SetFloat("_yOffset", f);
 
         Vector3 vec = mat.GetVector("Vector3_478B0511");
-        vec.z += Time.deltaTime * xSpeed;
+        vec.x += Time.deltaTime * xSpeed;
         mat.SetVector("Vector3_478B0511", vec);
     }
 }
