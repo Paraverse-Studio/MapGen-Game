@@ -23,7 +23,11 @@ public class QualityManager : MonoBehaviour, ITickElement
     void Start()
     {
         //TickManager.Instance?.Subscribe(this, gameObject, _checkDistanceDelay);
-        DetectQualitySetting();
+        //DetectQualitySetting();
+
+#if UNITY_ANDROID
+        SetQualityLevel(1);
+#endif
     }
 
     public void SetQualityLevel(int level)
