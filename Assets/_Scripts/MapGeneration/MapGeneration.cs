@@ -199,14 +199,19 @@ public class MapGeneration : MonoBehaviour
 
         yield return processDelay;
 
-        ResetVariables();
-        ResetLists();
+        ClearMap();
 
         OnMapGenerateStart?.Invoke();
 
         yield return processDelay;
 
         StartCoroutine(Generation());
+    }
+
+    public void ClearMap()
+    {
+        ResetVariables();
+        ResetLists();
     }
 
     private void ResetVariables()

@@ -384,6 +384,8 @@ public class GameLoopManager : MonoBehaviour
     {
         loadingScreen.SetActive(true);
         yield return null;
+        MapGeneration.Instance.ClearMap();
+        yield return null;
         //SceneManager.LoadScene(SceneManager.GetActiveScene().buildIndex);
         GameLoopEvents.OnBootupGame?.Invoke();
         loadingScreen.SetActive(false);
