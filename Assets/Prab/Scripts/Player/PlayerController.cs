@@ -48,9 +48,6 @@ namespace Paraverse.Player
         [Header("Landing Avoidance")]
         [SerializeField, Tooltip("Raycast distance to check for enemies below for land avoidance.")]
         private float disToEnemyCheck = 0.5f;
-        [SerializeField, Tooltip("Max time allowance of is not grounded state before avoidance force is applied.")]
-        private float isNotGroundedMaxDur = 2f;
-        private float isNotGroundedDur;
         [SerializeField, Tooltip("Avoid landing on these layers.")]
         private LayerMask avoidLayers;
         [SerializeField, Tooltip("Force applied to player movement to avoid the avoidLayers.")]
@@ -471,6 +468,7 @@ namespace Paraverse.Player
                 }
             }
         }
+
         public void ApplyHitAnimation()
         {
             anim.Play(StringData.Hit);
