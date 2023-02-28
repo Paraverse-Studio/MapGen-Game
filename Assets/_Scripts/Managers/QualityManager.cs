@@ -27,6 +27,7 @@ public class QualityManager : MonoBehaviour, ITickElement
 
 #if UNITY_ANDROID
         SetQualityLevel(1);
+        Application.targetFrameRate = 60;
 #endif
     }
 
