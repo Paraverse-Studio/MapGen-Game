@@ -45,7 +45,6 @@ public class WeaponBuffSkill : MobSkill, IMobSkill
 
         Vector3 scale = attackColliderGO.transform.localScale;
         attackColliderGO.transform.localScale = new Vector3(scale.x, scale.y + attackRangeLengthen, scale.z);
-        Debug.Log("HUH??? " + attackColliderGO.transform.localScale);
     }
 
     private void BuffDurationHandler()
