@@ -13,6 +13,7 @@ public class OptionsController : MonoBehaviour
     [Header("Water:")]
     public Toggle waterToggle;
     public bool WaterEnabled = true;
+
     private void OnEnable()
     {
         UpdateDisplay();
@@ -21,7 +22,7 @@ public class OptionsController : MonoBehaviour
     public void UpdateDisplay()
     {
         qualityLabel.text = QualityManager.QualityLevel + "";
-        qualitySlider.value = QualityManager.QualityLevel / 5f;
+        qualitySlider.value = (QualityManager.QualityLevel - 1f) / 4f;
         waterToggle.isOn = GlobalSettings.Instance.waterVolume.gameObject.activeSelf;
     }
 
