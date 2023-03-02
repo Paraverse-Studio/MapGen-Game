@@ -2,12 +2,11 @@ using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 
-public class QualityManager : MonoBehaviour, ITickElement
+public class QualityManager : MonoBehaviour
 {
     public static int QualityLevel;
     public static QualityManager Instance;
 
-    [Range(1, 5), SerializeField]
     private int _qualityLevel = 5;
 
     [SerializeField]
@@ -27,8 +26,14 @@ public class QualityManager : MonoBehaviour, ITickElement
 
 #if UNITY_ANDROID
         SetQualityLevel(1);
+        Application.targetFrameRate = 30;
+#endif
+
+#if UNITY_WEBGL
+        SetQualityLevel(3);
         Application.targetFrameRate = 60;
 #endif
+
     }
 
     public void SetQualityLevel(int level)
@@ -61,12 +66,7 @@ public class QualityManager : MonoBehaviour, ITickElement
         else SetQualityLevel(1);
         Debug.Log("(" + sampleMessage+")");
         Debug.Log($"Quality Manager: Average FPS: {averageFPS} ({sum} over {sampleCount} samples)  =>  Quality applied: {QualityLevel}!");
-
         
     }
 
-    public void Tick()
-    {
-        //DetectQualitySetting();
-    }
 }
