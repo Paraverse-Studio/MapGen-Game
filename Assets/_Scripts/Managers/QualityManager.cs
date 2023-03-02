@@ -26,8 +26,14 @@ public class QualityManager : MonoBehaviour
 
 #if UNITY_ANDROID
         SetQualityLevel(1);
+        Application.targetFrameRate = 30;
+#endif
+
+#if UNITY_WEBGL
+        SetQualityLevel(3);
         Application.targetFrameRate = 60;
 #endif
+
     }
 
     public void SetQualityLevel(int level)
