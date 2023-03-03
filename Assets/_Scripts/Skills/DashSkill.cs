@@ -11,6 +11,7 @@ public class DashSkill : MobSkill, IMobSkill
     #region variables
     [Header("Dash Skill:")]
     [SerializeField] private GameObject VFX;
+    [SerializeField] private GameObject[] VFXObjects;
     [SerializeField] private float buffDuration;
     [SerializeField] private Vector3 thrustForce;
     [SerializeField] private Vector3 jumpForce;
@@ -47,7 +48,7 @@ public class DashSkill : MobSkill, IMobSkill
 
             float y = _forces.y; _forces.y = 0;
             _forces = Vector3.MoveTowards(_forces, Vector3.zero, _resistance * Time.deltaTime);
-            _forces.y = Mathf.MoveTowards(y, 0, 18f * Time.deltaTime);
+            _forces.y = Mathf.MoveTowards(y, 0, 17f * Time.deltaTime);
         }
     }
 
@@ -138,13 +139,21 @@ public class DashSkill : MobSkill, IMobSkill
 
     private void ToggleParticleSystem(bool turnParticlesOn)
     {
-        if (null == _VFX) return;
-
-        var list = _VFX.GetComponentsInChildren<ParticleSystem>();
-        foreach (ParticleSystem ps in list)
+        if (null != _VFX)
         {
-            if (turnParticlesOn) ps.Play();
-            else ps.Stop();
+            var list = _VFX.GetComponentsInChildren<ParticleSystem>();
+            foreach (ParticleSystem ps in list)
+            {
+                if (turnParticlesOn) ps.Play();
+                else ps.Stop();
+            }
+        }
+        if (null != VFXObjects && true == turnParticlesOn)
+        {
+            foreach(GameObject obj in VFXObjects)
+            {
+                if (null != obj) Instantiate(obj, _userWeapon);
+            }
         }
     }
 
