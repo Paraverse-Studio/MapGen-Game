@@ -24,7 +24,7 @@ public class DashSkill : MobSkill, IMobSkill
     private float _duration;
     private float _originalJumpGravity = 0;
     private Vector3 _forces = Vector3.zero;
-    private float _resistance = 35f;
+    private float _resistance = 40f;
     private bool _thrustStarted = false;
     private CharacterController _controller;
     private PlayerController _player;

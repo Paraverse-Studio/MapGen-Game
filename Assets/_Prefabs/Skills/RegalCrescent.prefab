@@ -45,26 +45,29 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   _skillName: Regal Crescent
-  _ID: -1
-  _description: 
+  _ID: 100
+  _image: {fileID: 21300000, guid: 9fd6a8ca31303504aa8cc111717b9261, type: 3}
+  _description: 'Active Skill: Launch a golden wave forward that pierces targets
+    dealing [DMG] damage.'
   _minRange: 0
   _maxRange: 5
-  cooldown: 5
+  cooldown: 7
   cost: 60
   animName: HorizontalSlice
+  isBasicAttack: 0
+  _isMelee: 0
   attackColliderGO: {fileID: 0}
+  attackCollider: {fileID: 0}
   projData:
     projPf: {fileID: 98397111005207279, guid: 9b601de79a043e140a973529dec2522a, type: 3}
     projHeld: {fileID: 0}
     projOrigin: {fileID: 0}
     projRotation: {fileID: 0}
     basicAtkProjSpeed: 18
-    scalingStatData:
-      flatPower: 1
-      attackScaling: 0
-      abilityScaling: 0
   usesTargetLock: 1
+  rotSpeed: 110
   scalingStatData:
     flatPower: 30
     attackScaling: 0
     abilityScaling: 0.9
+    healthScaling: 0
