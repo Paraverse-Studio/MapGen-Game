@@ -1,0 +1,171 @@
+using Paraverse.Combat;
+using Paraverse.Helper;
+using Paraverse.Player;
+using Paraverse.Stats;
+using System.Collections;
+using System.Collections.Generic;
+using UnityEngine;
+
+public class DashSkill : MobSkill, IMobSkill
+{
+    #region variables
+    [Header("Dash Skill:")]
+    [SerializeField] private GameObject VFX;
+    [SerializeField] private float buffDuration;
+    [SerializeField] private Vector3 thrustForce;
+    [SerializeField] private Vector3 jumpForce;
+    [SerializeField] private Vector3 colliderSize;
+
+    private Transform _userWeapon = null;
+    private GameObject _VFX = null;
+    private StatModifier _buff = null;
+
+    private float _duration;
+    private float _originalJumpGravity = 0;
+    private Vector3 _forces = Vector3.zero;
+    private float _resistance = 35f;
+    private bool _thrustStarted = false;
+    private CharacterController _controller;
+    private PlayerController _player;
+    
+    #endregion
+
+    public override void SkillUpdate()
+    {
+        base.SkillUpdate();
+        // move character here towards targetspot or target transform
+
+        _duration -= Time.deltaTime;
+        if (_duration <= 0)
+        {
+            DisableSkill();
+            return;
+        }
+
+        if (_controller)
+        {
+            _controller.Move(new Vector3(_forces.x, _forces.y, _forces.z) * Time.deltaTime);
+
+            float y = _forces.y; _forces.y = 0;
+            _forces = Vector3.MoveTowards(_forces, Vector3.zero, _resistance * Time.deltaTime);
+            _forces.y = Mathf.MoveTowards(y, 0, 16f * Time.deltaTime);
+        }
+
+        //if (skillOn && false == _thrustStarted) SlowFaceTarget();
+    }
+
+    protected override void ExecuteSkillLogic()
+    {
+        base.ExecuteSkillLogic();
+
+        // COMPONENTS, AND BASIC DATA
+        if (null == _controller) _controller = mob.GetComponent<CharacterController>();
+        if (null == _player) _player = mob.GetComponent<PlayerController>();
+
+        _userWeapon = attackColliderGO.transform.parent;
+        if (0 == _originalJumpGravity) _originalJumpGravity = _player.JumpGravity;
+        _player.JumpGravity = _originalJumpGravity / 3f;
+        _thrustStarted = false;
+        _forces = Vector3.zero;
+
+        // GLOWY PARTICLES
+        if (null == _VFX && null != VFX) _VFX = Instantiate(VFX, _userWeapon);
+        ToggleParticleSystem(turnParticlesOn: true);
+
+        // BUFF OF THE DAMAGE
+        if (null == _buff)
+        {
+            _buff = new StatModifier(GetPowerAmount());
+            stats.AttackDamage.AddMod(_buff);
+        }
+
+        // JUMP AND FACING ANIMATION
+        _duration = buffDuration;
+        _forces += jumpForce;
+        Physics.IgnoreLayerCollision(14, 15, true);
+        //FaceTarget();
+
+        Vector3 scale = attackColliderGO.transform.localScale;
+        attackColliderGO.transform.localScale = 
+            new Vector3(scale.x + colliderSize.x, scale.y + colliderSize.y, scale.z + colliderSize.z);
+    }
+
+    protected override void DisableSkill()
+    {
+        base.DisableSkill();
+
+        if (_VFX)
+        {
+            ToggleParticleSystem(turnParticlesOn: false);
+        }
+
+        if (null != _buff)
+        {        
+            stats.AttackDamage.RemoveMod(_buff);
+            _buff = null;
+
+            Physics.IgnoreLayerCollision(14, 15, false);
+            _player.JumpGravity = _originalJumpGravity;
+
+            Vector3 scale = attackColliderGO.transform.localScale;
+            attackColliderGO.transform.localScale =
+                new Vector3(scale.x - colliderSize.x, scale.y - colliderSize.y, scale.z - colliderSize.z);
+        }
+    }
+
+    public override void SubscribeAnimationEventListeners()
+    {
+        base.SubscribeAnimationEventListeners();
+        mob.OnChargeSkillOneEvent += AddThrust;
+    }
+
+    public override void UnsubscribeAnimationEventListeners()
+    {
+        base.UnsubscribeAnimationEventListeners();
+        mob.OnChargeSkillOneEvent -= AddThrust;
+    }
+
+    private void AddThrust()
+    {
+        _thrustStarted = true;
+        _forces += new Vector3(transform.forward.x * thrustForce.x, transform.forward.y * thrustForce.y, transform.forward.z * thrustForce.z);
+    }
+
+    private float GetPowerAmount()
+    {
+        return scalingStatData.flatPower + (stats.AttackDamage.FinalValue * scalingStatData.attackScaling) + (stats.AbilityPower.FinalValue * scalingStatData.abilityScaling);
+    }
+
+    private void FaceTarget()
+    {
+        if (!mob.Target) return;
+        Vector3 targetDir = (ParaverseHelper.GetPositionXZ(mob.Target.position - mob.transform.position));
+        mob.transform.forward = targetDir;
+    }
+
+    private void SlowFaceTarget()
+    {
+        if (!mob.Target) 
+        {
+            return; 
+        }
+        Vector3 playerPos = mob.transform.position; playerPos.y = 0;
+        Vector3 targetPos = mob.Target.position; targetPos.y = 0;
+        Vector3 lookDir = (targetPos - playerPos).normalized;
+        Quaternion lookRot = Quaternion.LookRotation(lookDir);
+        mob.transform.rotation = Quaternion.RotateTowards(mob.transform.rotation, lookRot, rotSpeed * Time.deltaTime);
+    }
+
+    private void ToggleParticleSystem(bool turnParticlesOn)
+    {
+        if (null == _VFX) return;
+
+        var list = _VFX.GetComponentsInChildren<ParticleSystem>();
+        foreach (ParticleSystem ps in list)
+        {
+            if (turnParticlesOn) ps.Play();
+            else ps.Stop();
+        }
+    }
+
+}
