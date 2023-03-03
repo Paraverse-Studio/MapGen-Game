@@ -62,7 +62,6 @@ public class DashSkill : MobSkill, IMobSkill
         _userWeapon = attackColliderGO.transform.parent;
         if (0 == _originalJumpGravity) _originalJumpGravity = _player.JumpGravity;
         _player.JumpGravity = _originalJumpGravity / 3f;
-        _player.MoveDir = Vector3.zero;
         _thrustStarted = false;
         _forces = Vector3.zero;
 
