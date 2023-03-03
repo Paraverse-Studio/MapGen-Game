@@ -33,7 +33,6 @@ public class DashSkill : MobSkill, IMobSkill
     public override void SkillUpdate()
     {
         base.SkillUpdate();
-        // move character here towards targetspot or target transform
 
         _duration -= Time.deltaTime;
         if (_duration <= 0)
@@ -48,10 +47,8 @@ public class DashSkill : MobSkill, IMobSkill
 
             float y = _forces.y; _forces.y = 0;
             _forces = Vector3.MoveTowards(_forces, Vector3.zero, _resistance * Time.deltaTime);
-            _forces.y = Mathf.MoveTowards(y, 0, 16f * Time.deltaTime);
+            _forces.y = Mathf.MoveTowards(y, 0, 18f * Time.deltaTime);
         }
-
-        //if (skillOn && false == _thrustStarted) SlowFaceTarget();
     }
 
     protected override void ExecuteSkillLogic()
@@ -65,6 +62,7 @@ public class DashSkill : MobSkill, IMobSkill
         _userWeapon = attackColliderGO.transform.parent;
         if (0 == _originalJumpGravity) _originalJumpGravity = _player.JumpGravity;
         _player.JumpGravity = _originalJumpGravity / 3f;
+        _player.MoveDir = Vector3.zero;
         _thrustStarted = false;
         _forces = Vector3.zero;
 
@@ -128,32 +126,14 @@ public class DashSkill : MobSkill, IMobSkill
     private void AddThrust()
     {
         _thrustStarted = true;
-        _forces += new Vector3(transform.forward.x * thrustForce.x, transform.forward.y * thrustForce.y, transform.forward.z * thrustForce.z);
+        Vector3 direction = transform.forward;
+        if (mob.Target) direction = (ParaverseHelper.GetPositionXZ(mob.Target.transform.position - mob.transform.position)).normalized;
+        _forces += new Vector3(direction.x * thrustForce.x, direction.y * thrustForce.y, direction.z * thrustForce.z);
     }
 
     private float GetPowerAmount()
     {
         return scalingStatData.flatPower + (stats.AttackDamage.FinalValue * scalingStatData.attackScaling) + (stats.AbilityPower.FinalValue * scalingStatData.abilityScaling);
-    }
-
-    private void FaceTarget()
-    {
-        if (!mob.Target) return;
-        Vector3 targetDir = (ParaverseHelper.GetPositionXZ(mob.Target.position - mob.transform.position));
-        mob.transform.forward = targetDir;
-    }
-
-    private void SlowFaceTarget()
-    {
-        if (!mob.Target) 
-        {
-            return; 
-        }
-        Vector3 playerPos = mob.transform.position; playerPos.y = 0;
-        Vector3 targetPos = mob.Target.position; targetPos.y = 0;
-        Vector3 lookDir = (targetPos - playerPos).normalized;
-        Quaternion lookRot = Quaternion.LookRotation(lookDir);
-        mob.transform.rotation = Quaternion.RotateTowards(mob.transform.rotation, lookRot, rotSpeed * Time.deltaTime);
     }
 
     private void ToggleParticleSystem(bool turnParticlesOn)
