@@ -43,7 +43,7 @@ namespace Paraverse.Player
         [SerializeField, Tooltip("Detect these layers to consider mob is grounded.")]
         private LayerMask groundedLayers;
         [SerializeField]
-        private float jumpGravity = -40f;
+        private float jumpGravity = -40f; 
 
         [Header("Landing Avoidance")]
         [SerializeField, Tooltip("Raycast distance to check for enemies below for land avoidance.")]
@@ -90,6 +90,8 @@ namespace Paraverse.Player
         public event IMobController.OnDeathDel OnDeathEvent;
 
         // State Booleans
+
+        public float JumpGravity { get { return jumpGravity; } set { jumpGravity = value; } }
         public Transform Transform { get { return transform; } }
         public bool IsInteracting { get { return _isInteracting; } }
         private bool _isInteracting = false;
@@ -155,7 +157,7 @@ namespace Paraverse.Player
             input.OnUseItemTwoEvent += UseItemTwo;
             input.OnUseItemThreeEvent += UseItemThree;
             input.OnUseItemFourEvent += UseItemFour;
-            input.OnJumpEvent += Jump;
+            //input.OnJumpEvent += Jump;
             input.OnDiveEvent += Dive;
             input.OnTargetLockEvent += TargetLock;
         }
@@ -174,7 +176,7 @@ namespace Paraverse.Player
             MovementHandler();
             RotationHandler();
             JumpHandler();
-            AvoidObjUponLand();
+            //AvoidObjUponLand();
             DiveHandler();
             KnockbackHandling();
             AttackMovementHandler();
@@ -279,17 +281,17 @@ namespace Paraverse.Player
         /// <summary>
         /// Invokes jump action
         /// </summary>
-        private void Jump()
-        {
-            if (_isStaggered || _isInteracting || _isAvoidingObjUponLanding) return;
+        //private void Jump()
+        //{
+        //    if (_isStaggered || _isInteracting || _isAvoidingObjUponLanding) return;
 
-            if (_isGrounded && curJumpCd >= jumpCd)
-            {
-                curJumpCd = 0f;
-                jumpDir.y += Mathf.Sqrt(jumpForce * -GlobalValues.GravityModifier * GlobalValues.GravityForce);
-                anim.Play(StringData.Jump);
-            }
-        }
+        //    if (_isGrounded && curJumpCd >= jumpCd)
+        //    {
+        //        curJumpCd = 0f;
+        //        jumpDir.y += Mathf.Sqrt(jumpForce * -GlobalValues.GravityModifier * GlobalValues.GravityForce);
+        //        anim.Play(StringData.Jump);
+        //    }
+        //}
 
         /// <summary>
         /// Handles jump movement and variables in Updat().

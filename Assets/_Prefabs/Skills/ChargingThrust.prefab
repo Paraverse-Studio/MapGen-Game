@@ -51,9 +51,9 @@ MonoBehaviour:
     [DMG] damage.'
   _minRange: 0
   _maxRange: 5
-  cooldown: 5
-  cost: 60
-  animName: 
+  cooldown: 3.5
+  cost: 10
+  animName: ChargeThrust
   isBasicAttack: 0
   _isMelee: 0
   attackColliderGO: {fileID: 0}
@@ -65,11 +65,14 @@ MonoBehaviour:
     projRotation: {fileID: 0}
     basicAtkProjSpeed: 10
   usesTargetLock: 0
-  rotSpeed: 110
+  rotSpeed: 1400
   scalingStatData:
     flatPower: 10
     attackScaling: 2
     abilityScaling: 0
     healthScaling: 0
   VFX: {fileID: 0}
-  buffDuration: 0
+  buffDuration: 2.5
+  thrustForce: {x: 22, y: 50, z: 22}
+  jumpForce: {x: 0, y: 14, z: 0}
+  colliderSize: {x: 1, y: 0.3, z: 1}
