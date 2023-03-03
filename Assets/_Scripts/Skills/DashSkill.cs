@@ -101,8 +101,7 @@ public class DashSkill : MobSkill, IMobSkill
             _player.JumpGravity = _originalJumpGravity;
 
             Vector3 scale = attackColliderGO.transform.localScale;
-            attackColliderGO.transform.localScale =
-                new Vector3(scale.x - colliderSize.x, scale.y - colliderSize.y, scale.z - colliderSize.z);
+            attackColliderGO.transform.localScale = Vector3.one;
         }
     }
 

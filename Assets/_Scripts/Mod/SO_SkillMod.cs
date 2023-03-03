@@ -16,7 +16,7 @@ public class SO_SkillMod : SO_Mod
     public override string GetDescription()
     {
         if (!_skill) _skill = Skill.GetComponent<MobSkill>();
-        return Description.Replace("[DMG]", GetScalingText());
+        return Description.Replace("[DMG]", GetScalingText()) + $" ({_skill.Cooldown}s cooldown)";
     }
 
     public override void Activate(GameObject go)
