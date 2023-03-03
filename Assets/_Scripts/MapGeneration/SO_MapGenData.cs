@@ -29,8 +29,8 @@ public class SO_MapGenData : ScriptableObject
     [MinMaxSlider(-1f, 1f)]
     public Vector2 randomElevation;
 
-    [Header("PATH SIZE ")]
-    public float distanceOfPath = 40f;
+    [Header("PATH SIZE "), MinMaxSlider(0f, 300)]
+    public Vector2 distanceOfPath;
 
     [Header("PATH TWISTING ")]
     [MinMaxSlider(0f, 30f)]

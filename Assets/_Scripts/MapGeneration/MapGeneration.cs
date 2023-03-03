@@ -141,6 +141,7 @@ public class MapGeneration : MonoBehaviour
 
 
     #region RUNTIME_VARIABLES
+    private float runtimeDistanceOfPath;
     private float pathingAngle;
     private float distanceCreated = 0;
 
@@ -217,7 +218,8 @@ public class MapGeneration : MonoBehaviour
     private void ResetVariables()
     {
         // Used to be in Start()
-        _GRIDSIZE = (int)((M.distanceOfPath * 2.0f) + (M.grassFillRadius.y * 2.0f) + 1);
+        runtimeDistanceOfPath = Random.Range(M.distanceOfPath.x, M.distanceOfPath.y);
+        _GRIDSIZE = (int)((runtimeDistanceOfPath * 2.0f) + (M.grassFillRadius.y * 2.0f) + 1);
 
         // Can't and shouldn't change these 2 variables mid-play, only one time per play session
         gridOccupants = new GridOccupant[_GRIDSIZE, _GRIDSIZE];
@@ -521,7 +523,7 @@ public class MapGeneration : MonoBehaviour
 
     private void SpawnPath()
     {
-        while (distanceCreated < M.distanceOfPath)
+        while (distanceCreated < runtimeDistanceOfPath)
         {
             float randomAngle = Random.Range(M.turningAngleRange.x, M.turningAngleRange.y);
 

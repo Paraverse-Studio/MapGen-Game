@@ -34,8 +34,8 @@ public class DashSkill : MobSkill, IMobSkill
     {
         base.SkillUpdate();
 
-        _duration -= Time.deltaTime;
-        if (_duration <= 0)
+        //_duration -= Time.deltaTime;
+        if (_duration <= 0 || false == mob.IsSkilling)
         {
             DisableSkill();
             return;
@@ -80,11 +80,6 @@ public class DashSkill : MobSkill, IMobSkill
         _duration = buffDuration;
         _forces += jumpForce;
         Physics.IgnoreLayerCollision(14, 15, true);
-        //FaceTarget();
-
-        Vector3 scale = attackColliderGO.transform.localScale;
-        attackColliderGO.transform.localScale = 
-            new Vector3(scale.x + colliderSize.x, scale.y + colliderSize.y, scale.z + colliderSize.z);
     }
 
     protected override void DisableSkill()
@@ -124,10 +119,16 @@ public class DashSkill : MobSkill, IMobSkill
 
     private void AddThrust()
     {
+        if (_thrustStarted) return;
+
         _thrustStarted = true;
         Vector3 direction = transform.forward;
         if (mob.Target) direction = (ParaverseHelper.GetPositionXZ(mob.Target.transform.position - mob.transform.position)).normalized;
         _forces += new Vector3(direction.x * thrustForce.x, direction.y * thrustForce.y, direction.z * thrustForce.z);
+
+        Vector3 scale = attackColliderGO.transform.localScale;
+        attackColliderGO.transform.localScale =
+            new Vector3(scale.x + colliderSize.x, scale.y + colliderSize.y, scale.z + colliderSize.z);
     }
 
     private float GetPowerAmount()
