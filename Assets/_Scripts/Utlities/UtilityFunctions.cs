@@ -64,6 +64,12 @@ public static class UtilityFunctions
         if (cc) cc.enabled = true;
     }
 
+    public static IEnumerator IDelayedAction(float f, System.Action a)
+    {
+        yield return new WaitForSecondsRealtime(f);
+        a?.Invoke();
+    }
+
     public static string ToRoman(int number)
     {
         if ((number < 0) || (number > 3999)) return "Invalid";

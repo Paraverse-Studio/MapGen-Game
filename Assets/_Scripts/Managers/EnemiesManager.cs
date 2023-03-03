@@ -81,7 +81,10 @@ public class EnemiesManager : MonoBehaviour, ITickElement
 
             enemy.OnDeathEvent += RemoveEnemy;
 
-            if (hideFarEnemies) enemy.gameObject.SetActive(false);
+            if (hideFarEnemies)
+            {
+                StartCoroutine(UtilityFunctions.IDelayedAction(0.1f, () => enemy.gameObject.SetActive(false)));                
+            }
         }
     }
 
