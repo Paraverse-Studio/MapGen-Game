@@ -71,12 +71,14 @@ public class AnnouncementManager : MonoBehaviour
         Instance = this;
     }
 
+    // Fast, quick invocations for convenient callbacks!
     // This variation is to invoke through button callbacks
     public void QueueAnnounceType1(string msg)
     {
         QueueAnnouncement(new Announcement().AddType(1).AddText(msg));
     }
 
+    // Add an announcement to the queue of announcements to play
     public void QueueAnnouncement(Announcement a)
     {    
         if (null != a)
@@ -88,6 +90,8 @@ public class AnnouncementManager : MonoBehaviour
         if (_announcements.Count <= 1) ProcessQueue();
     }
 
+    // Add an announcement ONLY if there is not already an announcement
+    // of this same one (checks same text) in the queue
     public void QueueAnnouncementUnique(Announcement a)
     {
         foreach(Announcement announcement in _announcements)
@@ -113,9 +117,9 @@ public class AnnouncementManager : MonoBehaviour
         item.Animator.SetTrigger("Entry");
         yield return new WaitForSecondsRealtime(item.Announcement.Duration);
         item.Animator.SetTrigger("Exit");
-        yield return new WaitForSecondsRealtime(1.2f);
+        yield return new WaitForSecondsRealtime(1.2f); // hardcoded estimation of length of the exit anim
         _announcements.Dequeue();
-        Destroy(item.gameObject, 5f);
+        Destroy(item.gameObject, 1f);
 
         yield return new WaitForSecondsRealtime(delayBetweenAnnouncements);
         ProcessQueue();
