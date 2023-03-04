@@ -13,14 +13,15 @@ public class SwordSpinSkill : MobSkill, IMobSkill
     [SerializeField] private GameObject VFX;
     [SerializeField] private GameObject[] VFXObjects;
     [SerializeField] private Vector3 colliderSize;
-
-    private Transform _userWeapon = null;
-    private GameObject _VFX = null;
-    private StatModifier _buff = null;
+    [SerializeField] private float movementRatio;
+    [SerializeField] private float attackRatio;
 
     private CharacterController _controller;
     private PlayerController _player;
-
+    private Transform _userWeapon = null;
+    private GameObject _VFX = null;
+    private StatModifier _buff = null;
+    private bool _spinStarted = false;
     #endregion
 
     public override void SkillUpdate()
@@ -32,6 +33,8 @@ public class SwordSpinSkill : MobSkill, IMobSkill
             DisableSkill();
             return;
         }
+
+        if (_spinStarted) _player.ControlMovement(_player.GetWalkSpeed() * Mathf.Clamp(movementRatio, 0, 5f));
     }
 
     protected override void ExecuteSkillLogic()
@@ -44,11 +47,7 @@ public class SwordSpinSkill : MobSkill, IMobSkill
 
         _userWeapon = attackColliderGO.transform.parent;
 
-        // GLOWY PARTICLES
-        if (null == _VFX && null != VFX) _VFX = Instantiate(VFX, _userWeapon);
-        ToggleParticleSystem(turnParticlesOn: true);
-
-        AddSpin();
+        _spinStarted = false;
     }
 
     protected override void DisableSkill()
@@ -75,25 +74,41 @@ public class SwordSpinSkill : MobSkill, IMobSkill
     public override void SubscribeAnimationEventListeners()
     {
         base.SubscribeAnimationEventListeners();
-        mob.OnChargeSkillOneEvent += AddSpin;
+        mob.OnChargeSkillOneEvent += ResetCollider;
+        mob.OnEnableChargeReleaseSkillOneEvent += AddSpin;
+        mob.OnAttackInterrupted += DisableSkill;
     }
 
     public override void UnsubscribeAnimationEventListeners()
     {
         base.UnsubscribeAnimationEventListeners();
-        mob.OnChargeSkillOneEvent -= AddSpin;
+        mob.OnChargeSkillOneEvent -= ResetCollider;
+        mob.OnEnableChargeReleaseSkillOneEvent -= AddSpin;
+        mob.OnAttackInterrupted -= DisableSkill;
+    }
+
+    private void ResetCollider()
+    {
+        attackColliderGO.SetActive(false);
+        StartCoroutine(UtilityFunctions.IDelayedAction(0.02f, () => attackColliderGO.SetActive(true)));
     }
 
     private void AddSpin()
     {
+        _spinStarted = true;
+
         attackColliderGO.SetActive(true);
 
         Vector3 scale = attackColliderGO.transform.localScale;
         attackColliderGO.transform.localScale = new Vector3(scale.x + colliderSize.x, scale.y + colliderSize.y, scale.z + colliderSize.z);
 
+        // GLOWY PARTICLES
+        if (null == _VFX && null != VFX) _VFX = Instantiate(VFX, _userWeapon);
+        ToggleParticleSystem(turnParticlesOn: true);
+
         if (null == _buff)
         {
-            _buff = new StatModifier(GetPowerAmount());
+            _buff = new StatModifier(-(stats.AttackDamage.FinalValue * (1f - attackRatio)));
             stats.AttackDamage.AddMod(_buff);
         }
     }
@@ -118,7 +133,11 @@ public class SwordSpinSkill : MobSkill, IMobSkill
         {
             foreach (GameObject obj in VFXObjects)
             {
-                if (null != obj) Instantiate(obj, _userWeapon);
+                if (null != obj)
+                {
+                    GameObject ob = Instantiate(obj, _userWeapon);
+                    mob.OnAttackInterrupted += () => Destroy(ob);
+                }
             }
         }
     }

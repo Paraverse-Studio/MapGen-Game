@@ -184,7 +184,7 @@ namespace Paraverse.Player
         #endregion
 
         #region Helper Methods
-        private float GetWalkSpeed()
+        public float GetWalkSpeed()
         {
             return stats.MoveSpeed.FinalValue;
         }
@@ -205,9 +205,7 @@ namespace Paraverse.Player
         private void MovementHandler()
         {
             // Disables player movement during dive/
-            if (_isDiving || _isStaggered
-                || _isInteracting && !combat.CanComboAttackTwo
-                && !combat.CanComboAttackThree && !_isUsingSkill) return;
+            if (_isDiving || _isStaggered || _isInteracting && !combat.CanComboAttackTwo && !combat.CanComboAttackThree && !_isUsingSkill) return;
 
             // Adjusts player speed based on state
             if (IsInteracting)

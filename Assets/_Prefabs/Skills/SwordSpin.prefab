@@ -50,9 +50,9 @@ MonoBehaviour:
   _description: 'Active Skill: Spin with your sword extended, dealing [DMG] damage.'
   _minRange: 0
   _maxRange: 5
-  cooldown: 5
+  cooldown: 7
   cost: 10
-  animName: SwordSpin
+  animName: SwordSpinLaunch
   isBasicAttack: 0
   _isMelee: 0
   attackColliderGO: {fileID: 0}
@@ -67,9 +67,12 @@ MonoBehaviour:
   rotSpeed: 110
   scalingStatData:
     flatPower: 0
-    attackScaling: 1
+    attackScaling: 0
     abilityScaling: 0
     healthScaling: 0
-  VFX: {fileID: 0}
-  VFXObjects: []
-  colliderSize: {x: 1, y: 1, z: 1}
+  VFX: {fileID: 5162683242974884086, guid: e5f93fd9e47eec44e98b8fe463891b5f, type: 3}
+  VFXObjects:
+  - {fileID: 5946830106282448463, guid: 478374af79c29aa44a57d00fb99b62c2, type: 3}
+  colliderSize: {x: 0, y: 1.4, z: 0}
+  movementRatio: 0.825
+  attackRatio: 1

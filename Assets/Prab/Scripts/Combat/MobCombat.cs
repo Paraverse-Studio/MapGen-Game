@@ -100,6 +100,10 @@ namespace Paraverse.Mob.Combat
         public event OnInstantiateFXOneDel OnInstantiateFXOneEvent;
         public delegate void OnSummonSkillTwoDel();
         public event OnSummonSkillTwoDel OnInstantiateFXTwoEvent;
+
+        // Used for reaction to getting attack interrupted
+        public delegate void OnAttackInterruptDel();
+        public event OnAttackInterruptDel OnAttackInterrupted;
         #endregion
         #endregion
 
@@ -184,6 +188,7 @@ namespace Paraverse.Mob.Combat
             _isAttackLunging = false;
             DisableBasicAttackCollider();
             IsSkilling = false;
+            OnAttackInterrupted?.Invoke();
         }
 
         #region Animation Event Methods
