@@ -11,6 +11,7 @@ public class SwordSpinSkill : MobSkill, IMobSkill
     #region variables
     [Header("Sword Spin Skill:")]
     [SerializeField] private GameObject VFX;
+    [SerializeField] private GameObject VFX2;
     [SerializeField] private GameObject[] VFXObjects;
     [SerializeField] private Vector3 colliderSize;
     [SerializeField] private float movementRatio;
@@ -20,6 +21,7 @@ public class SwordSpinSkill : MobSkill, IMobSkill
     private PlayerController _player;
     private Transform _userWeapon = null;
     private GameObject _VFX = null;
+    private GameObject _VFX2 = null;
     private StatModifier _buff = null;
     private bool _spinStarted = false;
     #endregion
@@ -44,8 +46,11 @@ public class SwordSpinSkill : MobSkill, IMobSkill
         // COMPONENTS, AND BASIC DATA
         if (null == _controller) _controller = mob.GetComponent<CharacterController>();
         if (null == _player) _player = mob.GetComponent<PlayerController>();
-
         _userWeapon = attackColliderGO.transform.parent;
+
+        // GLOWY PARTICLES
+        if (null == _VFX && null != VFX) _VFX = Instantiate(VFX, _userWeapon);
+        ToggleParticleSystem(turnParticlesOn: true);
 
         _spinStarted = false;
     }
@@ -57,6 +62,7 @@ public class SwordSpinSkill : MobSkill, IMobSkill
         if (_VFX)
         {
             ToggleParticleSystem(turnParticlesOn: false);
+            ToggleParticleSystem2(turnParticlesOn: false);
         }
 
         if (null != _buff)
@@ -90,7 +96,10 @@ public class SwordSpinSkill : MobSkill, IMobSkill
     private void ResetCollider()
     {
         attackColliderGO.SetActive(false);
-        StartCoroutine(UtilityFunctions.IDelayedAction(0.02f, () => attackColliderGO.SetActive(true)));
+        StartCoroutine(UtilityFunctions.IDelayedAction(0.001f, () => 
+        {
+            if (skillOn) attackColliderGO.SetActive(true);            
+        }));
     }
 
     private void AddSpin()
@@ -102,15 +111,18 @@ public class SwordSpinSkill : MobSkill, IMobSkill
         Vector3 scale = attackColliderGO.transform.localScale;
         attackColliderGO.transform.localScale = new Vector3(scale.x + colliderSize.x, scale.y + colliderSize.y, scale.z + colliderSize.z);
 
-        // GLOWY PARTICLES
-        if (null == _VFX && null != VFX) _VFX = Instantiate(VFX, _userWeapon);
-        ToggleParticleSystem(turnParticlesOn: true);
-
         if (null == _buff)
         {
             _buff = new StatModifier(-(stats.AttackDamage.FinalValue * (1f - attackRatio)));
             stats.AttackDamage.AddMod(_buff);
         }
+
+        if (null == _VFX2 && null != VFX2)
+        {
+            _VFX2 = Instantiate(VFX2, mob.transform);
+            _VFX2.transform.localPosition += new Vector3(0, 0.55f, 0);
+        }
+        ToggleParticleSystem2(turnParticlesOn: true);
     }
 
     private float GetPowerAmount()
@@ -140,6 +152,19 @@ public class SwordSpinSkill : MobSkill, IMobSkill
                 }
             }
         }
+    }
+
+    private void ToggleParticleSystem2(bool turnParticlesOn)
+    {
+        if (null != _VFX2)
+        {
+            var list = _VFX2.GetComponentsInChildren<ParticleSystem>();
+            foreach (ParticleSystem ps in list)
+            {
+                if (turnParticlesOn) ps.Play();
+                else ps.Stop();
+            }
+        }        
     }
 
 }

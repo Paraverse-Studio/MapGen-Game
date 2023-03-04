@@ -11,7 +11,7 @@ GameObject:
   - component: {fileID: 2869449938675651110}
   - component: {fileID: 6020576381145870738}
   m_Layer: 0
-  m_Name: SwordSpin
+  m_Name: BladeWhirl
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
@@ -44,10 +44,11 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 7276c0008f128fa47aaf15424e5af04d, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  _skillName: Sword Spin
+  _skillName: Blade Whirl
   _ID: 104
   _image: {fileID: 21300000, guid: 30e27787632af124b8f6f4f531a61946, type: 3}
-  _description: 'Active Skill: Spin with your sword extended, dealing [DMG] damage.'
+  _description: 'Active Skill: Rapidly spin with your sword extended, dealing [DMG]
+    damage.'
   _minRange: 0
   _maxRange: 5
   cooldown: 7
@@ -71,8 +72,9 @@ MonoBehaviour:
     abilityScaling: 0
     healthScaling: 0
   VFX: {fileID: 5162683242974884086, guid: e5f93fd9e47eec44e98b8fe463891b5f, type: 3}
+  VFX2: {fileID: 7667971980374616633, guid: 276fbf999e6955948a80c28011d92586, type: 3}
   VFXObjects:
   - {fileID: 5946830106282448463, guid: 478374af79c29aa44a57d00fb99b62c2, type: 3}
-  colliderSize: {x: 0, y: 1.4, z: 0}
+  colliderSize: {x: 0, y: 1.65, z: 1.25}
   movementRatio: 0.825
-  attackRatio: 1
+  attackRatio: 0.5
