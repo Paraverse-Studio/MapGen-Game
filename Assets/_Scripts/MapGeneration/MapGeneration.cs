@@ -83,6 +83,9 @@ public class MapGeneration : MonoBehaviour
     [Header("NavMesh Data ")]
     public NavMeshBuilder navMeshBuilder;
 
+    [Header("Water Splash VFX"), SerializeField]
+    private ParticleSystem waterSplash;
+
     [Header("Randomness seed ")]
     public int randomSeed;
     [Space(10)]
@@ -187,6 +190,15 @@ public class MapGeneration : MonoBehaviour
 
         if (Input.GetKeyDown(KeyCode.F10)) 
             GlobalSettings.Instance.waterVolume.gameObject.SetActive(!GlobalSettings.Instance.waterVolume.gameObject.activeSelf);
+
+        if (GlobalSettings.Instance.player.transform.position.y >= 0f && GlobalSettings.Instance.player.transform.position.y < 0.5f)
+        {
+            if (!waterSplash.isPlaying) waterSplash.Play();
+        }
+        else
+        {
+            if (waterSplash.isPlaying) waterSplash.Stop();
+        }
     }
 
     public void RegenerateMap() => StartCoroutine(ERenegerateMap());

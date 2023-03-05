@@ -20,10 +20,12 @@ Material:
   m_CorrespondingSourceObject: {fileID: 0}
   m_PrefabInstance: {fileID: 0}
   m_PrefabAsset: {fileID: 0}
-  m_Name: PolySplat_ADD
-  m_Shader: {fileID: -6465566751694194690, guid: f28cb721e045b6f43b4af99f5d2cbf91, type: 3}
+  m_Name: PolySplat_ALPHA
+  m_Shader: {fileID: -6465566751694194690, guid: 93b2518f5741e5548a8f75574a29c2c3, type: 3}
   m_ValidKeywords: []
-  m_InvalidKeywords: []
+  m_InvalidKeywords:
+  - _FADING_ON
+  - _SOFTPARTICLES_ON
   m_LightmapFlags: 6
   m_EnableInstancingVariants: 0
   m_DoubleSidedGI: 0
@@ -43,10 +45,6 @@ Material:
         m_Scale: {x: 1, y: 1}
         m_Offset: {x: 0, y: 0}
     - Texture2D_SpriteShaderSoft:
-        m_Texture: {fileID: 2800000, guid: f7500a695c8dc8d4994b2a595d4034c8, type: 3}
-        m_Scale: {x: 1, y: 1}
-        m_Offset: {x: 0, y: 0}
-    - Texture2D_Spriteshader:
         m_Texture: {fileID: 2800000, guid: f7500a695c8dc8d4994b2a595d4034c8, type: 3}
         m_Scale: {x: 1, y: 1}
         m_Offset: {x: 0, y: 0}
@@ -81,7 +79,6 @@ Material:
     m_Ints: []
     m_Floats:
     - Intensity_SpriteShaderSoft: 6
-    - Intensity_Spriteshader: 1
     - PA_SSS_Intensity_: 8
     - PA_SSS_SPF_: 1
     - PA_SSS_SP_: 1

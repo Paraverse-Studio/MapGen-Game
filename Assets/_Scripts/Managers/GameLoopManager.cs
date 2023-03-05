@@ -148,6 +148,8 @@ public class GameLoopManager : MonoBehaviour
             if (_predicate(_roundIsActive)) EndPortal.Activate(true);
         }
 
+        if (player.transform.position.y <= 0.5f && player.transform.position.y > 0.4f)
+
         if (player.transform.position.y <= -25f)
         {
             UtilityFunctions.TeleportObject(player, MapGeneration.Instance.GetClosestBlock(player.transform).transform.position + new Vector3(0, 0.5f, 0));

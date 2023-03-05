@@ -18,6 +18,7 @@ public class Debugging : MonoBehaviour
         buff = new StatModifier(0);
         stats.MoveSpeed.AddMod(buff);
     }
+
     // Update is called once per frame
     void Update()
     {
@@ -32,7 +33,7 @@ public class Debugging : MonoBehaviour
             }
 
             on = !on;
-            buff.Value = on? -2.5f : 0f;
+            buff.Value = on? -2f : 0f;
             
 
         }
