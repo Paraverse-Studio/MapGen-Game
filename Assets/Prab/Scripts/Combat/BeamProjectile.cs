@@ -8,6 +8,9 @@ public class BeamProjectile : Projectile
     protected MobCombat targetMob;
     [SerializeField, Tooltip("The projectile is a beam.")]
     protected bool isBeam = false;
+    [SerializeField]
+    private float beamRadius = 1.5f;
+
 
     [Header("Beam Prefabs")]
     public GameObject beamLineRendererPrefab; //Put a prefab with a line renderer onto here.
@@ -37,7 +40,7 @@ public class BeamProjectile : Projectile
             line.SetPosition(0, transform.position);
 
             Vector3 end;
-            if (beamCollides && Physics.CapsuleCast(transform.position + (transform.forward * 0.5f), transform.position + (transform.up * -0.5f), 2f, transform.forward, out RaycastHit hit, beamLength)) //Checks for collision
+            if (beamCollides && Physics.CapsuleCast(transform.position + (transform.forward * 0.5f), transform.position + (transform.up * -0.5f), beamRadius, transform.forward, out RaycastHit hit, beamLength)) //Checks for collision
             {
                 end = hit.point - (transform.forward * beamEndOffset);
 

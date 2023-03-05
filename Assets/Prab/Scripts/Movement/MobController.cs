@@ -101,7 +101,7 @@ namespace Paraverse.Mob.Controller
         [SerializeField]
         protected float flyUpForce = 5f;
         [SerializeField]
-        protected float flyDownForce = 5f;
+        protected float flyDownForce = 8f;
         protected Vector3 flyDir;
         public bool isFlyingUp = false;
         public bool isFlyingDown = false;
