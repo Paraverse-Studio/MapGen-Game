@@ -83,7 +83,7 @@ public class LaserSkill : MobSkill, IMobSkill
     public virtual void InstantiateBeamFX()
     {
         GameObject go = Instantiate(projData.projPf, projData.projOrigin);
-        PolygonBeamStatic beam = go.GetComponent<PolygonBeamStatic>();
+        BeamProjectile beam = go.GetComponent<BeamProjectile>();
         beam.SpawnBeam();
     }
     #endregion
