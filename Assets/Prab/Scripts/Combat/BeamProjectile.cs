@@ -73,4 +73,24 @@ public class BeamProjectile : Projectile
         else
             targetMob = null;
     }
+
+    public void SpawnBeam() //This function spawns the prefab with linerenderer
+    {
+        if (beamLineRendererPrefab)
+        {
+            if (beamStartPrefab)
+                beamStart = Instantiate(beamStartPrefab);
+            if (beamEndPrefab)
+                beamEnd = Instantiate(beamEndPrefab);
+            beam = Instantiate(beamLineRendererPrefab);
+            beam.transform.position = transform.position;
+            beam.transform.parent = transform;
+            beam.transform.rotation = transform.rotation;
+            line = beam.GetComponent<LineRenderer>();
+            line.useWorldSpace = true;
+            line.positionCount = 2;
+        }
+        else
+            print("Add a hecking prefab with a line renderer to the SciFiBeamStatic script on " + gameObject.name + "! Heck!");
+    }
 }

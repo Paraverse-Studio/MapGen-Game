@@ -4894,8 +4894,8 @@ GameObject:
   - component: {fileID: 198460587821389584}
   - component: {fileID: 199159920115183208}
   - component: {fileID: 82696311886392364}
-  - component: {fileID: 5739916283554643842}
   - component: {fileID: -565135802180167250}
+  - component: {fileID: 5496783848657565611}
   m_Layer: 0
   m_Name: BeamBlueStart
   m_TagString: Untagged
@@ -9920,37 +9920,6 @@ AudioSource:
     m_PreInfinity: 2
     m_PostInfinity: 2
     m_RotationOrder: 0
---- !u!114 &5739916283554643842
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 1450890654167080}
-  m_Enabled: 0
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 20c23a8bcd5b0134d84a61ddd807fdc5, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: 
-  mob: {fileID: 0}
-  beamLineRendererPrefab: {fileID: 1773250190492750, guid: f4e37925a54636e4293491c991143948, type: 3}
-  beamStartPrefab: {fileID: 1450890654167080}
-  beamEndPrefab: {fileID: 1124451057500510, guid: 59b8686ac2191c145aa7aeb4f3ee4f37, type: 3}
-  alwaysOn: 1
-  beamCollides: 1
-  beamLength: 40
-  beamEndOffset: 0
-  textureScrollSpeed: 0
-  textureLengthScale: 1
-  targetTag: Player
-  dotIntervalTimer: 0.5
-  knockBackEffect: {fileID: 0}
-  applyHitAnim: 1
-  scalingStatData:
-    flatPower: 5
-    attackScaling: 0
-    abilityScaling: 1
-    healthScaling: 0
 --- !u!114 &-565135802180167250
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -9977,16 +9946,29 @@ MonoBehaviour:
   launchFX: {fileID: 0}
   hitFX: {fileID: 0}
   decreaseByLerp: -1
-  isBeam: 0
-  beamLineRendererPrefab: {fileID: 0}
-  beamStartPrefab: {fileID: 0}
-  beamEndPrefab: {fileID: 0}
+  isBeam: 1
+  beamLineRendererPrefab: {fileID: 1773250190492750, guid: f4e37925a54636e4293491c991143948, type: 3}
+  beamStartPrefab: {fileID: 1450890654167080}
+  beamEndPrefab: {fileID: 1124451057500510, guid: 59b8686ac2191c145aa7aeb4f3ee4f37, type: 3}
   alwaysOn: 1
   beamCollides: 1
   beamLength: 100
   beamEndOffset: 0
   textureScrollSpeed: 0
   textureLengthScale: 1
+--- !u!114 &5496783848657565611
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1450890654167080}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 96f8e0ad36fc9f24fb2a2f15bf3c55a3, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  deathTimer: 3.5
 --- !u!1 &1516870378216048
 GameObject:
   m_ObjectHideFlags: 0
