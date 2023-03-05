@@ -27,7 +27,8 @@ public class EndPointTrigger : MonoBehaviour
     {
         if (!_activated)
         {
-            AnnouncementManager.Instance.QueueAnnouncementUnique(new Announcement().AddText("Defeat all enemies to open the gate!"));
+            if (other.CompareTag("Player")) 
+                AnnouncementManager.Instance.QueueAnnouncementUnique(new Announcement().AddText("Defeat all enemies to open the gate!"));
             return;
         }
 

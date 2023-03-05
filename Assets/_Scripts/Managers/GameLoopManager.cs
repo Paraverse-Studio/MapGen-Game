@@ -30,7 +30,6 @@ public class GameLoopManager : MonoBehaviour
     [System.Serializable]
     public struct ResultsScreen
     {
-        public TextMeshProUGUI scoreText;
         public TextMeshProUGUI rankText;
         public TextMeshProUGUI timeTakenText;
         public TextMeshProUGUI damageTakenText;
@@ -316,8 +315,7 @@ public class GameLoopManager : MonoBehaviour
 
         if (roundCompletionType == RoundCompletionType.Failed)
         {
-            resultScreen.scoreText.text = "Score: " + "N/A";
-            resultScreen.rankText.text = "F";
+            resultScreen.rankText.text = "Incomplete";
             resultScreen.goldEarnedText.text = "0";
             resultScreen.shopButton.SetActive(false);
             resultScreen.mainMenuButton.SetActive(true);
@@ -329,7 +327,6 @@ public class GameLoopManager : MonoBehaviour
             resultScreen.mainMenuButton.SetActive(false);
             resultScreen.goldEarnedText.text = goldToReward + "";
             playerStats.UpdateGold(goldToReward); // save it to db
-            resultScreen.scoreText.text = "Score: " + (int)score + "%";
             resultScreen.rankText.text = ScoreFormula.GetScoreRank((int)score);
             nextRoundNumber++;
         }
