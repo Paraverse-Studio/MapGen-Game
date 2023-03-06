@@ -32,16 +32,19 @@ public class GreenPlains : MonoBehaviour, IMapMechanics, ITickElement
 
     private Mob playerMob;
     private List<Mob> allMobs = new();
+    private bool initialized = false;
 
     private void Start()
     {
-        TickManager.Instance?.Subscribe(this, gameObject, TickDelayOption.t10);
+        TickManager.Instance?.Subscribe(this, gameObject, TickDelayOption.t5);
     }
 
     public void Tick()
     {
+        if (!initialized) return;
+
         // Determine if to apply the mechanic
-        for(int i = 0; i < allMobs.Count; ++i)
+        for (int i = 0; i < allMobs.Count; ++i)
         {
             if (null == allMobs[i].mob)
             {
@@ -75,7 +78,7 @@ public class GreenPlains : MonoBehaviour, IMapMechanics, ITickElement
         
         // ATTACHING TO PLAYER
         var effect = Instantiate(effectObj);
-        effect.Stop();        
+        effect.Clear();
 
         GameObject player = GlobalSettings.Instance.player;
         playerMob = new Mob(player.GetComponentInChildren<MobStats>(), new StatModifier(0), null, effect);
@@ -90,7 +93,7 @@ public class GreenPlains : MonoBehaviour, IMapMechanics, ITickElement
         foreach (MobController enemyController in EnemiesManager.Instance.Enemies)
         {
             var effectForMob = Instantiate(effectObj);
-            effectForMob.Stop();
+            effectForMob.Clear();
 
             Mob enemy = new Mob(enemyController.GetComponentInChildren<MobStats>(), new StatModifier(0), enemyController, effectForMob);
 
@@ -100,6 +103,8 @@ public class GreenPlains : MonoBehaviour, IMapMechanics, ITickElement
             enemy.mob.MoveSpeed.AddMod(enemy.mod);
             allMobs.Add(enemy);
         }
+
+        StartCoroutine(UtilityFunctions.IDelayedAction(1f, () => initialized = true));
     }
 
     public void Clear()

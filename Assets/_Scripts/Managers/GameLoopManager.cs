@@ -213,11 +213,17 @@ public class GameLoopManager : MonoBehaviour
         GameLoopEvents.OnStartRound?.Invoke();
 
         totalEnemiesSpawned = EnemiesManager.Instance.EnemiesCount;
-        UpdateObjectiveText(null);
-
         playerMaxHealth = (int)playerStats.MaxHealth.FinalValue;
 
         GameplayListeners(attachOrRemove: true);
+
+        UpdateObjectiveText(null);
+
+        if (nextRoundNumber == 1)
+        {
+            AnnouncementManager.Instance.QueueAnnouncement(new Announcement().AddType(1).StartDelay(1.5f).OverrideDuration(3f)
+                .AddText("Defeat all enemies & pass through the gate!"));
+        }
 
         _roundIsActive = true;
     }

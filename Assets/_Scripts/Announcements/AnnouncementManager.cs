@@ -1,14 +1,24 @@
+using System;
 using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 
 public class Announcement
 {
+    // Basic
     public string Title = string.Empty;
     public string Text = string.Empty;
     public Sprite Image = null;
     public float Duration = 3f;
     public int Type = 0;
+
+    // Special
+    public float startDelay = 0;
+
+    // Event
+    public delegate bool Predicate();
+    public Predicate predicate;
+    public Action callback = null;
 
     public Announcement()
     {
@@ -38,6 +48,24 @@ public class Announcement
         return this;
     }
 
+    public Announcement StartDelay(float f)
+    {
+        startDelay = f;
+        return this;
+    }
+
+    public Announcement AddPredicate(Predicate p)
+    {
+        predicate = p;
+        return this;
+    }
+
+    public Announcement AddCallback(Action a)
+    {
+        callback = a;
+        return this;
+    }
+
     public Announcement AddType(int i)
     {
         Type = Mathf.Clamp(i, 0, AnnouncementManager.Instance.announcementTypes.Length);
@@ -56,6 +84,7 @@ public class AnnouncementManager : MonoBehaviour
         public AnnouncementItem Item;
         public float defaultDuration;
     }
+
     public static AnnouncementManager Instance;
     public static int CurrentAnnouncementCount;
     private static Queue<Announcement> _announcements = new();
@@ -63,7 +92,6 @@ public class AnnouncementManager : MonoBehaviour
     [Header("References")]
     public Transform announcementsContainer;
     public float delayBetweenAnnouncements;
-
     public AnnouncementType[] announcementTypes;
 
     private void Awake()
@@ -73,7 +101,7 @@ public class AnnouncementManager : MonoBehaviour
 
     // Fast, quick invocations for convenient callbacks!
     // This variation is to invoke through button callbacks
-    public void QueueAnnounceType1(string msg)
+    public void QueueAnnounceType123(string msg)
     {
         QueueAnnouncement(new Announcement().AddType(1).AddText(msg));
     }
@@ -106,7 +134,14 @@ public class AnnouncementManager : MonoBehaviour
     {
         if (_announcements.TryPeek(out Announcement a)) 
         {
+            if (null != a.predicate && !a.predicate.Invoke())
+            {
+                _announcements.Dequeue();
+                ProcessQueue();
+            }
+
             AnnouncementItem item = Instantiate(announcementTypes[a.Type].Item, announcementsContainer);
+            item.gameObject.SetActive(false);
             item.Announcement = a;
             StartCoroutine(IPlayAnnouncement(item));
         }
@@ -114,6 +149,8 @@ public class AnnouncementManager : MonoBehaviour
 
     private IEnumerator IPlayAnnouncement(AnnouncementItem item)
     {
+        yield return new WaitForSecondsRealtime(item.Announcement.startDelay);
+        item.gameObject.SetActive(true);
         item.Animator.SetTrigger("Entry");
         yield return new WaitForSecondsRealtime(item.Announcement.Duration);
         item.Animator.SetTrigger("Exit");
