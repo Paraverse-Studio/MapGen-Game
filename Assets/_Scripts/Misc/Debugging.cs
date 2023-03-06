@@ -8,15 +8,10 @@ using UnityEngine;
 
 public class Debugging : MonoBehaviour
 {
-    StatModifier buff;
-    bool on = false;
-    MobStats stats;
 
     private void Start()
     {
-        stats = GlobalSettings.Instance.player.GetComponentInChildren<MobStats>();
-        buff = new StatModifier(0);
-        stats.MoveSpeed.AddMod(buff);
+
     }
 
     // Update is called once per frame
@@ -30,11 +25,7 @@ public class Debugging : MonoBehaviour
             foreach (MobStats s in stats)
             {
                 s.GetComponentInChildren<MobStats>().SetFullHealth();
-            }
-
-            on = !on;
-            buff.Value = on? -2f : 0f;
-            
+            }                   
 
         }
     }

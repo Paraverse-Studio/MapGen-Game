@@ -11,6 +11,12 @@ public class SO_MapGenData : ScriptableObject
     public string mapDescription;
 
     [Space(30)]
+    [Header("    _____________  MAP MECHANICS  _____________")]
+    [Space(5)]
+    public GameObject mapMechanics;
+    public ParticleSystem mapMechanicsVFX;
+
+    [Space(30)]
     [Header("    _____________  MAP SET-UP  _____________")]
     [Space(5)]
     public VolumeProfile ppProfile;

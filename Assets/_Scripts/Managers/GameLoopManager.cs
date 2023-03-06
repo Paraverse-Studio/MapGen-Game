@@ -146,9 +146,7 @@ public class GameLoopManager : MonoBehaviour
         {
             if (null == _predicate) MakeCompletionPredicate(CompletionPredicate);
             if (_predicate(_roundIsActive)) EndPortal.Activate(true);
-        }
-
-        if (player.transform.position.y <= 0.5f && player.transform.position.y > 0.4f)
+        }        
 
         if (player.transform.position.y <= -25f)
         {

@@ -158,6 +158,7 @@ public class MapGeneration : MonoBehaviour
     private List<GameObject> enemyObjects = new List<GameObject>();
 
     private ParticleSystem mapVFX = null;
+    private IMapMechanics mapMechanics = null;
 
     private float progressValue;
     private float progressTotal = 11f;
@@ -191,14 +192,14 @@ public class MapGeneration : MonoBehaviour
         if (Input.GetKeyDown(KeyCode.F10)) 
             GlobalSettings.Instance.waterVolume.gameObject.SetActive(!GlobalSettings.Instance.waterVolume.gameObject.activeSelf);
 
-        if (GlobalSettings.Instance.player.transform.position.y >= 0f && GlobalSettings.Instance.player.transform.position.y < 0.5f)
-        {
-            if (!waterSplash.isPlaying) waterSplash.Play();
-        }
-        else
-        {
-            if (waterSplash.isPlaying) waterSplash.Stop();
-        }
+        //if (GlobalSettings.Instance.player.transform.position.y >= 0f && GlobalSettings.Instance.player.transform.position.y < 0.5f)
+        //{
+        //    if (!waterSplash.isPlaying) waterSplash.Play();
+        //}
+        //else
+        //{
+        //    if (waterSplash.isPlaying) waterSplash.Stop();
+        //}
     }
 
     public void RegenerateMap() => StartCoroutine(ERenegerateMap());
@@ -383,6 +384,8 @@ public class MapGeneration : MonoBehaviour
                 Destroy(g, Random.Range(0.1f, 0.5f));
             }
 
+            mapMechanics?.Clear();
+
             #endregion
         }            
     }
@@ -498,6 +501,13 @@ public class MapGeneration : MonoBehaviour
         }
 
         /* * * * * * * * * * * * * * * * * * * * * * * */
+
+
+        /* * * * * MAP MECHANICS - LAVA INTERACTION, WATER INTERACTION, ETC. * * * * * */
+
+        mapMechanics = Instantiate(M.mapMechanics, transform).GetComponent<IMapMechanics>();
+        mapMechanics.Initialize(M.mapMechanicsVFX);
+
 
         /* * * * MISC STEPS - FINAL TOUCHES * * * * * * */
         step = 11;
