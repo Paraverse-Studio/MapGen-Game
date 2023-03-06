@@ -183,7 +183,7 @@ namespace XftWeapon {
             Init();
             mActivated = true; pause = false;
             gameObject.SetActive(true);
-            mVertexPool.SetMeshObjectActive(true);
+            //mVertexPool.SetMeshObjectActive(true);
 
             mFadeT = 1f;
             mIsFading = false;
