@@ -104,6 +104,12 @@ namespace Paraverse.Mob.Combat
         // Used for reaction to getting attack interrupted
         public delegate void OnAttackInterruptDel();
         public event OnAttackInterruptDel OnAttackInterrupted;
+
+        // Event for existing enabling/disabling basic attack collider
+        public delegate void OnEnableBasicAttackColliderDel();
+        public event OnEnableBasicAttackColliderDel OnEnableBasicAttackCollider;
+        public delegate void OnDisableBasicAttackColliderDel();
+        public event OnDisableBasicAttackColliderDel OnDisableBasicAttackCollider;
         #endregion
         #endregion
 
@@ -197,8 +203,10 @@ namespace Paraverse.Mob.Combat
         /// </summary>
         protected void EnableBasicAttackCollider()
         {
-            if (null != basicAttackSkill.attackColliderGO)
+            if (null != basicAttackSkill.attackColliderGO)            
                 basicAttackSkill.attackColliderGO.SetActive(true);
+
+            OnEnableBasicAttackCollider?.Invoke();
         }
 
         /// <summary>
@@ -208,6 +216,8 @@ namespace Paraverse.Mob.Combat
         {
             if (null != basicAttackSkill.attackColliderGO)
                 basicAttackSkill.attackColliderGO.SetActive(false);
+
+            OnDisableBasicAttackCollider?.Invoke();
         }
 
         /// <summary>

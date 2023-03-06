@@ -40,6 +40,7 @@ public class GlobalSettings : MonoBehaviour
     public GameObject popupTextPrefab;
     public Color damageColour;
     public Color healColour;
+    public Material attackTrailMaterial;
 
     [Header("Backup Safe Position: ")]
     [Space(10)]
