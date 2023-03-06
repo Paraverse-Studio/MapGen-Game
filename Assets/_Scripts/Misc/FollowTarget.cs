@@ -10,6 +10,9 @@ public class FollowTarget : MonoBehaviour
     public bool useStartingOffset;
     public Vector3 offset;
 
+    [Header("Tuning")]
+    public float forwardOfTarget;
+
     [Header("SmoothStep lerp: ")]
     public float smoothStepLerp = 0;
 
@@ -49,7 +52,7 @@ public class FollowTarget : MonoBehaviour
             return;
         }
 
-        Vector3 goalPosition = offset + target.position;
+        Vector3 goalPosition = offset + (target.position + (target.forward * forwardOfTarget));
         Vector3 goalPositionOriginal = goalPosition;
 
         if (lerpY) goalPosition.y = Mathf.Lerp(transform.position.y, goalPosition.y, Time.deltaTime * lerpValue);

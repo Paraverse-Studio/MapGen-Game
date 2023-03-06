@@ -17,7 +17,7 @@ public class EndPointTrigger : MonoBehaviour
     {
         if (!_activated)
         {
-            AnnouncementManager.Instance.QueueAnnouncement(new Announcement().AddType(1).AddText("All enemies are defeated —— gate is open!"));
+            AnnouncementManager.Instance.QueueAnnouncement(new Announcement().AddType(1).AddText("All enemies are defeated — gate is open!"));
         }
         portal.SetActive(o);
         _activated = true;
