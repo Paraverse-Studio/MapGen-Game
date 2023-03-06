@@ -16,8 +16,9 @@ public class AttackTrail : MonoBehaviour
     public void Start()
     {
         if (null == _holder) _holder = new GameObject("(Temp) X-Weapon Trail");
+        _holder.layer = 17;
         _trail = _holder.AddComponent<XWeaponTrail>();
-        _trail.MaxFrame = 15;
+        _trail.MaxFrame = 5;
         _trail.Granularity = 50;
         _trail.Fps = 50;
         _trail.MyColor = Color.white;
