@@ -17,7 +17,7 @@ public class AttackTrail : MonoBehaviour
     {
         if (null == _holder) _holder = new GameObject("(Temp) X-Weapon Trail");
         _trail = _holder.AddComponent<XWeaponTrail>();
-        _trail.MaxFrame = 70;
+        _trail.MaxFrame = 5;
         _trail.Granularity = 60;
         _trail.Fps = 60;
         _trail.MyColor = Color.white;
@@ -27,8 +27,8 @@ public class AttackTrail : MonoBehaviour
         _trail.UseWithSRP = true;
 
         _trail.Init();
-        _trail.Activate();
-        _trail.StopSmoothly(0.1f);
+        _trail.Deactivate();
+        StartCoroutine(UtilityFunctions.IDelayedAction(1f, () => _trail.MaxFrame = 60));
 
         gameObject.GetComponent<MobCombat>().OnEnableBasicAttackCollider += ActivateTrail;
         gameObject.GetComponent<MobCombat>().OnDisableBasicAttackCollider += DeactivateTrail;
@@ -50,7 +50,7 @@ public class AttackTrail : MonoBehaviour
 
     public void ActivateTrail()
     {
-        ActivateTrail(1f);
+        ActivateTrail(2f);
     }
 
     public void DeactivateTrail()

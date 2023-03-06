@@ -82,6 +82,7 @@ public class GameLoopManager : MonoBehaviour
     public GameObject roundResultsWindow;
     public RoundTimer roundTimer;
     public PauseMenuViewController pauseMenu;
+    public TextMeshProUGUI objectiveText;
 
     [Header("End Portal")]
     public EndPointTrigger EndPortal;
@@ -212,6 +213,8 @@ public class GameLoopManager : MonoBehaviour
         GameLoopEvents.OnStartRound?.Invoke();
 
         totalEnemiesSpawned = EnemiesManager.Instance.EnemiesCount;
+        UpdateObjectiveText(null);
+
         playerMaxHealth = (int)playerStats.MaxHealth.FinalValue;
 
         GameplayListeners(attachOrRemove: true);
@@ -394,6 +397,7 @@ public class GameLoopManager : MonoBehaviour
         {
             playerStats.OnHealthChange.AddListener(AccrueDamageTaken);
             playerController.OnDeathEvent += EndRoundPremature;
+            EnemiesManager.Instance.OnEnemiesListUpdated.AddListener(UpdateObjectiveText);
         }
         else
         {
@@ -441,6 +445,11 @@ public class GameLoopManager : MonoBehaviour
     }
 
     /* * * * * * *  P R E D I C A T E S  * * * * * * * * */
+    private void UpdateObjectiveText(List<MobController> list = null)
+    {
+        objectiveText.text = $"Remaining: {(null != list? list.Count : EnemiesManager.Instance.EnemiesCount)} / {totalEnemiesSpawned}";
+    }
+
     public bool KillAllEnemies(bool mapReady)
     {
         int enemiesLeft = EnemiesManager.Instance.EnemiesCount;

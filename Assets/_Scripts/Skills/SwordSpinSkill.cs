@@ -16,6 +16,7 @@ public class SwordSpinSkill : MobSkill, IMobSkill
     [SerializeField] private Vector3 colliderSize;
     [SerializeField] private float movementRatio;
     [SerializeField] private float attackRatio;
+    [SerializeField] private float movementBoost;
 
     private CharacterController _controller;
     private PlayerController _player;
@@ -24,6 +25,7 @@ public class SwordSpinSkill : MobSkill, IMobSkill
     private GameObject _VFX2 = null;
     private StatModifier _buff = null;
     private bool _spinStarted = false;
+    private float _boost = 0f;
     #endregion
 
     public override void SkillUpdate()
@@ -36,7 +38,8 @@ public class SwordSpinSkill : MobSkill, IMobSkill
             return;
         }
 
-        if (_spinStarted) _player.ControlMovement(_player.GetWalkSpeed() * Mathf.Clamp(movementRatio, 0, 5f));
+        _boost -= Time.deltaTime * 0.5f;
+        if (_spinStarted) _player.ControlMovement((_player.GetWalkSpeed() * Mathf.Clamp(movementRatio, 0, 5f)) + Mathf.Max(0, _boost));
     }
 
     protected override void ExecuteSkillLogic()
@@ -106,6 +109,7 @@ public class SwordSpinSkill : MobSkill, IMobSkill
     {
         _spinStarted = true;
 
+        _boost = movementBoost;
         attackColliderGO.SetActive(true);
 
         Vector3 scale = attackColliderGO.transform.localScale;
