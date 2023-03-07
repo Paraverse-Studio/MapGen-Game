@@ -31,7 +31,7 @@ public class SO_MapGenData : ScriptableObject
 
     [Space(30)]
     [Header("    _____________  MAP BASE  _____________")]
-    [Space(40)]
+    [Space(5)]
     [MinMaxSlider(-1f, 1f)]
     public Vector2 randomElevation;
 
@@ -65,7 +65,7 @@ public class SO_MapGenData : ScriptableObject
 
     [Space(30)]
     [Header("    _____________  MAP LUMPS  _____________")]
-    [Space(40)]
+    [Space(5)]
 
     [Range(0, 1)]
     [Tooltip("Block elevation distance, a whole block up or half? Etc.")]
@@ -112,12 +112,12 @@ public class SO_MapGenData : ScriptableObject
 
     [Space(30)]
     [Header("    _____________  MAP LIQUID  _____________")]
-    [Space(40)]
+    [Space(5)]
     public float liquidRiseLevel;
 
     [Space(30)]
     [Header("    _____________  MAP PROPS  _____________")]
-    [Space(40)]
+    [Space(5)]
     public bool showProps;
 
     [Range(0, 40)]
@@ -131,10 +131,18 @@ public class SO_MapGenData : ScriptableObject
 
     [Space(30)]
     [Header("    _____________  ENEMIES  _____________")]
-    [Space(40)]
+    [Space(5)]
     public bool addEnemies;
     public GameObject[] enemies;
     public int enemySpawnAmount;
     public int enemySpawnOffset;
+
+    [Space(30)]
+    [Header("    ___________  INTERACTABLES  ____________")]
+    [Space(5)]
+    public bool addChests;
+    public bool addBlacksmith;
+    public bool addMerchant;
+
 
 }
