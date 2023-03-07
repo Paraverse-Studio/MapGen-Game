@@ -34,14 +34,6 @@ public struct PropSet
     public GameObject[] propPrefabs;
 }
 
-[System.Serializable]
-public struct MapGenDataPair 
-{
-    public SO_MapGenData map;
-    public SO_MapGenData bossMap;
-}
-
-
 public class MapGeneration : MonoBehaviour
 {
     public enum Side
@@ -73,6 +65,8 @@ public class MapGeneration : MonoBehaviour
         public bool hasProp;
         public bool hasWater;
     }
+
+    public static MapGeneration Instance;
 
     [Header("Map Generation Data ")]
     public SO_MapGenData M;
@@ -117,9 +111,6 @@ public class MapGeneration : MonoBehaviour
     public float delayAfterPercentDeleted = 0.06f;
     public TextMeshProUGUI seedText;
     public TextMeshProUGUI qualityText;
-
-
-    public static MapGeneration Instance;
 
     [Space(25)]
     public UnityEvent OnMapGenerateStart = new UnityEvent();
@@ -176,7 +167,6 @@ public class MapGeneration : MonoBehaviour
     private Vector2 furthestBlock;
     private float furthestDistance = 0f;
     #endregion
-
 
     private void Awake()
     {
@@ -1041,7 +1031,7 @@ public class MapGeneration : MonoBehaviour
             MobStats enemyStats = enemy.GetComponentInChildren<MobStats>();
             if (enemyStats)
             {
-                float scaleFactor = GameLoopManager.Instance.enemyScalingPerRound * (GameLoopManager.Instance.nextRoundNumber - 1);
+                float scaleFactor = MapCreator.Instance.enemyScalingPerRound * (GameLoopManager.Instance.nextRoundNumber - 1);
 
                 enemyStats.UpdateAttackDamage(enemyStats.AttackDamage.FinalValue * scaleFactor);
                 enemyStats.UpdateAbilityPower(enemyStats.AbilityPower.FinalValue * scaleFactor);

@@ -64,13 +64,7 @@ public class GameLoopManager : MonoBehaviour
     [Header("Combat Map")]
     public bool developerMode = false;
 
-    [Space(10)]
-    [Header("Biomes")]
-    public List<MapGenDataPair> maps;
-    [Min(1)]
-    public int switchMapAfterNumOfRounds;
-    public int bossAfterNumOfRounds;
-    public float enemyScalingPerRound;
+
 
     [Space(20)]
     [Header("Screens/Windows/Views")]
@@ -82,7 +76,6 @@ public class GameLoopManager : MonoBehaviour
     public GameObject roundResultsWindow;
     public RoundTimer roundTimer;
     public PauseMenuViewController pauseMenu;
-    public TextMeshProUGUI objectiveText;
 
     [Header("End Portal")]
     public EndPointTrigger EndPortal;
@@ -103,14 +96,14 @@ public class GameLoopManager : MonoBehaviour
     private GameObject player;
     MobStats playerStats;
     PlayerController playerController;
-    public int damageTaken;
+    private int damageTaken;
     private int totalEnemiesSpawned;
     private int lastHealthSaved = -1;
     private int playerMaxHealth;
     private int goldToReward = 0;
 
     private bool _roundIsActive = false;
-    private bool _isBossRound = false;
+    
     private bool _isPaused = false;
     public bool IsPaused => _isPaused;
 
@@ -196,14 +189,7 @@ public class GameLoopManager : MonoBehaviour
     }
 
     public void InitiateRound()
-    {
-        // nextRoundNumber starts with 1 just to make it easier for display on inspector what round you're on
-        // so as a result, in code is where we have to reduce by 1 to do the proper calculations
-        int adjustedRoundNumber = nextRoundNumber - 1;
-        int mapIndex = adjustedRoundNumber / switchMapAfterNumOfRounds;
-        _isBossRound = (adjustedRoundNumber != 0)? (nextRoundNumber % bossAfterNumOfRounds == 0) : bossAfterNumOfRounds == 0;
-        MapGeneration.Instance.M = (!_isBossRound) ? maps[mapIndex].map : maps[mapIndex].bossMap;
-
+    {      
         GameLoopEvents.OnInitiateRound?.Invoke();
     }
 
@@ -216,8 +202,6 @@ public class GameLoopManager : MonoBehaviour
         playerMaxHealth = (int)playerStats.MaxHealth.FinalValue;
 
         GameplayListeners(attachOrRemove: true);
-
-        UpdateObjectiveText(null);
 
         if (nextRoundNumber == 1)
         {
@@ -275,7 +259,7 @@ public class GameLoopManager : MonoBehaviour
         // DETERMINE HOW ROUND ENDED (SUCCESSFUL OR FAILED OR BOSS DEFEATED?)
         if (successfulRound)
         {
-            if (!_isBossRound) roundCompletionType = RoundCompletionType.Completed;
+            if (!MapCreator.Instance.IsBossMap) roundCompletionType = RoundCompletionType.Completed;
             else roundCompletionType = RoundCompletionType.BossDefeated;
         }
         else
@@ -309,13 +293,12 @@ public class GameLoopManager : MonoBehaviour
         CompleteRound();
     }
 
-
     public void CompleteRound()
     {
         EnemiesManager.Instance.ResetEnemiesList();
         Destroy(EndPortal);
 
-        float score = ScoreFormula.CalculateScore(totalEnemiesSpawned * (_isBossRound? 50f : 10f), roundTimer.GetTime(), playerMaxHealth, damageTaken);
+        float score = ScoreFormula.CalculateScore(totalEnemiesSpawned * (MapCreator.Instance.IsBossMap ? 50f : 10f), roundTimer.GetTime(), playerMaxHealth, damageTaken);
         goldToReward = (int)(score * 1);
 
         resultScreen.timeTakenText.text = UtilityFunctions.GetFormattedTime(roundTimer.GetTime());
@@ -403,12 +386,13 @@ public class GameLoopManager : MonoBehaviour
         {
             playerStats.OnHealthChange.AddListener(AccrueDamageTaken);
             playerController.OnDeathEvent += EndRoundPremature;
-            EnemiesManager.Instance.OnEnemiesListUpdated.AddListener(UpdateObjectiveText);
+            EnemiesManager.Instance.OnEnemiesListUpdated.AddListener(MapCreator.Instance.UpdateObjectiveText);
         }
         else
         {
             playerStats.OnHealthChange.RemoveListener(AccrueDamageTaken);
             playerController.OnDeathEvent -= EndRoundPremature;
+            EnemiesManager.Instance.OnEnemiesListUpdated.RemoveListener(MapCreator.Instance.UpdateObjectiveText);
         }
     }
 
@@ -451,10 +435,7 @@ public class GameLoopManager : MonoBehaviour
     }
 
     /* * * * * * *  P R E D I C A T E S  * * * * * * * * */
-    private void UpdateObjectiveText(List<MobController> list = null)
-    {
-        objectiveText.text = $"Remaining: {(null != list? list.Count : EnemiesManager.Instance.EnemiesCount)} / {totalEnemiesSpawned}";
-    }
+
 
     public bool KillAllEnemies(bool mapReady)
     {

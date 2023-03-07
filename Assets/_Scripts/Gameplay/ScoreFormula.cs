@@ -89,9 +89,10 @@ public class ScoreFormula
     {
         if (score > 100) return "Cube Hero!";
         else if (score >= 95) return "God-Like!";
-        else if (score >= 80) return "Legendary!";
-        else if (score >= 70) return "Excellent";
-        else if (score >= 60) return "Great";
+        else if (score >= 90) return "Legendary!";
+        else if (score >= 80) return "Excellent";
+        else if (score >= 70) return "Great";
+        else if (score >= 60) return "Very Good";
         else return "Good";
     }
 

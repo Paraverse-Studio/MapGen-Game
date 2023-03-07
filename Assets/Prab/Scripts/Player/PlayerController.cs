@@ -521,7 +521,7 @@ namespace Paraverse.Player
             controller.detectCollisions = true;
             _isDead = false;
             // also reset all _isInteracting, _knockedBack, etc. Basically all types of CC  ( @ PRAB )
-            stats.ResetStats();
+            //stats.ResetStats(); March 7, not needed, player shouldn't get a free heal between rounds
             anim.Play(StringData.Idle);
         }
         #endregion
