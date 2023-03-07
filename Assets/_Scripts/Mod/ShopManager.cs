@@ -11,7 +11,7 @@ public class ShopManager : MonoBehaviour
 {
     public struct ModPair
     {
-        public SO_Mod mod;
+        public SO_Item item;
         public int index;
     }
 
@@ -35,7 +35,7 @@ public class ShopManager : MonoBehaviour
     public int pollQuantity;
 
     [Header("Mods To Buy:")]
-    public List<SO_Mod> AvailableMods;
+    public List<SO_Item> AvailableMods;
 
     [Header("Events:")]
     public UnityEvent OnPurchaseItem = new UnityEvent();
@@ -44,7 +44,7 @@ public class ShopManager : MonoBehaviour
     #region private variables
     private ContentFitterRefresher _refresher;
     private List<ModPair> _modPool = new(); // used intermediate in the shop calculation
-    private List<SO_Mod> _purhasedMods = new();
+    private List<SO_Item> _purhasedMods = new();
     private List<ModCard> _modCards = new();
     GameObject _player;
     MobStats _playerStats;
@@ -64,12 +64,12 @@ public class ShopManager : MonoBehaviour
         _playerStats = _player.GetComponentInChildren<MobStats>();
 
         // Load Mods from Resources folder
-        Object[] loadedObjects = Resources.LoadAll("FinalizedMods", typeof(SO_Mod));
+        Object[] loadedObjects = Resources.LoadAll("ITEMS", typeof(SO_Item));
         AvailableMods.Clear();
 
         foreach (Object obj in loadedObjects)
         {
-            AvailableMods.Add((SO_Mod)obj);
+            AvailableMods.Add((SO_Item)obj);
             AvailableMods[AvailableMods.Count - 1].Reset();
         }
     }
@@ -112,7 +112,7 @@ public class ShopManager : MonoBehaviour
         {
             if (AvailableMods[i].CanPurchase(userCurrencyAmount, userCurrentMods))
             {
-                _modPool.Add(new ModPair { mod = AvailableMods[i], index = i });
+                _modPool.Add(new ModPair { item = AvailableMods[i], index = i });
             }
             if (_modPool.Count >= pollQuantity) break;
         }
@@ -126,7 +126,7 @@ public class ShopManager : MonoBehaviour
 
         for (int i = 0; i < availableModPool; ++i)
         {
-            if (null != _modPool[i].mod) _modsToShow.Add(_modPool[i]);
+            if (null != _modPool[i].item) _modsToShow.Add(_modPool[i]);
         }
 
         // 6.0  Show the finalized mods to the user
@@ -141,7 +141,7 @@ public class ShopManager : MonoBehaviour
     private void InstantiateModCard(ModPair modPair)
     {
         ModCard modCard = Instantiate(shopItemPrefab, shopItemsFolder);
-        modCard.Mod = modPair.mod;
+        modCard.Item = modPair.item;
         modCard.descriptionLabel = descriptionMessage;
         modCard.purchaseButton.onClick.AddListener(() => OnClickPurchaseItem(modCard, modPair));
         _modCards.Add(modCard);
@@ -165,26 +165,31 @@ public class ShopManager : MonoBehaviour
 
     public void OnClickPurchaseItem(ModCard modCard, ModPair shopItem)
     {
-        if (_playerStats.Gold < shopItem.mod.GetCost())
+        if (_playerStats.Gold < shopItem.item.GetCost())
         {
             // cannot purchase it, notify user of insuffucient gold
             return;
         }
 
         // Logistics
-        Debug.Log($"Purchased item {AvailableMods[shopItem.index].GetTitle()}!");
+        Debug.Log($"Obtained item {AvailableMods[shopItem.index].GetTitle()}!");
 
-        _playerStats.UpdateGold(-shopItem.mod.GetCost());
+        _playerStats.UpdateGold(-shopItem.item.GetCost());
         goldText.text = _playerStats.Gold.ToString();
 
-        _purhasedMods.Add(AvailableMods[shopItem.index]);
-
         // the mod itself handles what the mod will do for the player when activated
-        shopItem.mod.Activate(_player);
+        shopItem.item.Activate(_player);
 
-        SO_Mod returnValue = shopItem.mod.Consume();
-        // normally returnValue is null cause u bought the mod, so its gone from Available
-        AvailableMods[shopItem.index] = returnValue; 
+        // Item-specific type code
+        if (shopItem.item is SO_Mod)
+        {
+            // the following code handles refreshing the availableMods list 
+            _purhasedMods.Add(AvailableMods[shopItem.index]);
+            SO_Mod returnValue = shopItem.item.Consume();
+
+            // normally returnValue is null cause u bought the mod, so its gone from Available
+            AvailableMods[shopItem.index] = returnValue;
+        }    
 
         Destroy(modCard.gameObject);
         OnPurchaseItem?.Invoke();

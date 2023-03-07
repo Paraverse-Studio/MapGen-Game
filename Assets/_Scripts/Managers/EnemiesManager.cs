@@ -55,6 +55,12 @@ public class EnemiesManager : MonoBehaviour, ITickElement
 
         for (int i = 0; i < Enemies.Count; ++i)
         {
+            if (null == Enemies[i])
+            {
+                Enemies.RemoveAt(i);
+                continue;
+            }
+
             if ((Enemies[i].transform.position - _player.position).sqrMagnitude > (hideEnemyDistance * hideEnemyDistance))
             {
                 // Enemies[i].gameObject.SetActive(false); // for now, we will enable them upon distance and keep them enabled until death

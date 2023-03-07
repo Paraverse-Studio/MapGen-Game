@@ -92,6 +92,8 @@ public class GreenPlains : MonoBehaviour, IMapMechanics, ITickElement
         // ATTACHING TO MOBS
         foreach (MobController enemyController in EnemiesManager.Instance.Enemies)
         {
+            if (null == enemyController) continue;
+
             var effectForMob = Instantiate(effectObj);
             effectForMob.Clear();
 

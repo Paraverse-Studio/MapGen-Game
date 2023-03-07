@@ -14,8 +14,8 @@ public class ModCard : MonoBehaviour
     public Color EffectModColor;
     public Color EffectModColorGlow;
 
-    [Header("Mod")]
-    public SO_Mod Mod;
+    [Header("Item")]
+    public SO_Item Item;
     public TextMeshProUGUI titleLabel;
     public Image imageHolder;
     public TextMeshProUGUI descriptionLabel;
@@ -33,21 +33,21 @@ public class ModCard : MonoBehaviour
 
     private void Start()
     {
-        if (Mod) UpdateDisplay();
+        if (Item) UpdateDisplay();
     }
 
-    private Color GetModColor(Image image = null, bool typeTwo = false)
+    private Color GetModColor(SO_Mod mod, Image image = null, bool typeTwo = false)
     {
         float alphaRetain = (null != image)? image.color.a : -1f;        
         Color c;
-        if (Mod.Type == ModType.Stats) c = StatModColor;
-        else if (Mod.Type == ModType.Skill) c = SkillModColor;
+        if (mod.Type == ModType.Stats) c = StatModColor;
+        else if (mod.Type == ModType.Skill) c = SkillModColor;
         else c = EffectModColor;
 
         if (typeTwo)
         {
-            if (Mod.Type == ModType.Stats) c = StatModColorGlow;
-            else if (Mod.Type == ModType.Skill) c = SkillModColorGlow;
+            if (mod.Type == ModType.Stats) c = StatModColorGlow;
+            else if (mod.Type == ModType.Skill) c = SkillModColorGlow;
             else c = EffectModColorGlow;
         }
 
@@ -57,30 +57,33 @@ public class ModCard : MonoBehaviour
 
     public void UpdateDisplay(System.Action clickCallBack = null)
     {
-        if (titleLabel) titleLabel.text = Mod.GetTitle();
-        if (imageHolder) imageHolder.sprite = Mod.Image;
-        if (descriptionLabel) descriptionLabel.text = Mod.GetDescription();
-        if (loreLabel) loreLabel.text = Mod.Lore;
-        if (costLabel) costLabel.text = Mod.GetCost().ToString();
-        if (typeLabel) typeLabel.text = Mod.Type.ToString();
+        // All items can have these elements
+        if (titleLabel) titleLabel.text = Item.GetTitle();
+        if (imageHolder) imageHolder.sprite = Item.Image;
+        if (descriptionLabel) descriptionLabel.text = Item.GetDescription();
+        if (loreLabel) loreLabel.text = Item.Lore;
+        if (costLabel) costLabel.text = Item.GetCost().ToString();
 
-        if (CardBG) CardBG.color = GetModColor(CardBG);
-        if (CardOtherBG) CardOtherBG.color = GetModColor();
-        if (TypeLabel) TypeLabel.color = GetModColor(typeTwo: true);
-        if (null != CardHighlights && CardHighlights.Length > 0) 
+        // Mod specific
+        if (typeLabel && Item is SO_Mod) typeLabel.text = ((SO_Mod)Item).Type.ToString();
+        if (CardBG && Item is SO_Mod) CardBG.color = GetModColor((SO_Mod)Item, CardBG);
+        if (CardOtherBG && Item is SO_Mod) CardOtherBG.color = GetModColor((SO_Mod)Item);
+        if (TypeLabel && Item is SO_Mod) TypeLabel.color = GetModColor((SO_Mod)Item, typeTwo: true);
+        if (null != CardHighlights && CardHighlights.Length > 0 && Item is SO_Mod) 
         {
             foreach (Image highlight in CardHighlights)
             {
-                Color c = GetModColor(highlight, typeTwo: true); highlight.color = c;
+                Color c = GetModColor((SO_Mod)Item, highlight, typeTwo: true); highlight.color = c;
             }
         }
 
+        // Callback to when this item card is clicked
         if (null != clickCallBack) purchaseButton.onClick.AddListener(() => { clickCallBack.Invoke(); });
     }
 
     public void UpdateDescription()
     {
-        if (descriptionLabel) descriptionLabel.text = Mod.GetDescription();
+        if (descriptionLabel) descriptionLabel.text = Item.GetDescription();
     }
 
 }
