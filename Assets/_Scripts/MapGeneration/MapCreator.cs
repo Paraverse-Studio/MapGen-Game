@@ -1,3 +1,4 @@
+using NaughtyAttributes;
 using Paraverse.Mob.Controller;
 using System.Collections;
 using System.Collections.Generic;
@@ -21,7 +22,14 @@ public class MapCreator : MonoBehaviour
     public List<MapGenDataPair> maps;
     [Min(1)]
     public int switchMapAfterNumOfRounds;
-    public int bossAfterNumOfRounds;
+
+    [Header("Progression")]
+    [MinMaxSlider(0f, 10f)]
+    public Vector2 bossMapGapLimit;
+    [MinMaxSlider(0f, 10f)]
+    public Vector2 rewardMapGapLimit;
+
+    [Header("Enemies")]
     public float enemyScalingPerRound;
 
     [Header("UI References")]
@@ -31,6 +39,9 @@ public class MapCreator : MonoBehaviour
     public bool IsBossMap;
     public bool IsRewardMap;
     public int EnemiesSpawned;
+
+    private int roundsSinceLastBossMap = 0;
+    private int roundsSincelastRewardMap = 0;
 
     private void Awake()
     {
@@ -48,9 +59,33 @@ public class MapCreator : MonoBehaviour
         int mapIndex = adjustedRoundNumber / switchMapAfterNumOfRounds;
 
         // Determining type of map (normal, boss, reward)
-        IsBossMap = (adjustedRoundNumber != 0) ? (roundNumber % bossAfterNumOfRounds == 0) : bossAfterNumOfRounds == 0;
+        if (roundsSincelastRewardMap >= rewardMapGapLimit.x)
+        {
+            float chance = Mathf.Max(0, 1.0f / (rewardMapGapLimit.y - rewardMapGapLimit.x));
+            if (Random.value <= chance || roundsSincelastRewardMap >= rewardMapGapLimit.y)
+            {
+                IsRewardMap = true;
+                MapGeneration.Instance.M = maps[mapIndex].rewardMap;
+                roundsSincelastRewardMap = 0;
+            }
+        }
+        else if (roundsSinceLastBossMap >= bossMapGapLimit.x)
+        {
+            float chance = Mathf.Max(0, 1.0f / (bossMapGapLimit.y - bossMapGapLimit.x));
+            if (Random.value <= chance || roundsSinceLastBossMap >= bossMapGapLimit.y)
+            {
+                IsBossMap = true;
+                MapGeneration.Instance.M = maps[mapIndex].bossMap;
+                roundsSinceLastBossMap = 0;
+            }
+        }
+        else
+        {
+            MapGeneration.Instance.M = maps[mapIndex].map;
+        }
 
-        MapGeneration.Instance.M = (!IsBossMap) ? maps[mapIndex].map : maps[mapIndex].bossMap;
+        if (!IsBossMap) roundsSinceLastBossMap++;
+        if (!IsRewardMap) roundsSincelastRewardMap++;
 
         // Finally, start the map building
         MapGeneration.Instance.RegenerateMap();
