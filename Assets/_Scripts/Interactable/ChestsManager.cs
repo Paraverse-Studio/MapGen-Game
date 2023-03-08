@@ -4,9 +4,15 @@ using UnityEngine;
 
 public class ChestsManager : MonoBehaviour
 {
+    public static ChestsManager Instance;
+
+    public ItemDisplayCreator ItemDisplay;
 
 
-
+    private void Awake()
+    {
+        Instance = this;
+    }
 
     // Start is called before the first frame update
     void Start()

@@ -25,8 +25,7 @@ public class Debugging : MonoBehaviour
             foreach (MobStats s in stats)
             {
                 s.GetComponentInChildren<MobStats>().SetFullHealth();
-            }                   
-
+            } 
         }
 
         if (Input.GetKeyDown(KeyCode.U))

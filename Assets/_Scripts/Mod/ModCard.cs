@@ -4,7 +4,7 @@ using TMPro;
 using UnityEngine;
 using UnityEngine.UI;
 
-public class ModCard : MonoBehaviour
+public class ModCard : ItemCard
 {
     [Header("Mod Colours")]
     public Color StatModColor;
@@ -13,15 +13,6 @@ public class ModCard : MonoBehaviour
     public Color SkillModColorGlow;
     public Color EffectModColor;
     public Color EffectModColorGlow;
-
-    [Header("Item")]
-    public SO_Item Item;
-    public TextMeshProUGUI titleLabel;
-    public Image imageHolder;
-    public TextMeshProUGUI descriptionLabel;
-    public TextMeshProUGUI loreLabel;
-    public TextMeshProUGUI costLabel;
-    public TextMeshProUGUI typeLabel;
 
     public Button purchaseButton;
     public GameObject cardLock;
@@ -55,8 +46,10 @@ public class ModCard : MonoBehaviour
         return c;
     }
 
-    public void UpdateDisplay(System.Action clickCallBack = null)
+    public override void UpdateDisplay(System.Action clickCallBack = null)
     {
+        if (null == Item) return;
+
         // All items can have these elements
         if (titleLabel) titleLabel.text = Item.GetTitle();
         if (imageHolder) imageHolder.sprite = Item.Image;

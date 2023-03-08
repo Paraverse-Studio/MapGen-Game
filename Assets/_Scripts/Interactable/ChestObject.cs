@@ -10,7 +10,7 @@ public class ChestObject : MonoBehaviour
         public string chestName;
         public GameObject model;
         public GameObject modelGlow;
-        // reward
+        public SO_Item reward;
     }
 
     [SerializeField]
@@ -41,7 +41,7 @@ public class ChestObject : MonoBehaviour
 
     public void Initialize(int tierProvided)
     {
-        tier = tierProvided;
+        tier = Mathf.Clamp(tierProvided, 0, chestTiers.Length - 1);
 
         // Set this object to the current tier provided (set its name and looks)
         for (int i = 0; i < chestTiers.Length; ++i)
@@ -74,11 +74,12 @@ public class ChestObject : MonoBehaviour
 
     public void OpenChest()
     {
+        ChestsManager.Instance.ItemDisplay.Display(new List<SO_Item>{ chestTiers[tier].reward}, DisposeChest);
+
         interactable.OnInteract.RemoveListener(OpenChest);
         Destroy(interactable);
         Destroy(selectable);
-
-        Destroy(chestGlowFX.gameObject);
+        Destroy(chestTiers[tier].modelGlow.gameObject);
         Instantiate(deathFX, transform.position, Quaternion.identity);
     }
 
