@@ -9,6 +9,7 @@ public class ChestObject : MonoBehaviour
     {
         public string chestName;
         public GameObject model;
+        public GameObject modelGlow;
         // reward
     }
 
@@ -24,14 +25,18 @@ public class ChestObject : MonoBehaviour
     [SerializeField]
     private ChestTier[] chestTiers;
 
+    [SerializeField]
     private int tier;
+
     private Interactable interactable;
     private Selectable selectable;
 
     // Start is called before the first frame update
     void Start()
     {
-        Initialize(Random.Range(0, chestTiers.Length - 1));
+        if (tier == -1) tier = Random.Range(0, chestTiers.Length - 1);
+
+        Initialize(tier);
     }
 
     public void Initialize(int tierProvided)
@@ -41,10 +46,16 @@ public class ChestObject : MonoBehaviour
         // Set this object to the current tier provided (set its name and looks)
         for (int i = 0; i < chestTiers.Length; ++i)
         {
-            if (i == tier) 
+            if (i == tier)
+            {
                 chestTiers[i].model.SetActive(true);
+                chestTiers[i].modelGlow.SetActive(true);
+            }
             else
+            {
                 chestTiers[i].model.SetActive(false);
+                chestTiers[i].modelGlow.SetActive(false);
+            }
         }
 
         chestObject.name = chestTiers[tier].chestName;

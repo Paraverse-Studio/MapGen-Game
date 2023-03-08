@@ -64,7 +64,7 @@ public class CaptionTextController : MonoBehaviour
         }
         else
         {
-            _container.SetActive(false);
+            if (_container) _container.SetActive(false);
         }
     }
 
