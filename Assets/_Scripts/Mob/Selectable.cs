@@ -57,10 +57,10 @@ public class Selectable : MonoBehaviour
         switch (type)
         {
             case SelectableType.hostile:
-                Range = 8f;
+                Range = 9f;
                 break;
             case SelectableType.interactive:
-                Range = 4f;
+                Range = 5f;
                 break;
             case SelectableType.informational:
                 Range = 5f;
@@ -86,7 +86,7 @@ public class Selectable : MonoBehaviour
 
     private void OnDestroy()
     {
-        if (SelectableSystem.Instance) SelectableSystem.Instance.Remove(this);
+        if (SelectableSystem.Instance) SelectableSystem.Instance.Remove(this);        
     }
 
     public void Select()

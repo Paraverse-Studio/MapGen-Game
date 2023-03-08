@@ -86,6 +86,10 @@ public class SelectableSystem : MonoBehaviour
         {
             _selectables.Remove(selectable);
         }
+        if (Target && selectable == Target)
+        {
+            DeselectTarget();
+        }
     }
  
     private IEnumerator DoAfterDelay(float f, Action action)

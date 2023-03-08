@@ -101,6 +101,8 @@ public class MobHealthBar : MonoBehaviour
     {
         if (!_healthBarSetupComplete || !_healthBarShowable) return;
 
+        if (Time.frameCount % 30 == 0) _nameLabel.text = gameObject.name;
+
         // Health
         if (_healthBar)
         {

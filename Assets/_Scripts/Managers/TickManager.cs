@@ -51,11 +51,6 @@ public class TickManager : MonoBehaviour
     // Update is called once per frame
     void Update()
     {
-        if (Time.frameCount % 60 == 0)
-        {
-            
-        }
-
         size = tickElements.Count;
 
         for (int i = 0; i < size; ++i)

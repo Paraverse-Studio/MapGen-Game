@@ -11,7 +11,6 @@ GameObject:
   - component: {fileID: 4212002850137251620}
   - component: {fileID: 4212002850137251621}
   - component: {fileID: 4212002850137251642}
-  - component: {fileID: 4212002850137251643}
   - component: {fileID: 4212002850137251623}
   m_Layer: 0
   m_Name: InteractObject
@@ -28,8 +27,8 @@ Transform:
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 4212002850137251640}
   m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
-  m_LocalPosition: {x: 169.36298, y: 5.094467, z: 166.93193}
-  m_LocalScale: {x: 2.5, y: 2.5, z: 2.5}
+  m_LocalPosition: {x: 0, y: 0, z: 0}
+  m_LocalScale: {x: 3, y: 3, z: 3}
   m_ConstrainProportionsScale: 0
   m_Children: []
   m_Father: {fileID: 0}
@@ -85,19 +84,6 @@ MeshRenderer:
   m_SortingLayer: 0
   m_SortingOrder: 0
   m_AdditionalVertexStreams: {fileID: 0}
---- !u!135 &4212002850137251643
-SphereCollider:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 4212002850137251640}
-  m_Material: {fileID: 0}
-  m_IsTrigger: 1
-  m_Enabled: 1
-  serializedVersion: 2
-  m_Radius: 0.5
-  m_Center: {x: 0, y: 0, z: 0}
 --- !u!114 &4212002850137251623
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -110,10 +96,18 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: d1bc37eb4b96fb843a3d42bbb2d5965e, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  proximityRange: 3
+  interactableName: 
+  OnEnterProximity:
+    m_PersistentCalls:
+      m_Calls: []
+  OnExitProximity:
+    m_PersistentCalls:
+      m_Calls: []
   OnInteract:
     m_PersistentCalls:
       m_Calls:
-      - m_Target: {fileID: 0}
+      - m_Target: {fileID: 4212002850137251640}
         m_TargetAssemblyTypeName: UnityEngine.GameObject, UnityEngine
         m_MethodName: SetActive
         m_Mode: 6
@@ -123,5 +117,5 @@ MonoBehaviour:
           m_IntArgument: 0
           m_FloatArgument: 0
           m_StringArgument: 
-          m_BoolArgument: 1
+          m_BoolArgument: 0
         m_CallState: 2

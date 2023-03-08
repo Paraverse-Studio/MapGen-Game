@@ -42,6 +42,9 @@ public class GlobalSettings : MonoBehaviour
     public Color healColour;
     public Material attackTrailMaterial;
 
+    [Header("Interactables")]
+    public Color interactableColor;
+
     [Header("Backup Safe Position: ")]
     [Space(10)]
     public Vector3 backupSafePosition;

@@ -29,6 +29,8 @@ namespace Paraverse.Player
         public event OnPauseDel OnPauseEvent;
         public delegate void OnSkillUseDel();
         public event OnSkillUseDel OnSkillOneEvent;
+        public delegate void OnInteractDel();
+        public event OnInteractDel OnInteractEvent;
 
         public Vector2 MovementDirection { get { return _movementDirection; } }
         private Vector2 _movementDirection;
@@ -72,6 +74,9 @@ namespace Paraverse.Player
             input.Player.SkillOne.performed += OnSkillOne;
             input.Player.SkillOne.Enable();
 
+            input.Player.Interact.performed += OnInteract;
+            input.Player.Interact.Enable();
+
             input.Player.Pause.performed += OnPause;
             input.Player.Pause.Enable();
 
@@ -100,7 +105,10 @@ namespace Paraverse.Player
             input.Player.ItemFour.Disable();
 
             input.Player.SkillOne.performed -= OnSkillOne;
-            input.Player.SkillOne.Enable();
+            input.Player.SkillOne.Disable();
+
+            input.Player.Interact.performed -= OnInteract;
+            input.Player.Interact.Disable();
 
             input.Player.Pause.performed -= OnPause;
             input.Player.Pause.Disable();
@@ -140,6 +148,11 @@ namespace Paraverse.Player
         private void OnSkillOne(InputAction.CallbackContext obj)
         {
             OnSkillOneEvent?.Invoke();
+        }
+
+        private void OnInteract(InputAction.CallbackContext obj)
+        {
+            OnInteractEvent?.Invoke();
         }
 
         private void OnUseItemOne(InputAction.CallbackContext obj)
