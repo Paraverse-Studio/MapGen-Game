@@ -13,17 +13,28 @@ public class ItemDisplayCreator : MonoBehaviour
     [SerializeField]
     private ItemCard _itemCardPrefab;
 
+    private GameObject _player;
+    private List<SO_Item> _items;
     private System.Action _closeEvent;
-    private List<GameObject> _createdObjects;
+    private List<GameObject> _createdObjects = new();
 
     public void Display(List<SO_Item> items, System.Action closeCallback)
     {
-        foreach (Transform c in _container) Destroy(c.gameObject);
+        // if this screen is already open (a chest loot is being shown),
+        // force the older instance to close, and provide the loot, and then show this one
+        if (gameObject.activeSelf) gameObject.SetActive(false);
 
-        for (int i = 0; i < items.Count; ++i)
+        _items = items;
+        _player = GlobalSettings.Instance.player;
+        foreach (Transform c in _container)
+        {
+            if (null != c.gameObject) Destroy(c.gameObject);
+        }
+
+        for (int i = 0; i < _items.Count; ++i)
         {
             ItemCard card = Instantiate(_itemCardPrefab, _container);
-            card.Item = items[i];
+            card.Item = _items[i];
             card.UpdateDisplay();
             _createdObjects.Add(card.gameObject);
         }        
@@ -33,8 +44,27 @@ public class ItemDisplayCreator : MonoBehaviour
         if (_refresher) _refresher.RefreshContentFitters();
     }
 
+    private void GiveItemsToPlayer()
+    {
+        for (int i = 0; i < _items.Count; ++i)
+        {
+            Debug.Log($"Obtained item {_items[i].GetTitle()}!");
+            _items[i].Activate(_player);
+            if (_items[i] is SO_Mod)
+            {
+                // PUT THE BELOW CODE IN CHEST CODE WHERE THESE REWARDS ARE DECIDED
+                // AND ALSO REMOVE THEM FROM AVAILABLEMODS IN THAT SAME SPOT (SAME FUNCITON)
+                ShopManager.Instance.PurchasedMods.Add(_items[i]);
+            }
+        }
+    }
+
+    // With this design, we want to give player the rewards when the window is closed.
+    // in case any obtaining of any item shows a VFX.
     public void OnDisable()
     {
+        GiveItemsToPlayer();
+
         for (int i = _createdObjects.Count - 1; i > 0; --i)
         {
             Destroy(_createdObjects[i]);

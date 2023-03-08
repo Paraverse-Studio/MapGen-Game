@@ -96,7 +96,7 @@ public class GameLoopManager : MonoBehaviour
     private GameObject player;
     MobStats playerStats;
     PlayerController playerController;
-    private int damageTaken;
+    public int damageTaken;
     private int totalEnemiesSpawned;
     private int lastHealthSaved = -1;
     private int playerMaxHealth;
@@ -157,9 +157,9 @@ public class GameLoopManager : MonoBehaviour
 #if UNITY_EDITOR
         if (Input.GetKeyDown(KeyCode.U))
         {
-            if (EndPortal) EndPortal.Activate(true);                        
-            AnnouncementManager.Instance.QueueAnnouncement(new Announcement().AddType(0).AddTitle("hii").AddText("portal is open now LMAO :p"));
-            AnnouncementManager.Instance.QueueAnnouncement(new Announcement().AddType(1).AddTitle("hii").AddText("portal is open now LMAO :p"));
+            //if (EndPortal) EndPortal.Activate(true);                        
+            //AnnouncementManager.Instance.QueueAnnouncement(new Announcement().AddType(0).AddTitle("hii").AddText("portal is open now LMAO :p"));
+            //AnnouncementManager.Instance.QueueAnnouncement(new Announcement().AddType(1).AddTitle("hii").AddText("portal is open now LMAO :p"));
         }
         if (Input.GetKeyDown(KeyCode.I))
         {

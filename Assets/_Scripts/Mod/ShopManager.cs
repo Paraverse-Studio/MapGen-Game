@@ -44,7 +44,8 @@ public class ShopManager : MonoBehaviour
     #region private variables
     private ContentFitterRefresher _refresher;
     private List<ModPair> _modPool = new(); // used intermediate in the shop calculation
-    private List<SO_Item> _purhasedMods = new();
+
+    public List<SO_Item> PurchasedMods = new();
     private List<ModCard> _modCards = new();
     GameObject _player;
     MobStats _playerStats;
@@ -184,7 +185,7 @@ public class ShopManager : MonoBehaviour
         if (shopItem.item is SO_Mod)
         {
             // the following code handles refreshing the availableMods list 
-            _purhasedMods.Add(AvailableMods[shopItem.index]);
+            PurchasedMods.Add(AvailableMods[shopItem.index]);
             SO_Mod returnValue = shopItem.item.Consume();
 
             // normally returnValue is null cause u bought the mod, so its gone from Available

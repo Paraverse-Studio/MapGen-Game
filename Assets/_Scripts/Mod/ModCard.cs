@@ -58,7 +58,14 @@ public class ModCard : ItemCard
         if (costLabel) costLabel.text = Item.GetCost().ToString();
 
         // Mod specific
-        if (typeLabel && Item is SO_Mod) typeLabel.text = ((SO_Mod)Item).Type.ToString();
+        if (typeLabel && Item is SO_Mod)
+        {
+            typeLabel.text = ((SO_Mod)Item).Type.ToString();
+        }
+        else
+        {
+
+        }
         if (CardBG && Item is SO_Mod) CardBG.color = GetModColor((SO_Mod)Item, CardBG);
         if (CardOtherBG && Item is SO_Mod) CardOtherBG.color = GetModColor((SO_Mod)Item);
         if (TypeLabel && Item is SO_Mod) TypeLabel.color = GetModColor((SO_Mod)Item, typeTwo: true);
