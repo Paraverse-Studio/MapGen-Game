@@ -31,7 +31,7 @@ public class ChestObject : MonoBehaviour
     // Start is called before the first frame update
     void Start()
     {
-        Initialize(0);
+        Initialize(Random.Range(0, chestTiers.Length - 1));
     }
 
     public void Initialize(int tierProvided)

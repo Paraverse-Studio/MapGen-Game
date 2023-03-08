@@ -6,14 +6,26 @@ using UnityEngine;
 
 public class CaptionTextController : MonoBehaviour
 {
+    public struct Request
+    {
+        public string msg;
+        public GameObject requester;
+        public Request (string m, GameObject g)
+        {
+            msg = m; requester = g;
+        }
+    }
+
     public static CaptionTextController Instance;
 
     [SerializeField]
     private TextMeshProUGUI _text;
     [SerializeField]
     private GameObject _container;
+    [SerializeField]
+    private ContentFitterRefresher _refresher;
 
-    private List<string> requests = new();
+    private List<Request> requests = new();
 
     private void Awake()
     {
@@ -21,25 +33,34 @@ public class CaptionTextController : MonoBehaviour
         _container.SetActive(false);
     }
         
-    public void SetText(string msg)
+    private void SetText(string s)
     {
-        if (requests.Contains(msg))
-        {
-            RemoveText(msg);
-        }
+        _text.text = s;
+        _refresher.RefreshContentFitters();
+    }
 
-        requests.Add(msg);
-        _text.text = msg;
+    public void SetText(string msg, GameObject obj)
+    {
+        RemoveText(msg, obj);
+
+        Request newReq = new(msg, obj); 
+        requests.Add(newReq);
+        SetText(msg);
         _container.SetActive(true);
     }
 
-    public void RemoveText(string msg)
+    public void RemoveText(string msg, GameObject obj)
     {
-        requests.Remove(msg);
+        Request checkExistingRequest = requests.FirstOrDefault(r => r.requester == obj);
 
-        if (requests.Count > 0 && null != requests[0])
+        if (!string.IsNullOrEmpty(checkExistingRequest.msg))
         {
-            _text.text = requests[0];
+            requests.Remove(checkExistingRequest);
+        }
+
+        if (requests.Count > 0)
+        {
+            SetText(requests[0].msg);
         }
         else
         {

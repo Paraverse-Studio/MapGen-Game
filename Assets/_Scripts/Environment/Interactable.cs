@@ -59,9 +59,9 @@ public class Interactable : MonoBehaviour, ITickElement
             OnExitProximity?.Invoke();
 
         if (show)                  
-            CaptionTextController.Instance.SetText(_interactableMessage);    
+            CaptionTextController.Instance.SetText(_interactableMessage, gameObject);    
         else
-            CaptionTextController.Instance.RemoveText(_interactableMessage);
+            CaptionTextController.Instance.RemoveText(_interactableMessage, gameObject);
     }
 
     public void PressedInteract()
