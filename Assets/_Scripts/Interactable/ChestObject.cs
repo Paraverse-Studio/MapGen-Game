@@ -88,7 +88,7 @@ public class ChestObject : MonoBehaviour
         // 1. Decide the loot        
 
         // Generate loot randomly until you have all
-        int numToSpawn = (int)Random.Range(chestTiers[tier].numToSpawn.x, chestTiers[tier].numToSpawn.y);
+        int numToSpawn = Random.Range((int)chestTiers[tier].numToSpawn.x, (int)(chestTiers[tier].numToSpawn.y + 1));
 
         int safetyCounter = 0;
         // Keep performing following algorithm until required num of reward items are calculated
@@ -96,7 +96,7 @@ public class ChestObject : MonoBehaviour
         {
             // loot table logic
             safetyCounter++;
-            if (safetyCounter > 1000) break;
+            if (safetyCounter > 100) break;
             float total = 0;
             foreach (LootItem lootItem in chestTiers[tier].lootTable)
             {
@@ -117,18 +117,16 @@ public class ChestObject : MonoBehaviour
                     if (null == decidedItem)
                     {
                         int indexOfMod = ModsManager.Instance.GetMod(chestTiers[tier].lootTable[i].modType, out SO_Mod returnedMod);
+                        if (-1 == indexOfMod) continue;
+
                         decidedItem = returnedMod;
 
-                        ModsManager.Instance.PurchasedMods.Add(decidedItem);
+                        if (!ModsManager.Instance.PurchasedMods.Contains(decidedItem)) // stat mods get re-added
+                            ModsManager.Instance.PurchasedMods.Add(decidedItem);
 
-                        //int indexOfMod = ModsManager.Instance.AvailableMods.IndexOf(decidedItem);
-                        SO_Mod returnValue = decidedItem.Consume();
-
-                        // if consuming the mod yields a mod (stat mod), then place that in the spot,
+                        // if a mod (stat mod), then keep it in that in the spot,
                         // otherwise, remove this entry in available mods
-                        if (null != returnValue)
-                            ModsManager.Instance.AvailableMods[indexOfMod] = returnValue;
-                        else
+                        if (((SO_Mod)decidedItem).Type != ModType.Stats)
                             ModsManager.Instance.AvailableMods.RemoveAt(indexOfMod);
                     }
 
@@ -144,15 +142,12 @@ public class ChestObject : MonoBehaviour
                     {
                         int indexOfMod = ModsManager.Instance.AvailableMods.IndexOf(decidedItem);
 
-                        ModsManager.Instance.PurchasedMods.Add(decidedItem);
+                        if (!ModsManager.Instance.PurchasedMods.Contains(decidedItem)) // stat mods get re-added
+                            ModsManager.Instance.PurchasedMods.Add(decidedItem);
 
-                        SO_Mod returnValue = decidedItem.Consume();
-
-                        // if consuming the mod yields a mod (stat mod), then place that in the spot,
+                        // if a mod (stat mod), then keep it in that in the spot,
                         // otherwise, remove this entry in available mods
-                        if (null != returnValue) 
-                            ModsManager.Instance.AvailableMods[indexOfMod] = returnValue;
-                        else
+                        if (((SO_Mod)decidedItem).Type != ModType.Stats)                         
                             ModsManager.Instance.AvailableMods.RemoveAt(indexOfMod);
                     }
 
@@ -185,8 +180,11 @@ public class ChestObject : MonoBehaviour
     // chest is gone after viewing the reward screen
     public void DisposeChest()
     {
-        for (int i = 0; i < rewards.Count; ++i) 
+        for (int i = 0; i < rewards.Count; ++i)
+        {
             rewards[i].Activate(GlobalSettings.Instance.player);
+            rewards[i].Consume();
+        }
 
         Instantiate(deathFX, transform.position, Quaternion.identity);
         Destroy(gameObject);

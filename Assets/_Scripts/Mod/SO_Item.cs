@@ -42,7 +42,7 @@ public class SO_Item : ScriptableObject
     public virtual string GetDescription()
     {
         string desc = Description;
-        if (Quantity > 1) desc += " x" + Quantity;
+        if (Quantity > 1) desc += " (" + Quantity + ")";
         return desc;
     }
 

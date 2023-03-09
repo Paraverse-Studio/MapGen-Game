@@ -24,7 +24,7 @@ public class ModsManager : MonoBehaviour
         int index = -1;
 
         List<SO_Item> filtered = new();
-        int random;
+        int random = -1;
 
         if (type == ModType.Stats) 
         {
@@ -39,9 +39,12 @@ public class ModsManager : MonoBehaviour
             filtered = AvailableMods.Where(mod => null != mod && (mod is SO_Mod) && ((SO_Mod)mod).Type == type).ToList();            
         }
 
-        random = Random.Range(0, filtered.Count - 1);
-        mod = (SO_Mod)filtered[random];
-        index = AvailableMods.IndexOf(filtered[random]);
+        if (filtered.Count > 0) // if it's 0, then no mod was found, list is empty of any available mod
+        {
+            random = Random.Range(0, filtered.Count - 1);
+            mod = (SO_Mod)filtered[random];
+            index = AvailableMods.IndexOf(filtered[random]);
+        }
 
         return index;
     }

@@ -1,5 +1,6 @@
 using System.Collections;
 using System.Collections.Generic;
+using TMPro;
 using UnityEngine;
 
 public class ItemDisplayCreator : MonoBehaviour
@@ -12,6 +13,9 @@ public class ItemDisplayCreator : MonoBehaviour
 
     [SerializeField]
     private ItemCard _itemCardPrefab;
+
+    [SerializeField]
+    private TextMeshProUGUI _contextText;
 
     private GameObject _player;
     private List<SO_Item> _items;
@@ -35,30 +39,17 @@ public class ItemDisplayCreator : MonoBehaviour
         {
             ItemCard card = Instantiate(_itemCardPrefab, _container);
             card.Item = _items[i];
+            card.descriptionLabel = _contextText;
             card.UpdateDisplay();
             _createdObjects.Add(card.gameObject);
         }        
 
         _closeEvent = closeCallback;
         gameObject.SetActive(true);
-        //if (_refresher) _refresher.RefreshContentFitters();
     }
 
-    private void GiveItemsToPlayer()
-    {
-        for (int i = 0; i < _items.Count; ++i)
-        {
-            Debug.Log($"Obtained item {_items[i].GetTitle()}!");
-            _items[i].Activate(_player);            
-        }
-    }
-
-    // With this design, we want to give player the rewards when the window is closed.
-    // in case any obtaining of any item shows a VFX.
     public void OnDisable()
     {
-        GiveItemsToPlayer();
-
         for (int i = _createdObjects.Count - 1; i > 0; --i)
         {
             Destroy(_createdObjects[i]);
