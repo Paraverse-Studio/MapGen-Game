@@ -10,6 +10,7 @@ public class MapCreator : MonoBehaviour
     [System.Serializable]
     public struct MapGenDataPair
     {
+        public string mapName;
         public SO_MapGenData map;
         public SO_MapGenData bossMap;
         public SO_MapGenData rewardMap;
@@ -33,7 +34,8 @@ public class MapCreator : MonoBehaviour
     public float enemyScalingPerRound;
 
     [Header("UI References")]
-    public TextMeshProUGUI objectiveText;
+    public TextMeshProUGUI objectiveTitle;
+    public TextMeshProUGUI objectiveSubtitle;
 
     [Header("[Run-time data]")]
     public bool IsBossMap;
@@ -42,6 +44,7 @@ public class MapCreator : MonoBehaviour
 
     private int roundsSinceLastBossMap = 0;
     private int roundsSincelastRewardMap = 0;
+    private int mapIndex;
 
     private void Awake()
     {
@@ -56,12 +59,12 @@ public class MapCreator : MonoBehaviour
         int adjustedRoundNumber = roundNumber - 1;
 
         // Determining biome
-        int mapIndex = adjustedRoundNumber / switchMapAfterNumOfRounds;
+        mapIndex = adjustedRoundNumber / switchMapAfterNumOfRounds;
 
         // Determining type of map (normal, boss, reward)
         if (roundsSincelastRewardMap >= rewardMapGapLimit.x)
         {
-            float chance = Mathf.Max(0, 1.0f / (rewardMapGapLimit.y - rewardMapGapLimit.x));
+            float chance = Mathf.Max(0, 1.0f / (rewardMapGapLimit.y - rewardMapGapLimit.x + 1));
             if (Random.value <= chance || roundsSincelastRewardMap >= rewardMapGapLimit.y)
             {
                 IsRewardMap = true;
@@ -69,9 +72,9 @@ public class MapCreator : MonoBehaviour
                 roundsSincelastRewardMap = 0;
             }
         }
-        else if (roundsSinceLastBossMap >= bossMapGapLimit.x)
+        if (roundsSinceLastBossMap >= bossMapGapLimit.x)
         {
-            float chance = Mathf.Max(0, 1.0f / (bossMapGapLimit.y - bossMapGapLimit.x));
+            float chance = Mathf.Max(0, 1.0f / (bossMapGapLimit.y - bossMapGapLimit.x + 1));
             if (Random.value <= chance || roundsSinceLastBossMap >= bossMapGapLimit.y)
             {
                 IsBossMap = true;
@@ -82,7 +85,7 @@ public class MapCreator : MonoBehaviour
                 roundsSincelastRewardMap = int.MaxValue; 
             }
         }
-        else
+        if (!IsBossMap && !IsRewardMap)
         {
             MapGeneration.Instance.M = maps[mapIndex].map;
         }
@@ -92,6 +95,9 @@ public class MapCreator : MonoBehaviour
 
         // Finally, start the map building
         MapGeneration.Instance.RegenerateMap();
+
+        if (IsRewardMap) GameLoopManager.Instance.CompletionPredicate = GameLoopManager.CompletionPredicateType.EnjoyReward;
+        else GameLoopManager.Instance.CompletionPredicate = GameLoopManager.CompletionPredicateType.KillAllEnemies;
 
         // Post map generation steps
         UpdateObjectiveText();
@@ -110,14 +116,26 @@ public class MapCreator : MonoBehaviour
         {
             UpdateObjectiveText(EnemiesManager.Instance.Enemies);
         }
+        else if (GameLoopManager.Instance.CompletionPredicate == GameLoopManager.CompletionPredicateType.EnjoyReward)
+        {
+            UpdateObjectiveText(maps[mapIndex].mapName);                       
+        }
         // Create update objective texts for other types of completion predicates
+    }
+
+    public void UpdateObjectiveText(string mapName)
+    {
+        objectiveTitle.text = mapName;
+        objectiveSubtitle.text = $"Savor the tranquility";
     }
 
     public void UpdateObjectiveText(List<MobController> enemies)
     {
         int enemiesCount = (null == enemies ? EnemiesManager.Instance.EnemiesCount : enemies.Count);
         if (EnemiesSpawned == 0) EnemiesSpawned = enemiesCount;
-        objectiveText.text = $"Remaining: {enemiesCount} / {EnemiesSpawned}";
+        objectiveTitle.text = enemiesCount == 1? "Defeat the colossus!" : "Defeat the enemies!";
+        objectiveSubtitle.text = $"Remaining: {enemiesCount} / {EnemiesSpawned}";
+
     }
 
 

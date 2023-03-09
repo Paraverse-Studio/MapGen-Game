@@ -1101,6 +1101,7 @@ public class MapGeneration : MonoBehaviour
                 int newX = (int)Mathf.Round(x + randomXOffset);
                 int newZ = (int)Mathf.Round(z + randomZOffset);
 
+                if (!IsInGrid(new Vector3(newX, 0, newZ))) continue;
                 if (null == gridOccupants[newX, newZ].block) continue;
                 if (true == gridOccupants[newX, newZ].hasProp) continue;
 

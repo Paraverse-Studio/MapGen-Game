@@ -55,6 +55,7 @@ public class GameLoopManager : MonoBehaviour
 
     public enum CompletionPredicateType
     {
+        EnjoyReward,
         KillAllEnemies,
         GetAllGems,
         SurviveXMinutes,
@@ -236,6 +237,9 @@ public class GameLoopManager : MonoBehaviour
 
             case CompletionPredicateType.SurviveXMinutes:
                 //implement
+                break;
+            case CompletionPredicateType.EnjoyReward:
+                _predicate = EnjoyReward;
                 break;
         }
     }
@@ -442,6 +446,11 @@ public class GameLoopManager : MonoBehaviour
         int enemiesLeft = EnemiesManager.Instance.EnemiesCount;
         //Debug.Log($"CURRENT PREDICATE: [KILL ALL ENEMIES] STATUS:  mapReady: {mapReady}  -  enemies left: {enemiesLeft}");
         return mapReady && enemiesLeft <= 0;
+    }
+
+    public bool EnjoyReward(bool mapReady)
+    {
+        return mapReady;
     }
 
     // Implement Get All Gems
