@@ -55,7 +55,16 @@ public class ModCard : ItemCard
         if (imageHolder) imageHolder.sprite = Item.Image;
         if (descriptionLabel) descriptionLabel.text = Item.GetDescription();
         if (loreLabel) loreLabel.text = Item.Lore;
-        if (costLabel) costLabel.text = Item.GetCost().ToString();
+        if (costLabel)
+        {
+            costLabel.text = Item.GetCost().ToString();
+        }
+        else
+        {
+            if (costHolder) costHolder.SetActive(false);
+        }
+        if (quantityLabel && Item.Quantity > 1) quantityLabel.text = "x" + Item.Quantity;
+        else if (quantityLabel) quantityLabel.text = string.Empty;
 
         // Mod specific
         if (typeLabel && Item is SO_Mod)
@@ -64,7 +73,7 @@ public class ModCard : ItemCard
         }
         else
         {
-
+            if (typeHolder) typeHolder.SetActive(false);
         }
         if (CardBG && Item is SO_Mod) CardBG.color = GetModColor((SO_Mod)Item, CardBG);
         if (CardOtherBG && Item is SO_Mod) CardOtherBG.color = GetModColor((SO_Mod)Item);

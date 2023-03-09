@@ -13,7 +13,10 @@ public class ItemCard : MonoBehaviour
     public TextMeshProUGUI descriptionLabel;
     public TextMeshProUGUI loreLabel;
     public TextMeshProUGUI costLabel;
+    public GameObject costHolder;
     public TextMeshProUGUI typeLabel;
+    public GameObject typeHolder;
+    public TextMeshProUGUI quantityLabel;
 
     public virtual void UpdateDisplay(System.Action clickCallBack = null)
     {
