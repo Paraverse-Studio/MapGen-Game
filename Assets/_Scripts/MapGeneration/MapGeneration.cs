@@ -419,7 +419,7 @@ public class MapGeneration : MonoBehaviour
 
 
 
-        /* * * * * * DECALS ON SHAPE OF MAP * * * * * */
+        /* * * * * * PAINTING ON SHAPE OF MAP * * * * * */
 
         currentPaintingBlock = M.blockSet.dirt;
 
@@ -989,6 +989,23 @@ public class MapGeneration : MonoBehaviour
         GameLoopManager.Instance.EndPortal = obj.GetComponent<EndPointTrigger>();
         propObjects.Add(obj);
         obj.transform.parent = temporaryObjFolder.transform;
+
+        // Chests
+        if (M.addChests)
+        {
+            int numChests = Random.Range((int)M.numOfChests.x, (int)M.numOfChests.y + 1);
+            for (int i = 0; i < numChests; ++i)
+            {
+                Block b = allObjects[Random.Range(0, allObjects.Count - 1)];
+
+                Vector3 r = Vector3.down * (Random.value < 0.5f ? 90f : 180f);
+                var chest = Instantiate(MapCreator.Instance.chestPrefab, 
+                    b.transform.position + new Vector3(0, 0.5f, 0), Quaternion.Euler(r.x, r.y, r.z));
+                chest.Initialize(0);
+                b.hasProp = true;
+                propObjects.Add(chest.gameObject);
+            }
+        }
     }
 
     private void AddEnemies()

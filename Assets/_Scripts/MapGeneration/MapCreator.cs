@@ -37,6 +37,9 @@ public class MapCreator : MonoBehaviour
     public TextMeshProUGUI objectiveTitle;
     public TextMeshProUGUI objectiveSubtitle;
 
+    [Header("Prefabs")]
+    public ChestObject chestPrefab;
+
     [Header("[Run-time data]")]
     public bool IsBossMap;
     public bool IsRewardMap;

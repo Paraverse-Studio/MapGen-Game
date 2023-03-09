@@ -31,9 +31,12 @@ public class Debugging : MonoBehaviour
         if (Input.GetKeyDown(KeyCode.U))
         {
             if (GlobalSettings.Instance.testGameObject)
-                Instantiate(GlobalSettings.Instance.testGameObject, 
-                    GlobalSettings.Instance.player.transform.position + new Vector3(0, 0.5f, 0) + (GlobalSettings.Instance.player.transform.forward * 3f), 
-                    GlobalSettings.Instance.player.transform.rotation);
+            {
+                Vector3 r = Vector3.down * (Random.value < 0.5f ? 90f : 180f);
+                Instantiate(GlobalSettings.Instance.testGameObject,
+                    GlobalSettings.Instance.player.transform.position + new Vector3(0, 0.5f, 0) + (GlobalSettings.Instance.player.transform.forward * 3f),
+                    Quaternion.Euler(r.x, r.y, r.z));
+            }
         }
     }
 
