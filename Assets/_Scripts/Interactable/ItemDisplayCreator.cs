@@ -22,7 +22,7 @@ public class ItemDisplayCreator : MonoBehaviour
     private System.Action _closeEvent;
     private List<GameObject> _createdObjects = new();
 
-    public void Display(List<SO_Item> items, System.Action closeCallback)
+    public void Display(List<SO_Item> items, System.Action closeCallback = null)
     {
         // if this screen is already open (a chest loot is being shown),
         // force the older instance to close, and provide the loot, and then show this one
@@ -42,7 +42,7 @@ public class ItemDisplayCreator : MonoBehaviour
             card.descriptionLabel = _contextText;
             card.UpdateDisplay();
             _createdObjects.Add(card.gameObject);
-        }        
+        }
 
         _closeEvent = closeCallback;
         gameObject.SetActive(true);
@@ -52,7 +52,7 @@ public class ItemDisplayCreator : MonoBehaviour
     {
         for (int i = _createdObjects.Count - 1; i > 0; --i)
         {
-            Destroy(_createdObjects[i]);
+            if (null != _createdObjects[i]) Destroy(_createdObjects[i]);
         }
 
         _closeEvent?.Invoke();

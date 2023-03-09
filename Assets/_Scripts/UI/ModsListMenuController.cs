@@ -12,4 +12,10 @@ public class ModsListMenuController : MonoBehaviour
     {
         _displayCreator.Display(ModsManager.Instance.PurchasedMods, null);
     }
+
+    public void UpdateDisplay()
+    {
+        _displayCreator.Display(ModsManager.Instance.PurchasedMods, null);
+    }
+
 }
