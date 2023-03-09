@@ -4,15 +4,18 @@ using System.Collections.Generic;
 using System.Linq;
 using UnityEngine;
 
-
 public class ChestObject : MonoBehaviour
 {
     [System.Serializable]
     public struct LootItem
     {
-        public SO_Item item;
-        public int amount;
         public float chance;
+        public bool randomMod;
+        public ModType modType;
+        public bool randomConsumable;
+        [MinMaxSlider(1f, 500f)]
+        public Vector2 consumableAmount;
+        public SO_Item overrideItem;
     }
 
     [System.Serializable]
@@ -37,6 +40,7 @@ public class ChestObject : MonoBehaviour
 
     private Interactable _interactable;
     private Selectable _selectable;
+    List<SO_Item> rewards = new();
 
     // Start is called before the first frame update
     void Start()
@@ -81,35 +85,76 @@ public class ChestObject : MonoBehaviour
 
     public void OpenChest()
     {
-        // 1. Decide the loot
-        List<SO_Item> rewards = new List<SO_Item> { chestTiers[tier].lootTable[0].item };
+        // 1. Decide the loot        
 
         // Generate loot randomly until you have all
         int numToSpawn = (int)Random.Range(chestTiers[tier].numToSpawn.x, chestTiers[tier].numToSpawn.y);
 
+        int safetyCounter = 0;
         // Keep performing following algorithm until required num of reward items are calculated
         while (rewards.Count < numToSpawn)
         {
             // loot table logic
-            float total = chestTiers[tier].lootTable.Sum(lootItem => lootItem.chance);
+            safetyCounter++;
+            if (safetyCounter > 1000) break;
+            float total = 0;
+            foreach (LootItem lootItem in chestTiers[tier].lootTable)
+            {
+                total += lootItem.chance;
+            }
+
             float randomNumber = Random.Range(0, total);
 
             for (int i = 0; i < chestTiers[tier].lootTable.Count; ++i)
             {
                 if (randomNumber <= chestTiers[tier].lootTable[i].chance)
                 {
-                    SO_Item decidedItem = chestTiers[tier].lootTable[i].item;
+                    SO_Item decidedItem = chestTiers[tier].lootTable[i].overrideItem;
 
-                    // by this point, an item is decided to add to the list of rewards to give. 
+                    // by this point, an option from the loot table is decided to add to the list of rewards to give. 
 
-                    // if it's a consumable type, modify its quantity
-                    if (decidedItem is SO_Consumable)
+                    // If no SO_item is provided in the entry, then must be a random mod from randomMod property
+                    if (null == decidedItem)
                     {
-                        
+                        int indexOfMod = ModsManager.Instance.GetMod(chestTiers[tier].lootTable[i].modType, out SO_Mod returnedMod);
+                        decidedItem = returnedMod;
+
+                        ModsManager.Instance.PurchasedMods.Add(decidedItem);
+
+                        //int indexOfMod = ModsManager.Instance.AvailableMods.IndexOf(decidedItem);
+                        SO_Mod returnValue = decidedItem.Consume();
+
+                        // if consuming the mod yields a mod (stat mod), then place that in the spot,
+                        // otherwise, remove this entry in available mods
+                        if (null != returnValue)
+                            ModsManager.Instance.AvailableMods[indexOfMod] = returnValue;
+                        else
+                            ModsManager.Instance.AvailableMods.RemoveAt(indexOfMod);
                     }
 
-                    // If it's a mod,
-                    // Remove this mod from available pool, and add to purchased pool (since mods are unique and limited)
+                    // if it's a consumable type, modify its quantity
+                    else if (decidedItem is SO_Consumable)
+                    {
+                        float amount = Random.Range(chestTiers[tier].lootTable[i].consumableAmount.x, chestTiers[tier].lootTable[i].consumableAmount.y);
+                        decidedItem.Quantity = (int)amount;
+                    }
+
+                    // If it's a mod, remove it from available pool, and add to purchased pool (since mods are unique and limited)
+                    else if (decidedItem is SO_Mod)
+                    {
+                        int indexOfMod = ModsManager.Instance.AvailableMods.IndexOf(decidedItem);
+
+                        ModsManager.Instance.PurchasedMods.Add(decidedItem);
+
+                        SO_Mod returnValue = decidedItem.Consume();
+
+                        // if consuming the mod yields a mod (stat mod), then place that in the spot,
+                        // otherwise, remove this entry in available mods
+                        if (null != returnValue) 
+                            ModsManager.Instance.AvailableMods[indexOfMod] = returnValue;
+                        else
+                            ModsManager.Instance.AvailableMods.RemoveAt(indexOfMod);
+                    }
 
                     // finally, all tuning of the reward item are done, so add it to the rewards list
                     rewards.Add(decidedItem);
@@ -123,10 +168,7 @@ public class ChestObject : MonoBehaviour
                 {
                     randomNumber -= chestTiers[tier].lootTable[i].chance;
                 }
-            }
-
-            
-
+            }       
         }
 
         // 2. Open the rewards UI and display the loot
@@ -138,10 +180,14 @@ public class ChestObject : MonoBehaviour
         Destroy(chestTiers[tier].modelGlow.gameObject);
     }
 
+    // 3. Step 3 is when the player closes the menu, the mods are activated
     // This is called from closing the rewards screen, because we want player to see
     // chest is gone after viewing the reward screen
     public void DisposeChest()
     {
+        for (int i = 0; i < rewards.Count; ++i) 
+            rewards[i].Activate(GlobalSettings.Instance.player);
+
         Instantiate(deathFX, transform.position, Quaternion.identity);
         Destroy(gameObject);
     }

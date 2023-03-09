@@ -1373,29 +1373,54 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   chestObject: {fileID: 7913104399252966949}
-  chestGlowFX: {fileID: 2713682400765625660}
   deathFX: {fileID: 1043836665719942606, guid: 75c1b160671ce934fad50936633acef1, type: 3}
+  tier: 0
   chestTiers:
   - chestName: Common Chest
     model: {fileID: 7829095000730597899}
     modelGlow: {fileID: 8326200097660709432}
-    rewards:
-    - {fileID: 11400000, guid: 99c5653d962ac134cafaca0de919d501, type: 2}
+    numToSpawn: {x: 1, y: 1}
+    lootTable:
+    - chance: 33
+      randomMod: 0
+      modType: 0
+      randomConsumable: 0
+      consumableAmount: {x: 50, y: 100}
+      overrideItem: {fileID: 11400000, guid: 99c5653d962ac134cafaca0de919d501, type: 2}
+    - chance: 33
+      randomMod: 1
+      modType: 0
+      randomConsumable: 0
+      consumableAmount: {x: 1, y: 1}
+      overrideItem: {fileID: 0}
+    - chance: 33
+      randomMod: 1
+      modType: 2
+      randomConsumable: 0
+      consumableAmount: {x: 1, y: 1}
+      overrideItem: {fileID: 0}
   - chestName: Rare Chest
     model: {fileID: 5356637862389719579}
     modelGlow: {fileID: 7420352888443394520}
-    rewards:
-    - {fileID: 11400000, guid: 56e0042a2f708404088fa81376d7d5ed, type: 2}
-    - {fileID: 11400000, guid: 99c5653d962ac134cafaca0de919d501, type: 2}
+    numToSpawn: {x: 2, y: 2}
+    lootTable:
+    - chance: 50
+      randomMod: 0
+      modType: 0
+      randomConsumable: 0
+      consumableAmount: {x: 0, y: 0}
+      overrideItem: {fileID: 0}
+    - chance: 50
+      randomMod: 0
+      modType: 0
+      randomConsumable: 0
+      consumableAmount: {x: 0, y: 0}
+      overrideItem: {fileID: 0}
   - chestName: Legendary Chest
     model: {fileID: 2442988217512824695}
     modelGlow: {fileID: 5305634674721767675}
-    rewards:
-    - {fileID: 11400000, guid: b91039cf58ed13b4da38c2c99f21484a, type: 2}
-    - {fileID: 11400000, guid: be714285554494c47bbe057e7f165a38, type: 2}
-    - {fileID: 11400000, guid: 99c5653d962ac134cafaca0de919d501, type: 2}
-    - {fileID: 11400000, guid: 0242903ab842a35468a9a45b82dcfbbd, type: 2}
-  tier: -1
+    numToSpawn: {x: 3, y: 4}
+    lootTable: []
 --- !u!1 &7827639701495337705
 GameObject:
   m_ObjectHideFlags: 0
@@ -2284,11 +2309,6 @@ PrefabInstance:
       objectReference: {fileID: 0}
     m_RemovedComponents: []
   m_SourcePrefab: {fileID: 100100000, guid: 6f6fd83b75789ae4dacf4f2fca508090, type: 3}
---- !u!198 &2713682400765625660 stripped
-ParticleSystem:
-  m_CorrespondingSourceObject: {fileID: 7318447384532491757, guid: 6f6fd83b75789ae4dacf4f2fca508090, type: 3}
-  m_PrefabInstance: {fileID: 4627649669318531281}
-  m_PrefabAsset: {fileID: 0}
 --- !u!4 &3490610984595650314 stripped
 Transform:
   m_CorrespondingSourceObject: {fileID: 8091159736403701723, guid: 6f6fd83b75789ae4dacf4f2fca508090, type: 3}

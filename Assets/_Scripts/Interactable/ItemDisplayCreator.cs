@@ -41,7 +41,7 @@ public class ItemDisplayCreator : MonoBehaviour
 
         _closeEvent = closeCallback;
         gameObject.SetActive(true);
-        if (_refresher) _refresher.RefreshContentFitters();
+        //if (_refresher) _refresher.RefreshContentFitters();
     }
 
     private void GiveItemsToPlayer()
@@ -49,13 +49,7 @@ public class ItemDisplayCreator : MonoBehaviour
         for (int i = 0; i < _items.Count; ++i)
         {
             Debug.Log($"Obtained item {_items[i].GetTitle()}!");
-            _items[i].Activate(_player);
-            if (_items[i] is SO_Mod)
-            {
-                // PUT THE BELOW CODE IN CHEST CODE WHERE THESE REWARDS ARE DECIDED
-                // AND ALSO REMOVE THEM FROM AVAILABLEMODS IN THAT SAME SPOT (SAME FUNCITON)
-                ShopManager.Instance.PurchasedMods.Add(_items[i]);
-            }
+            _items[i].Activate(_player);            
         }
     }
 
