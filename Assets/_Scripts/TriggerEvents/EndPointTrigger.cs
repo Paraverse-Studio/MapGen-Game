@@ -23,6 +23,19 @@ public class EndPointTrigger : MonoBehaviour
         _activated = true;
     }
 
+    public void Interact()
+    {
+        if (!_activated)
+        {
+            AnnouncementManager.Instance.QueueAnnouncementUnique(new Announcement().AddText("Defeat all enemies to open the gate!"));
+        }
+        else
+        {
+            GameLoopManager.Instance.EndRound(successfulRound: true);
+            _activated = false;
+        }
+    }
+
     private void OnTriggerEnter(Collider other)
     {
         if (!_activated)

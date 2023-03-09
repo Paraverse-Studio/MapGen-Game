@@ -170,6 +170,7 @@ public class ChestObject : MonoBehaviour
         ChestsManager.Instance.ItemDisplay.Display(rewards, DisposeChest);
 
         _interactable.OnInteract.RemoveListener(OpenChest);
+        _interactable.interactable = false;
         Destroy(_interactable);
         Destroy(_selectable);
         Destroy(chestTiers[tier].modelGlow.gameObject);
