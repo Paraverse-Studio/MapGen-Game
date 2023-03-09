@@ -263,7 +263,7 @@ public class GameLoopManager : MonoBehaviour
         // DETERMINE HOW ROUND ENDED (SUCCESSFUL OR FAILED OR BOSS DEFEATED?)
         if (successfulRound)
         {
-            if (!MapCreator.Instance.IsBossMap) roundCompletionType = RoundCompletionType.Completed;
+            if (MapCreator.Instance.mapType != MapType.boss) roundCompletionType = RoundCompletionType.Completed;
             else roundCompletionType = RoundCompletionType.BossDefeated;
         }
         else
@@ -302,7 +302,7 @@ public class GameLoopManager : MonoBehaviour
         EnemiesManager.Instance.ResetEnemiesList();
         Destroy(EndPortal);
 
-        float score = ScoreFormula.CalculateScore(totalEnemiesSpawned * (MapCreator.Instance.IsBossMap ? 50f : 10f), roundTimer.GetTime(), playerMaxHealth, damageTaken);
+        float score = ScoreFormula.CalculateScore(totalEnemiesSpawned * (MapCreator.Instance.mapType == MapType.boss ? 50f : 10f), roundTimer.GetTime(), playerMaxHealth, damageTaken);
         goldToReward = (int)(score * 1);
 
         resultScreen.timeTakenText.text = UtilityFunctions.GetFormattedTime(roundTimer.GetTime());

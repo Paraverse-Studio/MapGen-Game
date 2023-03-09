@@ -5,6 +5,12 @@ using System.Collections.Generic;
 using TMPro;
 using UnityEngine;
 
+[System.Serializable]
+public enum MapType
+{
+    normal, boss, reward
+}
+
 public class MapCreator : MonoBehaviour
 {
     [System.Serializable]
@@ -14,7 +20,7 @@ public class MapCreator : MonoBehaviour
         public SO_MapGenData map;
         public SO_MapGenData bossMap;
         public SO_MapGenData rewardMap;
-    }
+    }    
 
     public static MapCreator Instance;
 
@@ -41,8 +47,7 @@ public class MapCreator : MonoBehaviour
     public ChestObject chestPrefab;
 
     [Header("[Run-time data]")]
-    public bool IsBossMap;
-    public bool IsRewardMap;
+    public MapType mapType;
     public int EnemiesSpawned;
 
     private int roundsSinceLastBossMap = 0;
@@ -58,8 +63,7 @@ public class MapCreator : MonoBehaviour
     {
         ResetRuntimeVariables();
 
-        int roundNumber = GameLoopManager.Instance.nextRoundNumber;
-        int adjustedRoundNumber = roundNumber - 1;
+        int adjustedRoundNumber = GameLoopManager.Instance.nextRoundNumber - 1;
 
         // Determining biome
         mapIndex = adjustedRoundNumber / switchMapAfterNumOfRounds;
@@ -70,9 +74,7 @@ public class MapCreator : MonoBehaviour
             float chance = Mathf.Max(0, 1.0f / (rewardMapGapLimit.y - rewardMapGapLimit.x + 1));
             if (Random.value <= chance || roundsSincelastRewardMap >= rewardMapGapLimit.y)
             {
-                IsRewardMap = true;
-                MapGeneration.Instance.M = maps[mapIndex].rewardMap;
-                roundsSincelastRewardMap = 0;
+                SetMapType(MapType.reward);
             }
         }
         if (roundsSinceLastBossMap >= bossMapGapLimit.x)
@@ -80,37 +82,53 @@ public class MapCreator : MonoBehaviour
             float chance = Mathf.Max(0, 1.0f / (bossMapGapLimit.y - bossMapGapLimit.x + 1));
             if (Random.value <= chance || roundsSinceLastBossMap >= bossMapGapLimit.y)
             {
-                IsBossMap = true;
-                MapGeneration.Instance.M = maps[mapIndex].bossMap;
-                roundsSinceLastBossMap = 0;
-
-                // *NEW: we want there to be a reward map right after a boss map guaranteed
-                roundsSincelastRewardMap = int.MaxValue; 
+                SetMapType(MapType.boss);                
             }
         }
-        if (!IsBossMap && !IsRewardMap)
-        {
-            MapGeneration.Instance.M = maps[mapIndex].map;
-        }
 
-        if (!IsBossMap) roundsSinceLastBossMap++;
-        if (!IsRewardMap) roundsSincelastRewardMap++;
+        SetMapType(mapType);
 
         // Finally, start the map building
         MapGeneration.Instance.RegenerateMap();
 
-        if (IsRewardMap) GameLoopManager.Instance.CompletionPredicate = GameLoopManager.CompletionPredicateType.EnjoyReward;
+        if (mapType == MapType.reward) GameLoopManager.Instance.CompletionPredicate = GameLoopManager.CompletionPredicateType.EnjoyReward;
         else GameLoopManager.Instance.CompletionPredicate = GameLoopManager.CompletionPredicateType.KillAllEnemies;
 
         // Post map generation steps
         UpdateObjectiveText();
     }
 
+    private void SetMapType(MapType type)
+    {
+        roundsSinceLastBossMap++;
+        roundsSincelastRewardMap++;
+
+        mapType = type;
+        switch (type)
+        {
+            case MapType.normal:
+                MapGeneration.Instance.M = maps[mapIndex].map;
+                break;
+
+            case MapType.boss:
+                MapGeneration.Instance.M = maps[mapIndex].bossMap;
+                roundsSinceLastBossMap = 0;
+
+                // *NEW: we want there to be a reward map right after a boss map guaranteed
+                roundsSincelastRewardMap = int.MaxValue;
+                break;
+
+            case MapType.reward:
+                MapGeneration.Instance.M = maps[mapIndex].rewardMap;
+                roundsSincelastRewardMap = 0;
+                break;
+        }
+    }
+
     private void ResetRuntimeVariables()
     {
         EnemiesSpawned = 0;
-        IsBossMap = false;
-        IsRewardMap = false;
+        mapType = MapType.normal;
     }
 
     public void UpdateObjectiveText()
@@ -138,9 +156,7 @@ public class MapCreator : MonoBehaviour
         if (EnemiesSpawned == 0) EnemiesSpawned = enemiesCount;
         objectiveTitle.text = enemiesCount == 1? "Defeat the colossus!" : "Defeat the enemies!";
         objectiveSubtitle.text = $"Remaining: {enemiesCount} / {EnemiesSpawned}";
-
     }
-
 
 
 }
