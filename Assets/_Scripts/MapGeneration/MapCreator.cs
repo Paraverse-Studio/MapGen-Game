@@ -77,6 +77,9 @@ public class MapCreator : MonoBehaviour
                 IsBossMap = true;
                 MapGeneration.Instance.M = maps[mapIndex].bossMap;
                 roundsSinceLastBossMap = 0;
+
+                // *NEW: we want there to be a reward map right after a boss map guaranteed
+                roundsSincelastRewardMap = int.MaxValue; 
             }
         }
         else
