@@ -87,7 +87,7 @@ public class SO_StatMod : SO_Mod
                     _player.AbilityPower.UpdateBaseValue(_player.AbilityPower.BaseValue + Mathf.CeilToInt(statPair.value));
                     break;
                 case StatType.Health:
-                    _player.MaxHealth.UpdateBaseValue(_player.MaxHealth.BaseValue + Mathf.CeilToInt(statPair.value));
+                    _player.UpdateMaxHealth(Mathf.CeilToInt(statPair.value));
                     break;
                 case StatType.Energy:
                     _player.UpdateMaxEnergy(Mathf.CeilToInt(statPair.value));
