@@ -18,6 +18,18 @@ public class ModsManager : MonoBehaviour
         Instance = this;
     }
 
+    private void Start()
+    {
+        Object[] loadedObjects = Resources.LoadAll("ITEMS", typeof(SO_Item));
+        AvailableMods.Clear();
+
+        foreach (Object obj in loadedObjects)
+        {
+            AvailableMods.Add((SO_Item)obj);
+            AvailableMods[AvailableMods.Count - 1].Reset();
+        }
+    }
+
     public int GetMod(ModType type, out SO_Mod mod)
     {
         mod = null;
