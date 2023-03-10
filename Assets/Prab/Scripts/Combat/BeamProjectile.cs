@@ -5,12 +5,15 @@ using UnityEngine;
 public class BeamProjectile : Projectile
 {
     [Header("Beam Properties")]
-    protected MobCombat targetMob;
+    //protected MobCombat targetMob;
     [SerializeField, Tooltip("The projectile is a beam.")]
     protected bool isBeam = false;
     private float beamRadius;
     private float beamLength = 100; //Ingame beam length
     private float beamWidth = 1; //Ingame beam width
+    private LayerMask targetLayer; //Ingame beam width
+    [SerializeField]
+    private bool isSticky = false;
 
     [Header("Beam Prefabs")]
     public GameObject beamLineRendererPrefab; //Put a prefab with a line renderer onto here.
@@ -30,8 +33,8 @@ public class BeamProjectile : Projectile
     public float textureLengthScale = 1f;   //Set this to the horizontal length of your texture relative to the vertical. 
                                             //Example: if texture is 200 pixels in height and 600 in length, set this to 3
 
-    public void Init(MobCombat mob, Vector3 target, ScalingStatData statData, 
-        GameObject beamStart, float beamRadius, float beamLength, float beamWidth)
+    public void Init(MobCombat mob, Vector3 target, ScalingStatData statData, GameObject beamStart, 
+        float beamRadius, float beamLength, float beamWidth, LayerMask targetLayer, bool isSticky)
     {
         this.target = target;
         this.mob = mob;
@@ -40,6 +43,8 @@ public class BeamProjectile : Projectile
         this.beamRadius = beamRadius;
         this.beamLength = beamLength;
         this.beamWidth = beamWidth;
+        this.targetLayer = targetLayer;
+        this.isSticky = isSticky;
         pierce = true; // Enables pierce for beams
     }
 
@@ -51,15 +56,15 @@ public class BeamProjectile : Projectile
             line.SetPosition(0, transform.position);
 
             Vector3 end;
-            if (beamCollides && Physics.CapsuleCast(transform.position + (transform.forward * 0.5f), transform.position + (transform.up * -0.5f), beamRadius, transform.forward, out RaycastHit hit, beamLength)) //Checks for collision
+            if (beamCollides && Physics.CapsuleCast(transform.position + (transform.forward * -3f), transform.position + (transform.forward * -2.5f), beamRadius, transform.forward, out RaycastHit hit, beamLength, targetLayer)) //Checks for collision
             {
-                end = hit.point - (transform.forward * beamEndOffset);
+                if (isSticky)
+                    end = hit.point - (transform.forward * beamEndOffset);
+                else
+                    end = transform.position + (transform.forward * beamLength);
 
                 if (hit.transform.CompareTag(targetTag) && dotTimer >= dotIntervalTimer)
                 {
-                    if (null == mob)
-                        targetMob = hit.transform.GetComponentInChildren<MobCombat>();
-
                     dotTimer = 0f;
                     DamageLogic(hit.collider);
                 }
@@ -86,8 +91,6 @@ public class BeamProjectile : Projectile
             line.material.mainTextureScale = new Vector2(distance / textureLengthScale, 1); //This sets the scale of the texture so it doesn't look stretched
             line.material.mainTextureOffset -= new Vector2(Time.deltaTime * textureScrollSpeed, 0); //This scrolls the texture along the beam if not set to 0
         }
-        else
-            targetMob = null;
     }
 
     public void SpawnBeam() //This function spawns the prefab with linerenderer
@@ -97,6 +100,8 @@ public class BeamProjectile : Projectile
             beam = Instantiate(beamLineRendererPrefab);
             if (beamEndPrefab)
                 beamEnd = Instantiate(beamEndPrefab);
+            if (beamStartPrefab)
+                beamStart = Instantiate(beamStartPrefab);
 
             beam.transform.position = transform.position;
             beam.transform.parent = transform;

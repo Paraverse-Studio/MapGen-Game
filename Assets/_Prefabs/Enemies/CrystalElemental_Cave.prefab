@@ -72,7 +72,10 @@ MonoBehaviour:
     healthScaling: 0
   laserRadius: 1.5
   laserLength: 100
-  laserWidth: 1
+  laserWidth: 1.5
+  targetLayer:
+    serializedVersion: 2
+    m_Bits: 491511
   chargeFX: {fileID: 147199183070441786, guid: 745a28b4649613c44bbca3590d649613, type: 3}
   chargeOrigin: {fileID: 1554990188}
   skillStartTimer: 1
@@ -992,7 +995,7 @@ MonoBehaviour:
   _minRange: 0
   _maxRange: 25
   cooldown: 7
-  cost: 10
+  cost: 0
   animName: BeamPrepare
   isBasicAttack: 0
   _isMelee: 0
@@ -1014,6 +1017,9 @@ MonoBehaviour:
   laserRadius: 1
   laserLength: 100
   laserWidth: 1
+  targetLayer:
+    serializedVersion: 2
+    m_Bits: 491511
   chargeFX: {fileID: 147199183070441786, guid: 745a28b4649613c44bbca3590d649613, type: 3}
   chargeOrigin: {fileID: 8375894351906716979}
   skillStartTimer: 5
@@ -1886,7 +1892,7 @@ GameObject:
   - component: {fileID: 3787384781022177466}
   - component: {fileID: 3787384781022177461}
   - component: {fileID: 5655811892658322798}
-  m_Layer: 0
+  m_Layer: 15
   m_Name: CrystalElemental
   m_TagString: Enemy
   m_Icon: {fileID: 0}

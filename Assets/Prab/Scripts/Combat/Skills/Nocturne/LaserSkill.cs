@@ -12,6 +12,10 @@ public class LaserSkill : MobSkill, IMobSkill
     [SerializeField]
     protected float laserWidth = 1f;                     
     [SerializeField]
+    protected LayerMask targetLayer;                     
+    [SerializeField]
+    private bool isSticky = false;
+    [SerializeField]
     protected GameObject chargeFX;
     [SerializeField]
     protected Transform chargeOrigin;
@@ -100,7 +104,7 @@ public class LaserSkill : MobSkill, IMobSkill
 
         GameObject go = Instantiate(projData.projPf, projData.projOrigin);
         BeamProjectile beam = go.GetComponentInChildren<BeamProjectile>();
-        beam.Init(mob, target.position, scalingStatData, beam.gameObject, laserRadius, laserLength, laserWidth);
+        beam.Init(mob, target.position, scalingStatData, beam.gameObject, laserRadius, laserLength, laserWidth, targetLayer, isSticky);
         beam.SpawnBeam();
     }
     #endregion
