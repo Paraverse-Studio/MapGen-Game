@@ -8512,7 +8512,7 @@ RectTransform:
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
   m_AnchorMin: {x: 0, y: 0}
   m_AnchorMax: {x: 0.24, y: 1}
-  m_AnchoredPosition: {x: -49.998688, y: 100}
+  m_AnchoredPosition: {x: -49.99875, y: 100}
   m_SizeDelta: {x: -100, y: -420}
   m_Pivot: {x: 1, y: 0}
 --- !u!114 &248483446
@@ -14532,7 +14532,7 @@ RectTransform:
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
   m_AnchorMin: {x: 0, y: 0}
   m_AnchorMax: {x: 1, y: 0}
-  m_AnchoredPosition: {x: -35.000183, y: 25}
+  m_AnchoredPosition: {x: -35.000244, y: 25}
   m_SizeDelta: {x: -60, y: 50}
   m_Pivot: {x: 1, y: 0}
 --- !u!114 &500510013
@@ -32852,7 +32852,7 @@ RectTransform:
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
   m_AnchorMin: {x: 0.5, y: 0}
   m_AnchorMax: {x: 0.5, y: 0}
-  m_AnchoredPosition: {x: 0, y: -20.000061}
+  m_AnchoredPosition: {x: 0, y: -20.00055}
   m_SizeDelta: {x: 1922, y: 1229.9604}
   m_Pivot: {x: 0.5, y: 1}
 --- !u!114 &1128975018
@@ -35144,11 +35144,13 @@ MonoBehaviour:
     rewardMap: {fileID: 11400000, guid: 3f7112df867a3a24ea0b5c57be99c8bb, type: 2}
   switchMapAfterNumOfRounds: 10
   bossMapGapLimit: {x: 4, y: 5}
-  rewardMapGapLimit: {x: 3, y: 4}
+  rewardMapGapLimit: {x: 0, y: 0}
   enemyScalingPerRound: 0.1
   objectiveTitle: {fileID: 1499388855}
   objectiveSubtitle: {fileID: 606446483}
   chestPrefab: {fileID: 7977392119240650148, guid: 22fbddcc247063147b22f781acaae287, type: 3}
+  blackSmithPrefab: {fileID: 9172293720564539993, guid: b60015c326eddd54981b233549cd67c6, type: 3}
+  merchantPrefab: {fileID: 9172293720564539993, guid: 2e7198bec3cbc7e488cef86802e204e0, type: 3}
   mapType: 0
   EnemiesSpawned: 0
 --- !u!1 &1201517314
@@ -39828,7 +39830,7 @@ RectTransform:
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
   m_AnchorMin: {x: 0.5, y: 0}
   m_AnchorMax: {x: 0.5, y: 0}
-  m_AnchoredPosition: {x: 0, y: -20.000061}
+  m_AnchoredPosition: {x: 0, y: -20.00055}
   m_SizeDelta: {x: 1922, y: 1229.9604}
   m_Pivot: {x: 0.5, y: 1}
 --- !u!114 &1368238360
@@ -42311,6 +42313,7 @@ GameObject:
   serializedVersion: 6
   m_Component:
   - component: {fileID: 1453982945}
+  - component: {fileID: 1453982946}
   m_Layer: 0
   m_Name: Interactables
   m_TagString: Untagged
@@ -42334,6 +42337,23 @@ Transform:
   m_Father: {fileID: 65676497}
   m_RootOrder: 13
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
+--- !u!114 &1453982946
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1453982944}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 36e5c22a614480f4cba4cc4e324b0911, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  windows:
+  - type: 0
+    obj: {fileID: 469476635}
+  - type: 1
+    obj: {fileID: 765822038}
 --- !u!1 &1465380930
 GameObject:
   m_ObjectHideFlags: 0
@@ -62659,7 +62679,7 @@ PrefabInstance:
     - target: {fileID: 8764965865831667164, guid: 834dc73c554c9ad4fae808a0fabce9de, type: 3}
       propertyPath: testGameObject
       value: 
-      objectReference: {fileID: 6209146013581620684, guid: 22fbddcc247063147b22f781acaae287, type: 3}
+      objectReference: {fileID: 2306166274347362398, guid: de54eef7299d45f4abee15a7817db9cc, type: 3}
     - target: {fileID: 8764965865831667164, guid: 834dc73c554c9ad4fae808a0fabce9de, type: 3}
       propertyPath: healthBarFolder
       value: 

@@ -45,6 +45,8 @@ public class MapCreator : MonoBehaviour
 
     [Header("Prefabs")]
     public ChestObject chestPrefab;
+    public GameObject blackSmithPrefab;
+    public GameObject merchantPrefab;
 
     [Header("[Run-time data]")]
     public MapType mapType;

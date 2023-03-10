@@ -983,7 +983,7 @@ public class MapGeneration : MonoBehaviour
     {
         // EndPoint
         Vector3 spawnSpot = pathObjects[pathObjects.Count - 1].transform.position + new Vector3(0, 0.5f, 0);
-        GameObject obj = Instantiate(importantProps.endPoint, spawnSpot, Quaternion.identity);
+        GameObject obj = Instantiate(importantProps.endPoint, spawnSpot, GetCameraFacingRotation(reverse: true));
         obj.name = "END PORTAL (Special)";
         UtilityFunctions.UpdateLODlevels(obj.transform);
         GameLoopManager.Instance.EndPortal = obj.GetComponent<EndPointTrigger>();
@@ -998,14 +998,56 @@ public class MapGeneration : MonoBehaviour
             {
                 Block b = allObjects[Random.Range(0, allObjects.Count - 1)];
 
-                Vector3 r = Vector3.down * (Random.value < 0.5f ? 90f : 180f);
-                var chest = Instantiate(MapCreator.Instance.chestPrefab, 
-                    b.transform.position + new Vector3(0, 0.5f, 0), Quaternion.Euler(r.x, r.y, r.z));
+                var chest = Instantiate(MapCreator.Instance.chestPrefab, b.transform.position + new Vector3(0, 0.5f, 0), 
+                    GetCameraFacingRotation());
                 chest.Initialize(0);
                 b.hasProp = true;
                 propObjects.Add(chest.gameObject);
+                chest.gameObject.transform.parent = temporaryObjFolder.transform;
             }
         }
+
+        if (M.addBlacksmith)
+        {
+            int distanceToCloserToPath = Random.Range(1, 3);
+            int distanceToTheBottomLeftOfPortal = Random.Range(4, 10);
+            Vector3 spot = pathObjects[pathObjects.Count - 1].gameObject.transform.position + new Vector3(-distanceToTheBottomLeftOfPortal, 0, -distanceToCloserToPath);
+            Vector3 r = Vector3.up *  180f;
+
+            Block b = GetClosestObject(spot, allObjects,
+                (Block b2) =>
+                {
+                    return !GetGridOccupant(b2).hasProp;
+                });
+
+            var npc = Instantiate(MapCreator.Instance.blackSmithPrefab, 
+                b.transform.position + new Vector3(0, 0.5f, 0), Quaternion.Euler(r.x, r.y, r.z));
+            b.hasProp = true;
+            propObjects.Add(npc.gameObject);
+            npc.transform.parent = temporaryObjFolder.transform;
+        }
+
+        if (M.addMerchant)
+        {
+            int distanceToCloserToPath = Random.Range(1, 3);
+            int distanceToTheBottomRightOfPortal = Random.Range(4, 10);
+
+            Vector3 spot = pathObjects[pathObjects.Count - 1].gameObject.transform.position + new Vector3(-distanceToCloserToPath, 0, -distanceToTheBottomRightOfPortal);
+            Vector3 r = Vector3.up * 90f;
+
+            Block b = GetClosestObject(spot, allObjects,
+                (Block b2) =>
+                {
+                    return !GetGridOccupant(b2).hasProp;
+                });
+
+            var npc = Instantiate(MapCreator.Instance.merchantPrefab,
+                b.transform.position + new Vector3(0, 0.5f, 0), Quaternion.Euler(r.x, r.y, r.z));
+            b.hasProp = true;
+            propObjects.Add(npc.gameObject);
+            npc.transform.parent = temporaryObjFolder.transform;
+        }
+
     }
 
     private void AddEnemies()
@@ -1357,6 +1399,18 @@ public class MapGeneration : MonoBehaviour
             }
         }
         return closest;
+    }
+
+    public Quaternion GetCameraFacingRotation(bool reverse = false)
+    {
+        Vector3 r = Vector3.down * (Random.value < 0.5f ? 90f : 180f);
+        if (reverse) r = Vector3.up * (Random.value < 0.5f ? 90f : 180f);
+        return Quaternion.Euler(r.x, r.y, r.z);
+    }
+
+    public Vector3 GetCameraFacingVector3()
+    {
+        return Vector3.down * (Random.value < 0.5f ? 90f : 180f);
     }
 
     public void TeleportPlayer(Vector3 v)
