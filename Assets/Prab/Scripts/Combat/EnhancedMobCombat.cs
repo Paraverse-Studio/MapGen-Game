@@ -1,7 +1,6 @@
 using Paraverse;
 using Paraverse.Combat;
 using Paraverse.Mob.Combat;
-using System.Collections.Generic;
 using UnityEngine;
 
 /// <summary>
@@ -16,9 +15,7 @@ public class EnhancedMobCombat : MobCombat
         MobSkill skill;
 
         if (IsSkilling)
-        {
             skill = skills[usingSkillIdx];
-        }
         else
             skill = basicAttackSkill;
 

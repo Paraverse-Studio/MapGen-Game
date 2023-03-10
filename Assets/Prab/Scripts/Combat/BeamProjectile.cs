@@ -8,9 +8,9 @@ public class BeamProjectile : Projectile
     protected MobCombat targetMob;
     [SerializeField, Tooltip("The projectile is a beam.")]
     protected bool isBeam = false;
-    [SerializeField]
-    private float beamRadius = 1.5f;
-
+    private float beamRadius;
+    private float beamLength = 100; //Ingame beam length
+    private float beamWidth = 1; //Ingame beam width
 
     [Header("Beam Prefabs")]
     public GameObject beamLineRendererPrefab; //Put a prefab with a line renderer onto here.
@@ -25,12 +25,23 @@ public class BeamProjectile : Projectile
     [Header("Beam Options")]
     public bool alwaysOn = true; //Enable this to spawn the beam when script is loaded.
     public bool beamCollides = true; //Beam stops at colliders
-    public float beamLength = 100; //Ingame beam length
     public float beamEndOffset = 0f; //How far from the raycast hit point the end effect is positioned
     public float textureScrollSpeed = 0f; //How fast the texture scrolls along the beam, can be negative or positive.
     public float textureLengthScale = 1f;   //Set this to the horizontal length of your texture relative to the vertical. 
                                             //Example: if texture is 200 pixels in height and 600 in length, set this to 3
 
+    public void Init(MobCombat mob, Vector3 target, ScalingStatData statData, 
+        GameObject beamStart, float beamRadius, float beamLength, float beamWidth)
+    {
+        this.target = target;
+        this.mob = mob;
+        scalingStatData = statData;   
+        this.beamStart = beamStart;
+        this.beamRadius = beamRadius;
+        this.beamLength = beamLength;
+        this.beamWidth = beamWidth;
+        pierce = true; // Enables pierce for beams
+    }
 
     protected override void Update()
     {
@@ -54,7 +65,9 @@ public class BeamProjectile : Projectile
                 }
             }
             else
+            {
                 end = transform.position + (transform.forward * beamLength);
+            }
 
             line.SetPosition(1, end);
 
@@ -81,17 +94,18 @@ public class BeamProjectile : Projectile
     {
         if (beamLineRendererPrefab)
         {
-            if (beamStartPrefab)
-                beamStart = Instantiate(beamStartPrefab);
+            beam = Instantiate(beamLineRendererPrefab);
             if (beamEndPrefab)
                 beamEnd = Instantiate(beamEndPrefab);
-            beam = Instantiate(beamLineRendererPrefab);
+
             beam.transform.position = transform.position;
             beam.transform.parent = transform;
             beam.transform.rotation = transform.rotation;
             line = beam.GetComponent<LineRenderer>();
             line.useWorldSpace = true;
             line.positionCount = 2;
+            line.startWidth = beamWidth;
+            line.endWidth = beamWidth;
         }
         else
             print("Add a hecking prefab with a line renderer to the SciFiBeamStatic script on " + gameObject.name + "! Heck!");

@@ -1,7 +1,5 @@
 using Paraverse.Combat;
 using Paraverse.Stats;
-using System.Collections;
-using System.Collections.Generic;
 using UnityEngine;
 
 public class WeaponBuffSkill : MobSkill, IMobSkill
@@ -54,7 +52,7 @@ public class WeaponBuffSkill : MobSkill, IMobSkill
             DisableSkill();
         }
         else
-        {            
+        {
             _buffDurationElapsed = Mathf.Clamp(_buffDurationElapsed - Time.deltaTime, 0f, buffDuration);
         }
     }
@@ -63,7 +61,7 @@ public class WeaponBuffSkill : MobSkill, IMobSkill
     {
         base.DisableSkill();
 
-        if (_weaponVFX) 
+        if (_weaponVFX)
         {
             ToggleParticleSystem(turnParticlesOn: false);
         }
@@ -75,7 +73,7 @@ public class WeaponBuffSkill : MobSkill, IMobSkill
 
             Vector3 scale = attackColliderGO.transform.localScale;
             attackColliderGO.transform.localScale = new Vector3(scale.x, scale.y - attackRangeLengthen, scale.z);
-        }                    
+        }
     }
 
     private float GetPowerAmount()

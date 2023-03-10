@@ -1,9 +1,6 @@
 using Paraverse.Combat;
-using Paraverse.Helper;
 using Paraverse.Player;
 using Paraverse.Stats;
-using System.Collections;
-using System.Collections.Generic;
 using UnityEngine;
 
 public class SwordSpinSkill : MobSkill, IMobSkill
@@ -99,9 +96,9 @@ public class SwordSpinSkill : MobSkill, IMobSkill
     private void ResetCollider()
     {
         attackColliderGO.SetActive(false);
-        StartCoroutine(UtilityFunctions.IDelayedAction(0.001f, () => 
+        StartCoroutine(UtilityFunctions.IDelayedAction(0.001f, () =>
         {
-            if (skillOn) attackColliderGO.SetActive(true);            
+            if (skillOn) attackColliderGO.SetActive(true);
         }));
     }
 
@@ -168,7 +165,7 @@ public class SwordSpinSkill : MobSkill, IMobSkill
                 if (turnParticlesOn) ps.Play();
                 else ps.Stop();
             }
-        }        
+        }
     }
 
 }
