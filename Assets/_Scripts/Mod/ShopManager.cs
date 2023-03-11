@@ -171,7 +171,7 @@ public class ShopManager : MonoBehaviour
         if (shopItem.item is SO_Mod)
         {
             // the following code handles refreshing the ModsManager.Instance.AvailableMods list 
-            ModsManager.Instance.PurchasedMods.Add(ModsManager.Instance.AvailableMods[shopItem.index]);
+            if (shopItem.item is not SO_StatMod) ModsManager.Instance.PurchasedMods.Add(ModsManager.Instance.AvailableMods[shopItem.index]);
             SO_Mod returnValue = shopItem.item.Consume();
 
             // normally returnValue is null cause u bought the mod, so its gone from Available

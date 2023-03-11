@@ -121,13 +121,7 @@ public class ChestObject : MonoBehaviour
 
                         decidedItem = returnedMod;
 
-                        if (!ModsManager.Instance.PurchasedMods.Contains(decidedItem)) // stat mods get re-added
-                            ModsManager.Instance.PurchasedMods.Add(decidedItem);
-
-                        // if a mod (stat mod), then keep it in that in the spot,
-                        // otherwise, remove this entry in available mods
-                        if (((SO_Mod)decidedItem).Type != ModType.Stats)
-                            ModsManager.Instance.AvailableMods.RemoveAt(indexOfMod);
+                        ModsManager.Instance.PurchaseMod(decidedItem);
                     }
 
                     // if it's a consumable type, modify its quantity
@@ -140,15 +134,7 @@ public class ChestObject : MonoBehaviour
                     // If it's a mod, remove it from available pool, and add to purchased pool (since mods are unique and limited)
                     else if (decidedItem is SO_Mod)
                     {
-                        int indexOfMod = ModsManager.Instance.AvailableMods.IndexOf(decidedItem);
-
-                        if (!ModsManager.Instance.PurchasedMods.Contains(decidedItem)) // stat mods get re-added
-                            ModsManager.Instance.PurchasedMods.Add(decidedItem);
-
-                        // if a mod (stat mod), then keep it in that in the spot,
-                        // otherwise, remove this entry in available mods
-                        if (((SO_Mod)decidedItem).Type != ModType.Stats)                         
-                            ModsManager.Instance.AvailableMods.RemoveAt(indexOfMod);
+                        ModsManager.Instance.PurchaseMod(decidedItem);
                     }
 
                     // finally, all tuning of the reward item are done, so add it to the rewards list

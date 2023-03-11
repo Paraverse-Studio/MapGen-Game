@@ -11,6 +11,7 @@ using UnityEngine.Rendering;
 using TMPro;
 using UnityEngine.AI;
 using Paraverse.Mob.Stats;
+using Paraverse.Mob.Controller;
 
 [System.Serializable]
 public class PropItem
@@ -1049,6 +1050,21 @@ public class MapGeneration : MonoBehaviour
 
     }
 
+    private void AddLegendaryChest(Transform t)
+    {
+        Block b = GetClosestObject(t.position, allObjects,
+                (Block b2) =>
+                {
+                    return !b2.hasProp && !b2.hasWater;
+                });
+
+        var chest = Instantiate(MapCreator.Instance.chestPrefab, b.transform.position + new Vector3(0, 0.5f, 0), GetCameraFacingRotation());
+        chest.Initialize(2);
+        b.hasProp = true;
+        propObjects.Add(chest.gameObject);
+        chest.gameObject.transform.parent = temporaryObjFolder.transform;        
+    }
+
     private void AddEnemies()
     {
         if (!M.addEnemies) return;
@@ -1094,6 +1110,10 @@ public class MapGeneration : MonoBehaviour
                 enemyStats.UpdateAttackDamage(enemyStats.AttackDamage.FinalValue * scaleFactor);
                 enemyStats.UpdateAbilityPower(enemyStats.AbilityPower.FinalValue * scaleFactor);
                 enemyStats.UpdateMaxHealth(Mathf.CeilToInt(enemyStats.MaxHealth.FinalValue * scaleFactor));
+                if (MapCreator.Instance.mapType == MapType.boss)
+                {
+                    enemy.GetComponentInChildren<MobController>().OnDeathEvent += AddLegendaryChest;
+                }
             }
         }
     }

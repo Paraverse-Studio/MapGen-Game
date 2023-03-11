@@ -22,7 +22,6 @@ public class ItemCard : MonoBehaviour
 
     public virtual void UpdateDisplay(System.Action clickCallBack = null)
     {
-
     }
 
     public virtual void Lock(bool onOrOff)
@@ -35,7 +34,6 @@ public class ItemCard : MonoBehaviour
 
     public void OnClickCardEvent()
     {
-        Debug.Log("The event is invoked");
         OnClickCard?.Invoke(this);
     }
 

@@ -102,7 +102,6 @@ public class ItemDisplayCreator : MonoBehaviour
 
     public void PurchaseItem(ItemCard item)
     {
-        Debug.Log("it gets here!!");
         if (_player.Gold < item.Item.GetCost())
         {
             // cannot purchase it, notify user of insuffucient gold
@@ -118,20 +117,9 @@ public class ItemDisplayCreator : MonoBehaviour
 
         // the mod itself handles what the mod will do for the player when activated
         item.Item.Activate(_player.gameObject);
+        item.Item.Consume();
 
-        // Item-specific type code
-        if (item.Item is SO_Mod)
-        {
-            int indexOfMod = ModsManager.Instance.AvailableMods.IndexOf(item.Item);
-
-            if (!ModsManager.Instance.PurchasedMods.Contains(item.Item)) // stat mods get re-added
-                ModsManager.Instance.PurchasedMods.Add(item.Item);
-
-            // if a mod (stat mod), then keep it in that in the spot,
-            // otherwise, remove this entry in available mods
-            if (((SO_Mod)item.Item).Type != ModType.Stats)
-                ModsManager.Instance.AvailableMods.RemoveAt(indexOfMod);
-        }
+        ModsManager.Instance.PurchaseMod(item.Item);
 
         Destroy(item.gameObject);
 
