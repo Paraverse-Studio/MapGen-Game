@@ -22,8 +22,6 @@ public class CaptionTextController : MonoBehaviour
     private TextMeshProUGUI _text;
     [SerializeField]
     private GameObject _container;
-    [SerializeField]
-    private ContentFitterRefresher _refresher;
 
     private List<Request> requests = new();
 
@@ -36,7 +34,6 @@ public class CaptionTextController : MonoBehaviour
     private void SetText(string s)
     {
         _text.text = s;
-        _refresher.RefreshContentFitters();
     }
 
     public void SetText(string msg, GameObject obj)

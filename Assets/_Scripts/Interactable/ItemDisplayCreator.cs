@@ -14,13 +14,22 @@ public class ItemDisplayCreator : MonoBehaviour
     [SerializeField]
     private ItemCard _itemCardPrefab;
 
+    [SerializeField, Header("For custom card display")]
+    private Transform _customCardContainer;
+
     [SerializeField]
+    private ItemCard _customItemCardPrefab;
+
+
+    [SerializeField, Header("Context message")]
     private TextMeshProUGUI _contextText;
 
-    private GameObject _player;
     private List<SO_Item> _items;
     private System.Action _closeEvent;
     private List<GameObject> _createdObjects = new();
+
+    private ItemCard _customCard;
+    
 
     public void Display(List<SO_Item> items, System.Action closeCallback = null)
     {
@@ -29,7 +38,6 @@ public class ItemDisplayCreator : MonoBehaviour
         if (gameObject.activeSelf) gameObject.SetActive(false);
 
         _items = items;
-        _player = GlobalSettings.Instance.player;
         foreach (Transform c in _container)
         {
             if (null != c.gameObject) Destroy(c.gameObject);
@@ -45,6 +53,24 @@ public class ItemDisplayCreator : MonoBehaviour
         }
 
         _closeEvent = closeCallback;
+        gameObject.SetActive(true);
+    }
+
+    public void DisplayCustomCard(SO_Item item)
+    {
+        foreach (Transform c in _customCardContainer)
+        {
+            if (null != c.gameObject) Destroy(c.gameObject);
+        }
+
+        if (item)
+        {
+            ItemCard card = Instantiate(_customItemCardPrefab, _customCardContainer);
+            card.Item = item;
+            card.descriptionLabel = _contextText;
+            card.UpdateDisplay();
+            _createdObjects.Add(card.gameObject);
+        }
         gameObject.SetActive(true);
     }
 

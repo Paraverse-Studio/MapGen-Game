@@ -23,4 +23,9 @@ public class ItemCard : MonoBehaviour
 
     }
 
+    public virtual void Lock()
+    {
+        if (costLabel) costLabel.color = Color.red;        
+    }
+
 }

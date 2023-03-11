@@ -16,7 +16,7 @@ public class InteractableObjectsManager : MonoBehaviour
     public struct InteractableWindow
     {
         public InteractableObjects type;
-        public GameObject obj;
+        public ItemDisplayCreator display;
     }
 
     public List<InteractableWindow> windows;

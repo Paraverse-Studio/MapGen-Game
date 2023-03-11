@@ -90,6 +90,12 @@ public class ModCard : ItemCard
         if (null != clickCallBack) purchaseButton.onClick.AddListener(() => { clickCallBack.Invoke(); });
     }
 
+    public override void Lock()
+    {
+        base.Lock();
+        if (cardLock) cardLock.SetActive(true);
+    }
+
     public void UpdateDescription()
     {
         if (descriptionLabel) descriptionLabel.text = Item.GetDescription();

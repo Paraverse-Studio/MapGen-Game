@@ -1,6 +1,26 @@
 using System.Collections;
 using System.Collections.Generic;
+using System.Linq;
 using UnityEngine;
+
+public static class IListExtensions
+{
+    /// <summary>
+    /// Shuffles the element order of the specified list.
+    /// </summary>
+    public static void Shuffle<T>(this IList<T> ts)
+    {
+        var count = ts.Count;
+        var last = count - 1;
+        for (var i = 0; i < last; ++i)
+        {
+            var r = UnityEngine.Random.Range(i, count);
+            var tmp = ts[i];
+            ts[i] = ts[r];
+            ts[r] = tmp;
+        }
+    }
+}
 
 public class InteractableObject : MonoBehaviour
 {
@@ -32,9 +52,43 @@ public class InteractableObject : MonoBehaviour
         _interactable.OnInteract.AddListener(InteractWithObject);
     }
 
+
     public void InteractWithObject()
     {
-        InteractableObjectsManager.Instance.windows.Find(x => x.type == thisInteractable).obj.SetActive(true);
+        var display = InteractableObjectsManager.Instance.windows.Find(x => x.type == thisInteractable).display;
+
+        if (thisInteractable == InteractableObjects.blacksmith)
+        {
+            // Displaying left side: list of available skills to buy
+            List<SO_Item> skillMods = ModsManager.Instance.AvailableMods.Where(mod => (mod is SO_SkillMod)).ToList();
+            IListExtensions.Shuffle(skillMods);
+
+            for (int i = 2; i < skillMods.Count; ++i) skillMods.RemoveAt(i);
+            display.Display(skillMods, null);
+
+            // Displayin right side: show the latest purchased skill you have
+            SO_Item latestSkill = null;
+            for (int i = ModsManager.Instance.PurchasedMods.Count - 1; i >= 0; --i)
+            {
+                if (null != ModsManager.Instance.PurchasedMods[i] && ModsManager.Instance.PurchasedMods[i] is SO_SkillMod)
+                {
+                    latestSkill = ModsManager.Instance.PurchasedMods[i];
+                }
+            }
+            display.DisplayCustomCard(latestSkill);
+
+        }
+        else if (thisInteractable == InteractableObjects.merchant)
+        {
+            List<SO_Item> effectMods = ModsManager.Instance.AvailableMods.Where(mod => (mod is SO_EffectMod)).ToList();
+
+            IListExtensions.Shuffle(effectMods);
+
+            for (int i = 4; i < effectMods.Count; ++i) effectMods.RemoveAt(i);
+
+            display.Display(effectMods, null);
+        }
+
     }
 
 }
