@@ -44,6 +44,10 @@ public class MobControllersListEvent : UnityEvent<List<MobController>>
 {
 }
 
+[System.Serializable]
+public class ItemCardEvent : UnityEvent<ItemCard>
+{
+}
 
 
 public class CustomUnityEvents : MonoBehaviour

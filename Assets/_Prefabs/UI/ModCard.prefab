@@ -185,9 +185,9 @@ RectTransform:
   m_Father: {fileID: 7443467735761174519}
   m_RootOrder: 0
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
-  m_AnchorMin: {x: 0, y: 0}
-  m_AnchorMax: {x: 0, y: 0}
-  m_AnchoredPosition: {x: 135, y: 0}
+  m_AnchorMin: {x: 0, y: 1}
+  m_AnchorMax: {x: 0, y: 1}
+  m_AnchoredPosition: {x: 135, y: -195}
   m_SizeDelta: {x: 264, y: 0}
   m_Pivot: {x: 0.5, y: 0.5}
 --- !u!222 &554693469627374387
@@ -310,7 +310,19 @@ MonoBehaviour:
   m_TargetGraphic: {fileID: 554693469627374386}
   m_OnClick:
     m_PersistentCalls:
-      m_Calls: []
+      m_Calls:
+      - m_Target: {fileID: 8225186734693155774}
+        m_TargetAssemblyTypeName: ItemCard, Assembly-CSharp
+        m_MethodName: OnClickCardEvent
+        m_Mode: 1
+        m_Arguments:
+          m_ObjectArgument: {fileID: 0}
+          m_ObjectArgumentAssemblyTypeName: UnityEngine.Object, UnityEngine
+          m_IntArgument: 0
+          m_FloatArgument: 0
+          m_StringArgument: 
+          m_BoolArgument: 0
+        m_CallState: 2
 --- !u!114 &554693469627374391
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -1434,6 +1446,9 @@ MonoBehaviour:
   typeLabel: {fileID: 8969786016279007242}
   typeHolder: {fileID: 0}
   quantityLabel: {fileID: 0}
+  OnClickCard:
+    m_PersistentCalls:
+      m_Calls: []
   StatModColor: {r: 0.6037736, g: 0.4873225, b: 0.31555712, a: 0.6}
   StatModColorGlow: {r: 1, g: 0.8352941, b: 0.45490196, a: 1}
   SkillModColor: {r: 0.3719117, g: 0.4905106, b: 0.5849056, a: 0.6}

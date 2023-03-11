@@ -2,6 +2,7 @@ using System.Collections;
 using System.Collections.Generic;
 using TMPro;
 using UnityEngine;
+using UnityEngine.Events;
 using UnityEngine.UI;
 
 public class ModCard : ItemCard
@@ -21,6 +22,8 @@ public class ModCard : ItemCard
     public Image CardOtherBG;
     public TextMeshProUGUI TypeLabel;
     public Image[] CardHighlights;
+
+   
 
     private void Start()
     {
@@ -90,10 +93,10 @@ public class ModCard : ItemCard
         if (null != clickCallBack) purchaseButton.onClick.AddListener(() => { clickCallBack.Invoke(); });
     }
 
-    public override void Lock()
+    public override void Lock(bool onOrOff)
     {
-        base.Lock();
-        if (cardLock) cardLock.SetActive(true);
+        base.Lock(onOrOff);
+        if (cardLock) cardLock.SetActive(onOrOff);
     }
 
     public void UpdateDescription()

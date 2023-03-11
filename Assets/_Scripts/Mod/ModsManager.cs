@@ -59,6 +59,6 @@ public class ModsManager : MonoBehaviour
         }
 
         return index;
-    }
+    } 
 
 }
