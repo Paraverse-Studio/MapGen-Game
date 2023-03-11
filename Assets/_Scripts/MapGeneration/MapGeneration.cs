@@ -998,8 +998,7 @@ public class MapGeneration : MonoBehaviour
             {
                 Block b = allObjects[Random.Range(0, allObjects.Count - 1)];
 
-                var chest = Instantiate(MapCreator.Instance.chestPrefab, b.transform.position + new Vector3(0, 0.5f, 0), 
-                    GetCameraFacingRotation());
+                var chest = Instantiate(MapCreator.Instance.chestPrefab, b.transform.position + new Vector3(0, 0.5f, 0), GetCameraFacingRotation());
                 chest.Initialize(0);
                 b.hasProp = true;
                 propObjects.Add(chest.gameObject);
@@ -1009,15 +1008,15 @@ public class MapGeneration : MonoBehaviour
 
         if (M.addBlacksmith)
         {
-            int distanceToCloserToPath = Random.Range(1, 3);
-            int distanceToTheBottomLeftOfPortal = Random.Range(4, 10);
+            int distanceToCloserToPath = Random.Range(0, 2);
+            int distanceToTheBottomLeftOfPortal = Random.Range(5, 10);
             Vector3 spot = pathObjects[pathObjects.Count - 1].gameObject.transform.position + new Vector3(-distanceToTheBottomLeftOfPortal, 0, -distanceToCloserToPath);
             Vector3 r = Vector3.up *  180f;
 
             Block b = GetClosestObject(spot, allObjects,
                 (Block b2) =>
                 {
-                    return !GetGridOccupant(b2).hasProp;
+                    return !b2.hasProp && b2.transform.position.y - YBoundary.y > _EPSILON;
                 });
 
             var npc = Instantiate(MapCreator.Instance.blackSmithPrefab, 
@@ -1029,8 +1028,8 @@ public class MapGeneration : MonoBehaviour
 
         if (M.addMerchant)
         {
-            int distanceToCloserToPath = Random.Range(1, 3);
-            int distanceToTheBottomRightOfPortal = Random.Range(4, 10);
+            int distanceToCloserToPath = Random.Range(0, 2);
+            int distanceToTheBottomRightOfPortal = Random.Range(5, 10);
 
             Vector3 spot = pathObjects[pathObjects.Count - 1].gameObject.transform.position + new Vector3(-distanceToCloserToPath, 0, -distanceToTheBottomRightOfPortal);
             Vector3 r = Vector3.up * 90f;
@@ -1038,7 +1037,7 @@ public class MapGeneration : MonoBehaviour
             Block b = GetClosestObject(spot, allObjects,
                 (Block b2) =>
                 {
-                    return !GetGridOccupant(b2).hasProp;
+                    return !b2.hasProp && b2.transform.position.y - YBoundary.y > _EPSILON;
                 });
 
             var npc = Instantiate(MapCreator.Instance.merchantPrefab,
