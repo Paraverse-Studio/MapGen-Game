@@ -64,6 +64,8 @@ public class ItemDisplayCreator : MonoBehaviour
 
         if (_goldText) _goldText.text = _player.Gold.ToString();
 
+        RefreshDisplay();
+
         _closeEvent = closeCallback;
         gameObject.SetActive(true);
     }
@@ -74,7 +76,7 @@ public class ItemDisplayCreator : MonoBehaviour
         {
             if (null != _createdObjects[i])
             {                
-                _createdObjects[i].Lock(_player.Gold >= _createdObjects[i].Item.GetCost());
+                _createdObjects[i].Lock(_player.Gold < _createdObjects[i].Item.GetCost());
             }
         }
     }

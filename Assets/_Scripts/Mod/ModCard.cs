@@ -96,7 +96,7 @@ public class ModCard : ItemCard
     public override void Lock(bool onOrOff)
     {
         base.Lock(onOrOff);
-        if (cardLock) cardLock.SetActive(onOrOff);
+        if (cardLock && costLabel) cardLock.SetActive(onOrOff);
     }
 
     public void UpdateDescription()
