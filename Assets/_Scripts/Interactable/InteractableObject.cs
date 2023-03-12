@@ -33,6 +33,9 @@ public class InteractableObject : MonoBehaviour
     private Interactable _interactable;
     private Selectable _selectable;
 
+    private bool _initialized = false;
+    private ItemDisplayCreator _display;
+
     private void Start()
     {
         Initialize();
@@ -55,7 +58,13 @@ public class InteractableObject : MonoBehaviour
 
     public void InteractWithObject()
     {
-        var display = InteractableObjectsManager.Instance.windows.Find(x => x.type == thisInteractable).display;
+        if (_initialized && _display)
+        {
+            _display.gameObject.SetActive(true);
+            return;
+        }
+
+        _display = InteractableObjectsManager.Instance.windows.Find(x => x.type == thisInteractable).display;
 
         if (thisInteractable == InteractableObjects.blacksmith)
         {
@@ -64,7 +73,7 @@ public class InteractableObject : MonoBehaviour
             IListExtensions.Shuffle(skillMods);
 
             for (int i = 2; i < skillMods.Count; ++i) skillMods.RemoveAt(i);
-            display.Display(skillMods, null);
+            _display.Display(skillMods, null);
 
             // Displayin right side: show the latest purchased skill you have
             SO_Item latestSkill = null;
@@ -75,7 +84,7 @@ public class InteractableObject : MonoBehaviour
                     latestSkill = ModsManager.Instance.PurchasedMods[i];
                 }
             }
-            display.DisplayCustomCard(latestSkill);
+            _display.DisplayCustomCard(latestSkill);
 
         }
         else if (thisInteractable == InteractableObjects.merchant)
@@ -86,9 +95,16 @@ public class InteractableObject : MonoBehaviour
 
             for (int i = 4; i < effectMods.Count; ++i) effectMods.RemoveAt(i);
 
-            display.Display(effectMods, null);
+            _display.Display(effectMods, null);
         }
 
+        _initialized = true;
+
+    }
+
+    public void ResetInteractable()
+    {
+        _initialized = false;
     }
 
 }

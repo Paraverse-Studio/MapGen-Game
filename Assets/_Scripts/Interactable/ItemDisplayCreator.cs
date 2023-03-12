@@ -128,11 +128,6 @@ public class ItemDisplayCreator : MonoBehaviour
 
     public void OnDisable()
     {
-        for (int i = _createdObjects.Count - 1; i > 0; --i)
-        {
-            if (null != _createdObjects[i]) Destroy(_createdObjects[i].gameObject);
-        }
-
         _closeEvent?.Invoke();
     }
 
