@@ -76,7 +76,7 @@ public class MapCreator : MonoBehaviour
             float chance = Mathf.Max(0, 1.0f / (rewardMapGapLimit.y - rewardMapGapLimit.x + 1));
             if (Random.value <= chance || roundsSincelastRewardMap >= rewardMapGapLimit.y)
             {
-                SetMapType(MapType.reward);
+                mapType = MapType.reward;
             }
         }
         if (roundsSinceLastBossMap >= bossMapGapLimit.x)
@@ -84,9 +84,11 @@ public class MapCreator : MonoBehaviour
             float chance = Mathf.Max(0, 1.0f / (bossMapGapLimit.y - bossMapGapLimit.x + 1));
             if (Random.value <= chance || roundsSinceLastBossMap >= bossMapGapLimit.y)
             {
-                SetMapType(MapType.boss);                
+                mapType = MapType.boss;                
             }
         }
+
+        CustomSettings();
 
         SetMapType(mapType);
 
@@ -98,6 +100,16 @@ public class MapCreator : MonoBehaviour
 
         // Post map generation steps
         UpdateObjectiveText();
+    }
+
+    // Set custom stuff here like forcing reward map at round 2 for tutorial,
+    // or making the first map super easy 
+    private void CustomSettings()
+    {
+        if (GameLoopManager.Instance.nextRoundNumber == 1)
+        {
+            roundsSincelastRewardMap = 9999; // forcing round 2 to be a reward map
+        }
     }
 
     private void SetMapType(MapType type)
@@ -117,7 +129,7 @@ public class MapCreator : MonoBehaviour
                 roundsSinceLastBossMap = 0;
 
                 // *NEW: we want there to be a reward map right after a boss map guaranteed
-                roundsSincelastRewardMap = int.MaxValue;
+                roundsSincelastRewardMap = 9999;
                 break;
 
             case MapType.reward:

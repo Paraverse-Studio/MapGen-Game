@@ -10,11 +10,14 @@ public class ChestObject : MonoBehaviour
     public struct LootItem
     {
         public float chance;
+        [Header("Mod")]
         public bool randomMod;
         public ModType modType;
+        [Header("Consumable")]
         public bool randomConsumable;
         [MinMaxSlider(1f, 500f)]
         public Vector2 consumableAmount;
+        [Header("Override item")]
         public SO_Item overrideItem;
     }
 
