@@ -66,7 +66,7 @@ public class InteractableObject : MonoBehaviour
 
         _display = InteractableObjectsManager.Instance.windows.Find(x => x.type == thisInteractable).display;
 
-        if (thisInteractable == InteractableObjects.blacksmith)
+        if (thisInteractable == InteractableObjects.spellbookMaster)
         {
             // Displaying left side: list of available skills to buy
             List<SO_Item> skillMods = ModsManager.Instance.AvailableMods.Where(mod => (mod is SO_SkillMod)).ToList();

@@ -5,7 +5,7 @@ using UnityEngine;
 [System.Serializable]
 public enum InteractableObjects
 {
-    blacksmith, merchant, trader
+    spellbookMaster, merchant, trader
 }
 
 public class InteractableObjectsManager : MonoBehaviour
