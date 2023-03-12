@@ -4894,8 +4894,8 @@ GameObject:
   - component: {fileID: 198460587821389584}
   - component: {fileID: 199159920115183208}
   - component: {fileID: 82696311886392364}
-  - component: {fileID: 5739916283554643842}
-  - component: {fileID: 3809179839124180522}
+  - component: {fileID: -565135802180167250}
+  - component: {fileID: 5496783848657565611}
   m_Layer: 0
   m_Name: BeamBlueStart
   m_TagString: Untagged
@@ -4910,7 +4910,7 @@ Transform:
   m_PrefabInstance: {fileID: 0}
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 1450890654167080}
-  m_LocalRotation: {x: -0.50000006, y: -0.49999994, z: 0.5, w: 0.50000006}
+  m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
   m_LocalPosition: {x: 0, y: 0, z: 0}
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_ConstrainProportionsScale: 0
@@ -4920,7 +4920,7 @@ Transform:
   - {fileID: 4890314786066336}
   m_Father: {fileID: 0}
   m_RootOrder: 0
-  m_LocalEulerAnglesHint: {x: -180, y: 89.99999, z: -90}
+  m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
 --- !u!198 &198460587821389584
 ParticleSystem:
   m_ObjectHideFlags: 0
@@ -9920,7 +9920,7 @@ AudioSource:
     m_PreInfinity: 2
     m_PostInfinity: 2
     m_RotationOrder: 0
---- !u!114 &5739916283554643842
+--- !u!114 &-565135802180167250
 MonoBehaviour:
   m_ObjectHideFlags: 0
   m_CorrespondingSourceObject: {fileID: 0}
@@ -9929,9 +9929,24 @@ MonoBehaviour:
   m_GameObject: {fileID: 1450890654167080}
   m_Enabled: 1
   m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 20c23a8bcd5b0134d84a61ddd807fdc5, type: 3}
+  m_Script: {fileID: 11500000, guid: 6473a4cb7d2f29d4fa1a33895e3f0258, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  targetTag: Player
+  speed: 20
+  range: 10
+  deathTimer: 3.5
+  stationary: 0
+  dot: 0
+  dontApplyDamageOnEnter: 0
+  dotIntervalTimer: 1
+  knockBackEffect: {fileID: 0}
+  pierce: 0
+  applyHitAnim: 1
+  launchFX: {fileID: 0}
+  hitFX: {fileID: 0}
+  decreaseByLerp: -1
+  isBeam: 1
   beamLineRendererPrefab: {fileID: 1773250190492750, guid: f4e37925a54636e4293491c991143948, type: 3}
   beamStartPrefab: {fileID: 1450890654167080}
   beamEndPrefab: {fileID: 1124451057500510, guid: 59b8686ac2191c145aa7aeb4f3ee4f37, type: 3}
@@ -9941,7 +9956,7 @@ MonoBehaviour:
   beamEndOffset: 0
   textureScrollSpeed: 0
   textureLengthScale: 1
---- !u!114 &3809179839124180522
+--- !u!114 &5496783848657565611
 MonoBehaviour:
   m_ObjectHideFlags: 0
   m_CorrespondingSourceObject: {fileID: 0}
@@ -9950,24 +9965,10 @@ MonoBehaviour:
   m_GameObject: {fileID: 1450890654167080}
   m_Enabled: 1
   m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: db6e1f98e37880845ac630a0e329ccb0, type: 3}
+  m_Script: {fileID: 11500000, guid: 96f8e0ad36fc9f24fb2a2f15bf3c55a3, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  targetTag: Player
-  speed: 0
-  range: 0
-  damage: 0
-  deathTimer: 5
-  stationary: 0
-  dot: 0
-  applyDamageOnEnter: 0
-  dotIntervalTimer: 1
-  knockBackEffect: {fileID: 0}
-  pierce: 0
-  applyHitAnim: 1
-  isBeam: 0
-  launchFX: {fileID: 0}
-  hitFX: {fileID: 0}
+  deathTimer: 3.5
 --- !u!1 &1516870378216048
 GameObject:
   m_ObjectHideFlags: 0

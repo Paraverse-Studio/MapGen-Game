@@ -1,11 +1,8 @@
+using Paraverse.Mob.Stats;
 using System.Collections;
-using System.Collections.Generic;
+using TMPro;
 using UnityEngine;
 using UnityEngine.UI;
-using UnityEngine.Events;
-using Paraverse.Mob.Stats;
-using TMPro;
-using Paraverse.Mob.Controller;
 
 public class MobHealthBar : MonoBehaviour
 {
@@ -74,10 +71,10 @@ public class MobHealthBar : MonoBehaviour
         {
             LoadCustomHealthBar();
         }
-        else 
+        else
         {
             CreateHealthBar();
-        }        
+        }
 
         if (TryGetComponent(out _mobStats))
         {
@@ -103,6 +100,8 @@ public class MobHealthBar : MonoBehaviour
     void Update()
     {
         if (!_healthBarSetupComplete || !_healthBarShowable) return;
+
+        if (Time.frameCount % 30 == 0) _nameLabel.text = gameObject.name;
 
         // Health
         if (_healthBar)
@@ -160,7 +159,7 @@ public class MobHealthBar : MonoBehaviour
         if (healthChange >= _totalHealth * 0.4f) textObj.fontSize *= 1.25f;
         else if (healthChange <= _totalHealth * 0.1f) textObj.fontSize /= 1.25f;
         textObj.text = Mathf.Abs(healthChange).ToString();
-        textObj.color = (healthChange >= 0)? GlobalSettings.Instance.damageColour : GlobalSettings.Instance.healColour;
+        textObj.color = (healthChange >= 0) ? GlobalSettings.Instance.damageColour : GlobalSettings.Instance.healColour;
     }
 
     public void UpdateEnergyBar(int currentEnergy = 1, int totalEnergy = 1)
@@ -214,7 +213,7 @@ public class MobHealthBar : MonoBehaviour
         _healthBarContainer.gameObject.SetActive(!settings.hideHealthBar);
         _nameLabel.gameObject.SetActive(!settings.hideName);
         _targetIcon.SetActive(settings.showSelectionAllTimes);
-        controller.energyBarContainer.gameObject.SetActive(settings.showEnergyBar);               
+        controller.energyBarContainer.gameObject.SetActive(settings.showEnergyBar);
 
         // Find this object's bounds height, using either a collider or mesh renderer
         Collider collider = GetComponentInChildren<Collider>();
@@ -232,7 +231,7 @@ public class MobHealthBar : MonoBehaviour
         _healthBarSetupComplete = true;
 
         // Turn off the HP Huds for those that only show it when selected
-        if (settings.showWhenSelected) StartCoroutine(DoAfterDelay(0.2f, () => _healthBarObject.gameObject.SetActive(false))); 
+        if (settings.showWhenSelected) StartCoroutine(DoAfterDelay(0.2f, () => _healthBarObject.gameObject.SetActive(false)));
     }
 
     private IEnumerator DoAfterDelay(float f, System.Action action)
@@ -256,9 +255,8 @@ public class MobHealthBar : MonoBehaviour
         }
 
         // custom for bosses (HUD health bar)
-        if (settings.isBoss)
+        if (settings.isBoss && _healthBarsFolder.TryGetComponent(out BossHealthBarModel model))
         {
-            BossHealthBarModel model = _healthBarsFolder.GetComponent<BossHealthBarModel>();
             _healthBar = model.healthBar;
             _healthDamageBar = model.damageBar;
             _healthValueDisplay = model.healthValueDisplay;
@@ -298,7 +296,7 @@ public class MobHealthBar : MonoBehaviour
 
     private void OnEnable()
     {
-        if (_healthBarObject) _healthBarObject.SetActive(true);        
+        if (_healthBarObject) _healthBarObject.SetActive(true);
     }
 
     private void OnDestroy()
@@ -323,7 +321,7 @@ public class MobHealthBar : MonoBehaviour
             foreach (Transform child in go.transform)
             {
                 if (child.TryGetComponent(out r))
-                {                 
+                {
                     bounds.Encapsulate(r.bounds);
                 }
                 else

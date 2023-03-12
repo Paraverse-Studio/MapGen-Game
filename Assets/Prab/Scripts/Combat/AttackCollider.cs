@@ -3,6 +3,7 @@ using Paraverse.Mob.Combat;
 using Paraverse.Mob.Stats;
 using System.Collections.Generic;
 using UnityEngine;
+using UnityEngine.InputSystem.XR;
 
 namespace Paraverse
 {
@@ -16,6 +17,8 @@ namespace Paraverse
 
         [SerializeField, Tooltip("Set turn for damage over time.")]
         private bool dot = false;
+        [SerializeField, Tooltip("Apply damage upon enter.")]
+        protected bool dontApplyDamageOnEnter = false;
         private float timer = 0f;
         private bool applyHit = false;
         private float attackPerUnitOfTime = 1f;
@@ -28,10 +31,40 @@ namespace Paraverse
         //public GameObject launchFX;
         public GameObject hitFX;
 
+        [SerializeField]
+        protected bool isBasicAttackCollider = false;
+
+
+        // Basic Attack Events Pre/During/Post
+        public delegate void OnBasicAttackLandPreDmgDel();
+        public event OnBasicAttackLandPreDmgDel OnBasicAttackPreHitEvent;
+        public delegate void OnBasicAttackApplyDamageDel(float dmg);
+        public event OnBasicAttackApplyDamageDel OnBasicAttackApplyDamageEvent;
+        public delegate void OnBasicAttackLandPostDmgDel();
+        public event OnBasicAttackLandPostDmgDel OnBasicAttackPostHitEvent;
+
+        // 
+
+
+        // Updated via Mob Skill
+        public ScalingStatData scalingStatData;
+
+
+        public void Init(MobCombat mob, IMobStats stats, ScalingStatData scalingStatData)
+        {
+            this.mob = mob;
+            this.stats = stats;
+            this.scalingStatData.flatPower = scalingStatData.flatPower;
+            this.scalingStatData.attackScaling = scalingStatData.attackScaling;
+            this.scalingStatData.abilityScaling = scalingStatData.abilityScaling;
+            gameObject.SetActive(false);
+        }
+        
         public void Init(MobCombat mob, IMobStats stats)
         {
             this.mob = mob;
             this.stats = stats;
+            gameObject.SetActive(false);
         }
 
         private void OnEnable()
@@ -53,31 +86,12 @@ namespace Paraverse
 
         private void OnTriggerEnter(Collider other)
         {
-            if (dot) return;
+            if (dontApplyDamageOnEnter == true) return;
 
             // Detecting type of object/enemy hit
             if (other.CompareTag(targetTag) && !hitTargets.Contains(other.gameObject))
             {
-                hitTargets.Add(other.gameObject);
-
-                // Enemy-related logic
-                IMobController controller;
-                if (other.TryGetComponent(out controller))
-                {
-                    controller.Stats.UpdateCurrentHealth((int)-stats.AttackDamage.FinalValue);
-                    
-                    // Apply knock back effect
-                    if (null != knockBackEffect)
-                    {
-                        KnockBackEffect effect = new KnockBackEffect(knockBackEffect);
-                        controller.ApplyKnockBack(mob.transform.position, effect);
-                    }
-                }
-
-                // General VFX logic
-                if (hitFX) Instantiate(hitFX, other.transform.position + new Vector3(0, 0.5f, 0), Quaternion.identity);
-
-                Debug.Log(other.name + " took " + stats.AttackDamage.FinalValue + " points of damage.");
+                DamageLogic(other);
             }
         }
 
@@ -87,16 +101,60 @@ namespace Paraverse
 
             if (other.CompareTag(targetTag) && !hitTargets.Contains(other.gameObject) && applyHit)
             {
-                hitTargets.Add(other.gameObject);
-
-                IMobController controller = other.GetComponent<IMobController>();
-                controller.Stats.UpdateCurrentHealth((int)-stats.AttackDamage.FinalValue);
-                controller.ApplyKnockBack(mob.transform.position, knockBackEffect);
-                applyHit = false;
+                DamageLogic(other);
                 timer = attackPerUnitOfTime;
+                hitTargets.Add(other.gameObject);
+                applyHit = false;
 
                 Debug.Log(other.name + " took " + stats.AttackDamage.FinalValue + " points of damage.");
             }
+        }
+
+        /// <summary>
+        /// useCustomDamage needs to be set to true on AttackCollider.cs inorder to apply this.
+        /// </summary>
+        public float ApplyCustomDamage(IMobController controller)
+        {
+            float totalDmg = scalingStatData.FinalValue(stats);            
+
+            controller.Stats.UpdateCurrentHealth(-Mathf.CeilToInt(totalDmg));
+            return totalDmg;
+        }
+
+        private void DamageLogic(Collider other)
+        {
+            // Pre Basic Attack Hit Event
+            if (isBasicAttackCollider)
+                OnBasicAttackPreHitEvent?.Invoke();
+
+            hitTargets.Add(other.gameObject);
+
+            // Enemy-related logic
+            if (other.TryGetComponent(out IMobController controller))
+            {
+                // Apply damage
+                float dmg = ApplyCustomDamage(controller);
+
+                // On Damage Applied Event
+                if (isBasicAttackCollider)
+                    OnBasicAttackApplyDamageEvent?.Invoke(dmg);
+
+                // Apply knock back effect
+                if (null != knockBackEffect)
+                {
+                    KnockBackEffect effect = new KnockBackEffect(knockBackEffect);
+                    controller.ApplyKnockBack(mob.transform.position, effect);
+                }
+            }
+
+            // General VFX logic
+            if (hitFX) Instantiate(hitFX, other.transform.position + new Vector3(0, 0.5f, 0), Quaternion.identity);
+
+            // Post Basic Attack Hit Event
+            if (isBasicAttackCollider)
+                OnBasicAttackPostHitEvent?.Invoke();
+
+            Debug.Log(other.name + " took " + scalingStatData.FinalValue(stats) + " points of damage.");
         }
     }
 }

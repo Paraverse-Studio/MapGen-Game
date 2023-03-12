@@ -11,6 +11,12 @@ public class SO_MapGenData : ScriptableObject
     public string mapDescription;
 
     [Space(30)]
+    [Header("    _____________  MAP MECHANICS  _____________")]
+    [Space(5)]
+    public GameObject mapMechanics;
+    public ParticleSystem mapMechanicsVFX;
+
+    [Space(30)]
     [Header("    _____________  MAP SET-UP  _____________")]
     [Space(5)]
     public VolumeProfile ppProfile;
@@ -25,12 +31,12 @@ public class SO_MapGenData : ScriptableObject
 
     [Space(30)]
     [Header("    _____________  MAP BASE  _____________")]
-    [Space(40)]
+    [Space(5)]
     [MinMaxSlider(-1f, 1f)]
     public Vector2 randomElevation;
 
-    [Header("PATH SIZE ")]
-    public float distanceOfPath = 40f;
+    [Header("PATH SIZE "), MinMaxSlider(0f, 300)]
+    public Vector2 distanceOfPath;
 
     [Header("PATH TWISTING ")]
     [MinMaxSlider(0f, 30f)]
@@ -59,7 +65,7 @@ public class SO_MapGenData : ScriptableObject
 
     [Space(30)]
     [Header("    _____________  MAP LUMPS  _____________")]
-    [Space(40)]
+    [Space(5)]
 
     [Range(0, 1)]
     [Tooltip("Block elevation distance, a whole block up or half? Etc.")]
@@ -106,12 +112,12 @@ public class SO_MapGenData : ScriptableObject
 
     [Space(30)]
     [Header("    _____________  MAP LIQUID  _____________")]
-    [Space(40)]
+    [Space(5)]
     public float liquidRiseLevel;
 
     [Space(30)]
     [Header("    _____________  MAP PROPS  _____________")]
-    [Space(40)]
+    [Space(5)]
     public bool showProps;
 
     [Range(0, 40)]
@@ -125,14 +131,20 @@ public class SO_MapGenData : ScriptableObject
 
     [Space(30)]
     [Header("    _____________  ENEMIES  _____________")]
-    [Space(40)]
+    [Space(5)]
     public bool addEnemies;
     public GameObject[] enemies;
     public int enemySpawnAmount;
     public int enemySpawnOffset;
 
-    [Header("Scaling")]
-    [Min(0)]
-    public float enemyScalingPerRound;
+    [Space(30)]
+    [Header("    ___________  INTERACTABLES  ____________")]
+    [Space(5)]
+    public bool addChests;
+    [MinMaxSlider(0f, 10f)]
+    public Vector2 numOfChests;
+    public bool addBlacksmith;
+    public bool addMerchant;
+
 
 }

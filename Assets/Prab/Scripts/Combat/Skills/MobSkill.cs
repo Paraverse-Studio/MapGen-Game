@@ -6,20 +6,28 @@ using UnityEngine;
 
 namespace Paraverse.Combat
 {
-    public class MobSkill : MonoBehaviour, IMobSkill
+    public class MobSkill : MonoBehaviour
     {
         #region Variables
-        protected EnhancedMobCombat mob;
+        protected MobCombat mob;
         protected Transform target;
         protected PlayerInputControls input;
         protected Animator anim;
-        protected IMobStats stats;
+        protected MobStats stats;
 
         public string Name { get { return _skillName; } set { _skillName = value; } }
         [SerializeField, Tooltip("Skill name.")]
         protected string _skillName = "";
 
-        public string Description { get { return _description; } set { _skillName = value; } }
+        public int ID { get { return _ID; } set { _ID = value; } }
+        [SerializeField, Tooltip("Skill ID.")]
+        protected int _ID = -1;
+
+        public Sprite Image { get { return _image; } set { _image = value; } }
+        [SerializeField]
+        protected Sprite _image = null;
+
+        public string Description { get { return _description; } set { _description = value; } }
         [SerializeField, TextArea(2, 3), Tooltip("Skill description.")]
         protected string _description = "";
 
@@ -28,44 +36,47 @@ namespace Paraverse.Combat
         protected float _minRange = 0f;
         [SerializeField, Tooltip("Max skill range value.")]
         protected float _maxRange = 5f;
+        public float MaxRange { get { return _maxRange; } }
         public bool IsOffCooldown { get { return curCooldown <= 0; } }
         [SerializeField, Tooltip("Skill cooldown value.")]
         protected float cooldown = 5f;
         protected float curCooldown;
+        public float CurCooldown { get { return curCooldown; } }
+        public float Cooldown { get { return cooldown; } }
 
         public bool HasEnergy { get { return cost <= stats.CurEnergy; } }
         [SerializeField, Tooltip("Required energy cost to execute skill.")]
         protected float cost = 10f;
 
-        [SerializeField, Tooltip("Name of skill animation to play.")]
-        protected string animName = "";
+        [Tooltip("Name of skill animation to play.")]
+        public string animName = "";
 
         [SerializeField]
-        protected GameObject attackColliderGO;
-        protected AttackCollider attackCollider;
+        protected bool isBasicAttack = false;
+        public bool IsBasicAttack { get { return isBasicAttack; } }
+
+        public bool IsMelee => _isMelee;
+        [SerializeField] protected bool _isMelee;
+
+        public GameObject attackColliderGO;
+        public AttackCollider attackCollider;
 
         [Header("Projectile Values")]
         public ProjectileData projData;
 
         [Header("Uses Target Lock"), Tooltip("If this skill should force mob to face its target")]
         public bool usesTargetLock;
+        [SerializeField, Tooltip("Speed of rotation during skill.")]
+        protected float rotSpeed = 110f;
 
-        [Header("Damage & Potency")]
-        [SerializeField]
-        public float flatPower = 1;
-
-        [SerializeField, Range(0, 3)]
-        public float attackScaling = 0;
-
-        [SerializeField, Range(0, 3)]
-        public float abilityScaling = 0;
+        public ScalingStatData scalingStatData;
 
         public bool skillOn { get; set; }
         #endregion
 
 
         #region Inheritable Methods
-        public virtual void ActivateSkill(EnhancedMobCombat mob, PlayerInputControls input, Animator anim, IMobStats stats, Transform target = null)
+        public virtual void ActivateSkill(PlayerCombat mob, PlayerInputControls input, Animator anim, MobStats stats, Transform target = null)
         {
             this.mob = mob;
             this.target = target;
@@ -73,39 +84,37 @@ namespace Paraverse.Combat
             this.anim = anim;
             this.stats = stats;
             curCooldown = 0f;
-            if (mob.tag.Equals(StringData.PlayerTag))
+            if (mob.gameObject.CompareTag(StringData.PlayerTag) && isBasicAttack == false)
                 input.OnSkillOneEvent += Execute;
 
             if (null == attackColliderGO)
             {
-                Debug.LogWarning(gameObject.name + " doesn't have an attack collider."); 
-                return;
+                attackColliderGO = mob.AttackColliderGO;
             }
-            attackColliderGO.SetActive(true);
-            attackCollider = attackColliderGO.GetComponent<AttackCollider>();
-            attackCollider.Init(mob, stats);
             attackColliderGO.SetActive(false);
+
+            if (_isMelee)
+            {
+                attackCollider = attackColliderGO.GetComponent<AttackCollider>();
+                attackCollider.Init(mob, stats, scalingStatData);
+            }
         }
 
-        public virtual void ActivateSkill(EnhancedMobCombat mob, Animator anim, IMobStats stats, Transform target = null)
+        public virtual void ActivateSkill(MobCombat mob, Animator anim, MobStats stats, Transform target = null)
         {
             this.mob = mob;
             this.target = target;
             this.anim = anim;
             this.stats = stats;
-            curCooldown = 0f;
-            if (mob.tag.Equals(StringData.PlayerTag))
-                input.OnSkillOneEvent += Execute;
+            curCooldown = cooldown;
 
             if (null == attackColliderGO)
             {
                 Debug.LogWarning(gameObject.name + " doesn't have an attack collider.");
                 return;
             }
-            attackColliderGO.SetActive(true);
             attackCollider = attackColliderGO.GetComponent<AttackCollider>();
-            attackCollider.Init(mob, stats);
-            attackColliderGO.SetActive(false);
+            attackCollider.Init(mob, stats, scalingStatData);
         }
 
         public virtual void DeactivateSkill(PlayerInputControls input)
@@ -139,6 +148,7 @@ namespace Paraverse.Combat
             {
                 Execute();
             }
+
             RotateToTarget();
             CooldownHandler();
         }
@@ -146,14 +156,18 @@ namespace Paraverse.Combat
         protected virtual void RotateToTarget()
         {
             if (skillOn == false) return;
+
             if (usesTargetLock && input && mob.Target)
             {
-                Vector3 targetDir = ParaverseHelper.GetPositionXZ(mob.Target.position - transform.position).normalized;
-                transform.forward = targetDir;
+                Vector3 targetDir = ParaverseHelper.GetPositionXZ(mob.Target.position - mob.transform.position).normalized;
+                mob.transform.forward = targetDir;
             }
             else if (usesTargetLock && mob.Target)
             {
-                mob.transform.rotation = ParaverseHelper.FaceTarget(mob.transform, target.transform, 100f);
+                //mob.transform.rotation = ParaverseHelper.FaceTarget(mob.transform, target.transform, 100f);
+                Vector3 lookDir = (target.transform.position - mob.transform.position).normalized;
+                Quaternion lookRot = Quaternion.LookRotation(lookDir);
+                mob.transform.rotation = Quaternion.Slerp(mob.transform.rotation, lookRot, rotSpeed * Time.deltaTime);
             }
         }
 
@@ -197,11 +211,8 @@ namespace Paraverse.Combat
         protected virtual bool CanUseSkill()
         {
             if (IsOffCooldown && HasEnergy && TargetWithinRange && mob.IsAttackLunging == false)
-            {
                 return true;
-            }
 
-            //Debug.Log(_skillName + " is on cooldown or don't have enough energy!");
             return false;
         }
 
@@ -226,8 +237,6 @@ namespace Paraverse.Combat
             {
                 SubscribeAnimationEventListeners();
                 ExecuteSkillLogic();
-                Debug.Log("Executing skill: " + _skillName + " which takes " + cost + " points of energy out of " + stats.CurEnergy + " point of current energy." +
-                    "The max cooldown for this skill is " + cooldown + " and the animation name is " + animName + ".");
             }
         }
         #endregion

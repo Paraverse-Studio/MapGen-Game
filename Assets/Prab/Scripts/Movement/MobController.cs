@@ -2,7 +2,6 @@ using Paraverse.Helper;
 using Paraverse.Mob.Combat;
 using Paraverse.Mob.Stats;
 using Paraverse.Stats;
-using System.Security.Policy;
 using UnityEngine;
 using UnityEngine.AI;
 
@@ -77,7 +76,6 @@ namespace Paraverse.Mob.Controller
         [Header("Attack Dash Values")]
         [SerializeField, Tooltip("The attack dashing force applied during basic attack.")]
         protected float atkDashForce = 2f;
-        protected float controllerStep;
 
         [Header("Knockback Values")]
         protected Vector3 knockbackDir;
@@ -103,7 +101,7 @@ namespace Paraverse.Mob.Controller
         [SerializeField]
         protected float flyUpForce = 5f;
         [SerializeField]
-        protected float flyDownForce = 5f;
+        protected float flyDownForce = 8f;
         protected Vector3 flyDir;
         public bool isFlyingUp = false;
         public bool isFlyingDown = false;
@@ -165,7 +163,6 @@ namespace Paraverse.Mob.Controller
             if (combat == null) combat = GetComponent<IMobCombat>();
             if (stats == null) stats = GetComponent<IMobStats>();
             if (statusEffectManager == null) statusEffectManager = GetComponent<StatusEffectManager>();
-            controllerStep = controller.stepOffset;
 
             // Ensure basic attack range is >= to stopping distance
             if (combat.BasicAtkRange < stoppingDistance)
@@ -196,11 +193,10 @@ namespace Paraverse.Mob.Controller
 
             DeathHandler();
             if (_isDead) return;
-
             StateHandler();
             CCHandler();
             KnockbackHandler();
-            JumpHandler(); 
+            JumpHandler();
             FlyUpHandler();
             FlyDownHandler();
             AnimatorHandler();
@@ -226,23 +222,20 @@ namespace Paraverse.Mob.Controller
                     CleanseStagger();
                     AttackMovementHandler();
                 }
-                else
-                {
-                    controller.stepOffset = controllerStep;
-                }
 
                 curMoveSpeed = 0f;
                 return;
             }
 
             if (nav.enabled == false) return;
-            if (TargetDetected() && combat.CanBasicAtk == false && playerController.IsDead == false)
+
+            if (TargetDetected() && combat.IsInCombat == false && combat.CanBasicAtk == false && playerController.IsDead == false)
             {
                 PursueTarget();
                 SetGeneralState(MobState.Pursue);
                 //Debug.Log("Pursue State");
             }
-            else if (TargetDetected() && combat.CanBasicAtk && playerController.IsDead == false)
+            else if (TargetDetected() && playerController.IsDead == false)
             {
                 CombatHandler();
                 SetGeneralState(MobState.Combat);
@@ -391,7 +384,7 @@ namespace Paraverse.Mob.Controller
             {
                 wps[curWPIdx].transform.position = transform.position;
                 unreachableWpCheckTimer = 0f;
-                Debug.Log(transform.name + "'s wp is out of reach! Updated out of reach wp to current position: " + transform.position);
+                //Debug.Log(transform.name + "'s wp is out of reach! Updated out of reach wp to current position: " + transform.position);
             }
             prevPos = curPos;
         }
@@ -429,8 +422,8 @@ namespace Paraverse.Mob.Controller
         {
             if (pursueTarget != null)
             {
-                Vector3 mobPos = ParaverseHelper.GetPositionXZ(transform.position);
-                Vector3 targetPos = ParaverseHelper.GetPositionXZ(pursueTarget.position);
+                //Vector3 mobPos = ParaverseHelper.GetPositionXZ(transform.position);
+                //Vector3 targetPos = ParaverseHelper.GetPositionXZ(pursueTarget.position);
                 float distanceFromTarget = ParaverseHelper.GetDistance(transform.position, pursueTarget.position);
 
                 if (distanceFromTarget <= combat.BasicAtkRange)
@@ -510,7 +503,7 @@ namespace Paraverse.Mob.Controller
             float angle = Quaternion.Angle(transform.rotation, lookRot);
 
             if (angle <= 0)
-                combat.BasicAttackHandler();
+                combat.BasicAttackSkill.ExecuteBasicAttack();
         }
 
         public void ApplyHitAnimation()
@@ -547,8 +540,8 @@ namespace Paraverse.Mob.Controller
                 // Ensures mob falls when off platform
                 if (CheckFall())
                 {
-                    _isFalling = true;
                     nav.enabled = false;
+                    _isFalling = true;
                     knockbackDir.y = GlobalValues.GravityForce;
                     Vector3 fallDir = new Vector3(knockbackDir.x * activeKnockBackEffect.knockForce, knockbackDir.y * fallForce, knockbackDir.z * activeKnockBackEffect.knockForce);
                     controller.Move(fallDir * Time.deltaTime);
@@ -563,6 +556,7 @@ namespace Paraverse.Mob.Controller
                 else if (disFromStartPos >= activeKnockBackEffect.maxKnockbackRange || activeKnockBackEffect.maxKnockbackDuration <= 0)
                 {
                     CleanseStagger();
+                    nav.enabled = true;
                     return;
                 }
 
@@ -593,6 +587,7 @@ namespace Paraverse.Mob.Controller
             {
                 Vector3 landDir = new Vector3(jumpDir.x * jumpForce, jumpDir.y, jumpDir.z * jumpForce);
                 controller.Move(landDir * Time.deltaTime);
+                nav.updateRotation = false;
 
                 if (curAirCheckTimer <= 0)
                 {
@@ -738,7 +733,6 @@ namespace Paraverse.Mob.Controller
         {
             if (combat.IsAttackLunging)
             {
-                controller.stepOffset = 0.1f;
                 nav.enabled = false;
                 controller.Move(transform.forward * atkDashForce * Time.deltaTime);
             }
@@ -769,7 +763,7 @@ namespace Paraverse.Mob.Controller
         {
             Debug.Log("Player has died!");
             Instantiate(deathEffect, transform.position, transform.rotation);
-            Destroy(gameObject);
+            Destroy(gameObject.transform.parent.gameObject);
         }
         #endregion
     }

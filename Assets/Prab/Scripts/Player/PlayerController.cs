@@ -3,7 +3,6 @@ using Paraverse.IK;
 using Paraverse.Mob;
 using Paraverse.Mob.Combat;
 using Paraverse.Mob.Stats;
-using System.Collections.Generic;
 using UnityEngine;
 
 namespace Paraverse.Player
@@ -43,13 +42,12 @@ namespace Paraverse.Player
         private float curJumpCd = 0f;
         [SerializeField, Tooltip("Detect these layers to consider mob is grounded.")]
         private LayerMask groundedLayers;
+        [SerializeField]
+        private float jumpGravity = -40f; 
 
         [Header("Landing Avoidance")]
         [SerializeField, Tooltip("Raycast distance to check for enemies below for land avoidance.")]
         private float disToEnemyCheck = 0.5f;
-        [SerializeField, Tooltip("Max time allowance of is not grounded state before avoidance force is applied.")]
-        private float isNotGroundedMaxDur = 2f;
-        private float isNotGroundedDur;
         [SerializeField, Tooltip("Avoid landing on these layers.")]
         private LayerMask avoidLayers;
         [SerializeField, Tooltip("Force applied to player movement to avoid the avoidLayers.")]
@@ -68,9 +66,14 @@ namespace Paraverse.Player
         [SerializeField, Range(0, 2), Tooltip("Time required to wait in between each dive.")]
         private float diveCd = 0.5f;
         private float curDiveCd = 0f;
+        public delegate void OnStartDiveDel();
+        public event OnStartDiveDel OnStartDiveEvent;
+        public delegate void OnEndDiveDel();
+        public event OnEndDiveDel OnEndDiveEvent;
 
         [Header("Knockback Values")]
         private KnockBackEffect activeKnockBackEffect;
+        private float disFromStartPos;
 
         [Header("Attack Dashing Values")]
         [SerializeField, Tooltip("The attack dashing force applied during basic attack.")]
@@ -84,6 +87,8 @@ namespace Paraverse.Player
         public event IMobController.OnDeathDel OnDeathEvent;
 
         // State Booleans
+
+        public float JumpGravity { get { return jumpGravity; } set { jumpGravity = value; } }
         public Transform Transform { get { return transform; } }
         public bool IsInteracting { get { return _isInteracting; } }
         private bool _isInteracting = false;
@@ -120,8 +125,6 @@ namespace Paraverse.Player
         private Vector3 knockbackDir;
         // Gets the start positions
         private Vector3 diveStartPos;
-        private Vector3 knockStartPos;
-        private Vector3 knockBackDir;
         // Gets the controller horizontal and vertical inputs
         private float horizontal;
         private float vertical;
@@ -151,7 +154,7 @@ namespace Paraverse.Player
             input.OnUseItemTwoEvent += UseItemTwo;
             input.OnUseItemThreeEvent += UseItemThree;
             input.OnUseItemFourEvent += UseItemFour;
-            input.OnJumpEvent += Jump;
+            //input.OnJumpEvent += Jump;
             input.OnDiveEvent += Dive;
             input.OnTargetLockEvent += TargetLock;
         }
@@ -170,7 +173,7 @@ namespace Paraverse.Player
             MovementHandler();
             RotationHandler();
             JumpHandler();
-            AvoidObjUponLand();
+            //AvoidObjUponLand();
             DiveHandler();
             KnockbackHandling();
             AttackMovementHandler();
@@ -178,7 +181,7 @@ namespace Paraverse.Player
         #endregion
 
         #region Helper Methods
-        private float GetWalkSpeed()
+        public float GetWalkSpeed()
         {
             return stats.MoveSpeed.FinalValue;
         }
@@ -199,9 +202,7 @@ namespace Paraverse.Player
         private void MovementHandler()
         {
             // Disables player movement during dive/
-            if (_isDiving || _isStaggered
-                || _isInteracting && !combat.CanComboAttackTwo
-                && !combat.CanComboAttackThree && !_isUsingSkill) return;
+            if (_isDiving || _isStaggered || _isInteracting && !combat.CanComboAttackTwo && !combat.CanComboAttackThree && !_isUsingSkill) return;
 
             // Adjusts player speed based on state
             if (IsInteracting)
@@ -275,17 +276,17 @@ namespace Paraverse.Player
         /// <summary>
         /// Invokes jump action
         /// </summary>
-        private void Jump()
-        {
-            if (_isStaggered || _isInteracting || _isAvoidingObjUponLanding) return;
+        //private void Jump()
+        //{
+        //    if (_isStaggered || _isInteracting || _isAvoidingObjUponLanding) return;
 
-            if (_isGrounded && curJumpCd >= jumpCd)
-            {
-                curJumpCd = 0f;
-                jumpDir.y += Mathf.Sqrt(jumpForce * -GlobalValues.GravityModifier * GlobalValues.GravityForce);
-                anim.Play(StringData.Jump);
-            }
-        }
+        //    if (_isGrounded && curJumpCd >= jumpCd)
+        //    {
+        //        curJumpCd = 0f;
+        //        jumpDir.y += Mathf.Sqrt(jumpForce * -GlobalValues.GravityModifier * GlobalValues.GravityForce);
+        //        anim.Play(StringData.Jump);
+        //    }
+        //}
 
         /// <summary>
         /// Handles jump movement and variables in Updat().
@@ -312,7 +313,7 @@ namespace Paraverse.Player
             }
 
             // Applies gravity and jump movement
-            jumpDir.y += GlobalValues.GravityForce * GlobalValues.GravityModifier * Time.deltaTime;
+            jumpDir.y += jumpGravity * Time.deltaTime;
         }
 
         /// <summary>
@@ -361,16 +362,16 @@ namespace Paraverse.Player
             }
 
             // Apply avoidance force if mob is not grounded within isNotGroundedMaxDur
-            if (_isGrounded == false)
-            {
-                isNotGroundedDur += Time.deltaTime;
-                if (isNotGroundedDur >= isNotGroundedMaxDur)
-                    _isAvoidingObjUponLanding = true;
-            }
-            else
-            {
-                isNotGroundedDur = 0f;
-            }
+            //if (_isGrounded == false)
+            //{
+            //    isNotGroundedDur += Time.deltaTime;
+            //    if (isNotGroundedDur >= isNotGroundedMaxDur)
+            //        _isAvoidingObjUponLanding = true;
+            //}
+            //else
+            //{
+            //    isNotGroundedDur = 0f;
+            //}
         }
         #endregion
 
@@ -392,6 +393,7 @@ namespace Paraverse.Player
                 controller.detectCollisions = false;
                 diveDir = new Vector3(goalDir.x, 0f, goalDir.z);
                 anim.Play(StringData.Dive);
+                OnStartDiveEvent?.Invoke();
             }
         }
 
@@ -414,6 +416,7 @@ namespace Paraverse.Player
                 {
                     controller.detectCollisions = true;
                     _isDiving = false;
+                    OnEndDiveEvent?.Invoke();
                     return;
                 }
             }
@@ -427,16 +430,10 @@ namespace Paraverse.Player
             _target = SelectableSystem.Instance.ToggleSelect();
             combat.Target = _target;
 
-            Debug.Log("Pressed shift, target is: " + _target);
             //headIK.SetLookAtObj(_target);
         }
 
         #endregion
-
-        public void ApplyHitAnimation()
-        {
-            anim.Play(StringData.Hit);
-        }
 
         #region KnockBack Methods
         /// <summary>
@@ -454,30 +451,6 @@ namespace Paraverse.Player
             anim.Play(StringData.Hit);
         }
 
-        /// <summary>
-        /// Handles knock back movement and variables in Update().
-        /// </summary>
-        //private void KnockbackHandler()
-        //{
-        //    if (_isStaggered)
-        //    {
-        //        // Updates mob position and dive timer
-        //        float knockBackRange = ParaverseHelper.GetDistance(transform.position, knockStartPos);
-        //        curKnockbackDuration += Time.deltaTime;
-
-        //        // Moves the mob in the move direction
-        //        controller.Move(knockbackDir * knockForce * Time.deltaTime);
-
-        //        // Stops dive when conditions met
-        //        if (knockBackRange >= maxKnockbackRange || curKnockbackDuration >= maxKnockbackDuration)
-        //        {
-        //            _isStaggered = false;
-        //            return;
-        //        }
-        //    }
-        //}
-
-        float disFromStartPos;
         private void KnockbackHandling()
         {
             if (null != activeKnockBackEffect)
@@ -495,6 +468,12 @@ namespace Paraverse.Player
                 }
             }
         }
+
+        public void ApplyHitAnimation()
+        {
+            anim.Play(StringData.Hit);
+        }
+
         #endregion
 
         #region Attack Movement
@@ -542,7 +521,7 @@ namespace Paraverse.Player
             controller.detectCollisions = true;
             _isDead = false;
             // also reset all _isInteracting, _knockedBack, etc. Basically all types of CC  ( @ PRAB )
-            stats.ResetStats();
+            //stats.ResetStats(); March 7, not needed, player shouldn't get a free heal between rounds
             anim.Play(StringData.Idle);
         }
         #endregion

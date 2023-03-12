@@ -11,7 +11,7 @@ public class ShopManager : MonoBehaviour
 {
     public struct ModPair
     {
-        public SO_Mod mod;
+        public SO_Item item;
         public int index;
     }
 
@@ -25,6 +25,7 @@ public class ShopManager : MonoBehaviour
     [Header("Elements:")]
     public ModCard shopItemPrefab;
     public Transform shopItemsFolder;
+    public TextMeshProUGUI descriptionMessage;
 
     [Header("Shop Algorithm:")]
     [Tooltip("Number of mod cards to display")]
@@ -33,9 +34,6 @@ public class ShopManager : MonoBehaviour
     [Tooltip("From pool, grab this many items to randomize from")]
     public int pollQuantity;
 
-    [Header("Mods To Buy:")]
-    public List<SO_Mod> AvailableMods;
-
     [Header("Events:")]
     public UnityEvent OnPurchaseItem = new UnityEvent();
     #endregion
@@ -43,7 +41,7 @@ public class ShopManager : MonoBehaviour
     #region private variables
     private ContentFitterRefresher _refresher;
     private List<ModPair> _modPool = new(); // used intermediate in the shop calculation
-    private List<SO_Mod> _purhasedMods = new();
+
     private List<ModCard> _modCards = new();
     GameObject _player;
     MobStats _playerStats;
@@ -60,17 +58,7 @@ public class ShopManager : MonoBehaviour
     {
         _refresher = ShopWindow.GetComponent<ContentFitterRefresher>();
         _player = GlobalSettings.Instance.player;
-        _playerStats = _player.GetComponentInChildren<MobStats>();
-
-        // Load Mods from Resources folder
-        Object[] loadedObjects = Resources.LoadAll("FinalizedMods", typeof(SO_Mod));
-        AvailableMods.Clear();
-
-        foreach (Object obj in loadedObjects)
-        {
-            AvailableMods.Add((SO_Mod)obj);
-            AvailableMods[AvailableMods.Count - 1].Reset();
-        }
+        _playerStats = _player.GetComponentInChildren<MobStats>();        
     }
 
     private void ClearShop()
@@ -81,47 +69,40 @@ public class ShopManager : MonoBehaviour
 
     public void CalculateShopItems(int userCurrencyAmount, IEnumerable<SO_Mod> userCurrentMods)
     {
-        Debug.Log("Shop Manager: Shop calculation invoked! Calculating new items. User gold: " + userCurrencyAmount);
-
-        // 1.0  Clear resources
-        if (null == AvailableMods || AvailableMods.Count == 0)
+        // 1.0  Clear resources, and ready available mods
+        if (null == ModsManager.Instance.AvailableMods || ModsManager.Instance.AvailableMods.Count == 0)
         {
             Debug.Log("Shop Manager: There are no available mods in the list.");
             return;
         }
         ClearShop();
         _modPool.Clear();
-        for (int i = 0; i < AvailableMods.Count; ++ i)
+        for (int i = 0; i < ModsManager.Instance.AvailableMods.Count; ++ i)
         {
-            if (null == AvailableMods[i]) AvailableMods.Remove(AvailableMods[i]);
-            else
-            {
-                AvailableMods[i].AutofillDescription();
-            }
+            if (null == ModsManager.Instance.AvailableMods[i]) ModsManager.Instance.AvailableMods.RemoveAt(i);            
+            else ModsManager.Instance.AvailableMods[i].AutofillDescription();            
         }
 
-        // 2.0  Refresh available mods list, sort them by their price
+        // 2.0  Sort remaining available mods by their price
         goldText.text = _playerStats.Gold.ToString();
-        AvailableMods.Sort((a, b) => a.GetCost().CompareTo(b.GetCost()));
+        ModsManager.Instance.AvailableMods.Sort((a, b) => a.GetCost().CompareTo(b.GetCost()));
 
         // 3.0  Find user's currency index point: index of the highest priced item the user can buy
         int userCurrencyIndex = -1;
-        for (int i = 0; i < AvailableMods.Count; ++i)
+        for (int i = 0; i < ModsManager.Instance.AvailableMods.Count; ++i)
         {
-            if (AvailableMods[i].GetCost() < userCurrencyAmount) userCurrencyIndex = i;
+            if (ModsManager.Instance.AvailableMods[i].GetCost() <= userCurrencyAmount) userCurrencyIndex = i;
         }
 
         // 4.0  Then poll a couple of mods from that price point and below
         for (int i = userCurrencyIndex; i >= 0; --i)
         {
-            if (AvailableMods[i].CanPurchase(userCurrencyAmount, userCurrentMods))
+            if (ModsManager.Instance.AvailableMods[i].CanPurchase(userCurrencyAmount, userCurrentMods))
             {
-                _modPool.Add(new ModPair { mod = AvailableMods[i], index = i });
+                _modPool.Add(new ModPair { item = ModsManager.Instance.AvailableMods[i], index = i });
             }
             if (_modPool.Count >= pollQuantity) break;
         }
-
-        Debug.Log("Mod Pool here has " + _modPool.Count);
 
         // 5.0  From the polled amount, randomly pick the mods to show on shop
         System.Random rand = new();
@@ -132,7 +113,7 @@ public class ShopManager : MonoBehaviour
 
         for (int i = 0; i < availableModPool; ++i)
         {
-            if (null != _modPool[i].mod) _modsToShow.Add(_modPool[i]);
+            if (null != _modPool[i].item) _modsToShow.Add(_modPool[i]);
         }
 
         // 6.0  Show the finalized mods to the user
@@ -147,7 +128,8 @@ public class ShopManager : MonoBehaviour
     private void InstantiateModCard(ModPair modPair)
     {
         ModCard modCard = Instantiate(shopItemPrefab, shopItemsFolder);
-        modCard.Mod = modPair.mod;
+        modCard.Item = modPair.item;
+        modCard.descriptionLabel = descriptionMessage;
         modCard.purchaseButton.onClick.AddListener(() => OnClickPurchaseItem(modCard, modPair));
         _modCards.Add(modCard);
     }
@@ -170,26 +152,31 @@ public class ShopManager : MonoBehaviour
 
     public void OnClickPurchaseItem(ModCard modCard, ModPair shopItem)
     {
-        if (_playerStats.Gold < shopItem.mod.GetCost())
+        if (_playerStats.Gold < shopItem.item.GetCost())
         {
             // cannot purchase it, notify user of insuffucient gold
             return;
         }
 
         // Logistics
-        Debug.Log($"Purchased item {AvailableMods[shopItem.index].Title}!");
+        Debug.Log($"Obtained item {ModsManager.Instance.AvailableMods[shopItem.index].GetTitle()}!");
 
-        _playerStats.UpdateGold(-shopItem.mod.GetCost());
+        _playerStats.UpdateGold(-shopItem.item.GetCost());
         goldText.text = _playerStats.Gold.ToString();
 
-        _purhasedMods.Add(AvailableMods[shopItem.index]);
-
         // the mod itself handles what the mod will do for the player when activated
-        shopItem.mod.Activate(_player);
+        shopItem.item.Activate(_player);
 
-        SO_Mod returnValue = shopItem.mod.Consume();
-        // normally returnValue is null cause u bought the mod, so its gone from Available
-        AvailableMods[shopItem.index] = returnValue; 
+        // Item-specific type code
+        if (shopItem.item is SO_Mod)
+        {
+            // the following code handles refreshing the ModsManager.Instance.AvailableMods list 
+            if (shopItem.item is not SO_StatMod) ModsManager.Instance.PurchasedMods.Add(ModsManager.Instance.AvailableMods[shopItem.index]);
+            SO_Mod returnValue = shopItem.item.Consume();
+
+            // normally returnValue is null cause u bought the mod, so its gone from Available
+            ModsManager.Instance.AvailableMods[shopItem.index] = returnValue;
+        }    
 
         Destroy(modCard.gameObject);
         OnPurchaseItem?.Invoke();

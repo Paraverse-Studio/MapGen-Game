@@ -23,10 +23,6 @@ public class GlobalSettings : MonoBehaviour
     public static GlobalSettings Instance;
     private void Awake() => Instance = this;
 
-    [Header("Quality Level:")]
-    [Range(1, 5)]
-    public int QualityLevel;
-
     [Header("Folders for objects ")]
     public Canvas ScreenSpaceCanvas;
     public Transform uiFolder;
@@ -44,11 +40,16 @@ public class GlobalSettings : MonoBehaviour
     public GameObject popupTextPrefab;
     public Color damageColour;
     public Color healColour;
+    public Material attackTrailMaterial;
+
+    [Header("Interactables")]
+    public Color interactableColor;
 
     [Header("Backup Safe Position: ")]
     [Space(10)]
     public Vector3 backupSafePosition;
     public GameObject testGameObject;
+
 
 
 

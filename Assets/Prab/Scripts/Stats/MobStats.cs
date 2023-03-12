@@ -65,12 +65,21 @@ namespace Paraverse.Mob.Stats
         [SerializeField, Tooltip("Energy cost for mob dive.")]
         private float diveEnergyCost = 30f;
 
+        public bool unkillable = false;
+
         #endregion
 
         #region Start & Update Methods
-        protected virtual void Awake()
+        protected void Awake()
         {
-            Init();
+            _maxHealth = new Stat(maxHealth);
+            _maxEnergy = new Stat(maxEnergy);
+            _attackDamage = new Stat(attackDamage);
+            _abilityPower = new Stat(abilityPower);
+            _attackSpeed = new Stat(attackSpeed);
+            _moveSpeed = new Stat(moveSpeed);
+            _energyRegen = new Stat(energyRegen);
+
             _curHealth = (int)MaxHealth.FinalValue;
             _curEnergy = (int)MaxEnergy.FinalValue;
         }
@@ -80,17 +89,6 @@ namespace Paraverse.Mob.Stats
             yield return null;
             OnHealthChange?.Invoke(CurHealth, (int)MaxHealth.FinalValue);
             OnEnergyChange?.Invoke((int)CurEnergy, (int)MaxEnergy.FinalValue);            
-        }
-
-        private void Init()
-        {
-            _maxHealth = new Stat(maxHealth);
-            _maxEnergy = new Stat(maxEnergy);
-            _attackDamage = new Stat(attackDamage);
-            _abilityPower = new Stat(abilityPower);
-            _attackSpeed = new Stat(attackSpeed);
-            _moveSpeed = new Stat(moveSpeed);
-            _energyRegen = new Stat(energyRegen);  
         }
 
         protected virtual void Update()
@@ -108,6 +106,7 @@ namespace Paraverse.Mob.Stats
 
         public void UpdateCurrentHealth(int amount)
         {
+            if (unkillable) return;
             _curHealth += amount;
             OnHealthChange?.Invoke(CurHealth, (int)MaxHealth.FinalValue);
         }

@@ -2,6 +2,14 @@ using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 
+// planned for use later if the returned object from this script should give more than just float score
+public class ScoreData
+{
+    public float Score;
+
+}
+
+
 public class ScoreFormula 
 {
     /*
@@ -32,7 +40,7 @@ public class ScoreFormula
 
         timeScore *= timeScore > 100? 1.1f : 1f;  // amplifies good score if they're above 100
 
-        timeScore = Mathf.Max(timeScore, 0); // Safety
+        timeScore = Mathf.Max(timeScore, 50); // Safety, 50 so players can explore the map a bit
 
 
         // Damage Taken /////////////
@@ -70,7 +78,6 @@ public class ScoreFormula
         return damageTakenScore;
     }
 
-
     // Version 2
     private static float DamageTakenScore2(int maxHealth, int damageTaken)
     {
@@ -80,13 +87,13 @@ public class ScoreFormula
 
     public static string GetScoreRank(int score)
     {
-        if (score > 100) return "S+";
-        else if (score >= 95) return "S";
-        else if (score >= 80) return "A";
-        else if (score >= 70) return "B";
-        else if (score >= 60) return "C";
-        else if (score >= 50) return "D";
-        else return "F";
+        if (score > 100) return "Cube Hero!";
+        else if (score >= 95) return "God-Like!";
+        else if (score >= 90) return "Legendary!";
+        else if (score >= 80) return "Excellent";
+        else if (score >= 70) return "Great";
+        else if (score >= 60) return "Very Good";
+        else return "Good";
     }
 
 }

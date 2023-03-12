@@ -5313,7 +5313,7 @@ Transform:
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 2066646372790914795}
   m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
-  m_LocalPosition: {x: -0, y: -0, z: 0.23}
+  m_LocalPosition: {x: -0, y: -0, z: 0.44}
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_ConstrainProportionsScale: 0
   m_Children: []
@@ -17817,7 +17817,7 @@ ParticleSystem:
       serializedVersion: 2
       minMaxState: 0
       minColor: {r: 1, g: 1, b: 1, a: 1}
-      maxColor: {r: 0, g: 0.053114414, b: 1, a: 0.22745098}
+      maxColor: {r: 0, g: 0.053114414, b: 1, a: 0.1764706}
       maxGradient:
         serializedVersion: 2
         key0: {r: 1, g: 1, b: 1, a: 1}
@@ -17879,7 +17879,7 @@ ParticleSystem:
     startSize:
       serializedVersion: 2
       minMaxState: 1
-      scalar: 10
+      scalar: 6
       minScalar: 1
       maxCurve:
         serializedVersion: 2
@@ -18342,7 +18342,7 @@ ParticleSystem:
     sphericalDirectionAmount: 0
     randomPositionAmount: 0
     radius:
-      value: 0.0001
+      value: 1
       mode: 0
       spread: 0
       speed:
@@ -18571,7 +18571,7 @@ ParticleSystem:
       countCurve:
         serializedVersion: 2
         minMaxState: 1
-        scalar: 5
+        scalar: 8
         minScalar: 30
         maxCurve:
           serializedVersion: 2
@@ -22539,7 +22539,7 @@ MonoBehaviour:
   deathTimer: 0.5
   stationary: 0
   dot: 0
-  applyDamageOnEnter: 0
+  dontApplyDamageOnEnter: 0
   dotIntervalTimer: 1
   knockBackEffect: {fileID: 11400000, guid: a49866a6b7f07e7418556a36b227298f, type: 2}
   pierce: 1
@@ -22548,6 +22548,10 @@ MonoBehaviour:
   launchFX: {fileID: 0}
   hitFX: {fileID: 0}
   decreaseByLerp: 3
+  scalingStatData:
+    flatPower: 0
+    attackScaling: 1
+    abilityScaling: 0
 --- !u!1 &8438421981163063206
 GameObject:
   m_ObjectHideFlags: 0

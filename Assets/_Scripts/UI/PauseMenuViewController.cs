@@ -15,11 +15,11 @@ public class PauseMenuViewController : MonoBehaviour
     public TextMeshProUGUI statLabel;
     public TextMeshProUGUI statText;
 
-    private MobStats playerStats;
+    private MobStats stats;
 
     private void Start()
     {
-        playerStats = GlobalSettings.Instance.player.GetComponentInChildren<MobStats>();
+        stats = GlobalSettings.Instance.player.GetComponentInChildren<MobStats>();
     }
 
 
@@ -28,13 +28,12 @@ public class PauseMenuViewController : MonoBehaviour
         roundLabel.text = "Round " + GameLoopManager.Instance.nextRoundNumber.ToString();
         roundDescriptionText.text = MapGeneration.Instance.M.mapDescription;
 
-        goldText.text = playerStats.Gold.ToString();
-
-        statText.text = playerStats.MaxHealth.FinalValue + "\n" +
-                        playerStats.AttackDamage.FinalValue + "\n" +
-                        playerStats.AttackSpeed.FinalValue + "/sec\n\n" +
-                        playerStats.AbilityPower.FinalValue + "\n" +
-                        playerStats.MoveSpeed.FinalValue + " m/s\n";
+        goldText.text = stats.Gold.ToString();
+        statText.text = $"{Mathf.CeilToInt(stats.MaxHealth.FinalValue)}\n";
+        statText.text += $"{Mathf.CeilToInt(stats.AttackDamage.FinalValue)} <color=#C8C8C8>({Mathf.CeilToInt(stats.AttackDamage.BaseValue)})</color>\n";
+        statText.text += $"{stats.AttackSpeed.FinalValue}/sec\n\n";
+        statText.text += $"{Mathf.CeilToInt(stats.AbilityPower.FinalValue)} <color=#C8C8C8>({Mathf.CeilToInt(stats.AbilityPower.BaseValue)})</color>\n";
+        statText.text += $"{stats.MoveSpeed.FinalValue} m/s\n";
     }
 
 }

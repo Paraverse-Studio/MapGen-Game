@@ -10,6 +10,9 @@ public class FollowTarget : MonoBehaviour
     public bool useStartingOffset;
     public Vector3 offset;
 
+    [Header("Tuning")]
+    public float forwardOfTarget;
+
     [Header("SmoothStep lerp: ")]
     public float smoothStepLerp = 0;
 
@@ -18,7 +21,11 @@ public class FollowTarget : MonoBehaviour
 
     [Header("Lerp on y-value?")]
     public bool lerpY;
+    public bool dontFollowY;
     public float lerpValue;
+
+    [Header("Follow Rotation")]
+    public bool followRotation;
 
     private Vector3 velocity;
     
@@ -45,9 +52,11 @@ public class FollowTarget : MonoBehaviour
             return;
         }
 
-        Vector3 goalPosition = offset + target.position;
+        Vector3 goalPosition = offset + (target.position + (target.forward * forwardOfTarget));
         Vector3 goalPositionOriginal = goalPosition;
+
         if (lerpY) goalPosition.y = Mathf.Lerp(transform.position.y, goalPosition.y, Time.deltaTime * lerpValue);
+        if (dontFollowY) goalPosition.y = transform.position.y;
 
         if (smoothStepLerp > 0)
         {
@@ -58,8 +67,10 @@ public class FollowTarget : MonoBehaviour
             transform.position = goalPosition;
         }
 
-        if (snapToFarDistance && (transform.position- goalPositionOriginal).sqrMagnitude > (10f * 10f)) 
+        if (snapToFarDistance && (transform.position - goalPositionOriginal).sqrMagnitude > (10f * 10f)) 
             transform.position = goalPositionOriginal;
+
+        if (followRotation) transform.rotation = target.rotation;
 
     }
 

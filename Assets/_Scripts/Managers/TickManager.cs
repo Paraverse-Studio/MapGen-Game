@@ -22,7 +22,10 @@ public enum TickDelayOption
     t20 = 20, 
     t30 = 30, 
     t60 = 60, 
-    t120 = 120
+    t120 = 120,
+    t300 = 300,
+    t600 = 600,
+    t900 = 900
 }
 
 [System.Serializable]
@@ -48,11 +51,6 @@ public class TickManager : MonoBehaviour
     // Update is called once per frame
     void Update()
     {
-        if (Time.frameCount % 60 == 0)
-        {
-            
-        }
-
         size = tickElements.Count;
 
         for (int i = 0; i < size; ++i)

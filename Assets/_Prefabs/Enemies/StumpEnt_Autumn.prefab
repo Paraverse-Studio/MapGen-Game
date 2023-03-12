@@ -1,5 +1,37 @@
 %YAML 1.1
 %TAG !u! tag:unity3d.com,2011:
+--- !u!1 &4004319895975023549
+GameObject:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  serializedVersion: 6
+  m_Component:
+  - component: {fileID: 3469968825766202167}
+  m_Layer: 15
+  m_Name: MobSkills
+  m_TagString: Untagged
+  m_Icon: {fileID: 0}
+  m_NavMeshLayer: 0
+  m_StaticEditorFlags: 0
+  m_IsActive: 1
+--- !u!4 &3469968825766202167
+Transform:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 4004319895975023549}
+  m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
+  m_LocalPosition: {x: 0, y: 0, z: 0}
+  m_LocalScale: {x: 1, y: 1, z: 1}
+  m_ConstrainProportionsScale: 0
+  m_Children:
+  - {fileID: 4865048700238484271}
+  m_Father: {fileID: 7898848738789558339}
+  m_RootOrder: 2
+  m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
 --- !u!1 &5125661759965749505
 GameObject:
   m_ObjectHideFlags: 0
@@ -9,7 +41,7 @@ GameObject:
   serializedVersion: 6
   m_Component:
   - component: {fileID: 5125661759965265185}
-  m_Layer: 0
+  m_Layer: 15
   m_Name: Leg_L_Back_02
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -41,7 +73,7 @@ GameObject:
   serializedVersion: 6
   m_Component:
   - component: {fileID: 5125661759965265187}
-  m_Layer: 0
+  m_Layer: 15
   m_Name: Leg_L_Back_03
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -72,7 +104,7 @@ GameObject:
   serializedVersion: 6
   m_Component:
   - component: {fileID: 5125661759965265189}
-  m_Layer: 0
+  m_Layer: 15
   m_Name: Head_03
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -103,7 +135,7 @@ GameObject:
   serializedVersion: 6
   m_Component:
   - component: {fileID: 5125661759965265191}
-  m_Layer: 0
+  m_Layer: 15
   m_Name: Leg_L_Back_01
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -135,7 +167,7 @@ GameObject:
   serializedVersion: 6
   m_Component:
   - component: {fileID: 5125661759965265193}
-  m_Layer: 0
+  m_Layer: 15
   m_Name: Head_01
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -167,7 +199,7 @@ GameObject:
   serializedVersion: 6
   m_Component:
   - component: {fileID: 5125661759965265195}
-  m_Layer: 0
+  m_Layer: 15
   m_Name: Head_02
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -208,7 +240,7 @@ GameObject:
   - component: {fileID: 5125661759958323763}
   - component: {fileID: 5125661759958323762}
   - component: {fileID: 4281474682663830210}
-  m_Layer: 0
+  m_Layer: 15
   m_Name: Wraith Stump
   m_TagString: Enemy
   m_Icon: {fileID: 0}
@@ -288,7 +320,7 @@ CharacterController:
   m_Height: 2
   m_Radius: 0.5
   m_SlopeLimit: 35
-  m_StepOffset: 0.65
+  m_StepOffset: 0.7
   m_SkinWidth: 0.08
   m_MinMoveDistance: 0.001
   m_Center: {x: 0, y: 1, z: 0}
@@ -324,13 +356,17 @@ MonoBehaviour:
   groundLayer:
     serializedVersion: 2
     m_Bits: 0
+  flyUpForce: 5
+  flyDownForce: 5
+  isFlyingUp: 0
+  isFlyingDown: 0
   checkFallRange: 2
   maxDeathTimerUponFall: 2
   fallForce: 0.5
   deathEffect: {fileID: 8073467667769803130, guid: 75c1b160671ce934fad50936633acef1, type: 3}
   _curMobState: 0
   _isGrounded: 1
-  _isInvulnerable: 0
+  _isUnstaggerable: 0
 --- !u!114 &5125661759958323761
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -346,7 +382,7 @@ MonoBehaviour:
   maxHealth: 30
   _curHealth: 30
   attackDamage: 15
-  abilityPower: 10
+  abilityPower: 15
   attackSpeed: 0.2
   moveSpeed: 2
   maxEnergy: 100
@@ -360,6 +396,7 @@ MonoBehaviour:
     m_PersistentCalls:
       m_Calls: []
   diveEnergyCost: 30
+  unkillable: 0
 --- !u!114 &5125661759958323765
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -372,20 +409,20 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 31b2fe413c995db46ab92bb45b7ca9ee, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  anim: {fileID: 0}
-  basicAtkDmgRatio: 1
-  basicAtkRange: 5
-  basicAtkCollider: {fileID: 0}
+  anim: {fileID: 5125661759958323917}
+  stats: {fileID: 0}
   projUser: 0
-  projData:
-    projPf: {fileID: 0}
-    projHeld: {fileID: 0}
-    projOrigin: {fileID: 0}
-    projRotation: {fileID: 0}
-    basicAtkProjSpeed: 10
-  IsSkilling: 0
+  basicAttackSkill: {fileID: 0}
+  skills: []
+  effects: []
+  animBool: isUsingSkill
   explosionEffect: {fileID: 3357188187496195378, guid: c4687f54de839e54f979bd3771bf99d5, type: 3}
   explosionRadius: 1.5
+  scalingStatData:
+    flatPower: 0
+    attackScaling: 0
+    abilityScaling: 1
+    healthScaling: 0
 --- !u!114 &5125661759958323763
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -454,7 +491,7 @@ GameObject:
   m_Component:
   - component: {fileID: 5125661759965265199}
   - component: {fileID: 5125661759962573837}
-  m_Layer: 0
+  m_Layer: 15
   m_Name: ent
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -555,7 +592,7 @@ GameObject:
   serializedVersion: 6
   m_Component:
   - component: {fileID: 5125661759965265201}
-  m_Layer: 0
+  m_Layer: 15
   m_Name: Leg_R_Front_01
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -587,7 +624,7 @@ GameObject:
   serializedVersion: 6
   m_Component:
   - component: {fileID: 5125661759965265203}
-  m_Layer: 0
+  m_Layer: 15
   m_Name: Leg_R_Front_02
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -619,7 +656,7 @@ GameObject:
   serializedVersion: 6
   m_Component:
   - component: {fileID: 5125661759965265205}
-  m_Layer: 0
+  m_Layer: 15
   m_Name: Leg_R_Back_02
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -651,7 +688,7 @@ GameObject:
   serializedVersion: 6
   m_Component:
   - component: {fileID: 5125661759965265207}
-  m_Layer: 0
+  m_Layer: 15
   m_Name: Leg_R_Back_03
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -682,7 +719,7 @@ GameObject:
   serializedVersion: 6
   m_Component:
   - component: {fileID: 5125661759965265209}
-  m_Layer: 0
+  m_Layer: 15
   m_Name: Leg_L_Front_03
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -713,7 +750,7 @@ GameObject:
   serializedVersion: 6
   m_Component:
   - component: {fileID: 5125661759965265211}
-  m_Layer: 0
+  m_Layer: 15
   m_Name: Leg_R_Back_01
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -745,7 +782,7 @@ GameObject:
   serializedVersion: 6
   m_Component:
   - component: {fileID: 5125661759965265213}
-  m_Layer: 0
+  m_Layer: 15
   m_Name: Leg_L_Front_01
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -777,7 +814,7 @@ GameObject:
   serializedVersion: 6
   m_Component:
   - component: {fileID: 5125661759965265215}
-  m_Layer: 0
+  m_Layer: 15
   m_Name: Leg_L_Front_02
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -809,7 +846,7 @@ GameObject:
   serializedVersion: 6
   m_Component:
   - component: {fileID: 5125661759965265161}
-  m_Layer: 0
+  m_Layer: 15
   m_Name: root
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -841,7 +878,7 @@ GameObject:
   serializedVersion: 6
   m_Component:
   - component: {fileID: 5125661759965265165}
-  m_Layer: 0
+  m_Layer: 15
   m_Name: Leg_R_Front_03
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -872,7 +909,7 @@ GameObject:
   serializedVersion: 6
   m_Component:
   - component: {fileID: 5125661759965265167}
-  m_Layer: 0
+  m_Layer: 15
   m_Name: pelvis
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -908,7 +945,7 @@ GameObject:
   serializedVersion: 6
   m_Component:
   - component: {fileID: 7898848737085797153}
-  m_Layer: 0
+  m_Layer: 15
   m_Name: Waypoints
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -943,7 +980,7 @@ GameObject:
   serializedVersion: 6
   m_Component:
   - component: {fileID: 7898848737142461241}
-  m_Layer: 0
+  m_Layer: 15
   m_Name: Waypoint (4)
   m_TagString: Untagged
   m_Icon: {fileID: 4162164826716764455, guid: 0000000000000000d000000000000000, type: 0}
@@ -974,7 +1011,7 @@ GameObject:
   serializedVersion: 6
   m_Component:
   - component: {fileID: 7898848737503949974}
-  m_Layer: 0
+  m_Layer: 15
   m_Name: Waypoint (1)
   m_TagString: Untagged
   m_Icon: {fileID: 4162164826716764455, guid: 0000000000000000d000000000000000, type: 0}
@@ -1005,7 +1042,7 @@ GameObject:
   serializedVersion: 6
   m_Component:
   - component: {fileID: 7898848738407680282}
-  m_Layer: 0
+  m_Layer: 15
   m_Name: Waypoint (2)
   m_TagString: Untagged
   m_Icon: {fileID: 4162164826716764455, guid: 0000000000000000d000000000000000, type: 0}
@@ -1036,7 +1073,7 @@ GameObject:
   serializedVersion: 6
   m_Component:
   - component: {fileID: 7898848738718253172}
-  m_Layer: 0
+  m_Layer: 15
   m_Name: Waypoint (3)
   m_TagString: Untagged
   m_Icon: {fileID: 4162164826716764455, guid: 0000000000000000d000000000000000, type: 0}
@@ -1067,7 +1104,7 @@ GameObject:
   serializedVersion: 6
   m_Component:
   - component: {fileID: 7898848738789558339}
-  m_Layer: 0
+  m_Layer: 15
   m_Name: StumpEnt_Autumn
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -1088,6 +1125,77 @@ Transform:
   m_Children:
   - {fileID: 5125661759965265197}
   - {fileID: 7898848737085797153}
+  - {fileID: 3469968825766202167}
   m_Father: {fileID: 0}
   m_RootOrder: 0
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
+--- !u!1 &9190496419088927380
+GameObject:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  serializedVersion: 6
+  m_Component:
+  - component: {fileID: 4865048700238484271}
+  - component: {fileID: 1862365032519942122}
+  m_Layer: 15
+  m_Name: BasicAttack
+  m_TagString: Untagged
+  m_Icon: {fileID: 0}
+  m_NavMeshLayer: 0
+  m_StaticEditorFlags: 0
+  m_IsActive: 1
+--- !u!4 &4865048700238484271
+Transform:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 9190496419088927380}
+  m_LocalRotation: {x: -0, y: -0, z: -0, w: 1}
+  m_LocalPosition: {x: -0.18783188, y: 1.0420071, z: 0.99387145}
+  m_LocalScale: {x: 1, y: 1, z: 1}
+  m_ConstrainProportionsScale: 0
+  m_Children: []
+  m_Father: {fileID: 3469968825766202167}
+  m_RootOrder: 0
+  m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
+--- !u!114 &1862365032519942122
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 9190496419088927380}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: a49d912e0b019f14b99bdde319029bdd, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  _skillName: Stump Basic Attack
+  _ID: -1
+  _image: {fileID: 0}
+  _description: 
+  _minRange: 0
+  _maxRange: 5
+  cooldown: 5
+  cost: 0
+  animName: BasicAttack
+  isBasicAttack: 1
+  _isMelee: 0
+  attackColliderGO: {fileID: 0}
+  attackCollider: {fileID: 0}
+  projData:
+    projPf: {fileID: 0}
+    projHeld: {fileID: 0}
+    projOrigin: {fileID: 0}
+    projRotation: {fileID: 0}
+    basicAtkProjSpeed: 10
+  usesTargetLock: 0
+  rotSpeed: 100
+  scalingStatData:
+    flatPower: 10
+    attackScaling: 0
+    abilityScaling: 0
+    healthScaling: 0

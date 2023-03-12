@@ -8,9 +8,16 @@ using UnityEngine;
 public class SO_SkillMod : SO_Mod
 {
     [Header("Obtained Skills")]
-    public MobSkill Skill;
+    public GameObject Skill;
 
     private PlayerCombat _player;
+    private MobSkill _skill;
+
+    public override string GetDescription()
+    {
+        if (!_skill) _skill = Skill.GetComponent<MobSkill>();
+        return Description.Replace("[DMG]", GetScalingText()) + $" ({_skill.Cooldown}s cooldown)";
+    }
 
     public override void Activate(GameObject go)
     {
@@ -27,13 +34,37 @@ public class SO_SkillMod : SO_Mod
         // Set some info from mod card to skill 
         // ---> stat, info, logistics and lore of the skill is provided from mod card to skill
         // ---> skill CD, range, damage and these things are to be put right on skill prefab
-        Skill.Name = Title;
-        Skill.Description = Description;        
+        if (!_skill) _skill = Skill.GetComponent<MobSkill>();
+        _skill.Name = Title;
+        _skill.ID = ID;
+        _skill.Description = Description;
+        _skill.Image = Image;
 
         // Add this skill to the player's list of skills, and also activate this one
-        //_player.skills.Add(Skill);
         _player.ActivateSkill(Skill);
         
         Debug.Log($"Skill Mod: Mod \"{Title}\" (ID {ID}) activated for {_player.gameObject.name}!");
     }
+
+    private string GetScalingText()
+    {
+        string msg = "";
+        if (_skill.scalingStatData.flatPower != 0)
+        {
+            msg += $"{_skill.scalingStatData.flatPower}";
+        }
+        if (_skill.scalingStatData.attackScaling != 0)
+        {
+            if (!string.IsNullOrWhiteSpace(msg)) msg += " + ";
+            msg += $"<color=#FF977B>({_skill.scalingStatData.attackScaling * 100f}% Attack)</color>";
+        }
+        if (_skill.scalingStatData.abilityScaling != 0)
+        {
+            if (!string.IsNullOrWhiteSpace(msg)) msg += " + ";
+            msg += $"<color=#83C5FF>({_skill.scalingStatData.abilityScaling * 100f}% Ability)</color>";
+        }
+        msg = "<b>" + msg + "</b>";
+        return msg;
+    }
+
 }

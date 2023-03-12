@@ -38,7 +38,7 @@ public class SO_BlockItem : ScriptableObject
     public GameObject[] prefabVariations;
 
     [Header("—————  Props  —————")]
-    public float propSpawnChance;
+    public float foliageSpawnChance;
     public GameObject[] blockFoliage;
 
 }

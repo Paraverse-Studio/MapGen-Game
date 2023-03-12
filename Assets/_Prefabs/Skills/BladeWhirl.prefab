@@ -1,0 +1,81 @@
+%YAML 1.1
+%TAG !u! tag:unity3d.com,2011:
+--- !u!1 &2124319867095109157
+GameObject:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  serializedVersion: 6
+  m_Component:
+  - component: {fileID: 2869449938675651110}
+  - component: {fileID: 6020576381145870738}
+  m_Layer: 0
+  m_Name: BladeWhirl
+  m_TagString: Untagged
+  m_Icon: {fileID: 0}
+  m_NavMeshLayer: 0
+  m_StaticEditorFlags: 0
+  m_IsActive: 1
+--- !u!4 &2869449938675651110
+Transform:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 2124319867095109157}
+  m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
+  m_LocalPosition: {x: 0, y: 0, z: 0}
+  m_LocalScale: {x: 1, y: 1, z: 1}
+  m_ConstrainProportionsScale: 0
+  m_Children: []
+  m_Father: {fileID: 0}
+  m_RootOrder: 0
+  m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
+--- !u!114 &6020576381145870738
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 2124319867095109157}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 7276c0008f128fa47aaf15424e5af04d, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  _skillName: Blade Whirl
+  _ID: 104
+  _image: {fileID: 21300000, guid: 30e27787632af124b8f6f4f531a61946, type: 3}
+  _description: 'Active Skill: Rapidly spin with your sword extended, continuously
+    dealing damage equal to Attack.'
+  _minRange: 0
+  _maxRange: 5
+  cooldown: 9
+  cost: 10
+  animName: SwordSpinLaunch
+  isBasicAttack: 0
+  _isMelee: 0
+  attackColliderGO: {fileID: 0}
+  attackCollider: {fileID: 0}
+  projData:
+    projPf: {fileID: 0}
+    projHeld: {fileID: 0}
+    projOrigin: {fileID: 0}
+    projRotation: {fileID: 0}
+    basicAtkProjSpeed: 10
+  usesTargetLock: 1
+  rotSpeed: 110
+  scalingStatData:
+    flatPower: 0
+    attackScaling: 0
+    abilityScaling: 0
+    healthScaling: 0
+  VFX: {fileID: 5162683242974884086, guid: e5f93fd9e47eec44e98b8fe463891b5f, type: 3}
+  VFX2: {fileID: 7667971980374616633, guid: 276fbf999e6955948a80c28011d92586, type: 3}
+  VFXObjects:
+  - {fileID: 5946830106282448463, guid: 478374af79c29aa44a57d00fb99b62c2, type: 3}
+  colliderSize: {x: 0, y: 1.7, z: 1.35}
+  movementRatio: 1
+  attackRatio: 0.6
+  movementBoost: 2

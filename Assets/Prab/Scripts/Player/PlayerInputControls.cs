@@ -9,8 +9,8 @@ namespace Paraverse.Player
         private PlayerInputs input;
         private InputAction movement;
 
-        public delegate void OnJumpDel();
-        public event OnJumpDel OnJumpEvent;
+        //public delegate void OnJumpDel();
+        //public event OnJumpDel OnJumpEvent;
         public delegate void OnDiveDel();
         public event OnDiveDel OnDiveEvent;
         public delegate void OnTargetLockDel();
@@ -29,6 +29,10 @@ namespace Paraverse.Player
         public event OnPauseDel OnPauseEvent;
         public delegate void OnSkillUseDel();
         public event OnSkillUseDel OnSkillOneEvent;
+        public delegate void OnInteractDel();
+        public event OnInteractDel OnInteractEvent;
+        public delegate void OnEscapeDel();
+        public event OnEscapeDel OnEscapeEvent;
 
         public Vector2 MovementDirection { get { return _movementDirection; } }
         private Vector2 _movementDirection;
@@ -56,7 +60,7 @@ namespace Paraverse.Player
             input.Player.BasicAttack.performed += OnBasicAttack;
             input.Player.BasicAttack.Enable();
 
-            input.Player.Jump.performed += OnJump;
+            //input.Player.Jump.performed += OnJump;
             input.Player.Dive.performed += OnDive;
             input.Player.TargetLock.performed += OnTargetLock;
 
@@ -72,6 +76,12 @@ namespace Paraverse.Player
             input.Player.SkillOne.performed += OnSkillOne;
             input.Player.SkillOne.Enable();
 
+            input.Player.Interact.performed += OnInteract;
+            input.Player.Interact.Enable();
+
+            input.Player.Escape.performed += OnEscape;
+            input.Player.Escape.Enable();
+
             input.Player.Pause.performed += OnPause;
             input.Player.Pause.Enable();
 
@@ -86,7 +96,7 @@ namespace Paraverse.Player
             input.Player.BasicAttack.performed -= OnBasicAttack;
             input.Player.BasicAttack.Disable();
 
-            input.Player.Jump.performed -= OnJump;
+            //input.Player.Jump.performed -= OnJump;
             input.Player.Dive.performed -= OnDive;
             input.Player.TargetLock.performed -= OnTargetLock;
 
@@ -100,7 +110,10 @@ namespace Paraverse.Player
             input.Player.ItemFour.Disable();
 
             input.Player.SkillOne.performed -= OnSkillOne;
-            input.Player.SkillOne.Enable();
+            input.Player.SkillOne.Disable();
+
+            input.Player.Interact.performed -= OnInteract;
+            input.Player.Interact.Disable();
 
             input.Player.Pause.performed -= OnPause;
             input.Player.Pause.Disable();
@@ -117,10 +130,10 @@ namespace Paraverse.Player
         #endregion
 
         #region Event Methods
-        private void OnJump(InputAction.CallbackContext obj)
-        {
-            OnJumpEvent?.Invoke();
-        }
+        //private void OnJump(InputAction.CallbackContext obj)
+        //{
+        //    OnJumpEvent?.Invoke();
+        //}
 
         private void OnDive(InputAction.CallbackContext obj)
         {
@@ -140,6 +153,16 @@ namespace Paraverse.Player
         private void OnSkillOne(InputAction.CallbackContext obj)
         {
             OnSkillOneEvent?.Invoke();
+        }
+
+        private void OnInteract(InputAction.CallbackContext obj)
+        {
+            OnInteractEvent?.Invoke();
+        }
+
+        public void OnEscape(InputAction.CallbackContext obj)
+        {
+            OnEscapeEvent?.Invoke();
         }
 
         private void OnUseItemOne(InputAction.CallbackContext obj)

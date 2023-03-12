@@ -30,10 +30,12 @@ public class GameLoopManager : MonoBehaviour
     [System.Serializable]
     public struct ResultsScreen
     {
-        public TextMeshProUGUI scoreText;
         public TextMeshProUGUI rankText;
-        public TextMeshProUGUI goldText;
+        public TextMeshProUGUI timeTakenText;
+        public TextMeshProUGUI damageTakenText;
+        public TextMeshProUGUI goldEarnedText;
         public GameObject shopButton;
+        public GameObject mainMenuButton;
     }
 
     [System.Serializable]
@@ -53,6 +55,7 @@ public class GameLoopManager : MonoBehaviour
 
     public enum CompletionPredicateType
     {
+        EnjoyReward,
         KillAllEnemies,
         GetAllGems,
         SurviveXMinutes,
@@ -62,15 +65,11 @@ public class GameLoopManager : MonoBehaviour
     [Header("Combat Map")]
     public bool developerMode = false;
 
-    [Space(10)]
-    [Header("Biomes")]
-    public List<MapGenDataPair> maps;
-    [Min(1)]
-    public int switchMapAfterNumOfRounds;
-    public int bossAfterNumOfRounds;
+
 
     [Space(20)]
     [Header("Screens/Windows/Views")]
+    public Animator roundStartWindow;
     public Animator roundCompleteWindow;
     public Animator roundFailedWindow;
     public Animator bossDefeatedWindow;
@@ -80,7 +79,7 @@ public class GameLoopManager : MonoBehaviour
     public PauseMenuViewController pauseMenu;
 
     [Header("End Portal")]
-    public GameObject EndPortal;
+    public EndPointTrigger EndPortal;
 
     [Header("Predicate")]
     public CompletionPredicateType CompletionPredicate;
@@ -105,7 +104,7 @@ public class GameLoopManager : MonoBehaviour
     private int goldToReward = 0;
 
     private bool _roundIsActive = false;
-    private bool _isBossRound = false;
+    
     private bool _isPaused = false;
     public bool IsPaused => _isPaused;
 
@@ -141,8 +140,8 @@ public class GameLoopManager : MonoBehaviour
         if (Time.frameCount % 60 == 0)
         {
             if (null == _predicate) MakeCompletionPredicate(CompletionPredicate);
-            if (_predicate(_roundIsActive)) EndPortal.SetActive(true);
-        }
+            if (_predicate(_roundIsActive)) EndPortal.Activate(true);
+        }        
 
         if (player.transform.position.y <= -25f)
         {
@@ -150,23 +149,18 @@ public class GameLoopManager : MonoBehaviour
             Invoke("PlayerFallDamage", 0.15f);
         }
 
-        if (Input.GetKeyDown(KeyCode.F1)) GlobalSettings.Instance.QualityLevel = 1;
-        if (Input.GetKeyDown(KeyCode.F5)) GlobalSettings.Instance.QualityLevel = 5;
+        if (Input.GetKeyDown(KeyCode.Alpha1)) QualityManager.Instance.SetQualityLevel(1);
+        if (Input.GetKeyDown(KeyCode.Alpha2)) QualityManager.Instance.SetQualityLevel(2);
+        if (Input.GetKeyDown(KeyCode.Alpha3)) QualityManager.Instance.SetQualityLevel(3);
+        if (Input.GetKeyDown(KeyCode.Alpha4)) QualityManager.Instance.SetQualityLevel(4);
+        if (Input.GetKeyDown(KeyCode.Alpha5)) QualityManager.Instance.SetQualityLevel(5);
 
+#if UNITY_EDITOR
         if (Input.GetKeyDown(KeyCode.U))
         {
-            if (EndPortal) EndPortal.SetActive(true);
-            if (GlobalSettings.Instance.testGameObject) 
-                Instantiate(GlobalSettings.Instance.testGameObject, player.transform.position + new Vector3(0, 0.5f, 0), player.transform.rotation);
-        }
-        if (Input.GetKeyDown(KeyCode.Y))
-        {
-            playerStats.SetFullHealth();
-            List<MobController> m = EnemiesManager.Instance.Enemies;
-            foreach (MobController _m in m)
-            {
-                _m.GetComponentInChildren<MobStats>().SetFullHealth();
-            }
+            //if (EndPortal) EndPortal.Activate(true);                        
+            //AnnouncementManager.Instance.QueueAnnouncement(new Announcement().AddType(0).AddTitle("hii").AddText("portal is open now LMAO :p"));
+            //AnnouncementManager.Instance.QueueAnnouncement(new Announcement().AddType(1).AddTitle("hii").AddText("portal is open now LMAO :p"));
         }
         if (Input.GetKeyDown(KeyCode.I))
         {
@@ -183,22 +177,21 @@ public class GameLoopManager : MonoBehaviour
             ShopManager.Instance.ShopWindow.SetActive(!ShopManager.Instance.ShopWindow.activeSelf);
             CalculateShop();
         }
+#endif
+
     }
 
 
     #region MAIN_MENU
+    public void InitiateSession()
+    {
+        nextRoundNumber = 1;
+        InitiateRound();
+    }
 
     public void InitiateRound()
-    {
-        // nextRoundNumber starts with 1 just to make it easier for display on inspector what round you're on
-        // so as a result, in code is where we have to reduce by 1 to do the proper calculations
-        int adjustedRoundNumber = nextRoundNumber - 1;
-        int mapIndex = adjustedRoundNumber / switchMapAfterNumOfRounds;
-        _isBossRound = (adjustedRoundNumber != 0)? (nextRoundNumber % bossAfterNumOfRounds == 0) : false;
-        MapGeneration.Instance.M = (!_isBossRound) ? maps[mapIndex].map : maps[mapIndex].bossMap;
-
+    {      
         GameLoopEvents.OnInitiateRound?.Invoke();
-
     }
 
     public void StartRound()
@@ -209,8 +202,13 @@ public class GameLoopManager : MonoBehaviour
         totalEnemiesSpawned = EnemiesManager.Instance.EnemiesCount;
         playerMaxHealth = (int)playerStats.MaxHealth.FinalValue;
 
-        playerStats.OnHealthChange.AddListener(AccrueDamageTaken);
-        playerController.OnDeathEvent += EndRoundPremature;
+        GameplayListeners(attachOrRemove: true);
+
+        if (nextRoundNumber == 1 && MapCreator.Instance.mapType != MapType.reward) // only for round 1, since it's tutorial
+        {
+            AnnouncementManager.Instance.QueueAnnouncement(new Announcement().AddType(1).StartDelay(1.5f).OverrideDuration(3f)
+                .AddText("Defeat all enemies & pass through the gate!"));
+        }
 
         _roundIsActive = true;
     }
@@ -240,6 +238,9 @@ public class GameLoopManager : MonoBehaviour
             case CompletionPredicateType.SurviveXMinutes:
                 //implement
                 break;
+            case CompletionPredicateType.EnjoyReward:
+                _predicate = EnjoyReward;
+                break;
         }
     }
 
@@ -257,11 +258,12 @@ public class GameLoopManager : MonoBehaviour
     {
         _roundIsActive = false;
         roundTimer.PauseTimer();
+        GameplayListeners(attachOrRemove: false);
 
         // DETERMINE HOW ROUND ENDED (SUCCESSFUL OR FAILED OR BOSS DEFEATED?)
         if (successfulRound)
         {
-            if (!_isBossRound) roundCompletionType = RoundCompletionType.Completed;
+            if (MapCreator.Instance.mapType != MapType.boss) roundCompletionType = RoundCompletionType.Completed;
             else roundCompletionType = RoundCompletionType.BossDefeated;
         }
         else
@@ -269,9 +271,7 @@ public class GameLoopManager : MonoBehaviour
             roundCompletionType = RoundCompletionType.Failed;
         }
 
-        // here ... (what here?)
-
-        Animator roundEndWindow = new Animator();
+        Animator roundEndWindow = new();
         switch (roundCompletionType)
         {
             case RoundCompletionType.Completed:
@@ -287,8 +287,8 @@ public class GameLoopManager : MonoBehaviour
 
         GameLoopEvents.OnEndRound?.Invoke();
         roundEndWindow.gameObject.SetActive(true);
-        roundEndWindow.SetTrigger("Entry");
         Time.timeScale = 0.4f;
+        roundEndWindow.SetTrigger("Entry");
         yield return new WaitForSecondsRealtime(3f);
         roundEndWindow.SetTrigger("Exit");
         yield return new WaitForSecondsRealtime(1.5f);
@@ -297,30 +297,33 @@ public class GameLoopManager : MonoBehaviour
         CompleteRound();
     }
 
-
     public void CompleteRound()
     {
-        playerStats.OnHealthChange.RemoveListener(AccrueDamageTaken);
-        playerController.OnDeathEvent -= EndRoundPremature;
         EnemiesManager.Instance.ResetEnemiesList();
         Destroy(EndPortal);
 
-        float score = ScoreFormula.CalculateScore(totalEnemiesSpawned * 10f, roundTimer.GetTime(), playerMaxHealth, damageTaken);
+        float score = ScoreFormula.CalculateScore(totalEnemiesSpawned * (MapCreator.Instance.mapType == MapType.boss ? 50f : 10f), roundTimer.GetTime(), playerMaxHealth, damageTaken);
         goldToReward = (int)(score * 1);
+
+        resultScreen.timeTakenText.text = UtilityFunctions.GetFormattedTime(roundTimer.GetTime());
+        resultScreen.damageTakenText.text = $"{damageTaken} ({(int)(((float)damageTaken/(float)playerMaxHealth)*100.0f)}%)";
+        
 
         if (roundCompletionType == RoundCompletionType.Failed)
         {
-            resultScreen.scoreText.text = "Score: " + "N/A";
-            resultScreen.rankText.text = "F";
+            resultScreen.rankText.text = "Incomplete";
+            resultScreen.goldEarnedText.text = "0";
             resultScreen.shopButton.SetActive(false);
+            resultScreen.mainMenuButton.SetActive(true);
+            nextRoundNumber = 1; // restart the playthrough
         }
         else
         {
             resultScreen.shopButton.SetActive(true);
+            resultScreen.mainMenuButton.SetActive(false);
+            resultScreen.goldEarnedText.text = goldToReward + "";
             playerStats.UpdateGold(goldToReward); // save it to db
-            resultScreen.scoreText.text = "Score: " + (int)score + "%";
             resultScreen.rankText.text = ScoreFormula.GetScoreRank((int)score);
-
             nextRoundNumber++;
         }
 
@@ -374,9 +377,27 @@ public class GameLoopManager : MonoBehaviour
     {
         loadingScreen.SetActive(true);
         yield return null;
+        MapGeneration.Instance.ClearMap();
+        yield return null;
         //SceneManager.LoadScene(SceneManager.GetActiveScene().buildIndex);
         GameLoopEvents.OnBootupGame?.Invoke();
         loadingScreen.SetActive(false);
+    }
+
+    private void GameplayListeners(bool attachOrRemove)
+    {
+        if (attachOrRemove)
+        {
+            playerStats.OnHealthChange.AddListener(AccrueDamageTaken);
+            playerController.OnDeathEvent += EndRoundPremature;
+            EnemiesManager.Instance.OnEnemiesListUpdated.AddListener(MapCreator.Instance.UpdateObjectiveText);
+        }
+        else
+        {
+            playerStats.OnHealthChange.RemoveListener(AccrueDamageTaken);
+            playerController.OnDeathEvent -= EndRoundPremature;
+            EnemiesManager.Instance.OnEnemiesListUpdated.RemoveListener(MapCreator.Instance.UpdateObjectiveText);
+        }
     }
 
     public void AccrueDamageTaken(int playerCurrentHealth, int _playerMaxHealth)
@@ -407,13 +428,29 @@ public class GameLoopManager : MonoBehaviour
         a?.Invoke();
     }
 
+    private IEnumerator PlayTriggerAnimation(Animator animator, float delay)
+    {
+        animator.gameObject.SetActive(true);
+        animator.SetTrigger("Entry");
+        yield return new WaitForSecondsRealtime(delay);
+        animator.SetTrigger("Exit");
+        yield return new WaitForSecondsRealtime(1.5f);
+        animator.gameObject.SetActive(false);
+    }
 
     /* * * * * * *  P R E D I C A T E S  * * * * * * * * */
+
+
     public bool KillAllEnemies(bool mapReady)
     {
         int enemiesLeft = EnemiesManager.Instance.EnemiesCount;
         //Debug.Log($"CURRENT PREDICATE: [KILL ALL ENEMIES] STATUS:  mapReady: {mapReady}  -  enemies left: {enemiesLeft}");
         return mapReady && enemiesLeft <= 0;
+    }
+
+    public bool EnjoyReward(bool mapReady)
+    {
+        return mapReady;
     }
 
     // Implement Get All Gems

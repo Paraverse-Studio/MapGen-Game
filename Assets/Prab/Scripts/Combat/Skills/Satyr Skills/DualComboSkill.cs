@@ -12,13 +12,11 @@ public class DualComboSkill : MobSkill, IMobSkill
     [SerializeField]
     protected GameObject offHandAttackColliderGO;
     protected AttackCollider offHandAttackCollider;
-    [SerializeField]
-    protected float rotSpeed = 100f;
     #endregion
 
 
     #region Inherited Methods
-    public override void ActivateSkill(EnhancedMobCombat mob, Animator anim, IMobStats stats, Transform target = null)
+    public override void ActivateSkill(MobCombat mob, Animator anim, MobStats stats, Transform target = null)
     {
         base.ActivateSkill(mob, anim, stats, target);
 
@@ -30,7 +28,7 @@ public class DualComboSkill : MobSkill, IMobSkill
         }
         offHandAttackColliderGO.SetActive(true);
         offHandAttackCollider = offHandAttackColliderGO.GetComponent<AttackCollider>();
-        offHandAttackCollider.Init(mob, stats);
+        offHandAttackCollider.Init(mob, stats, scalingStatData);
         offHandAttackColliderGO.SetActive(false);
 
         mob.OnEnableMainHandColliderSOneEvent += EnableMainHandAttackCollider;
@@ -75,24 +73,32 @@ public class DualComboSkill : MobSkill, IMobSkill
     {
         if (attackColliderGO != null)
             attackColliderGO.SetActive(true);
+
+        skillOn = true;
     }
 
     public void DisableMainHandAttackCollider()
     {
         if (attackColliderGO != null)
             attackColliderGO.SetActive(false);
+
+        skillOn = false;
     }
 
     public void EnableOffHandAttackCollider()
     {
         if (offHandAttackCollider != null)
             offHandAttackColliderGO.SetActive(true);
+
+        skillOn = true;
     }
 
     public void DisableOffHandAttackCollider()
     {
         if (offHandAttackCollider != null)
             offHandAttackColliderGO.SetActive(false);
+
+        skillOn = false;
     }
 
     public void DisableSkillAndCollider()

@@ -5,7 +5,7 @@ using UnityEngine;
 
 public class RoundTimer : MonoBehaviour
 {
-    TextMeshProUGUI text;
+    public TextMeshProUGUI text;
     float timer;
     float originalSize;
     bool paused = false;
@@ -25,7 +25,7 @@ public class RoundTimer : MonoBehaviour
 
         int minutes = Mathf.FloorToInt(timer / 60f);
         int seconds = Mathf.FloorToInt(timer - minutes * 60f);
-        text.text = "Time " + string.Format("{0:0}:{1:00}", minutes, seconds);
+        text.text = "Time " + UtilityFunctions.GetFormattedTime(timer);
 
         if (text.fontSize > originalSize)
         {

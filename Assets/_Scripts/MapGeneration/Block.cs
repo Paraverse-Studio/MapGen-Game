@@ -22,8 +22,8 @@ public class Block : MonoBehaviour, ITickElement
     private SO_BlockItem oldType = null;
 
     [Header("Properties")]
-    public bool hasProp;
-    public bool hasWater;
+    public bool hasProp = false;
+    public bool hasWater = false;
 
     [Header("Override Settings: ")]
     public BlockOverrideSettings overrideSettings;  
@@ -96,8 +96,7 @@ public class Block : MonoBehaviour, ITickElement
     {
         if (type && type == MapGeneration.Instance.M.blockSet.water)
         {
-            Vector3 newSpot = new Vector3(transform.position.x, 0, transform.position.z);
-            _currentPrefab.transform.position = newSpot;
+            _currentPrefab.transform.position = new Vector3(transform.position.x, 0, transform.position.z);
         }
     }
 
@@ -160,14 +159,13 @@ public class Block : MonoBehaviour, ITickElement
             {
                 _currentPrefab.transform.SetParent(transform);
                 CheckBoxCollider(_currentPrefab);
-                //CheckNavMeshSurface(_currentPrefab); // this did it to all blocks pre-emptively, not needed
                 //_currentPrefab.isStatic = true;
             }
             else
             {
                 //_currentPrefab.isStatic = false;
                 _currentPrefab.transform.SetParent(GlobalSettings.Instance.waterVolume.transform);
-                TickManager.Instance?.Subscribe(this, gameObject);
+                TickManager.Instance?.Subscribe(this, gameObject, TickDelayOption.t10);
             }
 
             _currentPrefab.transform.localPosition = new Vector3(0, 0, 0);
@@ -207,16 +205,18 @@ public class Block : MonoBehaviour, ITickElement
         }
     }
 
-    public void CheckNavMeshSurface(GameObject obj)
+    // Why was I previously adding this to every block? Not needed(?)
+    public NavMeshSurface CheckNavMeshSurface(GameObject obj)
     {
-        if (type == MapGeneration.Instance.M.blockSet.water) return;
-        if (hasProp) return;
+        if (type == MapGeneration.Instance.M.blockSet.water) return null;
+        if (hasProp) return null;
 
         _surface = obj.GetComponent<NavMeshSurface>();
         if (!_surface)
         {
             _surface = obj.AddComponent<NavMeshSurface>();
-        }        
+        }
+        return _surface;
     }
 
     private void ApplyRandomRotation(GameObject obj)

@@ -1,4 +1,5 @@
 using Paraverse.Combat;
+using Paraverse.Mob.Combat;
 using Paraverse.Mob.Controller;
 using Paraverse.Mob.Stats;
 using Paraverse.Player;
@@ -25,7 +26,7 @@ public class SummonSkill : MobSkill, IMobSkill
 
 
     #region Inherited Methods
-    public override void ActivateSkill(EnhancedMobCombat mob, Animator anim, IMobStats stats, Transform target = null)
+    public override void ActivateSkill(MobCombat mob, Animator anim, MobStats stats, Transform target = null)
     {
         base.ActivateSkill(mob, anim, stats, target);
         mob.OnSummonSkillOneEvent += SummonSapling;
@@ -43,8 +44,6 @@ public class SummonSkill : MobSkill, IMobSkill
         {
             return true;
         }
-
-        Debug.Log(_skillName + " is on cooldown or don't have enough energy!");
         return false;
     }
 

@@ -7,7 +7,8 @@ namespace Paraverse.Stats
     [Serializable]
     public class Stat
     {
-        public float BaseValue { get; }
+        private float _baseValue;
+        public float BaseValue { get { return _baseValue; } }
         public float FinalValue { get { return BaseValue + StatModifierSumValue() + TempStatModifierSumValue(); } }
         public float StatModValue { get { return StatModifierSumValue(); } }
         public float TempStatModValue { get { return TempStatModifierSumValue(); } }
@@ -17,7 +18,7 @@ namespace Paraverse.Stats
 
         public Stat(float value)
         {
-            BaseValue = value;
+            _baseValue = value;
         }
 
         /// <summary>
@@ -50,6 +51,11 @@ namespace Paraverse.Stats
                 value += _tempStatModifier[i].Value;
             }
             return value;
+        }
+
+        public void UpdateBaseValue(float value)
+        {
+            _baseValue = value;
         }
 
         public void AddMod(StatModifier modifier)

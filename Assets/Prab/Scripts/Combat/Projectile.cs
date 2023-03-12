@@ -1,6 +1,7 @@
 using Paraverse.Helper;
 using Paraverse.Mob;
 using Paraverse.Mob.Combat;
+using System.Runtime.InteropServices.ComTypes;
 using UnityEngine;
 
 namespace Paraverse
@@ -8,39 +9,39 @@ namespace Paraverse
     public class Projectile : MonoBehaviour
     {
         #region Variables
-        private MobCombat mob;
+        protected MobCombat mob;
+
+        [Header("Projectile Stats")]
         [SerializeField, Tooltip("Speed of the projectile.")]
-        private string targetTag = "Player";
-        private Vector3 target = Vector3.forward;
+        protected string targetTag = "Player";
+        protected Vector3 target = Vector3.forward;
         [SerializeField, Tooltip("Speed of the projectile.")]
-        private float speed;
+        protected float speed = 20f;
         [SerializeField, Tooltip("Range of the projectile.")]
-        private float range;
-        [SerializeField, Tooltip("Range of the projectile.")]
-        private float damage;
+        protected float range = 10f;
         [SerializeField, Tooltip("Projectile is destroyed after this duration.")]
-        private float deathTimer = 5f;
+        protected float deathTimer = 5f;
+
+        [Header("Projectile Properties")]
         [SerializeField, Tooltip("Stationary projectile.")]
         protected bool stationary = false;
         [SerializeField, Tooltip("Damage over time.")]
         protected bool dot = false;
         [SerializeField, Tooltip("Apply damage upon enter.")]
-        protected bool applyDamageOnEnter = false;
+        protected bool dontApplyDamageOnEnter = false;
         [SerializeField, Tooltip("Applies damage every given second.")]
         protected float dotIntervalTimer = 1f;
-        private float dotTimer = 0f;
+        protected float dotTimer = 0f;
 
         [Header("Knockback Effect")]
         [SerializeField]
-        private KnockBackEffect knockBackEffect;
+        protected KnockBackEffect knockBackEffect;
 
         [Header("Special Properties")]
         [SerializeField, Tooltip("Projectile is not destroyed upon impact.")]
         protected bool pierce = false;
         [SerializeField, Tooltip("Applies hit animation to target.")]
         protected bool applyHitAnim = true;
-        [SerializeField, Tooltip("The projectile is a beam.")]
-        protected bool isBeam = false;
 
         [Header("VFX")]
         public GameObject launchFX;
@@ -49,19 +50,21 @@ namespace Paraverse
         [Header("Motion")]
         public float decreaseByLerp = -1f;
 
-        private float curdeathTimer = 0f;
-        private Vector3 origin;
+        protected float curdeathTimer = 0f;
+        protected Vector3 origin;
+
+        protected ScalingStatData scalingStatData;
         #endregion
 
         #region Start & Update
-        private void Start()
+        protected virtual void Start()
         {
             origin = transform.position;
 
             if (launchFX) Instantiate(hitFX, origin, Quaternion.identity);
         }
 
-        private void Update()
+        protected virtual void Update()
         {
             float distanceFromOrigin = ParaverseHelper.GetDistance(transform.position, origin);
             if (distanceFromOrigin > range && stationary == false || curdeathTimer >= deathTimer)
@@ -80,62 +83,54 @@ namespace Paraverse
         }
         #endregion
 
-        public void Init(MobCombat mob, Vector3 target, float damage)
+        public virtual void Init(MobCombat mob, Vector3 target, ScalingStatData statData)
         {
             this.target = target;
             this.mob = mob;
-            this.damage = damage;
+            scalingStatData = statData;
         }
 
-        public void Init(MobCombat mob, Vector3 target, float range, float damage)
-        {
-            this.target = target;
-            this.mob = mob;
-            this.range = range;
-            this.damage = damage;
-        }
-
-        public void Init(MobCombat mob, Vector3 target, float speed, float range, float damage)
+        public virtual void Init(MobCombat mob, Vector3 target, float speed, ScalingStatData statData)
         {
             this.target = target;
             this.mob = mob;
             this.speed = speed;
-            this.range = range;
-            this.damage = damage;
+            scalingStatData = statData;
         }
 
         protected void OnTriggerEnter(Collider other)
         {
-            if (dot && applyDamageOnEnter == false) return;
+            if (dontApplyDamageOnEnter == true) return;
 
             if (other.CompareTag(targetTag))
             {
-                IMobController controller = other.GetComponent<IMobController>();
-                controller.Stats.UpdateCurrentHealth(-Mathf.CeilToInt(damage));
-
-                // Apply knock back effect
-                if (null != knockBackEffect)
-                {
-                    KnockBackEffect effect = new KnockBackEffect(knockBackEffect);
-                    controller.ApplyKnockBack(mob.transform.position, effect);
-                }
-                else if (applyHitAnim)
-                    controller.ApplyHitAnimation();
-
-                if (hitFX) Instantiate(hitFX, other.transform.position + new Vector3(0, 0.5f, 0), Quaternion.identity);
-
-                if (!pierce) Destroy(gameObject);
+                DamageLogic(other);
             }
         }
 
-        private void OnTriggerStay(Collider other)
+        protected virtual void OnTriggerStay(Collider other)
         {
             if (other.CompareTag(targetTag) && dotTimer >= dotIntervalTimer)
             {
                 dotTimer = 0f;
+                DamageLogic(other);
+            }
+        }
 
-                IMobController controller = other.GetComponent<IMobController>();
-                controller.Stats.UpdateCurrentHealth(-Mathf.CeilToInt(damage));
+        /// <summary>
+        /// useCustomDamage needs to be set to true on AttackCollider.cs inorder to apply this.
+        /// </summary>
+        protected void ApplyCustomDamage(IMobController controller)
+        {
+            controller.Stats.UpdateCurrentHealth(-Mathf.CeilToInt(scalingStatData.FinalValue(mob.stats)));
+        }
+
+        protected void DamageLogic(Collider other)
+        {
+            IMobController controller = other.GetComponent<IMobController>();
+            if (null != controller)
+            {
+                ApplyCustomDamage(controller);
 
                 // Apply knock back effect
                 if (null != knockBackEffect)
@@ -144,12 +139,14 @@ namespace Paraverse
                     controller.ApplyKnockBack(mob.transform.position, effect);
                 }
                 else if (applyHitAnim)
+                {
                     controller.ApplyHitAnimation();
-
-                if (hitFX) Instantiate(hitFX, other.transform.position + new Vector3(0, 0.5f, 0), Quaternion.identity);
-
-                if (!pierce) Destroy(gameObject);
+                }
             }
+
+            if (hitFX) Instantiate(hitFX, other.transform.position + new Vector3(0, 0.5f, 0), Quaternion.identity);
+
+            if (!pierce) Destroy(gameObject);
         }
     }
 }

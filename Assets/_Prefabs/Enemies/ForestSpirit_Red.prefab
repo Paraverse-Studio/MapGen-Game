@@ -1,5 +1,107 @@
 %YAML 1.1
 %TAG !u! tag:unity3d.com,2011:
+--- !u!1 &1448618251
+GameObject:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  serializedVersion: 6
+  m_Component:
+  - component: {fileID: 1448618252}
+  - component: {fileID: 2229417013032440403}
+  m_Layer: 15
+  m_Name: BasicAttack
+  m_TagString: Untagged
+  m_Icon: {fileID: 0}
+  m_NavMeshLayer: 0
+  m_StaticEditorFlags: 0
+  m_IsActive: 1
+--- !u!4 &1448618252
+Transform:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1448618251}
+  m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
+  m_LocalPosition: {x: 0, y: 0, z: 0}
+  m_LocalScale: {x: 1, y: 1, z: 1}
+  m_ConstrainProportionsScale: 0
+  m_Children: []
+  m_Father: {fileID: 1606808564}
+  m_RootOrder: 0
+  m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
+--- !u!114 &2229417013032440403
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1448618251}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 5ff88d084135b4240baee58ee284d528, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  _skillName: Forest Spirit Basic Attack
+  _ID: -1
+  _image: {fileID: 0}
+  _description: 
+  _minRange: 0
+  _maxRange: 3.25
+  cooldown: 2.2
+  cost: 0
+  animName: BasicAttack
+  isBasicAttack: 1
+  _isMelee: 0
+  attackColliderGO: {fileID: 2739856676951319334}
+  attackCollider: {fileID: 2739856676951319332}
+  projData:
+    projPf: {fileID: 0}
+    projHeld: {fileID: 0}
+    projOrigin: {fileID: 0}
+    projRotation: {fileID: 0}
+    basicAtkProjSpeed: 10
+  usesTargetLock: 0
+  rotSpeed: 100
+  scalingStatData:
+    flatPower: 0
+    attackScaling: 1
+    abilityScaling: 0
+    healthScaling: 0
+--- !u!1 &1606808563
+GameObject:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  serializedVersion: 6
+  m_Component:
+  - component: {fileID: 1606808564}
+  m_Layer: 15
+  m_Name: SkillHolder
+  m_TagString: Untagged
+  m_Icon: {fileID: 0}
+  m_NavMeshLayer: 0
+  m_StaticEditorFlags: 0
+  m_IsActive: 1
+--- !u!4 &1606808564
+Transform:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1606808563}
+  m_LocalRotation: {x: -0, y: -0, z: -0, w: 1}
+  m_LocalPosition: {x: 1.9048195, y: 0, z: -18.789211}
+  m_LocalScale: {x: 1, y: 1, z: 1}
+  m_ConstrainProportionsScale: 0
+  m_Children:
+  - {fileID: 1448618252}
+  m_Father: {fileID: 1491135451762375405}
+  m_RootOrder: 2
+  m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
 --- !u!1 &14393435521633614
 GameObject:
   m_ObjectHideFlags: 0
@@ -465,7 +567,7 @@ GameObject:
   m_Component:
   - component: {fileID: 7048396290103623970}
   - component: {fileID: 8401066637842673487}
-  m_Layer: 0
+  m_Layer: 15
   m_Name: Trail
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -604,7 +706,7 @@ GameObject:
   serializedVersion: 6
   m_Component:
   - component: {fileID: 1491135451762375405}
-  m_Layer: 0
+  m_Layer: 15
   m_Name: ForestSpirit_Red
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -625,6 +727,7 @@ Transform:
   m_Children:
   - {fileID: 8515811364479533948}
   - {fileID: 1491135453337703408}
+  - {fileID: 1606808564}
   m_Father: {fileID: 0}
   m_RootOrder: 0
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
@@ -637,7 +740,7 @@ GameObject:
   serializedVersion: 6
   m_Component:
   - component: {fileID: 1491135451918714300}
-  m_Layer: 0
+  m_Layer: 15
   m_Name: Waypoint (4)
   m_TagString: Untagged
   m_Icon: {fileID: 4162164826716764455, guid: 0000000000000000d000000000000000, type: 0}
@@ -668,7 +771,7 @@ GameObject:
   serializedVersion: 6
   m_Component:
   - component: {fileID: 1491135452144932509}
-  m_Layer: 0
+  m_Layer: 15
   m_Name: Waypoint (2)
   m_TagString: Untagged
   m_Icon: {fileID: 4162164826716764455, guid: 0000000000000000d000000000000000, type: 0}
@@ -699,7 +802,7 @@ GameObject:
   serializedVersion: 6
   m_Component:
   - component: {fileID: 1491135453107218438}
-  m_Layer: 0
+  m_Layer: 15
   m_Name: Waypoint (1)
   m_TagString: Untagged
   m_Icon: {fileID: 4162164826716764455, guid: 0000000000000000d000000000000000, type: 0}
@@ -730,7 +833,7 @@ GameObject:
   serializedVersion: 6
   m_Component:
   - component: {fileID: 1491135453337703408}
-  m_Layer: 0
+  m_Layer: 15
   m_Name: Waypoints
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -765,7 +868,7 @@ GameObject:
   serializedVersion: 6
   m_Component:
   - component: {fileID: 1491135453473271069}
-  m_Layer: 0
+  m_Layer: 15
   m_Name: Waypoint (3)
   m_TagString: Untagged
   m_Icon: {fileID: 4162164826716764455, guid: 0000000000000000d000000000000000, type: 0}
@@ -1345,8 +1448,15 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   targetTag: Player
   dot: 0
+  dontApplyDamageOnEnter: 1
   knockBackEffect: {fileID: 0}
   hitFX: {fileID: 0}
+  isBasicAttackCollider: 0
+  scalingStatData:
+    flatPower: 0
+    attackScaling: 1
+    abilityScaling: 0
+    healthScaling: 0
 --- !u!1 &2739856676951319334
 GameObject:
   m_ObjectHideFlags: 0
@@ -1366,7 +1476,7 @@ GameObject:
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
-  m_IsActive: 1
+  m_IsActive: 0
 --- !u!4 &2739856676951319333
 Transform:
   m_ObjectHideFlags: 0
@@ -1444,7 +1554,7 @@ BoxCollider:
   m_IsTrigger: 1
   m_Enabled: 1
   serializedVersion: 2
-  m_Size: {x: 1, y: 1, z: 1}
+  m_Size: {x: 1, y: 1.55, z: 1}
   m_Center: {x: 0, y: 0, z: 0}
 --- !u!114 &2739856676951319332
 MonoBehaviour:
@@ -1460,8 +1570,15 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   targetTag: Player
   dot: 0
+  dontApplyDamageOnEnter: 0
   knockBackEffect: {fileID: 11400000, guid: 598974d11fcf1634694fbcf7947f6e76, type: 2}
   hitFX: {fileID: 0}
+  isBasicAttackCollider: 0
+  scalingStatData:
+    flatPower: 0
+    attackScaling: 1
+    abilityScaling: 0
+    healthScaling: 0
 --- !u!1 &3236425430432729743
 GameObject:
   m_ObjectHideFlags: 0
@@ -3037,7 +3154,7 @@ GameObject:
   - component: {fileID: 7711031450815146375}
   - component: {fileID: 4585376326402837706}
   m_Layer: 15
-  m_Name: ForestSpirit
+  m_Name: Damien
   m_TagString: Enemy
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
@@ -3091,13 +3208,13 @@ CharacterController:
   m_IsTrigger: 0
   m_Enabled: 1
   serializedVersion: 2
-  m_Height: 2
+  m_Height: 3
   m_Radius: 0.5
   m_SlopeLimit: 45
-  m_StepOffset: 0.65
+  m_StepOffset: 0.7
   m_SkinWidth: 0.08
   m_MinMoveDistance: 0.001
-  m_Center: {x: 0, y: 1, z: 0}
+  m_Center: {x: 0, y: 1.5, z: 0}
 --- !u!195 &1491135453723649178
 NavMeshAgent:
   m_ObjectHideFlags: 0
@@ -3143,10 +3260,10 @@ MonoBehaviour:
   minWaitDur: 5
   maxWaitDur: 10
   accurayWP: 2
-  stoppingDistance: 1.5
-  detectionRadius: 6
-  pursueRadius: 10
-  atkDashForce: 5
+  stoppingDistance: 3
+  detectionRadius: 9
+  pursueRadius: 13
+  atkDashForce: 12
   jumpForce: 5
   isGroundedCheckRange: 0.5
   groundLayer:
@@ -3162,7 +3279,7 @@ MonoBehaviour:
   deathEffect: {fileID: 8073467667769803130, guid: 75c1b160671ce934fad50936633acef1, type: 3}
   _curMobState: 0
   _isGrounded: 1
-  _isInvulnerable: 0
+  _isUnstaggerable: 0
 --- !u!114 &5751539926344400073
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -3176,17 +3293,12 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   anim: {fileID: 2363846120556484870}
-  basicAtkDmgRatio: 1
-  basicAtkRange: 3
-  basicAttackColliderGO: {fileID: 2739856676951319334}
+  stats: {fileID: 0}
   projUser: 0
-  projData:
-    projPf: {fileID: 0}
-    projHeld: {fileID: 0}
-    projOrigin: {fileID: 0}
-    projRotation: {fileID: 0}
-    basicAtkProjSpeed: 10
-  IsSkilling: 0
+  basicAttackSkill: {fileID: 2229417013032440403}
+  skills: []
+  effects: []
+  animBool: isUsingSkill
 --- !u!114 &1810881194
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -3216,6 +3328,7 @@ MonoBehaviour:
     m_PersistentCalls:
       m_Calls: []
   diveEnergyCost: 30
+  unkillable: 0
 --- !u!114 &6049451608931212569
 MonoBehaviour:
   m_ObjectHideFlags: 0

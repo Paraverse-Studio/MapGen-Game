@@ -324,8 +324,11 @@ MonoBehaviour:
   parameter: isUsingSkill
   disableUponEnter: 0
   enableUponExit: 1
-  useDelay: 0
+  disableAttackEndState: 0
+  useEnableDelay: 0
   enableAfterAnimPercentage: 0
+  useDisableDelay: 0
+  disableBeforeAnimPercentage: 0
 --- !u!114 &-4424980878660423855
 MonoBehaviour:
   m_ObjectHideFlags: 1
@@ -341,8 +344,11 @@ MonoBehaviour:
   parameter: isInteracting
   disableUponEnter: 0
   enableUponExit: 1
-  useDelay: 0
+  disableAttackEndState: 0
+  useEnableDelay: 0
   enableAfterAnimPercentage: 0
+  useDisableDelay: 0
+  disableBeforeAnimPercentage: 0
 --- !u!1102 &-4279422730852187016
 AnimatorState:
   serializedVersion: 6
@@ -470,8 +476,11 @@ MonoBehaviour:
   parameter: isInteracting
   disableUponEnter: 0
   enableUponExit: 0
-  useDelay: 0
+  disableAttackEndState: 0
+  useEnableDelay: 0
   enableAfterAnimPercentage: 0
+  useDisableDelay: 0
+  disableBeforeAnimPercentage: 0
 --- !u!1102 &-943285565608923751
 AnimatorState:
   serializedVersion: 6
@@ -580,7 +589,7 @@ AnimatorController:
     m_Type: 4
     m_DefaultFloat: 0
     m_DefaultInt: 0
-    m_DefaultBool: 1
+    m_DefaultBool: 0
     m_Controller: {fileID: 0}
   - m_Name: isUsingSkill
     m_Type: 4
@@ -655,7 +664,7 @@ AnimatorStateMachine:
     m_Position: {x: -190, y: 270, z: 0}
   - serializedVersion: 1
     m_State: {fileID: -4279422730852187016}
-    m_Position: {x: 290, y: 240, z: 0}
+    m_Position: {x: 270, y: 260, z: 0}
   - serializedVersion: 1
     m_State: {fileID: -5209176797717504195}
     m_Position: {x: 20, y: 200, z: 0}
@@ -859,8 +868,11 @@ MonoBehaviour:
   parameter: isInteracting
   disableUponEnter: 0
   enableUponExit: 0
-  useDelay: 0
+  disableAttackEndState: 0
+  useEnableDelay: 0
   enableAfterAnimPercentage: 0
+  useDisableDelay: 0
+  disableBeforeAnimPercentage: 0
 --- !u!114 &8003304042599938830
 MonoBehaviour:
   m_ObjectHideFlags: 1
@@ -876,8 +888,11 @@ MonoBehaviour:
   parameter: isInteracting
   disableUponEnter: 0
   enableUponExit: 0
-  useDelay: 0
+  disableAttackEndState: 0
+  useEnableDelay: 0
   enableAfterAnimPercentage: 0
+  useDisableDelay: 0
+  disableBeforeAnimPercentage: 0
 --- !u!114 &8416949476830554100
 MonoBehaviour:
   m_ObjectHideFlags: 1
@@ -893,8 +908,11 @@ MonoBehaviour:
   parameter: isUsingSkill
   disableUponEnter: 0
   enableUponExit: 0
-  useDelay: 0
+  disableAttackEndState: 0
+  useEnableDelay: 0
   enableAfterAnimPercentage: 0
+  useDisableDelay: 0
+  disableBeforeAnimPercentage: 0
 --- !u!1101 &8981846025239339661
 AnimatorStateTransition:
   m_ObjectHideFlags: 1

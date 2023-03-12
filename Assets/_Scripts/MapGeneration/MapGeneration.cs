@@ -11,6 +11,7 @@ using UnityEngine.Rendering;
 using TMPro;
 using UnityEngine.AI;
 using Paraverse.Mob.Stats;
+using Paraverse.Mob.Controller;
 
 [System.Serializable]
 public class PropItem
@@ -33,14 +34,6 @@ public struct PropSet
 {
     public GameObject[] propPrefabs;
 }
-
-[System.Serializable]
-public struct MapGenDataPair 
-{
-    public SO_MapGenData map;
-    public SO_MapGenData bossMap;
-}
-
 
 public class MapGeneration : MonoBehaviour
 {
@@ -74,12 +67,19 @@ public class MapGeneration : MonoBehaviour
         public bool hasWater;
     }
 
+    public static MapGeneration Instance;
+
     [Header("Map Generation Data ")]
     public SO_MapGenData M;
     [Header("Post Processing Data ")]
     public Volume globalVolume;
+    public Light globalLight;
+
     [Header("NavMesh Data ")]
     public NavMeshBuilder navMeshBuilder;
+
+    [Header("Water Splash VFX"), SerializeField]
+    private ParticleSystem waterSplash;
 
     [Header("Randomness seed ")]
     public int randomSeed;
@@ -96,6 +96,9 @@ public class MapGeneration : MonoBehaviour
     private GameObject temporaryObjFolder;
     public GameObject[] foundationPrefabs;
 
+    [Header("(Experimental) Preloader")]
+    public GameObject[] preloadingObjects;
+
     [Header("Line (GPS)")]
     public LineRenderer line;
     public bool drawLine = true;
@@ -108,8 +111,7 @@ public class MapGeneration : MonoBehaviour
     [Range(0f, 1f)]
     public float delayAfterPercentDeleted = 0.06f;
     public TextMeshProUGUI seedText;
-
-    public static MapGeneration Instance;
+    public TextMeshProUGUI qualityText;
 
     [Space(25)]
     public UnityEvent OnMapGenerateStart = new UnityEvent();
@@ -134,6 +136,7 @@ public class MapGeneration : MonoBehaviour
 
 
     #region RUNTIME_VARIABLES
+    private float runtimeDistanceOfPath;
     private float pathingAngle;
     private float distanceCreated = 0;
 
@@ -147,6 +150,7 @@ public class MapGeneration : MonoBehaviour
     private List<GameObject> enemyObjects = new List<GameObject>();
 
     private ParticleSystem mapVFX = null;
+    private IMapMechanics mapMechanics = null;
 
     private float progressValue;
     private float progressTotal = 11f;
@@ -165,7 +169,6 @@ public class MapGeneration : MonoBehaviour
     private float furthestDistance = 0f;
     #endregion
 
-
     private void Awake()
     {
         Instance = this;
@@ -176,7 +179,18 @@ public class MapGeneration : MonoBehaviour
     void Update()
     {
         UpdateLine();
-        if (Input.GetKeyDown(KeyCode.R)) RegenerateMap();
+
+        if (Input.GetKeyDown(KeyCode.F10)) 
+            GlobalSettings.Instance.waterVolume.gameObject.SetActive(!GlobalSettings.Instance.waterVolume.gameObject.activeSelf);
+
+        //if (GlobalSettings.Instance.player.transform.position.y >= 0f && GlobalSettings.Instance.player.transform.position.y < 0.5f)
+        //{
+        //    if (!waterSplash.isPlaying) waterSplash.Play();
+        //}
+        //else
+        //{
+        //    if (waterSplash.isPlaying) waterSplash.Stop();
+        //}
     }
 
     public void RegenerateMap() => StartCoroutine(ERenegerateMap());
@@ -190,8 +204,7 @@ public class MapGeneration : MonoBehaviour
 
         yield return processDelay;
 
-        ResetVariables();
-        ResetLists();
+        ClearMap();
 
         OnMapGenerateStart?.Invoke();
 
@@ -200,10 +213,17 @@ public class MapGeneration : MonoBehaviour
         StartCoroutine(Generation());
     }
 
+    public void ClearMap()
+    {
+        ResetVariables();
+        ResetLists();
+    }
+
     private void ResetVariables()
     {
         // Used to be in Start()
-        _GRIDSIZE = (int)((M.distanceOfPath * 2.0f) + (M.grassFillRadius.y * 2.0f) + 1);
+        runtimeDistanceOfPath = Random.Range(M.distanceOfPath.x, M.distanceOfPath.y);
+        _GRIDSIZE = (int)((runtimeDistanceOfPath * 2.0f) + (M.grassFillRadius.y * 2.0f) + 1);
 
         // Can't and shouldn't change these 2 variables mid-play, only one time per play session
         gridOccupants = new GridOccupant[_GRIDSIZE, _GRIDSIZE];
@@ -213,6 +233,7 @@ public class MapGeneration : MonoBehaviour
         int randomSeedNumber = randomSeed > -1 ? randomSeed : Random.Range(0, 99999);
         Random.InitState(randomSeedNumber);
         seedText.text = "Seed  " + randomSeedNumber;
+        qualityText.text = "Quality Level: " + QualityManager.QualityLevel;
 
         progressValue = -1f;
 
@@ -347,6 +368,15 @@ public class MapGeneration : MonoBehaviour
             temporaryObjFolder = new GameObject("Folder");
             temporaryObjFolder.transform.parent = blocksFolder;
 
+            for (int i = 0; i < preloadingObjects.Length; ++i)
+            {
+                if (null == preloadingObjects[i]) continue;
+                GameObject g = Instantiate(preloadingObjects[i]);
+                Destroy(g, Random.Range(0.1f, 0.5f));
+            }
+
+            mapMechanics?.Clear();
+
             #endregion
         }            
     }
@@ -390,7 +420,7 @@ public class MapGeneration : MonoBehaviour
 
 
 
-        /* * * * * * DECALS ON SHAPE OF MAP * * * * * */
+        /* * * * * * PAINTING ON SHAPE OF MAP * * * * * */
 
         currentPaintingBlock = M.blockSet.dirt;
 
@@ -403,7 +433,7 @@ public class MapGeneration : MonoBehaviour
         //PartitionProgress("Activating props...");
         //yield return processDelay;
 
-        if (M.addEdgeFoundation || M.addEdgeWalls)
+        if ((M.addEdgeFoundation || M.addEdgeWalls) && (QualityManager.QualityLevel >= 3))
         {
             AddFoundationAndEdgeWork();
             PartitionProgress();
@@ -418,7 +448,15 @@ public class MapGeneration : MonoBehaviour
 
         /////////       NO SHAPE MODIFICATIONS BEYOND THIS POINT        /////////////////////////
         centerPointWithY = new Vector3(centerPoint.x, gridOccupants[(int)centerPoint.x, (int)centerPoint.z].block.transform.position.y, centerPoint.z);
+                 
 
+        /* * * * * DECORATIVE/MECHANICAL PROPS ON MAP * * * * * * */
+        currentPaintingBlock = M.blockSet.water;
+
+        PartitionProgress("");
+        step = 7;
+        yield return processDelay;
+        AddWaterToDips();
 
         /* * * * * IMPORTANT PROPS ON MAP * * * * * * */
         PartitionProgress("Adding event triggers...");
@@ -427,17 +465,10 @@ public class MapGeneration : MonoBehaviour
         AddImportantProps();
 
         /* * * * * DECORATIVE PROPS ON MAP * * * * * * */
-        currentPaintingBlock = M.blockSet.water;
-
-        PartitionProgress("");
-        step = 7;
-        yield return processDelay;
-        AddWaterToDips();
-
         step = 8;
         PartitionProgress("");
         yield return processDelay;
-        if (GlobalSettings.Instance.QualityLevel > 3) AddFoliage();        
+        if (QualityManager.QualityLevel > 3) AddFoliage();        
 
         step = 9;
         PartitionProgress("");
@@ -453,8 +484,8 @@ public class MapGeneration : MonoBehaviour
             PartitionProgress("Spawning dangerous enemies...");
             yield return processDelay;
 
-            foreach (Block b in allObjects) b.CheckNavMeshSurface(b.CurrentPrefab);
-            navMeshBuilder.surface = allObjects[0].GetComponentInChildren<NavMeshSurface>();
+            // Based on testing, NavMeshSurface isn't needed on every block, just 1, and then it bakes navmesh map
+            navMeshBuilder.surface = allObjects[0].CheckNavMeshSurface(allObjects[0].CurrentPrefab);
             navMeshBuilder.BuildNavMesh();
 
             AddEnemies();            
@@ -462,6 +493,13 @@ public class MapGeneration : MonoBehaviour
         }
 
         /* * * * * * * * * * * * * * * * * * * * * * * */
+
+
+        /* * * * * MAP MECHANICS - LAVA INTERACTION, WATER INTERACTION, ETC. * * * * * */
+
+        mapMechanics = Instantiate(M.mapMechanics, transform).GetComponent<IMapMechanics>();
+        mapMechanics.Initialize(M.mapMechanicsVFX);
+
 
         /* * * * MISC STEPS - FINAL TOUCHES * * * * * * */
         step = 11;
@@ -480,10 +518,10 @@ public class MapGeneration : MonoBehaviour
 
 
         /* * * * * QUALITY SETTINGS (PERFORMANCE) * * * * * * */
-
-        globalVolume.gameObject.SetActive(GlobalSettings.Instance.QualityLevel > 3);
-        QualitySettings.SetQualityLevel(Mathf.Max(0, GlobalSettings.Instance.QualityLevel - 2), true);
-        if (GlobalSettings.Instance.QualityLevel <= 4 && mapVFX) Destroy(mapVFX.gameObject);
+        //globalLight.gameObject.SetActive(QualityManager.QualityLevel >= 2);
+        //globalVolume.gameObject.SetActive(QualityManager.QualityLevel >= 3);
+        QualitySettings.SetQualityLevel(Mathf.Max(0, QualityManager.QualityLevel - 1), true);
+        if (QualityManager.QualityLevel <= 4 && mapVFX) Destroy(mapVFX.gameObject);
 
         /* * * * * * * * * * * * * * * * * * * * * * * * * * * */
 
@@ -493,13 +531,13 @@ public class MapGeneration : MonoBehaviour
         }
 
         OnMapGenerateEnd?.Invoke();
-        yield return new WaitForSeconds(0.55f);
+        yield return new WaitForSeconds(0.8f);
         OnScreenReady?.Invoke();
     }
 
     private void SpawnPath()
     {
-        while (distanceCreated < M.distanceOfPath)
+        while (distanceCreated < runtimeDistanceOfPath)
         {
             float randomAngle = Random.Range(M.turningAngleRange.x, M.turningAngleRange.y);
 
@@ -628,30 +666,44 @@ public class MapGeneration : MonoBehaviour
         }
     }
 
-    private void ApplyBlockElevationRestrictions(Block block)
+    private void SmoothRaise(bool upOrDown, Vector3 area, float radius)
     {
-        if (Mathf.Abs(block.transform.position.y - YBoundary.y) < _EPSILON)
+        if (radius <= 0f) return;
+
+        for (float x = -radius; x < radius; x += 1f)
         {
-            if (M.blockSet.bridge)
+            for (float z = -radius; z < radius; z += 1f)
             {
-                block.type = M.blockSet.bridge;
-                block.UpdateBlock();
+                Vector3 newSpot = area + new Vector3(x, 0, z);
+
+                if (!IsInGrid(new Vector3((int)newSpot.x, 0, (int)newSpot.z))) continue;
+
+                Block potentialObj = gridOccupants[(int)newSpot.x, (int)newSpot.z].block;
+
+                if (potentialObj != null)
+                {
+                    float factor = 0.11f;
+
+                    ElevateBlock(upOrDown, potentialObj, factor, ignoreBounds: true);
+                    //potentialObj.transform.position += new Vector3(0, (upOrDown? 1f : -1f)* factor, 0);
+                    //ElevateBlock(upOrDown, potentialObj);
+                }
             }
-            ElevateBlock(upOrDown: true, block);
         }
+        SmoothRaise(upOrDown, area, radius - 1f);
     }
 
     private void AddRandomLumps()
     {
         //// By default, lumps will spawn in a grid fashion
         // Spread determines how far lumps are apart (spread = 2, means a lump will appear every 2 blocks)
-        int spread = M.lumpDensity;
+        int spread2 = M.lumpDensity;
 
         for (int upOrDown = 0; upOrDown < M.lumpApplicationRounds; ++upOrDown)
         {
-            for (int x = (int)xBoundary.x; x < xBoundary.y; x += spread)
+            for (int x = (int)xBoundary.x; x < xBoundary.y; x += spread2)
             {
-                for (int z = (int)zBoundary.x; z < zBoundary.y; z += spread)
+                for (int z = (int)zBoundary.x; z < zBoundary.y; z += spread2)
                 {
                     if (!IsInGrid(new Vector3((int)x, 0, (int)z)) || null == gridOccupants[x, z].block) continue;
 
@@ -661,7 +713,35 @@ public class MapGeneration : MonoBehaviour
                     x += randomXOffset;
                     z += randomZOffset;
 
+                    //SmoothRaise(z % 2 == 0 ? true : false, new Vector3(x, 0, z), Random.Range(M.lumpRadius.x, M.lumpRadius.y));
                     ElevateCircle(z % 2 == 0 ? true : false, new Vector3(x, 0, z), Random.Range(M.lumpRadius.x, M.lumpRadius.y));
+                }
+            }
+        }
+
+
+        if (false)
+        {
+            //// By default, lumps will spawn in a grid fashion
+            // Spread determines how far lumps are apart (spread = 2, means a lump will appear every 2 blocks)
+            int spread = M.lumpDensity;
+
+            for (int upOrDown = 0; upOrDown < M.lumpApplicationRounds; ++upOrDown)
+            {
+                for (int x = (int)xBoundary.x; x < xBoundary.y; x += spread)
+                {
+                    for (int z = (int)zBoundary.x; z < zBoundary.y; z += spread)
+                    {
+                        if (!IsInGrid(new Vector3((int)x, 0, (int)z)) || null == gridOccupants[x, z].block) continue;
+
+                        int randomXOffset = Random.Range(-M.lumpOffset, M.lumpOffset + 1);
+                        int randomZOffset = Random.Range(-M.lumpOffset, M.lumpOffset + 1);
+
+                        x += randomXOffset;
+                        z += randomZOffset;
+
+                        ElevateCircle(z % 2 == 0 ? true : false, new Vector3(x, 0, z), Random.Range(M.lumpRadius.x, M.lumpRadius.y));
+                    }
                 }
             }
         }
@@ -698,7 +778,7 @@ public class MapGeneration : MonoBehaviour
 
     // Given an object obj, and an elevation direction, lift/lower the object in that direction BUT
     // with the condition that no block around this block in 3x3 should end up 2-block vertically distanced
-    private void ElevateBlock(bool upOrDown, Block obj, float overrideElevationSize = -1f)
+    private void ElevateBlock(bool upOrDown, Block obj, float overrideElevationSize = -1f, bool ignoreBounds = false)
     {
         float extremeY;
         extremeY = GetExtremestAdjacentElevation(upOrDown ? ElevationLevel.lowest : ElevationLevel.highest, obj.gameObject);
@@ -709,7 +789,7 @@ public class MapGeneration : MonoBehaviour
         float yValue = extremeY + ((upOrDown ? 1f : -1f) * elevationSize);
 
         // this is so that these elevations don't create new extreme ends. That is to be determined purely from lump application rounds
-        yValue = Mathf.Clamp(yValue, YBoundary.y, YBoundary.x); 
+        if (!ignoreBounds) yValue = Mathf.Clamp(yValue, YBoundary.y, YBoundary.x); 
 
         obj.transform.position = new Vector3(obj.transform.position.x, yValue, obj.transform.position.z);
 
@@ -904,14 +984,97 @@ public class MapGeneration : MonoBehaviour
     private void AddImportantProps()
     {
         // EndPoint
-        Vector3 spawnSpot = pathObjects[pathObjects.Count - 1].transform.position + new Vector3(0, 1, 0);
-        GameObject obj = Instantiate(importantProps.endPoint, spawnSpot, Quaternion.identity);
+        Vector3 spawnSpot = pathObjects[pathObjects.Count - 1].transform.position + new Vector3(0, 0.5f, 0);
+        GameObject obj = Instantiate(importantProps.endPoint, spawnSpot, GetCameraFacingRotation(reverse: true));
         obj.name = "END PORTAL (Special)";
         UtilityFunctions.UpdateLODlevels(obj.transform);
-        GameLoopManager.Instance.EndPortal = obj;
-        obj.SetActive(false);
+        GameLoopManager.Instance.EndPortal = obj.GetComponent<EndPointTrigger>();
         propObjects.Add(obj);
         obj.transform.parent = temporaryObjFolder.transform;
+
+        // Chests
+        if (M.addChests)
+        {
+            int numChests = Random.Range((int)M.numOfChests.x, (int)M.numOfChests.y + 1);
+            int blocksGapBetweenChests = pathObjects.Count / numChests;
+
+            int runtimeDistance = 0;
+            int chestsSpawned = 0;
+            for (int i = 0; i < pathObjects.Count; ++i)
+            {
+                runtimeDistance++;
+
+                if (runtimeDistance >= blocksGapBetweenChests)
+                {          
+                    Block b = pathObjects[i];
+                    Vector3 randomOffset = new Vector3(Random.Range(0, 5f), 0, Random.Range(0, 5f));
+                    b = GetClosestValidGroundBlock(b.transform.position + randomOffset);
+
+                    var chest = Instantiate(MapCreator.Instance.chestPrefab, b.transform.position + new Vector3(0, 0.5f, 0), GetCameraFacingRotation());
+                    chest.Initialize(0);
+                    b.hasProp = true;
+                    propObjects.Add(chest.gameObject);
+                    chest.gameObject.transform.parent = temporaryObjFolder.transform;
+
+                    runtimeDistance = 0;
+
+                    chestsSpawned++;
+                    if (chestsSpawned >= numChests)
+                    {
+                        break;
+                    }
+                }
+            }
+        }
+
+        if (M.addBlacksmith)
+        {
+            int distanceToCloserToPath = Random.Range(0, 2);
+            int distanceToTheBottomLeftOfPortal = Random.Range(5, 10);
+            Vector3 spot = pathObjects[pathObjects.Count - 1].gameObject.transform.position + new Vector3(-distanceToTheBottomLeftOfPortal, 0, -distanceToCloserToPath);
+            Vector3 r = Vector3.up *  180f;
+
+            Block b = GetClosestValidGroundBlock(spot);
+
+            var npc = Instantiate(MapCreator.Instance.blackSmithPrefab, 
+                b.transform.position + new Vector3(0, 0.5f, 0), Quaternion.Euler(r.x, r.y, r.z));
+            b.hasProp = true;
+            propObjects.Add(npc.gameObject);
+            npc.transform.parent = temporaryObjFolder.transform;
+        }
+
+        if (M.addMerchant)
+        {
+            int distanceToCloserToPath = Random.Range(0, 2);
+            int distanceToTheBottomRightOfPortal = Random.Range(5, 10);
+
+            Vector3 spot = pathObjects[pathObjects.Count - 1].gameObject.transform.position + new Vector3(-distanceToCloserToPath, 0, -distanceToTheBottomRightOfPortal);
+            Vector3 r = Vector3.up * 90f;
+
+            Block b = GetClosestValidGroundBlock(spot);
+
+            var npc = Instantiate(MapCreator.Instance.merchantPrefab,
+                b.transform.position + new Vector3(0, 0.5f, 0), Quaternion.Euler(r.x, r.y, r.z));
+            b.hasProp = true;
+            propObjects.Add(npc.gameObject);
+            npc.transform.parent = temporaryObjFolder.transform;
+        }
+
+    }
+
+    private void AddLegendaryChest(Transform t)
+    {
+        Block b = GetClosestObject(t.position, allObjects,
+                (Block b2) =>
+                {
+                    return !b2.hasProp && !b2.hasWater;
+                });
+
+        var chest = Instantiate(MapCreator.Instance.chestPrefab, b.transform.position + new Vector3(0, 0.5f, 0), GetCameraFacingRotation());
+        chest.Initialize(2);
+        b.hasProp = true;
+        propObjects.Add(chest.gameObject);
+        chest.gameObject.transform.parent = temporaryObjFolder.transform;        
     }
 
     private void AddEnemies()
@@ -921,9 +1084,12 @@ public class MapGeneration : MonoBehaviour
         // We don't want enemies to start right from beginning of path
         // because we want player to spawn peacefully and digest the air
         // before encountering something hostile
-        int gapOfTilesBeforeFirstEnemy = 10;
+        int gapOfTilesBeforeFirstEnemy = 14;
 
-        int enemyFrequency = (pathObjects.Count - gapOfTilesBeforeFirstEnemy) / M.enemySpawnAmount;
+        int enemyFrequency = Mathf.Max(1, (pathObjects.Count - gapOfTilesBeforeFirstEnemy) / M.enemySpawnAmount);
+
+        // safety code, if the map is just way too little, ignore the initial gap of enemies
+        if (enemyFrequency == 1) enemyFrequency = Mathf.Max(1, (pathObjects.Count) / M.enemySpawnAmount);
 
         for (int i = gapOfTilesBeforeFirstEnemy; i < pathObjects.Count; ++i)
         {
@@ -951,10 +1117,15 @@ public class MapGeneration : MonoBehaviour
             MobStats enemyStats = enemy.GetComponentInChildren<MobStats>();
             if (enemyStats)
             {
-                float scaleFactor = M.enemyScalingPerRound * (GameLoopManager.Instance.nextRoundNumber - 1);
+                float scaleFactor = MapCreator.Instance.enemyScalingPerRound * (GameLoopManager.Instance.nextRoundNumber - 1);
+
                 enemyStats.UpdateAttackDamage(enemyStats.AttackDamage.FinalValue * scaleFactor);
                 enemyStats.UpdateAbilityPower(enemyStats.AbilityPower.FinalValue * scaleFactor);
                 enemyStats.UpdateMaxHealth(Mathf.CeilToInt(enemyStats.MaxHealth.FinalValue * scaleFactor));
+                if (MapCreator.Instance.mapType == MapType.boss)
+                {
+                    enemy.GetComponentInChildren<MobController>().OnDeathEvent += AddLegendaryChest;
+                }
             }
         }
     }
@@ -973,7 +1144,7 @@ public class MapGeneration : MonoBehaviour
                 Block b = GetGridOccupant(location).block;
                 SO_BlockItem type = b.type;
 
-                if (Random.Range(0, 1.0f) > b.type.propSpawnChance) continue;
+                if (Random.Range(0, 1.0f) > b.type.foliageSpawnChance) continue;
                 
                 for (int x = -1; x < 2; ++x)
                 {
@@ -983,7 +1154,7 @@ public class MapGeneration : MonoBehaviour
                         if (!IsInGrid(location2) || null == GetGridOccupant(location2).block) continue;
                         GridOccupant gridOccupant = GetGridOccupant(location2);
                         Block b2 = gridOccupant.block;
-                        if (b2.hasWater) continue;
+                        if (b2.hasWater || b2.hasProp) continue;
                         if (gridOccupant.hasProp || gridOccupant.hasWater) continue;
                         if (type != b2.type) continue;
 
@@ -1020,6 +1191,7 @@ public class MapGeneration : MonoBehaviour
                 int newX = (int)Mathf.Round(x + randomXOffset);
                 int newZ = (int)Mathf.Round(z + randomZOffset);
 
+                if (!IsInGrid(new Vector3(newX, 0, newZ))) continue;
                 if (null == gridOccupants[newX, newZ].block) continue;
                 if (true == gridOccupants[newX, newZ].hasProp) continue;
 
@@ -1044,28 +1216,6 @@ public class MapGeneration : MonoBehaviour
                     obj.transform.parent = temporaryObjFolder.transform;
 
                     gridOccupants[newX, newZ].hasProp = true;
-                }
-            }
-        }
-    }
-
-    private void SmoothenElevation(int roundsOfSmoothening = 1)
-    {
-        for (int count = 0; count < roundsOfSmoothening; ++count)
-        {
-            for (int i = 0; i < allObjects.Count; ++i)
-            {
-                Block obj = allObjects[i];
-                if (NumOfAdjacentOccupied(obj.transform.position, true) < M.flattenIfSurroundedByLessThan)
-                {
-                    if (Mathf.Abs(obj.transform.position.y - YBoundary.x) < Mathf.Abs(obj.transform.position.y - YBoundary.y))
-                    {
-                        ElevateBlock(false, obj);
-                    }
-                    else
-                    {
-                        ElevateBlock(true, obj);
-                    }
                 }
             }
         }
@@ -1125,76 +1275,6 @@ public class MapGeneration : MonoBehaviour
                     }
                 }
             }
-        }
-
-        // attempt 2 at adding walls to top half of generated map
-        if (false)
-        {
-            List<Block> topEdgeBlocks = new();
-
-            int size = allObjects.Count;
-            for (int i = 0; i < size; ++i)
-            {
-                // reduce iterations to just edge-blocks
-                if (9 == NumOfAdjacentOccupied(allObjects[i].gameObject.transform.position)) continue;
-
-                Vector3 targetPosition = allObjects[i].transform.position + new Vector3(0, 0.9f, 0);
-                RaycastHit hit;
-                if (Physics.Raycast(Camera.main.transform.position, targetPosition - Camera.main.transform.position, out hit))
-                {
-                    if (hit.collider.gameObject.layer != 6)
-                    {
-                        Debug.Log("This one's was Ground!!! " + hit.collider.gameObject + "   layer: " + hit.collider.gameObject.layer);
-                        allObjects[i].transform.localScale = new Vector3(1, 5.5f, 1);
-                        topEdgeBlocks.Add(allObjects[i]);
-                    }
-                }
-                else
-                {
-                    allObjects[i].transform.localScale = new Vector3(1, 5.5f, 1);
-                    topEdgeBlocks.Add(allObjects[i]);
-                }
-            }
-
-            foreach (Block b in topEdgeBlocks)
-            {
-                for (int x = -1; x < 2; ++x)
-                {
-                    for (int z = -1; z < 2; ++z)
-                    {
-                        Vector3 areaToCheck = new Vector3(b.transform.position.x + x, 0, b.transform.position.z + z);
-
-                        if (!IsInGrid(areaToCheck)) continue;
-
-                        Block objectToCheck = gridOccupants[(int)areaToCheck.x, (int)areaToCheck.z].block;
-
-                        if (objectToCheck && 9 != NumOfAdjacentOccupied(objectToCheck.transform.position))
-                        {
-                            objectToCheck.transform.localScale = new Vector3(1, 5.5f, 1);
-                        }
-                    }
-                }
-            }
-        }
-
-
-        // old code to raise edge blocks to cover water
-        if (false) 
-        {
-            // RAISING edge blocks (so that anything, ie. water blocks, don't look awkward at edges)
-            //Vector3 objPos = allObjects[i].transform.position;
-            //Block obj = gridOccupants[(int)objPos.x, (int)objPos.z].block;
-
-            //if (M.blockSet.foundation)
-            //{
-            //    obj.type = M.blockSet.foundation;
-            //    obj.UpdateBlock();
-            //}
-
-            //if (null != obj && Mathf.Abs(objPos.y - YBoundary.y) < _EPSILON)
-            //{
-            //    ElevateBlock(upOrDown: true, obj, M.edgeBlockRaiseSize);
-            //}
         }        
     }
 
@@ -1330,6 +1410,18 @@ public class MapGeneration : MonoBehaviour
         return GetClosestObject(source.position, allObjects);
     }
 
+    // Returns the closest block to spot that is valid, doesn't have trees or props, and doesn't have water/liquid
+    // NOTE*: this must be used after WaterDips() has already been called since .hasWater is only populated
+    // during WaterDips()
+    public Block GetClosestValidGroundBlock(Vector3 spot)
+    {
+        return GetClosestObject(spot, allObjects,
+                (Block b2) =>
+                {
+                    return !b2.hasProp && !b2.hasWater;
+                });
+    }
+
     // Get closest valid block to a given vector
     private Block GetClosestObject(Vector3 src, List<Block> list, System.Predicate<Block> condition = null)
     {
@@ -1350,6 +1442,18 @@ public class MapGeneration : MonoBehaviour
             }
         }
         return closest;
+    }
+
+    public Quaternion GetCameraFacingRotation(bool reverse = false)
+    {
+        Vector3 r = Vector3.down * (Random.value < 0.5f ? 90f : 180f);
+        if (reverse) r = Vector3.up * (Random.value < 0.5f ? 90f : 180f);
+        return Quaternion.Euler(r.x, r.y, r.z);
+    }
+
+    public Vector3 GetCameraFacingVector3()
+    {
+        return Vector3.down * (Random.value < 0.5f ? 90f : 180f);
     }
 
     public void TeleportPlayer(Vector3 v)
