@@ -47,19 +47,23 @@ public class ItemDisplayCreator : MonoBehaviour
         if (null == _player) _player = GlobalSettings.Instance.player.GetComponent<MobStats>();
 
         _items = items;
-        foreach (Transform c in _container)
-        {
-            if (null != c.gameObject) Destroy(c.gameObject);
-        }
 
-        for (int i = 0; i < _items.Count; ++i)
+        if (_container)
         {
-            ItemCard card = Instantiate(_itemCardPrefab, _container);
-            card.Item = _items[i];
-            card.descriptionLabel = _contextText;
-            card.UpdateDisplay();
-            card.OnClickCard.AddListener(PurchaseItem);
-            _createdObjects.Add(card);
+            foreach (Transform c in _container)
+            {
+                if (null != c.gameObject) Destroy(c.gameObject);
+            }
+
+            for (int i = 0; i < _items.Count; ++i)
+            {
+                ItemCard card = Instantiate(_itemCardPrefab, _container);
+                card.Item = _items[i];
+                card.descriptionLabel = _contextText;
+                card.UpdateDisplay();
+                card.OnClickCard.AddListener(PurchaseItem);
+                _createdObjects.Add(card);
+            }
         }
 
         if (_goldText) _goldText.text = _player.Gold.ToString();

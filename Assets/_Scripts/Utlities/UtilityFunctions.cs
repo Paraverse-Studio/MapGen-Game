@@ -52,6 +52,13 @@ public static class UtilityFunctions
         return string.Format("{0:0}:{1:00}", minutes, seconds);
     }
 
+    public static Quaternion GetCameraFacingRotation(bool reverse = false)
+    {
+        Vector3 r = Vector3.down * (Random.value < 0.5f ? 90f : 180f);
+        if (reverse) r = Vector3.up * (Random.value < 0.5f ? 90f : 180f);
+        return Quaternion.Euler(r.x, r.y, r.z);
+    }
+
     public static void TeleportObject(GameObject obj, Vector3 spot)
     {
         CharacterController cc;

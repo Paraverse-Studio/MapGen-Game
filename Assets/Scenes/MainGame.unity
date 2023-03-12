@@ -5939,6 +5939,7 @@ GameObject:
   - component: {fileID: 138379636}
   - component: {fileID: 138379639}
   - component: {fileID: 138379638}
+  - component: {fileID: 138379640}
   m_Layer: 5
   m_Name: FreeSkillWindow
   m_TagString: Untagged
@@ -5995,6 +5996,25 @@ MonoBehaviour:
   previousMenu: {fileID: 0}
   nextMenu: {fileID: 0}
   exempt: 0
+--- !u!114 &138379640
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 138379635}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 852ddf6bac4e9a14e80cd1c6e02a364d, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  _refresher: {fileID: 0}
+  _container: {fileID: 0}
+  _itemCardPrefab: {fileID: 0}
+  _customCardContainer: {fileID: 0}
+  _customItemCardPrefab: {fileID: 0}
+  _goldText: {fileID: 0}
+  _contextText: {fileID: 0}
 --- !u!1 &140788754
 GameObject:
   m_ObjectHideFlags: 0
@@ -45975,6 +45995,8 @@ MonoBehaviour:
     display: {fileID: 469476639}
   - type: 1
     display: {fileID: 765822042}
+  - type: 3
+    display: {fileID: 138379640}
 --- !u!1 &1465380930
 GameObject:
   m_ObjectHideFlags: 0

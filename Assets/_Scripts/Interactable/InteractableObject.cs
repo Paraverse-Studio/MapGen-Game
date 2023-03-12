@@ -97,6 +97,17 @@ public class InteractableObject : MonoBehaviour
 
             _display.Display(effectMods, null);
         }
+        else if (thisInteractable == InteractableObjects.skillGiver)
+        {
+            _display.Display(null, ()=>
+                {
+                    var chest = Instantiate(MapCreator.Instance.chestPrefab, 
+                        transform.position + new Vector3(0, 0.5f, 0) + transform.forward, 
+                        UtilityFunctions.GetCameraFacingRotation(reverse: true));
+                    chest.Initialize(3); // skill chest
+                    Destroy(_interactable);
+                });
+        }
 
         _initialized = true;
 
