@@ -448,7 +448,15 @@ public class MapGeneration : MonoBehaviour
 
         /////////       NO SHAPE MODIFICATIONS BEYOND THIS POINT        /////////////////////////
         centerPointWithY = new Vector3(centerPoint.x, gridOccupants[(int)centerPoint.x, (int)centerPoint.z].block.transform.position.y, centerPoint.z);
+                 
 
+        /* * * * * DECORATIVE/MECHANICAL PROPS ON MAP * * * * * * */
+        currentPaintingBlock = M.blockSet.water;
+
+        PartitionProgress("");
+        step = 7;
+        yield return processDelay;
+        AddWaterToDips();
 
         /* * * * * IMPORTANT PROPS ON MAP * * * * * * */
         PartitionProgress("Adding event triggers...");
@@ -457,13 +465,6 @@ public class MapGeneration : MonoBehaviour
         AddImportantProps();
 
         /* * * * * DECORATIVE PROPS ON MAP * * * * * * */
-        currentPaintingBlock = M.blockSet.water;
-
-        PartitionProgress("");
-        step = 7;
-        yield return processDelay;
-        AddWaterToDips();
-
         step = 8;
         PartitionProgress("");
         yield return processDelay;
@@ -995,15 +996,34 @@ public class MapGeneration : MonoBehaviour
         if (M.addChests)
         {
             int numChests = Random.Range((int)M.numOfChests.x, (int)M.numOfChests.y + 1);
-            for (int i = 0; i < numChests; ++i)
-            {
-                Block b = allObjects[Random.Range(0, allObjects.Count - 1)];
+            int blocksGapBetweenChests = pathObjects.Count / numChests;
 
-                var chest = Instantiate(MapCreator.Instance.chestPrefab, b.transform.position + new Vector3(0, 0.5f, 0), GetCameraFacingRotation());
-                chest.Initialize(0);
-                b.hasProp = true;
-                propObjects.Add(chest.gameObject);
-                chest.gameObject.transform.parent = temporaryObjFolder.transform;
+            int runtimeDistance = 0;
+            int chestsSpawned = 0;
+            for (int i = 0; i < pathObjects.Count; ++i)
+            {
+                runtimeDistance++;
+
+                if (runtimeDistance >= blocksGapBetweenChests)
+                {          
+                    Block b = pathObjects[i];
+                    Vector3 randomOffset = new Vector3(Random.Range(0, 5f), 0, Random.Range(0, 5f));
+                    b = GetClosestValidGroundBlock(b.transform.position + randomOffset);
+
+                    var chest = Instantiate(MapCreator.Instance.chestPrefab, b.transform.position + new Vector3(0, 0.5f, 0), GetCameraFacingRotation());
+                    chest.Initialize(0);
+                    b.hasProp = true;
+                    propObjects.Add(chest.gameObject);
+                    chest.gameObject.transform.parent = temporaryObjFolder.transform;
+
+                    runtimeDistance = 0;
+
+                    chestsSpawned++;
+                    if (chestsSpawned >= numChests)
+                    {
+                        break;
+                    }
+                }
             }
         }
 
@@ -1014,11 +1034,7 @@ public class MapGeneration : MonoBehaviour
             Vector3 spot = pathObjects[pathObjects.Count - 1].gameObject.transform.position + new Vector3(-distanceToTheBottomLeftOfPortal, 0, -distanceToCloserToPath);
             Vector3 r = Vector3.up *  180f;
 
-            Block b = GetClosestObject(spot, allObjects,
-                (Block b2) =>
-                {
-                    return !b2.hasProp && b2.transform.position.y - YBoundary.y > _EPSILON;
-                });
+            Block b = GetClosestValidGroundBlock(spot);
 
             var npc = Instantiate(MapCreator.Instance.blackSmithPrefab, 
                 b.transform.position + new Vector3(0, 0.5f, 0), Quaternion.Euler(r.x, r.y, r.z));
@@ -1035,11 +1051,7 @@ public class MapGeneration : MonoBehaviour
             Vector3 spot = pathObjects[pathObjects.Count - 1].gameObject.transform.position + new Vector3(-distanceToCloserToPath, 0, -distanceToTheBottomRightOfPortal);
             Vector3 r = Vector3.up * 90f;
 
-            Block b = GetClosestObject(spot, allObjects,
-                (Block b2) =>
-                {
-                    return !b2.hasProp && b2.transform.position.y - YBoundary.y > _EPSILON;
-                });
+            Block b = GetClosestValidGroundBlock(spot);
 
             var npc = Instantiate(MapCreator.Instance.merchantPrefab,
                 b.transform.position + new Vector3(0, 0.5f, 0), Quaternion.Euler(r.x, r.y, r.z));
@@ -1396,6 +1408,18 @@ public class MapGeneration : MonoBehaviour
     public Block GetClosestBlock(Transform source)
     {
         return GetClosestObject(source.position, allObjects);
+    }
+
+    // Returns the closest block to spot that is valid, doesn't have trees or props, and doesn't have water/liquid
+    // NOTE*: this must be used after WaterDips() has already been called since .hasWater is only populated
+    // during WaterDips()
+    public Block GetClosestValidGroundBlock(Vector3 spot)
+    {
+        return GetClosestObject(spot, allObjects,
+                (Block b2) =>
+                {
+                    return !b2.hasProp && !b2.hasWater;
+                });
     }
 
     // Get closest valid block to a given vector

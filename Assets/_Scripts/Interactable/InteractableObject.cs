@@ -80,7 +80,7 @@ public class InteractableObject : MonoBehaviour
         }
         else if (thisInteractable == InteractableObjects.merchant)
         {
-            List<SO_Item> effectMods = ModsManager.Instance.AvailableMods.Where(mod => (mod is SO_EffectMod || mod is SO_StatMod)).ToList();
+            List<SO_Item> effectMods = ModsManager.Instance.AvailableMods.Where(mod => mod is SO_EffectMod).ToList();
 
             IListExtensions.Shuffle(effectMods);
 

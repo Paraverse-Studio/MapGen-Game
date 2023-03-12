@@ -204,7 +204,7 @@ public class GameLoopManager : MonoBehaviour
 
         GameplayListeners(attachOrRemove: true);
 
-        if (nextRoundNumber == 1)
+        if (nextRoundNumber == 1 && MapCreator.Instance.mapType != MapType.reward) // only for round 1, since it's tutorial
         {
             AnnouncementManager.Instance.QueueAnnouncement(new Announcement().AddType(1).StartDelay(1.5f).OverrideDuration(3f)
                 .AddText("Defeat all enemies & pass through the gate!"));
