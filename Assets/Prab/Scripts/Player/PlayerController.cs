@@ -78,6 +78,8 @@ namespace Paraverse.Player
         [Header("Attack Dashing Values")]
         [SerializeField, Tooltip("The attack dashing force applied during basic attack.")]
         private float atkDashForce = 2f;
+        [SerializeField, Tooltip("The attack dashing force applied during basic attack two.")]
+        private float atkTwoDashForce = 2f;
         [SerializeField, Tooltip("The attack dashing force applied during basic attack three.")]
         private float atkThreeDashForce = 4f;
 
@@ -482,6 +484,9 @@ namespace Paraverse.Player
             if (combat.IsAttackLunging && combat.BasicAttackComboIdx == 0)
             {
                 controller.Move(transform.forward * atkThreeDashForce * Time.deltaTime);
+            }else if (combat.IsAttackLunging && combat.BasicAttackComboIdx == 2)
+            {
+                controller.Move(transform.forward * atkTwoDashForce * Time.deltaTime);
             }
             else if (combat.IsAttackLunging)
             {
