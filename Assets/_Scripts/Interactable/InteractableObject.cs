@@ -35,6 +35,7 @@ public class InteractableObject : MonoBehaviour
 
     private bool _initialized = false;
     private ItemDisplayCreator _display;
+    private List<SO_Item> _items = null;
 
     private void Start()
     {
@@ -58,22 +59,19 @@ public class InteractableObject : MonoBehaviour
 
     public void InteractWithObject()
     {
-        if (_initialized && _display)
-        {
-            _display.gameObject.SetActive(true);
-            return;
-        }
-
         _display = InteractableObjectsManager.Instance.windows.Find(x => x.type == thisInteractable).display;
 
         if (thisInteractable == InteractableObjects.spellbookMaster)
         {
             // Displaying left side: list of available skills to buy
-            List<SO_Item> skillMods = ModsManager.Instance.AvailableMods.Where(mod => (mod is SO_SkillMod)).ToList();
-            IListExtensions.Shuffle(skillMods);
+            if (null == _items)
+            {
+                _items = ModsManager.Instance.AvailableMods.Where(mod => (mod is SO_SkillMod)).ToList();
+                IListExtensions.Shuffle(_items);
 
-            for (int i = 2; i < skillMods.Count; ++i) skillMods.RemoveAt(i);
-            _display.Display(skillMods, null);
+                for (int i = 2; i < _items.Count; ++i) _items.RemoveAt(i);
+            }
+            _display.Display(_items, null);
 
             // Displayin right side: show the latest purchased skill you have
             SO_Item latestSkill = null;
@@ -89,13 +87,23 @@ public class InteractableObject : MonoBehaviour
         }
         else if (thisInteractable == InteractableObjects.merchant)
         {
-            List<SO_Item> effectMods = ModsManager.Instance.AvailableMods.Where(mod => mod is SO_EffectMod).ToList();
-
-            IListExtensions.Shuffle(effectMods);
-
-            for (int i = 4; i < effectMods.Count; ++i) effectMods.RemoveAt(i);
-
-            _display.Display(effectMods, null);
+            if (null == _items)
+            {
+                _items = ModsManager.Instance.AvailableMods.Where(mod => mod is SO_EffectMod).ToList();
+                IListExtensions.Shuffle(_items);
+                for (int i = 4; i < _items.Count; ++i) _items.RemoveAt(i);
+            }
+            _display.Display(_items, null);
+        }
+        else if (thisInteractable == InteractableObjects.trainer)
+        {
+            if (null == _items)
+            {
+                _items = ModsManager.Instance.AvailableMods.Where(mod => mod is SO_StatMod).ToList();
+                IListExtensions.Shuffle(_items);
+                for (int i = 4; i < _items.Count; ++i) _items.RemoveAt(i);
+            }
+            _display.Display(_items, null);
         }
         else if (thisInteractable == InteractableObjects.skillGiver)
         {
@@ -116,6 +124,7 @@ public class InteractableObject : MonoBehaviour
     public void ResetInteractable()
     {
         _initialized = false;
+        _items = null;
     }
 
 }

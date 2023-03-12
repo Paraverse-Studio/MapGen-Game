@@ -1007,7 +1007,7 @@ public class MapGeneration : MonoBehaviour
                 if (runtimeDistance >= blocksGapBetweenChests)
                 {          
                     Block b = pathObjects[i];
-                    Vector3 randomOffset = new Vector3(Random.Range(0, 5f), 0, Random.Range(0, 5f));
+                    Vector3 randomOffset = new(Random.Range(2, 6f), 0, Random.Range(2, 6f));
                     b = GetClosestValidGroundBlock(b.transform.position + randomOffset);
 
                     var chest = Instantiate(MapCreator.Instance.chestPrefab, b.transform.position + new Vector3(0, 0.5f, 0), GetCameraFacingRotation());

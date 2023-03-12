@@ -5,7 +5,11 @@ using UnityEngine;
 [System.Serializable]
 public enum InteractableObjects
 {
-    spellbookMaster, merchant, trader, skillGiver
+    spellbookMaster, // lets you buy and upgrade skills
+    merchant, // lets you buy Effect mods
+    trader, // lets you sell mods (not yet available)
+    skillGiver, // Ronny, gives you a free random skill
+    trainer
 }
 
 public class InteractableObjectsManager : MonoBehaviour
