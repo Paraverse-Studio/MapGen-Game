@@ -133,14 +133,18 @@ public class GameLoopManager : MonoBehaviour
         }
     }
 
-
     // Update is called once per frame
     void Update()
     {
         if (Time.frameCount % 60 == 0)
         {
             if (null == _predicate) MakeCompletionPredicate(CompletionPredicate);
-            if (_predicate(_roundIsActive)) EndPortal.Activate(true);
+            if (_predicate(_roundIsActive) && false == EndPortal.gameObject.activeSelf)
+            {
+                if (MapCreator.Instance.mapType != MapType.reward)
+                    AnnouncementManager.Instance.QueueAnnouncement(new Announcement().AddType(1).AddText("Gate is open!"));
+                EndPortal.Activate(true);
+            }
         }        
 
         if (player.transform.position.y <= -25f)
