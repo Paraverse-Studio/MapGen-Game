@@ -139,7 +139,7 @@ public class GameLoopManager : MonoBehaviour
         if (Time.frameCount % 60 == 0)
         {
             if (null == _predicate) MakeCompletionPredicate(CompletionPredicate);
-            if (_predicate(_roundIsActive) && false == EndPortal.gameObject.activeSelf)
+            if (_predicate(_roundIsActive) && !EndPortal.IsActivated)
             {
                 if (MapCreator.Instance.mapType != MapType.reward)
                     AnnouncementManager.Instance.QueueAnnouncement(new Announcement().AddType(1).AddText("Gate is open!"));

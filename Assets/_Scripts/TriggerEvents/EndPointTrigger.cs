@@ -6,7 +6,7 @@ public class EndPointTrigger : MonoBehaviour
 {
     public GameObject portal;
 
-    private bool _activated = false;
+    private bool _activated = false; public bool IsActivated => _activated;
 
     private void Start()
     {

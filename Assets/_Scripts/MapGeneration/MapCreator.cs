@@ -168,7 +168,7 @@ public class MapCreator : MonoBehaviour
     {
         int enemiesCount = (null == enemies ? EnemiesManager.Instance.EnemiesCount : enemies.Count);
         if (EnemiesSpawned == 0) EnemiesSpawned = enemiesCount;
-        objectiveTitle.text = enemiesCount == 1? "Defeat the colossus!" : "Defeat the enemies!";
+        objectiveTitle.text = EnemiesSpawned == 1? "Defeat the colossus!" : "Defeat the enemies!";
         objectiveSubtitle.text = $"Remaining: {enemiesCount} / {EnemiesSpawned}";
     }
 
