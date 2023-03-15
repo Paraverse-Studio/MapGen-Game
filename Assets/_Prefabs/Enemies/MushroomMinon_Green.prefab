@@ -80,7 +80,7 @@ MonoBehaviour:
   _ID: -1
   _image: {fileID: 0}
   _description: 
-  _minRange: 0
+  _minRange: 3
   _maxRange: 9
   cooldown: 2
   cost: 10
@@ -1747,7 +1747,7 @@ GameObject:
   m_Layer: 15
   m_Name: Sphere
   m_TagString: Untagged
-  m_Icon: {fileID: 0}
+  m_Icon: {fileID: 5721338939258241955, guid: 0000000000000000d000000000000000, type: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
   m_IsActive: 1
@@ -1758,8 +1758,8 @@ Transform:
   m_PrefabInstance: {fileID: 0}
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 5121004192971979556}
-  m_LocalRotation: {x: 0, y: 0.008726535, z: 0, w: 0.9999619}
-  m_LocalPosition: {x: 0, y: 0, z: 0}
+  m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
+  m_LocalPosition: {x: 0, y: 1, z: 0}
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_ConstrainProportionsScale: 0
   m_Children: []
@@ -1781,7 +1781,7 @@ MeshRenderer:
   m_PrefabInstance: {fileID: 0}
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 5121004192971979556}
-  m_Enabled: 1
+  m_Enabled: 0
   m_CastShadows: 1
   m_ReceiveShadows: 1
   m_DynamicOccludee: 1
@@ -3670,7 +3670,7 @@ NavMeshAgent:
   m_Speed: 3
   m_Acceleration: 8
   avoidancePriority: 50
-  m_AngularSpeed: 120
+  m_AngularSpeed: 999
   m_StoppingDistance: 1
   m_AutoTraverseOffMeshLink: 1
   m_AutoBraking: 0
@@ -3723,6 +3723,9 @@ MonoBehaviour:
   stoppingDistance: 9
   detectionRadius: 12
   pursueRadius: 18
+  strafePoint: {fileID: 5611048398193010025}
+  strafeAccuracy: 1
+  _isStrafer: 1
   atkDashForce: 2
   jumpForce: 5
   isGroundedCheckRange: 0.5
@@ -3736,7 +3739,6 @@ MonoBehaviour:
   checkFallRange: 2
   maxDeathTimerUponFall: 2
   fallForce: 0.5
-  strafePoint: {fileID: 0}
   deathEffect: {fileID: 8073467667769803130, guid: 75c1b160671ce934fad50936633acef1, type: 3}
   _curMobState: 0
   _isGrounded: 1
@@ -3757,10 +3759,6 @@ MonoBehaviour:
   stats: {fileID: 0}
   projUser: 1
   basicAttackSkill: {fileID: 1061767023}
-  _strafeBackTarget: {fileID: 0}
-  _strafeLeftTarget: {fileID: 0}
-  _strafeRightTarget: {fileID: 0}
-  _isStrafer: 1
   skills: []
   effects: []
   animBool: isUsingSkill
@@ -3793,7 +3791,7 @@ MonoBehaviour:
     m_PersistentCalls:
       m_Calls: []
   diveEnergyCost: 30
-  unkillable: 0
+  unkillable: 1
 --- !u!114 &4734784885605418516
 MonoBehaviour:
   m_ObjectHideFlags: 0

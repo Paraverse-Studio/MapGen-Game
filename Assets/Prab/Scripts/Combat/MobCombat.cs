@@ -55,10 +55,6 @@ namespace Paraverse.Mob.Combat
         public bool IsSkilling { get; set; }
         public bool IsInCombat { get { return IsSkilling || IsBasicAttacking; } }
 
-        public bool IsStrafer { get { return _isStrafer; } }
-        [SerializeField, Tooltip("Allow mob strafing.")]
-        protected bool _isStrafer = false;
-
         [SerializeField, Tooltip("Mob skills.")]
         protected List<MobSkill> skills = new List<MobSkill>();
         [SerializeField, Tooltip("Mob effects.")]

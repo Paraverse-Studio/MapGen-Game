@@ -75,6 +75,17 @@ namespace Paraverse.Mob.Controller
         [Tooltip("Set to true once target is detected.")]
         protected bool targetDetected = false;
 
+        [Header("Strafe Values")]
+        private bool isStrafing = false;    // Mob is looking for a strafe location
+        private bool isStrafingToPoint = false; // Mob is strafing to a determined strafe location
+        [SerializeField]
+        private Transform strafePoint; // Updated strafe pos mob when strafing
+        [SerializeField, Tooltip("How close should mob approach strafe position.")]
+        protected float strafeAccuracy = 1f;
+        public bool IsStrafer { get { return _isStrafer; } }
+        [SerializeField, Tooltip("Allow mob strafing.")]
+        protected bool _isStrafer = false;
+
         [Header("Attack Dash Values")]
         [SerializeField, Tooltip("The attack dashing force applied during basic attack.")]
         protected float atkDashForce = 2f;
@@ -117,11 +128,6 @@ namespace Paraverse.Mob.Controller
         [SerializeField]
         protected float fallForce = 0.5f;
 
-        // Strafe 
-        private bool isStrafing = false;
-        [SerializeField]
-        private Transform strafePoint;
-
         [Header("Death Values")]
         [SerializeField]
         protected GameObject deathEffect;
@@ -151,7 +157,6 @@ namespace Paraverse.Mob.Controller
         protected bool _isFlying = false;
         public bool IsGrounded { get { return _isGrounded; } }
         public bool _isGrounded = true;
-        private bool isStrafingToPoint = false;
         public bool IsUnstaggerable { get { return _isUnstaggerable; } }
         [SerializeField]
         protected bool _isUnstaggerable = false;
@@ -565,12 +570,14 @@ namespace Paraverse.Mob.Controller
         #region Strafe Logic
         private void StrafeHandler()
         {
+            if (_isStrafer == false) return;
+
             float distanceFromTarget = ParaverseHelper.GetDistance(transform.position, pursueTarget.position);
             float distanceFromStrafePoint = ParaverseHelper.GetDistance(transform.position, strafePoint.position);
 
-            if (distanceFromStrafePoint <= 1.5f)
+            // Ensures mob strafes even when attacked and doesn't freeze
+            if (distanceFromStrafePoint <= strafeAccuracy)
             {
-                Debug.Log("is not strafing to a point");
                 isStrafingToPoint = false;
                 isStrafing = false;
             }
@@ -581,14 +588,13 @@ namespace Paraverse.Mob.Controller
                 nav.SetDestination(strafePoint.position);
             }
 
+            // Handles mob strafing
             if (distanceFromTarget > combat.BasicAttackSkill.MinRange && isStrafingToPoint == false)
             {
-                Debug.Log("is not strafing");
                 isStrafing = false;
             }
-            else if (distanceFromTarget <= combat.BasicAttackSkill.MinRange && _curMobState.Equals(MobState.Pursue) && combat.IsStrafer)
+            else if (distanceFromTarget <= combat.BasicAttackSkill.MinRange && _curMobState.Equals(MobState.Pursue) && _isStrafer)
             {
-                //Debug.Log("isStrafing");
                 isStrafing = true;
             }
         }

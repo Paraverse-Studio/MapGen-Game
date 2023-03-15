@@ -12,7 +12,6 @@ namespace Paraverse.Mob
         public bool CanBasicAtk { get; }
         public bool IsSkilling { get; set; }
         public bool IsInCombat { get; }
-        public bool IsStrafer { get; }
         public abstract void OnAttackInterrupt();
     }
 }
