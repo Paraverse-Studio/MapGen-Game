@@ -1745,7 +1745,7 @@ GameObject:
   - component: {fileID: 6033979882116610483}
   - component: {fileID: 116958035036312321}
   m_Layer: 15
-  m_Name: Sphere
+  m_Name: StrafePoint
   m_TagString: Untagged
   m_Icon: {fileID: 5721338939258241955, guid: 0000000000000000d000000000000000, type: 0}
   m_NavMeshLayer: 0
@@ -3723,9 +3723,9 @@ MonoBehaviour:
   stoppingDistance: 9
   detectionRadius: 12
   pursueRadius: 18
+  _isStrafer: 1
   strafePoint: {fileID: 5611048398193010025}
   strafeAccuracy: 1
-  _isStrafer: 1
   atkDashForce: 2
   jumpForce: 5
   isGroundedCheckRange: 0.5
@@ -3791,7 +3791,7 @@ MonoBehaviour:
     m_PersistentCalls:
       m_Calls: []
   diveEnergyCost: 30
-  unkillable: 1
+  unkillable: 0
 --- !u!114 &4734784885605418516
 MonoBehaviour:
   m_ObjectHideFlags: 0

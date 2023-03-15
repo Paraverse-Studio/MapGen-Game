@@ -182,9 +182,9 @@ namespace Paraverse.Mob.Controller
                 objToSpawn.transform.SetParent(transform);
                 strafePoint = objToSpawn.AddComponent<SphereCollider>().transform;
             }
-
-                // Ensure basic attack range is >= to stopping distance
-                if (combat.BasicAtkRange < stoppingDistance)
+            
+            // Ensure basic attack range is >= to stopping distance
+            if (combat.BasicAtkRange < stoppingDistance)
             {
                 stoppingDistance = combat.BasicAtkRange;
                 Debug.LogWarning(transform.name + " cannot have basic attack range lower than its stopping distance.");
