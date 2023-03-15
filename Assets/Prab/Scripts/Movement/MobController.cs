@@ -3,6 +3,7 @@ using Paraverse.Mob.Combat;
 using Paraverse.Mob.Stats;
 using Paraverse.Stats;
 using System.Runtime.CompilerServices;
+using UnityEditor.SceneManagement;
 using UnityEngine;
 using UnityEngine.AI;
 using UnityEngine.ProBuilder;
@@ -76,15 +77,14 @@ namespace Paraverse.Mob.Controller
         protected bool targetDetected = false;
 
         [Header("Strafe Values")]
+        [SerializeField, Tooltip("Allow mob strafing.")]
+        protected bool _isStrafer = false;
         private bool isStrafing = false;    // Mob is looking for a strafe location
         private bool isStrafingToPoint = false; // Mob is strafing to a determined strafe location
         [SerializeField]
         private Transform strafePoint; // Updated strafe pos mob when strafing
         [SerializeField, Tooltip("How close should mob approach strafe position.")]
         protected float strafeAccuracy = 1f;
-        public bool IsStrafer { get { return _isStrafer; } }
-        [SerializeField, Tooltip("Allow mob strafing.")]
-        protected bool _isStrafer = false;
 
         [Header("Attack Dash Values")]
         [SerializeField, Tooltip("The attack dashing force applied during basic attack.")]
@@ -176,9 +176,15 @@ namespace Paraverse.Mob.Controller
             if (combat == null) combat = GetComponent<IMobCombat>();
             if (stats == null) stats = GetComponent<IMobStats>();
             if (statusEffectManager == null) statusEffectManager = GetComponent<StatusEffectManager>();
+            if (strafePoint == null && _isStrafer)
+            {
+                GameObject objToSpawn = new GameObject("Strafe Point");
+                objToSpawn.transform.SetParent(transform);
+                strafePoint = objToSpawn.AddComponent<SphereCollider>().transform;
+            }
 
-            // Ensure basic attack range is >= to stopping distance
-            if (combat.BasicAtkRange < stoppingDistance)
+                // Ensure basic attack range is >= to stopping distance
+                if (combat.BasicAtkRange < stoppingDistance)
             {
                 stoppingDistance = combat.BasicAtkRange;
                 Debug.LogWarning(transform.name + " cannot have basic attack range lower than its stopping distance.");
