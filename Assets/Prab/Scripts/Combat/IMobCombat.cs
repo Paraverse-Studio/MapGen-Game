@@ -12,9 +12,6 @@ namespace Paraverse.Mob
         public bool CanBasicAtk { get; }
         public bool IsSkilling { get; set; }
         public bool IsInCombat { get; }
-        public Transform StrafeBackTarget { get; }
-        public Transform StrafeLeftTarget { get; }
-        public Transform StrafeRightTarget { get; }
         public bool IsStrafer { get; }
         public abstract void OnAttackInterrupt();
     }

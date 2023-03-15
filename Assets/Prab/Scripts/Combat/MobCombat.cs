@@ -55,16 +55,6 @@ namespace Paraverse.Mob.Combat
         public bool IsSkilling { get; set; }
         public bool IsInCombat { get { return IsSkilling || IsBasicAttacking; } }
 
-        // Strafing
-        public Transform StrafeBackTarget { get { return _strafeBackTarget; } } 
-        [SerializeField, Tooltip("Strafe target GO.")]
-        protected Transform _strafeBackTarget;
-        public Transform StrafeLeftTarget { get { return _strafeLeftTarget; } } 
-        [SerializeField, Tooltip("Strafe target GO.")]
-        protected Transform _strafeLeftTarget;
-        public Transform StrafeRightTarget { get { return _strafeRightTarget; } } 
-        [SerializeField, Tooltip("Strafe target GO.")]
-        protected Transform _strafeRightTarget;
         public bool IsStrafer { get { return _isStrafer; } }
         [SerializeField, Tooltip("Allow mob strafing.")]
         protected bool _isStrafer = false;

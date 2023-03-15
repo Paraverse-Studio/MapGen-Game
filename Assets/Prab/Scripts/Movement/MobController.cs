@@ -2,8 +2,10 @@ using Paraverse.Helper;
 using Paraverse.Mob.Combat;
 using Paraverse.Mob.Stats;
 using Paraverse.Stats;
+using System.Runtime.CompilerServices;
 using UnityEngine;
 using UnityEngine.AI;
+using UnityEngine.ProBuilder;
 
 namespace Paraverse.Mob.Controller
 {
@@ -115,6 +117,11 @@ namespace Paraverse.Mob.Controller
         [SerializeField]
         protected float fallForce = 0.5f;
 
+        // Strafe 
+        private bool isStrafing = false;
+        [SerializeField]
+        private Transform strafePoint;
+
         [Header("Death Values")]
         [SerializeField]
         protected GameObject deathEffect;
@@ -144,6 +151,7 @@ namespace Paraverse.Mob.Controller
         protected bool _isFlying = false;
         public bool IsGrounded { get { return _isGrounded; } }
         public bool _isGrounded = true;
+        private bool isStrafingToPoint = false;
         public bool IsUnstaggerable { get { return _isUnstaggerable; } }
         [SerializeField]
         protected bool _isUnstaggerable = false;
@@ -237,13 +245,11 @@ namespace Paraverse.Mob.Controller
             }
             else if (TargetDetected() && playerController.IsDead == false)
             {
-                isStrafing = false;
                 CombatHandler();
                 SetGeneralState(MobState.Combat);
             }
             else
             {
-                isStrafing = false;
                 nav.updateRotation = true;
                 Patrol();
                 SetGeneralState(MobState.Patrol);
@@ -414,8 +420,6 @@ namespace Paraverse.Mob.Controller
         }
         #endregion 
 
-        private bool isStrafing = false;
-
         #region Pursue Target Logic
         /// <summary>
         /// Responsible for handling mob pursuing logic.
@@ -426,74 +430,57 @@ namespace Paraverse.Mob.Controller
             {
                 float distanceFromTarget = ParaverseHelper.GetDistance(transform.position, pursueTarget.position);
 
-                if (distanceFromTarget <= combat.BasicAtkRange)
+                if (distanceFromTarget <= combat.BasicAttackSkill.MinRange)
                 {
-                    if (isStrafing)
+                    Debug.Log("within min range");
+                    if (isStrafing && isStrafingToPoint == false)
                     {
                         Debug.Log("IsStrafing");
-                        nav.updateRotation = true;
-                        nav.isStopped = false;
-                        curMoveSpeed = GetPursueSpeed();
+                        float strafeDistance = 8f;
+
+                        Vector3 strafePos = Random.insideUnitCircle.normalized * strafeDistance;
 
                         Vector3 origin = transform.position + new Vector3(0, 1f, 0);
-                        float maxDis = combat.BasicAttackSkill.MaxRange;
-                        Vector3 rearDis = -transform.forward * maxDis;
-                        Vector3 leftDis = -transform.right * maxDis;
-                        Vector3 rightDis = transform.right * maxDis;
-                        Vector3 groundCheckDis = -transform.up * 2f;
+                        Vector3 groundCheckDis = -transform.up * 3f;
 
-                        // back check
-                        if (Physics.Raycast(origin, rearDis, out RaycastHit hit, maxDis))
+                        if (Physics.Raycast(origin, strafePos, out RaycastHit hit, strafeDistance))
                         {
-                            if (Physics.Raycast(origin, leftDis, out hit, maxDis))
-                            {
-                                if (Physics.Raycast(origin, leftDis, out hit, maxDis))
-                                {
-                                    Debug.DrawRay(origin, rearDis, Color.blue);
-                                    Debug.DrawRay(origin + rearDis, groundCheckDis, Color.blue);
-                                    nav.SetDestination(combat.StrafeBackTarget.position);
-                                    Debug.Log("There is a GROUND!");
-                                    Debug.Log("Moving back!!");
-                                    return;
-                                }
-                                else
-                                {
-
-                                    Debug.DrawRay(origin, rightDis, Color.magenta);
-                                    Debug.DrawRay(origin + rightDis, groundCheckDis, Color.magenta);
-                                    nav.SetDestination(combat.StrafeRightTarget.position);
-                                    Debug.Log("There is a GROUND!");
-                                    Debug.Log("Moving right!!");
-                                    return;
-                                }
-                            }
-                            else
-                            {
-                                Debug.DrawRay(origin, leftDis, Color.red);
-                                Debug.DrawRay(origin + leftDis, groundCheckDis, Color.red);
-                                nav.SetDestination(combat.StrafeLeftTarget.position);
-                                Debug.Log("There is a GROUND!");
-                                Debug.Log("Moving left!!");
-                                return;
-                            }
+                            nav.isStopped = true;
+                            curMoveSpeed = 0f;
+                            nav.ResetPath();
+                            Debug.Log("Reseting path... determining path");
                         }
                         else
                         {
-                            Debug.DrawRay(origin, rearDis, Color.blue);
-                            Debug.DrawRay(origin + rearDis, groundCheckDis, Color.blue);
-                            nav.SetDestination(combat.StrafeBackTarget.position);
-                            Debug.Log("There is a GROUND!");
-                            Debug.Log("Moving back!!");
-                            return;
+                            if (Physics.Raycast(origin + strafePos, groundCheckDis, out hit, 3f))
+                            {
+                                nav.isStopped = false;
+                                curMoveSpeed = GetPursueSpeed();
+                                strafePoint.position = hit.point;
+                                nav.SetDestination(strafePoint.position);
+                                isStrafingToPoint = true;
+                                Debug.Log("Found PATH!");
+                                return;
+                            }
                         }
                     }
                     else
                     {
+                        if (isStrafingToPoint) return;
                         nav.isStopped = true;
                         curMoveSpeed = 0f;
                         transform.rotation = ParaverseHelper.FaceTarget(transform, pursueTarget, rotSpeed);
                         nav.SetDestination(pursueTarget.position);
+                        Debug.Log("Standing idle in pursue state");
                     }
+                }
+                else if (distanceFromTarget <= combat.BasicAttackSkill.MaxRange && distanceFromTarget > combat.BasicAttackSkill.MinRange && isStrafingToPoint == false)
+                {
+                    nav.isStopped = true;
+                    curMoveSpeed = 0f;
+                    transform.rotation = ParaverseHelper.FaceTarget(transform, pursueTarget, rotSpeed);
+                    nav.SetDestination(pursueTarget.position);
+                    Debug.Log("Standing idle in pursue state");
                 }
                 else
                 {
@@ -501,6 +488,8 @@ namespace Paraverse.Mob.Controller
                     nav.isStopped = false;
                     curMoveSpeed = GetPursueSpeed();
                     nav.SetDestination(pursueTarget.position);
+                    isStrafingToPoint = false;
+                    Debug.Log("Pursuing player");
                 }
             }
         }
@@ -577,13 +566,29 @@ namespace Paraverse.Mob.Controller
         private void StrafeHandler()
         {
             float distanceFromTarget = ParaverseHelper.GetDistance(transform.position, pursueTarget.position);
+            float distanceFromStrafePoint = ParaverseHelper.GetDistance(transform.position, strafePoint.position);
 
-            if (distanceFromTarget >= combat.BasicAttackSkill.MaxRange)
+            if (distanceFromStrafePoint <= 1.5f)
             {
+                Debug.Log("is not strafing to a point");
+                isStrafingToPoint = false;
                 isStrafing = false;
             }
-            else if (distanceFromTarget < combat.BasicAttackSkill.MinRange && _curMobState.Equals(MobState.Pursue) && combat.IsStrafer)
+            else if (isStrafing && _curMobState.Equals(MobState.Pursue))
             {
+                nav.isStopped = false;
+                curMoveSpeed = GetPursueSpeed();
+                nav.SetDestination(strafePoint.position);
+            }
+
+            if (distanceFromTarget > combat.BasicAttackSkill.MinRange && isStrafingToPoint == false)
+            {
+                Debug.Log("is not strafing");
+                isStrafing = false;
+            }
+            else if (distanceFromTarget <= combat.BasicAttackSkill.MinRange && _curMobState.Equals(MobState.Pursue) && combat.IsStrafer)
+            {
+                //Debug.Log("isStrafing");
                 isStrafing = true;
             }
         }
@@ -598,6 +603,7 @@ namespace Paraverse.Mob.Controller
             if (combat.IsAttackLunging || IsUnstaggerable) return;
 
             combat.OnAttackInterrupt();
+            isStrafingToPoint = false;
             Vector3 impactDir = (transform.position - mobPos).normalized;
             knockbackDir = new Vector3(impactDir.x, 0f, impactDir.z);
             activeKnockBackEffect = effect;
