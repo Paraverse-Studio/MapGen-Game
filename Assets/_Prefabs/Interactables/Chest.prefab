@@ -1379,13 +1379,13 @@ MonoBehaviour:
   - chestName: Common Chest
     model: {fileID: 7829095000730597899}
     modelGlow: {fileID: 8326200097660709432}
-    numToSpawn: {x: 1, y: 3}
+    numToSpawn: {x: 1, y: 2}
     lootTable:
     - chance: 50
       randomMod: 0
       modType: 0
       randomConsumable: 0
-      consumableAmount: {x: 4, y: 16}
+      consumableAmount: {x: 10, y: 20}
       overrideItem: {fileID: 11400000, guid: 99c5653d962ac134cafaca0de919d501, type: 2}
     - chance: 40
       randomMod: 1
@@ -1402,25 +1402,60 @@ MonoBehaviour:
   - chestName: Rare Chest
     model: {fileID: 5356637862389719579}
     modelGlow: {fileID: 7420352888443394520}
-    numToSpawn: {x: 2, y: 2}
+    numToSpawn: {x: 2, y: 3}
     lootTable:
     - chance: 50
       randomMod: 0
       modType: 0
       randomConsumable: 0
+      consumableAmount: {x: 25, y: 40}
+      overrideItem: {fileID: 11400000, guid: 99c5653d962ac134cafaca0de919d501, type: 2}
+    - chance: 30
+      randomMod: 1
+      modType: 0
+      randomConsumable: 0
       consumableAmount: {x: 0, y: 0}
       overrideItem: {fileID: 0}
-    - chance: 50
-      randomMod: 0
-      modType: 0
+    - chance: 20
+      randomMod: 1
+      modType: 2
       randomConsumable: 0
       consumableAmount: {x: 0, y: 0}
       overrideItem: {fileID: 0}
   - chestName: Legendary Chest
     model: {fileID: 2442988217512824695}
     modelGlow: {fileID: 5305634674721767675}
-    numToSpawn: {x: 3, y: 4}
-    lootTable: []
+    numToSpawn: {x: 4, y: 4}
+    lootTable:
+    - chance: 33
+      randomMod: 0
+      modType: 0
+      randomConsumable: 0
+      consumableAmount: {x: 140, y: 180}
+      overrideItem: {fileID: 11400000, guid: 99c5653d962ac134cafaca0de919d501, type: 2}
+    - chance: 33
+      randomMod: 1
+      modType: 0
+      randomConsumable: 0
+      consumableAmount: {x: 0, y: 0}
+      overrideItem: {fileID: 0}
+    - chance: 33
+      randomMod: 1
+      modType: 2
+      randomConsumable: 0
+      consumableAmount: {x: 0, y: 0}
+      overrideItem: {fileID: 0}
+  - chestName: (Custom) Skill Chest
+    model: {fileID: 2442988217512824695}
+    modelGlow: {fileID: 5305634674721767675}
+    numToSpawn: {x: 1, y: 1}
+    lootTable:
+    - chance: 100
+      randomMod: 1
+      modType: 1
+      randomConsumable: 0
+      consumableAmount: {x: 1, y: 1}
+      overrideItem: {fileID: 0}
 --- !u!1 &7827639701495337705
 GameObject:
   m_ObjectHideFlags: 0

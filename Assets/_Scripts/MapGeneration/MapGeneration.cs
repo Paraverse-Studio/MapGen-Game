@@ -11,6 +11,7 @@ using UnityEngine.Rendering;
 using TMPro;
 using UnityEngine.AI;
 using Paraverse.Mob.Stats;
+using Paraverse.Mob.Controller;
 
 [System.Serializable]
 public class PropItem
@@ -447,7 +448,15 @@ public class MapGeneration : MonoBehaviour
 
         /////////       NO SHAPE MODIFICATIONS BEYOND THIS POINT        /////////////////////////
         centerPointWithY = new Vector3(centerPoint.x, gridOccupants[(int)centerPoint.x, (int)centerPoint.z].block.transform.position.y, centerPoint.z);
+                 
 
+        /* * * * * DECORATIVE/MECHANICAL PROPS ON MAP * * * * * * */
+        currentPaintingBlock = M.blockSet.water;
+
+        PartitionProgress("");
+        step = 7;
+        yield return processDelay;
+        AddWaterToDips();
 
         /* * * * * IMPORTANT PROPS ON MAP * * * * * * */
         PartitionProgress("Adding event triggers...");
@@ -456,13 +465,6 @@ public class MapGeneration : MonoBehaviour
         AddImportantProps();
 
         /* * * * * DECORATIVE PROPS ON MAP * * * * * * */
-        currentPaintingBlock = M.blockSet.water;
-
-        PartitionProgress("");
-        step = 7;
-        yield return processDelay;
-        AddWaterToDips();
-
         step = 8;
         PartitionProgress("");
         yield return processDelay;
@@ -983,7 +985,7 @@ public class MapGeneration : MonoBehaviour
     {
         // EndPoint
         Vector3 spawnSpot = pathObjects[pathObjects.Count - 1].transform.position + new Vector3(0, 0.5f, 0);
-        GameObject obj = Instantiate(importantProps.endPoint, spawnSpot, Quaternion.identity);
+        GameObject obj = Instantiate(importantProps.endPoint, spawnSpot, GetCameraFacingRotation(reverse: true));
         obj.name = "END PORTAL (Special)";
         UtilityFunctions.UpdateLODlevels(obj.transform);
         GameLoopManager.Instance.EndPortal = obj.GetComponent<EndPointTrigger>();
@@ -994,18 +996,85 @@ public class MapGeneration : MonoBehaviour
         if (M.addChests)
         {
             int numChests = Random.Range((int)M.numOfChests.x, (int)M.numOfChests.y + 1);
-            for (int i = 0; i < numChests; ++i)
-            {
-                Block b = allObjects[Random.Range(0, allObjects.Count - 1)];
+            int blocksGapBetweenChests = pathObjects.Count / numChests;
 
-                Vector3 r = Vector3.down * (Random.value < 0.5f ? 90f : 180f);
-                var chest = Instantiate(MapCreator.Instance.chestPrefab, 
-                    b.transform.position + new Vector3(0, 0.5f, 0), Quaternion.Euler(r.x, r.y, r.z));
-                chest.Initialize(0);
-                b.hasProp = true;
-                propObjects.Add(chest.gameObject);
+            int runtimeDistance = 0;
+            int chestsSpawned = 0;
+            for (int i = 0; i < pathObjects.Count; ++i)
+            {
+                runtimeDistance++;
+
+                if (runtimeDistance >= blocksGapBetweenChests)
+                {          
+                    Block b = pathObjects[i];
+                    Vector3 randomOffset = new(Random.Range(2, 6f), 0, Random.Range(2, 6f));
+                    b = GetClosestValidGroundBlock(b.transform.position + randomOffset);
+
+                    var chest = Instantiate(MapCreator.Instance.chestPrefab, b.transform.position + new Vector3(0, 0.5f, 0), GetCameraFacingRotation());
+                    chest.Initialize(0);
+                    b.hasProp = true;
+                    propObjects.Add(chest.gameObject);
+                    chest.gameObject.transform.parent = temporaryObjFolder.transform;
+
+                    runtimeDistance = 0;
+
+                    chestsSpawned++;
+                    if (chestsSpawned >= numChests)
+                    {
+                        break;
+                    }
+                }
             }
         }
+
+        if (M.addBlacksmith)
+        {
+            int distanceToCloserToPath = Random.Range(0, 2);
+            int distanceToTheBottomLeftOfPortal = Random.Range(5, 10);
+            Vector3 spot = pathObjects[pathObjects.Count - 1].gameObject.transform.position + new Vector3(-distanceToTheBottomLeftOfPortal, 0, -distanceToCloserToPath);
+            Vector3 r = Vector3.up *  180f;
+
+            Block b = GetClosestValidGroundBlock(spot);
+
+            var npc = Instantiate(MapCreator.Instance.blackSmithPrefab, 
+                b.transform.position + new Vector3(0, 0.5f, 0), Quaternion.Euler(r.x, r.y, r.z));
+            b.hasProp = true;
+            propObjects.Add(npc.gameObject);
+            npc.transform.parent = temporaryObjFolder.transform;
+        }
+
+        if (M.addMerchant)
+        {
+            int distanceToCloserToPath = Random.Range(0, 2);
+            int distanceToTheBottomRightOfPortal = Random.Range(5, 10);
+
+            Vector3 spot = pathObjects[pathObjects.Count - 1].gameObject.transform.position + new Vector3(-distanceToCloserToPath, 0, -distanceToTheBottomRightOfPortal);
+            Vector3 r = Vector3.up * 90f;
+
+            Block b = GetClosestValidGroundBlock(spot);
+
+            var npc = Instantiate(MapCreator.Instance.merchantPrefab,
+                b.transform.position + new Vector3(0, 0.5f, 0), Quaternion.Euler(r.x, r.y, r.z));
+            b.hasProp = true;
+            propObjects.Add(npc.gameObject);
+            npc.transform.parent = temporaryObjFolder.transform;
+        }
+
+    }
+
+    private void AddLegendaryChest(Transform t)
+    {
+        Block b = GetClosestObject(t.position, allObjects,
+                (Block b2) =>
+                {
+                    return !b2.hasProp && !b2.hasWater;
+                });
+
+        var chest = Instantiate(MapCreator.Instance.chestPrefab, b.transform.position + new Vector3(0, 0.5f, 0), GetCameraFacingRotation());
+        chest.Initialize(2);
+        b.hasProp = true;
+        propObjects.Add(chest.gameObject);
+        chest.gameObject.transform.parent = temporaryObjFolder.transform;        
     }
 
     private void AddEnemies()
@@ -1053,6 +1122,10 @@ public class MapGeneration : MonoBehaviour
                 enemyStats.UpdateAttackDamage(enemyStats.AttackDamage.FinalValue * scaleFactor);
                 enemyStats.UpdateAbilityPower(enemyStats.AbilityPower.FinalValue * scaleFactor);
                 enemyStats.UpdateMaxHealth(Mathf.CeilToInt(enemyStats.MaxHealth.FinalValue * scaleFactor));
+                if (MapCreator.Instance.mapType == MapType.boss)
+                {
+                    enemy.GetComponentInChildren<MobController>().OnDeathEvent += AddLegendaryChest;
+                }
             }
         }
     }
@@ -1337,6 +1410,18 @@ public class MapGeneration : MonoBehaviour
         return GetClosestObject(source.position, allObjects);
     }
 
+    // Returns the closest block to spot that is valid, doesn't have trees or props, and doesn't have water/liquid
+    // NOTE*: this must be used after WaterDips() has already been called since .hasWater is only populated
+    // during WaterDips()
+    public Block GetClosestValidGroundBlock(Vector3 spot)
+    {
+        return GetClosestObject(spot, allObjects,
+                (Block b2) =>
+                {
+                    return !b2.hasProp && !b2.hasWater;
+                });
+    }
+
     // Get closest valid block to a given vector
     private Block GetClosestObject(Vector3 src, List<Block> list, System.Predicate<Block> condition = null)
     {
@@ -1357,6 +1442,18 @@ public class MapGeneration : MonoBehaviour
             }
         }
         return closest;
+    }
+
+    public Quaternion GetCameraFacingRotation(bool reverse = false)
+    {
+        Vector3 r = Vector3.down * (Random.value < 0.5f ? 90f : 180f);
+        if (reverse) r = Vector3.up * (Random.value < 0.5f ? 90f : 180f);
+        return Quaternion.Euler(r.x, r.y, r.z);
+    }
+
+    public Vector3 GetCameraFacingVector3()
+    {
+        return Vector3.down * (Random.value < 0.5f ? 90f : 180f);
     }
 
     public void TeleportPlayer(Vector3 v)

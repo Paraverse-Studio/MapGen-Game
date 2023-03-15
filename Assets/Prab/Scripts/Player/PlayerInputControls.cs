@@ -31,6 +31,8 @@ namespace Paraverse.Player
         public event OnSkillUseDel OnSkillOneEvent;
         public delegate void OnInteractDel();
         public event OnInteractDel OnInteractEvent;
+        public delegate void OnEscapeDel();
+        public event OnEscapeDel OnEscapeEvent;
 
         public Vector2 MovementDirection { get { return _movementDirection; } }
         private Vector2 _movementDirection;
@@ -76,6 +78,9 @@ namespace Paraverse.Player
 
             input.Player.Interact.performed += OnInteract;
             input.Player.Interact.Enable();
+
+            input.Player.Escape.performed += OnEscape;
+            input.Player.Escape.Enable();
 
             input.Player.Pause.performed += OnPause;
             input.Player.Pause.Enable();
@@ -153,6 +158,11 @@ namespace Paraverse.Player
         private void OnInteract(InputAction.CallbackContext obj)
         {
             OnInteractEvent?.Invoke();
+        }
+
+        public void OnEscape(InputAction.CallbackContext obj)
+        {
+            OnEscapeEvent?.Invoke();
         }
 
         private void OnUseItemOne(InputAction.CallbackContext obj)

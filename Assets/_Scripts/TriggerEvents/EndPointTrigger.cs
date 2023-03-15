@@ -6,7 +6,7 @@ public class EndPointTrigger : MonoBehaviour
 {
     public GameObject portal;
 
-    private bool _activated = false;
+    private bool _activated = false; public bool IsActivated => _activated;
 
     private void Start()
     {
@@ -15,10 +15,6 @@ public class EndPointTrigger : MonoBehaviour
 
     public void Activate(bool o)
     {
-        if (!_activated)
-        {
-            AnnouncementManager.Instance.QueueAnnouncement(new Announcement().AddType(1).AddText("All enemies are defeated — gate is open!"));
-        }
         portal.SetActive(o);
         _activated = true;
     }
@@ -27,7 +23,7 @@ public class EndPointTrigger : MonoBehaviour
     {
         if (!_activated)
         {
-            AnnouncementManager.Instance.QueueAnnouncementUnique(new Announcement().AddText("Defeat all enemies to open the gate!"));
+            AnnouncementManager.Instance.QueueAnnouncementUnique(new Announcement().AddText("Complete the objective to open the gate!"));
         }
         else
         {

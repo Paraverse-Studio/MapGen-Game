@@ -18,9 +18,23 @@ public class ItemCard : MonoBehaviour
     public GameObject typeHolder;
     public TextMeshProUGUI quantityLabel;
 
+    public ItemCardEvent OnClickCard = new();
+
     public virtual void UpdateDisplay(System.Action clickCallBack = null)
     {
+    }
 
+    public virtual void Lock(bool onOrOff)
+    {
+        if (costLabel)
+        {
+            costLabel.color = onOrOff? Color.red : Color.white;
+        }
+    }
+
+    public void OnClickCardEvent()
+    {
+        OnClickCard?.Invoke(this);
     }
 
 }

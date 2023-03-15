@@ -59,6 +59,21 @@ public class ModsManager : MonoBehaviour
         }
 
         return index;
+    } 
+
+    public void PurchaseMod(SO_Item item)
+    {
+        if (item is not SO_Mod) return;
+
+        int indexOfMod = AvailableMods.IndexOf(item);
+
+        if (!PurchasedMods.Contains(item) && item is not SO_StatMod) // stat mods get re-added
+            PurchasedMods.Add(item);
+
+        // if a mod (stat mod), then keep it in that in the spot,
+        // otherwise, remove this entry in available mods
+        if (((SO_Mod)item).Type != ModType.Stats)
+            AvailableMods.RemoveAt(indexOfMod);
     }
 
 }

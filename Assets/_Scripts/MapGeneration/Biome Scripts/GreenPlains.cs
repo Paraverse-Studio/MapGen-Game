@@ -114,7 +114,7 @@ public class GreenPlains : MonoBehaviour, IMapMechanics, ITickElement
         for (int i = 0; i < allMobs.Count; ++i)
         {
             allMobs[i].mob.MoveSpeed.RemoveMod(allMobs[i].mod);
-            Destroy(allMobs[i].effect);
+            Destroy(allMobs[i].effect.gameObject);
         }
 
         allMobs.Clear();

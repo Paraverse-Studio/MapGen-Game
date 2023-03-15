@@ -187,8 +187,8 @@ RectTransform:
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
   m_AnchorMin: {x: 0, y: 0}
   m_AnchorMax: {x: 0, y: 0}
-  m_AnchoredPosition: {x: 135, y: 0}
-  m_SizeDelta: {x: 264, y: 0}
+  m_AnchoredPosition: {x: 125, y: 0}
+  m_SizeDelta: {x: 244, y: 0}
   m_Pivot: {x: 0.5, y: 0.5}
 --- !u!222 &554693469627374387
 CanvasRenderer:
@@ -1350,7 +1350,7 @@ RectTransform:
   m_AnchorMin: {x: 0.5, y: 0.5}
   m_AnchorMax: {x: 0.5, y: 0.5}
   m_AnchoredPosition: {x: -250, y: -140}
-  m_SizeDelta: {x: 330, y: 0}
+  m_SizeDelta: {x: 310, y: 0}
   m_Pivot: {x: 0.5, y: 0.5}
 --- !u!222 &554693470919088077
 CanvasRenderer:
@@ -1427,11 +1427,14 @@ MonoBehaviour:
   imageHolder: {fileID: 554693469841322817}
   descriptionLabel: {fileID: 0}
   loreLabel: {fileID: 554693470587846508}
-  costLabel: {fileID: 554693470865339760}
+  costLabel: {fileID: 0}
   costHolder: {fileID: 554693471074562061}
   typeLabel: {fileID: 8969786016279007242}
   typeHolder: {fileID: 4383448380158373890}
   quantityLabel: {fileID: 4731520546436171307}
+  OnClickCard:
+    m_PersistentCalls:
+      m_Calls: []
   StatModColor: {r: 0.6037736, g: 0.4873225, b: 0.31555712, a: 0.6}
   StatModColorGlow: {r: 1, g: 0.8352941, b: 0.45490196, a: 1}
   SkillModColor: {r: 0.3719117, g: 0.4905106, b: 0.5849056, a: 0.6}
@@ -1439,7 +1442,7 @@ MonoBehaviour:
   EffectModColor: {r: 0.50955963, g: 0.5660378, b: 0.46671417, a: 0.6}
   EffectModColorGlow: {r: 0.7350008, g: 0.8584906, b: 0.5863653, a: 1}
   purchaseButton: {fileID: 554693469627374390}
-  cardLock: {fileID: 2727916149784427492}
+  cardLock: {fileID: 0}
   CardBG: {fileID: 1829861101099393957}
   CardOtherBG: {fileID: 554693469627374386}
   TypeLabel: {fileID: 8969786016279007242}
@@ -1680,8 +1683,8 @@ MonoBehaviour:
   m_faceColor:
     serializedVersion: 2
     rgba: 4294967295
-  m_fontSize: 48
-  m_fontSizeBase: 48
+  m_fontSize: 42
+  m_fontSizeBase: 42
   m_fontWeight: 400
   m_enableAutoSizing: 0
   m_fontSizeMin: 10
@@ -3458,7 +3461,7 @@ MonoBehaviour:
   m_MinWidth: -1
   m_MinHeight: -1
   m_PreferredWidth: -1
-  m_PreferredHeight: 264
+  m_PreferredHeight: 244
   m_FlexibleWidth: -1
   m_FlexibleHeight: -1
   m_LayoutPriority: 1

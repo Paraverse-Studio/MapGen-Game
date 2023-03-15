@@ -22,8 +22,8 @@ public class Block : MonoBehaviour, ITickElement
     private SO_BlockItem oldType = null;
 
     [Header("Properties")]
-    public bool hasProp;
-    public bool hasWater;
+    public bool hasProp = false;
+    public bool hasWater = false;
 
     [Header("Override Settings: ")]
     public BlockOverrideSettings overrideSettings;  
