@@ -192,8 +192,9 @@ namespace Paraverse.Mob.Controller
             _isInteracting = anim.GetBool(StringData.IsInteracting);
 
             DeathHandler();
-            if (_isDead) return;
+            if (_isDead) return; 
             StateHandler();
+            StrafeHandler();
             CCHandler();
             KnockbackHandler();
             JumpHandler();
@@ -233,20 +234,19 @@ namespace Paraverse.Mob.Controller
             {
                 PursueTarget();
                 SetGeneralState(MobState.Pursue);
-                //Debug.Log("Pursue State");
             }
             else if (TargetDetected() && playerController.IsDead == false)
             {
+                isStrafing = false;
                 CombatHandler();
                 SetGeneralState(MobState.Combat);
-                //Debug.Log("Combat State");
             }
             else
             {
+                isStrafing = false;
                 nav.updateRotation = true;
                 Patrol();
                 SetGeneralState(MobState.Patrol);
-                //Debug.Log("Patrol State");
             }
         }
 
@@ -414,6 +414,8 @@ namespace Paraverse.Mob.Controller
         }
         #endregion 
 
+        private bool isStrafing = false;
+
         #region Pursue Target Logic
         /// <summary>
         /// Responsible for handling mob pursuing logic.
@@ -422,25 +424,84 @@ namespace Paraverse.Mob.Controller
         {
             if (pursueTarget != null)
             {
-                //Vector3 mobPos = ParaverseHelper.GetPositionXZ(transform.position);
-                //Vector3 targetPos = ParaverseHelper.GetPositionXZ(pursueTarget.position);
                 float distanceFromTarget = ParaverseHelper.GetDistance(transform.position, pursueTarget.position);
 
                 if (distanceFromTarget <= combat.BasicAtkRange)
                 {
-                    nav.isStopped = true;
-                    curMoveSpeed = 0f;
-                    transform.rotation = ParaverseHelper.FaceTarget(transform, pursueTarget, rotSpeed);
-                    //Debug.Log("Combat Idle");
+                    if (isStrafing)
+                    {
+                        Debug.Log("IsStrafing");
+                        nav.updateRotation = true;
+                        nav.isStopped = false;
+                        curMoveSpeed = GetPursueSpeed();
+
+                        Vector3 origin = transform.position + new Vector3(0, 1f, 0);
+                        float maxDis = combat.BasicAttackSkill.MaxRange;
+                        Vector3 rearDis = -transform.forward * maxDis;
+                        Vector3 leftDis = -transform.right * maxDis;
+                        Vector3 rightDis = transform.right * maxDis;
+                        Vector3 groundCheckDis = -transform.up * 2f;
+
+                        // back check
+                        if (Physics.Raycast(origin, rearDis, out RaycastHit hit, maxDis))
+                        {
+                            if (Physics.Raycast(origin, leftDis, out hit, maxDis))
+                            {
+                                if (Physics.Raycast(origin, leftDis, out hit, maxDis))
+                                {
+                                    Debug.DrawRay(origin, rearDis, Color.blue);
+                                    Debug.DrawRay(origin + rearDis, groundCheckDis, Color.blue);
+                                    nav.SetDestination(combat.StrafeBackTarget.position);
+                                    Debug.Log("There is a GROUND!");
+                                    Debug.Log("Moving back!!");
+                                    return;
+                                }
+                                else
+                                {
+
+                                    Debug.DrawRay(origin, rightDis, Color.magenta);
+                                    Debug.DrawRay(origin + rightDis, groundCheckDis, Color.magenta);
+                                    nav.SetDestination(combat.StrafeRightTarget.position);
+                                    Debug.Log("There is a GROUND!");
+                                    Debug.Log("Moving right!!");
+                                    return;
+                                }
+                            }
+                            else
+                            {
+                                Debug.DrawRay(origin, leftDis, Color.red);
+                                Debug.DrawRay(origin + leftDis, groundCheckDis, Color.red);
+                                nav.SetDestination(combat.StrafeLeftTarget.position);
+                                Debug.Log("There is a GROUND!");
+                                Debug.Log("Moving left!!");
+                                return;
+                            }
+                        }
+                        else
+                        {
+                            Debug.DrawRay(origin, rearDis, Color.blue);
+                            Debug.DrawRay(origin + rearDis, groundCheckDis, Color.blue);
+                            nav.SetDestination(combat.StrafeBackTarget.position);
+                            Debug.Log("There is a GROUND!");
+                            Debug.Log("Moving back!!");
+                            return;
+                        }
+                    }
+                    else
+                    {
+                        nav.isStopped = true;
+                        curMoveSpeed = 0f;
+                        transform.rotation = ParaverseHelper.FaceTarget(transform, pursueTarget, rotSpeed);
+                        nav.SetDestination(pursueTarget.position);
+                    }
                 }
                 else
                 {
                     nav.updateRotation = true;
                     nav.isStopped = false;
                     curMoveSpeed = GetPursueSpeed();
-                    //Debug.Log("Pursuing");
+                    nav.SetDestination(pursueTarget.position);
                 }
-                nav.SetDestination(pursueTarget.position);
             }
         }
 
@@ -509,6 +570,22 @@ namespace Paraverse.Mob.Controller
         public void ApplyHitAnimation()
         {
             anim.Play(StringData.Hit);
+        }
+        #endregion
+
+        #region Strafe Logic
+        private void StrafeHandler()
+        {
+            float distanceFromTarget = ParaverseHelper.GetDistance(transform.position, pursueTarget.position);
+
+            if (distanceFromTarget >= combat.BasicAttackSkill.MaxRange)
+            {
+                isStrafing = false;
+            }
+            else if (distanceFromTarget < combat.BasicAttackSkill.MinRange && _curMobState.Equals(MobState.Pursue) && combat.IsStrafer)
+            {
+                isStrafing = true;
+            }
         }
         #endregion
 

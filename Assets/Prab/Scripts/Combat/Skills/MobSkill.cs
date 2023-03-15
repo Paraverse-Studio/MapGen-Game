@@ -36,6 +36,7 @@ namespace Paraverse.Combat
         protected float _minRange = 0f;
         [SerializeField, Tooltip("Max skill range value.")]
         protected float _maxRange = 5f;
+        public float MinRange{ get { return _minRange; } }
         public float MaxRange { get { return _maxRange; } }
         public bool IsOffCooldown { get { return curCooldown <= 0; } }
         [SerializeField, Tooltip("Skill cooldown value.")]

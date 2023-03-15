@@ -48,12 +48,26 @@ namespace Paraverse.Mob.Combat
         public bool IsBasicAttacking { get { return _isBasicAttacking; } }
         protected bool _isBasicAttacking = false;
         // Returns true when character is within basic attack range and cooldown is 0.
-        public bool CanBasicAtk { get { return distanceFromTarget <= basicAttackSkill.MaxRange && basicAttackSkill.CurCooldown <= 0; } }
+        public bool CanBasicAtk { get { return distanceFromTarget <= basicAttackSkill.MaxRange && distanceFromTarget >= basicAttackSkill.MinRange && basicAttackSkill.CurCooldown <= 0; } }
         // Sets to true when character is doing an action (Attack, Stun).
         public bool IsAttackLunging { get { return _isAttackLunging; } }
         protected bool _isAttackLunging = false;
         public bool IsSkilling { get; set; }
         public bool IsInCombat { get { return IsSkilling || IsBasicAttacking; } }
+
+        // Strafing
+        public Transform StrafeBackTarget { get { return _strafeBackTarget; } } 
+        [SerializeField, Tooltip("Strafe target GO.")]
+        protected Transform _strafeBackTarget;
+        public Transform StrafeLeftTarget { get { return _strafeLeftTarget; } } 
+        [SerializeField, Tooltip("Strafe target GO.")]
+        protected Transform _strafeLeftTarget;
+        public Transform StrafeRightTarget { get { return _strafeRightTarget; } } 
+        [SerializeField, Tooltip("Strafe target GO.")]
+        protected Transform _strafeRightTarget;
+        public bool IsStrafer { get { return _isStrafer; } }
+        [SerializeField, Tooltip("Allow mob strafing.")]
+        protected bool _isStrafer = false;
 
         [SerializeField, Tooltip("Mob skills.")]
         protected List<MobSkill> skills = new List<MobSkill>();
