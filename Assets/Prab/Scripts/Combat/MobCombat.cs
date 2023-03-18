@@ -24,12 +24,6 @@ namespace Paraverse.Mob.Combat
         protected string targetTag = "Player";
         protected Transform player;
 
-        //[Header("Only For Melee Attackers")]
-        //[SerializeField, Tooltip("Basic attack weapon collider [Only required for melee weapon users].")]
-        //protected GameObject basicAttackColliderGO;
-        //[Tooltip("AttackCollider script of basic attack collider.")]
-        //public AttackCollider basicAttackCollider;
-
         [Header("Projectile Values")]
         [SerializeField, Tooltip("Set as true if mob is a projectile user.")]
         protected bool projUser = false;
@@ -242,7 +236,6 @@ namespace Paraverse.Mob.Combat
         public virtual void FireProjectile()
         {
             MobSkill skill;
-
             if (IsSkilling)
             {
                 skill = skills[usingSkillIdx];
@@ -274,13 +267,19 @@ namespace Paraverse.Mob.Combat
         /// </summary>
         public void EnableHeldProjectile()
         {
-            if (basicAttackSkill.projData.projHeld == null)
+            MobSkill skill;
+            if (IsSkilling)
+                skill = skills[usingSkillIdx];
+            else
+                skill = basicAttackSkill;
+
+            if (skill.projData.projHeld == null)
             {
-                Debug.LogError("There is no reference to the projHeld variable.");
+                Debug.LogError("There is no reference to the projHeld variable for skill: ." + skill.name);
                 return;
             }
 
-            basicAttackSkill.projData.projHeld.SetActive(true);
+            skill.projData.projHeld.SetActive(true);
         }
         #endregion
 

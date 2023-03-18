@@ -47,15 +47,16 @@ namespace Paraverse.Combat
 
         public bool HasEnergy { get { return cost <= stats.CurEnergy; } }
         [SerializeField, Tooltip("Required energy cost to execute skill.")]
-        protected float cost = 10f;
+        protected float cost = 0f;
 
         [Tooltip("Name of skill animation to play.")]
         public string animName = "";
 
-        [SerializeField]
+        [SerializeField, Tooltip("Will subscribe skill to skill execute listener. [if isBasicAttack = false]")]
         protected bool isBasicAttack = false;
         public bool IsBasicAttack { get { return isBasicAttack; } }
 
+        [Tooltip("Will fetch attack collider GO. [if isMelee = true]")]
         public bool IsMelee => _isMelee;
         [SerializeField] protected bool _isMelee;
 
@@ -74,7 +75,6 @@ namespace Paraverse.Combat
 
         public bool skillOn { get; set; }
         #endregion
-
 
         #region Inheritable Methods
         public virtual void ActivateSkill(PlayerCombat mob, PlayerInputControls input, Animator anim, MobStats stats, Transform target = null)
@@ -129,7 +129,7 @@ namespace Paraverse.Combat
         /// </summary>
         public virtual void SubscribeAnimationEventListeners()
         {
-
+            mob.OnDisableSkillOneEvent += DisableSkill;
         }
 
         /// <summary>
@@ -137,7 +137,7 @@ namespace Paraverse.Combat
         /// </summary>
         public virtual void UnsubscribeAnimationEventListeners()
         {
-
+            mob.OnDisableSkillOneEvent -= DisableSkill;
         }
 
         /// <summary>
@@ -150,7 +150,9 @@ namespace Paraverse.Combat
                 Execute();
             }
 
-            RotateToTarget();
+            if (skillOn)
+                RotateToTarget();
+
             CooldownHandler();
         }
 
@@ -226,7 +228,7 @@ namespace Paraverse.Combat
             return disFromTarget >= _minRange && disFromTarget <= _maxRange;
         }
         #endregion
-
+         
         #region Private Methods
 
         /// <summary>
@@ -243,5 +245,3 @@ namespace Paraverse.Combat
         #endregion
     }
 }
-
-
