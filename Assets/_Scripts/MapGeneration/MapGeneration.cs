@@ -1032,7 +1032,7 @@ public class MapGeneration : MonoBehaviour
             int distanceToCloserToPath = Random.Range(0, 2);
             int distanceToTheBottomLeftOfPortal = Random.Range(5, 10);
             Vector3 spot = pathObjects[pathObjects.Count - 1].gameObject.transform.position + new Vector3(-distanceToTheBottomLeftOfPortal, 0, -distanceToCloserToPath);
-            Vector3 r = Vector3.up *  180f;
+            Vector3 r = Vector3.down *  180f;
 
             Block b = GetClosestValidGroundBlock(spot);
 
@@ -1049,7 +1049,7 @@ public class MapGeneration : MonoBehaviour
             int distanceToTheBottomRightOfPortal = Random.Range(5, 10);
 
             Vector3 spot = pathObjects[pathObjects.Count - 1].gameObject.transform.position + new Vector3(-distanceToCloserToPath, 0, -distanceToTheBottomRightOfPortal);
-            Vector3 r = Vector3.up * 90f;
+            Vector3 r = Vector3.down * 90f;
 
             Block b = GetClosestValidGroundBlock(spot);
 
