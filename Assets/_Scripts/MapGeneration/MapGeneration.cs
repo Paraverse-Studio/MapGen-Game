@@ -996,7 +996,7 @@ public class MapGeneration : MonoBehaviour
         if (M.addChests)
         {
             int numChests = Random.Range((int)M.numOfChests.x, (int)M.numOfChests.y + 1);
-            int blocksGapBetweenChests = pathObjects.Count / numChests;
+            int blocksGapBetweenChests = pathObjects.Count / (numChests + 1);
 
             int runtimeDistance = 0;
             int chestsSpawned = 0;
@@ -1007,7 +1007,7 @@ public class MapGeneration : MonoBehaviour
                 if (runtimeDistance >= blocksGapBetweenChests)
                 {          
                     Block b = pathObjects[i];
-                    Vector3 randomOffset = new(Random.Range(2, 6f), 0, Random.Range(2, 6f));
+                    Vector3 randomOffset = new(Random.Range(5, 10f), 0, Random.Range(5, 10f));
                     b = GetClosestValidGroundBlock(b.transform.position + randomOffset);
 
                     var chest = Instantiate(MapCreator.Instance.chestPrefab, b.transform.position + new Vector3(0, 0.5f, 0), GetCameraFacingRotation());
