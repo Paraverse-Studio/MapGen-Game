@@ -46,29 +46,39 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   _skillName: Azurite Infusion
   _ID: -1
+  _image: {fileID: 0}
   _description: 
   _minRange: 0
   _maxRange: 5
   cooldown: 25
   cost: 90
   animName: DrawSword
+  isBasicAttack: 0
+  _isMelee: 0
   attackColliderGO: {fileID: 0}
+  attackCollider: {fileID: 0}
   projData:
     projPf: {fileID: 0}
     projHeld: {fileID: 0}
     projOrigin: {fileID: 0}
     projRotation: {fileID: 0}
     basicAtkProjSpeed: 10
-    scalingStatData:
-      flatPower: 1
-      attackScaling: 0
-      abilityScaling: 0
   usesTargetLock: 0
   rotSpeed: 100
   scalingStatData:
-    flatPower: 5
+    flatPower: 0
     attackScaling: 0
-    abilityScaling: 0.6
-  weaponBuffVFX: {fileID: 3588532860561885775, guid: 462bf3cfddfdfda4d8396a6263584db3, type: 3}
+    abilityScaling: 0
+    healthScaling: 0
+  Buffs:
+  - type: 0
+    scalingValue:
+      flatPower: 6
+      attackScaling: 0
+      abilityScaling: 0.6
+      healthScaling: 0
+  buffVFX: {fileID: 3588532860561885775, guid: 462bf3cfddfdfda4d8396a6263584db3, type: 3}
+  vfxWeaponParent: 1
+  vfxBodyParent: 0
   buffDuration: 20
   attackRangeLengthen: 0.75
