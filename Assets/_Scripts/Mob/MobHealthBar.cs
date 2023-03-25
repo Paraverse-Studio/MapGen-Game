@@ -125,6 +125,7 @@ public class MobHealthBar : MonoBehaviour
     public void UpdateHealthBar(int currentHP = -1, int totalHP = -1)
     {
         bool firstInvocation = false; // if this is the first time this function is called (to set up)
+
         int healthChange = (int)_health - currentHP;
         if (_health == -1f)
         {
@@ -137,18 +138,23 @@ public class MobHealthBar : MonoBehaviour
 
         if (_healthValueDisplay) _healthValueDisplay.text = currentHP + " / " + totalHP;
 
-        if (!_healthBarSetupComplete || !_healthBarShowable || firstInvocation) return;
+        if (!_healthBarSetupComplete || !_healthBarShowable) return;
 
         PopupTextOnHealthChange(healthChange);
     }
 
     public void PopupTextOnHealthChange(int healthChange)
     {
+        Debug.Log("222 Invoked pop-up text creation " + healthChange + "!");
+
         if (!GlobalSettings.Instance.ScreenSpaceCanvas)
         {
             Debug.Log("Health Bar: No screen space canvas provided in Global Settings to create pop up text!");
             return;
         }
+
+        Debug.Log("333 An instance of pop-up text was created for damage " + healthChange + "!");
+
         GameObject popupObj = Instantiate(GlobalSettings.Instance.popupTextPrefab, GlobalSettings.Instance.ScreenSpaceCanvas.transform);
         float xOffset = Random.Range(-0.25f, 0.25f);
         float zOffset = Random.Range(-0.25f, 0.25f);
