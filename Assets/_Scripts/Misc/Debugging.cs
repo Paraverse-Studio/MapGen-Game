@@ -32,11 +32,11 @@ public class Debugging : MonoBehaviour
         {
             if (GlobalSettings.Instance.testGameObject)
             {
-                Vector3 r = Vector3.down * (Random.value < 0.5f ? 90f : 180f);
+                //Vector3 r = Vector3.down * (Random.value < 0.5f ? 90f : 180f);
                 GameObject g = Instantiate(GlobalSettings.Instance.testGameObject,
-                    GlobalSettings.Instance.player.transform.position + (GlobalSettings.Instance.player.transform.forward * 3f),
-                    Quaternion.Euler(r.x, r.y, r.z));
-                g.GetComponent<ChestObject>().Initialize(Random.Range(0,3));
+                    GlobalSettings.Instance.player.transform.position,
+                    GlobalSettings.Instance.player.transform.rotation);
+                //g.GetComponent<ChestObject>().Initialize(Random.Range(0,3));
             }
         }
     }

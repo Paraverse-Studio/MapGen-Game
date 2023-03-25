@@ -12,18 +12,25 @@ public class TeleportSkill : MobSkill, IMobSkill
     private int rangeLimit;
     [SerializeField]
     private GameObject FX;
+
+    private bool performing = false;
     #endregion
 
     public override void SkillUpdate()
     {
         base.SkillUpdate();
 
-        Vector3 targetDir = ParaverseHelper.GetPositionXZ(mob.Target.position - mob.transform.position).normalized;
-        mob.transform.forward = targetDir;
+        if (null != mob.Target && performing)
+        {
+            Vector3 targetDir = ParaverseHelper.GetPositionXZ(mob.Target.position - mob.transform.position).normalized;
+            mob.transform.forward = targetDir;
+        }
     }
 
     protected override void ExecuteSkillLogic()
     {
+        performing = true;
+        
         base.ExecuteSkillLogic();
 
         // teleport
@@ -31,6 +38,7 @@ public class TeleportSkill : MobSkill, IMobSkill
 
         if (UtilityFunctions.IsDistanceLessThan(mob.transform.position, mob.Target.position, rangeLimit))
         {
+            anim.SetBool(StringData.IsInteracting, true);
             Vector3 oldPosition = mob.gameObject.transform.position;
             Vector3 position = ((mob.Target.position - mob.transform.position).normalized * 1.2f) + mob.Target.position;
             var block = MapGeneration.Instance.GetClosestValidGroundBlock(position);
@@ -44,9 +52,15 @@ public class TeleportSkill : MobSkill, IMobSkill
                 Instantiate(FX, block.transform.position, Quaternion.identity);
             }
 
-            anim.SetBool(StringData.IsInteracting, false);
-            DisableSkill();
+            DisableSkill();            
         }
+
+        StartCoroutine(UtilityFunctions.IDelayedAction(0.2f, () =>
+        {
+            performing = false;
+            anim.SetBool(StringData.IsInteracting, false);
+            anim.SetBool(StringData.IsUsingSkill, false);
+        }));
     }
 
     private void ResetCollider()

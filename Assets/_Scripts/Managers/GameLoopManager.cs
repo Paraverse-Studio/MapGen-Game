@@ -138,8 +138,7 @@ public class GameLoopManager : MonoBehaviour
     {
         if (Time.frameCount % 60 == 0)
         {
-            if (null == _predicate) MakeCompletionPredicate(CompletionPredicate);
-            if (_predicate(_roundIsActive) && !EndPortal.IsActivated)
+            if (null != _predicate && _predicate(_roundIsActive) && !EndPortal.IsActivated)
             {
                 if (MapCreator.Instance.mapType != MapType.reward)
                     AnnouncementManager.Instance.QueueAnnouncement(new Announcement().AddType(1).AddText("Gate is open!"));
@@ -214,6 +213,7 @@ public class GameLoopManager : MonoBehaviour
                 .AddText("Defeat all enemies & pass through the gate!"));
         }
 
+        MakeCompletionPredicate(CompletionPredicate);
         _roundIsActive = true;
     }
 
@@ -229,7 +229,7 @@ public class GameLoopManager : MonoBehaviour
 
     public void MakeCompletionPredicate(CompletionPredicateType predicate)
     {
-        switch (CompletionPredicate)
+        switch (predicate)
         {
             case CompletionPredicateType.KillAllEnemies:
                 _predicate = KillAllEnemies;
