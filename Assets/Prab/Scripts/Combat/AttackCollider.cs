@@ -117,7 +117,7 @@ namespace Paraverse
         {
             float totalDmg = scalingStatData.FinalValue(stats);            
 
-            controller.Stats.UpdateCurrentHealth(-Mathf.CeilToInt(totalDmg));
+            controller.Stats.TakeDamage(totalDmg);
             return totalDmg;
         }
 

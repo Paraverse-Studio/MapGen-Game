@@ -15,10 +15,11 @@ public class ScalingStatData
 
     public float FinalValue(Paraverse.Mob.Stats.IMobStats stats)
     {
-        return flatPower + 
-               (stats.AttackDamage.FinalValue * attackScaling) + 
-               (stats.AbilityPower.FinalValue * abilityScaling) +
-               (stats.MaxHealth.FinalValue * healthScaling);
+        float finalAttackValue = stats.AttackDamage.FinalValue * attackScaling * stats.MobBoosts.GetAttackDamageBoost();
+        float finalAbilityValue = stats.AbilityPower.FinalValue * abilityScaling * stats.MobBoosts.GetAbilityPowerBoost();
+        float finalHealthValue = stats.MaxHealth.FinalValue * healthScaling;
+
+        return (flatPower + finalAttackValue + finalAbilityValue + finalHealthValue) * stats.MobBoosts.GetOverallDamageOutputBoost();
     }
 
 }

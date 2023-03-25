@@ -1,3 +1,4 @@
+using Paraverse.Mob.Boosts;
 using Paraverse.Stats;
 using System.Collections;
 using UnityEngine;
@@ -50,7 +51,6 @@ namespace Paraverse.Mob.Stats
         public Stat EnergyRegen { get { return _energyRegen; } }
         private Stat _energyRegen;
 
-
         [SerializeField]
         protected float _gold = 100f;
         public int Gold { get { return (int)_gold; } }
@@ -67,6 +67,9 @@ namespace Paraverse.Mob.Stats
 
         public bool unkillable = false;
 
+        [SerializeField, Header("Mob Boosts")]
+        protected IMobBoosts _mobBoosts;
+        public IMobBoosts MobBoosts { get { return _mobBoosts; } }
         #endregion
 
         #region Start & Update Methods
@@ -82,6 +85,7 @@ namespace Paraverse.Mob.Stats
 
             _curHealth = (int)MaxHealth.FinalValue;
             _curEnergy = (int)MaxEnergy.FinalValue;
+            _mobBoosts = GetComponent<IMobBoosts>();
         }
 
         private IEnumerator Start()
@@ -102,6 +106,13 @@ namespace Paraverse.Mob.Stats
         {
             _maxHealth.AddMod(new StatModifier(amount));
             UpdateCurrentHealth(amount);
+        }
+
+        // This is made so that damage-related health updates are all to one function,
+        // instead of using UpdateCurrentHealth which can happen through non-combat ways (healing, etc.)
+        public void TakeDamage(float damage)
+        {
+            UpdateCurrentHealth(-Mathf.CeilToInt(damage));
         }
 
         public void UpdateCurrentHealth(int amount)
