@@ -66,14 +66,16 @@ public class InteractableObject : MonoBehaviour
             // Displaying left side: list of available skills to buy
             if (null == _items)
             {
-                _items = ModsManager.Instance.AvailableMods.Where(mod => (mod is SO_SkillMod)).ToList();
+                _items = ModsManager.Instance.AvailableMods.Where(mod => (mod is SO_SkillMod && !ModsManager.Instance.PurchasedMods.Contains(mod))).ToList();
                 IListExtensions.Shuffle(_items);
 
-                for (int i = 2; i < _items.Count; ++i) _items.RemoveAt(i);
+                for (int i = _items.Count - 1; i >= 3; --i) _items.RemoveAt(i);
             }
+
+            for (int i = _items.Count - 1; i >= 0; --i) if (ModsManager.Instance.PurchasedMods.Contains(_items[i])) _items.RemoveAt(i);
             _display.Display(_items, null);
 
-            // Displayin right side: show the latest purchased skill you have
+            // Displaying right side: show the latest purchased skill you have
             SO_Item latestSkill = null;
             for (int i = ModsManager.Instance.PurchasedMods.Count - 1; i >= 0; --i)
             {

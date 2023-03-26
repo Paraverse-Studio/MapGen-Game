@@ -49,7 +49,7 @@ public abstract class MobEffect : MonoBehaviour
     public virtual float ApplyCustomDamage(IMobController controller)
     {
         float totalDmg =
-            _scaling.FinalValue(_stats);
+            _scaling.FinalValueWithBoosts(_stats);
 
         controller.Stats.UpdateCurrentHealth(-Mathf.CeilToInt(totalDmg));
         return totalDmg;

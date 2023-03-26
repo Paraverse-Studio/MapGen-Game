@@ -139,7 +139,15 @@ public class MapCreator : MonoBehaviour
         }
     }
 
-    private void ResetRuntimeVariables()
+    public void ResetVariables() // after restarting the game
+    {
+        EnemiesSpawned = 0;
+        mapType = MapType.normal;
+        roundsSinceLastBossMap = 0;
+        roundsSincelastRewardMap = 0;
+    }
+
+    private void ResetRuntimeVariables() // between rounds
     {
         EnemiesSpawned = 0;
         mapType = MapType.normal;

@@ -145,15 +145,11 @@ public class MobHealthBar : MonoBehaviour
 
     public void PopupTextOnHealthChange(int healthChange)
     {
-        Debug.Log("222 Invoked pop-up text creation " + healthChange + "!");
-
         if (!GlobalSettings.Instance.ScreenSpaceCanvas)
         {
             Debug.Log("Health Bar: No screen space canvas provided in Global Settings to create pop up text!");
             return;
         }
-
-        Debug.Log("333 An instance of pop-up text was created for damage " + healthChange + "!");
 
         GameObject popupObj = Instantiate(GlobalSettings.Instance.popupTextPrefab, GlobalSettings.Instance.ScreenSpaceCanvas.transform);
         float xOffset = Random.Range(-0.25f, 0.25f);

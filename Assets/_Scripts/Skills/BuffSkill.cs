@@ -136,7 +136,8 @@ public class BuffSkill : MobSkill, IMobSkill
                     break;
                 case BoostType.healthStatIncreaseBoost:
                     stats.MaxHealth.RemoveMod(buff.buff);
-                    stats.UpdateCurrentHealth(0);
+                    if(stats.CurHealth > Mathf.CeilToInt(buff.buff.Value)) 
+                        stats.UpdateCurrentHealth(-Mathf.CeilToInt(buff.buff.Value));
                     break;
                 case BoostType.movementStatIncreaseBoost:
                     stats.MoveSpeed.RemoveMod(buff.buff);
