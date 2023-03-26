@@ -56,7 +56,6 @@ public class InteractableObject : MonoBehaviour
         _interactable.OnInteract.AddListener(InteractWithObject);
     }
 
-
     public void InteractWithObject()
     {
         _display = InteractableObjectsManager.Instance.windows.Find(x => x.type == thisInteractable).display;
@@ -71,9 +70,7 @@ public class InteractableObject : MonoBehaviour
 
                 for (int i = _items.Count - 1; i >= 3; --i) _items.RemoveAt(i);
             }
-
-            for (int i = _items.Count - 1; i >= 0; --i) if (ModsManager.Instance.PurchasedMods.Contains(_items[i])) _items.RemoveAt(i);
-            _display.Display(_items, null);
+            _display.Display(UniqueMods(_items), null);
 
             // Displaying right side: show the latest purchased skill you have
             SO_Item latestSkill = null;
@@ -95,7 +92,7 @@ public class InteractableObject : MonoBehaviour
                 IListExtensions.Shuffle(_items);
                 for (int i = 4; i < _items.Count; ++i) _items.RemoveAt(i);
             }
-            _display.Display(_items, null);
+            _display.Display(UniqueMods(_items), null);
         }
         else if (thisInteractable == InteractableObjects.trainer)
         {
@@ -105,7 +102,7 @@ public class InteractableObject : MonoBehaviour
                 IListExtensions.Shuffle(_items);
                 for (int i = 4; i < _items.Count; ++i) _items.RemoveAt(i);
             }
-            _display.Display(_items, null);
+            _display.Display(UniqueMods(_items), null);
         }
         else if (thisInteractable == InteractableObjects.skillGiver)
         {
@@ -122,6 +119,12 @@ public class InteractableObject : MonoBehaviour
         _initialized = true;
 
     }
+
+    private List<SO_Item> UniqueMods(List<SO_Item> list)
+    {
+        for (int i = list.Count - 1; i >= 0; --i) if (ModsManager.Instance.PurchasedMods.Contains(list[i])) list.RemoveAt(i);
+        return list;
+    } 
 
     public void ResetInteractable()
     {
