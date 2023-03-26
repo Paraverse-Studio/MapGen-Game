@@ -45,9 +45,10 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   _skillName: Azurite Infusion
-  _ID: -1
-  _image: {fileID: 0}
-  _description: 
+  _ID: 102
+  _image: {fileID: 21300000, guid: fe967a1394de8be46870dbc53b91ea4c, type: 3}
+  _description: 'Active Skill: Imbue Azurite magic into your weapon, temporarily
+    providing an Attack boost scaling off of [DMG] and increasing attack-range.'
   _minRange: 0
   _maxRange: 5
   cooldown: 25
@@ -68,14 +69,14 @@ MonoBehaviour:
   scalingStatData:
     flatPower: 0
     attackScaling: 0
-    abilityScaling: 0
+    abilityScaling: 0.05
     healthScaling: 0
   Buffs:
-  - type: 0
+  - type: 4
     scalingValue:
-      flatPower: 6
+      flatPower: 0
       attackScaling: 0
-      abilityScaling: 0.6
+      abilityScaling: 0.05
       healthScaling: 0
   buffVFX: {fileID: 3588532860561885775, guid: 462bf3cfddfdfda4d8396a6263584db3, type: 3}
   vfxWeaponParent: 1
