@@ -111,7 +111,7 @@ public class InteractableObject : MonoBehaviour
                     var chest = Instantiate(MapCreator.Instance.chestPrefab, 
                         transform.position + new Vector3(0, 0.5f, 0) + transform.forward, 
                         UtilityFunctions.GetCameraFacingRotation(reverse: true));
-                    chest.Initialize(3); // skill chest
+                    chest.Initialize(3); // ronny's custom chest
                     Destroy(_interactable);
                 });
         }
