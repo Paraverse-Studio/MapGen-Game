@@ -115,7 +115,7 @@ namespace Paraverse
         /// </summary>
         public float ApplyCustomDamage(IMobController controller)
         {
-            float totalDmg = scalingStatData.FinalValue(stats);            
+            float totalDmg = scalingStatData.FinalValueWithBoosts(stats);            
 
             controller.Stats.TakeDamage(totalDmg);
             return totalDmg;

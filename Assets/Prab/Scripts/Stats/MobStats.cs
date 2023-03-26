@@ -104,7 +104,7 @@ namespace Paraverse.Mob.Stats
         #region Update Stat Methods
         public void UpdateMaxHealth(int amount)
         {
-            _maxHealth.AddMod(new StatModifier(amount));
+            if (0 != amount) _maxHealth.AddMod(new StatModifier(amount));
             UpdateCurrentHealth(amount);
         }
 

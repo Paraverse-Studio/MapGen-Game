@@ -50,7 +50,7 @@ public class BuffSkill : MobSkill, IMobSkill
         {
             if (null != buff.buff)
             {
-                buff.buff.Value = GetPowerAmount(buff.scalingValue);
+                buff.buff.Value = buff.scalingValue.FinalValue(stats);
             }
         }
     }
@@ -107,15 +107,6 @@ public class BuffSkill : MobSkill, IMobSkill
         }                    
     }
 
-    private float GetPowerAmount(ScalingStatData data)
-    {
-        //Debug.Log($"BUFF SCALING IS:  + {data.flatPower} + {(stats.AttackDamage.FinalValue * data.attackScaling)} + { (stats.AbilityPower.FinalValue * data.abilityScaling)} + { (stats.MaxHealth.FinalValue * data.healthScaling)} ({stats.MaxHealth.FinalValue} * {data.healthScaling}) ");
-
-        return data.flatPower + (stats.AttackDamage.FinalValue * data.attackScaling) 
-                              + (stats.AbilityPower.FinalValue * data.abilityScaling)
-                              + (stats.MaxHealth.FinalValue * data.healthScaling);
-    }
-
     private void ToggleParticleSystem(bool turnParticlesOn)
     {
         if (null == _VFX) return;
@@ -145,6 +136,7 @@ public class BuffSkill : MobSkill, IMobSkill
                     break;
                 case BoostType.healthStatIncreaseBoost:
                     stats.MaxHealth.RemoveMod(buff.buff);
+                    stats.UpdateCurrentHealth(0);
                     break;
                 case BoostType.movementStatIncreaseBoost:
                     stats.MoveSpeed.RemoveMod(buff.buff);
@@ -168,7 +160,7 @@ public class BuffSkill : MobSkill, IMobSkill
         for (int i = 0; i < Buffs.Count; ++i)
         {
             BoostElement buff = Buffs[i];
-            buff.buff = new StatModifier(GetPowerAmount(buff.scalingValue));
+            buff.buff = new StatModifier(buff.scalingValue.FinalValue(stats));
 
             switch (buff.type)
             {
@@ -180,6 +172,7 @@ public class BuffSkill : MobSkill, IMobSkill
                     break;
                 case BoostType.healthStatIncreaseBoost:
                     stats.MaxHealth.AddMod(buff.buff);
+                    stats.UpdateCurrentHealth(Mathf.CeilToInt(buff.buff.Value));
                     break;
                 case BoostType.movementStatIncreaseBoost:
                     stats.MoveSpeed.AddMod(buff.buff);
