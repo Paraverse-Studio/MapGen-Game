@@ -109,7 +109,7 @@ public class BuffSkill : MobSkill, IMobSkill
 
     private float GetPowerAmount(ScalingStatData data)
     {
-        Debug.Log($"BUFF SCALING IS:  + {data.flatPower} + {(stats.AttackDamage.FinalValue * data.attackScaling)} + { (stats.AbilityPower.FinalValue * data.abilityScaling)} + { (stats.MaxHealth.FinalValue * data.healthScaling)} ");
+        //Debug.Log($"BUFF SCALING IS:  + {data.flatPower} + {(stats.AttackDamage.FinalValue * data.attackScaling)} + { (stats.AbilityPower.FinalValue * data.abilityScaling)} + { (stats.MaxHealth.FinalValue * data.healthScaling)} ({stats.MaxHealth.FinalValue} * {data.healthScaling}) ");
 
         return data.flatPower + (stats.AttackDamage.FinalValue * data.attackScaling) 
                               + (stats.AbilityPower.FinalValue * data.abilityScaling)
