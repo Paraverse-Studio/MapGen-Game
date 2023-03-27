@@ -1007,7 +1007,7 @@ public class MapGeneration : MonoBehaviour
                 if (runtimeDistance >= blocksGapBetweenChests)
                 {          
                     Block b = pathObjects[i];
-                    Vector3 randomOffset = new(Random.Range(5, 10f), 0, Random.Range(5, 10f));
+                    Vector3 randomOffset = new(Random.Range(2, 9f), 0, Random.Range(2, 9f));
                     b = GetClosestValidGroundBlock(b.transform.position + randomOffset);
 
                     var chest = Instantiate(MapCreator.Instance.chestPrefab, b.transform.position + new Vector3(0, 0.5f, 0), GetCameraFacingRotation());
@@ -1027,11 +1027,11 @@ public class MapGeneration : MonoBehaviour
             }
         }
 
-        if (M.addBlacksmith)
+        if (M.addSpellbook)
         {
-            int distanceToCloserToPath = Random.Range(0, 2);
+            int distanceCloserToPath = Random.Range(0, 2);
             int distanceToTheBottomLeftOfPortal = Random.Range(5, 10);
-            Vector3 spot = pathObjects[pathObjects.Count - 1].gameObject.transform.position + new Vector3(-distanceToTheBottomLeftOfPortal, 0, -distanceToCloserToPath);
+            Vector3 spot = pathObjects[pathObjects.Count - 1].gameObject.transform.position + new Vector3(-distanceToTheBottomLeftOfPortal, 0, -distanceCloserToPath);
             Vector3 r = Vector3.down *  180f;
 
             Block b = GetClosestValidGroundBlock(spot);
@@ -1045,10 +1045,10 @@ public class MapGeneration : MonoBehaviour
 
         if (M.addMerchant)
         {
-            int distanceToCloserToPath = Random.Range(0, 2);
+            int distanceCloserToPath = Random.Range(0, 2);
             int distanceToTheBottomRightOfPortal = Random.Range(5, 10);
 
-            Vector3 spot = pathObjects[pathObjects.Count - 1].gameObject.transform.position + new Vector3(-distanceToCloserToPath, 0, -distanceToTheBottomRightOfPortal);
+            Vector3 spot = pathObjects[pathObjects.Count - 1].gameObject.transform.position + new Vector3(-distanceCloserToPath, 0, -distanceToTheBottomRightOfPortal);
             Vector3 r = Vector3.down * 90f;
 
             Block b = GetClosestValidGroundBlock(spot);
