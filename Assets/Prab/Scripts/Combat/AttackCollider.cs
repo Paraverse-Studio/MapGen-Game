@@ -1,7 +1,6 @@
 using Paraverse.Mob;
 using Paraverse.Mob.Combat;
 using Paraverse.Mob.Stats;
-using System;
 using System.Collections.Generic;
 using UnityEngine;
 
@@ -58,7 +57,6 @@ namespace Paraverse
             this.scalingStatData.attackScaling = scalingStatData.attackScaling;
             this.scalingStatData.abilityScaling = scalingStatData.abilityScaling;
             gameObject.SetActive(false);
-            Debug.Log("Activate Collider");
         }
 
         public void Init(MobCombat mob, IMobStats stats)
@@ -66,7 +64,6 @@ namespace Paraverse
             this.mob = mob;
             this.stats = stats;
             gameObject.SetActive(false);
-            Debug.Log("Activate Collider");
         }
 
         private void OnEnable()

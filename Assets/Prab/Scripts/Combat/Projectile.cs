@@ -123,6 +123,7 @@ namespace Paraverse
         protected void ApplyCustomDamage(IMobController controller)
         {
             controller.Stats.UpdateCurrentHealth(-Mathf.CeilToInt(scalingStatData.FinalValue(mob.stats)));
+            Debug.Log("Applied " + Mathf.CeilToInt(scalingStatData.FinalValue(mob.stats)) + " points of damage to " + controller.Transform.name);
         }
 
         protected void DamageLogic(Collider other)
