@@ -69,6 +69,7 @@ public class JumpSmashAttack : MobSkill, IMobSkill
         anim.Play(landAnimName);
         anim.SetLayerWeight(layerIdx, layerWeight);
         anim.SetBool(StringData.IsGrounded, true);
+        
     }
 
     private void EnableSmashAttackCollider()

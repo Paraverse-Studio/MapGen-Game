@@ -184,7 +184,7 @@ namespace Paraverse.Mob.Controller
             if (statusEffectManager == null) statusEffectManager = GetComponent<StatusEffectManager>();
             if (strafePoint == null && _isStrafer)
             {
-                GameObject objToSpawn = new GameObject("Strafe Point");
+                GameObject objToSpawn = new GameObject(StringData.StrafePoint);
                 objToSpawn.transform.SetParent(transform);
                 strafePoint = objToSpawn.AddComponent<SphereCollider>().transform;
             }
@@ -238,7 +238,7 @@ namespace Paraverse.Mob.Controller
             nav.speed = curMoveSpeed;
 
             // Ensures nav is enabled after switching it off
-            if (_isStaggered == false && combat.IsAttackLunging == false && IsFlying == false)
+            if (_isStaggered == false && combat.IsAttackLunging == false && IsFlying == false && IsJumping == false)
                 nav.enabled = true;
 
             if (_isInteracting && IsFalling == false)
@@ -675,6 +675,7 @@ namespace Paraverse.Mob.Controller
 
             curAirCheckTimer = jumpCheckTimer;
             nav.enabled = false;
+            Debug.Log("Nav enabled on Apply Jump: " + nav.enabled);
             _isJumping = true;
             combat.OnAttackInterrupt();
             Vector3 targetDir = (mobPos - transform.position).normalized;
@@ -687,9 +688,10 @@ namespace Paraverse.Mob.Controller
         {
             if (_isJumping)
             {
+                Debug.Log("Nav enabled on Jump Handler: " + nav.enabled);
                 Vector3 landDir = new Vector3(jumpDir.x * jumpLateralForce, jumpDir.y, jumpDir.z * jumpLateralForce);
                 controller.Move(landDir * Time.deltaTime);
-                nav.updateRotation = false;
+                //nav.updateRotation = false;
 
                 if (curAirCheckTimer <= 0)
                 {
