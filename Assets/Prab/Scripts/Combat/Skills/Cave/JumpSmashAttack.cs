@@ -4,7 +4,6 @@ using Paraverse.Mob.Controller;
 using Paraverse.Mob.Stats;
 using Paraverse.Player;
 using UnityEngine;
-using UnityEngine.InputSystem.XR;
 
 public class JumpSmashAttack : MobSkill, IMobSkill
 {
@@ -36,12 +35,14 @@ public class JumpSmashAttack : MobSkill, IMobSkill
     public override void SubscribeAnimationEventListeners()
     {
         controller.OnLandEvent += OnLand;
+        mob.OnEnableSkillColliderSOneEvent += EnableSmashAttackCollider;
         mob.OnDisableSkillOneEvent += DisableSkill;
     }
 
     public override void UnsubscribeAnimationEventListeners()
     {
         controller.OnLandEvent -= OnLand;
+        mob.OnDisableSkillColliderSOneEvent += DisableSmashAttackCollider;
         mob.OnDisableSkillOneEvent -= DisableSkill;
     }
 
@@ -68,6 +69,16 @@ public class JumpSmashAttack : MobSkill, IMobSkill
         anim.Play(landAnimName);
         anim.SetLayerWeight(layerIdx, layerWeight);
         anim.SetBool(StringData.IsGrounded, true);
+    }
+
+    private void EnableSmashAttackCollider()
+    {
+        attackColliderGO.SetActive(true);
+    }
+
+    private void DisableSmashAttackCollider()
+    {
+        attackColliderGO.SetActive(false);  
     }
     #endregion
 }

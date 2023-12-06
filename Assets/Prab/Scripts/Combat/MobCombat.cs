@@ -1,7 +1,6 @@
 using Paraverse.Combat;
 using Paraverse.Helper;
 using Paraverse.Mob.Stats;
-using System;
 using System.Collections.Generic;
 using UnityEngine;
 
@@ -197,7 +196,7 @@ namespace Paraverse.Mob.Combat
         /// </summary>
         protected void EnableBasicAttackCollider()
         {
-            if (null != basicAttackSkill.attackColliderGO)            
+            if (null != basicAttackSkill.attackColliderGO)
                 basicAttackSkill.attackColliderGO.SetActive(true);
 
             OnEnableBasicAttackCollider?.Invoke();

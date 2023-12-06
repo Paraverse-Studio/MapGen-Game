@@ -1,9 +1,9 @@
 using Paraverse.Mob;
 using Paraverse.Mob.Combat;
 using Paraverse.Mob.Stats;
+using System;
 using System.Collections.Generic;
 using UnityEngine;
-using UnityEngine.InputSystem.XR;
 
 namespace Paraverse
 {
@@ -58,13 +58,15 @@ namespace Paraverse
             this.scalingStatData.attackScaling = scalingStatData.attackScaling;
             this.scalingStatData.abilityScaling = scalingStatData.abilityScaling;
             gameObject.SetActive(false);
+            Debug.Log("Activate Collider");
         }
-        
+
         public void Init(MobCombat mob, IMobStats stats)
         {
             this.mob = mob;
             this.stats = stats;
             gameObject.SetActive(false);
+            Debug.Log("Activate Collider");
         }
 
         private void OnEnable()
@@ -115,7 +117,7 @@ namespace Paraverse
         /// </summary>
         public float ApplyCustomDamage(IMobController controller)
         {
-            float totalDmg = scalingStatData.FinalValue(stats);            
+            float totalDmg = scalingStatData.FinalValue(stats);
 
             controller.Stats.UpdateCurrentHealth(-Mathf.CeilToInt(totalDmg));
             return totalDmg;

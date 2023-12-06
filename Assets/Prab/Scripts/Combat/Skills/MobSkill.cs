@@ -76,7 +76,15 @@ namespace Paraverse.Combat
         public bool skillOn { get; set; }
         #endregion
 
-        #region Inheritable Methods
+        #region Inheritable 
+        /// <summary>
+        /// Activates players skill ONLY
+        /// </summary>
+        /// <param name="mob"></param>
+        /// <param name="input"></param>
+        /// <param name="anim"></param>
+        /// <param name="stats"></param>
+        /// <param name="target"></param>
         public virtual void ActivateSkill(PlayerCombat mob, PlayerInputControls input, Animator anim, MobStats stats, Transform target = null)
         {
             this.mob = mob;
@@ -101,6 +109,13 @@ namespace Paraverse.Combat
             }
         }
 
+        /// <summary>
+        /// Activates mobs skill ONLY
+        /// </summary>
+        /// <param name="mob"></param>
+        /// <param name="anim"></param>
+        /// <param name="stats"></param>
+        /// <param name="target"></param>
         public virtual void ActivateSkill(MobCombat mob, Animator anim, MobStats stats, Transform target = null)
         {
             this.mob = mob;
