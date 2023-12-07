@@ -125,7 +125,6 @@ namespace Paraverse.Mob.Combat
             if (controller.IsDead) return;
 
             distanceFromTarget = ParaverseHelper.GetDistance(transform.position, player.position);
-
             _isBasicAttacking = anim.GetBool(StringData.IsBasicAttacking);
 
             if (anim.GetBool(StringData.IsUsingSkill))
@@ -156,7 +155,10 @@ namespace Paraverse.Mob.Combat
             distanceFromTarget = ParaverseHelper.GetDistance(transform.position, player.position);
 
             IsSkilling = false;
-            basicAttackSkill.ActivateSkill(this, anim, stats, player);
+            if (null != basicAttackSkill)
+            {
+                basicAttackSkill.ActivateSkill(this, anim, stats, player);
+            }
             for (int i = 0; i < skills.Count; i++)
             {
                 skills[i].ActivateSkill(this, anim, stats, player);
