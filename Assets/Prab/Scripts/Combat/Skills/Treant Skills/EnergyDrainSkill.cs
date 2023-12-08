@@ -10,7 +10,7 @@ using UnityEngine;
 public class EnergyDrainSkill : MobSkill, IMobSkill
 {
     #region Variables
-    [SerializeField]
+    [SerializeField, Range(0,1)]
     protected float lifeStealRatio = 0.3f;
     #endregion
 
@@ -39,7 +39,7 @@ public class EnergyDrainSkill : MobSkill, IMobSkill
     {
         float healAmount = dmg * lifeStealRatio;
         stats.UpdateCurrentHealth((int)healAmount);
-        Debug.Log(healAmount);
+        Debug.Log(transform.name + "applied " + dmg + " points of damage and healed for " + healAmount + " points of health.  LS Ratio: " + lifeStealRatio);
     }
     #endregion
 
