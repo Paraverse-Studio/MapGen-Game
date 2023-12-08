@@ -3,7 +3,6 @@ using Paraverse.Mob.Combat;
 using Paraverse.Mob.Stats;
 using System.Collections.Generic;
 using UnityEngine;
-using UnityEngine.InputSystem.XR;
 
 namespace Paraverse
 {
@@ -59,7 +58,7 @@ namespace Paraverse
             this.scalingStatData.abilityScaling = scalingStatData.abilityScaling;
             gameObject.SetActive(false);
         }
-        
+
         public void Init(MobCombat mob, IMobStats stats)
         {
             this.mob = mob;
@@ -115,9 +114,9 @@ namespace Paraverse
         /// </summary>
         public float ApplyCustomDamage(IMobController controller)
         {
-            float totalDmg = scalingStatData.FinalValueWithBoosts(stats);            
+            float totalDmg = scalingStatData.FinalValue(stats);
 
-            controller.Stats.TakeDamage(totalDmg);
+            controller.Stats.UpdateCurrentHealth(-Mathf.CeilToInt(totalDmg));
             return totalDmg;
         }
 

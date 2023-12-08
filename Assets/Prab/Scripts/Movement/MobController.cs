@@ -2,8 +2,11 @@ using Paraverse.Helper;
 using Paraverse.Mob.Combat;
 using Paraverse.Mob.Stats;
 using Paraverse.Stats;
+using System.Runtime.CompilerServices;
+using UnityEditor.SceneManagement;
 using UnityEngine;
 using UnityEngine.AI;
+using UnityEngine.ProBuilder;
 
 namespace Paraverse.Mob.Controller
 {
@@ -72,6 +75,20 @@ namespace Paraverse.Mob.Controller
         protected IMobController playerController;
         [Tooltip("Set to true once target is detected.")]
         protected bool targetDetected = false;
+        [SerializeField, Tooltip("Uses min basic attack range as default pursue range.")]
+        protected bool customPursueRange = false;
+        [SerializeField, Tooltip("Define the range at which the mob begins to pursue target.")]
+        protected float pursueRange = 10f;
+
+        [Header("Strafe Values")]
+        [SerializeField, Tooltip("Allow mob strafing.")]
+        protected bool _isStrafer = false;
+        private bool isStrafing = false;    // Mob is looking for a strafe location
+        private bool isStrafingToPoint = false; // Mob is strafing to a determined strafe location
+        [SerializeField]
+        private Transform strafePoint; // Updated strafe pos mob when strafing
+        [SerializeField, Tooltip("How close should mob approach strafe position.")]
+        protected float strafeAccuracy = 1f;
 
         [Header("Attack Dash Values")]
         [SerializeField, Tooltip("The attack dashing force applied during basic attack.")]
@@ -85,7 +102,9 @@ namespace Paraverse.Mob.Controller
 
         [Header("Jump Values")]
         [SerializeField]
-        protected float jumpForce = 5f;
+        protected float jumpLateralForce = 5f;
+        [SerializeField]
+        protected float jumpHeightForce = 5f;
         protected Vector3 landPos;
         [SerializeField]
         protected float isGroundedCheckRange = 0.5f;
@@ -163,7 +182,13 @@ namespace Paraverse.Mob.Controller
             if (combat == null) combat = GetComponent<IMobCombat>();
             if (stats == null) stats = GetComponent<IMobStats>();
             if (statusEffectManager == null) statusEffectManager = GetComponent<StatusEffectManager>();
-
+            if (strafePoint == null && _isStrafer)
+            {
+                GameObject objToSpawn = new GameObject(StringData.StrafePoint);
+                objToSpawn.transform.SetParent(transform);
+                strafePoint = objToSpawn.AddComponent<SphereCollider>().transform;
+            }
+            
             // Ensure basic attack range is >= to stopping distance
             if (combat.BasicAtkRange < stoppingDistance)
             {
@@ -192,8 +217,9 @@ namespace Paraverse.Mob.Controller
             _isInteracting = anim.GetBool(StringData.IsInteracting);
 
             DeathHandler();
-            if (_isDead) return;
+            if (_isDead) return; 
             StateHandler();
+            StrafeHandler();
             CCHandler();
             KnockbackHandler();
             JumpHandler();
@@ -212,7 +238,7 @@ namespace Paraverse.Mob.Controller
             nav.speed = curMoveSpeed;
 
             // Ensures nav is enabled after switching it off
-            if (_isStaggered == false && combat.IsAttackLunging == false && IsFlying == false)
+            if (_isStaggered == false && combat.IsAttackLunging == false && IsFlying == false && IsJumping == false)
                 nav.enabled = true;
 
             if (_isInteracting && IsFalling == false)
@@ -233,20 +259,17 @@ namespace Paraverse.Mob.Controller
             {
                 PursueTarget();
                 SetGeneralState(MobState.Pursue);
-                //Debug.Log("Pursue State");
             }
             else if (TargetDetected() && playerController.IsDead == false)
             {
                 CombatHandler();
                 SetGeneralState(MobState.Combat);
-                //Debug.Log("Combat State");
             }
             else
             {
                 nav.updateRotation = true;
                 Patrol();
                 SetGeneralState(MobState.Patrol);
-                //Debug.Log("Patrol State");
             }
         }
 
@@ -422,25 +445,70 @@ namespace Paraverse.Mob.Controller
         {
             if (pursueTarget != null)
             {
-                //Vector3 mobPos = ParaverseHelper.GetPositionXZ(transform.position);
-                //Vector3 targetPos = ParaverseHelper.GetPositionXZ(pursueTarget.position);
                 float distanceFromTarget = ParaverseHelper.GetDistance(transform.position, pursueTarget.position);
 
-                if (distanceFromTarget <= combat.BasicAtkRange)
+                bool canPursue = false;
+                if (distanceFromTarget <= combat.BasicAttackSkill.MinRange && customPursueRange == false)
+                    canPursue = true;
+                else if (distanceFromTarget <= pursueRange && customPursueRange)
+                    canPursue = true;
+                else
+                    canPursue = false;
+
+                if (canPursue)
+                {
+                    if (isStrafing && isStrafingToPoint == false)
+                    {
+                        float strafeDistance = 8f;
+
+                        Vector3 strafePos = Random.insideUnitCircle.normalized * strafeDistance;
+
+                        Vector3 origin = transform.position + new Vector3(0, 1f, 0);
+                        Vector3 groundCheckDis = -transform.up * 3f;
+
+                        if (Physics.Raycast(origin, strafePos, out RaycastHit hit, strafeDistance))
+                        {
+                            nav.isStopped = true;
+                            curMoveSpeed = 0f;
+                            nav.ResetPath();
+                        }
+                        else
+                        {
+                            if (Physics.Raycast(origin + strafePos, groundCheckDis, out hit, 3f))
+                            {
+                                nav.isStopped = false;
+                                curMoveSpeed = GetPursueSpeed();
+                                strafePoint.position = hit.point;
+                                nav.SetDestination(strafePoint.position);
+                                isStrafingToPoint = true;
+                                return;
+                            }
+                        }
+                    }
+                    else
+                    {
+                        if (isStrafingToPoint) return;
+                        nav.isStopped = true;
+                        curMoveSpeed = 0f;
+                        transform.rotation = ParaverseHelper.FaceTarget(transform, pursueTarget, rotSpeed);
+                        nav.SetDestination(pursueTarget.position);
+                    }
+                }
+                else if (distanceFromTarget <= combat.BasicAttackSkill.MaxRange && distanceFromTarget > combat.BasicAttackSkill.MinRange && isStrafingToPoint == false)
                 {
                     nav.isStopped = true;
                     curMoveSpeed = 0f;
                     transform.rotation = ParaverseHelper.FaceTarget(transform, pursueTarget, rotSpeed);
-                    //Debug.Log("Combat Idle");
+                    nav.SetDestination(pursueTarget.position);
                 }
                 else
                 {
                     nav.updateRotation = true;
                     nav.isStopped = false;
                     curMoveSpeed = GetPursueSpeed();
-                    //Debug.Log("Pursuing");
+                    nav.SetDestination(pursueTarget.position);
+                    isStrafingToPoint = false;
                 }
-                nav.SetDestination(pursueTarget.position);
             }
         }
 
@@ -512,6 +580,39 @@ namespace Paraverse.Mob.Controller
         }
         #endregion
 
+        #region Strafe Logic
+        private void StrafeHandler()
+        {
+            if (_isStrafer == false) return;
+
+            float distanceFromTarget = ParaverseHelper.GetDistance(transform.position, pursueTarget.position);
+            float distanceFromStrafePoint = ParaverseHelper.GetDistance(transform.position, strafePoint.position);
+
+            // Ensures mob strafes even when attacked and doesn't freeze
+            if (distanceFromStrafePoint <= strafeAccuracy)
+            {
+                isStrafingToPoint = false;
+                isStrafing = false;
+            }
+            else if (isStrafing && _curMobState.Equals(MobState.Pursue))
+            {
+                nav.isStopped = false;
+                curMoveSpeed = GetPursueSpeed();
+                nav.SetDestination(strafePoint.position);
+            }
+
+            // Handles mob strafing
+            if (distanceFromTarget > combat.BasicAttackSkill.MinRange && isStrafingToPoint == false)
+            {
+                isStrafing = false;
+            }
+            else if (distanceFromTarget <= combat.BasicAttackSkill.MinRange && _curMobState.Equals(MobState.Pursue) && _isStrafer)
+            {
+                isStrafing = true;
+            }
+        }
+        #endregion
+
         #region Knockback Methods
         /// <summary>
         /// Invokes knock back action
@@ -521,6 +622,7 @@ namespace Paraverse.Mob.Controller
             if (combat.IsAttackLunging || IsUnstaggerable) return;
 
             combat.OnAttackInterrupt();
+            isStrafingToPoint = false;
             Vector3 impactDir = (transform.position - mobPos).normalized;
             knockbackDir = new Vector3(impactDir.x, 0f, impactDir.z);
             activeKnockBackEffect = effect;
@@ -573,29 +675,31 @@ namespace Paraverse.Mob.Controller
 
             curAirCheckTimer = jumpCheckTimer;
             nav.enabled = false;
+            Debug.Log("Nav enabled on Apply Jump: " + nav.enabled);
             _isJumping = true;
             combat.OnAttackInterrupt();
             Vector3 targetDir = (mobPos - transform.position).normalized;
             landPos = mobPos;
             jumpDir = new Vector3(targetDir.x, targetDir.y, targetDir.z);
-            jumpDir.y += Mathf.Sqrt(jumpForce * -GlobalValues.GravityModifier * GlobalValues.GravityForce);
+            jumpDir.y += Mathf.Sqrt(jumpHeightForce * -GlobalValues.GravityModifier * GlobalValues.GravityForce);
         }
 
         private void JumpHandler()
         {
             if (_isJumping)
             {
-                Vector3 landDir = new Vector3(jumpDir.x * jumpForce, jumpDir.y, jumpDir.z * jumpForce);
+                Debug.Log("Nav enabled on Jump Handler: " + nav.enabled);
+                Vector3 landDir = new Vector3(jumpDir.x * jumpLateralForce, jumpDir.y, jumpDir.z * jumpLateralForce);
                 controller.Move(landDir * Time.deltaTime);
-                nav.updateRotation = false;
+                //nav.updateRotation = false;
 
                 if (curAirCheckTimer <= 0)
                 {
                     if (IsGroundedCheck())
                     {
                         nav.enabled = true;
-                        _isJumping = false;
                         OnLandEvent?.Invoke();
+                        _isJumping = false;
                         return;
                     }
                 }
@@ -608,23 +712,25 @@ namespace Paraverse.Mob.Controller
             }
         }
 
+        /// <summary>
+        /// Returns true if mob is grounded.
+        /// </summary>
+        /// <returns></returns>
         private bool IsGroundedCheck()
         {
             Vector3 origin = transform.position;
             Vector3 dir = -transform.up;
-            RaycastHit hit;
-
-            Debug.DrawRay(origin, dir * isGroundedCheckRange, Color.red);
-            if (Physics.Raycast(origin, dir * isGroundedCheckRange, out hit, isGroundedCheckRange, groundLayer))
-            {
+            
+            if (Physics.Raycast(origin, dir * isGroundedCheckRange, out RaycastHit hit, isGroundedCheckRange, groundLayer))
                 return true;
-            }
             else
-            {
                 return false;
-            }
         }
 
+        /// <summary>
+        /// Allows mob to fall off the map
+        /// </summary>
+        /// <returns></returns>
         private bool CheckFall()
         {
             Vector3 origin = transform.position;

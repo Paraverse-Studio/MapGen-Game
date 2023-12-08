@@ -30,4 +30,7 @@ public static class StringData
 
     // Method Names
     public static string TempStatModifierHandler = "TempStatModifierHandler";
+
+    // General GameObjects
+    public static string StrafePoint = "Strafe Point";
 }

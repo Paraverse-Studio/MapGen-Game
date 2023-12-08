@@ -1,7 +1,6 @@
 using Paraverse;
 using Paraverse.Helper;
 using Paraverse.Mob.Combat;
-using Paraverse.Mob.Stats;
 using UnityEngine;
 
 public class SuicideCombat : MobCombat
@@ -25,6 +24,7 @@ public class SuicideCombat : MobCombat
         {
             Explode();
         }
+        basicAttackSkill.SkillUpdate();
     }
 
     private void Explode()

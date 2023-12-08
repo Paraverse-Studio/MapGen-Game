@@ -36,6 +36,7 @@ namespace Paraverse.Combat
         protected float _minRange = 0f;
         [SerializeField, Tooltip("Max skill range value.")]
         protected float _maxRange = 5f;
+        public float MinRange{ get { return _minRange; } }
         public float MaxRange { get { return _maxRange; } }
         public bool IsOffCooldown { get { return curCooldown <= 0; } }
         [SerializeField, Tooltip("Skill cooldown value.")]
@@ -46,15 +47,16 @@ namespace Paraverse.Combat
 
         public bool HasEnergy { get { return cost <= stats.CurEnergy; } }
         [SerializeField, Tooltip("Required energy cost to execute skill.")]
-        protected float cost = 10f;
+        protected float cost = 0f;
 
         [Tooltip("Name of skill animation to play.")]
         public string animName = "";
 
-        [SerializeField]
+        [SerializeField, Tooltip("Will subscribe skill to skill execute listener. [if isBasicAttack = false]")]
         protected bool isBasicAttack = false;
         public bool IsBasicAttack { get { return isBasicAttack; } }
 
+        [Tooltip("Will fetch attack collider GO. [if isMelee = true]")]
         public bool IsMelee => _isMelee;
         [SerializeField] protected bool _isMelee;
 
@@ -74,8 +76,15 @@ namespace Paraverse.Combat
         public bool skillOn { get; set; }
         #endregion
 
-
-        #region Inheritable Methods
+        #region Inheritable 
+        /// <summary>
+        /// Activates players skill ONLY
+        /// </summary>
+        /// <param name="mob"></param>
+        /// <param name="input"></param>
+        /// <param name="anim"></param>
+        /// <param name="stats"></param>
+        /// <param name="target"></param>
         public virtual void ActivateSkill(PlayerCombat mob, PlayerInputControls input, Animator anim, MobStats stats, Transform target = null)
         {
             this.mob = mob;
@@ -100,6 +109,13 @@ namespace Paraverse.Combat
             }
         }
 
+        /// <summary>
+        /// Activates mobs skill ONLY
+        /// </summary>
+        /// <param name="mob"></param>
+        /// <param name="anim"></param>
+        /// <param name="stats"></param>
+        /// <param name="target"></param>
         public virtual void ActivateSkill(MobCombat mob, Animator anim, MobStats stats, Transform target = null)
         {
             this.mob = mob;
@@ -128,7 +144,7 @@ namespace Paraverse.Combat
         /// </summary>
         public virtual void SubscribeAnimationEventListeners()
         {
-
+            mob.OnDisableSkillOneEvent += DisableSkill;
         }
 
         /// <summary>
@@ -136,7 +152,7 @@ namespace Paraverse.Combat
         /// </summary>
         public virtual void UnsubscribeAnimationEventListeners()
         {
-
+            mob.OnDisableSkillOneEvent -= DisableSkill;
         }
 
         /// <summary>
@@ -149,7 +165,9 @@ namespace Paraverse.Combat
                 Execute();
             }
 
-            RotateToTarget();
+            if (skillOn)
+                RotateToTarget();
+
             CooldownHandler();
         }
 
@@ -225,7 +243,7 @@ namespace Paraverse.Combat
             return disFromTarget >= _minRange && disFromTarget <= _maxRange;
         }
         #endregion
-
+         
         #region Private Methods
 
         /// <summary>
@@ -242,5 +260,3 @@ namespace Paraverse.Combat
         #endregion
     }
 }
-
-

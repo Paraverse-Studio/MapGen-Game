@@ -1649,7 +1649,7 @@ MonoBehaviour:
   _ID: -1
   _image: {fileID: 0}
   _description: 
-  _minRange: 0
+  _minRange: 3
   _maxRange: 7
   cooldown: 2.2
   cost: 0
@@ -2319,7 +2319,7 @@ NavMeshAgent:
   m_GameObject: {fileID: 7134590875374718952}
   m_Enabled: 1
   m_AgentTypeID: 0
-  m_Radius: 0.5
+  m_Radius: 0.85
   m_Speed: 3
   m_Acceleration: 8
   avoidancePriority: 50
@@ -2406,6 +2406,9 @@ MonoBehaviour:
   stoppingDistance: 7
   detectionRadius: 12
   pursueRadius: 18
+  _isStrafer: 1
+  strafePoint: {fileID: 0}
+  strafeAccuracy: 1
   atkDashForce: 2
   jumpForce: 5
   isGroundedCheckRange: 0.5

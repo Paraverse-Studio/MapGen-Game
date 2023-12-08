@@ -1,4 +1,3 @@
-using UnityEngine;
 using Paraverse.Combat;
 
 public class BasicAttackSkill : MobSkill, IMobSkill

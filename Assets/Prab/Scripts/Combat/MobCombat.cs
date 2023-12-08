@@ -1,7 +1,6 @@
 using Paraverse.Combat;
 using Paraverse.Helper;
 using Paraverse.Mob.Stats;
-using System;
 using System.Collections.Generic;
 using UnityEngine;
 
@@ -24,12 +23,6 @@ namespace Paraverse.Mob.Combat
         protected string targetTag = "Player";
         protected Transform player;
 
-        //[Header("Only For Melee Attackers")]
-        //[SerializeField, Tooltip("Basic attack weapon collider [Only required for melee weapon users].")]
-        //protected GameObject basicAttackColliderGO;
-        //[Tooltip("AttackCollider script of basic attack collider.")]
-        //public AttackCollider basicAttackCollider;
-
         [Header("Projectile Values")]
         [SerializeField, Tooltip("Set as true if mob is a projectile user.")]
         protected bool projUser = false;
@@ -48,7 +41,7 @@ namespace Paraverse.Mob.Combat
         public bool IsBasicAttacking { get { return _isBasicAttacking; } }
         protected bool _isBasicAttacking = false;
         // Returns true when character is within basic attack range and cooldown is 0.
-        public bool CanBasicAtk { get { return distanceFromTarget <= basicAttackSkill.MaxRange && basicAttackSkill.CurCooldown <= 0; } }
+        public bool CanBasicAtk { get { return distanceFromTarget <= basicAttackSkill.MaxRange && distanceFromTarget >= basicAttackSkill.MinRange && basicAttackSkill.CurCooldown <= 0; } }
         // Sets to true when character is doing an action (Attack, Stun).
         public bool IsAttackLunging { get { return _isAttackLunging; } }
         protected bool _isAttackLunging = false;
@@ -132,7 +125,6 @@ namespace Paraverse.Mob.Combat
             if (controller.IsDead) return;
 
             distanceFromTarget = ParaverseHelper.GetDistance(transform.position, player.position);
-
             _isBasicAttacking = anim.GetBool(StringData.IsBasicAttacking);
 
             if (anim.GetBool(StringData.IsUsingSkill))
@@ -163,7 +155,10 @@ namespace Paraverse.Mob.Combat
             distanceFromTarget = ParaverseHelper.GetDistance(transform.position, player.position);
 
             IsSkilling = false;
-            basicAttackSkill.ActivateSkill(this, anim, stats, player);
+            if (null != basicAttackSkill)
+            {
+                basicAttackSkill.ActivateSkill(this, anim, stats, player);
+            }
             for (int i = 0; i < skills.Count; i++)
             {
                 skills[i].ActivateSkill(this, anim, stats, player);
@@ -203,7 +198,7 @@ namespace Paraverse.Mob.Combat
         /// </summary>
         protected void EnableBasicAttackCollider()
         {
-            if (null != basicAttackSkill.attackColliderGO)            
+            if (null != basicAttackSkill.attackColliderGO)
                 basicAttackSkill.attackColliderGO.SetActive(true);
 
             OnEnableBasicAttackCollider?.Invoke();
@@ -242,7 +237,6 @@ namespace Paraverse.Mob.Combat
         public virtual void FireProjectile()
         {
             MobSkill skill;
-
             if (IsSkilling)
             {
                 skill = skills[usingSkillIdx];
@@ -274,13 +268,19 @@ namespace Paraverse.Mob.Combat
         /// </summary>
         public void EnableHeldProjectile()
         {
-            if (basicAttackSkill.projData.projHeld == null)
+            MobSkill skill;
+            if (IsSkilling)
+                skill = skills[usingSkillIdx];
+            else
+                skill = basicAttackSkill;
+
+            if (skill.projData.projHeld == null)
             {
-                Debug.LogError("There is no reference to the projHeld variable.");
+                Debug.LogError("There is no reference to the projHeld variable for skill: ." + skill.name);
                 return;
             }
 
-            basicAttackSkill.projData.projHeld.SetActive(true);
+            skill.projData.projHeld.SetActive(true);
         }
         #endregion
 

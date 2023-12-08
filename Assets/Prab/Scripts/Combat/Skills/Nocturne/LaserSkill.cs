@@ -1,11 +1,20 @@
 using Paraverse.Combat;
 using Paraverse.Mob.Combat;
 using Paraverse.Mob.Stats;
-using PolygonArsenal;
 using UnityEngine;
 
 public class LaserSkill : MobSkill, IMobSkill
 {
+    [SerializeField]
+    protected float laserRadius = 1.5f;
+    [SerializeField]
+    protected float laserLength = 100f; 
+    [SerializeField]
+    protected float laserWidth = 1f;                     
+    [SerializeField]
+    protected LayerMask targetLayer;                     
+    [SerializeField]
+    private bool isSticky = false;
     [SerializeField]
     protected GameObject chargeFX;
     [SerializeField]
@@ -13,6 +22,11 @@ public class LaserSkill : MobSkill, IMobSkill
     [SerializeField]
     protected float skillStartTimer = 3f;
     protected float skillCurTimer = 3f;
+
+    [SerializeField, Tooltip("Manually sets the projectile origin on to target. [Use offset variable to adjust offset from origin.]")]
+    protected bool adjustProjOrigin = false;
+    [SerializeField]
+    protected Vector3 projOriginOffset = Vector3.zero;
 
     #region Inherited Methods
     public override void ActivateSkill(MobCombat mob, Animator anim, MobStats stats, Transform target = null)
@@ -77,13 +91,20 @@ public class LaserSkill : MobSkill, IMobSkill
 
     public void InstantiateChargeFX()
     {
-        Instantiate(chargeFX, chargeOrigin);
+        if (chargeFX != null)
+            Instantiate(chargeFX, chargeOrigin);
     }
 
     public virtual void InstantiateBeamFX()
     {
+        if (adjustProjOrigin)
+        {
+            projData.projOrigin.position = target.position + projOriginOffset;
+        }
+
         GameObject go = Instantiate(projData.projPf, projData.projOrigin);
-        BeamProjectile beam = go.GetComponent<BeamProjectile>();
+        BeamProjectile beam = go.GetComponentInChildren<BeamProjectile>();
+        beam.Init(mob, target.position, scalingStatData, beam.gameObject, laserRadius, laserLength, laserWidth, targetLayer, isSticky);
         beam.SpawnBeam();
     }
     #endregion
