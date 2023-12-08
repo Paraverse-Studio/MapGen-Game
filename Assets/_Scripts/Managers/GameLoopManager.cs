@@ -65,8 +65,6 @@ public class GameLoopManager : MonoBehaviour
     [Header("Combat Map")]
     public bool developerMode = false;
 
-
-
     [Space(20)]
     [Header("Screens/Windows/Views")]
     public Animator roundStartWindow;
@@ -468,6 +466,5 @@ public class GameLoopManager : MonoBehaviour
     {
         playerStats.UpdateCurrentHealth((int)(-playerStats.MaxHealth.FinalValue * GlobalValues.FallDamage / 100.0f));
     }
-
 
 }

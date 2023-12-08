@@ -8676,7 +8676,7 @@ GameObject:
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
-  m_IsActive: 1
+  m_IsActive: 0
 --- !u!4 &214632644
 Transform:
   m_ObjectHideFlags: 0
@@ -9995,7 +9995,7 @@ RectTransform:
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
   m_AnchorMin: {x: 0, y: 0}
   m_AnchorMax: {x: 0.24, y: 1}
-  m_AnchoredPosition: {x: -49.997955, y: 100}
+  m_AnchoredPosition: {x: -49.997314, y: 100}
   m_SizeDelta: {x: -100, y: -420}
   m_Pivot: {x: 1, y: 0}
 --- !u!114 &248483446
@@ -38938,9 +38938,9 @@ MonoBehaviour:
   m_Padding:
     m_Left: 0
     m_Right: 40
-    m_Top: 12
+    m_Top: 0
     m_Bottom: 0
-  m_ChildAlignment: 2
+  m_ChildAlignment: 5
   m_Spacing: 12
   m_ChildForceExpandWidth: 1
   m_ChildForceExpandHeight: 0
@@ -41557,7 +41557,7 @@ MonoBehaviour:
   globalLight: {fileID: 513471769}
   navMeshBuilder: {fileID: 336833245}
   waterSplash: {fileID: 0}
-  randomSeed: 47392
+  randomSeed: -1
   blockPrefab: {fileID: 191310894738300439, guid: ac4429f39fa00f4478f2559540ccbc39, type: 3}
   importantProps:
     endPoint: {fileID: 1149089271704264, guid: bd7b25c85ff31fc4dae483c7113cbf04, type: 3}
@@ -41774,6 +41774,7 @@ MonoBehaviour:
   chestPrefab: {fileID: 7977392119240650148, guid: 22fbddcc247063147b22f781acaae287, type: 3}
   blackSmithPrefab: {fileID: 9172293720564539993, guid: b60015c326eddd54981b233549cd67c6, type: 3}
   merchantPrefab: {fileID: 9172293720564539993, guid: 2e7198bec3cbc7e488cef86802e204e0, type: 3}
+  skillGiverPrefab: {fileID: 9172293720564539993, guid: de315d02f70e52e4baffa91a9598cf52, type: 3}
   mapType: 0
   EnemiesSpawned: 0
 --- !u!1 &1201517314
@@ -60987,6 +60988,17 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: f1360b5e821afee43bb7656851bcc9d0, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+--- !u!114 &1752897486 stripped
+MonoBehaviour:
+  m_CorrespondingSourceObject: {fileID: 2956618024134931112, guid: aa4e16a1786ed124fa06618210886566, type: 3}
+  m_PrefabInstance: {fileID: 1752897469}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1191419013}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 375c10a061ff4ff42855707e570453e8, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
 --- !u!1 &1756901534
 GameObject:
   m_ObjectHideFlags: 0
@@ -71750,7 +71762,7 @@ RectTransform:
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
   m_AnchorMin: {x: 0, y: 1}
   m_AnchorMax: {x: 0, y: 1}
-  m_AnchoredPosition: {x: 180.3446, y: -103.1}
+  m_AnchoredPosition: {x: 180.3446, y: -103.1001}
   m_SizeDelta: {x: 360.6892, y: 5}
   m_Pivot: {x: 0.5, y: 0.5}
 --- !u!114 &2111182175
@@ -73891,6 +73903,10 @@ PrefabInstance:
       propertyPath: waterVolume
       value: 
       objectReference: {fileID: 991567769}
+    - target: {fileID: 8764965865831667164, guid: 834dc73c554c9ad4fae808a0fabce9de, type: 3}
+      propertyPath: playerCombat
+      value: 
+      objectReference: {fileID: 1752897486}
     - target: {fileID: 8764965865831667164, guid: 834dc73c554c9ad4fae808a0fabce9de, type: 3}
       propertyPath: testGameObject
       value: 

@@ -30,14 +30,14 @@ public class InteractableObject : MonoBehaviour
     [SerializeField]
     private InteractableObjects thisInteractable;
 
-    private Interactable _interactable;
+    private Interactable _interactable; 
     private Selectable _selectable;
 
     private bool _initialized = false;
     private ItemDisplayCreator _display;
     private List<SO_Item> _items = null;
 
-    private void Start()
+    private void Awake()
     {
         Initialize();
     }
@@ -109,9 +109,9 @@ public class InteractableObject : MonoBehaviour
             _display.Display(null, ()=>
                 {
                     var chest = Instantiate(MapCreator.Instance.chestPrefab, 
-                        transform.position + new Vector3(0, 0.5f, 0) + transform.forward, 
+                        transform.position + (transform.forward * 2), 
                         UtilityFunctions.GetCameraFacingRotation(reverse: true));
-                    chest.Initialize(3); // ronny's custom chest
+                    chest.Initialize(ChestObject.ChestTierType.RonnyChest); // ronny's custom chest
                     Destroy(_interactable);
                 });
         }

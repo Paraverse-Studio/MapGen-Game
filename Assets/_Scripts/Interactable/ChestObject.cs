@@ -6,6 +6,14 @@ using UnityEngine;
 
 public class ChestObject : MonoBehaviour
 {
+    public enum ChestTierType
+    {
+        Common = 0, 
+        Rare = 1, 
+        Legendary = 2,
+        RonnyChest = 3
+    }
+
     [System.Serializable]
     public struct LootItem
     {
@@ -45,17 +53,9 @@ public class ChestObject : MonoBehaviour
     private Selectable _selectable;
     List<SO_Item> rewards = new();
 
-    // Start is called before the first frame update
-    void Start()
+    public void Initialize(ChestTierType tierProvided)
     {
-        //if (tier == -1) tier = Random.Range(0, chestTiers.Length);
-
-        //Initialize(tier);
-    }
-
-    public void Initialize(int tierProvided)
-    {
-        tier = Mathf.Clamp(tierProvided, 0, chestTiers.Length);
+        tier = Mathf.Clamp((int)tierProvided, 0, chestTiers.Length);
 
         // Set this object to the current tier provided (set its name and looks)
         for (int i = 0; i < chestTiers.Length; ++i)
