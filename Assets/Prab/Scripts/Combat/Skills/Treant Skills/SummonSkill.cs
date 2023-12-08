@@ -85,8 +85,8 @@ public class SummonSkill : MobSkill, IMobSkill
 
         StartCoroutine(IDelayedSpawn(() => 
         {
-            GameObject go = Instantiate(summonPf, spawnPos, transform.rotation);
-            _summonedMob = go.GetComponentInChildren<MobController>();
+            GameObject sapling = Instantiate(summonPf, spawnPos, transform.rotation);
+            _summonedMob = sapling.GetComponentInChildren<MobController>();
             _summonedMob.OnDeathEvent += DecrementSummonCount;
             skillOn = false;
         }, 
