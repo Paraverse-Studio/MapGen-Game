@@ -49,6 +49,9 @@ public class MapCreator : MonoBehaviour
     public GameObject merchantPrefab;
     public GameObject skillGiverPrefab;
 
+    [Header("Rare Chest Chance Growth"), Tooltip("Game rounds * rare chest growth = chance of rare chest")]
+    public float rareChestBaseChance;
+
     [Header("[Run-time data]")]
     public MapType mapType;
     public int EnemiesSpawned;

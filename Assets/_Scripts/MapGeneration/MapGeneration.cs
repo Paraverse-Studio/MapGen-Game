@@ -1003,7 +1003,16 @@ public class MapGeneration : MonoBehaviour
                     b = GetClosestValidGroundBlock(b.transform.position + randomOffset);
 
                     var chest = Instantiate(MapCreator.Instance.chestPrefab, b.transform.position + new Vector3(0, 0.5f, 0), GetCameraFacingRotation());
-                    chest.Initialize(ChestObject.ChestTierType.Common);
+
+                    var rareChestChance = MapCreator.Instance.rareChestBaseChance * (GameLoopManager.Instance.nextRoundNumber - 1);
+                    if (Random.Range(0f, 100f) <= rareChestChance)
+                    {
+                        chest.Initialize(ChestObject.ChestTierType.Rare);
+                    }
+                    else
+                    {
+                        chest.Initialize(ChestObject.ChestTierType.Common);
+                    }
                     b.hasProp = true;
                     propObjects.Add(chest.gameObject);
                     chest.gameObject.transform.parent = temporaryObjFolder.transform;
@@ -1132,7 +1141,7 @@ public class MapGeneration : MonoBehaviour
                 enemyStats.UpdateAttackDamage(enemyStats.AttackDamage.FinalValue * scaleFactor);
                 enemyStats.UpdateAbilityPower(enemyStats.AbilityPower.FinalValue * scaleFactor);
                 enemyStats.UpdateMaxHealth(Mathf.CeilToInt(enemyStats.MaxHealth.FinalValue * scaleFactor));
-                if (MapCreator.Instance.mapType == MapType.boss || true)
+                if (MapCreator.Instance.mapType == MapType.boss)
                 {
                     enemy.GetComponentInChildren<MobController>().OnDeathEvent += AddLegendaryChest;
                 }
