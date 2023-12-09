@@ -28,9 +28,9 @@ class BuildProcessor : IPreprocessBuildWithReport
 
         if (idx != -1)
         {
-            string ext = DateTime.Now.Month.ToString().TrimStart('0') + DateTime.Now.Day.ToString().TrimStart('0') +
+            string ext = (DateTime.Now.Month % 10).ToString().TrimStart('0') + DateTime.Now.Day.ToString().TrimStart('0') +
                 DateTime.Now.Hour.ToString().TrimStart('0');
-            newVersion = existingVersion.Substring(0, idx) + "." + ext;
+            newVersion = ((DateTime.Now.Year % 10)-2) + "." + ((DateTime.Now.Month >= 10)? "1":"0") + "." + ext;
         }
 
         Debug.Log($"Existing version: {existingVersion}, moving to version: {newVersion}");
