@@ -47,6 +47,7 @@ public class MapCreator : MonoBehaviour
     public ChestObject chestPrefab;
     public GameObject blackSmithPrefab;
     public GameObject merchantPrefab;
+    public GameObject skillGiverPrefab;
 
     [Header("[Run-time data]")]
     public MapType mapType;
@@ -87,14 +88,17 @@ public class MapCreator : MonoBehaviour
                 mapType = MapType.boss;                
             }
         }
+        if (GameLoopManager.Instance.nextRoundNumber == 2) // forcing round 2 to be a reward map
+        {
+            mapType = MapType.reward;
+        }
 
-        CustomSettings();
-
-        SetMapType(mapType);
+        SetMapType();
 
         // Finally, start the map building
         MapGeneration.Instance.RegenerateMap();
 
+        // Establish the objective to complete
         if (mapType == MapType.reward) GameLoopManager.Instance.CompletionPredicate = GameLoopManager.CompletionPredicateType.EnjoyReward;
         else GameLoopManager.Instance.CompletionPredicate = GameLoopManager.CompletionPredicateType.KillAllEnemies;
 
@@ -102,23 +106,12 @@ public class MapCreator : MonoBehaviour
         UpdateObjectiveText();
     }
 
-    // Set custom stuff here like forcing reward map at round 2 for tutorial,
-    // or making the first map super easy 
-    private void CustomSettings()
-    {
-        if (GameLoopManager.Instance.nextRoundNumber == 1)
-        {
-            roundsSincelastRewardMap = 9999; // forcing round 2 to be a reward map
-        }
-    }
-
-    private void SetMapType(MapType type)
+    private void SetMapType()
     {
         roundsSinceLastBossMap++;
         roundsSincelastRewardMap++;
 
-        mapType = type;
-        switch (type)
+        switch (mapType)
         {
             case MapType.normal:
                 MapGeneration.Instance.M = maps[mapIndex].map;
@@ -126,10 +119,9 @@ public class MapCreator : MonoBehaviour
 
             case MapType.boss:
                 MapGeneration.Instance.M = maps[mapIndex].bossMap;
-                roundsSinceLastBossMap = 0;
 
-                // *NEW: we want there to be a reward map right after a boss map guaranteed
-                roundsSincelastRewardMap = 9999;
+                roundsSinceLastBossMap = 0;                
+                roundsSincelastRewardMap = int.MaxValue; // *NEW: we want there to be a reward map right after a boss map guaranteed
                 break;
 
             case MapType.reward:
@@ -139,7 +131,15 @@ public class MapCreator : MonoBehaviour
         }
     }
 
-    private void ResetRuntimeVariables()
+    public void ResetVariables() // after restarting the game
+    {
+        EnemiesSpawned = 0;
+        mapType = MapType.normal;
+        roundsSinceLastBossMap = 0;
+        roundsSincelastRewardMap = 0;
+    }
+
+    private void ResetRuntimeVariables() // between rounds
     {
         EnemiesSpawned = 0;
         mapType = MapType.normal;
@@ -161,7 +161,7 @@ public class MapCreator : MonoBehaviour
     public void UpdateObjectiveText(string mapName)
     {
         objectiveTitle.text = mapName;
-        objectiveSubtitle.text = $"Savor the tranquility";
+        objectiveSubtitle.text = $"Savor the tranquility!";
     }
 
     public void UpdateObjectiveText(List<MobController> enemies)

@@ -798,6 +798,8 @@ MonoBehaviour:
   - {fileID: 11400000, guid: d42a1ce9260b3734d95fe17efae58730, type: 2}
   - {fileID: 11400000, guid: d121129d894598340825f7ec39247b40, type: 2}
   - {fileID: 11400000, guid: a2a0a812dc32f174ab1069cc79571b5e, type: 2}
+  - {fileID: 11400000, guid: 77a95db75b354724c9f75911b387f9e9, type: 2}
+  - {fileID: 11400000, guid: 069ac5a737734de418ebe1a2fb50bdb4, type: 2}
 --- !u!1 &14069833
 GameObject:
   m_ObjectHideFlags: 0
@@ -1563,7 +1565,7 @@ MonoBehaviour:
   m_OnCullStateChanged:
     m_PersistentCalls:
       m_Calls: []
-  m_text: Wonderous Merchant
+  m_text: Wesley, the Mechanics Merchant
   m_isRightToLeft: 0
   m_fontAsset: {fileID: 11400000, guid: d129d46333cd86e43b28ec644c6265af, type: 2}
   m_sharedMaterial: {fileID: 2100000, guid: a5f35f0510b9e5d438d5c37a5746fed7, type: 2}
@@ -4802,8 +4804,8 @@ RectTransform:
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
   m_AnchorMin: {x: 0, y: 1}
   m_AnchorMax: {x: 0, y: 1}
-  m_AnchoredPosition: {x: 180.3446, y: -318.005}
-  m_SizeDelta: {x: 360.6892, y: 383.61}
+  m_AnchoredPosition: {x: 180.3446, y: -376.805}
+  m_SizeDelta: {x: 360.6892, y: 501.21}
   m_Pivot: {x: 0.5, y: 0.5}
 --- !u!222 &93388394
 CanvasRenderer:
@@ -6436,6 +6438,18 @@ MonoBehaviour:
         - m_Target: {fileID: 1752897478}
           m_TargetAssemblyTypeName: Paraverse.Mob.Stats.MobStats, Assembly-CSharp
           m_MethodName: SetFullHealth
+          m_Mode: 1
+          m_Arguments:
+            m_ObjectArgument: {fileID: 0}
+            m_ObjectArgumentAssemblyTypeName: UnityEngine.Object, UnityEngine
+            m_IntArgument: 0
+            m_FloatArgument: 0
+            m_StringArgument: 
+            m_BoolArgument: 0
+          m_CallState: 2
+        - m_Target: {fileID: 1197659345}
+          m_TargetAssemblyTypeName: MapCreator, Assembly-CSharp
+          m_MethodName: ResetVariables
           m_Mode: 1
           m_Arguments:
             m_ObjectArgument: {fileID: 0}
@@ -8662,7 +8676,7 @@ GameObject:
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
-  m_IsActive: 1
+  m_IsActive: 0
 --- !u!4 &214632644
 Transform:
   m_ObjectHideFlags: 0
@@ -9981,7 +9995,7 @@ RectTransform:
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
   m_AnchorMin: {x: 0, y: 0}
   m_AnchorMax: {x: 0.24, y: 1}
-  m_AnchoredPosition: {x: -49.99875, y: 100}
+  m_AnchoredPosition: {x: -49.997314, y: 100}
   m_SizeDelta: {x: -100, y: -420}
   m_Pivot: {x: 1, y: 0}
 --- !u!114 &248483446
@@ -11030,7 +11044,7 @@ RectTransform:
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
   m_AnchorMin: {x: 0, y: 0}
   m_AnchorMax: {x: 1, y: 1}
-  m_AnchoredPosition: {x: 0, y: -80}
+  m_AnchoredPosition: {x: 0, y: -85}
   m_SizeDelta: {x: -100, y: -887.0398}
   m_Pivot: {x: 0.5, y: 1}
 --- !u!114 &300755092
@@ -11341,7 +11355,7 @@ MonoBehaviour:
   m_OnCullStateChanged:
     m_PersistentCalls:
       m_Calls: []
-  m_text: Titular Trainer
+  m_text: Oslind, the Titular Trainer
   m_isRightToLeft: 0
   m_fontAsset: {fileID: 11400000, guid: d129d46333cd86e43b28ec644c6265af, type: 2}
   m_sharedMaterial: {fileID: 2100000, guid: a5f35f0510b9e5d438d5c37a5746fed7, type: 2}
@@ -18745,7 +18759,7 @@ MonoBehaviour:
   m_VertexBufferAutoSizeReduction: 0
   m_useMaxVisibleDescender: 1
   m_pageToDisplay: 1
-  m_margin: {x: 0, y: 0, z: 0, w: 0}
+  m_margin: {x: 0, y: -15, z: 0, w: 0}
   m_isUsingLegacyAnimationComponent: 0
   m_isVolumetricText: 0
   m_hasFontAssetChanged: 0
@@ -38924,9 +38938,9 @@ MonoBehaviour:
   m_Padding:
     m_Left: 0
     m_Right: 40
-    m_Top: 12
+    m_Top: 0
     m_Bottom: 0
-  m_ChildAlignment: 2
+  m_ChildAlignment: 5
   m_Spacing: 12
   m_ChildForceExpandWidth: 1
   m_ChildForceExpandHeight: 0
@@ -39158,7 +39172,7 @@ RectTransform:
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
   m_AnchorMin: {x: 0.5, y: 0}
   m_AnchorMax: {x: 0.5, y: 0}
-  m_AnchoredPosition: {x: 0, y: -20.00055}
+  m_AnchoredPosition: {x: 0, y: -20.000488}
   m_SizeDelta: {x: 1922, y: 1229.9604}
   m_Pivot: {x: 0.5, y: 1}
 --- !u!114 &1128975018
@@ -39448,8 +39462,8 @@ RectTransform:
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
   m_AnchorMin: {x: 0, y: 1}
   m_AnchorMax: {x: 0, y: 1}
-  m_AnchoredPosition: {x: 180.3446, y: -191.805}
-  m_SizeDelta: {x: 360.6892, y: 333.61}
+  m_AnchoredPosition: {x: 180.3446, y: -250.605}
+  m_SizeDelta: {x: 360.6892, y: 451.21}
   m_Pivot: {x: 0.5, y: 0.5}
 --- !u!114 &1136384137
 MonoBehaviour:
@@ -39505,7 +39519,8 @@ MonoBehaviour:
   m_OnCullStateChanged:
     m_PersistentCalls:
       m_Calls: []
-  m_text: "HP Total: \nAttack: \nAttack Speed:\n\nAbility:\nMove Speed:\n\n"
+  m_text: "HP Total: \nAttack: \nAttack Speed:\n\nAbility:\nMove Speed:\n\nAttack
+    boost: \nAbility boost:\nDamage boost:\n\n"
   m_isRightToLeft: 0
   m_fontAsset: {fileID: 11400000, guid: 068dc15526fc7b64889fd70d060febf3, type: 2}
   m_sharedMaterial: {fileID: 8629264953455646405, guid: 068dc15526fc7b64889fd70d060febf3, type: 2}
@@ -39544,7 +39559,7 @@ MonoBehaviour:
   m_textAlignment: 65535
   m_characterSpacing: 0
   m_wordSpacing: 0
-  m_lineSpacing: 80
+  m_lineSpacing: 45
   m_lineSpacingMax: 0
   m_paragraphSpacing: 0
   m_charWidthMaxAdj: 0
@@ -41542,7 +41557,7 @@ MonoBehaviour:
   globalLight: {fileID: 513471769}
   navMeshBuilder: {fileID: 336833245}
   waterSplash: {fileID: 0}
-  randomSeed: 47392
+  randomSeed: -1
   blockPrefab: {fileID: 191310894738300439, guid: ac4429f39fa00f4478f2559540ccbc39, type: 3}
   importantProps:
     endPoint: {fileID: 1149089271704264, guid: bd7b25c85ff31fc4dae483c7113cbf04, type: 3}
@@ -41746,12 +41761,12 @@ MonoBehaviour:
     map: {fileID: 11400000, guid: eee651aca9ecf3b4bab685931d03037b, type: 2}
     bossMap: {fileID: 11400000, guid: ca55aae686f041a45b1191ee3b71df97, type: 2}
     rewardMap: {fileID: 11400000, guid: 4d0bf55eed04e4a41b3ed0ac674b8ee8, type: 2}
-  - mapName: The Desert
-    map: {fileID: 11400000, guid: 30240d6222a3b254faceae1b3443388d, type: 2}
-    bossMap: {fileID: 11400000, guid: 3f7112df867a3a24ea0b5c57be99c8bb, type: 2}
-    rewardMap: {fileID: 11400000, guid: 3f7112df867a3a24ea0b5c57be99c8bb, type: 2}
+  - mapName: Desert Lands
+    map: {fileID: 11400000, guid: 4f66af4253eb76945aa506b83b0f45b3, type: 2}
+    bossMap: {fileID: 11400000, guid: b58c801e1755c8d4299fe0e4f36174c7, type: 2}
+    rewardMap: {fileID: 11400000, guid: 81ab54b72e960ae40b3d30676fc2710d, type: 2}
   switchMapAfterNumOfRounds: 10
-  bossMapGapLimit: {x: 5, y: 7}
+  bossMapGapLimit: {x: 2, y: 2}
   rewardMapGapLimit: {x: 3, y: 4}
   enemyScalingPerRound: 0.1
   objectiveTitle: {fileID: 1499388855}
@@ -41759,6 +41774,7 @@ MonoBehaviour:
   chestPrefab: {fileID: 7977392119240650148, guid: 22fbddcc247063147b22f781acaae287, type: 3}
   blackSmithPrefab: {fileID: 9172293720564539993, guid: b60015c326eddd54981b233549cd67c6, type: 3}
   merchantPrefab: {fileID: 9172293720564539993, guid: 2e7198bec3cbc7e488cef86802e204e0, type: 3}
+  skillGiverPrefab: {fileID: 9172293720564539993, guid: de315d02f70e52e4baffa91a9598cf52, type: 3}
   mapType: 0
   EnemiesSpawned: 0
 --- !u!1 &1201517314
@@ -42502,7 +42518,7 @@ MonoBehaviour:
   m_OnCullStateChanged:
     m_PersistentCalls:
       m_Calls: []
-  m_text: Ronny, the Mage prodigy
+  m_text: Ronny, the Prophesized Prodigy
   m_isRightToLeft: 0
   m_fontAsset: {fileID: 11400000, guid: d129d46333cd86e43b28ec644c6265af, type: 2}
   m_sharedMaterial: {fileID: 2100000, guid: a5f35f0510b9e5d438d5c37a5746fed7, type: 2}
@@ -43222,7 +43238,7 @@ MonoBehaviour:
   m_textAlignment: 65535
   m_characterSpacing: 0
   m_wordSpacing: 0
-  m_lineSpacing: 80
+  m_lineSpacing: 45
   m_lineSpacingMax: 0
   m_paragraphSpacing: 0
   m_charWidthMaxAdj: 0
@@ -44443,7 +44459,7 @@ MonoBehaviour:
   m_OnCullStateChanged:
     m_PersistentCalls:
       m_Calls: []
-  m_text: Galilee, The spellbook master
+  m_text: Galilee, the Spellbook Specialist
   m_isRightToLeft: 0
   m_fontAsset: {fileID: 11400000, guid: d129d46333cd86e43b28ec644c6265af, type: 2}
   m_sharedMaterial: {fileID: 2100000, guid: a5f35f0510b9e5d438d5c37a5746fed7, type: 2}
@@ -46050,7 +46066,7 @@ MonoBehaviour:
   m_ChildAlignment: 1
   m_StartCorner: 0
   m_StartAxis: 0
-  m_CellSize: {x: 330, y: 450}
+  m_CellSize: {x: 310, y: 450}
   m_Spacing: {x: -30, y: -100}
   m_Constraint: 0
   m_ConstraintCount: 2
@@ -48193,7 +48209,7 @@ RectTransform:
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
   m_AnchorMin: {x: 0.5, y: 0}
   m_AnchorMax: {x: 0.5, y: 0}
-  m_AnchoredPosition: {x: 0, y: -20.00055}
+  m_AnchoredPosition: {x: 0, y: -20.000488}
   m_SizeDelta: {x: 1922, y: 1229.9604}
   m_Pivot: {x: 0.5, y: 1}
 --- !u!114 &1368238360
@@ -55073,8 +55089,8 @@ MonoBehaviour:
   m_fontMaterials: []
   m_fontColor32:
     serializedVersion: 2
-    rgba: 4288985024
-  m_fontColor: {r: 0.754717, g: 0.71704906, b: 0.6436454, a: 1}
+    rgba: 4292997373
+  m_fontColor: {r: 0.990566, g: 0.9418462, b: 0.8821645, a: 1}
   m_enableVertexGradient: 0
   m_colorMode: 3
   m_fontColorGradient:
@@ -55097,7 +55113,7 @@ MonoBehaviour:
   m_enableAutoSizing: 1
   m_fontSizeMin: 18
   m_fontSizeMax: 26
-  m_fontStyle: 2
+  m_fontStyle: 0
   m_HorizontalAlignment: 2
   m_VerticalAlignment: 256
   m_textAlignment: 65535
@@ -60970,6 +60986,17 @@ MonoBehaviour:
   m_Enabled: 1
   m_EditorHideFlags: 0
   m_Script: {fileID: 11500000, guid: f1360b5e821afee43bb7656851bcc9d0, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+--- !u!114 &1752897486 stripped
+MonoBehaviour:
+  m_CorrespondingSourceObject: {fileID: 2956618024134931112, guid: aa4e16a1786ed124fa06618210886566, type: 3}
+  m_PrefabInstance: {fileID: 1752897469}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1191419013}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 375c10a061ff4ff42855707e570453e8, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
 --- !u!1 &1756901534
@@ -71735,7 +71762,7 @@ RectTransform:
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
   m_AnchorMin: {x: 0, y: 1}
   m_AnchorMax: {x: 0, y: 1}
-  m_AnchoredPosition: {x: 180.3446, y: -103.1}
+  m_AnchoredPosition: {x: 180.3446, y: -103.1001}
   m_SizeDelta: {x: 360.6892, y: 5}
   m_Pivot: {x: 0.5, y: 0.5}
 --- !u!114 &2111182175
@@ -73877,9 +73904,13 @@ PrefabInstance:
       value: 
       objectReference: {fileID: 991567769}
     - target: {fileID: 8764965865831667164, guid: 834dc73c554c9ad4fae808a0fabce9de, type: 3}
+      propertyPath: playerCombat
+      value: 
+      objectReference: {fileID: 1752897486}
+    - target: {fileID: 8764965865831667164, guid: 834dc73c554c9ad4fae808a0fabce9de, type: 3}
       propertyPath: testGameObject
       value: 
-      objectReference: {fileID: 2306166274347362398, guid: de54eef7299d45f4abee15a7817db9cc, type: 3}
+      objectReference: {fileID: 98397111005207279, guid: 9b601de79a043e140a973529dec2522a, type: 3}
     - target: {fileID: 8764965865831667164, guid: 834dc73c554c9ad4fae808a0fabce9de, type: 3}
       propertyPath: healthBarFolder
       value: 

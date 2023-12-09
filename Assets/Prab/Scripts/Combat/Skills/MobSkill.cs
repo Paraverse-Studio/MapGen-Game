@@ -234,6 +234,11 @@ namespace Paraverse.Combat
             return false;
         }
 
+        protected virtual float GetPowerAmount()
+        {
+            return scalingStatData.flatPower + (stats.AttackDamage.FinalValue * scalingStatData.attackScaling) + (stats.AbilityPower.FinalValue * scalingStatData.abilityScaling);
+        }
+
         protected virtual bool IsInRange()
         {
             if (target == null) return true;

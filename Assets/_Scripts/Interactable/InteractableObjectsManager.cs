@@ -9,7 +9,8 @@ public enum InteractableObjects
     merchant, // lets you buy Effect mods
     trader, // lets you sell mods (not yet available)
     skillGiver, // Ronny, gives you a free random skill
-    trainer
+    trainer, // lets you buy Stat mods (but idk yet if we want that)
+    puppy, // lets you pet him to heal you 50% HP (random luck)
 }
 
 public class InteractableObjectsManager : MonoBehaviour

@@ -16,22 +16,19 @@ public abstract class MobEffect : MonoBehaviour
     [SerializeField, Tooltip("Effect ID")]
     protected int _ID = -1;
 
-    [Header("Damage Over Time Properties")]
-    [SerializeField]
-    protected float attackPerUnitOfTime = 1f;
-    protected float timer = 0f;
-    protected bool applyHit = false;
     protected List<GameObject> hitTargets = new List<GameObject>();
 
     [SerializeField]
-    protected ScalingStatData _empoweredScaling;
+    protected ScalingStatData _scaling;
 
+    [SerializeField]
+    protected GameObject effectFX;
     [SerializeField]
     protected GameObject hitFX;
 
     public bool IsActive { get { return isActive; } }
     protected bool isActive = false;
-
+    protected GameObject _FX;
 
     public virtual void ActivateEffect(MobStats stats)
     {
@@ -52,7 +49,7 @@ public abstract class MobEffect : MonoBehaviour
     public virtual float ApplyCustomDamage(IMobController controller)
     {
         float totalDmg =
-            _empoweredScaling.FinalValue(_stats);
+            _scaling.FinalValueWithBoosts(_stats);
 
         controller.Stats.UpdateCurrentHealth(-Mathf.CeilToInt(totalDmg));
         return totalDmg;

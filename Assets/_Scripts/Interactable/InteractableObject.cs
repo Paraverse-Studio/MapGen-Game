@@ -30,14 +30,14 @@ public class InteractableObject : MonoBehaviour
     [SerializeField]
     private InteractableObjects thisInteractable;
 
-    private Interactable _interactable;
+    private Interactable _interactable; 
     private Selectable _selectable;
 
     private bool _initialized = false;
     private ItemDisplayCreator _display;
     private List<SO_Item> _items = null;
 
-    private void Start()
+    private void Awake()
     {
         Initialize();
     }
@@ -56,7 +56,6 @@ public class InteractableObject : MonoBehaviour
         _interactable.OnInteract.AddListener(InteractWithObject);
     }
 
-
     public void InteractWithObject()
     {
         _display = InteractableObjectsManager.Instance.windows.Find(x => x.type == thisInteractable).display;
@@ -66,14 +65,14 @@ public class InteractableObject : MonoBehaviour
             // Displaying left side: list of available skills to buy
             if (null == _items)
             {
-                _items = ModsManager.Instance.AvailableMods.Where(mod => (mod is SO_SkillMod)).ToList();
+                _items = ModsManager.Instance.AvailableMods.Where(mod => (mod is SO_SkillMod && !ModsManager.Instance.PurchasedMods.Contains(mod))).ToList();
                 IListExtensions.Shuffle(_items);
 
-                for (int i = 2; i < _items.Count; ++i) _items.RemoveAt(i);
+                for (int i = _items.Count - 1; i >= 3; --i) _items.RemoveAt(i);
             }
-            _display.Display(_items, null);
+            _display.Display(UniqueMods(_items), null);
 
-            // Displayin right side: show the latest purchased skill you have
+            // Displaying right side: show the latest purchased skill you have
             SO_Item latestSkill = null;
             for (int i = ModsManager.Instance.PurchasedMods.Count - 1; i >= 0; --i)
             {
@@ -93,7 +92,7 @@ public class InteractableObject : MonoBehaviour
                 IListExtensions.Shuffle(_items);
                 for (int i = 4; i < _items.Count; ++i) _items.RemoveAt(i);
             }
-            _display.Display(_items, null);
+            _display.Display(UniqueMods(_items), null);
         }
         else if (thisInteractable == InteractableObjects.trainer)
         {
@@ -103,16 +102,16 @@ public class InteractableObject : MonoBehaviour
                 IListExtensions.Shuffle(_items);
                 for (int i = 4; i < _items.Count; ++i) _items.RemoveAt(i);
             }
-            _display.Display(_items, null);
+            _display.Display(UniqueMods(_items), null);
         }
         else if (thisInteractable == InteractableObjects.skillGiver)
         {
             _display.Display(null, ()=>
                 {
                     var chest = Instantiate(MapCreator.Instance.chestPrefab, 
-                        transform.position + new Vector3(0, 0.5f, 0) + transform.forward, 
+                        transform.position + (transform.forward * 2), 
                         UtilityFunctions.GetCameraFacingRotation(reverse: true));
-                    chest.Initialize(3); // skill chest
+                    chest.Initialize(ChestObject.ChestTierType.RonnyChest); // ronny's custom chest
                     Destroy(_interactable);
                 });
         }
@@ -120,6 +119,12 @@ public class InteractableObject : MonoBehaviour
         _initialized = true;
 
     }
+
+    private List<SO_Item> UniqueMods(List<SO_Item> list)
+    {
+        for (int i = list.Count - 1; i >= 0; --i) if (ModsManager.Instance.PurchasedMods.Contains(list[i])) list.RemoveAt(i);
+        return list;
+    } 
 
     public void ResetInteractable()
     {

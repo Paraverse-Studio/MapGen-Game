@@ -125,11 +125,6 @@ public class DashSkill : MobSkill, IMobSkill
         attackColliderGO.transform.localScale = new Vector3(scale.x + colliderSize.x, scale.y + colliderSize.y, scale.z + colliderSize.z);
     }
 
-    private float GetPowerAmount()
-    {
-        return scalingStatData.flatPower + (stats.AttackDamage.FinalValue * scalingStatData.attackScaling) + (stats.AbilityPower.FinalValue * scalingStatData.abilityScaling);
-    }
-
     private void ToggleParticleSystem(bool turnParticlesOn)
     {
         if (null != _VFX)

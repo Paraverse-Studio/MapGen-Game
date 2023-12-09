@@ -12,6 +12,7 @@ using TMPro;
 using UnityEngine.AI;
 using Paraverse.Mob.Stats;
 using Paraverse.Mob.Controller;
+using Paraverse.Player;
 
 [System.Serializable]
 public class PropItem
@@ -182,15 +183,6 @@ public class MapGeneration : MonoBehaviour
 
         if (Input.GetKeyDown(KeyCode.F10)) 
             GlobalSettings.Instance.waterVolume.gameObject.SetActive(!GlobalSettings.Instance.waterVolume.gameObject.activeSelf);
-
-        //if (GlobalSettings.Instance.player.transform.position.y >= 0f && GlobalSettings.Instance.player.transform.position.y < 0.5f)
-        //{
-        //    if (!waterSplash.isPlaying) waterSplash.Play();
-        //}
-        //else
-        //{
-        //    if (waterSplash.isPlaying) waterSplash.Stop();
-        //}
     }
 
     public void RegenerateMap() => StartCoroutine(ERenegerateMap());
@@ -996,7 +988,7 @@ public class MapGeneration : MonoBehaviour
         if (M.addChests)
         {
             int numChests = Random.Range((int)M.numOfChests.x, (int)M.numOfChests.y + 1);
-            int blocksGapBetweenChests = pathObjects.Count / numChests;
+            int blocksGapBetweenChests = pathObjects.Count / (numChests + 1);
 
             int runtimeDistance = 0;
             int chestsSpawned = 0;
@@ -1007,11 +999,11 @@ public class MapGeneration : MonoBehaviour
                 if (runtimeDistance >= blocksGapBetweenChests)
                 {          
                     Block b = pathObjects[i];
-                    Vector3 randomOffset = new(Random.Range(2, 6f), 0, Random.Range(2, 6f));
+                    Vector3 randomOffset = new(Random.Range(2, 9f), 0, Random.Range(2, 9f));
                     b = GetClosestValidGroundBlock(b.transform.position + randomOffset);
 
                     var chest = Instantiate(MapCreator.Instance.chestPrefab, b.transform.position + new Vector3(0, 0.5f, 0), GetCameraFacingRotation());
-                    chest.Initialize(0);
+                    chest.Initialize(ChestObject.ChestTierType.Common);
                     b.hasProp = true;
                     propObjects.Add(chest.gameObject);
                     chest.gameObject.transform.parent = temporaryObjFolder.transform;
@@ -1027,12 +1019,12 @@ public class MapGeneration : MonoBehaviour
             }
         }
 
-        if (M.addBlacksmith)
+        if (M.addSpellbook)
         {
-            int distanceToCloserToPath = Random.Range(0, 2);
-            int distanceToTheBottomLeftOfPortal = Random.Range(5, 10);
-            Vector3 spot = pathObjects[pathObjects.Count - 1].gameObject.transform.position + new Vector3(-distanceToTheBottomLeftOfPortal, 0, -distanceToCloserToPath);
-            Vector3 r = Vector3.up *  180f;
+            int distanceCloserToPath = Random.Range(0, 3);
+            int distanceToTheBottomLeftOfPortal = Random.Range(4, 9);
+            Vector3 spot = pathObjects[pathObjects.Count - 1].gameObject.transform.position + new Vector3(-distanceToTheBottomLeftOfPortal, 0, -distanceCloserToPath);
+            Vector3 r = Vector3.down *  180f;
 
             Block b = GetClosestValidGroundBlock(spot);
 
@@ -1045,15 +1037,33 @@ public class MapGeneration : MonoBehaviour
 
         if (M.addMerchant)
         {
-            int distanceToCloserToPath = Random.Range(0, 2);
-            int distanceToTheBottomRightOfPortal = Random.Range(5, 10);
+            int distanceCloserToPath = Random.Range(0, 3);
+            int distanceToTheBottomRightOfPortal = Random.Range(4, 9);
 
-            Vector3 spot = pathObjects[pathObjects.Count - 1].gameObject.transform.position + new Vector3(-distanceToCloserToPath, 0, -distanceToTheBottomRightOfPortal);
-            Vector3 r = Vector3.up * 90f;
+            Vector3 spot = pathObjects[pathObjects.Count - 1].gameObject.transform.position + new Vector3(-distanceCloserToPath, 0, -distanceToTheBottomRightOfPortal);
+            Vector3 r = Vector3.down * 90f;
 
             Block b = GetClosestValidGroundBlock(spot);
 
             var npc = Instantiate(MapCreator.Instance.merchantPrefab,
+                b.transform.position + new Vector3(0, 0.5f, 0), Quaternion.Euler(r.x, r.y, r.z));
+            b.hasProp = true;
+            propObjects.Add(npc.gameObject);
+            npc.transform.parent = temporaryObjFolder.transform;
+        }
+
+        // Ronny, add him only on reward maps, and on any reward map if player still doesn't have a skill
+        if (MapCreator.Instance.mapType == MapType.reward && GlobalSettings.Instance.playerCombat.ActiveSkill == null)
+        {
+            int distanceCloserToPath = Random.Range(0, 3);
+            int distanceToTheBottomRightOfPortal = Random.Range(4, 9);
+
+            Vector3 spot = pathObjects[pathObjects.Count - 1].gameObject.transform.position + new Vector3(distanceToTheBottomRightOfPortal, 0, -distanceCloserToPath);
+            Vector3 r = Vector3.down * 180f;
+
+            Block b = GetClosestValidGroundBlock(spot);
+
+            var npc = Instantiate(MapCreator.Instance.skillGiverPrefab,
                 b.transform.position + new Vector3(0, 0.5f, 0), Quaternion.Euler(r.x, r.y, r.z));
             b.hasProp = true;
             propObjects.Add(npc.gameObject);
@@ -1071,7 +1081,7 @@ public class MapGeneration : MonoBehaviour
                 });
 
         var chest = Instantiate(MapCreator.Instance.chestPrefab, b.transform.position + new Vector3(0, 0.5f, 0), GetCameraFacingRotation());
-        chest.Initialize(2);
+        chest.Initialize(ChestObject.ChestTierType.Legendary);
         b.hasProp = true;
         propObjects.Add(chest.gameObject);
         chest.gameObject.transform.parent = temporaryObjFolder.transform;        
@@ -1122,7 +1132,7 @@ public class MapGeneration : MonoBehaviour
                 enemyStats.UpdateAttackDamage(enemyStats.AttackDamage.FinalValue * scaleFactor);
                 enemyStats.UpdateAbilityPower(enemyStats.AbilityPower.FinalValue * scaleFactor);
                 enemyStats.UpdateMaxHealth(Mathf.CeilToInt(enemyStats.MaxHealth.FinalValue * scaleFactor));
-                if (MapCreator.Instance.mapType == MapType.boss)
+                if (MapCreator.Instance.mapType == MapType.boss || true)
                 {
                     enemy.GetComponentInChildren<MobController>().OnDeathEvent += AddLegendaryChest;
                 }

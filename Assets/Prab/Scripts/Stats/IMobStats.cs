@@ -1,3 +1,4 @@
+using Paraverse.Mob.Boosts;
 using Paraverse.Stats;
 
 namespace Paraverse.Mob.Stats
@@ -16,6 +17,7 @@ namespace Paraverse.Mob.Stats
         public float CurEnergy { get; }
         public Stat EnergyRegen { get; }
         public int Gold { get; }
+        public IMobBoosts MobBoosts { get; }
         #endregion
 
         // Methods
@@ -25,6 +27,10 @@ namespace Paraverse.Mob.Stats
         /// </summary>
         /// <param name="amount"></param>
         public void UpdateMaxHealth(int amount);
+
+        // This is made so that damage-related health updates are all to one function,
+        // instead of using UpdateCurrentHealth which can happen through non-combat ways (healing, etc.)
+        public void TakeDamage(float amount);
 
         /// <summary>
         /// Updates mob current health stat value.

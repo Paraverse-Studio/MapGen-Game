@@ -33,7 +33,10 @@ public class PauseMenuViewController : MonoBehaviour
         statText.text += $"{Mathf.CeilToInt(stats.AttackDamage.FinalValue)} <color=#C8C8C8>({Mathf.CeilToInt(stats.AttackDamage.BaseValue)})</color>\n";
         statText.text += $"{stats.AttackSpeed.FinalValue}/sec\n\n";
         statText.text += $"{Mathf.CeilToInt(stats.AbilityPower.FinalValue)} <color=#C8C8C8>({Mathf.CeilToInt(stats.AbilityPower.BaseValue)})</color>\n";
-        statText.text += $"{stats.MoveSpeed.FinalValue} m/s\n";
+        statText.text += $"{stats.MoveSpeed.FinalValue} m/s\n\n";
+        statText.text += $"+{(int)((stats.MobBoosts.AttackDamageBoost.FinalValue - 1f) * 100f)}%\n";
+        statText.text += $"+{(int)((stats.MobBoosts.AbilityPowerBoost.FinalValue - 1f) * 100f)}%\n";
+        statText.text += $"+{(int)((stats.MobBoosts.OverallDamageBoost.FinalValue - 1f) * 100f)}%\n";
     }
 
 }

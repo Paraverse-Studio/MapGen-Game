@@ -143,7 +143,7 @@ public class SO_MapGenData : ScriptableObject
     public bool addChests;
     [MinMaxSlider(0f, 10f)]
     public Vector2 numOfChests;
-    public bool addBlacksmith;
+    public bool addSpellbook;
     public bool addMerchant;
 
 

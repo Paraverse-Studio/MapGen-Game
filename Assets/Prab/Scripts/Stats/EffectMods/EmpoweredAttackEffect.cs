@@ -15,7 +15,7 @@ public class EmpoweredAttackEffect : MobEffect
     public override void ActivateEffect(MobStats stats)
     {
         base.ActivateEffect(stats);
-        _mod = new StatModifier(_empoweredScaling.FinalValue(_stats));
+        _mod = new StatModifier(_scaling.FinalValue(_stats));
         _hitCounter = 0;
         _combat.BasicAttackSkill.attackCollider.OnBasicAttackPreHitEvent += IncrementBasicAttackCounter;
         _combat.BasicAttackSkill.attackCollider.OnBasicAttackApplyDamageEvent += RemoveMod;
@@ -34,7 +34,7 @@ public class EmpoweredAttackEffect : MobEffect
         _hitCounter++;
         if (_hitCounter % _empoweredHitIndex == 0)
         {
-            _mod.Value = _empoweredScaling.FinalValue(_stats);
+            _mod.Value = _scaling.FinalValue(_stats);
             _stats.AttackDamage.AddMod(_mod);
         }
     }

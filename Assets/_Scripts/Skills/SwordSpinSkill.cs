@@ -114,7 +114,7 @@ public class SwordSpinSkill : MobSkill, IMobSkill
 
         if (null == _buff)
         {
-            _buff = new StatModifier(-(stats.AttackDamage.FinalValue * (1f - attackRatio)));
+            _buff = new StatModifier(-(stats.AttackDamage.FinalValue - GetPowerAmount()));
             stats.AttackDamage.AddMod(_buff);
         }
 
@@ -124,11 +124,6 @@ public class SwordSpinSkill : MobSkill, IMobSkill
             _VFX2.transform.localPosition += new Vector3(0, 0.55f, 0);
         }
         ToggleParticleSystem2(turnParticlesOn: true);
-    }
-
-    private float GetPowerAmount()
-    {
-        return scalingStatData.flatPower + (stats.AttackDamage.FinalValue * scalingStatData.attackScaling) + (stats.AbilityPower.FinalValue * scalingStatData.abilityScaling);
     }
 
     private void ToggleParticleSystem(bool turnParticlesOn)

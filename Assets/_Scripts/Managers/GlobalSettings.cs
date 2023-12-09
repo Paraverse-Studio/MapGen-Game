@@ -1,3 +1,4 @@
+using Paraverse.Player;
 using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
@@ -33,6 +34,7 @@ public class GlobalSettings : MonoBehaviour
     public bool recordBlockHistory = true;
     public GameObject playerPrefab;
     public GameObject player;
+    public PlayerCombat playerCombat;
 
     [Header("Combat")]
     public GameObject healthBarPrefab;
