@@ -76,6 +76,7 @@ MonoBehaviour:
   targetLayer:
     serializedVersion: 2
     m_Bits: 491511
+  isSticky: 0
   chargeFX: {fileID: 147199183070441786, guid: 745a28b4649613c44bbca3590d649613, type: 3}
   chargeOrigin: {fileID: 1554990188}
   skillStartTimer: 1
@@ -1020,6 +1021,7 @@ MonoBehaviour:
   targetLayer:
     serializedVersion: 2
     m_Bits: 491511
+  isSticky: 0
   chargeFX: {fileID: 147199183070441786, guid: 745a28b4649613c44bbca3590d649613, type: 3}
   chargeOrigin: {fileID: 8375894351906716979}
   skillStartTimer: 5
@@ -2024,12 +2026,18 @@ MonoBehaviour:
   stoppingDistance: 5
   detectionRadius: 100
   pursueRadius: 100
+  customPursueRange: 0
+  pursueRange: 10
+  _isStrafer: 0
+  strafePoint: {fileID: 0}
+  strafeAccuracy: 1
   atkDashForce: 10
-  jumpForce: 5
+  jumpLateralForce: 5
+  jumpHeightForce: 5
   isGroundedCheckRange: 0.5
   groundLayer:
     serializedVersion: 2
-    m_Bits: 524215
+    m_Bits: 2147483647
   flyUpForce: 10
   flyDownForce: 25
   isFlyingUp: 0

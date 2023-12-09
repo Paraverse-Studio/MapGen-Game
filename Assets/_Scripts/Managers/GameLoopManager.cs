@@ -50,6 +50,7 @@ public class GameLoopManager : MonoBehaviour
         Completed,
         Failed,
         BossDefeated,
+        Reward,
         Quit
     }
 
@@ -71,6 +72,7 @@ public class GameLoopManager : MonoBehaviour
     public Animator roundCompleteWindow;
     public Animator roundFailedWindow;
     public Animator bossDefeatedWindow;
+    public Animator startingHostileRoundWindow;
     public GameObject loadingScreen;
     public GameObject roundResultsWindow;
     public RoundTimer roundTimer;
@@ -265,15 +267,18 @@ public class GameLoopManager : MonoBehaviour
         // DETERMINE HOW ROUND ENDED (SUCCESSFUL OR FAILED OR BOSS DEFEATED?)
         if (successfulRound)
         {
-            if (MapCreator.Instance.mapType != MapType.boss) roundCompletionType = RoundCompletionType.Completed;
-            else roundCompletionType = RoundCompletionType.BossDefeated;
+            if (MapCreator.Instance.mapType == MapType.normal) roundCompletionType = RoundCompletionType.Completed;
+            else if (MapCreator.Instance.mapType == MapType.boss) roundCompletionType = RoundCompletionType.BossDefeated;
+            else roundCompletionType = RoundCompletionType.Reward;
+            nextRoundNumber++;
         }
         else
         {
             roundCompletionType = RoundCompletionType.Failed;
+            nextRoundNumber = 1;
         }
 
-        Animator roundEndWindow = new();
+        Animator roundEndWindow = null;
         switch (roundCompletionType)
         {
             case RoundCompletionType.Completed:
@@ -285,9 +290,12 @@ public class GameLoopManager : MonoBehaviour
             case RoundCompletionType.BossDefeated:
                 roundEndWindow = bossDefeatedWindow;
                 break;
+            case RoundCompletionType.Reward:
+                roundEndWindow = startingHostileRoundWindow;
+                break;
         }
 
-        GameLoopEvents.OnEndRound?.Invoke();
+        GameLoopEvents.OnEndRound?.Invoke();        
         roundEndWindow.gameObject.SetActive(true);
         Time.timeScale = 0.4f;
         roundEndWindow.SetTrigger("Entry");
@@ -295,7 +303,7 @@ public class GameLoopManager : MonoBehaviour
         roundEndWindow.SetTrigger("Exit");
         yield return new WaitForSecondsRealtime(1.5f);
         roundEndWindow.gameObject.SetActive(false);
-        Time.timeScale = 1f;
+        Time.timeScale = 1f;        
         CompleteRound();
     }
 
@@ -303,6 +311,13 @@ public class GameLoopManager : MonoBehaviour
     {
         EnemiesManager.Instance.ResetEnemiesList();
         Destroy(EndPortal);
+
+        if (roundCompletionType == RoundCompletionType.Reward)
+        {
+            ResetStates();
+            InitiateRound();
+            return;
+        }
 
         float score = ScoreFormula.CalculateScore(totalEnemiesSpawned * (MapCreator.Instance.mapType == MapType.boss ? 50f : 10f), roundTimer.GetTime(), playerMaxHealth, damageTaken);
         goldToReward = (int)(score * 1);
@@ -317,7 +332,6 @@ public class GameLoopManager : MonoBehaviour
             resultScreen.goldEarnedText.text = "0";
             resultScreen.shopButton.SetActive(false);
             resultScreen.mainMenuButton.SetActive(true);
-            nextRoundNumber = 1; // restart the playthrough
         }
         else
         {
@@ -326,7 +340,6 @@ public class GameLoopManager : MonoBehaviour
             resultScreen.goldEarnedText.text = goldToReward + "";
             playerStats.UpdateGold(goldToReward); // save it to db
             resultScreen.rankText.text = ScoreFormula.GetScoreRank((int)score);
-            nextRoundNumber++;
         }
 
         // Update Results Screen
