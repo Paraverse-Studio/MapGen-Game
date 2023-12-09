@@ -59,7 +59,9 @@ public class BeamProjectile : Projectile
             if (beamCollides && Physics.CapsuleCast(transform.position + (transform.forward * -3f), transform.position + (transform.forward * -2.5f), beamRadius, transform.forward, out RaycastHit hit, beamLength, targetLayer)) //Checks for collision
             {
                 if (isSticky)
-                    end = hit.point - (transform.forward * beamEndOffset);
+                {
+                    end = hit.point;
+                }
                 else
                     end = transform.position + (transform.forward * beamLength);
 
