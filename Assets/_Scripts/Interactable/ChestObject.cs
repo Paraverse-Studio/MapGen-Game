@@ -38,6 +38,21 @@ public class ChestObject : MonoBehaviour
         [MinMaxSlider(0f, 5f)]
         public Vector2 numToSpawn;
         public List<LootItem> lootTable;
+
+        public ChestTier Clone()
+        {
+            ChestTier newChest = new();
+            newChest.chestName = chestName;
+            newChest.model = model;
+            newChest.modelGlow = modelGlow;
+            newChest.numToSpawn = numToSpawn;
+            newChest.lootTable = new List<LootItem>();
+            for (int i = 0; i < lootTable.Count; ++i)
+            {
+                newChest.lootTable.Add(lootTable[i]);
+            }
+            return newChest;
+        }
     }
 
     [SerializeField]
@@ -49,11 +64,10 @@ public class ChestObject : MonoBehaviour
     [SerializeField]
     private ChestTier[] chestTiers;
 
-    private ChestTier referenceChest;
-
     private Interactable _interactable;
     private Selectable _selectable;
     List<SO_Item> rewards = new();
+    List<SO_Mod> rewardsThatAreStats = new();
 
     public void Initialize(ChestTierType tierProvided)
     {
@@ -92,8 +106,12 @@ public class ChestObject : MonoBehaviour
 
         // Save a copy of this chest as a reference chest in case we empty this chest's loot table and still don't have
         // all the # of items to gift to player, then we refill the current chest with reference chest and go again
-        ChestTier thisChest = chestTiers[tier];
-        referenceChest = chestTiers[tier];
+        ChestTier thisChest = chestTiers[tier].Clone();
+
+        // Since the SO_Consumable Gold doesn't really make sense as a ScriptableObject since whatever amount value you 
+        // put on it, it'll save that to the Unity files, we will reset it to 0 here, so that we can customize it for this chest
+        // We need to do this for all future quantity type consumable items we add to chests
+        ModsManager.Instance.GoldItem.Quantity = 0;
 
         int safetyCounter = 0;
         // Keep performing following algorithm until required num of reward items are calculated
@@ -101,11 +119,14 @@ public class ChestObject : MonoBehaviour
         {
             // loot table logic
             safetyCounter++;
-            if (safetyCounter > 100) { Debug.LogError("AB - HIT THE SAFETY COUNTER ON CHEST ALGORITHM!"); break; }
+            if (safetyCounter > 100) { break; }
 
             // This would happen once we've gifted the player one of each item in the loot table,
             // then if we are to gift the player more items, refill this chest with reference chest to go again
-            if (thisChest.lootTable.Count == 0) thisChest = referenceChest;
+            if (thisChest.lootTable.Count == 0) 
+            { 
+                thisChest = chestTiers[tier].Clone();
+            }
 
             float total = 0; // adding all the chances up (will likely always be 100)
             foreach (LootItem lootItem in thisChest.lootTable)
@@ -123,11 +144,18 @@ public class ChestObject : MonoBehaviour
 
                     // by this point, an option from the loot table is decided to add to the list of rewards to give. 
 
-                    // If no override SO_item is provided in the entry, then must be a random mod from randomMod property
+                    // If no override SO_item is provided in the entry, then must be a random mod from random Mod property
                     if (null == decidedItem)
                     {
-                        int indexOfMod = ModsManager.Instance.GetMod(thisChest.lootTable[i].modType, out SO_Mod returnedMod);
-                        if (-1 == indexOfMod) continue;
+                        int indexOfMod = ModsManager.Instance.GetMod(thisChest.lootTable[i].modType, out SO_Mod returnedMod, rewardsThatAreStats);
+                        if (-1 == indexOfMod)
+                        {
+                            // if getting this type of mod returned nothing, it means there's no mods left of this type,
+                            // so remove this loot item from table so we don't keep searching for it, move onto the other 
+                            // possible loot items
+                            thisChest.lootTable.RemoveAt(i);
+                            continue;
+                        }
 
                         decidedItem = returnedMod;
 
@@ -138,7 +166,22 @@ public class ChestObject : MonoBehaviour
                     else if (decidedItem is SO_Consumable)
                     {
                         float amount = Random.Range(thisChest.lootTable[i].consumableAmount.x, thisChest.lootTable[i].consumableAmount.y);
-                        decidedItem.Quantity = (int)amount;
+
+                        if (amount > 1)
+                        {
+                            // if something has more than 1 quantity, we can provide more of it if it loots twice,
+                            // and then also remove its previous appearance, so we don't get 2 appearances of it, instead we get one with x2 (example)
+                            if (decidedItem.Quantity > 0)
+                            {
+                                rewards.Remove(rewards.Find(rewardItem => rewardItem.ID == decidedItem.ID));
+                                numToSpawn--;
+                            }
+                            decidedItem.Quantity += (int)amount; 
+                        }
+                        else // if this is a consumable that only has 1 of it, then we likely don't want to give player 2 appearances of it
+                        {
+                            chestTiers[tier].lootTable.Remove(chestTiers[tier].lootTable.Find(lootItem => lootItem.overrideItem == thisChest.lootTable[i].overrideItem));
+                        }
                     }
 
                     // If it's a mod, remove it from available pool, and add to purchased pool (since mods are unique and limited)
@@ -149,8 +192,9 @@ public class ChestObject : MonoBehaviour
 
                     // finally, all tuning of the reward item are done, so add it to the rewards list
                     rewards.Add(decidedItem);
+                    if (decidedItem is SO_StatMod) rewardsThatAreStats.Add((SO_StatMod)decidedItem);
 
-                    // we chose this loot item to add, so remove it from loot table cause we don't want repeat reward items 
+                    // we chose this loot item to add, so remove it from loot table cause we don't want repeat reward items on first loop
                     thisChest.lootTable.RemoveAt(i);
 
                     break;

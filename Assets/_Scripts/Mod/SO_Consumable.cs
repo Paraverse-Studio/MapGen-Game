@@ -13,6 +13,7 @@ public class SO_Consumable : SO_Item
 {
     [Header("Consumable Type:")]
     public ConsumableType Type;
+    public float strength;
 
     private MobStats _player;
 
@@ -35,7 +36,7 @@ public class SO_Consumable : SO_Item
                 _player.UpdateGold(Quantity);
                 break;
             case ConsumableType.Heal:
-                _player.SetFullHealth();
+                _player.UpdateCurrentHealth((int)(_player.MaxHealth.FinalValue * strength));
                 break;
             case ConsumableType.Revive:
                 break;

@@ -5,7 +5,10 @@ using UnityEngine;
 
 public class ModsManager : MonoBehaviour
 {
-    public static ModsManager Instance;   
+    public static ModsManager Instance;
+
+    [Header("Non-Mods")]
+    public SO_Consumable GoldItem;
 
     [Header("Purchased/Obtained Mods")]
     public List<SO_Item> PurchasedMods;
@@ -30,7 +33,7 @@ public class ModsManager : MonoBehaviour
         }
     }
 
-    public int GetMod(ModType type, out SO_Mod mod)
+    public int GetMod(ModType type, out SO_Mod mod, List<SO_Mod> avoidMods = null)
     {
         mod = null;
         int index = -1;
@@ -40,15 +43,15 @@ public class ModsManager : MonoBehaviour
 
         if (type == ModType.Stats) 
         {
-            filtered = AvailableMods.Where(mod => null != mod && (mod is SO_Mod) && ((SO_Mod)mod).Type == type).ToList();            
+            filtered = AvailableMods.Where(mod => null != mod && (mod is SO_Mod) && ((SO_Mod)mod).Type == type && !avoidMods.Contains(mod)).ToList();            
         } 
         else if (type == ModType.Skill) 
         { 
-            filtered = AvailableMods.Where(mod => null != mod && (mod is SO_Mod) && ((SO_Mod)mod).Type == type).ToList();            
+            filtered = AvailableMods.Where(mod => null != mod && (mod is SO_Mod) && ((SO_Mod)mod).Type == type && !avoidMods.Contains(mod)).ToList();            
         }
         else if (type == ModType.Effects) 
         { 
-            filtered = AvailableMods.Where(mod => null != mod && (mod is SO_Mod) && ((SO_Mod)mod).Type == type).ToList();            
+            filtered = AvailableMods.Where(mod => null != mod && (mod is SO_Mod) && ((SO_Mod)mod).Type == type && !avoidMods.Contains(mod)).ToList();            
         }
 
         if (filtered.Count > 0) // if it's 0, then no mod was found, list is empty of any available mod

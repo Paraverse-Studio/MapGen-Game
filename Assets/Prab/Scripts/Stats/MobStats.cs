@@ -117,8 +117,8 @@ namespace Paraverse.Mob.Stats
 
         public void UpdateCurrentHealth(int amount)
         {
-            if (unkillable) return;
-            _curHealth += amount;
+            if (unkillable && amount < 0) return;
+            _curHealth = Mathf.Clamp(_curHealth + amount, 0, (int)MaxHealth.FinalValue);
             OnHealthChange?.Invoke(CurHealth, (int)MaxHealth.FinalValue);
         }
 
