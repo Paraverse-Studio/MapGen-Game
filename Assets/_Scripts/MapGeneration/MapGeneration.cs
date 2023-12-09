@@ -1132,7 +1132,7 @@ public class MapGeneration : MonoBehaviour
                 enemyStats.UpdateAttackDamage(enemyStats.AttackDamage.FinalValue * scaleFactor);
                 enemyStats.UpdateAbilityPower(enemyStats.AbilityPower.FinalValue * scaleFactor);
                 enemyStats.UpdateMaxHealth(Mathf.CeilToInt(enemyStats.MaxHealth.FinalValue * scaleFactor));
-                if (MapCreator.Instance.mapType == MapType.boss)
+                if (MapCreator.Instance.mapType == MapType.boss || true)
                 {
                     enemy.GetComponentInChildren<MobController>().OnDeathEvent += AddLegendaryChest;
                 }
