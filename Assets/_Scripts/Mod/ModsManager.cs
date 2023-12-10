@@ -16,6 +16,8 @@ public class ModsManager : MonoBehaviour
     [Header("Available Mods")]
     public List<SO_Item> AvailableMods;
 
+    private Object[] loadedObjects;
+
     private void Awake()
     {
         Instance = this;
@@ -23,8 +25,15 @@ public class ModsManager : MonoBehaviour
 
     private void Start()
     {
-        Object[] loadedObjects = Resources.LoadAll("ITEMS", typeof(SO_Item));
+        loadedObjects = Resources.LoadAll("ITEMS", typeof(SO_Item));
+
+        ResetMods();
+    }
+
+    public void ResetMods()
+    {
         AvailableMods.Clear();
+        PurchasedMods.Clear();
 
         // Reset all the mods to their default state (so that Attack or Ability aren't at mod lv 5 for example)
         foreach (Object obj in loadedObjects)
