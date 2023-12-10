@@ -39,4 +39,10 @@ public class SO_EffectMod : SO_Mod
         Debug.Log($"Effect Mod: Mod \"{Title}\" (ID {ID}) activated for {_player.gameObject.name}!");
     }
 
+    public override void Reset()
+    {
+        base.Reset();
+        // TODO DeactivateEffect() once it's done
+    }
+
 }

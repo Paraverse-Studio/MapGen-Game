@@ -19,6 +19,8 @@ public class GameLoopManager : MonoBehaviour
         public UnityEvent OnBootupGame;
         public UnityEvent OnDeveloperMode;
 
+        public UnityEvent OnInitiateSession;
+
         public UnityEvent OnInitiateRound;
         public UnityEvent OnStartRound;
 
@@ -189,6 +191,7 @@ public class GameLoopManager : MonoBehaviour
     public void InitiateSession()
     {
         nextRoundNumber = 1;
+        GameLoopEvents.OnInitiateSession?.Invoke();
         InitiateRound();
     }
 

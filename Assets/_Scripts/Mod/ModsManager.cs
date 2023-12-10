@@ -66,7 +66,7 @@ public class ModsManager : MonoBehaviour
 
         if (filtered.Count > 0) // if it's 0, then no mod was found, list is empty of any available mod
         {
-            random = Random.Range(0, filtered.Count - 1);
+            random = Random.Range(0, filtered.Count);
             mod = (SO_Mod)filtered[random];
             index = AvailableMods.IndexOf(filtered[random]);
         }
