@@ -26,6 +26,7 @@ public class ModsManager : MonoBehaviour
         Object[] loadedObjects = Resources.LoadAll("ITEMS", typeof(SO_Item));
         AvailableMods.Clear();
 
+        // Reset all the mods to their default state (so that Attack or Ability aren't at mod lv 5 for example)
         foreach (Object obj in loadedObjects)
         {
             AvailableMods.Add((SO_Item)obj);
