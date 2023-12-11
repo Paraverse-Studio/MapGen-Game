@@ -68,6 +68,13 @@ public class MapGeneration : MonoBehaviour
         public bool hasWater;
     }
 
+    [System.Serializable]
+    public struct NPCPair
+    {
+        public GameObject npc;
+        public SO_Condition condition;
+    }
+
     public static MapGeneration Instance;
 
     [Header("Map Generation Data ")]
@@ -977,7 +984,7 @@ public class MapGeneration : MonoBehaviour
     {
         // EndPoint
         Vector3 spawnSpot = pathObjects[pathObjects.Count - 1].transform.position + new Vector3(0, 0.5f, 0);
-        GameObject obj = Instantiate(importantProps.endPoint, spawnSpot, GetCameraFacingRotation(reverse: true));
+        GameObject obj = Instantiate(importantProps.endPoint, spawnSpot, GetCameraFacingRotation());
         obj.name = "END PORTAL (Special)";
         UtilityFunctions.UpdateLODlevels(obj.transform);
         GameLoopManager.Instance.EndPortal = obj.GetComponent<EndPointTrigger>();
@@ -1028,57 +1035,23 @@ public class MapGeneration : MonoBehaviour
             }
         }
 
-        if (M.addSpellbook)
+        // Adding the non-hostile NPCs (like merchants, and other interactables)
+        for (int i = 0; i < M.npcs.Length; ++i)
         {
-            int distanceCloserToPath = Random.Range(0, 3);
-            int distanceToTheBottomLeftOfPortal = Random.Range(4, 9);
-            Vector3 spot = pathObjects[pathObjects.Count - 1].gameObject.transform.position + new Vector3(-distanceToTheBottomLeftOfPortal, 0, -distanceCloserToPath);
-            Vector3 r = Vector3.down *  180f;
+            if (null != M.npcs[i].condition && !M.npcs[i].condition.Evaluate()) continue; 
+
+            int xDirection = Random.Range(3, 8) * (i % 2 == 0? 1 : -1);
+            int zDirection = Random.Range(2, 5) * (i % 4 == 0 ? 1 : -1) - 3;
+            Vector3 spot = pathObjects[pathObjects.Count - 1].gameObject.transform.position + new Vector3(xDirection, 0, zDirection);
+            Vector3 r = Vector3.down * (Random.Range(0, 2) == 0? 180f : 90f);
 
             Block b = GetClosestValidGroundBlock(spot);
 
-            var npc = Instantiate(MapCreator.Instance.blackSmithPrefab, 
-                b.transform.position + new Vector3(0, 0.5f, 0), Quaternion.Euler(r.x, r.y, r.z));
+            var npc = Instantiate(M.npcs[i].npc, b.transform.position + new Vector3(0, 0.5f, 0), Quaternion.Euler(r.x, r.y, r.z));
             b.hasProp = true;
             propObjects.Add(npc.gameObject);
             npc.transform.parent = temporaryObjFolder.transform;
         }
-
-        if (M.addMerchant)
-        {
-            int distanceCloserToPath = Random.Range(0, 3);
-            int distanceToTheBottomRightOfPortal = Random.Range(4, 9);
-
-            Vector3 spot = pathObjects[pathObjects.Count - 1].gameObject.transform.position + new Vector3(-distanceCloserToPath, 0, -distanceToTheBottomRightOfPortal);
-            Vector3 r = Vector3.down * 90f;
-
-            Block b = GetClosestValidGroundBlock(spot);
-
-            var npc = Instantiate(MapCreator.Instance.merchantPrefab,
-                b.transform.position + new Vector3(0, 0.5f, 0), Quaternion.Euler(r.x, r.y, r.z));
-            b.hasProp = true;
-            propObjects.Add(npc.gameObject);
-            npc.transform.parent = temporaryObjFolder.transform;
-        }
-
-        // Ronny, add him only on reward maps, and on any reward map if player still doesn't have a skill
-        if (MapCreator.Instance.mapType == MapType.reward && GlobalSettings.Instance.playerCombat.ActiveSkill == null)
-        {
-            int distanceCloserToPath = Random.Range(0, 3);
-            int distanceToTheBottomRightOfPortal = Random.Range(4, 9);
-
-            Vector3 spot = pathObjects[pathObjects.Count - 1].gameObject.transform.position + new Vector3(distanceToTheBottomRightOfPortal, 0, -distanceCloserToPath);
-            Vector3 r = Vector3.down * 180f;
-
-            Block b = GetClosestValidGroundBlock(spot);
-
-            var npc = Instantiate(MapCreator.Instance.skillGiverPrefab,
-                b.transform.position + new Vector3(0, 0.5f, 0), Quaternion.Euler(r.x, r.y, r.z));
-            b.hasProp = true;
-            propObjects.Add(npc.gameObject);
-            npc.transform.parent = temporaryObjFolder.transform;
-        }
-
     }
 
     private void AddLegendaryChest(Transform t)
