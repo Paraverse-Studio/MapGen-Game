@@ -10,10 +10,10 @@ MonoBehaviour:
   m_Enabled: 1
   m_EditorHideFlags: 0
   m_Script: {fileID: 11500000, guid: ac7b4726c008121408f35db723b6e5ff, type: 3}
-  m_Name: RewardMap
+  m_Name: Desert_Base
   m_EditorClassIdentifier: 
   mapDescription: Lush Oasis
-  mapMechanics: {fileID: 3748690503777916363, guid: d27c483732df660489e6f896ca574187, type: 3}
+  mapMechanics: {fileID: 0}
   mapMechanicsVFX: {fileID: 6725425050033914297, guid: 79a0b9f15318de4488e2010ea91cfb25, type: 3}
   ppProfile: {fileID: 11400000, guid: 592bcbf73aa0bb24092dbc036148ef7f, type: 2}
   vfx: {fileID: 0}
@@ -32,18 +32,18 @@ MonoBehaviour:
     - {fileID: 9053638965515276012, guid: 89a8c4fe11c5c420f9ab5ed5ad61ca20, type: 3}
     - {fileID: 6316437309591991426, guid: 67508185608264f3f9155697b3b699e7, type: 3}
   randomElevation: {x: 0, y: 0}
-  distanceOfPath: {x: 1, y: 3}
+  distanceOfPath: {x: 130, y: 160}
   distanceBeforeTurningPath: {x: 6, y: 10}
   turningAngleRange: {x: 0, y: 65}
   roundAngleToNearest: 45
   maxAccumulatedAngle: 90
-  pathThickenFrequency: 15
-  grassFillRadius: {x: 7, y: 8}
-  circularity: 1.5
+  pathThickenFrequency: 17
+  grassFillRadius: {x: 5, y: 11}
+  circularity: 1
   blockRaiseSize: 0.5
   edgeBlockRaiseSize: 1
   lumpDensity: 15
-  lumpApplicationRounds: 2
+  lumpApplicationRounds: 1
   lumpRadius: {x: 3, y: 6}
   lumpOffset: 4
   addEdgeWalls: 0
@@ -57,27 +57,22 @@ MonoBehaviour:
   dirtFillRadius: {x: 1, y: 3}
   dirtCutoffFrequency: 7
   dirtCutoffLength: {x: 0, y: 3}
+  addLiquid: 0
   liquidRiseLevel: -0.5
   showProps: 0
-  foliageDensity: 6
-  treeSpawnDensity: 10
+  foliageDensity: 8
+  treeSpawnDensity: 5
   treeSpawnOffset: 2
-  treeChanceGrowthRate: 15
-  addEnemies: 0
+  treeChanceGrowthRate: 20
+  addEnemies: 1
   enemies:
   - {fileID: 834749840821475308, guid: 504274220e31b014bb1f9da275f2fca1, type: 3}
   - {fileID: 4257800398774748632, guid: feaf9f99f013c334fb69778b3288438e, type: 3}
   - {fileID: 1491135451762375406, guid: 7cd480286f30f724d8b6b177b24d1810, type: 3}
   - {fileID: 5234615525773085686, guid: 42baf1299c251cd49bc6b2fea0d259e6, type: 3}
   - {fileID: 6016866019765979880, guid: 34d94af78fa950147ba258a6accafe38, type: 3}
-  enemySpawnAmount: 0
-  enemySpawnOffset: 0
-  addChests: 0
-  numOfChests: {x: 0, y: 0}
-  npcs:
-  - npc: {fileID: 9172293720564539993, guid: 2e7198bec3cbc7e488cef86802e204e0, type: 3}
-    condition: {fileID: 0}
-  - npc: {fileID: 9172293720564539993, guid: b60015c326eddd54981b233549cd67c6, type: 3}
-    condition: {fileID: 0}
-  - npc: {fileID: 9172293720564539993, guid: de315d02f70e52e4baffa91a9598cf52, type: 3}
-    condition: {fileID: 11400000, guid: 1051394ee6a2c3f4cbc3f26b3b5f5699, type: 2}
+  enemySpawnAmount: 14
+  enemySpawnOffset: 1
+  addChests: 1
+  numOfChests: {x: 3, y: 3}
+  npcs: []

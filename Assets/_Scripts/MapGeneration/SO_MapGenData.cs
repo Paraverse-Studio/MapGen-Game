@@ -114,6 +114,7 @@ public class SO_MapGenData : ScriptableObject
     [Space(30)]
     [Header("    _____________  MAP LIQUID  _____________")]
     [Space(5)]
+    public bool addLiquid;
     public float liquidRiseLevel;
 
     [Space(30)]

@@ -440,7 +440,7 @@ public class MapGeneration : MonoBehaviour
             yield return processDelay;
         }
 
-        if (M.raiseDirtLevel) 
+        if (M.raiseDirtLevel && M.addLiquid) 
         {
             RaiseBlocksAboveLiquid();
         }
@@ -454,8 +454,11 @@ public class MapGeneration : MonoBehaviour
 
         PartitionProgress("");
         step = 7;
-        yield return processDelay;
-        AddWaterToDips();
+        if (M.addLiquid)
+        {
+            yield return processDelay;        
+            AddWaterToDips();
+        }
 
         /* * * * * IMPORTANT PROPS ON MAP * * * * * * */
         PartitionProgress("Adding event triggers...");

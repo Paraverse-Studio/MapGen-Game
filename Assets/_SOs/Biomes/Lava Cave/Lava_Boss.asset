@@ -13,9 +13,9 @@ MonoBehaviour:
   m_Name: Lava_Boss
   m_EditorClassIdentifier: 
   mapDescription: Balmy Green Plains
-  mapMechanics: {fileID: 3748690503777916363, guid: d27c483732df660489e6f896ca574187, type: 3}
+  mapMechanics: {fileID: 0}
   mapMechanicsVFX: {fileID: 6725425050033914297, guid: 79a0b9f15318de4488e2010ea91cfb25, type: 3}
-  ppProfile: {fileID: 11400000, guid: b3c5a5a69239adb4d8970121354188bf, type: 2}
+  ppProfile: {fileID: 11400000, guid: 6361f99e9ab39e44a80d800b0f1885c5, type: 2}
   vfx: {fileID: 0}
   blockSet:
     grass: {fileID: 11400000, guid: 17d9d2e64a23d8b449954a9113c03eaf, type: 2}
@@ -37,7 +37,7 @@ MonoBehaviour:
   maxAccumulatedAngle: 90
   pathThickenFrequency: 15
   grassFillRadius: {x: 12, y: 18}
-  circularity: 1
+  circularity: 1.5
   blockRaiseSize: 0.5
   edgeBlockRaiseSize: 1
   lumpDensity: 15
@@ -52,9 +52,10 @@ MonoBehaviour:
   flattenIfSurroundedByLessThan: 3
   raiseDirtLevel: 1
   dirtPathThickenFrequency: 6
-  dirtFillRadius: {x: 1, y: 3}
+  dirtFillRadius: {x: 2, y: 3}
   dirtCutoffFrequency: 7
-  dirtCutoffLength: {x: 0, y: 2}
+  dirtCutoffLength: {x: 0, y: 1}
+  addLiquid: 0
   liquidRiseLevel: -0.5
   showProps: 0
   foliageDensity: 6
@@ -69,5 +70,4 @@ MonoBehaviour:
   enemySpawnOffset: 1
   addChests: 0
   numOfChests: {x: 0, y: 0}
-  addSpellbook: 0
-  addMerchant: 0
+  npcs: []
