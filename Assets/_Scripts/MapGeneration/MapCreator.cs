@@ -58,7 +58,8 @@ public class MapCreator : MonoBehaviour
 
     private int roundsSinceLastBossMap = 0;
     private int roundsSincelastRewardMap = 0;
-    private int mapIndex;
+    private int biomeIndex = 0;
+    private bool biomeChangePending = false;
 
     private void Awake()
     {
@@ -71,8 +72,13 @@ public class MapCreator : MonoBehaviour
 
         int adjustedRoundNumber = GameLoopManager.Instance.nextRoundNumber - 1;
 
-        // Determining biome
-        mapIndex = adjustedRoundNumber / switchMapAfterNumOfRounds;
+        // Determining biome, removed: we don't change biome after a predetermined # of rounds anymore
+        //biomeIndex = adjustedRoundNumber / switchMapAfterNumOfRounds;
+        if (biomeChangePending)
+        {
+            biomeIndex++;
+            biomeChangePending = false;
+        }
 
         // Determining type of map (normal, boss, reward)
         if (roundsSincelastRewardMap >= rewardMapGapLimit.x)
@@ -117,18 +123,19 @@ public class MapCreator : MonoBehaviour
         switch (mapType)
         {
             case MapType.normal:
-                MapGeneration.Instance.M = maps[mapIndex].map;
+                MapGeneration.Instance.M = maps[biomeIndex].map;
                 break;
 
             case MapType.boss:
-                MapGeneration.Instance.M = maps[mapIndex].bossMap;
+                MapGeneration.Instance.M = maps[biomeIndex].bossMap;
 
                 roundsSinceLastBossMap = 0;                
                 roundsSincelastRewardMap = int.MaxValue; // *NEW: we want there to be a reward map right after a boss map guaranteed
+                biomeChangePending = true;
                 break;
 
             case MapType.reward:
-                MapGeneration.Instance.M = maps[mapIndex].rewardMap;
+                MapGeneration.Instance.M = maps[biomeIndex].rewardMap;
                 roundsSincelastRewardMap = 0;
                 break;
         }
@@ -156,7 +163,7 @@ public class MapCreator : MonoBehaviour
         }
         else if (GameLoopManager.Instance.CompletionPredicate == GameLoopManager.CompletionPredicateType.EnjoyReward)
         {
-            UpdateObjectiveText(maps[mapIndex].mapName);                       
+            UpdateObjectiveText(maps[biomeIndex].mapName);                       
         }
         // Create update objective texts for other types of completion predicates
     }
