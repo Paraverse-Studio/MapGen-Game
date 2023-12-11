@@ -130,7 +130,6 @@ public class MapCreator : MonoBehaviour
                 MapGeneration.Instance.M = maps[biomeIndex].bossMap;
 
                 roundsSinceLastBossMap = 0;                
-                roundsSincelastRewardMap = int.MaxValue; // *NEW: we want there to be a reward map right after a boss map guaranteed
                 biomeChangePending = true;
                 break;
 

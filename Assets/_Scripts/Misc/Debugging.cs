@@ -8,6 +8,7 @@ using UnityEngine;
 
 public class Debugging : MonoBehaviour
 {
+    public GameObject chest;
 
     private void Start()
     {
@@ -37,6 +38,10 @@ public class Debugging : MonoBehaviour
                     GlobalSettings.Instance.player.transform.position,
                     GlobalSettings.Instance.player.transform.rotation);
                 //g.GetComponent<ChestObject>().Initialize(Random.Range(0,3));
+
+                ChestObject c = Instantiate(chest, GlobalSettings.Instance.player.transform.position + transform.forward * 2,
+                    GlobalSettings.Instance.player.transform.rotation).GetComponent<ChestObject>();
+                c.Initialize(ChestObject.ChestTierType.Legendary);
             }
         }
     }

@@ -30,7 +30,7 @@ public class QualityManager : MonoBehaviour
 #endif
 
 #if UNITY_WEBGL
-        SetQualityLevel(3);
+        SetQualityLevel(4);
         Application.targetFrameRate = 60;
 #endif
 
