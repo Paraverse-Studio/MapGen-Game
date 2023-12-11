@@ -35,6 +35,7 @@ public class Block : MonoBehaviour, ITickElement
     [Space(20)]
     [TextArea(6, 15)]
     public string blockHistory = "";
+    public bool isFirstBlockOfMap = false;
 
     private Renderer _renderer;
     private Collider _collider;
@@ -171,7 +172,10 @@ public class Block : MonoBehaviour, ITickElement
             _currentPrefab.transform.localPosition = new Vector3(0, 0, 0);
             _currentPrefab.transform.localRotation = Quaternion.identity;
 
-            ApplyRandomRotation(_currentPrefab);
+            if (!isFirstBlockOfMap)
+            {
+                ApplyRandomRotation(_currentPrefab);
+            }
 
             //UpdateHistory("Type changed to " + System.Enum.GetName(typeof(BlockType), (int)type.blockType));
         }

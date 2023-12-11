@@ -498,9 +498,11 @@ public class MapGeneration : MonoBehaviour
 
 
         /* * * * * MAP MECHANICS - LAVA INTERACTION, WATER INTERACTION, ETC. * * * * * */
-
-        mapMechanics = Instantiate(M.mapMechanics, transform).GetComponent<IMapMechanics>();
-        mapMechanics.Initialize(M.mapMechanicsVFX);
+        if (M.mapMechanics)
+        {
+            mapMechanics = Instantiate(M.mapMechanics, transform).GetComponent<IMapMechanics>();
+            mapMechanics.Initialize(M.mapMechanicsVFX);
+        }
 
 
         /* * * * MISC STEPS - FINAL TOUCHES * * * * * * */
@@ -564,7 +566,9 @@ public class MapGeneration : MonoBehaviour
                 if (obj)
                 {
                     allObjects.Add(obj);
-                    pathObjects.Add(obj);                    
+                    pathObjects.Add(obj);
+                    obj.isFirstBlockOfMap = true; // we need this because we build the NavMesh off the first block 
+                    // and if this block is rotated or flipped in any way, the navmesh doesn't build properly
                 }
             }
             else // Buiolding the rest of the path
