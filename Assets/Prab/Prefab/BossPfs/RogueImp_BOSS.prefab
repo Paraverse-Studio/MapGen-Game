@@ -143,8 +143,15 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   targetTag: Player
   dot: 0
+  dontApplyDamageOnEnter: 0
   knockBackEffect: {fileID: 11400000, guid: 748f4316b61c09e4eb46f5136b6b2a06, type: 2}
   hitFX: {fileID: 0}
+  isBasicAttackCollider: 0
+  scalingStatData:
+    flatPower: 0
+    attackScaling: 1
+    abilityScaling: 0
+    healthScaling: 0
 --- !u!1 &1596251152
 GameObject:
   m_ObjectHideFlags: 0
@@ -257,8 +264,15 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   targetTag: Player
   dot: 0
+  dontApplyDamageOnEnter: 0
   knockBackEffect: {fileID: 11400000, guid: 748f4316b61c09e4eb46f5136b6b2a06, type: 2}
   hitFX: {fileID: 0}
+  isBasicAttackCollider: 0
+  scalingStatData:
+    flatPower: 0
+    attackScaling: 1
+    abilityScaling: 0
+    healthScaling: 0
 --- !u!1 &1780692463
 GameObject:
   m_ObjectHideFlags: 0
@@ -371,8 +385,15 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   targetTag: Player
   dot: 0
+  dontApplyDamageOnEnter: 0
   knockBackEffect: {fileID: 11400000, guid: 748f4316b61c09e4eb46f5136b6b2a06, type: 2}
   hitFX: {fileID: 0}
+  isBasicAttackCollider: 0
+  scalingStatData:
+    flatPower: 0
+    attackScaling: 1
+    abilityScaling: 0
+    healthScaling: 0
 --- !u!1 &1894406624
 GameObject:
   m_ObjectHideFlags: 0
@@ -1255,10 +1276,10 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: b04cd1b06f0908d4c81a8bc7bcea9d24, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  maxHealth: 100
-  _curHealth: 100
-  attackDamage: 5
-  abilityPower: 10
+  maxHealth: 150
+  _curHealth: 150
+  attackDamage: 10
+  abilityPower: 5
   attackSpeed: 0.2
   moveSpeed: 2
   maxEnergy: 100
@@ -1272,6 +1293,7 @@ MonoBehaviour:
     m_PersistentCalls:
       m_Calls: []
   diveEnergyCost: 30
+  unkillable: 0
 --- !u!114 &1692120143
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -1294,18 +1316,29 @@ MonoBehaviour:
   stoppingDistance: 3
   detectionRadius: 10
   pursueRadius: 15
+  customPursueRange: 0
+  pursueRange: 10
+  _isStrafer: 0
+  strafePoint: {fileID: 0}
+  strafeAccuracy: 1
   atkDashForce: 20
-  jumpForce: 7
+  jumpLateralForce: 5
+  jumpHeightForce: 5
   isGroundedCheckRange: 0.5
   groundLayer:
     serializedVersion: 2
     m_Bits: 524215
+  flyUpForce: 5
+  flyDownForce: 8
+  isFlyingUp: 0
+  isFlyingDown: 0
   checkFallRange: 2
   maxDeathTimerUponFall: 2
   fallForce: 0.5
   deathEffect: {fileID: 8073467667769803130, guid: 75c1b160671ce934fad50936633acef1, type: 3}
   _curMobState: 0
-  _isInvulnerable: 1
+  _isGrounded: 1
+  _isUnstaggerable: 0
 --- !u!114 &1692120150
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -1319,20 +1352,14 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   anim: {fileID: 4495370683190529758}
-  basicAtkDmgRatio: 1
-  basicAtkRange: 5
-  basicAtkCollider: {fileID: 706526565}
+  stats: {fileID: 0}
   projUser: 1
-  projData:
-    projPf: {fileID: 7922565735799238133, guid: 581c3b128b7afa640a13128e4969f3e4, type: 3}
-    projHeld: {fileID: 0}
-    projOrigin: {fileID: 1894406625}
-    projRotation: {fileID: 0}
-    basicAtkProjSpeed: 10
+  basicAttackSkill: {fileID: 0}
   skills:
   - {fileID: 1692120151}
   - {fileID: 1687112675}
   - {fileID: 176279067}
+  effects: []
   animBool: isUsingSkill
 --- !u!114 &1687112675
 MonoBehaviour:
@@ -1347,22 +1374,31 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   _skillName: SkyBarrageSkill
+  _ID: -1
+  _image: {fileID: 0}
   _description: 
   _minRange: 4
   _maxRange: 100
   cooldown: 10
   cost: 0
   animName: SkyBarrageSkill
+  isBasicAttack: 0
+  _isMelee: 0
   attackColliderGO: {fileID: 0}
+  attackCollider: {fileID: 0}
   projData:
     projPf: {fileID: 1520875604049576418, guid: 881f129da2d31e446ae5b376b6629684, type: 3}
     projHeld: {fileID: 0}
     projOrigin: {fileID: 182814346}
     projRotation: {fileID: 182814346}
     basicAtkProjSpeed: 0
-  flatPower: 20
-  attackScaling: 0
-  abilityScaling: 0
+  usesTargetLock: 0
+  rotSpeed: 110
+  scalingStatData:
+    flatPower: 0
+    attackScaling: 1
+    abilityScaling: 0
+    healthScaling: 0
   skillStartTimer: 5
 --- !u!114 &1692120151
 MonoBehaviour:
@@ -1377,24 +1413,32 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   _skillName: Attack01
+  _ID: -1
+  _image: {fileID: 0}
   _description: 
   _minRange: 0
   _maxRange: 5
   cooldown: 5
   cost: 0
   animName: AttackCombo
+  isBasicAttack: 0
+  _isMelee: 0
   attackColliderGO: {fileID: 1780692463}
+  attackCollider: {fileID: 0}
   projData:
     projPf: {fileID: 0}
     projHeld: {fileID: 0}
     projOrigin: {fileID: 0}
     projRotation: {fileID: 0}
     basicAtkProjSpeed: 10
-  flatPower: 5
-  attackScaling: 0
-  abilityScaling: 0
-  offHandAttackColliderGO: {fileID: 1596251152}
+  usesTargetLock: 0
   rotSpeed: 100
+  scalingStatData:
+    flatPower: 0
+    attackScaling: 1
+    abilityScaling: 0
+    healthScaling: 0
+  offHandAttackColliderGO: {fileID: 1596251152}
 --- !u!114 &176279067
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -1408,22 +1452,31 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   _skillName: Jump
+  _ID: -1
+  _image: {fileID: 0}
   _description: 
   _minRange: 7
   _maxRange: 30
   cooldown: 5
   cost: 0
   animName: JumpStart
+  isBasicAttack: 0
+  _isMelee: 0
   attackColliderGO: {fileID: 0}
+  attackCollider: {fileID: 0}
   projData:
     projPf: {fileID: 0}
     projHeld: {fileID: 0}
     projOrigin: {fileID: 0}
     projRotation: {fileID: 0}
     basicAtkProjSpeed: 10
-  flatPower: 1
-  attackScaling: 0
-  abilityScaling: 0
+  usesTargetLock: 0
+  rotSpeed: 110
+  scalingStatData:
+    flatPower: 0
+    attackScaling: 1
+    abilityScaling: 0
+    healthScaling: 0
 --- !u!114 &1692120146
 MonoBehaviour:
   m_ObjectHideFlags: 0
