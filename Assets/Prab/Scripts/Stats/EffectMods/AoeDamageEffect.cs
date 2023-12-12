@@ -1,5 +1,4 @@
 using Paraverse.Mob.Stats;
-using System.Collections.Generic;
 using UnityEngine;
 
 
@@ -10,7 +9,7 @@ public class AoeDamageEffect : MobEffect
     protected float attackPerUnitOfTime = 1f;
     protected float timer = 0f;
     protected bool applyHit = false;
-    
+
     [Header("Effect Properties")]
     [SerializeField]
     protected CapsuleCollider _col = null;
@@ -34,7 +33,8 @@ public class AoeDamageEffect : MobEffect
     public override void DeactivateEffect()
     {
         base.DeactivateEffect();
-        _col.gameObject.SetActive(false);
+        //_col.gameObject.SetActive(false);
+        if (_col != null) Destroy(_col.gameObject);
         if (_FX) Destroy(_FX.gameObject);
     }
 
