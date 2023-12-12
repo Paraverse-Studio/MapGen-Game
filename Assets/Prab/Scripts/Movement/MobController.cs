@@ -856,6 +856,7 @@ namespace Paraverse.Mob.Controller
         {
             if (stats.CurHealth <= 0 && _isDead == false)
             {
+                Debug.Log("Player has died! WITH HP: " + stats.CurHealth + " is Dead: " + _isDead);
                 _isDead = true;
                 Death();
                 OnDeathEvent?.Invoke(transform);

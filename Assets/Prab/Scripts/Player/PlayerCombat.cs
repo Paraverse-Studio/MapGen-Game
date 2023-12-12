@@ -121,6 +121,16 @@ namespace Paraverse.Player
             effectObj.ActivateEffect(stats);
         }
 
+        public void DeactivateEffects()
+        {
+            foreach (MobEffect eff in effects)
+            {
+                eff.DeactivateEffect();
+                Destroy(eff.gameObject);
+            }
+            effects.Clear();
+        }
+
         protected override void Update()
         {
             if (controller.IsDead) return;

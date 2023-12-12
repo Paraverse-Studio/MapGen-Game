@@ -30,6 +30,8 @@ public class DashAttackEffect : MobEffect
     {
         base.DeactivateEffect();
 
+        if (null != col) Destroy(col.gameObject);
+
         controller.OnStartDiveEvent -= EnableCollider;
         controller.OnEndDiveEvent -= DisableCollider;
     }

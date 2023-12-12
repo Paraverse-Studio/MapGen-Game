@@ -521,13 +521,33 @@ namespace Paraverse.Player
             vertical = 0f;
         }
 
-        public void ResetPlayer()
+        private void ResetAllCC()
+        {
+            _isInteracting = false;
+            _isSoftCced = false;
+            _isBasicAttacking = false;
+            _isDiving = false;
+            _isHardCced = false;
+            _isInvulnerable = false;
+            _isStaggered = false;
+            _isUsingSkill = false;
+            activeKnockBackEffect = null;
+        }
+
+        public void ResetPlayerRound()
         {
             controller.detectCollisions = true;
             _isDead = false;
             // also reset all _isInteracting, _knockedBack, etc. Basically all types of CC  ( @ PRAB )
+            ResetAllCC();
             //stats.ResetStats(); March 7, not needed, player shouldn't get a free heal between rounds
             anim.Play(StringData.Idle);
+        }
+
+        public void FactoryResetPlayerOnDeath()
+        {
+            combat.DeactivateEffects();
+            Debug.Log("Factory Reset");
         }
         #endregion
 
