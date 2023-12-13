@@ -439,7 +439,7 @@ namespace Paraverse.Player
 
         #region KnockBack Methods
         /// <summary>
-        /// Invokes knock back action
+        /// Applies knock back by passing the knockback effect
         /// </summary>
         public void ApplyKnockBack(Vector3 mobPos, KnockBackEffect effect)
         {
@@ -453,6 +453,9 @@ namespace Paraverse.Player
             anim.Play(StringData.Hit);
         }
 
+        /// <summary>
+        /// Handles knock back by applying force until either the target distance or duration condition is met.
+        /// </summary>
         private void KnockbackHandling()
         {
             if (null != activeKnockBackEffect)
@@ -471,6 +474,9 @@ namespace Paraverse.Player
             }
         }
 
+        /// <summary>
+        /// Plays hit animation
+        /// </summary>
         public void ApplyHitAnimation()
         {
             anim.Play(StringData.Hit);
@@ -497,7 +503,7 @@ namespace Paraverse.Player
 
         #region Death Handler Methods
         /// <summary>
-        /// Checks if player is dead.
+        /// Handles player death based on conditions (HP, _isDead boolean).
         /// </summary>
         private void DeathHandler()
         {
@@ -519,6 +525,8 @@ namespace Paraverse.Player
 
             horizontal = 0f;
             vertical = 0f;
+
+            FactoryResetPlayerOnDeath();
         }
 
         private void ResetAllCC()
@@ -534,6 +542,9 @@ namespace Paraverse.Player
             activeKnockBackEffect = null;
         }
 
+        /// <summary>
+        /// Prepares player for next round  
+        /// </summary>
         public void ResetPlayerRound()
         {
             controller.detectCollisions = true;
@@ -544,6 +555,9 @@ namespace Paraverse.Player
             anim.Play(StringData.Idle);
         }
 
+        /// <summary>
+        /// Resets player completely by removing effects or anyother attributes that may need to be reset
+        /// </summary>
         public void FactoryResetPlayerOnDeath()
         {
             combat.DeactivateEffects();
