@@ -33,9 +33,9 @@ public class AoeDamageEffect : MobEffect
     public override void DeactivateEffect()
     {
         base.DeactivateEffect();
-        //_col.gameObject.SetActive(false);
-        if (_col != null) Destroy(_col.gameObject);
-        if (_FX) Destroy(_FX.gameObject);
+
+        // Remove all instantiated colliders
+        if (_col) Destroy(_col.gameObject);
     }
 
     private void Update()
