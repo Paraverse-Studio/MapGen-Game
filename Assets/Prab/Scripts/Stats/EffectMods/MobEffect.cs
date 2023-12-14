@@ -7,6 +7,8 @@ using UnityEngine;
 
 public abstract class MobEffect : MonoBehaviour
 {
+    [SerializeField]
+    protected string EffectName = "Mob Effect";
     protected MobStats _stats;
     protected PlayerCombat _combat;
 
