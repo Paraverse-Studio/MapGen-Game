@@ -6,7 +6,7 @@ using UnityEngine;
 
 namespace Paraverse.Combat
 {
-    public class MobSkill : MonoBehaviour
+    public class MobSkill : MonoBehaviour, IMobSkill
     {
         #region Variables
         protected MobCombat mob;
