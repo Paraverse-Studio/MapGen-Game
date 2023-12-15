@@ -98,7 +98,8 @@ public class ChestObject : MonoBehaviour
     }
 
     public void OpenChest()
-    {
+    { 
+        Debug.Log("HUHHH 1111");
         // 1. Decide the loot        
 
         // The # of items you have to give to player
@@ -209,6 +210,7 @@ public class ChestObject : MonoBehaviour
 
         // 2. Open the rewards UI and display the loot
         ChestsManager.Instance.ItemDisplay.Display(rewards, DisposeChest);
+        Debug.Log("HUHHH 2222");
 
         _interactable.OnInteract.RemoveListener(OpenChest);
         _interactable.interactable = false;

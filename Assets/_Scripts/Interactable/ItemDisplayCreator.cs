@@ -47,6 +47,7 @@ public class ItemDisplayCreator : TimeChanger
         {
             gameObject.SetActive(false);
         }
+        Debug.Log("HUHHH 3333");
 
         if (null == _player) _player = GlobalSettings.Instance.player.GetComponent<MobStats>();
 
@@ -76,6 +77,8 @@ public class ItemDisplayCreator : TimeChanger
 
         _closeEvent = closeCallback;
         gameObject.SetActive(true);
+        Debug.Log("HUHHH 4444");
+
     }
 
     public void RefreshDisplay()

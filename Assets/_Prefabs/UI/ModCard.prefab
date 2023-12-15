@@ -1335,7 +1335,7 @@ GameObject:
   - component: {fileID: 7312399382396947300}
   - component: {fileID: 7585852551991497579}
   - component: {fileID: 7236202772367425868}
-  - component: {fileID: 8424781423604058491}
+  - component: {fileID: 4206302925948985657}
   m_Layer: 5
   m_Name: ModCard
   m_TagString: Untagged
@@ -1518,22 +1518,26 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   cardFrame: {fileID: 7443467735761174519}
   mouseZOffset: -500
---- !u!111 &8424781423604058491
-Animation:
+--- !u!95 &4206302925948985657
+Animator:
+  serializedVersion: 4
   m_ObjectHideFlags: 0
   m_CorrespondingSourceObject: {fileID: 0}
   m_PrefabInstance: {fileID: 0}
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 554693470919088074}
   m_Enabled: 1
-  serializedVersion: 3
-  m_Animation: {fileID: 7400000, guid: b734e6deba9342e40abc2750b47f49c5, type: 2}
-  m_Animations:
-  - {fileID: 7400000, guid: b734e6deba9342e40abc2750b47f49c5, type: 2}
-  m_WrapMode: 0
-  m_PlayAutomatically: 1
-  m_AnimatePhysics: 0
-  m_CullingType: 0
+  m_Avatar: {fileID: 0}
+  m_Controller: {fileID: 9100000, guid: 83664f46095bac04582a6d5f8c2195c8, type: 2}
+  m_CullingMode: 0
+  m_UpdateMode: 2
+  m_ApplyRootMotion: 0
+  m_LinearVelocityBlending: 0
+  m_StabilizeFeet: 0
+  m_WarningMessage: 
+  m_HasTransformHierarchy: 1
+  m_AllowConstantClipSamplingOptimization: 1
+  m_KeepAnimatorControllerStateOnDisable: 0
 --- !u!1 &554693471074562061
 GameObject:
   m_ObjectHideFlags: 0
@@ -2356,7 +2360,7 @@ RectTransform:
   m_AnchorMin: {x: 0.5, y: 0.5}
   m_AnchorMax: {x: 0.5, y: 0.5}
   m_AnchoredPosition: {x: 0, y: 0}
-  m_SizeDelta: {x: 700, y: 700}
+  m_SizeDelta: {x: 300, y: 700}
   m_Pivot: {x: 0.5, y: 0.5}
 --- !u!222 &8190784841124655773
 CanvasRenderer:
@@ -2388,7 +2392,7 @@ MonoBehaviour:
       m_Calls: []
   m_Sprite: {fileID: 21300000, guid: 5f9e3d7105baa274e84c29014195b04e, type: 3}
   m_Type: 0
-  m_PreserveAspect: 0
+  m_PreserveAspect: 1
   m_FillCenter: 1
   m_FillMethod: 4
   m_FillAmount: 1
