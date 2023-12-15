@@ -13205,7 +13205,7 @@ PrefabInstance:
       objectReference: {fileID: 0}
     - target: {fileID: 7311448671115723015, guid: b0089e7a57060c94592e590afc510844, type: 3}
       propertyPath: m_AnchoredPosition.y
-      value: -20.000153
+      value: -20.000122
       objectReference: {fileID: 0}
     - target: {fileID: 7311448671347971881, guid: b0089e7a57060c94592e590afc510844, type: 3}
       propertyPath: m_AnchorMax.y
@@ -13641,7 +13641,7 @@ PrefabInstance:
       objectReference: {fileID: 0}
     - target: {fileID: 7311448672384992556, guid: b0089e7a57060c94592e590afc510844, type: 3}
       propertyPath: m_AnchoredPosition.x
-      value: -35.00006
+      value: -35
       objectReference: {fileID: 0}
     - target: {fileID: 7311448672392100026, guid: b0089e7a57060c94592e590afc510844, type: 3}
       propertyPath: m_AnchorMax.y
@@ -13733,7 +13733,7 @@ PrefabInstance:
       objectReference: {fileID: 0}
     - target: {fileID: 7311448672604579429, guid: b0089e7a57060c94592e590afc510844, type: 3}
       propertyPath: m_AnchoredPosition.x
-      value: -50.00128
+      value: -50.00122
       objectReference: {fileID: 0}
     m_RemovedComponents: []
   m_SourcePrefab: {fileID: 100100000, guid: b0089e7a57060c94592e590afc510844, type: 3}
@@ -14061,14 +14061,22 @@ PrefabInstance:
       objectReference: {fileID: 1366090563}
     - target: {fileID: 2956618024134931112, guid: aa4e16a1786ed124fa06618210886566, type: 3}
       propertyPath: effects.Array.size
-      value: 1
+      value: 4
       objectReference: {fileID: 0}
     - target: {fileID: 2956618024134931112, guid: aa4e16a1786ed124fa06618210886566, type: 3}
       propertyPath: effects.Array.data[0]
       value: 
-      objectReference: {fileID: 1366090572}
+      objectReference: {fileID: 1366090584}
     - target: {fileID: 2956618024134931112, guid: aa4e16a1786ed124fa06618210886566, type: 3}
       propertyPath: effects.Array.data[1]
+      value: 
+      objectReference: {fileID: 1366090585}
+    - target: {fileID: 2956618024134931112, guid: aa4e16a1786ed124fa06618210886566, type: 3}
+      propertyPath: effects.Array.data[2]
+      value: 
+      objectReference: {fileID: 1366090554}
+    - target: {fileID: 2956618024134931112, guid: aa4e16a1786ed124fa06618210886566, type: 3}
+      propertyPath: effects.Array.data[3]
       value: 
       objectReference: {fileID: 1366090573}
     - target: {fileID: 2956618024134931112, guid: aa4e16a1786ed124fa06618210886566, type: 3}
@@ -14151,15 +14159,17 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 160fb074773bd2b40b3698abfe12f12d, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  EffectName: Sunfire
   targetTag: Enemy
   _ID: -1
-  attackPerUnitOfTime: 1
-  _empoweredScaling:
+  _scaling:
     flatPower: 0
     attackScaling: 1
     abilityScaling: 0
     healthScaling: 0
+  effectFX: {fileID: 0}
   hitFX: {fileID: 0}
+  attackPerUnitOfTime: 1
   _col: {fileID: 0}
   _effectRadius: 3
 --- !u!114 &1366090563
@@ -14200,28 +14210,6 @@ MonoBehaviour:
     attackScaling: 1
     abilityScaling: 0
     healthScaling: 0
---- !u!114 &1366090572
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 1366090533}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 7a7d1c6b22016784cb0ce8852705cf8c, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: 
-  targetTag: Enemy
-  _ID: -1
-  attackPerUnitOfTime: 1
-  _empoweredScaling:
-    flatPower: 0
-    attackScaling: 1
-    abilityScaling: 0
-    healthScaling: 0
-  hitFX: {fileID: 0}
-  hitRadius: 1
 --- !u!114 &1366090573
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -14234,16 +14222,63 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 6679c24e2c1f1ae4ca5d233e87d9ae23, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  EffectName: Reaper
   targetTag: Enemy
   _ID: -1
-  attackPerUnitOfTime: 1
-  _empoweredScaling:
+  _scaling:
+    flatPower: 2
+    attackScaling: 1
+    abilityScaling: 0
+    healthScaling: 0
+  effectFX: {fileID: 0}
+  hitFX: {fileID: 0}
+  healAmount: 20
+--- !u!114 &1366090584
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1366090533}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: ddf38f08fd8f57141a0669a6a8db21da, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  EffectName: Empowered Attack
+  targetTag: Enemy
+  _ID: -1
+  _scaling:
     flatPower: 0
     attackScaling: 1
     abilityScaling: 0
     healthScaling: 0
+  effectFX: {fileID: 0}
   hitFX: {fileID: 0}
-  healAmount: 20
+  _empoweredHitIndex: 3
+--- !u!114 &1366090585
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1366090533}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 7a7d1c6b22016784cb0ce8852705cf8c, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  EffectName: Dash Attack
+  targetTag: Enemy
+  _ID: -1
+  _scaling:
+    flatPower: 0
+    attackScaling: 1
+    abilityScaling: 0
+    healthScaling: 0
+  effectFX: {fileID: 0}
+  hitFX: {fileID: 0}
+  hitRadius: 2
 --- !u!1 &1375431600
 GameObject:
   m_ObjectHideFlags: 0
@@ -23185,6 +23220,18 @@ PrefabInstance:
       propertyPath: atkDashForce
       value: 20
       objectReference: {fileID: 0}
+    - target: {fileID: 70889177420668490, guid: b5bb5caa027eab745a624ea74bd7373d, type: 3}
+      propertyPath: maxHealth
+      value: 10000
+      objectReference: {fileID: 0}
+    - target: {fileID: 70889177420668490, guid: b5bb5caa027eab745a624ea74bd7373d, type: 3}
+      propertyPath: _curHealth
+      value: 10000
+      objectReference: {fileID: 0}
+    - target: {fileID: 70889177420668490, guid: b5bb5caa027eab745a624ea74bd7373d, type: 3}
+      propertyPath: unkillable
+      value: 0
+      objectReference: {fileID: 0}
     - target: {fileID: 381769008500357369, guid: b5bb5caa027eab745a624ea74bd7373d, type: 3}
       propertyPath: m_RootOrder
       value: 21
@@ -23235,7 +23282,7 @@ PrefabInstance:
       objectReference: {fileID: 0}
     - target: {fileID: 381769008500357370, guid: b5bb5caa027eab745a624ea74bd7373d, type: 3}
       propertyPath: m_IsActive
-      value: 0
+      value: 1
       objectReference: {fileID: 0}
     - target: {fileID: 5699475108057975578, guid: b5bb5caa027eab745a624ea74bd7373d, type: 3}
       propertyPath: _maxRange

@@ -1,7 +1,5 @@
 using Paraverse.Combat;
 using Paraverse.Helper;
-using System.Collections;
-using System.Collections.Generic;
 using UnityEngine;
 
 public class TeleportSkill : MobSkill, IMobSkill
@@ -15,6 +13,17 @@ public class TeleportSkill : MobSkill, IMobSkill
 
     private bool performing = false;
     #endregion
+
+
+    // Check if target exists
+    protected override bool CanUseSkill()
+    {
+        if (IsOffCooldown && HasEnergy && TargetWithinRange && mob.IsAttackLunging == false && IsBasicAttack == false 
+            && null != mob.Target && UtilityFunctions.IsDistanceLessThan(mob.transform.position, mob.Target.position, rangeLimit))
+            return true;
+
+        return false;
+    }
 
     public override void SkillUpdate()
     {
@@ -30,30 +39,27 @@ public class TeleportSkill : MobSkill, IMobSkill
     protected override void ExecuteSkillLogic()
     {
         performing = true;
-        
+
         base.ExecuteSkillLogic();
 
         // teleport
         if (null == mob.Target) return;
 
-        if (UtilityFunctions.IsDistanceLessThan(mob.transform.position, mob.Target.position, rangeLimit))
+        anim.SetBool(StringData.IsInteracting, true);
+        Vector3 oldPosition = mob.gameObject.transform.position;
+        Vector3 position = ((mob.Target.position - mob.transform.position).normalized * 1.2f) + mob.Target.position;
+        var block = MapGeneration.Instance.GetClosestValidGroundBlock(position);
+
+        ResetCollider();
+        UtilityFunctions.TeleportObject(mob.gameObject, block.transform.position + new Vector3(0, 0.4f, 0));
+
+        if (FX)
         {
-            anim.SetBool(StringData.IsInteracting, true);
-            Vector3 oldPosition = mob.gameObject.transform.position;
-            Vector3 position = ((mob.Target.position - mob.transform.position).normalized * 1.2f) + mob.Target.position;
-            var block = MapGeneration.Instance.GetClosestValidGroundBlock(position);
-
-            ResetCollider();
-            UtilityFunctions.TeleportObject(mob.gameObject, block.transform.position + new Vector3(0, 0.4f, 0));
-            
-            if (FX)
-            {
-                Instantiate(FX, oldPosition, Quaternion.identity);
-                Instantiate(FX, block.transform.position, Quaternion.identity);
-            }
-
-            DisableSkill();            
+            Instantiate(FX, oldPosition, Quaternion.identity);
+            Instantiate(FX, block.transform.position, Quaternion.identity);
         }
+
+        DisableSkill();
 
         StartCoroutine(UtilityFunctions.IDelayedAction(0.2f, () =>
         {

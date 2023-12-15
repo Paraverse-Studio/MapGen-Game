@@ -5,7 +5,7 @@ using UnityEngine;
 public class DashAttackEffect : MobEffect
 {
     private PlayerController controller;
-    private SphereCollider col;
+    private SphereCollider _col;
     [SerializeField]
     private float hitRadius = 2f;
 
@@ -17,10 +17,11 @@ public class DashAttackEffect : MobEffect
         _combat = _stats.GetComponent<PlayerCombat>();
         isActive = true;
 
-        if (null == col) col = gameObject.AddComponent<SphereCollider>();
-        col.radius = hitRadius;
-        col.isTrigger = true;
-        col.enabled = false;
+        if (null == _col) _col = gameObject.AddComponent<SphereCollider>();
+        _col.center += Vector3.up;
+        _col.radius = hitRadius;
+        _col.isTrigger = true;
+        _col.enabled = false;
 
         controller.OnStartDiveEvent += EnableCollider;
         controller.OnEndDiveEvent += DisableCollider;
@@ -30,7 +31,8 @@ public class DashAttackEffect : MobEffect
     {
         base.DeactivateEffect();
 
-        if (null != col) Destroy(col.gameObject);
+        // Remove all instantiated colliders
+        if (_col) Destroy(_col.gameObject);
 
         controller.OnStartDiveEvent -= EnableCollider;
         controller.OnEndDiveEvent -= DisableCollider;
@@ -46,11 +48,11 @@ public class DashAttackEffect : MobEffect
 
     private void EnableCollider()
     {
-        col.enabled = true;
+        _col.enabled = true;
     }
 
     private void DisableCollider()
     {
-        col.enabled = false;
+        _col.enabled = false;
     }
 }

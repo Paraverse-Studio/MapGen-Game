@@ -7,6 +7,8 @@ using UnityEngine;
 
 public abstract class MobEffect : MonoBehaviour
 {
+    [SerializeField]
+    protected string EffectName = "Mob Effect";
     protected MobStats _stats;
     protected PlayerCombat _combat;
 
@@ -40,6 +42,9 @@ public abstract class MobEffect : MonoBehaviour
     public virtual void DeactivateEffect()
     {
         isActive = false;
+
+        // Destroys instantiated FX
+        if (_FX) Destroy(_FX.gameObject);
     }
 
 

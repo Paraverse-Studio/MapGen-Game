@@ -133,6 +133,7 @@ namespace Paraverse.Player
 
         protected override void Update()
         {
+            //TEST_METHOD();
             if (controller.IsDead) return;
 
             distanceFromTarget = ParaverseHelper.GetDistance(transform.position, player.position);
@@ -151,6 +152,14 @@ namespace Paraverse.Player
             {
                 skills[i].SkillUpdate();
                 SkillUIHandler();
+            }
+        }
+
+        private void TEST_METHOD()
+        {
+            if (Input.GetKeyDown(KeyCode.P))
+            {
+                DeactivateEffects();
             }
         }
         #endregion
