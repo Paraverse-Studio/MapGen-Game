@@ -68,7 +68,7 @@ public class SO_EffectMod : SO_Mod
         if (_effect.scalingStatData.healthScaling != 0)
         {
             if (!string.IsNullOrWhiteSpace(msg)) msg += " + ";
-            msg += $"<color=#64F56A>({_effect.scalingStatData.abilityScaling * 100f}% of Health)</color>";
+            msg += $"<color=#86F383>({_effect.scalingStatData.healthScaling * 100f}% of Health)</color>";
         }
         msg = "<b>" + msg + "</b>";
         return msg;

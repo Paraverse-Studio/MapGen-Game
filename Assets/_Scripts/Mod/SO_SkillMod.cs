@@ -66,7 +66,7 @@ public class SO_SkillMod : SO_Mod
         if (_skill.scalingStatData.healthScaling != 0)
         {
             if (!string.IsNullOrWhiteSpace(msg)) msg += " + ";
-            msg += $"<color=#64F56A>({_skill.scalingStatData.abilityScaling * 100f}% of Health)</color>";
+            msg += $"<color=#86F383>({_skill.scalingStatData.healthScaling * 100f}% of Health)</color>";
         }
         msg = "<b>" + msg + "</b>";
         return msg;
