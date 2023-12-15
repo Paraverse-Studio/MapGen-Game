@@ -4,7 +4,7 @@ using UnityEngine;
 using UnityEngine.Events;
 using UnityEngine.SceneManagement;
 
-public class PauseMenu : MonoBehaviour
+public class PauseMenu : TimeChanger
 {
     [System.Serializable]
     public struct Events
@@ -87,7 +87,7 @@ public class PauseMenu : MonoBehaviour
         if (!o) events.OffPause?.Invoke();
         events.OnPauseBool?.Invoke(o);
 
-        Time.timeScale = _isPaused? 0f : 1f;
+        TimeManager.Instance.RequestTimeChange(this, _isPaused ? 0f : 1f);
     }
 
     public void QuitToMainMenu()

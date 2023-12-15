@@ -201,6 +201,7 @@ public class ChestObject : MonoBehaviour
                 }
                 else
                 {
+                    // part of the loot table magic, by removing this item's chance, we can decide on a random item faster 
                     randomNumber -= thisChest.lootTable[i].chance;
                 }
             }       

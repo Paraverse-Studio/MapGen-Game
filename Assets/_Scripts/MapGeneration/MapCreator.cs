@@ -37,7 +37,8 @@ public class MapCreator : MonoBehaviour
     public Vector2 rewardMapGapLimit;
 
     [Header("Enemies")]
-    public float enemyScalingPerRound;
+    public float enemyDamageScalingPerRound;
+    public float enemyHealthScalingPerRound;
 
     [Header("UI References")]
     public TextMeshProUGUI objectiveTitle;
