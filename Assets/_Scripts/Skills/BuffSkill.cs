@@ -25,6 +25,9 @@ public class BuffSkill : MobSkill, IMobSkill
 
         [HideInInspector] // runtime
         public StatModifier buff;
+
+        [HideInInspector] // runtime
+        public bool isPercentageBuff = false;
     }
 
     #region variables
@@ -39,7 +42,6 @@ public class BuffSkill : MobSkill, IMobSkill
     private float _buffDurationElapsed = 0f;
     private Transform _userWeapon = null;
     private GameObject _VFX = null;
-    private bool _buffIsAPercentage = false;
     #endregion
 
     public override void SkillUpdate()
@@ -52,7 +54,7 @@ public class BuffSkill : MobSkill, IMobSkill
             if (null != buff.buff)
             {                
                 buff.buff.Value = buff.scalingValue.FinalValue(stats);
-                if (_buffIsAPercentage)
+                if (buff.isPercentageBuff)
                 {
                     buff.buff.Value /= 100.0f;
                 }
@@ -184,17 +186,17 @@ public class BuffSkill : MobSkill, IMobSkill
                     stats.MoveSpeed.AddMod(buff.buff);
                     break;
                 case BoostType.attackDamageBoost:
-                    _buffIsAPercentage = true;
+                    buff.isPercentageBuff = true;
                     buff.buff.Value = (buff.buff.Value / 100.0f);
                     stats.MobBoosts.AttackDamageBoost.AddMod(buff.buff);
                     break;
                 case BoostType.abilityPowerBoost:
-                    _buffIsAPercentage = true;
+                    buff.isPercentageBuff = true;
                     buff.buff.Value = (buff.buff.Value / 100.0f);
                     stats.MobBoosts.AbilityPowerBoost.AddMod(buff.buff);
                     break;
                 case BoostType.overallDamageBoost:
-                    _buffIsAPercentage = true;
+                    buff.isPercentageBuff = true;
                     buff.buff.Value = (buff.buff.Value / 100.0f);
                     stats.MobBoosts.OverallDamageBoost.AddMod(buff.buff);
                     break;
