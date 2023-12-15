@@ -383,7 +383,7 @@ namespace Paraverse.Player
         /// </summary>
         private void Dive()
         {
-            if (_isStaggered || _isDiving || combat.IsAttackLunging || _isMoving == false) return;
+            if (_isStaggered || _isDiving || combat.IsAttackLunging) return;
 
             if (_isGrounded && curDiveCd >= diveCd)
             {
@@ -393,7 +393,16 @@ namespace Paraverse.Player
                 curDiveDuration = 0f;
                 diveStartPos = transform.position;
                 controller.detectCollisions = false;
-                diveDir = new Vector3(goalDir.x, 0f, goalDir.z);
+
+                // Allows player to dash when stand still
+                if (_isMoving == false)
+                {
+                    diveDir = new Vector3(transform.forward.x, 0f, transform.forward.z);
+                }
+                else
+                {
+                    diveDir = new Vector3(goalDir.x, 0f, goalDir.z);
+                }
                 anim.Play(StringData.Dive);
                 OnStartDiveEvent?.Invoke();
             }
