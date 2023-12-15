@@ -20,8 +20,7 @@ public abstract class MobEffect : MonoBehaviour
 
     protected List<GameObject> hitTargets = new List<GameObject>();
 
-    [SerializeField]
-    protected ScalingStatData _scaling;
+    public ScalingStatData scalingStatData;
 
     [SerializeField]
     protected GameObject effectFX;
@@ -54,7 +53,7 @@ public abstract class MobEffect : MonoBehaviour
     public virtual float ApplyCustomDamage(IMobController controller)
     {
         float totalDmg =
-            _scaling.FinalValueWithBoosts(_stats);
+            scalingStatData.FinalValueWithBoosts(_stats);
 
         controller.Stats.UpdateCurrentHealth(-Mathf.CeilToInt(totalDmg));
         return totalDmg;

@@ -86,9 +86,9 @@ public class ChestObject : MonoBehaviour
         chestObject.name = chestTiers[tier].chestName;
 
         // Add Selectable for making this object display an outline and its name
-        _selectable = chestObject.AddComponent<Selectable>();
-        _selectable.priority = Selectable.SelectablePriority.whenIsolated;
-        _selectable.type = Selectable.SelectableType.informational;
+        //_selectable = chestObject.AddComponent<Selectable>();
+        //_selectable.priority = Selectable.SelectablePriority.whenIsolated;
+        //_selectable.type = Selectable.SelectableType.informational;
 
         // Add an Interactable for making this object be interacted with user's Interact press and from a distance
         _interactable = chestObject.AddComponent<Interactable>();
@@ -99,7 +99,6 @@ public class ChestObject : MonoBehaviour
 
     public void OpenChest()
     { 
-        Debug.Log("HUHHH 1111");
         // 1. Decide the loot        
 
         // The # of items you have to give to player
@@ -210,7 +209,6 @@ public class ChestObject : MonoBehaviour
 
         // 2. Open the rewards UI and display the loot
         ChestsManager.Instance.ItemDisplay.Display(rewards, DisposeChest);
-        Debug.Log("HUHHH 2222");
 
         _interactable.OnInteract.RemoveListener(OpenChest);
         _interactable.interactable = false;

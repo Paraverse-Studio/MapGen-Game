@@ -56,12 +56,17 @@ public class SO_SkillMod : SO_Mod
         if (_skill.scalingStatData.attackScaling != 0)
         {
             if (!string.IsNullOrWhiteSpace(msg)) msg += " + ";
-            msg += $"<color=#FF977B>({_skill.scalingStatData.attackScaling * 100f}% Attack)</color>";
+            msg += $"<color=#FF977B>({_skill.scalingStatData.attackScaling * 100f}% of Attack)</color>";
         }
         if (_skill.scalingStatData.abilityScaling != 0)
         {
             if (!string.IsNullOrWhiteSpace(msg)) msg += " + ";
-            msg += $"<color=#83C5FF>({_skill.scalingStatData.abilityScaling * 100f}% Ability)</color>";
+            msg += $"<color=#83C5FF>({_skill.scalingStatData.abilityScaling * 100f}% of Ability)</color>";
+        }
+        if (_skill.scalingStatData.healthScaling != 0)
+        {
+            if (!string.IsNullOrWhiteSpace(msg)) msg += " + ";
+            msg += $"<color=#64F56A>({_skill.scalingStatData.abilityScaling * 100f}% of Health)</color>";
         }
         msg = "<b>" + msg + "</b>";
         return msg;
