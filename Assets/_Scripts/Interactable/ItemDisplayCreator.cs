@@ -36,13 +36,17 @@ public class ItemDisplayCreator : MonoBehaviour
     private void OnEnable()
     {
         _player = GlobalSettings.Instance.player.GetComponent<MobStats>();
+        Time.timeScale = 0f;
     }
 
     public void Display(List<SO_Item> items, System.Action closeCallback = null)
     {
         // if this screen is already open (a chest loot is being shown),
         // force the older instance to close, and provide the loot, and then show this one
-        if (gameObject.activeSelf) gameObject.SetActive(false);
+        if (gameObject.activeSelf)
+        {
+            gameObject.SetActive(false);
+        }
 
         if (null == _player) _player = GlobalSettings.Instance.player.GetComponent<MobStats>();
 
@@ -101,6 +105,7 @@ public class ItemDisplayCreator : MonoBehaviour
             card.UpdateDisplay();
             _createdObjects.Add(card);
         }
+
         gameObject.SetActive(true);
     }
 
@@ -132,6 +137,7 @@ public class ItemDisplayCreator : MonoBehaviour
 
     public void OnDisable()
     {
+        Time.timeScale = 1f;
         _closeEvent?.Invoke();
     }
 
