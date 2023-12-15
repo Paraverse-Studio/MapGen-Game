@@ -62,6 +62,21 @@ public class MapCreator : MonoBehaviour
     private int biomeIndex = 0;
     private bool biomeChangePending = false;
 
+    public void ResetMapCreator()
+    {
+        EnemiesSpawned = 0;
+        roundsSinceLastBossMap = 0;
+        roundsSincelastRewardMap = 0;
+        biomeIndex = 0;
+        biomeChangePending = false;
+    }
+
+    private void ResetRuntimeVariables() // between rounds
+    {
+        EnemiesSpawned = 0;
+        mapType = MapType.normal;
+    }
+
     private void Awake()
     {
         Instance = this;
@@ -139,20 +154,6 @@ public class MapCreator : MonoBehaviour
                 roundsSincelastRewardMap = 0;
                 break;
         }
-    }
-
-    public void ResetVariables() // after restarting the game
-    {
-        EnemiesSpawned = 0;
-        mapType = MapType.normal;
-        roundsSinceLastBossMap = 0;
-        roundsSincelastRewardMap = 0;
-    }
-
-    private void ResetRuntimeVariables() // between rounds
-    {
-        EnemiesSpawned = 0;
-        mapType = MapType.normal;
     }
 
     public void UpdateObjectiveText()
