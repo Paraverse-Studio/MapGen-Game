@@ -38,7 +38,7 @@ RenderSettings:
   m_ReflectionIntensity: 1
   m_CustomReflection: {fileID: 0}
   m_Sun: {fileID: 0}
-  m_IndirectSpecularColor: {r: 0.15900815, g: 0.51751715, b: 1.0386043, a: 1}
+  m_IndirectSpecularColor: {r: 0.1605202, g: 0.5180438, b: 1.0452659, a: 1}
   m_UseRadianceAmbientProbe: 0
 --- !u!157 &3
 LightmapSettings:
@@ -450,6 +450,17 @@ PrefabInstance:
       objectReference: {fileID: 0}
     m_RemovedComponents: []
   m_SourcePrefab: {fileID: 100100000, guid: 7adff7c8b54a4e542894c6ae079fe129, type: 3}
+--- !u!114 &311865010 stripped
+MonoBehaviour:
+  m_CorrespondingSourceObject: {fileID: 7311448670877514595, guid: b0089e7a57060c94592e590afc510844, type: 3}
+  m_PrefabInstance: {fileID: 1198782774}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: fe87c0e1cc204ed48ad3b37840f39efc, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
 --- !u!1 &357725736
 GameObject:
   m_ObjectHideFlags: 0
@@ -1086,6 +1097,17 @@ PrefabInstance:
       objectReference: {fileID: 0}
     m_RemovedComponents: []
   m_SourcePrefab: {fileID: 100100000, guid: e8af1b021cbbfcc4c99ab98996847b6e, type: 3}
+--- !u!114 &845644088 stripped
+MonoBehaviour:
+  m_CorrespondingSourceObject: {fileID: 7311448672543741889, guid: b0089e7a57060c94592e590afc510844, type: 3}
+  m_PrefabInstance: {fileID: 1198782774}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: f4688fdb7df04437aeb418b961361dc5, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
 --- !u!1 &982273548
 GameObject:
   m_ObjectHideFlags: 0
@@ -2171,6 +2193,22 @@ PrefabInstance:
       value: -60
       objectReference: {fileID: 0}
     - target: {fileID: 2956618024134931112, guid: aa4e16a1786ed124fa06618210886566, type: 3}
+      propertyPath: _refresher
+      value: 
+      objectReference: {fileID: 1887297444}
+    - target: {fileID: 2956618024134931112, guid: aa4e16a1786ed124fa06618210886566, type: 3}
+      propertyPath: _skillIcon
+      value: 
+      objectReference: {fileID: 311865010}
+    - target: {fileID: 2956618024134931112, guid: aa4e16a1786ed124fa06618210886566, type: 3}
+      propertyPath: _skillLabel
+      value: 
+      objectReference: {fileID: 845644088}
+    - target: {fileID: 2956618024134931112, guid: aa4e16a1786ed124fa06618210886566, type: 3}
+      propertyPath: _activeSkill
+      value: 
+      objectReference: {fileID: 1930888976}
+    - target: {fileID: 2956618024134931112, guid: aa4e16a1786ed124fa06618210886566, type: 3}
       propertyPath: basicAttackSkill
       value: 
       objectReference: {fileID: 1366090563}
@@ -2185,11 +2223,11 @@ PrefabInstance:
     - target: {fileID: 2956618024134931112, guid: aa4e16a1786ed124fa06618210886566, type: 3}
       propertyPath: skills.Array.data[0]
       value: 
-      objectReference: {fileID: 444436178833814125, guid: 162dfd6b4c12af94c815b0a778dc9c6d, type: 3}
+      objectReference: {fileID: 1930888976}
     - target: {fileID: 2956618024134931112, guid: aa4e16a1786ed124fa06618210886566, type: 3}
       propertyPath: effects.Array.data[0]
       value: 
-      objectReference: {fileID: 1366090572}
+      objectReference: {fileID: 1366090574}
     - target: {fileID: 2956618024134931112, guid: aa4e16a1786ed124fa06618210886566, type: 3}
       propertyPath: effects.Array.data[1]
       value: 
@@ -2274,6 +2312,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 160fb074773bd2b40b3698abfe12f12d, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  EffectName: Mob Effect
   targetTag: Enemy
   _ID: -1
   _scaling:
@@ -2336,6 +2375,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 7a7d1c6b22016784cb0ce8852705cf8c, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  EffectName: Mob Effect
   targetTag: Enemy
   _ID: -1
   _scaling:
@@ -2358,6 +2398,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 6679c24e2c1f1ae4ca5d233e87d9ae23, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  EffectName: Mob Effect
   targetTag: Enemy
   _ID: -1
   _scaling:
@@ -2368,6 +2409,28 @@ MonoBehaviour:
   effectFX: {fileID: 0}
   hitFX: {fileID: 0}
   healAmount: 20
+--- !u!114 &1366090574
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1366090533}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: ef6a621f986f1e540bb68f09741ea850, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  EffectName: Mob Effect
+  targetTag: Enemy
+  _ID: -1
+  _scaling:
+    flatPower: 0
+    attackScaling: 0.8
+    abilityScaling: 0
+    healthScaling: 0
+  effectFX: {fileID: 0}
+  hitFX: {fileID: 0}
 --- !u!1 &1375431600
 GameObject:
   m_ObjectHideFlags: 0
@@ -2483,6 +2546,68 @@ MonoBehaviour:
   m_ShadowLayerMask: 1
   m_LightCookieSize: {x: 1, y: 1}
   m_LightCookieOffset: {x: 0, y: 0}
+--- !u!1001 &1603811344
+PrefabInstance:
+  m_ObjectHideFlags: 0
+  serializedVersion: 2
+  m_Modification:
+    m_TransformParent: {fileID: 1854425073}
+    m_Modifications:
+    - target: {fileID: 9115092598388828369, guid: 364b470066912ef4d9f29a7509bd75bf, type: 3}
+      propertyPath: m_RootOrder
+      value: 2
+      objectReference: {fileID: 0}
+    - target: {fileID: 9115092598388828369, guid: 364b470066912ef4d9f29a7509bd75bf, type: 3}
+      propertyPath: m_LocalPosition.x
+      value: 252.90294
+      objectReference: {fileID: 0}
+    - target: {fileID: 9115092598388828369, guid: 364b470066912ef4d9f29a7509bd75bf, type: 3}
+      propertyPath: m_LocalPosition.y
+      value: 5.201936
+      objectReference: {fileID: 0}
+    - target: {fileID: 9115092598388828369, guid: 364b470066912ef4d9f29a7509bd75bf, type: 3}
+      propertyPath: m_LocalPosition.z
+      value: 253.8114
+      objectReference: {fileID: 0}
+    - target: {fileID: 9115092598388828369, guid: 364b470066912ef4d9f29a7509bd75bf, type: 3}
+      propertyPath: m_LocalRotation.w
+      value: 1
+      objectReference: {fileID: 0}
+    - target: {fileID: 9115092598388828369, guid: 364b470066912ef4d9f29a7509bd75bf, type: 3}
+      propertyPath: m_LocalRotation.x
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 9115092598388828369, guid: 364b470066912ef4d9f29a7509bd75bf, type: 3}
+      propertyPath: m_LocalRotation.y
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 9115092598388828369, guid: 364b470066912ef4d9f29a7509bd75bf, type: 3}
+      propertyPath: m_LocalRotation.z
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 9115092598388828369, guid: 364b470066912ef4d9f29a7509bd75bf, type: 3}
+      propertyPath: m_LocalEulerAnglesHint.x
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 9115092598388828369, guid: 364b470066912ef4d9f29a7509bd75bf, type: 3}
+      propertyPath: m_LocalEulerAnglesHint.y
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 9115092598388828369, guid: 364b470066912ef4d9f29a7509bd75bf, type: 3}
+      propertyPath: m_LocalEulerAnglesHint.z
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 9115092598388828375, guid: 364b470066912ef4d9f29a7509bd75bf, type: 3}
+      propertyPath: m_Name
+      value: RegalCrescent
+      objectReference: {fileID: 0}
+    m_RemovedComponents: []
+  m_SourcePrefab: {fileID: 100100000, guid: 364b470066912ef4d9f29a7509bd75bf, type: 3}
+--- !u!4 &1854425073 stripped
+Transform:
+  m_CorrespondingSourceObject: {fileID: 4241460780824340472, guid: aa4e16a1786ed124fa06618210886566, type: 3}
+  m_PrefabInstance: {fileID: 1366090532}
+  m_PrefabAsset: {fileID: 0}
 --- !u!1 &1859832276
 GameObject:
   m_ObjectHideFlags: 0
@@ -2580,6 +2705,28 @@ Transform:
   m_Father: {fileID: 1104816973}
   m_RootOrder: 5
   m_LocalEulerAnglesHint: {x: 0, y: 105, z: 0}
+--- !u!114 &1887297444 stripped
+MonoBehaviour:
+  m_CorrespondingSourceObject: {fileID: 7311448671574216987, guid: b0089e7a57060c94592e590afc510844, type: 3}
+  m_PrefabInstance: {fileID: 1198782774}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 12c8daf475342fd46907f539cf913f39, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+--- !u!114 &1930888976 stripped
+MonoBehaviour:
+  m_CorrespondingSourceObject: {fileID: 9115092598388828374, guid: 364b470066912ef4d9f29a7509bd75bf, type: 3}
+  m_PrefabInstance: {fileID: 1603811344}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: a49d912e0b019f14b99bdde319029bdd, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
 --- !u!1 &1968649517
 GameObject:
   m_ObjectHideFlags: 0
@@ -3509,8 +3656,16 @@ PrefabInstance:
       value: 1.3
       objectReference: {fileID: 0}
     - target: {fileID: 2657095164308100576, guid: bb48c0a6c7c30e44fb01328c0709dc77, type: 3}
+      propertyPath: maxHealth
+      value: 50000000
+      objectReference: {fileID: 0}
+    - target: {fileID: 2657095164308100576, guid: bb48c0a6c7c30e44fb01328c0709dc77, type: 3}
       propertyPath: attackSpeed
       value: 1
+      objectReference: {fileID: 0}
+    - target: {fileID: 2657095164308100581, guid: bb48c0a6c7c30e44fb01328c0709dc77, type: 3}
+      propertyPath: skills.Array.size
+      value: 0
       objectReference: {fileID: 0}
     - target: {fileID: 2657095164308100604, guid: bb48c0a6c7c30e44fb01328c0709dc77, type: 3}
       propertyPath: atkDashForce

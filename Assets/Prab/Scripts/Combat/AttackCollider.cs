@@ -6,63 +6,25 @@ using UnityEngine;
 
 namespace Paraverse
 {
-    public class AttackCollider : MonoBehaviour
+    public class AttackCollider : Damage, IDamage
     {
-        private MobCombat mob;
-        private IMobStats stats;
-        [SerializeField, Tooltip("Enter the tag of target.")]
-        private string targetTag = "Player";
         private List<GameObject> hitTargets = new List<GameObject>();
 
-        [SerializeField, Tooltip("Set turn for damage over time.")]
-        private bool dot = false;
-        [SerializeField, Tooltip("Apply damage upon enter.")]
-        protected bool dontApplyDamageOnEnter = false;
-        private float timer = 0f;
         private bool applyHit = false;
-        private float attackPerUnitOfTime = 1f;
 
-        [Header("Knockback Effect")]
-        [SerializeField]
-        private KnockBackEffect knockBackEffect;
-
-        [Header("VFX")]
-        //public GameObject launchFX;
-        public GameObject hitFX;
-
-        [SerializeField]
-        protected bool isBasicAttackCollider = false;
-
-
-        // Basic Attack Events Pre/During/Post
-        public delegate void OnBasicAttackLandPreDmgDel();
-        public event OnBasicAttackLandPreDmgDel OnBasicAttackPreHitEvent;
-        public delegate void OnBasicAttackApplyDamageDel(float dmg);
-        public event OnBasicAttackApplyDamageDel OnBasicAttackApplyDamageEvent;
-        public delegate void OnBasicAttackLandPostDmgDel();
-        public event OnBasicAttackLandPostDmgDel OnBasicAttackPostHitEvent;
-
-        // 
-
-
-        // Updated via Mob Skill
-        public ScalingStatData scalingStatData;
-
-
-        public void Init(MobCombat mob, IMobStats stats, ScalingStatData scalingStatData)
+        
+        public override void Init(MobCombat mob, ScalingStatData scalingStatData)
         {
             this.mob = mob;
-            this.stats = stats;
             this.scalingStatData.flatPower = scalingStatData.flatPower;
             this.scalingStatData.attackScaling = scalingStatData.attackScaling;
             this.scalingStatData.abilityScaling = scalingStatData.abilityScaling;
             gameObject.SetActive(false);
         }
 
-        public void Init(MobCombat mob, IMobStats stats)
+        public override void Init(MobCombat mob)
         {
             this.mob = mob;
-            this.stats = stats;
             gameObject.SetActive(false);
         }
 
@@ -71,19 +33,19 @@ namespace Paraverse
             hitTargets.Clear();
         }
 
-        private void Update()
+        protected override void Update()
         {
-            if (timer <= 0)
+            if (dotTimer <= 0)
             {
                 applyHit = true;
                 hitTargets.Clear();
-                timer = attackPerUnitOfTime;
+                dotTimer = dotIntervalTimer;
             }
             else
-                timer -= Time.deltaTime;
+                dotTimer -= Time.deltaTime;
         }
 
-        private void OnTriggerEnter(Collider other)
+        protected virtual void OnTriggerEnter(Collider other)
         {
             if (dontApplyDamageOnEnter == true) return;
 
@@ -94,37 +56,35 @@ namespace Paraverse
             }
         }
 
-        private void OnTriggerStay(Collider other)
+        protected virtual void OnTriggerStay(Collider other)
         {
             if (dot == false) return;
 
             if (other.CompareTag(targetTag) && !hitTargets.Contains(other.gameObject) && applyHit)
             {
                 DamageLogic(other);
-                timer = attackPerUnitOfTime;
+                dotTimer = dotIntervalTimer;
                 hitTargets.Add(other.gameObject);
                 applyHit = false;
 
-                Debug.Log(other.name + " took " + stats.AttackDamage.FinalValue + " points of damage.");
+                Debug.Log(other.name + " took " + mob.stats.AttackDamage.FinalValue + " points of damage.");
             }
         }
 
         /// <summary>
         /// useCustomDamage needs to be set to true on AttackCollider.cs inorder to apply this.
         /// </summary>
-        public float ApplyCustomDamage(IMobController controller)
+        protected override float ApplyCustomDamage(IMobController controller)
         {
-            float totalDmg = scalingStatData.FinalValueWithBoosts(stats);
+            float totalDmg = scalingStatData.FinalValueWithBoosts((IMobStats)mob.stats);
 
             controller.Stats.UpdateCurrentHealth(-Mathf.CeilToInt(totalDmg));
             return totalDmg;
         }
 
-        private void DamageLogic(Collider other)
+        protected override void DamageLogic(Collider other)
         {
-            // Pre Basic Attack Hit Event
-            if (isBasicAttackCollider)
-                OnBasicAttackPreHitEvent?.Invoke();
+            InvokePreHitEvent();
 
             hitTargets.Add(other.gameObject);
 
@@ -134,9 +94,7 @@ namespace Paraverse
                 // Apply damage
                 float dmg = ApplyCustomDamage(controller);
 
-                // On Damage Applied Event
-                if (isBasicAttackCollider)
-                    OnBasicAttackApplyDamageEvent?.Invoke(dmg);
+                InvokeApplyDamageEvent(dmg);
 
                 // Apply knock back effect
                 if (null != knockBackEffect)
@@ -144,16 +102,18 @@ namespace Paraverse
                     KnockBackEffect effect = new KnockBackEffect(knockBackEffect);
                     controller.ApplyKnockBack(mob.transform.position, effect);
                 }
+                else if (applyHitAnim)
+                {
+                    controller.ApplyHitAnimation();
+                }
             }
 
             // General VFX logic
             if (hitFX) Instantiate(hitFX, other.transform.position + new Vector3(0, 0.5f, 0), Quaternion.identity);
 
-            // Post Basic Attack Hit Event
-            if (isBasicAttackCollider)
-                OnBasicAttackPostHitEvent?.Invoke();
+            InvokePostHitEvent();
 
-            Debug.Log(other.name + " took " + scalingStatData.FinalValue(stats) + " points of damage.");
+            Debug.Log(other.name + " took " + scalingStatData.FinalValue(mob.stats) + " points of damage.");
         }
     }
 }

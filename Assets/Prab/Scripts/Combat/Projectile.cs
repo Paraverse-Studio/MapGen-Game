@@ -1,19 +1,16 @@
 using Paraverse.Helper;
 using Paraverse.Mob;
 using Paraverse.Mob.Combat;
-using System.Runtime.InteropServices.ComTypes;
+using Paraverse.Player;
 using UnityEngine;
 
 namespace Paraverse
 {
-    public class Projectile : MonoBehaviour
+    public class Projectile : Damage, IDamage
     {
         #region Variables
-        protected MobCombat mob;
 
         [Header("Projectile Stats")]
-        [SerializeField, Tooltip("Speed of the projectile.")]
-        protected string targetTag = "Player";
         protected Vector3 target = Vector3.forward;
         [SerializeField, Tooltip("Speed of the projectile.")]
         protected float speed = 20f;
@@ -25,27 +22,11 @@ namespace Paraverse
         [Header("Projectile Properties")]
         [SerializeField, Tooltip("Stationary projectile.")]
         protected bool stationary = false;
-        [SerializeField, Tooltip("Damage over time.")]
-        protected bool dot = false;
-        [SerializeField, Tooltip("Apply damage upon enter.")]
-        protected bool dontApplyDamageOnEnter = false;
-        [SerializeField, Tooltip("Applies damage every given second.")]
-        protected float dotIntervalTimer = 1f;
-        protected float dotTimer = 0f;
-
-        [Header("Knockback Effect")]
-        [SerializeField]
-        protected KnockBackEffect knockBackEffect;
+        
 
         [Header("Special Properties")]
         [SerializeField, Tooltip("Projectile is not destroyed upon impact.")]
         protected bool pierce = false;
-        [SerializeField, Tooltip("Applies hit animation to target.")]
-        protected bool applyHitAnim = true;
-
-        [Header("VFX")]
-        public GameObject launchFX;
-        public GameObject hitFX;
 
         [Header("Motion")]
         public float decreaseByLerp = -1f;
@@ -53,18 +34,19 @@ namespace Paraverse
         protected float curdeathTimer = 0f;
         protected Vector3 origin;
 
-        protected ScalingStatData scalingStatData;
+        public GameObject launchFX;
+
         #endregion
 
         #region Start & Update
-        protected virtual void Start()
+        protected override void Start()
         {
             origin = transform.position;
 
             if (launchFX) Instantiate(hitFX, origin, Quaternion.identity);
         }
 
-        protected virtual void Update()
+        protected override void Update()
         {
             float distanceFromOrigin = ParaverseHelper.GetDistance(transform.position, origin);
             if (distanceFromOrigin > range && stationary == false || curdeathTimer >= deathTimer)
@@ -98,7 +80,7 @@ namespace Paraverse
             scalingStatData = statData;
         }
 
-        protected void OnTriggerEnter(Collider other)
+        protected virtual void OnTriggerEnter(Collider other)
         {
             if (dontApplyDamageOnEnter == true) return;
 
@@ -120,18 +102,24 @@ namespace Paraverse
         /// <summary>
         /// useCustomDamage needs to be set to true on AttackCollider.cs inorder to apply this.
         /// </summary>
-        protected void ApplyCustomDamage(IMobController controller)
+        protected override float ApplyCustomDamage(IMobController controller)
         {
-            controller.Stats.UpdateCurrentHealth(-Mathf.CeilToInt(scalingStatData.FinalValue(mob.stats)));
-            Debug.Log("Applied " + Mathf.CeilToInt(scalingStatData.FinalValue(mob.stats)) + " points of damage to " + controller.Transform.name);
+            float totalDmg = Mathf.CeilToInt(scalingStatData.FinalValue(mob.stats));
+            controller.Stats.UpdateCurrentHealth(-(int)totalDmg);
+            Debug.Log("Applied " + totalDmg + " points of damage to " + controller.Transform.name);
+            return totalDmg;
         }
 
-        protected void DamageLogic(Collider other)
+        protected override void DamageLogic(Collider other)
         {
+            InvokePreHitEvent();
+
             IMobController controller = other.GetComponent<IMobController>();
             if (null != controller)
             {
-                ApplyCustomDamage(controller);
+                float dmg = ApplyCustomDamage(controller);
+
+                InvokeApplyDamageEvent(dmg);
 
                 // Apply knock back effect
                 if (null != knockBackEffect)
@@ -146,6 +134,8 @@ namespace Paraverse
             }
 
             if (hitFX) Instantiate(hitFX, other.transform.position + new Vector3(0, 0.5f, 0), Quaternion.identity);
+
+            InvokePostHitEvent();
 
             if (!pierce) Destroy(gameObject);
         }

@@ -18,7 +18,7 @@ public class EnergyDrainSkill : MobSkill, IMobSkill
     public override void ActivateSkill(MobCombat mob, Animator anim, MobStats stats, Transform target = null)
     {
         base.ActivateSkill(mob, anim, stats, target);
-        attackCollider.Init(mob, stats, scalingStatData);
+        attackCollider.Init(mob, scalingStatData);
         attackCollider.OnBasicAttackApplyDamageEvent += ApplyLiftSteal;
         mob.OnEnableSkillColliderSOneEvent += EnableCollider;
         mob.OnDisableSkillColliderSOneEvent += DisableCollider;

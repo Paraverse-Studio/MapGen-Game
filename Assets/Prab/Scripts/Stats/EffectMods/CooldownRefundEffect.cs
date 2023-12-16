@@ -3,17 +3,18 @@ using Paraverse.Mob.Stats;
 using UnityEngine;
 
 
-public class ReaperKillEffect : MobEffect
+//After killing a unit with a skill, refund 50% of the skill's cooldown (40/60/80)
+public class CooldownRefundEffect: MobEffect
 {
     [SerializeField]
-    protected int healAmount = 3;
+    protected int energyGainAmount = 20;
 
     public override void ActivateEffect(MobStats stats)
     {
         base.ActivateEffect(stats);
         foreach (MobController enemy in EnemiesManager.Instance.Enemies)
         {
-            enemy.OnDeathEvent += GainHealth;
+            enemy.OnDeathEvent += GainEnergy;
         }
     }
 
@@ -22,12 +23,12 @@ public class ReaperKillEffect : MobEffect
         base.DeactivateEffect();
         foreach (MobController enemy in EnemiesManager.Instance.Enemies)
         {
-            enemy.OnDeathEvent -= GainHealth;
+            enemy.OnDeathEvent -= GainEnergy;
         }
     }
 
-    private void GainHealth(Transform t = null)
+    private void GainEnergy(Transform t = null)
     {
-        _stats.UpdateCurrentHealth(healAmount);
+        _stats.UpdateCurrentEnergy(energyGainAmount);
     }
 }

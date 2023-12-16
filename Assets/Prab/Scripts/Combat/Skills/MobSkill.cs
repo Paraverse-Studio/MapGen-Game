@@ -105,7 +105,7 @@ namespace Paraverse.Combat
             if (_isMelee)
             {
                 attackCollider = attackColliderGO.GetComponent<AttackCollider>();
-                attackCollider.Init(mob, stats, scalingStatData);
+                attackCollider.Init(mob, scalingStatData);
             }
         }
 
@@ -130,7 +130,7 @@ namespace Paraverse.Combat
                 return;
             }
             attackCollider = attackColliderGO.GetComponent<AttackCollider>();
-            attackCollider.Init(mob, stats, scalingStatData);
+            attackCollider.Init(mob, scalingStatData);
         }
 
         public virtual void DeactivateSkill(PlayerInputControls input)

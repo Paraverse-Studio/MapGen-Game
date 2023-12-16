@@ -3,7 +3,8 @@ using Paraverse.Mob.Stats;
 using UnityEngine;
 
 
-public class ReaperKillEffect : MobEffect
+//Killing a unit heals player for 3 HP (2/4/6)
+public class EnergyGainEffect : MobEffect
 {
     [SerializeField]
     protected int healAmount = 3;

@@ -50,8 +50,10 @@ namespace Paraverse.Mob.Combat
 
         [SerializeField, Tooltip("Mob skills.")]
         protected List<MobSkill> skills = new List<MobSkill>();
+        public List<MobSkill> Skills { get { return skills; } }
         [SerializeField, Tooltip("Mob effects.")]
         protected List<MobEffect> effects = new List<MobEffect>();
+        public List<MobEffect> Effects { get { return effects; } }
 
         protected int usingSkillIdx;
         [SerializeField]

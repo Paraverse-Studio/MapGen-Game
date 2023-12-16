@@ -36,6 +36,7 @@ namespace Paraverse.Player
         private GameObject _attackColliderGO;
 
         // Skills 
+        [SerializeField]
         private MobSkill _activeSkill;
         public MobSkill ActiveSkill { get { return _activeSkill; } }
 
@@ -268,42 +269,43 @@ namespace Paraverse.Player
         }
         #endregion
 
-        #region Skill Methods
-        /// <summary>
-        /// Adds skill to mobs active skills.
-        /// </summary>
-        /// <param name="skill"></param>
-        public void AddToActiveSkills(MobSkill skill)
-        {
-            if (skills.Contains(skill))
-            {
-                Debug.Log(skill.Name + " already exists in the Active Skills OR you have max number of active skills.");
-                return;
-            }
-            if (skills.Count > 0)
-                RemoveFromActiveSkills(skills[skills.Count - 1]);
+        // Not required at the moment, since player can only have one skill 
+        //#region Skill Methods
+        ///// <summary>
+        ///// Adds skill to mobs active skills.
+        ///// </summary>
+        ///// <param name="skill"></param>
+        //public void AddToActiveSkills(MobSkill skill)
+        //{
+        //    if (skills.Contains(skill))
+        //    {
+        //        Debug.Log(skill.Name + " already exists in the Active Skills OR you have max number of active skills.");
+        //        return;
+        //    }
+        //    if (skills.Count > 0)
+        //        RemoveFromActiveSkills(skills[skills.Count - 1]);
 
-            skills.Add(skill);
-            skill.ActivateSkill(this, input, anim, stats);
-        }
+        //    skills.Add(skill);
+        //    skill.ActivateSkill(this, input, anim, stats);
+        //}
 
-        /// <summary>
-        /// Removes skill from mob active skills and removes listener.
-        /// </summary>
-        /// <param name="skill"></param>
-        public void RemoveFromActiveSkills(MobSkill skill)
-        {
-            Debug.Log("skill: " + skill.Name);
-            if (skills.Count <= 0)
-            {
-                Debug.Log("No skill exists in Active Skills.");
-                return;
-            }
-            skill.DeactivateSkill(input);
-            skills.Remove(skill);
-            Debug.Log("Remove skill: " + skill.Name + " from Active Skills: " + skills.Count);
-        }
-        #endregion
+        ///// <summary>
+        ///// Removes skill from mob active skills and removes listener.
+        ///// </summary>
+        ///// <param name="skill"></param>
+        //public void RemoveFromActiveSkills(MobSkill skill)
+        //{
+        //    Debug.Log("skill: " + skill.Name);
+        //    if (skills.Count <= 0)
+        //    {
+        //        Debug.Log("No skill exists in Active Skills.");
+        //        return;
+        //    }
+        //    skill.DeactivateSkill(input);
+        //    skills.Remove(skill);
+        //    Debug.Log("Remove skill: " + skill.Name + " from Active Skills: " + skills.Count);
+        //}
+        //#endregion
 
         #region Animation Events
         public void AllowComboAttackTwo()
@@ -342,6 +344,13 @@ namespace Paraverse.Player
                 GameObject go = Instantiate(skill.projData.projPf, transform.position, transform.rotation);
                 Projectile proj = go.GetComponent<Projectile>();
                 proj.Init(this, transform.forward, skill.scalingStatData);
+
+                // Adds effect listeners to newly instantiated projectiles (OnAttackApplyDamage, OnAttackPostDamage, etc)
+                foreach (MobEffect effect in Effects)
+                {
+                    effect.AddSubscribersToSkillEvents(proj);
+                    Debug.Log("effect: " + effect.name);
+                }
             }
             else Debug.LogError("A skill invoked PlayerCombat's FireProjectile without providing proper projectile data, and no default data.");
 
