@@ -3,6 +3,7 @@ using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.Events;
+using UnityEngine.InputSystem;
 
 public class Interactable : MonoBehaviour, ITickElement
 {
@@ -24,15 +25,52 @@ public class Interactable : MonoBehaviour, ITickElement
         TickManager.Instance.Subscribe(this, gameObject, TickDelayOption.t10);
     }
 
+
+    private string GetInputActionKey(InputAction action)
+    {
+        if (action.controls.Count == 0)
+            return string.Empty;
+
+        var verb = action.type == InputActionType.Button ? "Press" : "Use";
+        var lastCompositeIndex = -1;
+        var isFirstControl = true;
+
+        var controls = "";
+        foreach (var control in action.controls)
+        {
+            var bindingIndex = action.GetBindingIndexForControl(control);
+            var binding = action.bindings[bindingIndex];
+            if (binding.isPartOfComposite)
+            {
+                if (lastCompositeIndex != -1)
+                    continue;
+                lastCompositeIndex = action.ChangeBinding(bindingIndex).PreviousCompositeBinding().bindingIndex;
+                bindingIndex = lastCompositeIndex;
+            }
+            else
+            {
+                lastCompositeIndex = -1;
+            }
+            if (!isFirstControl)
+                controls += " or ";
+
+            controls += action.GetBindingDisplayString(bindingIndex);
+            isFirstControl = false;
+        }
+        return controls;
+    }
+
     private void Start()
     {
         _player = GlobalSettings.Instance.player.GetComponent<PlayerInputControls>();
 
         _player.OnInteractEvent += PressedInteract;
         _interactableColor = GlobalSettings.Instance.interactableColor;
-        _interactableMessage = 
-            $"Press [E] to interact with <b><color=#{ColorUtility.ToHtmlStringRGB(_interactableColor)}>{gameObject.name}</color></b>";
 
+        var interactKey = GetInputActionKey(_player.Input.Player.Interact);
+
+        _interactableMessage = 
+        $"Press [<b>{ interactKey}</b>] to interact with <b><color=#{ColorUtility.ToHtmlStringRGB(_interactableColor)}>{gameObject.name}</color></b>";
     }
 
     public void Tick()

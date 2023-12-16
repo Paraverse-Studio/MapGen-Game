@@ -6,8 +6,8 @@ namespace Paraverse.Player
     public class PlayerInputControls : MonoBehaviour
     {
         #region Variables
-        private PlayerInputs input;
-        private InputAction movement;
+        private PlayerInputs input; public PlayerInputs Input => input;
+        private InputAction movement; 
 
         //public delegate void OnJumpDel();
         //public event OnJumpDel OnJumpEvent;
