@@ -28,10 +28,6 @@ public class Interactable : MonoBehaviour, ITickElement
 
     private string GetInputActionKey(InputAction action)
     {
-        if (action.controls.Count == 0)
-            return string.Empty;
-
-        var verb = action.type == InputActionType.Button ? "Press" : "Use";
         var lastCompositeIndex = -1;
         var isFirstControl = true;
 
