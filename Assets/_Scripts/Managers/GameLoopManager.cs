@@ -26,6 +26,8 @@ public class GameLoopManager : MonoBehaviour
 
         public UnityEvent OnEndRound;
 
+        public UnityEvent OnEndSession;
+
         public UnityEvent OnUI; //whenever game enters any UI (excluding pause)
     }
 
@@ -331,10 +333,11 @@ public class GameLoopManager : MonoBehaviour
 
         if (roundCompletionType == RoundCompletionType.Failed)
         {
-            resultScreen.rankText.text = "Incomplete";
+            resultScreen.rankText.text = "Reached: " + nextRoundNumber.ToString();
             resultScreen.goldEarnedText.text = "0";
             resultScreen.shopButton.SetActive(false);
             resultScreen.mainMenuButton.SetActive(true);
+            GameLoopEvents.OnEndSession?.Invoke();
         }
         else
         {

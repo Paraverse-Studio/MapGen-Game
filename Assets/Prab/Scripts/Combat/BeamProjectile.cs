@@ -5,7 +5,6 @@ using UnityEngine;
 public class BeamProjectile : Projectile
 {
     [Header("Beam Properties")]
-    //protected MobCombat targetMob;
     [SerializeField, Tooltip("The projectile is a beam.")]
     protected bool isBeam = false;
     private float beamRadius;

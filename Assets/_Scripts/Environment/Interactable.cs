@@ -26,12 +26,8 @@ public class Interactable : MonoBehaviour, ITickElement
     }
 
 
-    private string GetInputActionKey(InputAction action)
+    private string GetInteractPhrase(InputAction action)
     {
-        if (action.controls.Count == 0)
-            return string.Empty;
-
-        var verb = action.type == InputActionType.Button ? "Press" : "Use";
         var lastCompositeIndex = -1;
         var isFirstControl = true;
 
@@ -57,7 +53,17 @@ public class Interactable : MonoBehaviour, ITickElement
             controls += action.GetBindingDisplayString(bindingIndex);
             isFirstControl = false;
         }
-        return controls;
+        //return controls;
+
+        var interactKey = "E";
+
+        var interactPhrase = $"Press [<b>{interactKey}</b>]";
+
+#if UNITY_ANDROID
+        interactPhrase = "Tap ";
+#endif
+
+        return interactPhrase;
     }
 
     private void Start()
@@ -67,10 +73,10 @@ public class Interactable : MonoBehaviour, ITickElement
         _player.OnInteractEvent += PressedInteract;
         _interactableColor = GlobalSettings.Instance.interactableColor;
 
-        var interactKey = GetInputActionKey(_player.Input.Player.Interact);
+        var interactPhrase = GetInteractPhrase(_player.Input.Player.Interact);
 
         _interactableMessage = 
-        $"Press [<b>{ interactKey}</b>] to interact with <b><color=#{ColorUtility.ToHtmlStringRGB(_interactableColor)}>{gameObject.name}</color></b>";
+        $"{interactPhrase} to interact with <b><color=#{ColorUtility.ToHtmlStringRGB(_interactableColor)}>{gameObject.name}</color></b>";
     }
 
     public void Tick()

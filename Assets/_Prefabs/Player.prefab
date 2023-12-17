@@ -1062,7 +1062,7 @@ MonoBehaviour:
   OnEnergyChange:
     m_PersistentCalls:
       m_Calls: []
-  diveEnergyCost: 0
+  diveEnergyCost: 10
   unkillable: 0
 --- !u!114 &4954338033876700215
 MonoBehaviour:
@@ -1102,6 +1102,7 @@ MonoBehaviour:
   _skillHolder: {fileID: 4241460780824340472}
   _effectsHolder: {fileID: 3781554212329764893}
   _attackColliderGO: {fileID: 6080363539117558812}
+  _activeSkill: {fileID: 0}
   _skillLabel: {fileID: 0}
   _skillCDTime: {fileID: 0}
   _skillCDFill: {fileID: 0}
@@ -2261,16 +2262,18 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   targetTag: Enemy
+  knockBackEffect: {fileID: 11400000, guid: 08edd5322913a02478d20bccf7bfb43f, type: 2}
   dot: 0
   dontApplyDamageOnEnter: 0
-  knockBackEffect: {fileID: 11400000, guid: 08edd5322913a02478d20bccf7bfb43f, type: 2}
+  dotIntervalTimer: 1
+  applyHitAnim: 1
   hitFX: {fileID: 1281011124605332014, guid: 78283b04fb4620d4fb5afde968967a87, type: 3}
-  isBasicAttackCollider: 1
   scalingStatData:
     flatPower: 0
     attackScaling: 1
     abilityScaling: 0
     healthScaling: 0
+  isBasicAttackCollider: 1
 --- !u!1 &6229009748062782238
 GameObject:
   m_ObjectHideFlags: 0

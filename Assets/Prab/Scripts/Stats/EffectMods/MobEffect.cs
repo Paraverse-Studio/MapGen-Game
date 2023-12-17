@@ -1,3 +1,4 @@
+using Paraverse;
 using Paraverse.Mob;
 using Paraverse.Mob.Stats;
 using Paraverse.Player;
@@ -46,14 +47,22 @@ public abstract class MobEffect : MonoBehaviour
         if (_FX) Destroy(_FX.gameObject);
     }
 
+    public virtual void AddSubscribersToSkillEvents(Projectile proj)
+    {
+
+    }
+
+    public virtual void RemoveSubscribersToSkillEvents(Projectile proj)
+    {
+
+    }
 
     /// <summary>
     /// useCustomDamage needs to be set to true on AttackCollider.cs inorder to apply this.
     /// </summary>
     public virtual float ApplyCustomDamage(IMobController controller)
     {
-        float totalDmg =
-            scalingStatData.FinalValueWithBoosts(_stats);
+        float totalDmg = scalingStatData.FinalValueWithBoosts(_stats);
 
         controller.Stats.UpdateCurrentHealth(-Mathf.CeilToInt(totalDmg));
         return totalDmg;

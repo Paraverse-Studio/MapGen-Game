@@ -31,7 +31,7 @@ public class SuicideCombat : MobCombat
     {
         GameObject go = Instantiate(explosionEffect, transform.position, transform.rotation);
         AttackCollider col = go.GetComponentInChildren<AttackCollider>();
-        col.Init(this, stats, scalingStatData);
+        col.Init(this, scalingStatData);
         col.gameObject.SetActive(true);
         stats.UpdateCurrentHealth(-10000000);
     }

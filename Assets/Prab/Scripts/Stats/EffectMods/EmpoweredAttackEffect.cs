@@ -43,5 +43,4 @@ public class EmpoweredAttackEffect : MobEffect
     {
         _stats.AttackDamage.RemoveMod(_mod);
     }
-
 }
