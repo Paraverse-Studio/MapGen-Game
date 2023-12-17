@@ -87,5 +87,11 @@ namespace Paraverse.Stats
         {
             _tempStatModifier.Clear();
         }
+
+        public void FactoryResetMods()
+        {
+            ClearAllMods();
+            ClearAllTempMods();
+        }
     }
 }

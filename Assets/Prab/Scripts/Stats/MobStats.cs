@@ -161,6 +161,14 @@ namespace Paraverse.Mob.Stats
         {
             _curHealth = (int)MaxHealth.FinalValue;
             _curEnergy = (int)MaxEnergy.FinalValue;
+
+            _attackDamage.FactoryResetMods();
+            _abilityPower.FactoryResetMods();
+            _attackSpeed.FactoryResetMods();
+            _moveSpeed.FactoryResetMods();
+            _maxEnergy.FactoryResetMods();
+            _energyRegen.FactoryResetMods();
+            _gold = 0f;
         }
 
         public void UpdateCurrentEnergy(float amount)

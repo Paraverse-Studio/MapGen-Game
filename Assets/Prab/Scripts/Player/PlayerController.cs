@@ -570,6 +570,8 @@ namespace Paraverse.Player
         public void FactoryResetPlayerOnDeath()
         {
             combat.DeactivateEffects();
+            stats.ResetStats();
+            combat.DeactivateSkill();
             Debug.Log("Factory Reset");
         }
         #endregion

@@ -13,7 +13,7 @@ public class LichBaneEffect : MobEffect
     public override void ActivateEffect(MobStats stats)
     {
         base.ActivateEffect(stats);
-        _mod = new StatModifier(_scaling.FinalValue(_stats));
+        _mod = new StatModifier(scalingStatData.FinalValue(_stats));
         _combat.BasicAttackSkill.attackCollider.OnBasicAttackPreHitEvent += ApplyEffect;
         _combat.BasicAttackSkill.attackCollider.OnBasicAttackApplyDamageEvent += RemoveMod;
         _combat.BasicAttackSkill.attackCollider.OnBasicAttackApplyDamageEvent += DisableApplyEffect;
@@ -44,7 +44,7 @@ public class LichBaneEffect : MobEffect
     {
         if (_applyEffect)
         {
-            _mod.Value = _scaling.FinalValue(_stats);
+            _mod.Value = scalingStatData.FinalValue(_stats);
             _stats.AttackDamage.AddMod(_mod);
         }
     }

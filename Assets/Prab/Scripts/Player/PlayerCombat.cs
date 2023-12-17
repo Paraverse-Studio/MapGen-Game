@@ -93,6 +93,10 @@ namespace Paraverse.Player
             skills.Add(skillInstance);
             ActivateSkillWithUI(skillInstance);
         }
+        public void DeactivateSkill()
+        {
+            _activeSkill.DeactivateSkill(input);
+        }
 
         private void ActivateSkillWithUI(MobSkill skill)
         {
