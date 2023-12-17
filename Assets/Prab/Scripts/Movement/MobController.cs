@@ -591,7 +591,7 @@ namespace Paraverse.Mob.Controller
                 isStrafingToPoint = false;
                 isStrafing = false;
             }
-            else if (isStrafing && _curMobState.Equals(MobState.Pursue))
+            else if (isStrafing && _curMobState.Equals(MobState.Pursue) && nav.enabled)
             {
                 nav.isStopped = false;
                 curMoveSpeed = GetPursueSpeed();

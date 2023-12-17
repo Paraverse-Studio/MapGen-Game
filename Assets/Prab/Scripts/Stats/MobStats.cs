@@ -75,16 +75,7 @@ namespace Paraverse.Mob.Stats
         #region Start & Update Methods
         protected void Awake()
         {
-            _maxHealth = new Stat(maxHealth);
-            _maxEnergy = new Stat(maxEnergy);
-            _attackDamage = new Stat(attackDamage);
-            _abilityPower = new Stat(abilityPower);
-            _attackSpeed = new Stat(attackSpeed);
-            _moveSpeed = new Stat(moveSpeed);
-            _energyRegen = new Stat(energyRegen);
-
-            _curHealth = (int)MaxHealth.FinalValue;
-            _curEnergy = (int)MaxEnergy.FinalValue;
+            ResetStats();
             _mobBoosts = GetComponent<IMobBoosts>();
         }
 
@@ -159,15 +150,23 @@ namespace Paraverse.Mob.Stats
 
         public void ResetStats()
         {
+            _maxHealth = new Stat(maxHealth);
+            _maxHealth.FactoryResetMods();
+            _maxEnergy = new Stat(maxEnergy);
+            _maxEnergy.FactoryResetMods();
+            _attackDamage = new Stat(attackDamage);
+            _attackDamage.FactoryResetMods();
+            _abilityPower = new Stat(abilityPower);
+            _abilityPower.FactoryResetMods();
+            _attackSpeed = new Stat(attackSpeed);
+            _attackSpeed.FactoryResetMods();
+            _moveSpeed = new Stat(moveSpeed);
+            _moveSpeed.FactoryResetMods();
+            _energyRegen = new Stat(energyRegen);
+            _energyRegen.FactoryResetMods();
+
             _curHealth = (int)MaxHealth.FinalValue;
             _curEnergy = (int)MaxEnergy.FinalValue;
-
-            _attackDamage.FactoryResetMods();
-            _abilityPower.FactoryResetMods();
-            _attackSpeed.FactoryResetMods();
-            _moveSpeed.FactoryResetMods();
-            _maxEnergy.FactoryResetMods();
-            _energyRegen.FactoryResetMods();
             _gold = 0f;
         }
 
