@@ -1,20 +1,25 @@
 using Paraverse.Mob.Controller;
 using Paraverse.Mob.Stats;
+using System.Collections.Generic;
 using UnityEngine;
 
 
 //After killing a unit with a skill, refund 50% of the skill's cooldown (40/60/80)
 public class CooldownRefundEffect: MobEffect
 {
-    [SerializeField]
-    protected int energyGainAmount = 20;
+    [SerializeField, Range(0,1)]
+    protected float cooldownRefundAmount = 0.4f;
+
+    public List<MobController> mobs;
 
     public override void ActivateEffect(MobStats stats)
     {
         base.ActivateEffect(stats);
-        foreach (MobController enemy in EnemiesManager.Instance.Enemies)
+        //foreach (MobController enemy in EnemiesManager.Instance.Enemies)
+        foreach (MobController enemy in mobs)
         {
-            enemy.OnDeathEvent += GainEnergy;
+            Debug.Log("enemy: " + enemy.name);
+            enemy.OnDeathEvent += RefundCooldown;
         }
     }
 
@@ -23,12 +28,14 @@ public class CooldownRefundEffect: MobEffect
         base.DeactivateEffect();
         foreach (MobController enemy in EnemiesManager.Instance.Enemies)
         {
-            enemy.OnDeathEvent -= GainEnergy;
+            enemy.OnDeathEvent -= RefundCooldown;
         }
     }
 
-    private void GainEnergy(Transform t = null)
+    private void RefundCooldown(Transform t = null)
     {
-        _stats.UpdateCurrentEnergy(energyGainAmount);
+        float refund = _combat.ActiveSkill.Cooldown * cooldownRefundAmount;
+        Debug.Log("Refund CD: " + refund);
+        _combat.ActiveSkill.RefundCooldown(refund);
     }
 }

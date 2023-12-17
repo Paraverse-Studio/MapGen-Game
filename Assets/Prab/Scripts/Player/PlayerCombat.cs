@@ -353,7 +353,6 @@ namespace Paraverse.Player
                 foreach (MobEffect effect in Effects)
                 {
                     effect.AddSubscribersToSkillEvents(proj);
-                    Debug.Log("effect: " + effect.name);
                 }
             }
             else Debug.LogError("A skill invoked PlayerCombat's FireProjectile without providing proper projectile data, and no default data.");

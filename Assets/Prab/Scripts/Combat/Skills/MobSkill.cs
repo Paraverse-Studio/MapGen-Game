@@ -171,6 +171,12 @@ namespace Paraverse.Combat
             CooldownHandler();
         }
 
+        public void RefundCooldown(float refund)
+        {
+            curCooldown -= refund;
+            Debug.Log("cur CD: " + curCooldown);
+        }
+
         protected virtual void RotateToTarget()
         {
             if (skillOn == false) return;
