@@ -1116,11 +1116,12 @@ public class MapGeneration : MonoBehaviour
             MobStats enemyStats = enemy.GetComponentInChildren<MobStats>();
             if (enemyStats)
             {
-                float scaleFactor = MapCreator.Instance.enemyScalingPerRound * (GameLoopManager.Instance.nextRoundNumber - 1);
+                float damageScaleFactor = MapCreator.Instance.enemyDamageScalingPerRound * (GameLoopManager.Instance.nextRoundNumber - 1);
+                float healthScaleFactor = MapCreator.Instance.enemyHealthScalingPerRound * (GameLoopManager.Instance.nextRoundNumber - 1);
 
-                enemyStats.UpdateAttackDamage(enemyStats.AttackDamage.FinalValue * scaleFactor);
-                enemyStats.UpdateAbilityPower(enemyStats.AbilityPower.FinalValue * scaleFactor);
-                enemyStats.UpdateMaxHealth(Mathf.CeilToInt(enemyStats.MaxHealth.FinalValue * scaleFactor));
+                enemyStats.UpdateAttackDamage(enemyStats.AttackDamage.FinalValue * damageScaleFactor);
+                enemyStats.UpdateAbilityPower(enemyStats.AbilityPower.FinalValue * damageScaleFactor);
+                enemyStats.UpdateMaxHealth(Mathf.CeilToInt(enemyStats.MaxHealth.FinalValue * healthScaleFactor));
                 if (MapCreator.Instance.mapType == MapType.boss)
                 {
                     enemy.GetComponentInChildren<MobController>().OnDeathEvent += AddLegendaryChest;

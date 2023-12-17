@@ -4,7 +4,7 @@ using System.Collections.Generic;
 using TMPro;
 using UnityEngine;
 
-public class ItemDisplayCreator : MonoBehaviour
+public class ItemDisplayCreator : TimeChanger
 {
     [SerializeField]
     private ContentFitterRefresher _refresher;
@@ -36,7 +36,7 @@ public class ItemDisplayCreator : MonoBehaviour
     private void OnEnable()
     {
         _player = GlobalSettings.Instance.player.GetComponent<MobStats>();
-        Time.timeScale = 0f;
+        TimeManager.Instance.RequestTimeChange(this, 0f);
     }
 
     public void Display(List<SO_Item> items, System.Action closeCallback = null)
@@ -137,7 +137,7 @@ public class ItemDisplayCreator : MonoBehaviour
 
     public void OnDisable()
     {
-        Time.timeScale = 1f;
+        TimeManager.Instance.RequestTimeChange(this, 1f);
         _closeEvent?.Invoke();
     }
 

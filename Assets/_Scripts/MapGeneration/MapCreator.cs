@@ -37,7 +37,8 @@ public class MapCreator : MonoBehaviour
     public Vector2 rewardMapGapLimit;
 
     [Header("Enemies")]
-    public float enemyScalingPerRound;
+    public float enemyDamageScalingPerRound;
+    public float enemyHealthScalingPerRound;
 
     [Header("UI References")]
     public TextMeshProUGUI objectiveTitle;
@@ -60,6 +61,21 @@ public class MapCreator : MonoBehaviour
     private int roundsSincelastRewardMap = 0;
     private int biomeIndex = 0;
     private bool biomeChangePending = false;
+
+    public void ResetMapCreator()
+    {
+        EnemiesSpawned = 0;
+        roundsSinceLastBossMap = 0;
+        roundsSincelastRewardMap = 0;
+        biomeIndex = 0;
+        biomeChangePending = false;
+    }
+
+    private void ResetRuntimeVariables() // between rounds
+    {
+        EnemiesSpawned = 0;
+        mapType = MapType.normal;
+    }
 
     private void Awake()
     {
@@ -138,20 +154,6 @@ public class MapCreator : MonoBehaviour
                 roundsSincelastRewardMap = 0;
                 break;
         }
-    }
-
-    public void ResetVariables() // after restarting the game
-    {
-        EnemiesSpawned = 0;
-        mapType = MapType.normal;
-        roundsSinceLastBossMap = 0;
-        roundsSincelastRewardMap = 0;
-    }
-
-    private void ResetRuntimeVariables() // between rounds
-    {
-        EnemiesSpawned = 0;
-        mapType = MapType.normal;
     }
 
     public void UpdateObjectiveText()

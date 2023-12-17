@@ -11,6 +11,13 @@ public class SO_EffectMod : SO_Mod
     public GameObject Effect;
 
     private PlayerCombat _player;
+    private MobEffect _effect;
+
+    public override string GetDescription()
+    {
+        if (!_effect) _effect = Effect.GetComponent<MobEffect>();
+        return Description.Replace("[DMG]", GetScalingText());
+    }
 
     public override void Activate(GameObject go)
     {
@@ -28,7 +35,9 @@ public class SO_EffectMod : SO_Mod
         // ---> stat, info, logistics and lore of the skill is provided from mod card to skill
         // ---> skill CD, range, damage and these things are to be put right on skill prefab
         //Effect.Name = Title;
-        Effect.GetComponent<MobEffect>().ID = ID;
+
+        if (!_effect) _effect = Effect.GetComponent<MobEffect>();
+        _effect.ID = ID;
         //Skill.Description = Description;
         //Skill.Image = Image;
 
@@ -39,10 +48,35 @@ public class SO_EffectMod : SO_Mod
         Debug.Log($"Effect Mod: Mod \"{Title}\" (ID {ID}) activated for {_player.gameObject.name}!");
     }
 
+    private string GetScalingText()
+    {
+        string msg = "";
+        if (_effect.scalingStatData.flatPower != 0)
+        {
+            msg += $"{_effect.scalingStatData.flatPower}";
+        }
+        if (_effect.scalingStatData.attackScaling != 0)
+        {
+            if (!string.IsNullOrWhiteSpace(msg)) msg += " + ";
+            msg += $"<color=#FF977B>({_effect.scalingStatData.attackScaling * 100f}% of Attack)</color>";
+        }
+        if (_effect.scalingStatData.abilityScaling != 0)
+        {
+            if (!string.IsNullOrWhiteSpace(msg)) msg += " + ";
+            msg += $"<color=#83C5FF>({_effect.scalingStatData.abilityScaling * 100f}% of Ability)</color>";
+        }
+        if (_effect.scalingStatData.healthScaling != 0)
+        {
+            if (!string.IsNullOrWhiteSpace(msg)) msg += " + ";
+            msg += $"<color=#86F383>({_effect.scalingStatData.healthScaling * 100f}% of Health)</color>";
+        }
+        msg = "<b>" + msg + "</b>";
+        return msg;
+    }
+
     public override void Reset()
     {
-        base.Reset();
-        // TODO DeactivateEffect() once it's done
+        base.Reset();        
     }
 
 }

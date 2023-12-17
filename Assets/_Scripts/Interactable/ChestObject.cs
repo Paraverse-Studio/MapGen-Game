@@ -86,9 +86,9 @@ public class ChestObject : MonoBehaviour
         chestObject.name = chestTiers[tier].chestName;
 
         // Add Selectable for making this object display an outline and its name
-        _selectable = chestObject.AddComponent<Selectable>();
-        _selectable.priority = Selectable.SelectablePriority.whenIsolated;
-        _selectable.type = Selectable.SelectableType.informational;
+        //_selectable = chestObject.AddComponent<Selectable>();
+        //_selectable.priority = Selectable.SelectablePriority.whenIsolated;
+        //_selectable.type = Selectable.SelectableType.informational;
 
         // Add an Interactable for making this object be interacted with user's Interact press and from a distance
         _interactable = chestObject.AddComponent<Interactable>();
@@ -98,7 +98,7 @@ public class ChestObject : MonoBehaviour
     }
 
     public void OpenChest()
-    {
+    { 
         // 1. Decide the loot        
 
         // The # of items you have to give to player
@@ -201,6 +201,7 @@ public class ChestObject : MonoBehaviour
                 }
                 else
                 {
+                    // part of the loot table magic, by removing this item's chance, we can decide on a random item faster 
                     randomNumber -= thisChest.lootTable[i].chance;
                 }
             }       

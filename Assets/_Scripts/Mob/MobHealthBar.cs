@@ -158,7 +158,8 @@ public class MobHealthBar : MonoBehaviour
         popupObj.transform.position = new Vector3(screenPosition.x, screenPosition.y, 0);
 
         TextMeshProUGUI textObj = popupObj.GetComponentInChildren<TextMeshProUGUI>();
-        if (healthChange >= _totalHealth * 0.4f) textObj.fontSize *= 1.25f;
+        if (healthChange >= _totalHealth * 0.65f) textObj.fontSize *= 1.55f;
+        else if (healthChange >= _totalHealth * 0.4f) textObj.fontSize *= 1.25f;
         else if (healthChange <= _totalHealth * 0.1f) textObj.fontSize /= 1.25f;
         textObj.text = Mathf.Abs(healthChange).ToString();
         textObj.color = (healthChange >= 0) ? GlobalSettings.Instance.damageColour : GlobalSettings.Instance.healColour;

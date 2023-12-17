@@ -3,6 +3,7 @@ using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.Events;
+using UnityEngine.InputSystem;
 
 public enum LayerEnum {
     def = 0,
@@ -52,6 +53,8 @@ public class GlobalSettings : MonoBehaviour
     public Vector3 backupSafePosition;
     public GameObject testGameObject;
 
+
+    public PlayerInput PlayerInput;
 
 
 
