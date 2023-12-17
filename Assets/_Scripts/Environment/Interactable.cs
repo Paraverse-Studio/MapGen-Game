@@ -53,7 +53,8 @@ public class Interactable : MonoBehaviour, ITickElement
             controls += action.GetBindingDisplayString(bindingIndex);
             isFirstControl = false;
         }
-        return controls;
+        //return controls;
+
         var interactKey = "E";
 
         var interactPhrase = $"Press [<b>{interactKey}</b>]";
