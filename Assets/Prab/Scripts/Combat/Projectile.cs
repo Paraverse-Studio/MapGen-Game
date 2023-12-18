@@ -80,22 +80,16 @@ namespace Paraverse
             scalingStatData = statData;
         }
 
-        protected virtual void OnTriggerEnter(Collider other)
-        {
-            if (dontApplyDamageOnEnter == true) return;
-
-            if (other.CompareTag(targetTag))
-            {
-                DamageLogic(other);
-            }
-        }
-
         protected virtual void OnTriggerStay(Collider other)
         {
-            if (other.CompareTag(targetTag) && dotTimer >= dotIntervalTimer && dot)
+            if (other.CompareTag(targetTag) && !hitTargets.Contains(other.gameObject) && applyHit && dotTimer >= dotIntervalTimer && dot)
             {
-                dotTimer = 0f;
                 DamageLogic(other);
+                dotTimer = dotIntervalTimer;
+                hitTargets.Add(other.gameObject);
+                applyHit = false;
+
+                Debug.Log(other.name + " took " + mob.stats.AttackDamage.FinalValue + " points of damage.");
             }
         }
 
@@ -112,30 +106,7 @@ namespace Paraverse
 
         protected override void DamageLogic(Collider other)
         {
-            InvokePreHitEvent();
-
-            IMobController controller = other.GetComponent<IMobController>();
-            if (null != controller)
-            {
-                float dmg = ApplyCustomDamage(controller);
-
-                InvokeApplyDamageEvent(dmg);
-
-                // Apply knock back effect
-                if (null != knockBackEffect)
-                {
-                    KnockBackEffect effect = new KnockBackEffect(knockBackEffect);
-                    controller.ApplyKnockBack(mob.transform.position, effect);
-                }
-                else if (applyHitAnim)
-                {
-                    controller.ApplyHitAnimation();
-                }
-            }
-
-            if (hitFX) Instantiate(hitFX, other.transform.position + new Vector3(0, 0.5f, 0), Quaternion.identity);
-
-            InvokePostHitEvent();
+            base.DamageLogic(other);
 
             if (!pierce) Destroy(gameObject);
         }

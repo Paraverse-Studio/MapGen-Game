@@ -93,9 +93,16 @@ namespace Paraverse.Player
             skills.Add(skillInstance);
             ActivateSkillWithUI(skillInstance);
         }
+
         public void DeactivateSkill()
         {
-            _activeSkill.DeactivateSkill(input);
+            if (null != _activeSkill) _activeSkill.DeactivateSkill(input);
+
+            foreach (MobSkill sk in skills)
+            {
+                DeactivateSkillWithUI();
+                skills.Remove(sk);
+            }
         }
 
         private void ActivateSkillWithUI(MobSkill skill)
@@ -105,6 +112,16 @@ namespace Paraverse.Player
             _skillLabel.text = skill.Name;
             _skillLabel.transform.parent.gameObject.SetActive(true);
             _skillIcon.sprite = skill.Image;
+            _refresher.RefreshContentFitters();
+        }
+
+        private void DeactivateSkillWithUI()
+        {
+            skill.DeactivateSkill(input);
+            _activeSkill = null;
+            _skillLabel.text = "";
+            _skillLabel.transform.parent.gameObject.SetActive(false);
+            _skillIcon.sprite = null;
             _refresher.RefreshContentFitters();
         }
 

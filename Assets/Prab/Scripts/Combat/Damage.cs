@@ -1,5 +1,6 @@
 using Paraverse.Mob;
 using Paraverse.Mob.Combat;
+using System.Collections.Generic;
 using UnityEngine;
 
 public class Damage : MonoBehaviour, IDamage
@@ -21,6 +22,10 @@ public class Damage : MonoBehaviour, IDamage
     [SerializeField, Tooltip("Applies damage every given second.")]
     protected float dotIntervalTimer = 1f;
     protected float dotTimer = 0f;
+    protected bool applyHit = false;
+
+    protected List<GameObject> hitTargets = new List<GameObject>();
+    
     [SerializeField, Tooltip("Applies hit animation to target.")]
     protected bool applyHitAnim = true;
 
@@ -57,8 +62,21 @@ public class Damage : MonoBehaviour, IDamage
 
     protected virtual void Update()
     {
+        if (dotTimer <= 0)
+        {
+            applyHit = true;
+            hitTargets.Clear();
+            dotTimer = dotIntervalTimer;
+        }
+        else
+            dotTimer -= Time.deltaTime;
     }
     #endregion
+
+    protected virtual void OnEnable()
+    {
+        hitTargets.Clear();
+    }
 
     public virtual void Init(MobCombat mob)
     {
@@ -82,36 +100,29 @@ public class Damage : MonoBehaviour, IDamage
         return totalDmg;
     }
 
+    protected virtual void OnTriggerEnter(Collider other)
+    {
+        if (dontApplyDamageOnEnter == true) return;
+
+        // Detecting type of object/enemy hit
+        if (other.CompareTag(targetTag) && !hitTargets.Contains(other.gameObject))
+        {
+            DamageLogic(other);
+        }
+    }
+
     protected virtual void DamageLogic(Collider other)
     {
-        // Pre Basic Attack Hit Event
-        if (isBasicAttackCollider)
-        {
-            OnBasicAttackPreHitEvent?.Invoke();
-            Debug.Log("PROJ: Invoked OnBasicAttackPreEvent");
-        }
-        else
-        {
-            OnAttackPreHitEvent?.Invoke();
-            Debug.Log("PROJ: Invoked OnAttackPreEvent");
-        }
+        InvokePreHitEvent();
+        hitTargets.Add(other.gameObject);
 
-        IMobController controller = other.GetComponent<IMobController>();
-        if (null != controller)
+        // Enemy-related logic
+        if (other.TryGetComponent(out IMobController controller))
         {
+            // Apply damage
             float dmg = ApplyCustomDamage(controller);
 
-            // On Damage Applied Event
-            if (isBasicAttackCollider)
-            {
-                OnBasicAttackApplyDamageEvent?.Invoke(dmg);
-                Debug.Log("PROJ: Invoked OnBasicAttackApplyDamageEvent");
-            }
-            else
-            {
-                OnAttackApplyDamageEvent?.Invoke(dmg);
-                Debug.Log("PROJ: Invoked OnAttackApplyDamageEvent");
-            }
+            InvokeApplyDamageEvent(dmg);
 
             // Apply knock back effect
             if (null != knockBackEffect)
@@ -125,20 +136,12 @@ public class Damage : MonoBehaviour, IDamage
             }
         }
 
+        // General VFX logic
         if (hitFX) Instantiate(hitFX, other.transform.position + new Vector3(0, 0.5f, 0), Quaternion.identity);
 
-        // Post Basic Attack Hit Event
-        if (isBasicAttackCollider)
-        {
-            OnBasicAttackPostHitEvent?.Invoke();
-            Debug.Log("PROJ: Invoked OnBasicAttackPostHitEvent");
-        }
-        else
-        {
-            OnAttackPostHitEvent?.Invoke();
-            Debug.Log("PROJ: Invoked OnAttackPostHitEvent");
+        InvokePostHitEvent();
 
-        }
+        Debug.Log(other.name + " took " + scalingStatData.FinalValue(mob.stats) + " points of damage.");
     }
 
     protected void InvokePreHitEvent()
