@@ -1,6 +1,7 @@
 using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
+using UnityEngine.UI;
 
 public class MenuScreen : MonoBehaviour
 {
@@ -8,6 +9,9 @@ public class MenuScreen : MonoBehaviour
     public MenuScreen previousMenu;
     public MenuScreen nextMenu;
     public bool exempt = false; // exempt from force opening/closing
+
+    [Header("Button to invoke when pressing 'ESC'")]
+    public Button[] defaultButtons;
 
     private CanvasGroup _cs;
     public CanvasGroup CS
@@ -24,37 +28,25 @@ public class MenuScreen : MonoBehaviour
         _fader = GetComponent<Fader>();
     }
 
-    // Start is called before the first frame update
-    void Start()
+    public void OnEnable()
     {
-        if (playOnStart) Show();
+        UIManager.Instance.SelectMenu(this);
     }
 
-    // Update is called once per frame
-    void Update()
+    public void SelectDefaultButton()
     {
-        
+        if (defaultButtons.Length > 0)
+        {
+            for (int i = 0; i < defaultButtons.Length; ++i)
+            {
+                if (defaultButtons[i].gameObject.activeInHierarchy)
+                {
+                    Debug.Log("Successful!");
+                    defaultButtons[i].onClick.Invoke();
+                    break;
+                }
+            }
+        }
     }
 
-    public void Show()
-    {
-        // have a Fader script on all menus, and this calls that
-        //if (_fader) _fader.FadeIn = true;
-        //_cs.alpha = 1f;
-        gameObject.SetActive(true);
-
-    }
-
-    public void End()
-    {
-        //if (nextMenu)
-        //{
-        //    _fader.FadeOut = true; // use Fader here?
-        //    nextMenu.Show();
-        //}
-
-        //_cs.alpha = 0f;
-        gameObject.SetActive(false);
-
-    }
 }

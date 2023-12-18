@@ -3,9 +3,10 @@ using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.UI;
 
-public class SelectButtonOnEnable : MonoBehaviour
+public class ManagedButton : MonoBehaviour
 {
     Button button;
+    public bool selectOnStart = true;
 
     // Start is called before the first frame update
     void Awake()
@@ -15,13 +16,18 @@ public class SelectButtonOnEnable : MonoBehaviour
 
     private void OnEnable()
     {
-        if (true == gameObject.activeInHierarchy) button.Select();
+        if (true == gameObject.activeInHierarchy && selectOnStart)
+        {
+            UIManager.Instance.SelectButton(button);
+        }
     }
 
     private void OnDisable()
     {
+        Debug.Log("AYY I GOT CALLED!! " + gameObject.name);
         button.interactable = false;
         button.interactable = true;
+        UIManager.Instance.DeselectButton(button);
     }   
     
 
