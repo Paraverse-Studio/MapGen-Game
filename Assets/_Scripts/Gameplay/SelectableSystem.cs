@@ -25,7 +25,7 @@ public class SelectableSystem : MonoBehaviour
     }
 
     [Header("Settings")]
-    [Tooltip("Don't deselect a target before this duration has passed")]
+    [Tooltip("Don't deselect a target before this duration has passed, when player moves out of range")]
     public float TargetMinimumDuration;
 
     [Header("Events")]

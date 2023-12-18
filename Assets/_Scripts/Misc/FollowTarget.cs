@@ -67,7 +67,7 @@ public class FollowTarget : MonoBehaviour
             transform.position = goalPosition;
         }
 
-        if (snapToFarDistance && (transform.position - goalPositionOriginal).sqrMagnitude > (10f * 10f)) 
+        if (snapToFarDistance && (transform.position - goalPositionOriginal).sqrMagnitude > (30f * 30f)) 
             transform.position = goalPositionOriginal;
 
         if (followRotation) transform.rotation = target.rotation;
