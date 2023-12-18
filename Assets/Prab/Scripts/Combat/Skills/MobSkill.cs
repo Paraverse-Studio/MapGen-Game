@@ -234,7 +234,7 @@ namespace Paraverse.Combat
         /// <returns></returns>
         protected virtual bool CanUseSkill()
         {
-            if (IsOffCooldown && HasEnergy && TargetWithinRange && mob.IsAttackLunging == false && IsBasicAttack == false)
+            if (IsOffCooldown && HasEnergy && TargetWithinRange && mob.IsAttackLunging == false && anim.GetBool(StringData.IsBasicAttacking) == false)
                 return true;
 
             return false;

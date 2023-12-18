@@ -339,42 +339,42 @@ namespace Paraverse.Player
         /// <summary>
         /// Checks if mob is landing on an avoidance layer object, if so, sets avoidLandingOn as true. 
         /// </summary>
-        private void AvoidObjUponLand()
-        {
-            RaycastHit hit;
-            Vector3 origin = transform.position;
-            Vector3 dir = -transform.up;
+        //private void AvoidObjUponLand()
+        //{
+        //    RaycastHit hit;
+        //    Vector3 origin = transform.position;
+        //    Vector3 dir = -transform.up;
 
-            if (Physics.SphereCast(origin, controller.radius, dir * disToEnemyCheck, out hit, disToEnemyCheck, avoidLayers))
-            {
-                _isAvoidingObjUponLanding = true;
-            }
-            LandingAvoidanceHandler();
-        }
+        //    if (Physics.SphereCast(origin, controller.radius, dir * disToEnemyCheck, out hit, disToEnemyCheck, avoidLayers))
+        //    {
+        //        _isAvoidingObjUponLanding = true;
+        //    }
+        //    LandingAvoidanceHandler();
+        //}
 
-        /// <summary>
-        /// Handles avoiding landing
-        /// </summary>
-        private void LandingAvoidanceHandler()
-        {
-            Vector3 offDis = new Vector3(transform.forward.x, -downwardAvoidanceForceRatio, transform.forward.z);
-            if (_isAvoidingObjUponLanding)
-            {
-                controller.Move(offDis * avoidanceForce * Time.deltaTime);
-            }
+        ///// <summary>
+        ///// Handles avoiding landing
+        ///// </summary>
+        //private void LandingAvoidanceHandler()
+        //{
+        //    Vector3 offDis = new Vector3(transform.forward.x, -downwardAvoidanceForceRatio, transform.forward.z);
+        //    if (_isAvoidingObjUponLanding)
+        //    {
+        //        controller.Move(offDis * avoidanceForce * Time.deltaTime);
+        //    }
 
-            // Apply avoidance force if mob is not grounded within isNotGroundedMaxDur
-            //if (_isGrounded == false)
-            //{
-            //    isNotGroundedDur += Time.deltaTime;
-            //    if (isNotGroundedDur >= isNotGroundedMaxDur)
-            //        _isAvoidingObjUponLanding = true;
-            //}
-            //else
-            //{
-            //    isNotGroundedDur = 0f;
-            //}
-        }
+        //    // Apply avoidance force if mob is not grounded within isNotGroundedMaxDur
+        //    //if (_isGrounded == false)
+        //    //{
+        //    //    isNotGroundedDur += Time.deltaTime;
+        //    //    if (isNotGroundedDur >= isNotGroundedMaxDur)
+        //    //        _isAvoidingObjUponLanding = true;
+        //    //}
+        //    //else
+        //    //{
+        //    //    isNotGroundedDur = 0f;
+        //    //}
+        //}
         #endregion
 
         #region Dive Methods
@@ -383,7 +383,7 @@ namespace Paraverse.Player
         /// </summary>
         private void Dive()
         {
-            if (_isStaggered || _isDiving || combat.IsAttackLunging) return;
+            if (_isStaggered || _isDiving || combat.IsAttackLunging || combat.IsSkilling) return;
 
             if (_isGrounded && curDiveCd >= diveCd)
             {
