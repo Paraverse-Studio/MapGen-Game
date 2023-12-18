@@ -100,7 +100,7 @@ namespace Paraverse.Player
 
             foreach (MobSkill sk in skills)
             {
-                DeactivateSkillWithUI();
+                DeactivateSkillWithUI(sk);
                 skills.Remove(sk);
             }
         }
@@ -115,7 +115,7 @@ namespace Paraverse.Player
             _refresher.RefreshContentFitters();
         }
 
-        private void DeactivateSkillWithUI()
+        private void DeactivateSkillWithUI(MobSkill skill)
         {
             skill.DeactivateSkill(input);
             _activeSkill = null;
