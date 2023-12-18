@@ -92,7 +92,7 @@ namespace Paraverse
 
         protected virtual void OnTriggerStay(Collider other)
         {
-            if (other.CompareTag(targetTag) && dotTimer >= dotIntervalTimer)
+            if (other.CompareTag(targetTag) && dotTimer >= dotIntervalTimer && dot)
             {
                 dotTimer = 0f;
                 DamageLogic(other);
