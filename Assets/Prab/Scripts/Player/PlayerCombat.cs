@@ -98,10 +98,10 @@ namespace Paraverse.Player
         {
             if (null != _activeSkill) _activeSkill.DeactivateSkill(input);
 
-            foreach (MobSkill sk in skills)
+            for (int i = 0; i < skills.Count; i++)
             {
-                DeactivateSkillWithUI(sk);
-                skills.Remove(sk);
+                DeactivateSkillWithUI(skills[i]);
+                skills.Remove(skills[i]);
             }
         }
 
