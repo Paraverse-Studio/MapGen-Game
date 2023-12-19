@@ -1,4 +1,5 @@
 using Paraverse.Combat;
+using Paraverse.Player;
 using Paraverse.Stats;
 using System.Collections;
 using System.Collections.Generic;
@@ -43,6 +44,13 @@ public class BuffSkill : MobSkill, IMobSkill
     private Transform _userWeapon = null;
     private GameObject _VFX = null;
     #endregion
+
+    public override void DeactivateSkill(PlayerInputControls input)
+    {
+        base.DeactivateSkill(input);
+        DisableSkill();
+        Destroy(_VFX);
+    }
 
     public override void SkillUpdate()
     {

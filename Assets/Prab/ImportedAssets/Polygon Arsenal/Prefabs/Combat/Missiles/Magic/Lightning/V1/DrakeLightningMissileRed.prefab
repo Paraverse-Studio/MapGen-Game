@@ -14675,7 +14675,6 @@ GameObject:
   - component: {fileID: 4128837290899696}
   - component: {fileID: 198550701098355552}
   - component: {fileID: 199089386899808794}
-  - component: {fileID: 114845700637665068}
   - component: {fileID: 6506948218312774757}
   - component: {fileID: 2281676261979697823}
   m_Layer: 0
@@ -19549,22 +19548,6 @@ ParticleSystemRenderer:
   m_MeshWeighting2: 1
   m_MeshWeighting3: 1
   m_MaskInteraction: 0
---- !u!114 &114845700637665068
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 1724378205437814}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 5aa5c1e37409a9344a344c0468db383d, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: 
-  prefabSound: {fileID: 1297775994297274, guid: 5688e2c326ca8d341beb40d43f1eb92d, type: 3}
-  destroyWhenDone: 1
-  soundPrefabIsChild: 0
-  pitchRandomMultiplier: 1.1
 --- !u!114 &6506948218312774757
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -19578,19 +19561,25 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   targetTag: Player
+  knockBackEffect: {fileID: 11400000, guid: 598974d11fcf1634694fbcf7947f6e76, type: 2}
+  dot: 0
+  dontApplyDamageOnEnter: 0
+  dotIntervalTimer: 1
+  applyHitAnim: 1
+  hitFX: {fileID: 0}
+  scalingStatData:
+    flatPower: 0
+    attackScaling: 1
+    abilityScaling: 0
+    healthScaling: 0
+  isBasicAttackCollider: 0
   speed: 15
   range: 15
   deathTimer: 4
   stationary: 0
-  dot: 0
-  dontApplyDamageOnEnter: 0
-  dotIntervalTimer: 1
-  knockBackEffect: {fileID: 11400000, guid: 598974d11fcf1634694fbcf7947f6e76, type: 2}
   pierce: 0
-  applyHitAnim: 1
-  launchFX: {fileID: 0}
-  hitFX: {fileID: 0}
   decreaseByLerp: -1
+  launchFX: {fileID: 0}
 --- !u!65 &2281676261979697823
 BoxCollider:
   m_ObjectHideFlags: 0

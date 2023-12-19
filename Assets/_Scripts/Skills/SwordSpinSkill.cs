@@ -1,4 +1,3 @@
-using Paraverse;
 using Paraverse.Combat;
 using Paraverse.Mob.Combat;
 using Paraverse.Mob.Stats;
