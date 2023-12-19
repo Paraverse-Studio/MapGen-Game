@@ -29,7 +29,7 @@ public class ScoreFormula
     // https://www.mathcelebrity.com/3ptquad.php?p1=50%2C+75&p2=0%2C+107&p3=100%2C+35&pl=Calculate+Equation (helped find the equation)
 
 
-    public static float CalculateScore(float expectedTime, float timeTaken, int maxHealth, int damageTaken)
+    public static float CalculateScore(float expectedTime, float timeTaken, int maxHealth, int damageTaken, out int goldToReward)
     {
         float score = -1f;
 
@@ -59,6 +59,20 @@ public class ScoreFormula
         Debug.Log($"Score Summary: Time taken {timeTaken} (score {(int)timeScore}%), " +
             $"and damage taken {damageTaken} [given max HP: {maxHealth}] (score {(int)damageTakenScore}%): Score {(int)score}%");
 
+
+        if (score >= 90)
+        {
+            goldToReward = (int)(score * 1.2f);
+        }
+        else if (score >= 80)
+        {
+            goldToReward = (int)(score * 1.1f);
+        }
+        else
+        {
+            goldToReward = (int)score;
+        }
+
         return score;
     }
 
@@ -82,7 +96,7 @@ public class ScoreFormula
     private static float DamageTakenScore2(int maxHealth, int damageTaken)
     {
         float percentDamageTaken = ((float)damageTaken / (float)maxHealth) * 100.0f;
-        return (-0.0004f * Mathf.Pow(percentDamageTaken, 2f)) - (0.75f * percentDamageTaken) + 107f; 
+        return (-0.0026f * Mathf.Pow(percentDamageTaken, 2f)) - (0.75f * percentDamageTaken) + 107f; 
     }
 
     public static string GetScoreRank(int score)
