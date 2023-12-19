@@ -1,4 +1,7 @@
+using Paraverse;
 using Paraverse.Combat;
+using Paraverse.Mob.Combat;
+using Paraverse.Mob.Stats;
 using Paraverse.Player;
 using Paraverse.Stats;
 using UnityEngine;
@@ -24,6 +27,19 @@ public class SwordSpinSkill : MobSkill, IMobSkill
     private bool _spinStarted = false;
     private float _boost = 0f;
     #endregion
+
+    public override void ActivateSkill(MobCombat mob, Animator anim, MobStats stats, Transform target = null)
+    {
+        base.ActivateSkill(mob, anim, stats, target);
+    }
+
+    public override void DeactivateSkill(PlayerInputControls input)
+    {
+        base.DeactivateSkill(input);
+        DisableSkill();
+        Destroy(_VFX);
+        Destroy(_VFX2);
+    }
 
     public override void SkillUpdate()
     {

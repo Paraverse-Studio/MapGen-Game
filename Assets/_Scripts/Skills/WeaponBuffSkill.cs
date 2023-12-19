@@ -1,4 +1,6 @@
 using Paraverse.Combat;
+using Paraverse.Mob.Stats;
+using Paraverse.Player;
 using Paraverse.Stats;
 using UnityEngine;
 
@@ -15,6 +17,20 @@ public class WeaponBuffSkill : MobSkill, IMobSkill
     private GameObject _weaponVFX = null;
     private StatModifier _buff = null;
     #endregion
+
+    public override void ActivateSkill(PlayerCombat mob, PlayerInputControls input, Animator anim, MobStats stats, Transform target = null)
+    {
+        base.ActivateSkill(mob, input, anim, stats, target);
+    }
+
+    public override void DeactivateSkill(PlayerInputControls input)
+    {
+        base.DeactivateSkill(input);
+        DisableSkill();
+        Destroy(_weaponVFX);
+        Debug.Log("disable: " + _weaponVFX);
+    }
+
 
     public override void SkillUpdate()
     {
@@ -76,7 +92,7 @@ public class WeaponBuffSkill : MobSkill, IMobSkill
         }
     }
 
-    private float GetPowerAmount()
+    protected override float GetPowerAmount()
     {
         return scalingStatData.flatPower + (stats.AttackDamage.FinalValue * scalingStatData.attackScaling) + (stats.AbilityPower.FinalValue * scalingStatData.abilityScaling);
     }
