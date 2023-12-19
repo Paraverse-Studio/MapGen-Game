@@ -48,6 +48,10 @@ namespace Paraverse.Player
         [SerializeField] private Animation _skillCDGlow;
         [SerializeField] private ContentFitterRefresher _refresher;
 
+
+        // Reset to Default Skill UI upon player death
+        [SerializeField]
+        private Sprite noSkillSprite;
         #endregion
 
 
@@ -120,8 +124,10 @@ namespace Paraverse.Player
             skill.DeactivateSkill(input);
             _activeSkill = null;
             _skillLabel.text = "";
+            _skillCDTime.text = "";
             _skillLabel.transform.parent.gameObject.SetActive(false);
-            _skillIcon.sprite = null;
+            _skillIcon.sprite = noSkillSprite;
+            _skillCDFill.gameObject.SetActive(false);
             _refresher.RefreshContentFitters();
         }
 

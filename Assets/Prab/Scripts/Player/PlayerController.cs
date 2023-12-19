@@ -4,6 +4,7 @@ using Paraverse.Mob;
 using Paraverse.Mob.Combat;
 using Paraverse.Mob.Stats;
 using UnityEngine;
+using UnityEngine.UI;
 
 namespace Paraverse.Player
 {
@@ -89,7 +90,6 @@ namespace Paraverse.Player
         public event IMobController.OnDeathDel OnDeathEvent;
 
         // State Booleans
-
         public float JumpGravity { get { return jumpGravity; } set { jumpGravity = value; } }
         public Transform Transform { get { return transform; } }
         public bool IsInteracting { get { return _isInteracting; } }
