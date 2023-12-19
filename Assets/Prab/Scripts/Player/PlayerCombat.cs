@@ -85,26 +85,36 @@ namespace Paraverse.Player
             {
                 if (sk.ID == skill.ID)
                 {
-                    ActivateSkillWithUI(sk);
+                    ActivateSkillUI(sk);
                     return;
                 }
             }
             MobSkill skillInstance = Instantiate(obj, SkillHolder).GetComponent<MobSkill>();
             skills.Add(skillInstance);
-            ActivateSkillWithUI(skillInstance);
+            ActivateSkillUI(skillInstance);
         }
         public void DeactivateSkill()
         {
             _activeSkill.DeactivateSkill(input);
+            DeactivateSkillUI();
         }
 
-        private void ActivateSkillWithUI(MobSkill skill)
+        private void ActivateSkillUI(MobSkill skill)
         {
             skill.ActivateSkill(this, input, anim, stats);
             _activeSkill = skill;
             _skillLabel.text = skill.Name;
             _skillLabel.transform.parent.gameObject.SetActive(true);
             _skillIcon.sprite = skill.Image;
+            _skillIcon.color = new Color(1, 1, 1, 1);
+            _refresher.RefreshContentFitters();
+        }
+
+        private void DeactivateSkillUI()
+        {
+            _skillLabel.text = string.Empty;
+            _skillLabel.transform.parent.gameObject.SetActive(false);
+            _skillIcon.color = new Color(1, 1, 1, 0);
             _refresher.RefreshContentFitters();
         }
 
