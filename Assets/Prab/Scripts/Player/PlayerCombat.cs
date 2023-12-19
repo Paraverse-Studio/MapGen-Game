@@ -100,7 +100,10 @@ namespace Paraverse.Player
 
         public void DeactivateSkill()
         {
-            if (null != _activeSkill) _activeSkill.DeactivateSkill(input);
+            if (null != _activeSkill)
+            {
+                _activeSkill.DeactivateSkill(input);
+            }
 
             for (int i = 0; i < skills.Count; i++)
             {
