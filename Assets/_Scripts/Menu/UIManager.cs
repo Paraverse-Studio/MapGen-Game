@@ -34,12 +34,12 @@ public class UIManager : MonoBehaviour
 
     private void Update()
     {
-        string s = string.Empty;
-        for (int i = 0; i < _buttonsQueue.Count; ++i)
-        {
-            s += _buttonsQueue.ToArray()[i].name + ", ";
-        }
-        Debug.Log("QUEUE: " + s);           
+        //string s = string.Empty;
+        //for (int i = 0; i < _buttonsQueue.Count; ++i)
+        //{
+        //    s += _buttonsQueue.ToArray()[i].name + ", ";
+        //}
+        //Debug.Log("QUEUE: " + s);           
 
     }
 
