@@ -24,7 +24,6 @@ public class ManagedButton : MonoBehaviour
 
     private void OnDisable()
     {
-        Debug.Log("AYY I GOT CALLED!! " + gameObject.name);
         button.interactable = false;
         button.interactable = true;
         UIManager.Instance.DeselectButton(button);
