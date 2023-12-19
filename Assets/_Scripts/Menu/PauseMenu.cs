@@ -1,3 +1,4 @@
+using Paraverse.Player;
 using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
@@ -43,6 +44,7 @@ public class PauseMenu : TimeChanger
     void Start()
     {
         _isPaused = false;
+        PlayerInputControls.Instance.OnPauseEvent += TogglePause;
     }
 
     private float GetTimeDelta()
@@ -54,7 +56,7 @@ public class PauseMenu : TimeChanger
     void Update()
     {
         // it's here instead of Player Controller for ex. because player controlled might be disabled during UI, pauses, etc.
-        if (Input.GetKeyDown(KeyCode.Escape)) TogglePause();
+        //if (Input.GetKeyDown(KeyCode.Escape) && !_isPaused) SetPause(true);
 
         if (_isPaused)
         {

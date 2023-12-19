@@ -374,6 +374,17 @@ public partial class @PlayerInputs : IInputActionCollection2, IDisposable
                 },
                 {
                     ""name"": """",
+                    ""id"": ""7b613c4a-c336-4a5c-b116-6d5ed91f3e31"",
+                    ""path"": ""<Gamepad>/buttonEast"",
+                    ""interactions"": """",
+                    ""processors"": """",
+                    ""groups"": ""Gamepad"",
+                    ""action"": ""Cancel"",
+                    ""isComposite"": false,
+                    ""isPartOfComposite"": false
+                },
+                {
+                    ""name"": """",
                     ""id"": ""ed643e79-9151-4c69-aaf5-f30889c9801d"",
                     ""path"": ""<Mouse>/position"",
                     ""interactions"": """",
@@ -665,7 +676,7 @@ public partial class @PlayerInputs : IInputActionCollection2, IDisposable
                 {
                     ""name"": """",
                     ""id"": ""2e11321f-f580-4066-8410-276347443c76"",
-                    ""path"": ""<Keyboard>/escape"",
+                    ""path"": ""<Keyboard>/p"",
                     ""interactions"": """",
                     ""processors"": """",
                     ""groups"": ""Keyboard"",
@@ -984,7 +995,7 @@ public partial class @PlayerInputs : IInputActionCollection2, IDisposable
                 {
                     ""name"": """",
                     ""id"": ""0820e6ba-ace2-4347-a7a6-073f61bde243"",
-                    ""path"": ""<Gamepad>/select"",
+                    ""path"": ""<Gamepad>/buttonSouth"",
                     ""interactions"": """",
                     ""processors"": """",
                     ""groups"": ""Gamepad"",

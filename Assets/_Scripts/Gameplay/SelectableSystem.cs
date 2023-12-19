@@ -10,7 +10,7 @@ public class SelectableSystem : MonoBehaviour
 {
     public static SelectableSystem Instance;
 
-    [Header("(Run-time)")]
+    [Header("[Run-time]")]
     public Selectable Target;
 
     [Header("Target Outline")]
@@ -24,8 +24,8 @@ public class SelectableSystem : MonoBehaviour
         get { return _selectables; }
     }
 
-    [Header("Settings")]
-    [Tooltip("Don't deselect a target before this duration has passed")]
+    [Header("Targetting Settings")]
+    [Tooltip("Don't deselect a target before this duration has passed, when player moves out of range")]
     public float TargetMinimumDuration;
 
     [Header("Events")]

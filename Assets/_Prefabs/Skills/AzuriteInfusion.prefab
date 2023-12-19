@@ -48,7 +48,7 @@ MonoBehaviour:
   _ID: 102
   _image: {fileID: 21300000, guid: fe967a1394de8be46870dbc53b91ea4c, type: 3}
   _description: 'Active Skill: Imbue Azurite magic into your weapon, temporarily
-    providing an Attack boost scaling off of [DMG] and increasing attack-range.'
+    providing an Attack boost scaling of [DMG] and increasing attack-range.'
   _minRange: 0
   _maxRange: 5
   cooldown: 25
@@ -67,17 +67,18 @@ MonoBehaviour:
   usesTargetLock: 0
   rotSpeed: 100
   scalingStatData:
-    flatPower: 0
+    flatPower: 10
     attackScaling: 0
-    abilityScaling: 0.4
+    abilityScaling: 0.8
     healthScaling: 0
   Buffs:
   - type: 4
     scalingValue:
-      flatPower: 0
+      flatPower: 10
       attackScaling: 0
-      abilityScaling: 0.5
+      abilityScaling: 0.8
       healthScaling: 0
+    isPercentageBuff: 0
   buffVFX: {fileID: 3588532860561885775, guid: 462bf3cfddfdfda4d8396a6263584db3, type: 3}
   vfxWeaponParent: 1
   vfxBodyParent: 0
