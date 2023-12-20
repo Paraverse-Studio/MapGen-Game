@@ -57,6 +57,11 @@ public abstract class MobEffect : MonoBehaviour
 
     }
 
+    public virtual void OnSkillChangeApplyEffect()
+    {
+
+    }
+
     /// <summary>
     /// useCustomDamage needs to be set to true on AttackCollider.cs inorder to apply this.
     /// </summary>

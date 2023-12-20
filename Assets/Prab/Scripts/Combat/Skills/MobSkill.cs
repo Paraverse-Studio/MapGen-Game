@@ -74,6 +74,9 @@ namespace Paraverse.Combat
         public ScalingStatData scalingStatData;
 
         public bool skillOn { get; set; }
+
+        public delegate void OnExecuteSkillDel();
+        public event OnExecuteSkillDel OnExecuteSkillEvent;
         #endregion
 
         #region Inheritable 
@@ -264,6 +267,7 @@ namespace Paraverse.Combat
         {
             if (CanUseSkill())
             {
+                OnExecuteSkillEvent?.Invoke();
                 SubscribeAnimationEventListeners();
                 ExecuteSkillLogic();
             }
