@@ -76,6 +76,11 @@ public class TeleportSkill : MobSkill, IMobSkill
         {
             attackColliderGO.SetActive(true);
         }));
+
+        StartCoroutine(UtilityFunctions.IDelayedAction(0.25f, () =>
+        {
+            attackColliderGO.SetActive(false);
+        }));
     }
 
     protected override void DisableSkill()
