@@ -37,6 +37,7 @@ public class Damage : MonoBehaviour, IDamage
 
     [SerializeField]
     protected bool isBasicAttackCollider = false;
+    public bool IsBasicAttackCollider { get { return IsBasicAttackCollider; } }
 
     // Basic Attack Events Pre/During/Post
     public delegate void OnBasicLandPreDmgDel();
