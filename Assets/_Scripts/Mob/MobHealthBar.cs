@@ -136,6 +136,8 @@ public class MobHealthBar : MonoBehaviour
         _health = (float)currentHP;
         _totalHealth = (float)totalHP;
 
+        if (healthChange == 0) return;
+
         if (_healthValueDisplay) _healthValueDisplay.text = currentHP + " / " + totalHP;
 
         if (!_healthBarSetupComplete || !_healthBarShowable) return;

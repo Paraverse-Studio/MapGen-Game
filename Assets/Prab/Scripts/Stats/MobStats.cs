@@ -47,6 +47,11 @@ namespace Paraverse.Mob.Stats
         public float CurEnergy { get { return _curEnergy; } }
 
         [SerializeField]
+        protected float healthRegen = 0f;
+        public Stat HealthRegen { get { return _healthRegen; } }
+        private Stat _healthRegen;
+
+        [SerializeField]
         protected float energyRegen = 25f;
         public Stat EnergyRegen { get { return _energyRegen; } }
         private Stat _energyRegen;
@@ -88,6 +93,10 @@ namespace Paraverse.Mob.Stats
 
         protected virtual void Update()
         {
+            if (HealthRegen.FinalValue > 0 && Time.frameCount % 180 == 0)
+            {
+                UpdateCurrentHealth((int)HealthRegen.FinalValue);
+            }
             UpdateCurrentEnergy(EnergyRegen.FinalValue * Time.deltaTime);
         }
         #endregion
@@ -162,6 +171,8 @@ namespace Paraverse.Mob.Stats
             _attackSpeed.FactoryResetMods();
             _moveSpeed = new Stat(moveSpeed);
             _moveSpeed.FactoryResetMods();
+            _healthRegen = new Stat(healthRegen);
+            _healthRegen.FactoryResetMods();
             _energyRegen = new Stat(energyRegen);
             _energyRegen.FactoryResetMods();
 

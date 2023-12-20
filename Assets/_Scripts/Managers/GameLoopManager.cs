@@ -331,7 +331,7 @@ public class GameLoopManager : MonoBehaviour
 
         resultScreen.timeTakenText.text = UtilityFunctions.GetFormattedTime(roundTimer.GetTime());
         resultScreen.damageTakenText.text = $"{damageTaken} ({(int)(((float)damageTaken/(float)playerMaxHealth)*100.0f)}%)";
-        resultScreen.totalScoreText.text = $"{score}%";
+        resultScreen.totalScoreText.text = $"{Mathf.RoundToInt(score)}%";
 
         if (roundCompletionType == RoundCompletionType.Failed)
         {
