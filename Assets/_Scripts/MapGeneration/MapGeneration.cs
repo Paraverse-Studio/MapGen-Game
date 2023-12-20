@@ -1105,7 +1105,13 @@ public class MapGeneration : MonoBehaviour
                     return !GetGridOccupant(b).hasProp;
                 }).gameObject;
 
-            GameObject enemy = Instantiate(M.enemies[Random.Range(0, M.enemies.Length)],
+            // Choosing the enemy to spawn
+            // New System: the enemy prefabs in the list are in order from weakest to strongest
+            // only show tier 1 & 2 at first (round 1 of biome), then tier 3 next round, then tier 4, etc. (if there's that many)
+            int enemyTiersToShow = GameLoopManager.Instance.roundNumberInBiome + 1;
+            int range = Mathf.Min(M.enemies.Length, enemyTiersToShow);
+
+            GameObject enemy = Instantiate(M.enemies[Random.Range(0, range)],
                 closestPathObject.transform.position + new Vector3(0, 0.5f, 0), Quaternion.identity);
 
             enemy.name = "Enemy " + (enemyObjects.Count + 1);

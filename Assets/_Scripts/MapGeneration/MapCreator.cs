@@ -94,6 +94,7 @@ public class MapCreator : MonoBehaviour
         {
             biomeIndex++;
             biomeChangePending = false;
+            GameLoopManager.Instance.roundNumberInBiome = 1;
         }
 
         // Determining type of map (normal, boss, reward)
