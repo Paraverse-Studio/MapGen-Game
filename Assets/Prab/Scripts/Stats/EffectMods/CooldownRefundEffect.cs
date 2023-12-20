@@ -15,8 +15,7 @@ public class CooldownRefundEffect: MobEffect
     public override void ActivateEffect(MobStats stats)
     {
         base.ActivateEffect(stats);
-        //foreach (MobController enemy in EnemiesManager.Instance.Enemies)
-        foreach (MobController enemy in mobs)
+        foreach (MobController enemy in EnemiesManager.Instance.Enemies)
         {
             Debug.Log("enemy: " + enemy.name);
             enemy.OnDeathEvent += RefundCooldown;
