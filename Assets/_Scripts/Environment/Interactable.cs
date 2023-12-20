@@ -76,7 +76,7 @@ public class Interactable : MonoBehaviour, ITickElement
         var interactPhrase = GetInteractPhrase(_player.Input.Player.Interact);
 
         _interactableMessage = 
-        $"{interactPhrase} to interact with <b><color=#{ColorUtility.ToHtmlStringRGB(_interactableColor)}>{gameObject.name}</color></b>";
+        $"{interactPhrase}to interact with <b><color=#{ColorUtility.ToHtmlStringRGB(_interactableColor)}>{gameObject.name}</color></b>";
     }
 
     public void Tick()
