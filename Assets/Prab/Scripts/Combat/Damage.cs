@@ -95,7 +95,7 @@ public class Damage : MonoBehaviour, IDamage
     /// </summary>
     protected virtual float ApplyCustomDamage(IMobController controller)
     {
-        float totalDmg = Mathf.CeilToInt(scalingStatData.FinalValue(mob.stats));
+        float totalDmg = Mathf.CeilToInt(scalingStatData.FinalValueWithBoosts(mob.stats));
         controller.Stats.UpdateCurrentHealth(-(int)totalDmg);
         Debug.Log("Applied " + totalDmg + " points of damage to " + controller.Transform.name);
         return totalDmg;
@@ -109,6 +109,21 @@ public class Damage : MonoBehaviour, IDamage
         if (other.CompareTag(targetTag) && !hitTargets.Contains(other.gameObject))
         {
             DamageLogic(other);
+        }
+    }
+
+    protected virtual void OnTriggerStay(Collider other)
+    {
+        if (dot == false) return;
+
+        if (other.CompareTag(targetTag) && !hitTargets.Contains(other.gameObject) && applyHit && dotTimer >= dotIntervalTimer && dot)
+        {
+            DamageLogic(other);
+            dotTimer = dotIntervalTimer;
+            hitTargets.Add(other.gameObject);
+            applyHit = false;
+
+            Debug.Log(other.name + " took " + mob.stats.AttackDamage.FinalValue + " points of damage.");
         }
     }
 

@@ -21,31 +21,5 @@ namespace Paraverse
             this.mob = mob;
             gameObject.SetActive(false);
         }
-
-        protected virtual void OnTriggerStay(Collider other)
-        {
-            if (dot == false) return;
-
-            if (other.CompareTag(targetTag) && !hitTargets.Contains(other.gameObject) && applyHit)
-            {
-                DamageLogic(other);
-                dotTimer = dotIntervalTimer;
-                hitTargets.Add(other.gameObject);
-                applyHit = false;
-
-                Debug.Log(other.name + " took " + mob.stats.AttackDamage.FinalValue + " points of damage.");
-            }
-        }
-
-        /// <summary>
-        /// useCustomDamage needs to be set to true on AttackCollider.cs inorder to apply this.
-        /// </summary>
-        protected override float ApplyCustomDamage(IMobController controller)
-        {
-            float totalDmg = scalingStatData.FinalValueWithBoosts((IMobStats)mob.stats);
-
-            controller.Stats.UpdateCurrentHealth(-Mathf.CeilToInt(totalDmg));
-            return totalDmg;
-        }
     }
 }

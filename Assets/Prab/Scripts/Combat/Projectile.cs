@@ -1,6 +1,7 @@
 using Paraverse.Helper;
 using Paraverse.Mob;
 using Paraverse.Mob.Combat;
+using Paraverse.Mob.Stats;
 using UnityEngine;
 
 namespace Paraverse
@@ -77,30 +78,6 @@ namespace Paraverse
             this.mob = mob;
             this.speed = speed;
             scalingStatData = statData;
-        }
-
-        protected virtual void OnTriggerStay(Collider other)
-        {
-            if (other.CompareTag(targetTag) && !hitTargets.Contains(other.gameObject) && applyHit && dotTimer >= dotIntervalTimer && dot)
-            {
-                DamageLogic(other);
-                dotTimer = dotIntervalTimer;
-                hitTargets.Add(other.gameObject);
-                applyHit = false;
-
-                Debug.Log(other.name + " took " + mob.stats.AttackDamage.FinalValue + " points of damage.");
-            }
-        }
-
-        /// <summary>
-        /// useCustomDamage needs to be set to true on AttackCollider.cs inorder to apply this.
-        /// </summary>
-        protected override float ApplyCustomDamage(IMobController controller)
-        {
-            float totalDmg = Mathf.CeilToInt(scalingStatData.FinalValue(mob.stats));
-            controller.Stats.UpdateCurrentHealth(-(int)totalDmg);
-            Debug.Log("Applied " + totalDmg + " points of damage to " + controller.Transform.name);
-            return totalDmg;
         }
 
         protected override void DamageLogic(Collider other)

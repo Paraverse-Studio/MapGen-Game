@@ -1,3 +1,4 @@
+using Paraverse.Mob.Stats;
 using System;
 using UnityEngine;
 
@@ -22,7 +23,7 @@ public class ScalingStatData
         return (flatPower + finalAttackValue + finalAbilityValue + finalHealthValue);
     }
 
-    public float FinalValueWithBoosts(Paraverse.Mob.Stats.IMobStats stats)
+    public float FinalValueWithBoosts(MobStats stats)
     {
         float finalAttackValue = stats.AttackDamage.FinalValue * attackScaling * (null != stats.MobBoosts ? stats.MobBoosts.GetAttackDamageBoost() : 1f);
         float finalAbilityValue = stats.AbilityPower.FinalValue * abilityScaling * (null != stats.MobBoosts ? stats.MobBoosts.GetAbilityPowerBoost() : 1f);
