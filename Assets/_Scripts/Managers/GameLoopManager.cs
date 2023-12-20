@@ -37,6 +37,7 @@ public class GameLoopManager : MonoBehaviour
         public TextMeshProUGUI rankText;
         public TextMeshProUGUI timeTakenText;
         public TextMeshProUGUI damageTakenText;
+        public TextMeshProUGUI totalScoreText;
         public TextMeshProUGUI goldEarnedText;
         public GameObject shopButton;
         public GameObject mainMenuButton;
@@ -150,7 +151,7 @@ public class GameLoopManager : MonoBehaviour
             }
         }        
 
-        if (player.transform.position.y <= -20f)
+        if (player.transform.position.y <= -20f && _roundIsActive)
         {
             UtilityFunctions.TeleportObject(player, MapGeneration.Instance.GetClosestBlock(player.transform).transform.position + new Vector3(0, 0.5f, 0));
             Invoke(nameof(PlayerFallDamage), 0.15f);
@@ -324,12 +325,11 @@ public class GameLoopManager : MonoBehaviour
             return;
         }
 
-        float score = ScoreFormula.CalculateScore(totalEnemiesSpawned * (MapCreator.Instance.mapType == MapType.boss ? 50f : 10f), roundTimer.GetTime(), playerMaxHealth, damageTaken);
-        goldToReward = (int)(score * 1);
+        float score = ScoreFormula.CalculateScore(totalEnemiesSpawned * (MapCreator.Instance.mapType == MapType.boss ? 50f : 10f), roundTimer.GetTime(), playerMaxHealth, damageTaken, out goldToReward);
 
         resultScreen.timeTakenText.text = UtilityFunctions.GetFormattedTime(roundTimer.GetTime());
         resultScreen.damageTakenText.text = $"{damageTaken} ({(int)(((float)damageTaken/(float)playerMaxHealth)*100.0f)}%)";
-        
+        resultScreen.totalScoreText.text = $"{score}%";
 
         if (roundCompletionType == RoundCompletionType.Failed)
         {
