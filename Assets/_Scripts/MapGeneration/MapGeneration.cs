@@ -13,6 +13,7 @@ using UnityEngine.AI;
 using Paraverse.Mob.Stats;
 using Paraverse.Mob.Controller;
 using Paraverse.Player;
+using UnityEngine.InputSystem.XR;
 
 [System.Serializable]
 public class PropItem
@@ -1128,9 +1129,18 @@ public class MapGeneration : MonoBehaviour
                 enemyStats.UpdateAttackDamage(enemyStats.AttackDamage.FinalValue * damageScaleFactor);
                 enemyStats.UpdateAbilityPower(enemyStats.AbilityPower.FinalValue * damageScaleFactor);
                 enemyStats.UpdateMaxHealth(Mathf.CeilToInt(enemyStats.MaxHealth.FinalValue * healthScaleFactor));
+
+                MobController controller = enemy.GetComponentInChildren<MobController>();
                 if (MapCreator.Instance.mapType == MapType.boss)
                 {
-                    enemy.GetComponentInChildren<MobController>().OnDeathEvent += AddLegendaryChest;
+                    controller.OnDeathEvent += AddLegendaryChest;
+                }
+
+                // PRABS UGLY FORCED METHOD THAT NEEDS TO BE OPTIMIZED
+                PlayerCombat combat = PlayerController.Instance.GetComponent<PlayerCombat>();
+                foreach (MobEffect effect in combat.Effects)
+                {
+                    effect.OnEnemyDeathApplyEffect(controller);
                 }
             }
         }

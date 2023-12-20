@@ -1,5 +1,6 @@
 using Paraverse;
 using Paraverse.Mob;
+using Paraverse.Mob.Controller;
 using Paraverse.Mob.Stats;
 using Paraverse.Player;
 using System.Collections.Generic;
@@ -58,6 +59,11 @@ public abstract class MobEffect : MonoBehaviour
     }
 
     public virtual void OnSkillChangeApplyEffect()
+    {
+
+    }
+
+    public virtual void OnEnemyDeathApplyEffect(MobController enemy)
     {
 
     }

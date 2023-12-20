@@ -26,6 +26,12 @@ public class ReaperKillEffect : MobEffect
         }
     }
 
+    public override void OnEnemyDeathApplyEffect(MobController enemy)
+    {
+        base.OnEnemyDeathApplyEffect(enemy);
+        enemy.OnDeathEvent += GainHealth;
+    }
+
     private void GainHealth(Transform t = null)
     {
         _stats.UpdateCurrentHealth(healAmount);

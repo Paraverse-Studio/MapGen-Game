@@ -81,7 +81,7 @@ namespace Paraverse.Combat
 
         #region Inheritable 
         /// <summary>
-        /// Activates players skill ONLY
+        /// Activates players skill ONLY. Needs to be used for EVERY skill inorder to activate skill when obtained.
         /// </summary>
         /// <param name="mob"></param>
         /// <param name="input"></param>

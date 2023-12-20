@@ -34,27 +34,27 @@ namespace Paraverse.Player
         private float rotSpeed = 10f;
 
         [Header("Jump Values")]
-        [SerializeField, Tooltip("The jump force of the mob.")]
-        private float jumpForce = 10f;
+        //[SerializeField, Tooltip("The jump force of the mob.")]
+        //private float jumpForce = 10f;
         [SerializeField, Range(0.1f, 1f), Tooltip("Raycast distance to detect is Grounded")]
         private float disToGroundCheck = 0.1f;
-        [SerializeField, Range(0, 2), Tooltip("Time required to wait in between each jump.")]
-        private float jumpCd = 0.5f;
-        private float curJumpCd = 0f;
+        //[SerializeField, Range(0, 2), Tooltip("Time required to wait in between each jump.")]
+        //private float jumpCd = 0.5f;
+        //private float curJumpCd = 0f;
         [SerializeField, Tooltip("Detect these layers to consider mob is grounded.")]
         private LayerMask groundedLayers;
         [SerializeField]
         private float jumpGravity = -40f; 
 
-        [Header("Landing Avoidance")]
-        [SerializeField, Tooltip("Raycast distance to check for enemies below for land avoidance.")]
-        private float disToEnemyCheck = 0.5f;
-        [SerializeField, Tooltip("Avoid landing on these layers.")]
-        private LayerMask avoidLayers;
-        [SerializeField, Tooltip("Force applied to player movement to avoid the avoidLayers.")]
-        private float avoidanceForce = 10f;
-        [SerializeField, Tooltip("Downward force applied on the mob when landing off an avoidance object.")]
-        private float downwardAvoidanceForceRatio = 2f;
+        //[Header("Landing Avoidance")]
+        //[SerializeField, Tooltip("Raycast distance to check for enemies below for land avoidance.")]
+        //private float disToEnemyCheck = 0.5f;
+        //[SerializeField, Tooltip("Avoid landing on these layers.")]
+        //private LayerMask avoidLayers;
+        //[SerializeField, Tooltip("Force applied to player movement to avoid the avoidLayers.")]
+        //private float avoidanceForce = 10f;
+        //[SerializeField, Tooltip("Downward force applied on the mob when landing off an avoidance object.")]
+        //private float downwardAvoidanceForceRatio = 2f;
 
         [Header("Dive Values")]
         [SerializeField, Tooltip("The dive force of the mob.")]
@@ -297,8 +297,8 @@ namespace Paraverse.Player
         {
             ApplyGravity();
 
-            curJumpCd += Time.deltaTime;
-            curJumpCd = Mathf.Clamp(curJumpCd, 0, jumpCd);
+            //curJumpCd += Time.deltaTime;
+            //curJumpCd = Mathf.Clamp(curJumpCd, 0, jumpCd);
 
             controller.Move(jumpDir * Time.deltaTime);
         }
