@@ -18,9 +18,20 @@ public class TeleportSkill : MobSkill, IMobSkill
     // Check if target exists
     protected override bool CanUseSkill()
     {
-        if (IsOffCooldown && HasEnergy && TargetWithinRange && mob.IsAttackLunging == false && IsBasicAttack == false 
-            && null != mob.Target && UtilityFunctions.IsDistanceLessThan(mob.transform.position, mob.Target.position, rangeLimit))
-            return true;
+        if (IsOffCooldown && HasEnergy && TargetWithinRange && mob.IsAttackLunging == false && IsBasicAttack == false)
+        {
+            if (null == mob.Target)
+            {
+                mob.Target = SelectableSystem.Instance.ToggleSelect();
+            }
+
+            if (null != mob.Target && UtilityFunctions.IsDistanceLessThan(mob.transform.position, mob.Target.position, rangeLimit))
+            {
+                return true;
+            }
+
+            return false;
+        }
 
         return false;
     }
@@ -42,12 +53,15 @@ public class TeleportSkill : MobSkill, IMobSkill
 
         base.ExecuteSkillLogic();
 
-        // teleport
-        if (null == mob.Target) return;
+        // teleport to closest enemy
+        if (null == mob.Target)
+        {            
+            return;            
+        }
 
         anim.SetBool(StringData.IsInteracting, true);
         Vector3 oldPosition = mob.gameObject.transform.position;
-        Vector3 position = ((mob.Target.position - mob.transform.position).normalized * 1.2f) + mob.Target.position;
+        Vector3 position = ((mob.Target.position - mob.transform.position).normalized * 0.5f) + mob.Target.position;
         var block = MapGeneration.Instance.GetClosestValidGroundBlock(position);
 
         ResetCollider();
