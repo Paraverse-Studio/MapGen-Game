@@ -40,7 +40,7 @@ public class GlobalSettings : MonoBehaviour
     [Header("Combat")]
     public GameObject healthBarPrefab;
     public Material FlashMaterial;
-    public GameObject popupTextPrefab;
+    public PopupText popupTextPrefab;
     public Color damageColour;
     public Color healColour;
     public Material attackTrailMaterial;

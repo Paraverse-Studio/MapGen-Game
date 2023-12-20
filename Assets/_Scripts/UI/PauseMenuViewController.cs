@@ -25,7 +25,7 @@ public class PauseMenuViewController : MonoBehaviour
 
     public void UpdateDisplay()
     {
-        roundLabel.text = "Round " + GameLoopManager.Instance.nextRoundNumber.ToString();
+        roundLabel.text = "Round " + GameLoopManager.Instance.roundNumber.ToString();
         roundDescriptionText.text = MapGeneration.Instance.M.mapDescription;
 
         goldText.text = stats.Gold.ToString();

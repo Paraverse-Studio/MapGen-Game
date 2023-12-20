@@ -1019,7 +1019,7 @@ public class MapGeneration : MonoBehaviour
 
                     var chest = Instantiate(MapCreator.Instance.chestPrefab, b.transform.position + new Vector3(0, 0.5f, 0), GetCameraFacingRotation());
 
-                    var rareChestChance = MapCreator.Instance.rareChestBaseChance * (GameLoopManager.Instance.nextRoundNumber - 1);
+                    var rareChestChance = MapCreator.Instance.rareChestBaseChance * (GameLoopManager.Instance.roundNumber - 1);
                     if (Random.Range(0f, 100f) <= rareChestChance)
                     {
                         chest.Initialize(ChestObject.ChestTierType.Rare);
@@ -1123,8 +1123,8 @@ public class MapGeneration : MonoBehaviour
             MobStats enemyStats = enemy.GetComponentInChildren<MobStats>();
             if (enemyStats)
             {
-                float damageScaleFactor = MapCreator.Instance.enemyDamageScalingPerRound * (GameLoopManager.Instance.nextRoundNumber - 1);
-                float healthScaleFactor = MapCreator.Instance.enemyHealthScalingPerRound * (GameLoopManager.Instance.nextRoundNumber - 1);
+                float damageScaleFactor = MapCreator.Instance.enemyDamageScalingPerRound * (GameLoopManager.Instance.roundNumber - 1);
+                float healthScaleFactor = MapCreator.Instance.enemyHealthScalingPerRound * (GameLoopManager.Instance.roundNumber - 1);
 
                 enemyStats.UpdateAttackDamage(enemyStats.AttackDamage.FinalValue * damageScaleFactor);
                 enemyStats.UpdateAbilityPower(enemyStats.AbilityPower.FinalValue * damageScaleFactor);

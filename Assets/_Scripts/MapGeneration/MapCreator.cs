@@ -86,7 +86,7 @@ public class MapCreator : MonoBehaviour
     {
         ResetRuntimeVariables();
 
-        int adjustedRoundNumber = GameLoopManager.Instance.nextRoundNumber - 1;
+        int adjustedRoundNumber = GameLoopManager.Instance.roundNumber - 1;
 
         // Determining biome, removed: we don't change biome after a predetermined # of rounds anymore
         //biomeIndex = adjustedRoundNumber / switchMapAfterNumOfRounds;
@@ -114,7 +114,7 @@ public class MapCreator : MonoBehaviour
                 mapType = MapType.boss;                
             }
         }
-        if (GameLoopManager.Instance.nextRoundNumber == 2) // forcing round 2 to be a reward map
+        if (GameLoopManager.Instance.roundNumber == 2) // forcing round 2 to be a reward map
         {
             mapType = MapType.reward;
         }

@@ -136,10 +136,9 @@ public class MobHealthBar : MonoBehaviour
         _health = (float)currentHP;
         _totalHealth = (float)totalHP;
 
-        if (healthChange == 0) return;
-
         if (_healthValueDisplay) _healthValueDisplay.text = currentHP + " / " + totalHP;
 
+        if (healthChange == 0) return;
         if (!_healthBarSetupComplete || !_healthBarShowable) return;
 
         PopupTextOnHealthChange(healthChange);
@@ -153,16 +152,25 @@ public class MobHealthBar : MonoBehaviour
             return;
         }
 
-        GameObject popupObj = Instantiate(GlobalSettings.Instance.popupTextPrefab, GlobalSettings.Instance.ScreenSpaceCanvas.transform);
+        PopupText popupObj = Instantiate(GlobalSettings.Instance.popupTextPrefab, GlobalSettings.Instance.ScreenSpaceCanvas.transform);
         float xOffset = Random.Range(-0.25f, 0.25f);
         float zOffset = Random.Range(-0.25f, 0.25f);
         Vector3 screenPosition = Camera.main.WorldToScreenPoint(bodyToFollow.transform.position + new Vector3(xOffset, 0.5f, zOffset));
         popupObj.transform.position = new Vector3(screenPosition.x, screenPosition.y, 0);
 
-        TextMeshProUGUI textObj = popupObj.GetComponentInChildren<TextMeshProUGUI>();
-        if (healthChange >= _totalHealth * 0.65f) textObj.fontSize *= 1.55f;
-        else if (healthChange >= _totalHealth * 0.4f) textObj.fontSize *= 1.25f;
-        else if (healthChange <= _totalHealth * 0.1f) textObj.fontSize /= 1.25f;
+        TextMeshProUGUI textObj = popupObj.text;
+        if (healthChange >= _totalHealth * 0.65f)
+        {
+            textObj.fontSize *= 1.55f;
+        }
+        else if (healthChange >= _totalHealth * 0.4f)
+        {
+            textObj.fontSize *= 1.25f;
+        }
+        else if (healthChange <= _totalHealth * 0.1f)
+        {
+            textObj.fontSize /= 1.25f;
+        }
         textObj.text = Mathf.Abs(healthChange).ToString();
         textObj.color = (healthChange >= 0) ? GlobalSettings.Instance.damageColour : GlobalSettings.Instance.healColour;
     }
@@ -170,7 +178,6 @@ public class MobHealthBar : MonoBehaviour
     public void UpdateEnergyBar(int currentEnergy = 1, int totalEnergy = 1)
     {
         _energy = (float)currentEnergy;
-
         _totalEnergy = (float)totalEnergy;
     }
 

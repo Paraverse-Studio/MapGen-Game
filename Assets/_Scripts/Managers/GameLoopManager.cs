@@ -98,7 +98,7 @@ public class GameLoopManager : MonoBehaviour
     [Space(20)]
     [Header("Runtime Data")]
     [Min(1)]
-    public int nextRoundNumber;
+    public int roundNumber;
     public int roundNumberInBiome;
     public RoundCompletionType roundCompletionType;
     private GameObject player;
@@ -195,20 +195,21 @@ public class GameLoopManager : MonoBehaviour
     #region MAIN_MENU
     public void InitiateSession()
     {
-        nextRoundNumber = 1;
-        roundNumberInBiome = 1;
+        ResetSessionStates();
         GameLoopEvents.OnInitiateSession?.Invoke();
         InitiateRound();
     }
 
     public void InitiateRound()
-    {      
+    {
+        roundNumber++;
+        roundNumberInBiome++;
         GameLoopEvents.OnInitiateRound?.Invoke();
     }
 
     public void StartRound()
     {
-        ResetStates();
+        ResetRoundStates();
         GameLoopEvents.OnStartRound?.Invoke();
 
         totalEnemiesSpawned = EnemiesManager.Instance.EnemiesCount;
@@ -216,7 +217,7 @@ public class GameLoopManager : MonoBehaviour
 
         GameplayListeners(attachOrRemove: true);
 
-        if (nextRoundNumber == 1 && MapCreator.Instance.mapType != MapType.reward) // only for round 1, since it's tutorial
+        if (roundNumber == 1 && MapCreator.Instance.mapType != MapType.reward) // only for round 1, since it's tutorial
         {
             AnnouncementManager.Instance.QueueAnnouncement(new Announcement().AddType(1).StartDelay(1.5f).OverrideDuration(3f)
                 .AddText("Defeat all enemies & pass through the gate!"));
@@ -226,7 +227,7 @@ public class GameLoopManager : MonoBehaviour
         _roundIsActive = true;
     }
 
-    public void ResetStates()
+    public void ResetRoundStates()
     {
         damageTaken = 0;
         totalEnemiesSpawned = 0;
@@ -234,6 +235,12 @@ public class GameLoopManager : MonoBehaviour
         playerMaxHealth = 0;
         goldToReward = 0;
         _roundIsActive = false;
+    }
+
+    public void ResetSessionStates()
+    {
+        roundNumber = 0;
+        roundNumberInBiome = 0;
     }
 
     public void MakeCompletionPredicate(CompletionPredicateType predicate)
@@ -279,8 +286,6 @@ public class GameLoopManager : MonoBehaviour
             if (MapCreator.Instance.mapType == MapType.normal) roundCompletionType = RoundCompletionType.Completed;
             else if (MapCreator.Instance.mapType == MapType.boss) roundCompletionType = RoundCompletionType.BossDefeated;
             else roundCompletionType = RoundCompletionType.Reward;
-            nextRoundNumber++;
-            roundNumberInBiome++;
         }
         else
         {
@@ -323,72 +328,41 @@ public class GameLoopManager : MonoBehaviour
 
         if (roundCompletionType == RoundCompletionType.Reward)
         {
-            ResetStates();
             InitiateRound();
-            return;
         }
 
-        float score = ScoreFormula.CalculateScore(totalEnemiesSpawned * (MapCreator.Instance.mapType == MapType.boss ? 50f : 10f), roundTimer.GetTime(), playerMaxHealth, damageTaken, out goldToReward);
-
-        resultScreen.resultTitleText.text = $"Round " + nextRoundNumber + " Results";
-        resultScreen.timeTakenText.text = UtilityFunctions.GetFormattedTime(roundTimer.GetTime());
-        resultScreen.damageTakenText.text = $"{damageTaken} ({(int)(((float)damageTaken/(float)playerMaxHealth)*100.0f)}%)";
-        resultScreen.totalScoreText.text = $"{Mathf.RoundToInt(score)}%";
-
-        if (roundCompletionType == RoundCompletionType.Failed)
-        {
-            resultScreen.rankText.text = "Reached: " + nextRoundNumber.ToString();
-            resultScreen.goldEarnedText.text = "0";
-            resultScreen.shopButton.SetActive(false);
-            resultScreen.mainMenuButton.SetActive(true);
-            GameLoopEvents.OnEndSession?.Invoke();
-        }
         else
         {
-            resultScreen.shopButton.SetActive(true);
-            resultScreen.mainMenuButton.SetActive(false);
-            resultScreen.goldEarnedText.text = goldToReward + "";
-            playerStats.UpdateGold(goldToReward); // save it to db
-            resultScreen.rankText.text = ScoreFormula.GetScoreRank((int)score);
+            float score = ScoreFormula.CalculateScore(totalEnemiesSpawned * (MapCreator.Instance.mapType == MapType.boss ? 50f : 10f), roundTimer.GetTime(), playerMaxHealth, damageTaken, out goldToReward);
+
+            resultScreen.resultTitleText.text = $"Round " + roundNumber + " Results";
+            resultScreen.timeTakenText.text = UtilityFunctions.GetFormattedTime(roundTimer.GetTime());
+            resultScreen.damageTakenText.text = $"{damageTaken} ({(int)(((float)damageTaken / (float)playerMaxHealth) * 100.0f)}%)";
+            resultScreen.totalScoreText.text = $"{Mathf.RoundToInt(score)}%";
+
+            if (roundCompletionType == RoundCompletionType.Failed)
+            {
+                resultScreen.rankText.text = "Reached: " + roundNumber.ToString();
+                resultScreen.goldEarnedText.text = "0";
+                resultScreen.shopButton.SetActive(false);
+                resultScreen.mainMenuButton.SetActive(true);
+                GameLoopEvents.OnEndSession?.Invoke();
+            }
+            else
+            {
+                resultScreen.shopButton.SetActive(true);
+                resultScreen.mainMenuButton.SetActive(false);
+                resultScreen.goldEarnedText.text = goldToReward + "";
+                playerStats.UpdateGold(goldToReward); // save it to db
+                resultScreen.rankText.text = ScoreFormula.GetScoreRank((int)score);
+            }
+
+            GameLoopEvents.OnUI?.Invoke();
+            roundResultsWindow.SetActive(true); // or play an animation
         }
-
-        // Update Results Screen
-        //Results.goldText.text = "+" + goldRewarded;
-
-        // Update Shop Screen
-        shopScreen.goldText.text = playerStats.Gold.ToString();
-        shopScreen.messageText.text = "Spend your gold here to purchase upgrades!";
 
         // save it in database here, we need to save stats in db asap so players
         // who might d/c right after ending get their stuff saved
-
-
-        ResetStates();
-        GameLoopEvents.OnUI?.Invoke();
-
-        switch (roundCompletionType)
-        {
-            case RoundCompletionType.Completed:
-                // Calculate Stats()
-                // show stats + rewards() happily
-                // Continue to Shop menu()
-                // Show options to continue to next round, or quit to main menu
-                break;
-
-            case RoundCompletionType.Failed:
-                // Calculate Stats()
-                // show stats + rewards() sadly
-                // Continue to Shop menu()
-                // Show options to continue to next round, or quit to main menu
-                break;
-
-            case RoundCompletionType.Quit:
-                // Show failed stats (that can be shown so far)
-                // Show option to retry or quit to main menu
-                break;
-        }
-
-        roundResultsWindow.SetActive(true); // or play an animation
     }
 
     public void QuitGame()
