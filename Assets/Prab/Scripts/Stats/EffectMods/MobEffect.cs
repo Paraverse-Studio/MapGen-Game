@@ -47,12 +47,12 @@ public abstract class MobEffect : MonoBehaviour
         if (_FX) Destroy(_FX.gameObject);
     }
 
-    public virtual void AddSubscribersToSkillEvents(Projectile proj)
+    public virtual void AddSubscribersToSkillEvents(Damage col)
     {
 
     }
 
-    public virtual void RemoveSubscribersToSkillEvents(Projectile proj)
+    public virtual void RemoveSubscribersToSkillEvents(Damage col)
     {
 
     }

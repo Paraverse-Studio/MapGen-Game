@@ -14,7 +14,7 @@ public class LichBaneEffect : MobEffect
     {
         base.ActivateEffect(stats);
         _mod = new StatModifier(scalingStatData.FinalValue(_stats));
-        _combat.BasicAttackSkill.attackCollider.OnBasicAttackPreHitEvent += ApplyEffect;
+        //_combat.BasicAttackSkill.attackCollider.OnBasicAttackPreHitEvent += ApplyEffect;
         _combat.BasicAttackSkill.attackCollider.OnBasicAttackApplyDamageEvent += RemoveMod;
         _combat.BasicAttackSkill.attackCollider.OnBasicAttackApplyDamageEvent += DisableApplyEffect;
     }
@@ -23,30 +23,34 @@ public class LichBaneEffect : MobEffect
     {
         base.DeactivateEffect();
         RemoveMod();
-        _combat.BasicAttackSkill.attackCollider.OnBasicAttackPreHitEvent -= ApplyEffect;
+        //_combat.BasicAttackSkill.attackCollider.OnBasicAttackPreHitEvent -= ApplyEffect;
         _combat.BasicAttackSkill.attackCollider.OnBasicAttackApplyDamageEvent += RemoveMod;
         _combat.BasicAttackSkill.attackCollider.OnBasicAttackApplyDamageEvent -= DisableApplyEffect;
     }
 
-    public override void AddSubscribersToSkillEvents(Projectile proj)
+    public override void AddSubscribersToSkillEvents(Damage col)
     {
-        base.AddSubscribersToSkillEvents(proj);
-        proj.OnAttackApplyDamageEvent += EnableApplyEffect;
+        base.AddSubscribersToSkillEvents(col);
+        //proj.OnAttackApplyDamageEvent += EnableApplyEffect;
+        if (false == col.IsBasicAttackCollider)
+            col.OnAttackApplyDamageEvent += ApplyEffect;
     }
 
-    public override void RemoveSubscribersToSkillEvents(Projectile proj)
+    public override void RemoveSubscribersToSkillEvents(Damage col)
     {
-        base.RemoveSubscribersToSkillEvents(proj);
-        proj.OnAttackApplyDamageEvent -= EnableApplyEffect;
+        base.RemoveSubscribersToSkillEvents(col);
+        //proj.OnAttackApplyDamageEvent -= EnableApplyEffect;
+        if (false == col.IsBasicAttackCollider)
+            col.OnAttackApplyDamageEvent -= ApplyEffect;
     }
 
-    private void ApplyEffect()
+    private void ApplyEffect(float f)
     {
-        if (_applyEffect)
-        {
+        //if (_applyEffect)
+        //{
             _mod.Value = scalingStatData.FinalValue(_stats);
             _stats.AttackDamage.AddMod(_mod);
-        }
+        //}
     }
 
     private void DisableApplyEffect(float f)

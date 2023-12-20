@@ -1,7 +1,6 @@
 using Paraverse.Helper;
 using Paraverse.Mob;
 using Paraverse.Mob.Combat;
-using Paraverse.Player;
 using UnityEngine;
 
 namespace Paraverse
@@ -22,7 +21,7 @@ namespace Paraverse
         [Header("Projectile Properties")]
         [SerializeField, Tooltip("Stationary projectile.")]
         protected bool stationary = false;
-        
+
 
         [Header("Special Properties")]
         [SerializeField, Tooltip("Projectile is not destroyed upon impact.")]
