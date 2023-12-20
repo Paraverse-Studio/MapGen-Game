@@ -34,6 +34,7 @@ public class GameLoopManager : MonoBehaviour
     [System.Serializable]
     public struct ResultsScreen
     {
+        public TextMeshProUGUI resultTitleText;
         public TextMeshProUGUI rankText;
         public TextMeshProUGUI timeTakenText;
         public TextMeshProUGUI damageTakenText;
@@ -329,6 +330,7 @@ public class GameLoopManager : MonoBehaviour
 
         float score = ScoreFormula.CalculateScore(totalEnemiesSpawned * (MapCreator.Instance.mapType == MapType.boss ? 50f : 10f), roundTimer.GetTime(), playerMaxHealth, damageTaken, out goldToReward);
 
+        resultScreen.resultTitleText.text = $"Round " + nextRoundNumber + " Results";
         resultScreen.timeTakenText.text = UtilityFunctions.GetFormattedTime(roundTimer.GetTime());
         resultScreen.damageTakenText.text = $"{damageTaken} ({(int)(((float)damageTaken/(float)playerMaxHealth)*100.0f)}%)";
         resultScreen.totalScoreText.text = $"{Mathf.RoundToInt(score)}%";
