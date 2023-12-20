@@ -129,7 +129,7 @@ public class SwordSpinSkill : MobSkill, IMobSkill
 
         if (null == _buff)
         {
-            _buff = new StatModifier(-(stats.AttackDamage.FinalValue - GetPowerAmount()));
+            _buff = new StatModifier(-(stats.AttackDamage.BaseValue * (1.0f - attackRatio)));
             stats.AttackDamage.AddMod(_buff);
         }
 
