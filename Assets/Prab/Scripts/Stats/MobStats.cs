@@ -93,7 +93,7 @@ namespace Paraverse.Mob.Stats
 
         protected virtual void Update()
         {
-            if (HealthRegen.FinalValue > 0 && Time.frameCount % 180 == 0)
+            if (HealthRegen.FinalValue > 0 && Time.frameCount % 240 == 0)
             {
                 UpdateCurrentHealth((int)HealthRegen.FinalValue);
             }
