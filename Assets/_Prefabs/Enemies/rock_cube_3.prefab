@@ -161,19 +161,25 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   targetTag: Player
+  knockBackEffect: {fileID: 11400000, guid: a49866a6b7f07e7418556a36b227298f, type: 2}
+  dot: 0
+  dontApplyDamageOnEnter: 0
+  dotIntervalTimer: 1
+  applyHitAnim: 1
+  hitFX: {fileID: 0}
+  scalingStatData:
+    flatPower: 0
+    attackScaling: 1
+    abilityScaling: 0
+    healthScaling: 0
+  isBasicAttackCollider: 0
   speed: 20
   range: 100
   deathTimer: 5
   stationary: 0
-  dot: 0
-  dontApplyDamageOnEnter: 0
-  dotIntervalTimer: 1
-  knockBackEffect: {fileID: 11400000, guid: a49866a6b7f07e7418556a36b227298f, type: 2}
   pierce: 1
-  applyHitAnim: 1
-  launchFX: {fileID: 0}
-  hitFX: {fileID: 0}
   decreaseByLerp: -1
+  launchFX: {fileID: 0}
 --- !u!65 &656989152957166695
 BoxCollider:
   m_ObjectHideFlags: 0
@@ -185,7 +191,7 @@ BoxCollider:
   m_IsTrigger: 1
   m_Enabled: 1
   serializedVersion: 2
-  m_Size: {x: 1, y: 1, z: 1}
+  m_Size: {x: 1.5, y: 1.5, z: 1.5}
   m_Center: {x: 0, y: 0, z: 0}
 --- !u!54 &1791082563674149781
 Rigidbody:
