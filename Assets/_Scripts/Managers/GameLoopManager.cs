@@ -98,6 +98,7 @@ public class GameLoopManager : MonoBehaviour
     [Header("Runtime Data")]
     [Min(1)]
     public int nextRoundNumber;
+    public int roundNumberInBiome;
     public RoundCompletionType roundCompletionType;
     private GameObject player;
     MobStats playerStats;
@@ -194,6 +195,7 @@ public class GameLoopManager : MonoBehaviour
     public void InitiateSession()
     {
         nextRoundNumber = 1;
+        roundNumberInBiome = 1;
         GameLoopEvents.OnInitiateSession?.Invoke();
         InitiateRound();
     }
@@ -277,11 +279,11 @@ public class GameLoopManager : MonoBehaviour
             else if (MapCreator.Instance.mapType == MapType.boss) roundCompletionType = RoundCompletionType.BossDefeated;
             else roundCompletionType = RoundCompletionType.Reward;
             nextRoundNumber++;
+            roundNumberInBiome++;
         }
         else
         {
             roundCompletionType = RoundCompletionType.Failed;
-            nextRoundNumber = 1;
         }
 
         Animator roundEndWindow = null;

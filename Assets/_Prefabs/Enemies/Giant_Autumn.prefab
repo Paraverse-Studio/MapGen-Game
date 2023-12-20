@@ -232,7 +232,7 @@ MonoBehaviour:
   minWaitDur: 2
   maxWaitDur: 5
   accurayWP: 2
-  stoppingDistance: 5
+  stoppingDistance: 6
   detectionRadius: 8
   pursueRadius: 11
   customPursueRange: 0
@@ -240,7 +240,7 @@ MonoBehaviour:
   _isStrafer: 0
   strafePoint: {fileID: 0}
   strafeAccuracy: 1
-  atkDashForce: 14
+  atkDashForce: 15
   jumpLateralForce: 5
   jumpHeightForce: 5
   isGroundedCheckRange: 0.5
@@ -1147,16 +1147,18 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   targetTag: Player
+  knockBackEffect: {fileID: 11400000, guid: 598974d11fcf1634694fbcf7947f6e76, type: 2}
   dot: 0
   dontApplyDamageOnEnter: 0
-  knockBackEffect: {fileID: 11400000, guid: 598974d11fcf1634694fbcf7947f6e76, type: 2}
+  dotIntervalTimer: 1
+  applyHitAnim: 1
   hitFX: {fileID: 0}
-  isBasicAttackCollider: 0
   scalingStatData:
     flatPower: 0
     attackScaling: 1
     abilityScaling: 0
     healthScaling: 0
+  isBasicAttackCollider: 0
 --- !u!1 &6016866019765979880
 GameObject:
   m_ObjectHideFlags: 0
@@ -1240,7 +1242,7 @@ MonoBehaviour:
   _image: {fileID: 0}
   _description: 
   _minRange: 0
-  _maxRange: 3
+  _maxRange: 4
   cooldown: 2.5
   cost: 0
   animName: BasicAttack
@@ -1403,16 +1405,18 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   targetTag: Player
+  knockBackEffect: {fileID: 11400000, guid: 8d46d8126b7c32045bd79befa15f1757, type: 2}
   dot: 0
   dontApplyDamageOnEnter: 0
-  knockBackEffect: {fileID: 11400000, guid: 8d46d8126b7c32045bd79befa15f1757, type: 2}
+  dotIntervalTimer: 1
+  applyHitAnim: 1
   hitFX: {fileID: 0}
-  isBasicAttackCollider: 1
   scalingStatData:
     flatPower: 0
     attackScaling: 1
     abilityScaling: 0
     healthScaling: 0
+  isBasicAttackCollider: 1
 --- !u!1 &6016866020318334053
 GameObject:
   m_ObjectHideFlags: 0
