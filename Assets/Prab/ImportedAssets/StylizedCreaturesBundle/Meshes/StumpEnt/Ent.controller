@@ -88,6 +88,13 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   parameter: isBasicAttacking
+  disableUponEnter: 0
+  enableUponExit: 0
+  disableAttackEndState: 0
+  useEnableDelay: 0
+  enableAfterAnimPercentage: 0
+  useDisableDelay: 0
+  disableBeforeAnimPercentage: 0
 --- !u!1101 &-3846304634612305928
 AnimatorStateTransition:
   m_ObjectHideFlags: 1
@@ -202,25 +209,31 @@ AnimatorController:
     m_DefaultFloat: 0
     m_DefaultInt: 0
     m_DefaultBool: 0
-    m_Controller: {fileID: 9100000}
+    m_Controller: {fileID: 0}
   - m_Name: isSprinting
     m_Type: 4
     m_DefaultFloat: 0
     m_DefaultInt: 0
     m_DefaultBool: 0
-    m_Controller: {fileID: 9100000}
+    m_Controller: {fileID: 0}
   - m_Name: isInteracting
     m_Type: 4
     m_DefaultFloat: 0
     m_DefaultInt: 0
     m_DefaultBool: 0
-    m_Controller: {fileID: 9100000}
+    m_Controller: {fileID: 0}
   - m_Name: isBasicAttacking
     m_Type: 4
     m_DefaultFloat: 0
     m_DefaultInt: 0
     m_DefaultBool: 0
-    m_Controller: {fileID: 9100000}
+    m_Controller: {fileID: 0}
+  - m_Name: isUsingSkill
+    m_Type: 4
+    m_DefaultFloat: 0
+    m_DefaultInt: 0
+    m_DefaultBool: 0
+    m_Controller: {fileID: 0}
   m_AnimatorLayers:
   - serializedVersion: 5
     m_Name: Base Layer
@@ -337,6 +350,13 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   parameter: isInteracting
+  disableUponEnter: 0
+  enableUponExit: 0
+  disableAttackEndState: 0
+  useEnableDelay: 0
+  enableAfterAnimPercentage: 0
+  useDisableDelay: 0
+  disableBeforeAnimPercentage: 0
 --- !u!1102 &2445207515685124252
 AnimatorState:
   serializedVersion: 6
@@ -406,6 +426,13 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   parameter: isInteracting
+  disableUponEnter: 0
+  enableUponExit: 0
+  disableAttackEndState: 0
+  useEnableDelay: 0
+  enableAfterAnimPercentage: 0
+  useDisableDelay: 0
+  disableBeforeAnimPercentage: 0
 --- !u!1101 &4813970751107172127
 AnimatorStateTransition:
   m_ObjectHideFlags: 1
