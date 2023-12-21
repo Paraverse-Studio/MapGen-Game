@@ -22,7 +22,7 @@ public class BasicAttackSkill : MobSkill, IMobSkill
 
     protected override bool CanUseSkill()
     {
-        if (IsOffCooldown && TargetWithinRange && mob.IsAttackLunging == false)
+        if (IsOffCooldown && TargetWithinRange && mob.IsAttackLunging == false && mob.IsSkilling == false)
             return true;
 
         return false;
