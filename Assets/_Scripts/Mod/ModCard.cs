@@ -10,6 +10,8 @@ public class ModCard : ItemCard
     [Header("Mod Colours")]
     public Color StatModColor;
     public Color StatModColorGlow;
+    public Color UltraStatModColor;
+    public Color UltraStatModColorGlow;
     public Color SkillModColor;
     public Color SkillModColorGlow;
     public Color EffectModColor;
@@ -34,13 +36,21 @@ public class ModCard : ItemCard
     {
         float alphaRetain = (null != image)? image.color.a : -1f;        
         Color c;
-        if (mod.Type == ModType.Stats) c = StatModColor;
+        if (mod.Type == ModType.Stats)
+        {
+            if ((mod as SO_StatMod).ultraTier == true) c = UltraStatModColor;
+            else c = StatModColor;
+        }
         else if (mod.Type == ModType.Skill) c = SkillModColor;
         else c = EffectModColor;
 
         if (typeTwo)
         {
-            if (mod.Type == ModType.Stats) c = StatModColorGlow;
+            if (mod.Type == ModType.Stats)
+            {
+                if ((mod as SO_StatMod).ultraTier == true) c = UltraStatModColorGlow;
+                else c = StatModColorGlow;
+            }
             else if (mod.Type == ModType.Skill) c = SkillModColorGlow;
             else c = EffectModColorGlow;
         }
@@ -73,6 +83,10 @@ public class ModCard : ItemCard
         if (typeLabel && Item is SO_Mod)
         {
             typeLabel.text = ((SO_Mod)Item).Type.ToString();
+            if (Item is SO_StatMod statMod && statMod.ultraTier)
+            {
+                typeLabel.text = "Ultra " + typeLabel.text;
+            }
         }
         else
         {
