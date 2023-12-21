@@ -15,7 +15,8 @@ public class SO_StatMod : SO_Mod
         Health,
         Energy,
         AttackSpeed,
-        MoveSpeed
+        MoveSpeed,
+        HealthRegen
     }
 
     [System.Serializable]
@@ -83,6 +84,7 @@ public class SO_StatMod : SO_Mod
             {
                 case StatType.Attack:
                     _player.AttackDamage.UpdateBaseValue(_player.AttackDamage.BaseValue + Mathf.CeilToInt(statPair.value));
+                    Debug.Log("HUH??... " + _player.AttackDamage.BaseValue);
                     break;
                 case StatType.Ability:
                     _player.AbilityPower.UpdateBaseValue(_player.AbilityPower.BaseValue + Mathf.CeilToInt(statPair.value));
@@ -98,6 +100,9 @@ public class SO_StatMod : SO_Mod
                     break;
                 case StatType.MoveSpeed:
                     _player.UpdateMovementSpeed(statPair.value);
+                    break;
+                case StatType.HealthRegen:
+                    _player.UpdateHealthRegen(statPair.value);
                     break;
             }
         }        

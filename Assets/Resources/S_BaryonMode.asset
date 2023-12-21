@@ -13,25 +13,30 @@ MonoBehaviour:
   m_Name: S_BaryonMode
   m_EditorClassIdentifier: 
   Title: Baryon Mode
-  ID: 0
-  Type: 0
+  ID: 999
   Image: {fileID: 21300000, guid: ab4114690ca97cb4c83593c2f7972020, type: 3}
-  Cost: 350
+  Quantity: 1
+  Cost: 1000
   Lore: 
   Description: <Stat Mods are autofilled at run-time>
-  _removeOnPurchase: 1
   PrerequisiteMods: []
   BlockedByMods: []
+  Type: 0
   evolve:
-    canStack: 0
-    valueGrowthFactor: 0
-    costGrowthFactor: 0
+    canStack: 1
+    valueGrowthFactor: 1
+    costGrowthFactor: 1
+  ultraTier: 1
   addStats:
   - type: 0
-    value: 50
+    value: 20
   - type: 2
-    value: 100
+    value: 200
   - type: 5
-    value: 15
+    value: 2
   - type: 1
-    value: 110
+    value: 50
+  - type: 3
+    value: 100
+  - type: 4
+    value: 1

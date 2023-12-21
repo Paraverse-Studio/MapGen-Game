@@ -10,6 +10,8 @@ public class ModsManager : MonoBehaviour
     [Header("Non-Mods")]
     public SO_Consumable GoldItem;
 
+    public SO_StatMod BaryonModeMod;
+
     [Header("Purchased/Obtained Mods")]
     public List<SO_Item> PurchasedMods;
 
@@ -41,6 +43,8 @@ public class ModsManager : MonoBehaviour
             AvailableMods.Add((SO_Item)obj);
             AvailableMods[AvailableMods.Count - 1].Reset();
         }
+
+        BaryonModeMod.Reset(); // not available in the game, we just keep it for testing internally within team
     }
 
     public int GetMod(ModType type, out SO_Mod mod, List<SO_Mod> avoidMods = null)
@@ -51,7 +55,7 @@ public class ModsManager : MonoBehaviour
         List<SO_Item> filtered = new();
         int random = -1;
 
-        if (type == ModType.Stats) 
+        if (type == ModType.Stat) 
         {
             filtered = AvailableMods.Where(mod => null != mod && (mod is SO_StatMod statMod) && !avoidMods.Contains(mod) && statMod.ultraTier == false).ToList();            
         } 
@@ -59,7 +63,7 @@ public class ModsManager : MonoBehaviour
         { 
             filtered = AvailableMods.Where(mod => null != mod && (mod is SO_SkillMod skillMod) && !avoidMods.Contains(mod)).ToList();            
         }
-        else if (type == ModType.Effects) 
+        else if (type == ModType.Effect) 
         { 
             filtered = AvailableMods.Where(mod => null != mod && (mod is SO_EffectMod effectMod) && !avoidMods.Contains(mod)).ToList();            
         }
@@ -85,7 +89,7 @@ public class ModsManager : MonoBehaviour
 
         // if a mod (stat mod), then keep it in that in the spot,
         // otherwise, remove this entry in available mods
-        if (((SO_Mod)item).Type != ModType.Stats)
+        if (((SO_Mod)item).Type != ModType.Stat)
             AvailableMods.RemoveAt(indexOfMod);
     }
 

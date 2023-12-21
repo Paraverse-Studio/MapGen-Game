@@ -5,7 +5,7 @@ using System.Linq;
 
 public enum ModType
 {
-    Stats, Skill, Effects
+    Stat, Skill, Effect
 }
 
 

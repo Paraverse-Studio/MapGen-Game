@@ -36,7 +36,7 @@ public class ModCard : ItemCard
     {
         float alphaRetain = (null != image)? image.color.a : -1f;        
         Color c;
-        if (mod.Type == ModType.Stats)
+        if (mod.Type == ModType.Stat)
         {
             if ((mod as SO_StatMod).ultraTier == true) c = UltraStatModColor;
             else c = StatModColor;
@@ -46,7 +46,7 @@ public class ModCard : ItemCard
 
         if (typeTwo)
         {
-            if (mod.Type == ModType.Stats)
+            if (mod.Type == ModType.Stat)
             {
                 if ((mod as SO_StatMod).ultraTier == true) c = UltraStatModColorGlow;
                 else c = StatModColorGlow;

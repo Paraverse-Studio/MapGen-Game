@@ -192,6 +192,12 @@ public class GameLoopManager : MonoBehaviour
             CalculateShop();
         }
 #endif
+        if (Input.GetKey(KeyCode.ScrollLock) && Input.GetKeyDown(KeyCode.F9))
+        {
+            ModsManager.Instance.BaryonModeMod.Activate(GlobalSettings.Instance.player);
+            ModsManager.Instance.BaryonModeMod.Consume();
+            ModsManager.Instance.PurchasedMods.Add(ModsManager.Instance.BaryonModeMod);
+        }
 
     }
 

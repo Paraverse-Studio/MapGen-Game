@@ -152,6 +152,11 @@ namespace Paraverse.Mob.Stats
             _maxEnergy.AddMod(new StatModifier(amount));
         }
 
+        public void UpdateHealthRegen(float amount)
+        {
+            _healthRegen.AddMod(new StatModifier(amount));
+        }
+
         public void ConsumeDiveEnergy()
         {
             UpdateCurrentEnergy(-diveEnergyCost);
