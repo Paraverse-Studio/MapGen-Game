@@ -53,15 +53,15 @@ public class ModsManager : MonoBehaviour
 
         if (type == ModType.Stats) 
         {
-            filtered = AvailableMods.Where(mod => null != mod && (mod is SO_Mod) && ((SO_Mod)mod).Type == type && !avoidMods.Contains(mod)).ToList();            
+            filtered = AvailableMods.Where(mod => null != mod && (mod is SO_StatMod statMod) && !avoidMods.Contains(mod) && statMod.ultraTier == false).ToList();            
         } 
         else if (type == ModType.Skill) 
         { 
-            filtered = AvailableMods.Where(mod => null != mod && (mod is SO_Mod) && ((SO_Mod)mod).Type == type && !avoidMods.Contains(mod)).ToList();            
+            filtered = AvailableMods.Where(mod => null != mod && (mod is SO_SkillMod skillMod) && !avoidMods.Contains(mod)).ToList();            
         }
         else if (type == ModType.Effects) 
         { 
-            filtered = AvailableMods.Where(mod => null != mod && (mod is SO_Mod) && ((SO_Mod)mod).Type == type && !avoidMods.Contains(mod)).ToList();            
+            filtered = AvailableMods.Where(mod => null != mod && (mod is SO_EffectMod effectMod) && !avoidMods.Contains(mod)).ToList();            
         }
 
         if (filtered.Count > 0) // if it's 0, then no mod was found, list is empty of any available mod

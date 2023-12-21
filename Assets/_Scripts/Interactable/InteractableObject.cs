@@ -98,7 +98,7 @@ public class InteractableObject : MonoBehaviour
         {
             if (null == _items)
             {
-                _items = ModsManager.Instance.AvailableMods.Where(mod => mod is SO_StatMod).ToList();
+                _items = ModsManager.Instance.AvailableMods.Where(mod => mod is SO_StatMod && true == (mod as SO_StatMod).ultraTier).ToList();
                 IListExtensions.Shuffle(_items);
                 for (int i = 1; i < _items.Count; ++i) _items.RemoveAt(i); // remove all, but one!
             }

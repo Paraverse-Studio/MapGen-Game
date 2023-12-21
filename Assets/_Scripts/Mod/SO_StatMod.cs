@@ -32,7 +32,8 @@ public class SO_StatMod : SO_Mod
     }
 
     [Header("Stats Change")]
-    [SerializeField]
+    public bool ultraTier = false;
+
     public List<StatPair> addStats; // reference for original values
 
     private List<StatPair> _addStatsMutable = null; // mutable
