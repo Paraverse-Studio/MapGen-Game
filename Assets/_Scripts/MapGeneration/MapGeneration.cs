@@ -976,9 +976,9 @@ public class MapGeneration : MonoBehaviour
     {
         int xRemainder = sizeX % 2;
         int zRemainder = sizeZ % 2;
-        List<Block> randomBlocksList = new();
-        randomBlocksList.AddRange(allObjects);
-        IListExtensions.Shuffle(randomBlocksList);
+        List<Block> randomBlocksList = allObjects;
+        //randomBlocksList.AddRange(allObjects);
+        //IListExtensions.Shuffle(randomBlocksList);
         List<Block> surroundingBlockSet = new();
 
         Block eligibleBlock = null;

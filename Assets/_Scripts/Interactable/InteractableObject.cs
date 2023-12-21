@@ -68,7 +68,7 @@ public class InteractableObject : MonoBehaviour
                 _items = ModsManager.Instance.AvailableMods.Where(mod => (mod is SO_SkillMod && !ModsManager.Instance.PurchasedMods.Contains(mod))).ToList();
                 IListExtensions.Shuffle(_items);
 
-                for (int i = _items.Count - 1; i >= 3; --i) _items.RemoveAt(i);
+                for (int i = _items.Count - 1; i >= 3; --i) _items.Remove(_items[i]);
             }
             _display.Display(UniqueMods(_items), null);
 
@@ -90,7 +90,8 @@ public class InteractableObject : MonoBehaviour
             {
                 _items = ModsManager.Instance.AvailableMods.Where(mod => mod is SO_EffectMod).ToList();
                 IListExtensions.Shuffle(_items);
-                for (int i = 4; i < _items.Count; ++i) _items.RemoveAt(i);
+
+                for (int i = _items.Count - 1; i >= 4; --i) _items.Remove(_items[i]); // display 4 out of the many
             }
             _display.Display(UniqueMods(_items), null);
         }
@@ -100,7 +101,8 @@ public class InteractableObject : MonoBehaviour
             {
                 _items = ModsManager.Instance.AvailableMods.Where(mod => mod is SO_StatMod && true == (mod as SO_StatMod).ultraTier).ToList();
                 IListExtensions.Shuffle(_items);
-                for (int i = 1; i < _items.Count; ++i) _items.RemoveAt(i); // remove all, but one!
+
+                for (int i = _items.Count - 1; i >= 1; --i) _items.Remove(_items[i]); // remove all, but one!
             }
             _display.Display(UniqueMods(_items), null);
         }
