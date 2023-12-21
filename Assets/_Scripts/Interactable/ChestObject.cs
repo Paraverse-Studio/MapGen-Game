@@ -144,10 +144,10 @@ public class ChestObject : MonoBehaviour
 
                     // by this point, an option from the loot table is decided to add to the list of rewards to give. 
 
-                    // If no override SO_item is provided in the entry, then must be a random mod from random Mod property
+                    // NO OVERRIDE, RANDOM MOD: If no override SO_item is provided in the entry, then must be a random mod from random Mod property
                     if (null == decidedItem)
                     {
-                        int indexOfMod = ModsManager.Instance.GetMod(thisChest.lootTable[i].modType, out SO_Mod returnedMod, rewardsThatAreStats);
+                        int indexOfMod = ModsManager.Instance.GetMod(thisChest.lootTable[i].modType, out SO_Mod returnedMod, avoidMods: rewardsThatAreStats);
                         if (-1 == indexOfMod)
                         {
                             // if getting this type of mod returned nothing, it means there's no mods left of this type,
@@ -162,7 +162,7 @@ public class ChestObject : MonoBehaviour
                         ModsManager.Instance.PurchaseMod(decidedItem);
                     }
 
-                    // if it's a consumable type, modify its quantity
+                    // OVERRIDE CONSUMABLE: if it's a consumable type, modify its quantity
                     else if (decidedItem is SO_Consumable)
                     {
                         float amount = Random.Range(thisChest.lootTable[i].consumableAmount.x, thisChest.lootTable[i].consumableAmount.y);
@@ -184,7 +184,7 @@ public class ChestObject : MonoBehaviour
                         }
                     }
 
-                    // If it's a mod, remove it from available pool, and add to purchased pool (since mods are unique and limited)
+                    // OVERRIDE MOD: If it's a mod, remove it from available pool, and add to purchased pool (since mods are unique and limited)
                     else if (decidedItem is SO_Mod)
                     {
                         ModsManager.Instance.PurchaseMod(decidedItem);
