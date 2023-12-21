@@ -111,16 +111,18 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   targetTag: Player
+  knockBackEffect: {fileID: 11400000, guid: a49866a6b7f07e7418556a36b227298f, type: 2}
   dot: 0
   dontApplyDamageOnEnter: 0
-  knockBackEffect: {fileID: 11400000, guid: a49866a6b7f07e7418556a36b227298f, type: 2}
+  dotIntervalTimer: 1
+  applyHitAnim: 1
   hitFX: {fileID: 0}
-  isBasicAttackCollider: 0
   scalingStatData:
     flatPower: 0
     attackScaling: 1
     abilityScaling: 0
     healthScaling: 0
+  isBasicAttackCollider: 0
 --- !u!1 &1348275132
 GameObject:
   m_ObjectHideFlags: 0
@@ -232,16 +234,18 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   targetTag: Player
+  knockBackEffect: {fileID: 11400000, guid: 748f4316b61c09e4eb46f5136b6b2a06, type: 2}
   dot: 0
   dontApplyDamageOnEnter: 0
-  knockBackEffect: {fileID: 11400000, guid: 748f4316b61c09e4eb46f5136b6b2a06, type: 2}
+  dotIntervalTimer: 1
+  applyHitAnim: 1
   hitFX: {fileID: 0}
-  isBasicAttackCollider: 0
   scalingStatData:
     flatPower: 15
     attackScaling: 1
     abilityScaling: 0
     healthScaling: 0
+  isBasicAttackCollider: 0
 --- !u!1 &1373114571
 GameObject:
   m_ObjectHideFlags: 0
@@ -384,16 +388,18 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   targetTag: Player
+  knockBackEffect: {fileID: 0}
   dot: 0
   dontApplyDamageOnEnter: 0
-  knockBackEffect: {fileID: 0}
+  dotIntervalTimer: 1
+  applyHitAnim: 1
   hitFX: {fileID: 0}
-  isBasicAttackCollider: 1
   scalingStatData:
     flatPower: 0
     attackScaling: 1
     abilityScaling: 0
     healthScaling: 0
+  isBasicAttackCollider: 1
 --- !u!1 &126926026225142072
 GameObject:
   m_ObjectHideFlags: 0
@@ -2227,7 +2233,7 @@ MonoBehaviour:
   _description: 
   _minRange: 5
   _maxRange: 20
-  cooldown: 5
+  cooldown: 7.5
   cost: 0
   animName: RockThrow
   isBasicAttack: 0
@@ -2297,7 +2303,7 @@ MonoBehaviour:
   _description: 
   _minRange: 0
   _maxRange: 5
-  cooldown: 5
+  cooldown: 2
   cost: 0
   animName: BasicAttack
   isBasicAttack: 1
@@ -2367,7 +2373,7 @@ MonoBehaviour:
   _description: 
   _minRange: 0
   _maxRange: 7
-  cooldown: 5
+  cooldown: 3.5
   cost: 0
   animName: DualAttack
   isBasicAttack: 0
@@ -2499,16 +2505,18 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   targetTag: Player
+  knockBackEffect: {fileID: 11400000, guid: a49866a6b7f07e7418556a36b227298f, type: 2}
   dot: 0
   dontApplyDamageOnEnter: 0
-  knockBackEffect: {fileID: 11400000, guid: a49866a6b7f07e7418556a36b227298f, type: 2}
+  dotIntervalTimer: 1
+  applyHitAnim: 1
   hitFX: {fileID: 0}
-  isBasicAttackCollider: 1
   scalingStatData:
     flatPower: 0
     attackScaling: 1
     abilityScaling: 0
     healthScaling: 0
+  isBasicAttackCollider: 1
 --- !u!1 &6462017409901739476
 GameObject:
   m_ObjectHideFlags: 0
@@ -2591,7 +2599,7 @@ MonoBehaviour:
   _description: 
   _minRange: 8
   _maxRange: 15
-  cooldown: 5
+  cooldown: 3
   cost: 0
   animName: Jump_Start
   isBasicAttack: 0
@@ -3577,6 +3585,7 @@ MonoBehaviour:
   moveSpeed: 2
   maxEnergy: 100
   _curEnergy: 100
+  healthRegen: 0
   energyRegen: 25
   _gold: 100
   OnHealthChange:

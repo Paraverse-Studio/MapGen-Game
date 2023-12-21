@@ -38,7 +38,7 @@ RenderSettings:
   m_ReflectionIntensity: 1
   m_CustomReflection: {fileID: 0}
   m_Sun: {fileID: 0}
-  m_IndirectSpecularColor: {r: 0.15900815, g: 0.51751715, b: 1.0386043, a: 1}
+  m_IndirectSpecularColor: {r: 0.1605202, g: 0.5180438, b: 1.0452659, a: 1}
   m_UseRadianceAmbientProbe: 0
 --- !u!157 &3
 LightmapSettings:
@@ -1413,7 +1413,7 @@ PrefabInstance:
       objectReference: {fileID: 0}
     - target: {fileID: 7311448671115723015, guid: b0089e7a57060c94592e590afc510844, type: 3}
       propertyPath: m_AnchoredPosition.y
-      value: -20.000153
+      value: -20.000122
       objectReference: {fileID: 0}
     - target: {fileID: 7311448671347971881, guid: b0089e7a57060c94592e590afc510844, type: 3}
       propertyPath: m_AnchorMax.y
@@ -2266,15 +2266,17 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 160fb074773bd2b40b3698abfe12f12d, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  EffectName: Mob Effect
   targetTag: Enemy
   _ID: -1
-  attackPerUnitOfTime: 1
-  _empoweredScaling:
+  scalingStatData:
     flatPower: 0
     attackScaling: 1
     abilityScaling: 0
     healthScaling: 0
+  effectFX: {fileID: 0}
   hitFX: {fileID: 0}
+  attackPerUnitOfTime: 1
   _col: {fileID: 0}
   _effectRadius: 3
 --- !u!114 &1366090563
@@ -2327,14 +2329,15 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 7a7d1c6b22016784cb0ce8852705cf8c, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  EffectName: Mob Effect
   targetTag: Enemy
   _ID: -1
-  attackPerUnitOfTime: 1
-  _empoweredScaling:
+  scalingStatData:
     flatPower: 0
     attackScaling: 1
     abilityScaling: 0
     healthScaling: 0
+  effectFX: {fileID: 0}
   hitFX: {fileID: 0}
   hitRadius: 1
 --- !u!114 &1366090573
@@ -2349,14 +2352,15 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 6679c24e2c1f1ae4ca5d233e87d9ae23, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  EffectName: Mob Effect
   targetTag: Enemy
   _ID: -1
-  attackPerUnitOfTime: 1
-  _empoweredScaling:
+  scalingStatData:
     flatPower: 0
     attackScaling: 1
     abilityScaling: 0
     healthScaling: 0
+  effectFX: {fileID: 0}
   hitFX: {fileID: 0}
   healAmount: 20
 --- !u!1 &1375431600
@@ -2675,6 +2679,22 @@ PrefabInstance:
   m_Modification:
     m_TransformParent: {fileID: 0}
     m_Modifications:
+    - target: {fileID: 994304602, guid: 43e407bd14fecf2448578c422593c4c6, type: 3}
+      propertyPath: cooldown
+      value: 3.5
+      objectReference: {fileID: 0}
+    - target: {fileID: 1480904022, guid: 43e407bd14fecf2448578c422593c4c6, type: 3}
+      propertyPath: cooldown
+      value: 3
+      objectReference: {fileID: 0}
+    - target: {fileID: 6462017408475583510, guid: 43e407bd14fecf2448578c422593c4c6, type: 3}
+      propertyPath: cooldown
+      value: 7.5
+      objectReference: {fileID: 0}
+    - target: {fileID: 6462017408502394068, guid: 43e407bd14fecf2448578c422593c4c6, type: 3}
+      propertyPath: cooldown
+      value: 2
+      objectReference: {fileID: 0}
     - target: {fileID: 6462017409901739476, guid: 43e407bd14fecf2448578c422593c4c6, type: 3}
       propertyPath: m_Name
       value: CaveCrusher
