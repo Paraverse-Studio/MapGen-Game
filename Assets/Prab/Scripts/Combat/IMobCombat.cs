@@ -1,7 +1,4 @@
-using Paraverse.Combat;
-using UnityEngine;
-
-namespace Paraverse.Mob 
+namespace Paraverse.Mob
 {
     public interface IMobCombat
     {

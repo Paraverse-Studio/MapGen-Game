@@ -59,7 +59,7 @@ namespace Paraverse
 
             if (stationary == false)
             {
-                transform.position += new Vector3(transform.forward.x, 0, transform.forward.z) * speed * Time.deltaTime;
+                transform.position += ParaverseHelper.GetPositionXZ(target) * speed * Time.deltaTime;
                 if (decreaseByLerp > 0) speed = Mathf.Lerp(speed, 0, decreaseByLerp * Time.deltaTime);
             }
         }

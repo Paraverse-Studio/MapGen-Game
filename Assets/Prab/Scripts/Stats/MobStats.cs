@@ -166,7 +166,7 @@ namespace Paraverse.Mob.Stats
         {
 
 #if UNITY_ANDROID
-            maxHealth *= 2f; // Mobile gameplay balancing
+            maxHealth *= 2; // Mobile gameplay balancing
             attackDamage *= 1.5f;
 #endif
 

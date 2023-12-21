@@ -110,6 +110,13 @@ namespace Paraverse.Combat
                 attackCollider = attackColliderGO.GetComponent<AttackCollider>();
                 attackCollider.Init(mob, scalingStatData);
             }
+
+            mob.OnAttackInterrupted += InterruptSkill;
+        }
+
+        protected virtual void InterruptSkill()
+        {
+            skillOn = false;
         }
 
         /// <summary>
@@ -139,7 +146,10 @@ namespace Paraverse.Combat
         public virtual void DeactivateSkill(PlayerInputControls input)
         {
             if (mob.tag.Equals(StringData.PlayerTag))
+            {
                 input.OnSkillOneEvent -= Execute;
+                mob.OnAttackInterrupted -= InterruptSkill;
+            }
         }
 
         /// <summary>

@@ -335,12 +335,16 @@ namespace Paraverse.Player
             if (basicAttackSkill.projData.projHeld != null)
                 basicAttackSkill.projData.projHeld.SetActive(false);
 
+            // Added to assist in auto aiming to enemy when targetted 
+            Vector3 targetDir = transform.forward;
+            if (Target) targetDir = ParaverseHelper.GetPositionXZ(Target.transform.position - transform.position).normalized;
+
             //// Instantiate and initialize projectile
             if (null != skill.projData.projPf)
             {
                 GameObject go = Instantiate(skill.projData.projPf, transform.position, transform.rotation);
                 Projectile proj = go.GetComponent<Projectile>();
-                proj.Init(this, transform.forward, skill.scalingStatData);
+                proj.Init(this, targetDir, skill.scalingStatData);
 
                 // Adds effect listeners to newly instantiated projectiles (OnAttackApplyDamage, OnAttackPostDamage, etc)
                 foreach (MobEffect effect in Effects)
