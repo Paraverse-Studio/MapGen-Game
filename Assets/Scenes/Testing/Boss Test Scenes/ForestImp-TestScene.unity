@@ -1024,6 +1024,17 @@ Transform:
   m_Father: {fileID: 1104816973}
   m_RootOrder: 4
   m_LocalEulerAnglesHint: {x: 0, y: 180, z: 0}
+--- !u!114 &668354725 stripped
+MonoBehaviour:
+  m_CorrespondingSourceObject: {fileID: 1849899259, guid: bb48c0a6c7c30e44fb01328c0709dc77, type: 3}
+  m_PrefabInstance: {fileID: 2657095164593021778}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 9dde734c8317a2e4391ebd406597222e, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
 --- !u!1001 &762816729
 PrefabInstance:
   m_ObjectHideFlags: 0
@@ -1435,7 +1446,7 @@ PrefabInstance:
       objectReference: {fileID: 0}
     - target: {fileID: 7311448671115723015, guid: b0089e7a57060c94592e590afc510844, type: 3}
       propertyPath: m_AnchoredPosition.y
-      value: -19.999939
+      value: -19.999878
       objectReference: {fileID: 0}
     - target: {fileID: 7311448671347971881, guid: b0089e7a57060c94592e590afc510844, type: 3}
       propertyPath: m_AnchorMax.y
@@ -2315,7 +2326,7 @@ MonoBehaviour:
   EffectName: Mob Effect
   targetTag: Enemy
   _ID: -1
-  _scaling:
+  scalingStatData:
     flatPower: 0
     attackScaling: 1
     abilityScaling: 0
@@ -2378,7 +2389,7 @@ MonoBehaviour:
   EffectName: Mob Effect
   targetTag: Enemy
   _ID: -1
-  _scaling:
+  scalingStatData:
     flatPower: 0
     attackScaling: 1
     abilityScaling: 0
@@ -2401,7 +2412,7 @@ MonoBehaviour:
   EffectName: Mob Effect
   targetTag: Enemy
   _ID: -1
-  _scaling:
+  scalingStatData:
     flatPower: 0
     attackScaling: 1
     abilityScaling: 0
@@ -2424,9 +2435,9 @@ MonoBehaviour:
   EffectName: Mob Effect
   targetTag: Enemy
   _ID: -1
-  _scaling:
+  scalingStatData:
     flatPower: 0
-    attackScaling: 0.8
+    attackScaling: 1
     abilityScaling: 0
     healthScaling: 0
   effectFX: {fileID: 0}
@@ -2603,6 +2614,17 @@ PrefabInstance:
       objectReference: {fileID: 0}
     m_RemovedComponents: []
   m_SourcePrefab: {fileID: 100100000, guid: 364b470066912ef4d9f29a7509bd75bf, type: 3}
+--- !u!114 &1801132396 stripped
+MonoBehaviour:
+  m_CorrespondingSourceObject: {fileID: 1719642824, guid: bb48c0a6c7c30e44fb01328c0709dc77, type: 3}
+  m_PrefabInstance: {fileID: 2657095164593021778}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: bc24a35688d7a2c4cac7a2bad6090d62, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
 --- !u!4 &1854425073 stripped
 Transform:
   m_CorrespondingSourceObject: {fileID: 4241460780824340472, guid: aa4e16a1786ed124fa06618210886566, type: 3}
@@ -2832,12 +2854,48 @@ PrefabInstance:
     m_TransformParent: {fileID: 0}
     m_Modifications:
     - target: {fileID: 80345161, guid: bb48c0a6c7c30e44fb01328c0709dc77, type: 3}
+      propertyPath: cooldown
+      value: 2.5
+      objectReference: {fileID: 0}
+    - target: {fileID: 80345161, guid: bb48c0a6c7c30e44fb01328c0709dc77, type: 3}
       propertyPath: _maxRange
       value: 10
       objectReference: {fileID: 0}
     - target: {fileID: 80345161, guid: bb48c0a6c7c30e44fb01328c0709dc77, type: 3}
       propertyPath: _minRange
-      value: 2
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 1719642824, guid: bb48c0a6c7c30e44fb01328c0709dc77, type: 3}
+      propertyPath: cooldown
+      value: 7
+      objectReference: {fileID: 0}
+    - target: {fileID: 1849899259, guid: bb48c0a6c7c30e44fb01328c0709dc77, type: 3}
+      propertyPath: cooldown
+      value: 6
+      objectReference: {fileID: 0}
+    - target: {fileID: 1849899259, guid: bb48c0a6c7c30e44fb01328c0709dc77, type: 3}
+      propertyPath: _minRange
+      value: 3
+      objectReference: {fileID: 0}
+    - target: {fileID: 1908622638, guid: bb48c0a6c7c30e44fb01328c0709dc77, type: 3}
+      propertyPath: _isMelee
+      value: 1
+      objectReference: {fileID: 0}
+    - target: {fileID: 1908622638, guid: bb48c0a6c7c30e44fb01328c0709dc77, type: 3}
+      propertyPath: cooldown
+      value: 5
+      objectReference: {fileID: 0}
+    - target: {fileID: 1908622638, guid: bb48c0a6c7c30e44fb01328c0709dc77, type: 3}
+      propertyPath: rotSpeed
+      value: 5
+      objectReference: {fileID: 0}
+    - target: {fileID: 1908622638, guid: bb48c0a6c7c30e44fb01328c0709dc77, type: 3}
+      propertyPath: _minRange
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 1908622638, guid: bb48c0a6c7c30e44fb01328c0709dc77, type: 3}
+      propertyPath: usesTargetLock
+      value: 0
       objectReference: {fileID: 0}
     - target: {fileID: 1926738171508654209, guid: bb48c0a6c7c30e44fb01328c0709dc77, type: 3}
       propertyPath: m_LocalEulerAnglesHint.x
@@ -3665,11 +3723,19 @@ PrefabInstance:
       objectReference: {fileID: 0}
     - target: {fileID: 2657095164308100581, guid: bb48c0a6c7c30e44fb01328c0709dc77, type: 3}
       propertyPath: skills.Array.size
-      value: 0
+      value: 3
       objectReference: {fileID: 0}
+    - target: {fileID: 2657095164308100581, guid: bb48c0a6c7c30e44fb01328c0709dc77, type: 3}
+      propertyPath: skills.Array.data[1]
+      value: 
+      objectReference: {fileID: 668354725}
+    - target: {fileID: 2657095164308100581, guid: bb48c0a6c7c30e44fb01328c0709dc77, type: 3}
+      propertyPath: skills.Array.data[2]
+      value: 
+      objectReference: {fileID: 1801132396}
     - target: {fileID: 2657095164308100604, guid: bb48c0a6c7c30e44fb01328c0709dc77, type: 3}
       propertyPath: atkDashForce
-      value: 30
+      value: 25
       objectReference: {fileID: 0}
     - target: {fileID: 2657095164408987042, guid: bb48c0a6c7c30e44fb01328c0709dc77, type: 3}
       propertyPath: m_LocalScale.x
