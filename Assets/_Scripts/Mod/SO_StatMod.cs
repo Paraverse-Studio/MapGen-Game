@@ -51,7 +51,7 @@ public class SO_StatMod : SO_Mod
 
     public override string GetTitle()
     {
-        if (!evolve.canStack) return Title;
+        if (!evolve.canStack || evolve.valueGrowthFactor <= 1) return Title;
 
         return Title + " " + UtilityFunctions.ToRoman(ModLevel);
     }
