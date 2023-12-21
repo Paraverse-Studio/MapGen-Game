@@ -1093,6 +1093,11 @@ public class MapGeneration : MonoBehaviour
         if (M.addChests)
         {
             int numChests = Random.Range((int)M.numOfChests.x, (int)M.numOfChests.y + 1);
+
+#if UNITY_ANDROID
+            numChests += 1; // Mobile gameplay balancing
+#endif
+
             int blocksGapBetweenChests = pathObjects.Count / (numChests + 1);
 
             int runtimeDistance = 0;

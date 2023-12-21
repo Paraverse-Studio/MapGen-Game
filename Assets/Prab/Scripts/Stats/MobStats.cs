@@ -159,6 +159,12 @@ namespace Paraverse.Mob.Stats
 
         public void ResetStats()
         {
+
+#if UNITY_ANDROID
+            maxHealth *= 2f; // Mobile gameplay balancing
+            attackDamage *= 1.5f;
+#endif
+
             _maxHealth = new Stat(maxHealth);
             _maxHealth.FactoryResetMods();
             _maxEnergy = new Stat(maxEnergy);
