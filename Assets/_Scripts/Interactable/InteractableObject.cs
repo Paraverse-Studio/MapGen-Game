@@ -100,7 +100,7 @@ public class InteractableObject : MonoBehaviour
             {
                 _items = ModsManager.Instance.AvailableMods.Where(mod => mod is SO_StatMod).ToList();
                 IListExtensions.Shuffle(_items);
-                for (int i = 4; i < _items.Count; ++i) _items.RemoveAt(i);
+                for (int i = 1; i < _items.Count; ++i) _items.RemoveAt(i); // remove all, but one!
             }
             _display.Display(UniqueMods(_items), null);
         }
