@@ -1,5 +1,6 @@
 using Paraverse.Mob;
 using Paraverse.Mob.Combat;
+using Paraverse.Mob.Stats;
 using System.Collections.Generic;
 using UnityEngine;
 
@@ -101,6 +102,13 @@ public class Damage : MonoBehaviour, IDamage
         return totalDmg;
     }
 
+    protected virtual float ApplyCustomDamage(IMobStats stats)
+    {
+        float totalDmg = Mathf.CeilToInt(scalingStatData.FinalValueWithBoosts(mob.stats));
+        stats.UpdateCurrentHealth(-(int)totalDmg);
+        return totalDmg;
+    }
+
     protected virtual void OnTriggerEnter(Collider other)
     {
         if (dontApplyDamageOnEnter == true) return;
@@ -150,6 +158,13 @@ public class Damage : MonoBehaviour, IDamage
             {
                 controller.ApplyHitAnimation();
             }
+        }
+
+        // some entities that the player can inflict damage to may not be mobs specifically
+        else if (other.TryGetComponent(out IMobStats stats))
+        { 
+            float dmg = ApplyCustomDamage(stats);
+            InvokeApplyDamageEvent(dmg);
         }
 
         // General VFX logic

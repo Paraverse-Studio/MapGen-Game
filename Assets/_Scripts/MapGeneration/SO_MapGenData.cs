@@ -145,7 +145,7 @@ public class SO_MapGenData : ScriptableObject
     public bool addChests;
     [MinMaxSlider(0f, 10f)]
     public Vector2 numOfChests;
-    [Header("NPCs ")]
+    [Header("NPCs "), Tooltip("NOTE: sort this list in order from highest spacing required to lowest")]
     public MapGeneration.NPCPair[] npcs;
 
 

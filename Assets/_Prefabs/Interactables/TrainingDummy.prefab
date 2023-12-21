@@ -98,10 +98,6 @@ GameObject:
   - component: {fileID: 2021405448038576772}
   - component: {fileID: 3534052144625594138}
   - component: {fileID: 5348001037372331676}
-  - component: {fileID: 7037478032272877983}
-  - component: {fileID: 120232357643295598}
-  - component: {fileID: 570669158967385184}
-  - component: {fileID: 4630755326533681506}
   m_Layer: 15
   m_Name: Dummy (500 HP)
   m_TagString: Enemy
@@ -187,7 +183,7 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   bodyToFollow: {fileID: 0}
   settings:
-    showWhenSelected: 1
+    showWhenSelected: 0
     hideName: 0
     hideHealthBar: 0
     showSelectionAllTimes: 0
@@ -269,105 +265,6 @@ Animator:
   m_HasTransformHierarchy: 1
   m_AllowConstantClipSamplingOptimization: 1
   m_KeepAnimatorControllerStateOnDisable: 0
---- !u!195 &7037478032272877983
-NavMeshAgent:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 1821075853481115529}
-  m_Enabled: 0
-  m_AgentTypeID: 0
-  m_Radius: 0.5
-  m_Speed: 0
-  m_Acceleration: 0
-  avoidancePriority: 50
-  m_AngularSpeed: 0
-  m_StoppingDistance: 0
-  m_AutoTraverseOffMeshLink: 1
-  m_AutoBraking: 1
-  m_AutoRepath: 1
-  m_Height: 2
-  m_BaseOffset: 0.4
-  m_WalkableMask: 4294967295
-  m_ObstacleAvoidanceType: 0
---- !u!114 &120232357643295598
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 1821075853481115529}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 5b3fe259459faf844a89438f0f42bc88, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: 
-  anim: {fileID: 0}
-  stats: {fileID: 0}
-  projUser: 0
-  basicAttackSkill: {fileID: 3963438340753937597}
-  skills: []
-  effects: []
-  animBool: isUsingSkill
---- !u!114 &570669158967385184
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 1821075853481115529}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 91379af3fa21cc34e8ea9ea8189ce047, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: 
-  damageOverTimeEffects: []
---- !u!114 &4630755326533681506
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 1821075853481115529}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: d7247787b83f8b143b61f62b88ba1f58, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: 
-  walkSpeedRatio: 0
-  sprintSpeedRatio: 1
-  rotSpeed: 0
-  wps: []
-  minWaitDur: 2
-  maxWaitDur: 5
-  accurayWP: 2
-  stoppingDistance: -1
-  detectionRadius: 5
-  pursueRadius: 7
-  customPursueRange: 0
-  pursueRange: 10
-  _isStrafer: 0
-  strafePoint: {fileID: 0}
-  strafeAccuracy: 1
-  atkDashForce: 2
-  jumpLateralForce: 5
-  jumpHeightForce: 5
-  isGroundedCheckRange: 0.5
-  groundLayer:
-    serializedVersion: 2
-    m_Bits: 0
-  flyUpForce: 5
-  flyDownForce: 8
-  isFlyingUp: 0
-  isFlyingDown: 0
-  checkFallRange: 2
-  maxDeathTimerUponFall: 2
-  fallForce: 0.5
-  deathEffect: {fileID: 0}
-  _curMobState: 0
-  _isGrounded: 1
-  _isUnstaggerable: 1
 --- !u!1 &1821449472753334755
 GameObject:
   m_ObjectHideFlags: 0

@@ -74,6 +74,10 @@ public class MapGeneration : MonoBehaviour
     {
         public GameObject npc;
         public SO_Condition condition;
+        public Vector2 spacingAround;
+        public bool spacingIncludeLiquid;
+        public bool spacingIncludeProps;
+        public bool spacingIncludeElevation;
     }
 
     public static MapGeneration Instance;
@@ -448,9 +452,11 @@ public class MapGeneration : MonoBehaviour
 
         /////////       NO SHAPE MODIFICATIONS BEYOND THIS POINT        /////////////////////////
         centerPointWithY = new Vector3(centerPoint.x, gridOccupants[(int)centerPoint.x, (int)centerPoint.z].block.transform.position.y, centerPoint.z);
-                 
+
 
         /* * * * * DECORATIVE/MECHANICAL PROPS ON MAP * * * * * * */
+        AddMultisizeProps();
+
         currentPaintingBlock = M.blockSet.water;
 
         PartitionProgress("");
@@ -959,6 +965,88 @@ public class MapGeneration : MonoBehaviour
         }
     }
 
+    private void AddMultisizeProps()
+    {
+        
+
+    }
+
+    private Block GetRandomBlockWithBoundary(int sizeX, int sizeZ, bool avoidProps = true, 
+        bool avoidLiquid = true, bool avoidElevationChange = true)
+    {
+        int xRemainder = sizeX % 2;
+        int zRemainder = sizeZ % 2;
+        List<Block> randomBlocksList = new();
+        randomBlocksList.AddRange(allObjects);
+        IListExtensions.Shuffle(randomBlocksList);
+        List<Block> surroundingBlockSet = new();
+
+        Block eligibleBlock = null;
+
+        for (int i = 0; i < randomBlocksList.Count; ++i)
+        {
+            Block searchingBlock = randomBlocksList[i];
+            if (searchingBlock.hasProp || searchingBlock.hasWater) continue;
+
+            bool blockIsEligible = true;         
+            Vector3 blockPosition = searchingBlock.transform.position;
+
+            for (int x = -(sizeZ / 2); x < (sizeZ / 2) + xRemainder; ++x)
+            {
+                for (int z = -(sizeZ / 2); z < (sizeZ / 2) + zRemainder; ++z)
+                {
+                    Vector3 location = new(blockPosition.x + x, 0, blockPosition.z + z);
+                    if (!IsInGrid(location) || null == GetGridOccupant(location).block)
+                    {
+                        blockIsEligible = false;
+                        surroundingBlockSet.Clear();
+                        continue;
+                    }
+
+                    if (avoidProps && GetGridOccupant(location).block.hasProp)
+                    {
+                        blockIsEligible = false;
+                        surroundingBlockSet.Clear();
+                        continue;
+                    }
+
+                    if (avoidLiquid && GetGridOccupant(location).block.hasWater)
+                    {
+                        blockIsEligible = false;
+                        surroundingBlockSet.Clear();
+                        continue;
+                    }
+
+                    if (avoidElevationChange && GetGridOccupant(location).block.transform.position.y != searchingBlock.transform.position.y)
+                    {
+                        blockIsEligible = false;
+                        surroundingBlockSet.Clear();
+                        continue;
+                    }
+
+                    surroundingBlockSet.Add(GetGridOccupant(location).block);
+                }
+            }
+
+            if (blockIsEligible)
+            {
+                eligibleBlock = searchingBlock;
+                break;
+            }
+        }
+
+        if (null == eligibleBlock) return null; // no eligible block was found to pass all the conditions
+        
+        // Found an eligible block so make the spacing around it considered occupied
+        for (int i = 0; i < surroundingBlockSet.Count; ++i)
+        {
+            surroundingBlockSet[i].hasProp = true;
+            //CreateTestingObject(surroundingBlockSet[i].transform.position + new Vector3(0, 3.5f, 0));
+        }
+
+        return eligibleBlock;
+    }
+
     private void AddWaterToDips()
     {
         float yLevelToMeasure = M.liquidRiseLevel + _EPSILON;
@@ -992,6 +1080,8 @@ public class MapGeneration : MonoBehaviour
     {
         // EndPoint
         Vector3 spawnSpot = pathObjects[pathObjects.Count - 1].transform.position + new Vector3(0, 0.5f, 0);
+        pathObjects[pathObjects.Count - 1].hasProp = true;
+
         GameObject obj = Instantiate(importantProps.endPoint, spawnSpot, GetCameraFacingRotation());
         obj.name = "END PORTAL (Special)";
         UtilityFunctions.UpdateLODlevels(obj.transform);
@@ -1053,7 +1143,28 @@ public class MapGeneration : MonoBehaviour
             Vector3 spot = pathObjects[pathObjects.Count - 1].gameObject.transform.position + new Vector3(xDirection, 0, zDirection);
             Vector3 r = Vector3.down * (Random.Range(0, 2) == 0? 180f : 90f);
 
-            Block b = GetClosestValidGroundBlock(spot);
+            int xSpacing = (int)M.npcs[i].spacingAround.x;
+            int zSpacing = (int)M.npcs[i].spacingAround.y;
+            //Block b = GetClosestValidGroundBlock(spot); // OLD WAY OF SPAWNING NPCs
+            Block b = GetRandomBlockWithBoundary(xSpacing, zSpacing, 
+                M.npcs[i].spacingIncludeProps, M.npcs[i].spacingIncludeLiquid, M.npcs[i].spacingIncludeElevation);
+
+            if (null == b)
+            {
+                while (null == b)
+                {
+                    Debug.Log("NOTE: " + M.npcs[i].npc.name + " couldn't be placed with the conditions, so conditions were lowered.");
+                    xSpacing--;
+                    zSpacing--;
+                    b = GetRandomBlockWithBoundary(xSpacing, zSpacing, avoidProps: true, avoidElevationChange: false);
+
+                    if (xSpacing == 0 || zSpacing == 0)
+                    {
+                        Debug.Log("This shouldn't really ever happen.");
+                        return; // somehow can't find a spot to spawn this NPC, so don't spawn it
+                    }
+                }
+            }
 
             var npc = Instantiate(M.npcs[i].npc, b.transform.position + new Vector3(0, 0.5f, 0), Quaternion.Euler(r.x, r.y, r.z));
             b.hasProp = true;
@@ -1209,7 +1320,7 @@ public class MapGeneration : MonoBehaviour
 
                 if (!IsInGrid(new Vector3(newX, 0, newZ))) continue;
                 if (null == gridOccupants[newX, newZ].block) continue;
-                if (true == gridOccupants[newX, newZ].hasProp) continue;
+                if (true == gridOccupants[newX, newZ].block.hasProp) continue;
 
                 // NEW* - don't put normal props on lowest level (where water is, only put water props there)
                 if (Mathf.Abs(gridOccupants[newX, newZ].block.transform.position.y - YBoundary.y) < _EPSILON) continue;
@@ -1231,7 +1342,7 @@ public class MapGeneration : MonoBehaviour
                     obj.transform.position += new Vector3(0, 0.5f, 0); // only 0.5f because the pivot point is center of block
                     obj.transform.parent = temporaryObjFolder.transform;
 
-                    gridOccupants[newX, newZ].hasProp = true;
+                    gridOccupants[newX, newZ].block.hasProp = true;
                 }
             }
         }
@@ -1483,5 +1594,12 @@ public class MapGeneration : MonoBehaviour
         OnProgressChange?.Invoke(progressValue, progressTotal);
         OnProgressChangeText?.Invoke(va);
     }
+
+    private void CreateTestingObject(Vector3 pos)
+    {
+        GameObject cube = GameObject.CreatePrimitive(PrimitiveType.Cube);
+        cube.transform.position = pos;
+    }
+
 
 }
