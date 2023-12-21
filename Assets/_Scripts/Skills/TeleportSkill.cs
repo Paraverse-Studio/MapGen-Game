@@ -61,11 +61,11 @@ public class TeleportSkill : MobSkill, IMobSkill
 
         anim.SetBool(StringData.IsInteracting, true);
         Vector3 oldPosition = mob.gameObject.transform.position;
-        Vector3 position = ((mob.Target.position - mob.transform.position).normalized * 0.5f) + mob.Target.position;
-        var block = MapGeneration.Instance.GetClosestValidGroundBlock(position);
+        Vector3 position = ((mob.Target.position - mob.transform.position).normalized * 0.65f) + mob.Target.position;
+        var block = MapGeneration.Instance.GetClosestBlock(position);
 
         ResetCollider();
-        UtilityFunctions.TeleportObject(mob.gameObject, block.transform.position + new Vector3(0, 0.4f, 0));
+        UtilityFunctions.TeleportObject(mob.gameObject, block.transform.position + new Vector3(0, 0.5f, 0));
 
         if (FX)
         {

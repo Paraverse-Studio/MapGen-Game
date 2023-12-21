@@ -1542,6 +1542,11 @@ public class MapGeneration : MonoBehaviour
         return GetClosestObject(source.position, allObjects);
     }
 
+    public Block GetClosestBlock(Vector3 source)
+    {
+        return GetClosestObject(source, allObjects);
+    }
+
     // Returns the closest block to spot that is valid, doesn't have trees or props, and doesn't have water/liquid
     // NOTE*: this must be used after WaterDips() has already been called since .hasWater is only populated
     // during WaterDips()
