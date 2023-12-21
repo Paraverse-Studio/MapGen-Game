@@ -47,21 +47,25 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   targetTag: Player
-  speed: 30
-  range: 20
-  damage: 0
-  deathTimer: 5
-  stationary: 0
+  knockBackEffect: {fileID: 0}
   dot: 0
   dontApplyDamageOnEnter: 0
   dotIntervalTimer: 1
-  knockBackEffect: {fileID: 0}
-  pierce: 0
   applyHitAnim: 1
-  isBeam: 0
-  launchFX: {fileID: 0}
   hitFX: {fileID: 0}
+  scalingStatData:
+    flatPower: 0
+    attackScaling: 1
+    abilityScaling: 0
+    healthScaling: 0
+  isBasicAttackCollider: 0
+  speed: 20
+  range: 20
+  deathTimer: 5
+  stationary: 0
+  pierce: 0
   decreaseByLerp: -1
+  launchFX: {fileID: 0}
 --- !u!65 &6081233146122701220
 BoxCollider:
   m_ObjectHideFlags: 0
