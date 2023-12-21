@@ -111,16 +111,18 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   targetTag: Player
+  knockBackEffect: {fileID: 11400000, guid: 748f4316b61c09e4eb46f5136b6b2a06, type: 2}
   dot: 0
   dontApplyDamageOnEnter: 0
-  knockBackEffect: {fileID: 11400000, guid: 748f4316b61c09e4eb46f5136b6b2a06, type: 2}
+  dotIntervalTimer: 1
+  applyHitAnim: 1
   hitFX: {fileID: 1281011124605332014, guid: 78283b04fb4620d4fb5afde968967a87, type: 3}
-  isBasicAttackCollider: 1
   scalingStatData:
     flatPower: 0
     attackScaling: 1
     abilityScaling: 0
     healthScaling: 0
+  isBasicAttackCollider: 1
 --- !u!1 &6864850351590495654
 GameObject:
   m_ObjectHideFlags: 0
@@ -233,16 +235,18 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   targetTag: Player
+  knockBackEffect: {fileID: 11400000, guid: 748f4316b61c09e4eb46f5136b6b2a06, type: 2}
   dot: 0
   dontApplyDamageOnEnter: 0
-  knockBackEffect: {fileID: 11400000, guid: 748f4316b61c09e4eb46f5136b6b2a06, type: 2}
+  dotIntervalTimer: 1
+  applyHitAnim: 1
   hitFX: {fileID: 1281011124605332014, guid: 78283b04fb4620d4fb5afde968967a87, type: 3}
-  isBasicAttackCollider: 1
   scalingStatData:
     flatPower: 0
     attackScaling: 1
     abilityScaling: 0
     healthScaling: 0
+  isBasicAttackCollider: 1
 --- !u!1 &6864850351737904892
 GameObject:
   m_ObjectHideFlags: 0
@@ -1821,6 +1825,7 @@ MonoBehaviour:
   moveSpeed: 1.65
   maxEnergy: 100
   _curEnergy: 100
+  healthRegen: 0
   energyRegen: 25
   _gold: 100
   OnHealthChange:
@@ -3793,16 +3798,18 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   targetTag: Player
+  knockBackEffect: {fileID: 11400000, guid: 748f4316b61c09e4eb46f5136b6b2a06, type: 2}
   dot: 0
   dontApplyDamageOnEnter: 0
-  knockBackEffect: {fileID: 11400000, guid: 748f4316b61c09e4eb46f5136b6b2a06, type: 2}
+  dotIntervalTimer: 1
+  applyHitAnim: 1
   hitFX: {fileID: 1281011124605332014, guid: 78283b04fb4620d4fb5afde968967a87, type: 3}
-  isBasicAttackCollider: 1
   scalingStatData:
     flatPower: 0
     attackScaling: 1
     abilityScaling: 0
     healthScaling: 0
+  isBasicAttackCollider: 1
 --- !u!1 &8305639317601381794
 GameObject:
   m_ObjectHideFlags: 0
@@ -3928,7 +3935,7 @@ MonoBehaviour:
   _description: 
   _minRange: 0
   _maxRange: 5
-  cooldown: 2.5
+  cooldown: 3
   cost: 0
   animName: BasicAttack
   isBasicAttack: 1
@@ -4138,7 +4145,7 @@ MonoBehaviour:
   _description: 
   _minRange: 0
   _maxRange: 5
-  cooldown: 4.5
+  cooldown: 8
   cost: 0
   animName: LifeStealAttack
   isBasicAttack: 0
@@ -4151,7 +4158,7 @@ MonoBehaviour:
     projOrigin: {fileID: 0}
     projRotation: {fileID: 0}
     basicAtkProjSpeed: 10
-  usesTargetLock: 1
+  usesTargetLock: 0
   rotSpeed: 10
   scalingStatData:
     flatPower: 0
