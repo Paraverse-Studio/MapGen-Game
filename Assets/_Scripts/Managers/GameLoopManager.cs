@@ -156,7 +156,11 @@ public class GameLoopManager : MonoBehaviour
         if (player.transform.position.y <= -20f && _roundIsActive)
         {
             UtilityFunctions.TeleportObject(player, MapGeneration.Instance.GetClosestBlock(player.transform).transform.position + new Vector3(0, 0.5f, 0));
-            Invoke(nameof(PlayerFallDamage), 0.15f);
+
+            if (MapCreator.Instance.mapType != MapType.reward)
+            {
+                Invoke(nameof(PlayerFallDamage), 0.15f);
+            }
         }
 
         if (Input.GetKeyDown(KeyCode.Alpha1)) QualityManager.Instance.SetQualityLevel(1);
