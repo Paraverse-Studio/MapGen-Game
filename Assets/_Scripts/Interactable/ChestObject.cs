@@ -11,7 +11,8 @@ public class ChestObject : MonoBehaviour
         Common = 0, 
         Rare = 1, 
         Legendary = 2,
-        RonnyChest = 3
+        RonnyChest = 3,
+        Mystic = 4
     }
 
     [System.Serializable]
