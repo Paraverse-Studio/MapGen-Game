@@ -50,7 +50,7 @@ MonoBehaviour:
   _description: 
   _minRange: 0
   _maxRange: 25
-  cooldown: 7
+  cooldown: 10
   cost: 0
   animName: BarragePrepare
   isBasicAttack: 0
@@ -76,7 +76,7 @@ MonoBehaviour:
   targetLayer:
     serializedVersion: 2
     m_Bits: 491511
-  isSticky: 0
+  isSticky: 1
   chargeFX: {fileID: 147199183070441786, guid: 745a28b4649613c44bbca3590d649613, type: 3}
   chargeOrigin: {fileID: 1554990188}
   skillStartTimer: 1
@@ -1021,7 +1021,7 @@ MonoBehaviour:
   targetLayer:
     serializedVersion: 2
     m_Bits: 491511
-  isSticky: 0
+  isSticky: 1
   chargeFX: {fileID: 147199183070441786, guid: 745a28b4649613c44bbca3590d649613, type: 3}
   chargeOrigin: {fileID: 8375894351906716979}
   skillStartTimer: 5
@@ -1095,16 +1095,18 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   targetTag: Player
+  knockBackEffect: {fileID: 11400000, guid: 748f4316b61c09e4eb46f5136b6b2a06, type: 2}
   dot: 0
   dontApplyDamageOnEnter: 0
-  knockBackEffect: {fileID: 11400000, guid: 748f4316b61c09e4eb46f5136b6b2a06, type: 2}
+  dotIntervalTimer: 1
+  applyHitAnim: 1
   hitFX: {fileID: 0}
-  isBasicAttackCollider: 0
   scalingStatData:
     flatPower: 0
     attackScaling: 1
     abilityScaling: 0
     healthScaling: 0
+  isBasicAttackCollider: 0
 --- !u!1 &3787384781715577073
 GameObject:
   m_ObjectHideFlags: 0
@@ -1173,16 +1175,18 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   targetTag: Player
+  knockBackEffect: {fileID: 11400000, guid: 748f4316b61c09e4eb46f5136b6b2a06, type: 2}
   dot: 0
   dontApplyDamageOnEnter: 0
-  knockBackEffect: {fileID: 11400000, guid: 748f4316b61c09e4eb46f5136b6b2a06, type: 2}
+  dotIntervalTimer: 1
+  applyHitAnim: 1
   hitFX: {fileID: 0}
-  isBasicAttackCollider: 0
   scalingStatData:
     flatPower: 0
     attackScaling: 1
     abilityScaling: 0
     healthScaling: 0
+  isBasicAttackCollider: 0
 --- !u!1 &3820186339593213479
 GameObject:
   m_ObjectHideFlags: 0
@@ -2127,6 +2131,7 @@ MonoBehaviour:
   moveSpeed: 2
   maxEnergy: 100
   _curEnergy: 100
+  healthRegen: 0
   energyRegen: 25
   _gold: 100
   OnHealthChange:
