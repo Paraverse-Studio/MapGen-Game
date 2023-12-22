@@ -161,7 +161,9 @@ public class GameLoopManager : MonoBehaviour
             if (null != _predicate && _predicate(_roundIsActive) && !EndPortal.IsActivated)
             {
                 if (MapCreator.Instance.mapType != MapType.reward)
+                {
                     AnnouncementManager.Instance.QueueAnnouncement(new Announcement().AddType(1).AddText("Gate is open!"));
+                }
                 EndPortal.Activate(true);
             }
         }
@@ -298,8 +300,7 @@ public class GameLoopManager : MonoBehaviour
     public void EndRound(bool successfulRound) => StartCoroutine(IEndRound(successfulRound));
 
     public IEnumerator IEndRound(bool successfulRound)
-    {
-        _roundIsActive = false;
+    {       
         roundTimer.PauseTimer();
         GameplayListeners(attachOrRemove: false);
 
@@ -331,8 +332,7 @@ public class GameLoopManager : MonoBehaviour
                 roundEndWindow = startingHostileRoundWindow;
                 break;
         }
-
-        GameLoopEvents.OnEndRound?.Invoke();
+                
         roundEndWindow.gameObject.SetActive(true);
         Time.timeScale = 0.4f;
         roundEndWindow.SetTrigger("Entry");
@@ -341,11 +341,19 @@ public class GameLoopManager : MonoBehaviour
         yield return new WaitForSecondsRealtime(1.5f);
         roundEndWindow.gameObject.SetActive(false);
         Time.timeScale = 1f;
-        CompleteRound();
+
+        // boss ones don't auto-complete after above animation, u have to touch portal,
+        // because for boss maps, the above animation happens right after killing boss, not touching portal 
+        if (roundCompletionType != RoundCompletionType.BossDefeated)
+        {
+            CompleteRound();
+        }
     }
 
     public void CompleteRound()
     {
+        _roundIsActive = false;
+        GameLoopEvents.OnEndRound?.Invoke();
         EnemiesManager.Instance.ResetEnemiesList();
         Destroy(EndPortal);
 

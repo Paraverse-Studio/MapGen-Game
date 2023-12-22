@@ -1,3 +1,4 @@
+using System;
 using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
@@ -5,6 +6,7 @@ using UnityEngine;
 public class EndPointTrigger : MonoBehaviour
 {
     public GameObject portal;
+    public Action OnInteractAction = null;
 
     private bool _activated = false; public bool IsActivated => _activated;
 
@@ -27,23 +29,7 @@ public class EndPointTrigger : MonoBehaviour
         }
         else
         {
-            GameLoopManager.Instance.EndRound(successfulRound: true);
-            _activated = false;
-        }
-    }
-
-    private void OnTriggerEnter(Collider other)
-    {
-        if (!_activated)
-        {
-            if (other.CompareTag("Player")) 
-                AnnouncementManager.Instance.QueueAnnouncementUnique(new Announcement().AddText("Defeat all enemies to open the gate!"));
-            return;
-        }
-
-        if (other.CompareTag("Player"))
-        {
-            GameLoopManager.Instance.EndRound(successfulRound: true);
+            OnInteractAction?.Invoke();
             _activated = false;
         }
     }

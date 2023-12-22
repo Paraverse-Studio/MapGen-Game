@@ -1108,6 +1108,18 @@ public class MapGeneration : MonoBehaviour
         obj.name = "END PORTAL (Special)";
         UtilityFunctions.UpdateLODlevels(obj.transform);
         GameLoopManager.Instance.EndPortal = obj.GetComponent<EndPointTrigger>();
+
+        // boss ones don't auto-complete after above animation, u have to touch portal,
+        // because for boss maps, the above animation happens right after killing boss, not touching portal 
+        if (MapCreator.Instance.mapType == MapType.boss)
+        {
+            GameLoopManager.Instance.EndPortal.OnInteractAction = () => GameLoopManager.Instance.CompleteRound();
+        }
+        else 
+        {
+            GameLoopManager.Instance.EndPortal.OnInteractAction = () => GameLoopManager.Instance.EndRound(successfulRound: true);
+        }
+
         propObjects.Add(obj);
         obj.transform.parent = temporaryObjFolder.transform;
 
@@ -1269,6 +1281,7 @@ public class MapGeneration : MonoBehaviour
                 if (MapCreator.Instance.mapType == MapType.boss)
                 {
                     controller.OnDeathEvent += AddLegendaryChest;
+                    controller.OnDeathEvent += (Transform t) => GameLoopManager.Instance.EndRound(successfulRound: true);
                 }
 
                 // PRABS UGLY FORCED METHOD THAT NEEDS TO BE OPTIMIZED

@@ -129,7 +129,7 @@ public class ChestObject : MonoBehaviour
                 thisChest = chestTiers[tier].Clone();
             }
 
-            float total = 0; // adding all the chances up (will likely always be 100)
+            float total = 0; // adding all the chances up (will likely always be 100 AT FIRST, but after items are pulled out, it lessens)
             foreach (LootItem lootItem in thisChest.lootTable)
             {
                 total += lootItem.chance;
@@ -137,7 +137,7 @@ public class ChestObject : MonoBehaviour
 
             float randomNumber = Random.Range(0, total);
 
-            for (int i = 0; i < thisChest.lootTable.Count; ++i)
+            for (int i = thisChest.lootTable.Count - 1; i >= 0; --i)
             {
                 if (randomNumber <= thisChest.lootTable[i].chance)
                 {
@@ -203,7 +203,7 @@ public class ChestObject : MonoBehaviour
                 else
                 {
                     // part of the loot table magic, by removing this item's chance, we can decide on a random item faster 
-                    randomNumber -= thisChest.lootTable[i].chance;
+                    //randomNumber -= thisChest.lootTable[i].chance;
                 }
             }       
         }

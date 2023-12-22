@@ -75,11 +75,11 @@ public class MapCreator : MonoBehaviour
     public bool offerMysticDungeon;
     public int EnemiesSpawned;
 
-    private int roundsSinceLastBossMap = 0;
-    private int roundsSinceLastRewardMap = 0;
-    private int roundsSinceLastOFferMysticMap = 0;
-    private int biomeIndex = 0;
-    private bool biomeChangePending = false;
+    private int roundsSinceLastBossMap;
+    private int roundsSinceLastRewardMap;
+    private int roundsSinceLastOFferMysticMap;
+    private int biomeIndex;
+    private bool biomeChangePending;
 
     public void ResetMapCreator()
     {
