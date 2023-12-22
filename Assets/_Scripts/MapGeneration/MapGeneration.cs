@@ -525,8 +525,30 @@ public class MapGeneration : MonoBehaviour
         {
             mapVFX = Instantiate(M.vfx, Vector3.zero, Quaternion.identity);
         }
+
+        if (M.environmentLightingColor != Color.white)
+        {
+            RenderSettings.ambientSkyColor = M.environmentLightingColor;
+        }
+        else
+        {
+            RenderSettings.ambientSkyColor = MapCreator.Instance.defaultEnvironmentColor;
+        }
+
+        if (M.mapSkybox != null)
+        {
+            RenderSettings.skybox = M.mapSkybox;
+        }
         /* * * * * * * * * * * * * * * * * * * * * * */
 
+
+        /* * * * MYSTIC MAP - CUSTOM SETTINGS FOR THIS OVERRIDING MAP * * * * * * */
+        if (MapCreator.Instance.isMysticMap)
+        {
+            globalVolume.profile = MapCreator.Instance.mysticMapData.ppProfile;
+            RenderSettings.ambientSkyColor = MapCreator.Instance.mysticMapData.environmentLightingColor;
+            RenderSettings.skybox = MapCreator.Instance.mysticMapData.mapSkybox;
+        }
 
         /* * * * * QUALITY SETTINGS (PERFORMANCE) * * * * * * */
         //globalLight.gameObject.SetActive(QualityManager.QualityLevel >= 2);

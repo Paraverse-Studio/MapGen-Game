@@ -22,6 +22,8 @@ public class SO_MapGenData : ScriptableObject
     [Space(5)]
     public VolumeProfile ppProfile;
     public ParticleSystem vfx;
+    public Material mapSkybox;
+    public Color environmentLightingColor;
 
     [Header("BLOCK SET ")]
     [Space(10)]

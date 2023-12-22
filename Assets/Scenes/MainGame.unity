@@ -16418,7 +16418,7 @@ RectTransform:
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
   m_AnchorMin: {x: 0, y: 0}
   m_AnchorMax: {x: 0, y: 0}
-  m_AnchoredPosition: {x: 100, y: 0}
+  m_AnchoredPosition: {x: 0, y: 0}
   m_SizeDelta: {x: 0, y: 62}
   m_Pivot: {x: 1, y: 1}
 --- !u!114 &480979922
@@ -16721,7 +16721,7 @@ RectTransform:
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
   m_AnchorMin: {x: 0, y: 0}
   m_AnchorMax: {x: 0, y: 0}
-  m_AnchoredPosition: {x: 3, y: 0}
+  m_AnchoredPosition: {x: 0, y: 0}
   m_SizeDelta: {x: 0, y: 0}
   m_Pivot: {x: 0, y: 1}
 --- !u!114 &498716843
@@ -26756,7 +26756,7 @@ RectTransform:
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
   m_AnchorMin: {x: 0, y: 0}
   m_AnchorMax: {x: 0, y: 0}
-  m_AnchoredPosition: {x: 300.5, y: 0}
+  m_AnchoredPosition: {x: 0, y: 0}
   m_SizeDelta: {x: 0, y: 0}
   m_Pivot: {x: 0.5, y: 0.5}
 --- !u!114 &818983974
@@ -34023,7 +34023,7 @@ RectTransform:
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
   m_AnchorMin: {x: 0, y: 0}
   m_AnchorMax: {x: 0, y: 0}
-  m_AnchoredPosition: {x: 3, y: 0}
+  m_AnchoredPosition: {x: 0, y: 0}
   m_SizeDelta: {x: 0, y: 0}
   m_Pivot: {x: 0, y: 1}
 --- !u!114 &1031312079
@@ -40504,9 +40504,15 @@ MonoBehaviour:
     map: {fileID: 11400000, guid: 8524d43def88d1d49bd4ad6fc327c80d, type: 2}
     bossMap: {fileID: 11400000, guid: 9f08d5ca1ce186d468e89bf621d9214b, type: 2}
     rewardMap: {fileID: 11400000, guid: 6de3b2fcad1bc804aa9b8502ebffd8cd, type: 2}
+  mysticMapData:
+    mapSkybox: {fileID: 2100000, guid: 5771ae7da310ce1419fc779bc043e56c, type: 2}
+    ppProfile: {fileID: 11400000, guid: 3416e5db27e44284f96758c67e12391c, type: 2}
+    environmentLightingColor: {r: 0.34419674, g: 0.31327873, b: 0.4716981, a: 1}
+  defaultEnvironmentColor: {r: 0.61858314, g: 0.71178997, b: 0.9056604, a: 1}
   switchMapAfterNumOfRounds: 10
   bossMapGapLimit: {x: 5, y: 6}
   rewardMapGapLimit: {x: 3, y: 3}
+  mysticMapGapLimit: {x: 0, y: 2}
   enemyDamageScalingPerRound: 0.1
   enemyHealthScalingPerRound: 0.2
   objectiveTitle: {fileID: 1499388855}
@@ -40517,6 +40523,8 @@ MonoBehaviour:
   skillGiverPrefab: {fileID: 9172293720564539993, guid: de315d02f70e52e4baffa91a9598cf52, type: 3}
   rareChestBaseChance: 3
   mapType: 0
+  isMysticMap: 0
+  offerMysticDungeon: 0
   EnemiesSpawned: 0
 --- !u!1 &1201517314
 GameObject:
@@ -43487,7 +43495,7 @@ RectTransform:
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
   m_AnchorMin: {x: 0, y: 0}
   m_AnchorMax: {x: 0, y: 0}
-  m_AnchoredPosition: {x: 6, y: 0}
+  m_AnchoredPosition: {x: 0, y: 0}
   m_SizeDelta: {x: 0, y: 0}
   m_Pivot: {x: 0, y: 0}
 --- !u!114 &1271340574
@@ -44100,7 +44108,7 @@ RectTransform:
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
   m_AnchorMin: {x: 0, y: 0}
   m_AnchorMax: {x: 0, y: 0}
-  m_AnchoredPosition: {x: 160.595, y: 0}
+  m_AnchoredPosition: {x: 0, y: 0}
   m_SizeDelta: {x: 0, y: 0}
   m_Pivot: {x: 0.5, y: 0.5}
 --- !u!114 &1292337618
@@ -60706,7 +60714,7 @@ RectTransform:
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
   m_AnchorMin: {x: 0, y: 0}
   m_AnchorMax: {x: 0, y: 0}
-  m_AnchoredPosition: {x: 6, y: 0}
+  m_AnchoredPosition: {x: 0, y: 0}
   m_SizeDelta: {x: 0, y: 0}
   m_Pivot: {x: 0, y: 0}
 --- !u!114 &1838762275
