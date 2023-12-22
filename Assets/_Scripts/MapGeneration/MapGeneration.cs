@@ -1108,6 +1108,18 @@ public class MapGeneration : MonoBehaviour
         obj.name = "END PORTAL (Special)";
         UtilityFunctions.UpdateLODlevels(obj.transform);
         GameLoopManager.Instance.EndPortal = obj.GetComponent<EndPointTrigger>();
+
+        // boss ones don't auto-complete after above animation, u have to touch portal,
+        // because for boss maps, the above animation happens right after killing boss, not touching portal 
+        if (MapCreator.Instance.mapType == MapType.boss)
+        {
+            GameLoopManager.Instance.EndPortal.OnInteractAction = () => GameLoopManager.Instance.CompleteRound();
+        }
+        else 
+        {
+            GameLoopManager.Instance.EndPortal.OnInteractAction = () => GameLoopManager.Instance.EndRound(successfulRound: true);
+        }
+
         propObjects.Add(obj);
         obj.transform.parent = temporaryObjFolder.transform;
 
@@ -1220,10 +1232,11 @@ public class MapGeneration : MonoBehaviour
         // before encountering something hostile
         int gapOfTilesBeforeFirstEnemy = 14;
 
+        // how many path blocks until the next enemy should be spawned
         int enemyFrequency = Mathf.Max(1, (pathObjects.Count - gapOfTilesBeforeFirstEnemy) / M.enemySpawnAmount);
 
-        // safety code, if the map is just way too little, ignore the initial gap of enemies
-        if (enemyFrequency == 1) enemyFrequency = Mathf.Max(1, (pathObjects.Count) / M.enemySpawnAmount);
+        // safety code, if the gap is bigger than the actual spawned path, then reduce that initial gap to just below it
+        if (pathObjects.Count <= gapOfTilesBeforeFirstEnemy) gapOfTilesBeforeFirstEnemy = pathObjects.Count - 2;
 
         for (int i = gapOfTilesBeforeFirstEnemy; i < pathObjects.Count; ++i)
         {
@@ -1268,6 +1281,7 @@ public class MapGeneration : MonoBehaviour
                 if (MapCreator.Instance.mapType == MapType.boss)
                 {
                     controller.OnDeathEvent += AddLegendaryChest;
+                    controller.OnDeathEvent += (Transform t) => GameLoopManager.Instance.EndRound(successfulRound: true);
                 }
 
                 // PRABS UGLY FORCED METHOD THAT NEEDS TO BE OPTIMIZED
