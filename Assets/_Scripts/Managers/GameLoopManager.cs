@@ -1,5 +1,6 @@
 using Paraverse;
 using Paraverse.Mob;
+using Paraverse.Mob.Combat;
 using Paraverse.Mob.Controller;
 using Paraverse.Mob.Stats;
 using Paraverse.Player;
@@ -18,16 +19,11 @@ public class GameLoopManager : MonoBehaviour
     {
         public UnityEvent OnBootupGame;
         public UnityEvent OnDeveloperMode;
-
         public UnityEvent OnInitiateSession;
-
         public UnityEvent OnInitiateRound;
         public UnityEvent OnStartRound;
-
         public UnityEvent OnEndRound;
-
         public UnityEvent OnEndSession;
-
         public UnityEvent OnUI; //whenever game enters any UI (excluding pause)
     }
 
@@ -41,7 +37,19 @@ public class GameLoopManager : MonoBehaviour
         public TextMeshProUGUI totalScoreText;
         public TextMeshProUGUI goldEarnedText;
         public GameObject shopButton;
-        public GameObject mainMenuButton;
+    }
+
+    [System.Serializable]
+    public struct PlayerSessionData
+    {
+        public int roundReached;
+        public float sessionLength;
+        public int damageTaken;
+        public int totalScore;
+        public int goldEarned;
+        public int mobsDefeated;
+        public int bossesDefeated;
+        public int mysticDungeons;
     }
 
     [System.Serializable]
@@ -81,6 +89,7 @@ public class GameLoopManager : MonoBehaviour
     public Animator startingHostileRoundWindow;
     public GameObject loadingScreen;
     public GameObject roundResultsWindow;
+    public SummaryView summaryView;
     public RoundTimer roundTimer;
     public PauseMenuViewController pauseMenu;
 
@@ -103,15 +112,19 @@ public class GameLoopManager : MonoBehaviour
     public RoundCompletionType roundCompletionType;
     private GameObject player;
     MobStats playerStats;
+    PlayerCombat playerCombat;
     PlayerController playerController;
     public int damageTaken;
+    public float score;
+    public PlayerSessionData sessionData;
+
     private int totalEnemiesSpawned;
     private int lastHealthSaved = -1;
     private int playerMaxHealth;
     private int goldToReward = 0;
 
     private bool _roundIsActive = false;
-    
+
     private bool _isPaused = false;
     public bool IsPaused => _isPaused;
 
@@ -129,6 +142,7 @@ public class GameLoopManager : MonoBehaviour
         player = GlobalSettings.Instance.player;
         playerStats = player.GetComponentInChildren<MobStats>();
         playerController = player.GetComponentInChildren<PlayerController>();
+        playerCombat = player.GetComponentInChildren<PlayerCombat>();
 
         if (!developerMode)
         {
@@ -151,7 +165,7 @@ public class GameLoopManager : MonoBehaviour
                     AnnouncementManager.Instance.QueueAnnouncement(new Announcement().AddType(1).AddText("Gate is open!"));
                 EndPortal.Activate(true);
             }
-        }        
+        }
 
         if (player.transform.position.y <= -20f && _roundIsActive)
         {
@@ -187,7 +201,7 @@ public class GameLoopManager : MonoBehaviour
         }
         if (Input.GetKeyDown(KeyCode.T))
         {
-            playerStats.UpdateGold(500); 
+            playerStats.UpdateGold(500);
             ShopManager.Instance.ShopWindow.SetActive(!ShopManager.Instance.ShopWindow.activeSelf);
             CalculateShop();
         }
@@ -319,7 +333,7 @@ public class GameLoopManager : MonoBehaviour
                 break;
         }
 
-        GameLoopEvents.OnEndRound?.Invoke();        
+        GameLoopEvents.OnEndRound?.Invoke();
         roundEndWindow.gameObject.SetActive(true);
         Time.timeScale = 0.4f;
         roundEndWindow.SetTrigger("Entry");
@@ -327,7 +341,7 @@ public class GameLoopManager : MonoBehaviour
         roundEndWindow.SetTrigger("Exit");
         yield return new WaitForSecondsRealtime(1.5f);
         roundEndWindow.gameObject.SetActive(false);
-        Time.timeScale = 1f;        
+        Time.timeScale = 1f;
         CompleteRound();
     }
 
@@ -340,39 +354,63 @@ public class GameLoopManager : MonoBehaviour
         {
             InitiateRound();
         }
-
-        else
+        else // a normal or boss round was completed, or failed (aka, anything but a reward map)
         {
-            float score = ScoreFormula.CalculateScore(totalEnemiesSpawned * (MapCreator.Instance.mapType == MapType.boss ? 50f : 10f), roundTimer.GetTime(), playerMaxHealth, damageTaken, out goldToReward);
-
-            resultScreen.resultTitleText.text = $"Round " + roundNumber + " Results";
-            resultScreen.timeTakenText.text = UtilityFunctions.GetFormattedTime(roundTimer.GetTime());
-            resultScreen.damageTakenText.text = $"{damageTaken} ({(int)(((float)damageTaken / (float)playerMaxHealth) * 100.0f)}%)";
-            resultScreen.totalScoreText.text = $"{Mathf.RoundToInt(score)}%";
+            score = ScoreFormula.CalculateScore(totalEnemiesSpawned * (MapCreator.Instance.mapType == MapType.boss ? 50f : 10f), roundTimer.GetTime(), playerMaxHealth, damageTaken, out goldToReward);
+            UpdatePlayerSessionData();
 
             if (roundCompletionType == RoundCompletionType.Failed)
             {
-                resultScreen.rankText.text = "Reached: " + roundNumber.ToString();
-                resultScreen.goldEarnedText.text = "0";
-                resultScreen.shopButton.SetActive(false);
-                resultScreen.mainMenuButton.SetActive(true);
+                summaryView.gameObject.SetActive(true);
+                summaryView.Populate(sessionData, playerStats, playerCombat);
                 GameLoopEvents.OnEndSession?.Invoke();
             }
             else
             {
-                resultScreen.shopButton.SetActive(true);
-                resultScreen.mainMenuButton.SetActive(false);
+                resultScreen.resultTitleText.text = $"Round " + roundNumber + " Results";
+                resultScreen.timeTakenText.text = UtilityFunctions.GetFormattedTime(roundTimer.GetTime());
+                resultScreen.damageTakenText.text = $"{damageTaken} ({(int)(((float)damageTaken / (float)playerMaxHealth) * 100.0f)}%)";
+                resultScreen.totalScoreText.text = $"{Mathf.RoundToInt(score)}%";
                 resultScreen.goldEarnedText.text = goldToReward + "";
-                playerStats.UpdateGold(goldToReward); // save it to db
                 resultScreen.rankText.text = ScoreFormula.GetScoreRank((int)score);
+
+                playerStats.UpdateGold(goldToReward); // save it to db
+                roundResultsWindow.SetActive(true); // or play an animation
             }
 
             GameLoopEvents.OnUI?.Invoke();
-            roundResultsWindow.SetActive(true); // or play an animation
         }
 
         // save it in database here, we need to save stats in db asap so players
         // who might d/c right after ending get their stuff saved
+    }
+
+    private void UpdatePlayerSessionData()
+    {
+        sessionData.roundReached = roundNumber;
+        sessionData.sessionLength += roundTimer.GetTime();
+        sessionData.damageTaken += damageTaken;
+
+        if (roundCompletionType != RoundCompletionType.Failed)
+        {
+            sessionData.totalScore += Mathf.RoundToInt(score);
+        }
+
+        sessionData.goldEarned += goldToReward;
+
+        if (MapCreator.Instance.mapType == MapType.normal)
+        {
+            sessionData.mobsDefeated += 14; // TODO , do properly after we add OnKilledUnitEvent (pass in mobController so we can check if boss or not)
+        }
+        else if (MapCreator.Instance.mapType == MapType.boss)
+        {
+            sessionData.bossesDefeated += 1;
+        }
+
+        if (roundCompletionType != RoundCompletionType.Failed && MapCreator.Instance.isMysticMap)
+        {
+            sessionData.mysticDungeons++;
+        }
     }
 
     public void QuitGame()

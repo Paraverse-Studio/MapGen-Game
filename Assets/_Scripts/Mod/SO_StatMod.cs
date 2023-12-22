@@ -84,7 +84,6 @@ public class SO_StatMod : SO_Mod
             {
                 case StatType.Attack:
                     _player.AttackDamage.UpdateBaseValue(_player.AttackDamage.BaseValue + Mathf.CeilToInt(statPair.value));
-                    Debug.Log("HUH??... " + _player.AttackDamage.BaseValue);
                     break;
                 case StatType.Ability:
                     _player.AbilityPower.UpdateBaseValue(_player.AbilityPower.BaseValue + Mathf.CeilToInt(statPair.value));

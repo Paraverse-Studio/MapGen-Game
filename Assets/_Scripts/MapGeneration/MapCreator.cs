@@ -4,6 +4,7 @@ using System.Collections;
 using System.Collections.Generic;
 using TMPro;
 using UnityEngine;
+using UnityEngine.Rendering;
 
 [System.Serializable]
 public enum MapType
@@ -22,11 +23,24 @@ public class MapCreator : MonoBehaviour
         public SO_MapGenData rewardMap;
     }    
 
+    [System.Serializable]
+    public struct MysticMapData
+    {
+        public Material mapSkybox;
+        public VolumeProfile ppProfile;
+        public Color environmentLightingColor;
+    }
+
     public static MapCreator Instance;
 
     [Space(10)]
     [Header("Biomes")]
     public List<MapGenDataPair> maps;
+
+    [Header("Mystic Map Properties")]
+    public MysticMapData mysticMapData;
+    public Color defaultEnvironmentColor;
+
     [Min(1)]
     public int switchMapAfterNumOfRounds;
 
@@ -35,6 +49,8 @@ public class MapCreator : MonoBehaviour
     public Vector2 bossMapGapLimit;
     [MinMaxSlider(0f, 10f)]
     public Vector2 rewardMapGapLimit;
+    [MinMaxSlider(0f, 10f)]
+    public Vector2 mysticMapGapLimit;
 
     [Header("Enemies")]
     public float enemyDamageScalingPerRound;
@@ -55,10 +71,13 @@ public class MapCreator : MonoBehaviour
 
     [Header("[Run-time data]")]
     public MapType mapType;
+    public bool isMysticMap;
+    public bool offerMysticDungeon;
     public int EnemiesSpawned;
 
     private int roundsSinceLastBossMap = 0;
-    private int roundsSincelastRewardMap = 0;
+    private int roundsSinceLastRewardMap = 0;
+    private int roundsSinceLastOFferMysticMap = 0;
     private int biomeIndex = 0;
     private bool biomeChangePending = false;
 
@@ -66,7 +85,8 @@ public class MapCreator : MonoBehaviour
     {
         EnemiesSpawned = 0;
         roundsSinceLastBossMap = 0;
-        roundsSincelastRewardMap = 0;
+        roundsSinceLastRewardMap = 0;
+        roundsSinceLastOFferMysticMap = 0;
         biomeIndex = 0;
         biomeChangePending = false;
     }
@@ -75,6 +95,8 @@ public class MapCreator : MonoBehaviour
     {
         EnemiesSpawned = 0;
         mapType = MapType.normal;
+        isMysticMap = false;
+        offerMysticDungeon = false;
     }
 
     private void Awake()
@@ -86,8 +108,6 @@ public class MapCreator : MonoBehaviour
     {
         ResetRuntimeVariables();
 
-        int adjustedRoundNumber = GameLoopManager.Instance.roundNumber - 1;
-
         // Determining biome, removed: we don't change biome after a predetermined # of rounds anymore
         //biomeIndex = adjustedRoundNumber / switchMapAfterNumOfRounds;
         if (biomeChangePending)
@@ -98,22 +118,35 @@ public class MapCreator : MonoBehaviour
         }
 
         // Determining type of map (normal, boss, reward)
-        if (roundsSincelastRewardMap >= rewardMapGapLimit.x)
-        {
-            float chance = Mathf.Max(0, 1.0f / (rewardMapGapLimit.y - rewardMapGapLimit.x + 1));
-            if (Random.value <= chance || roundsSincelastRewardMap >= rewardMapGapLimit.y)
-            {
-                mapType = MapType.reward;
-            }
-        }
         if (roundsSinceLastBossMap >= bossMapGapLimit.x)
         {
             float chance = Mathf.Max(0, 1.0f / (bossMapGapLimit.y - bossMapGapLimit.x + 1));
             if (Random.value <= chance || roundsSinceLastBossMap >= bossMapGapLimit.y)
             {
-                mapType = MapType.boss;                
+                mapType = MapType.boss;
             }
         }
+
+        // Determining type of map (normal, boss, reward)
+        if (roundsSinceLastRewardMap >= rewardMapGapLimit.x)
+        {
+            float chance = Mathf.Max(0, 1.0f / (rewardMapGapLimit.y - rewardMapGapLimit.x + 1));
+            if (Random.value <= chance || roundsSinceLastRewardMap >= rewardMapGapLimit.y)
+            {
+                mapType = MapType.reward;
+
+                // NEW* Mystic Dungeon map every few reward maps
+                if (roundsSinceLastOFferMysticMap >= mysticMapGapLimit.x)
+                {
+                    float mysticChance = Mathf.Max(0, 1.0f / (mysticMapGapLimit.y - mysticMapGapLimit.x + 1));
+                    if (Random.value <= mysticChance || roundsSinceLastOFferMysticMap >= mysticMapGapLimit.y)
+                    {
+                        offerMysticDungeon = true;
+                    }
+                }
+            }
+        }
+
         if (GameLoopManager.Instance.roundNumber == 2) // forcing round 2 to be a reward map
         {
             mapType = MapType.reward;
@@ -135,7 +168,8 @@ public class MapCreator : MonoBehaviour
     private void SetMapType()
     {
         roundsSinceLastBossMap++;
-        roundsSincelastRewardMap++;
+        roundsSinceLastRewardMap++;
+        roundsSinceLastOFferMysticMap++;
 
         switch (mapType)
         {
@@ -152,7 +186,8 @@ public class MapCreator : MonoBehaviour
 
             case MapType.reward:
                 MapGeneration.Instance.M = maps[biomeIndex].rewardMap;
-                roundsSincelastRewardMap = 0;
+                roundsSinceLastRewardMap = 0;
+                if (offerMysticDungeon) roundsSinceLastOFferMysticMap = 0;
                 break;
         }
     }
