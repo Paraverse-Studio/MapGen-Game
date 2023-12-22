@@ -156,7 +156,7 @@ public class AnnouncementManager : MonoBehaviour
         item.Animator.SetTrigger("Exit");
         yield return new WaitForSecondsRealtime(1.2f); // hardcoded estimation of length of the exit anim
         _announcements.Dequeue();
-        Destroy(item.gameObject, 1f);
+        DestroyImmediate(item.gameObject);
 
         yield return new WaitForSecondsRealtime(delayBetweenAnnouncements);
         ProcessQueue();
