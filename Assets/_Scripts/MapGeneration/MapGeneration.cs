@@ -1220,10 +1220,11 @@ public class MapGeneration : MonoBehaviour
         // before encountering something hostile
         int gapOfTilesBeforeFirstEnemy = 14;
 
+        // how many path blocks until the next enemy should be spawned
         int enemyFrequency = Mathf.Max(1, (pathObjects.Count - gapOfTilesBeforeFirstEnemy) / M.enemySpawnAmount);
 
-        // safety code, if the map is just way too little, ignore the initial gap of enemies
-        if (enemyFrequency == 1) enemyFrequency = Mathf.Max(1, (pathObjects.Count) / M.enemySpawnAmount);
+        // safety code, if the gap is bigger than the actual spawned path, then reduce that initial gap to just below it
+        if (pathObjects.Count <= gapOfTilesBeforeFirstEnemy) gapOfTilesBeforeFirstEnemy = pathObjects.Count - 2;
 
         for (int i = gapOfTilesBeforeFirstEnemy; i < pathObjects.Count; ++i)
         {

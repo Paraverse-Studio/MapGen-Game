@@ -10,7 +10,6 @@ using System.Collections.Generic;
 using TMPro;
 using UnityEngine;
 using UnityEngine.Events;
-using UnityEngine.SceneManagement;
 
 public class GameLoopManager : MonoBehaviour
 {
@@ -359,7 +358,7 @@ public class GameLoopManager : MonoBehaviour
             score = ScoreFormula.CalculateScore(totalEnemiesSpawned * (MapCreator.Instance.mapType == MapType.boss ? 50f : 10f), roundTimer.GetTime(), playerMaxHealth, damageTaken, out goldToReward);
             UpdatePlayerSessionData();
 
-            if (roundCompletionType == RoundCompletionType.Failed)
+            if (roundCompletionType == RoundCompletionType.Failed || !MapCreator.Instance.NextMapCreatable())
             {
                 summaryView.gameObject.SetActive(true);
                 summaryView.Populate(sessionData, playerStats, playerCombat);

@@ -104,6 +104,12 @@ public class MapCreator : MonoBehaviour
         Instance = this;
     }
 
+    public bool NextMapCreatable()
+    {
+        if (biomeChangePending && (biomeIndex + 1) >= maps.Count) return false;
+        return true;
+    }
+
     public void CreateMap()
     {
         ResetRuntimeVariables();
