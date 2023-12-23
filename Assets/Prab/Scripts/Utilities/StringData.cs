@@ -33,4 +33,21 @@ public static class StringData
 
     // General GameObjects
     public static string StrafePoint = "Strafe Point";
+
+    // Database Keys
+    public static string Username = "Username"; 
+    public static string RoundNumberReached = "RoundNumberReached"; 
+    public static string SessionLength = "SessionLength"; 
+    public static string DamageTaken = "DamageTaken"; 
+    public static string TotalScore = "TotalScore"; 
+    public static string GoldEarned = "GoldEarned"; 
+    public static string MobsDefeatedCount = "MobsDefeatedCount"; 
+    public static string BossesDefeatedCount = "BossesDefeatedCount"; 
+    public static string MysticDungeonsEnteredCount = "MysticDungeonsEnteredCount"; 
+    public static string BloodLine = "BloodLine"; 
+    public static string SkillUsed = "SkillUsed"; 
+    public static string Attack = "Attack"; 
+    public static string Ability = "Ability"; 
+    public static string Health = "Health";
+    public static string EffectsObtained = "EffectsObtained"; 
 }
