@@ -131,7 +131,7 @@ public class Damage : MonoBehaviour, IDamage
             hitTargets.Add(other.gameObject);
             applyHit = false;
 
-            Debug.Log(other.name + " took " + mob.stats.AttackDamage.FinalValue + " points of damage.");
+            Debug.Log(other.name + " took " + mob.stats.AttackDamage.FinalValue + " points of DOT damage.");
         }
     }
 
