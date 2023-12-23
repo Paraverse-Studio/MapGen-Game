@@ -41,5 +41,26 @@ public class SummaryView : MonoBehaviour
         abilityText.text = stats.AbilityPower.BaseValue.ToString();
         healthText.text = stats.CurHealth + "/" + stats.MaxHealth.BaseValue;
         mobsObtainedText.text = ModsManager.Instance.PurchasedMods.Count.ToString();
+
+        // Pass match history to db
+        MatchHistoryModel model = new MatchHistoryModel
+        {
+            Username = "Prab",
+            RoundNumberReached = sessionData.roundReached,
+            SessionLength = UtilityFunctions.GetFormattedTime(sessionData.sessionLength),
+            DamageTaken = sessionData.damageTaken,
+            TotalScore = sessionData.totalScore,
+            GoldEarned = sessionData.goldEarned,
+            MobsDefeatedCount = sessionData.mobsDefeated,
+            BossesDefeatedCount = sessionData.bossesDefeated,
+            MysticDungeonsEnteredCount = sessionData.mysticDungeons,
+            BloodLine = "TBD",
+            SkillUsed = combat.ActiveSkill != null ? combat.ActiveSkill.Name : "N/A",
+            Attack = (int)stats.AttackDamage.BaseValue,
+            Ability = (int)stats.AbilityPower.BaseValue,
+            Health = (stats.CurHealth + "/" + stats.MaxHealth.BaseValue).ToString(),
+            EffectsObtained = ModsManager.Instance.PurchasedMods.Count.ToString(),
+        };
+        FirebaseDatabaseManager.Instance.CreateMatchHistory(model);
     }
 }
