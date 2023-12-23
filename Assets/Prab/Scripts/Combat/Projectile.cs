@@ -51,6 +51,7 @@ namespace Paraverse
             float distanceFromOrigin = ParaverseHelper.GetDistance(transform.position, origin);
             if (distanceFromOrigin > range && stationary == false || curdeathTimer >= deathTimer)
             {
+                Debug.Log("AYOOOO????? ");
                 Destroy(gameObject);
             }
 

@@ -1,3 +1,4 @@
+using Paraverse;
 using Paraverse.Combat;
 using Paraverse.Helper;
 using System.Collections;
@@ -48,7 +49,9 @@ public class LightningBoltSkill : MobSkill, IMobSkill
 
         if (FX)
         {
-            Instantiate(FX, mob.Target.transform.position, Quaternion.identity);
+            GameObject go = Instantiate(FX, mob.Target.transform.position, Quaternion.identity);
+            Projectile proj = go.GetComponent<Projectile>();
+            proj.Init(mob, mob.Target.transform.position, scalingStatData);
         }
 
         DisableSkill();
