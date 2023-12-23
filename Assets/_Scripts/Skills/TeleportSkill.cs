@@ -29,8 +29,6 @@ public class TeleportSkill : MobSkill, IMobSkill
             {
                 return true;
             }
-
-            return false;
         }
 
         return false;
