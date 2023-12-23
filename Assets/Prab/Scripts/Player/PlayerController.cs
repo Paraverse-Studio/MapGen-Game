@@ -534,8 +534,6 @@ namespace Paraverse.Player
 
             horizontal = 0f;
             vertical = 0f;
-
-            FactoryResetPlayerOnDeath();
         }
 
         private void ResetAllCC()

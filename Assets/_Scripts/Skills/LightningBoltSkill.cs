@@ -1,3 +1,4 @@
+using Paraverse;
 using Paraverse.Combat;
 using Paraverse.Helper;
 using System.Collections;
@@ -20,9 +21,18 @@ public class LightningBoltSkill : MobSkill, IMobSkill
     // Check if target exists
     protected override bool CanUseSkill()
     {
-        if (IsOffCooldown && HasEnergy && TargetWithinRange && mob.IsAttackLunging == false && IsBasicAttack == false
-            && null != mob.Target && UtilityFunctions.IsDistanceLessThan(mob.transform.position, mob.Target.position, rangeLimit))
-            return true;
+        if (IsOffCooldown && HasEnergy && TargetWithinRange && mob.IsAttackLunging == false && IsBasicAttack == false)
+        {
+            if (null == mob.Target)
+            {
+                mob.Target = SelectableSystem.Instance.ToggleSelect();
+            }
+
+            if (null != mob.Target && UtilityFunctions.IsDistanceLessThan(mob.transform.position, mob.Target.position, rangeLimit))
+            {
+                return true;
+            }
+        }
 
         return false;
     }
@@ -32,14 +42,16 @@ public class LightningBoltSkill : MobSkill, IMobSkill
         performing = true;
         base.ExecuteSkillLogic();
 
-        // teleport
+        // need a target to cast this
         if (null == mob.Target) return; 
 
         anim.SetBool(StringData.IsInteracting, true);
 
         if (FX)
         {
-            Instantiate(FX, mob.Target.transform.position, Quaternion.identity);
+            GameObject go = Instantiate(FX, mob.Target.transform.position, Quaternion.identity);
+            Projectile proj = go.GetComponent<Projectile>();
+            proj.Init(mob, mob.Target.transform.position, scalingStatData);
         }
 
         DisableSkill();
