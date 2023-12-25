@@ -4,6 +4,7 @@ using Paraverse.Stats;
 using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
+using NaughtyAttributes;
 
 public class BuffSkill : MobSkill, IMobSkill
 {
@@ -39,6 +40,12 @@ public class BuffSkill : MobSkill, IMobSkill
     [SerializeField] private bool vfxBodyParent = false;
     [SerializeField] private float buffDuration;
     [SerializeField] private float attackRangeLengthen = 0f;
+        
+    [Foldout("Glow/Outline"), SerializeField] private bool useGlowOutline = false;
+    [Foldout("Glow/Outline"), SerializeField] private Material materialForWeapon = null;
+    [Foldout("Glow/Outline"), SerializeField] private float sizeOfGlow = 0;
+    [Foldout("Glow/Outline"), SerializeField] private Color colorOfGlow;
+    [Foldout("Glow/Outline")] private Material _glowMaterial; // Run-time for the above
 
     private float _buffDurationElapsed = 0f;
     private Transform _userWeapon = null;
@@ -80,6 +87,7 @@ public class BuffSkill : MobSkill, IMobSkill
         // Add the buff VFX and stats to the player
         if (null == _VFX && vfxWeaponParent) _VFX = Instantiate(buffVFX, _userWeapon);
         if (null == _VFX && vfxBodyParent) _VFX = Instantiate(buffVFX, stats.transform);
+        ToggleGlowAndOutline(true);
 
         ToggleParticleSystem(turnParticlesOn: true);
 
@@ -119,7 +127,9 @@ public class BuffSkill : MobSkill, IMobSkill
 
             Vector3 scale = attackColliderGO.transform.localScale;
             attackColliderGO.transform.localScale = new Vector3(scale.x, scale.y - attackRangeLengthen, scale.z);
-        }                    
+        }
+
+        ToggleGlowAndOutline(false);
     }
 
     private void ToggleParticleSystem(bool turnParticlesOn)
@@ -209,6 +219,38 @@ public class BuffSkill : MobSkill, IMobSkill
                     stats.MobBoosts.OverallDamageBoost.AddMod(buff.buff);
                     break;
             }
+        }
+    }
+
+    private void ToggleGlowAndOutline(bool on)
+    {
+        if (!useGlowOutline) return;
+
+        if (on)
+        {
+            var renderer = _userWeapon.gameObject.GetComponent<MeshRenderer>();
+            Material[] weaponMaterials = new Material[renderer.materials.Length + 1];
+            for (int i = 0; i < renderer.materials.Length; ++i)
+            {
+                weaponMaterials[i] = renderer.materials[i];
+            }
+            _glowMaterial = weaponMaterials[weaponMaterials.Length - 1] = materialForWeapon;
+            renderer.materials = weaponMaterials;
+        }
+        else
+        {
+            var renderer = _userWeapon.gameObject.GetComponent<MeshRenderer>();
+            List<Material> weaponMaterials = new();
+            weaponMaterials.AddRange(renderer.materials);
+
+            for (int i = 0; i < weaponMaterials.Count; ++i)
+            {
+                if (weaponMaterials[i].name.Contains(_glowMaterial.name))
+                {
+                    weaponMaterials.Remove(weaponMaterials[i]);
+                } 
+            }
+            renderer.materials = weaponMaterials.ToArray();
         }
     }
 
