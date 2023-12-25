@@ -1,12 +1,10 @@
 ﻿using System.Runtime.InteropServices;
-using TMPro;
 using UnityEngine;
 
 namespace FirebaseWebGL.Scripts.FirebaseBridge
 {
   public class FirebaseFirestore : MonoBehaviour
   {
-    public TextMeshProUGUI text;
     public string CollectionName = "MatchHistory";
     public string DocumentId = "Prab";
 
@@ -31,14 +29,11 @@ namespace FirebaseWebGL.Scripts.FirebaseBridge
 
     private void OnRequestSuccess(string data)
     {
-      text.color = Color.green;
-      text.text = data;
+      
     }
 
     private void OnRequestFailed(string error)
     {
-      text.color = Color.red;
-      text.text = "THIS: " + error;
     }
 
     /// <summary>

@@ -42,8 +42,9 @@ public class SummaryView : MonoBehaviour
         healthText.text = stats.CurHealth + "/" + stats.MaxHealth.BaseValue;
         mobsObtainedText.text = ModsManager.Instance.PurchasedMods.Count.ToString();
 
-        // Pass match history to db
-        MatchHistoryModel model = new MatchHistoryModel
+#if UNITY_ANDROID
+    // Pass match history to db
+    MatchHistoryModel model = new MatchHistoryModel
         {
             Username = "Prab",
             RoundNumberReached = sessionData.roundReached,
@@ -62,5 +63,6 @@ public class SummaryView : MonoBehaviour
             EffectsObtained = ModsManager.Instance.PurchasedMods.Count.ToString(),
         };
         FirebaseDatabaseManager.Instance.CreateMatchHistory(model);
+#endif
     }
 }
