@@ -1,3 +1,5 @@
+#if !UNITY_WEBGL
+using Firebase.Extensions;
 using Firebase.Firestore;
 using System;
 using System.Collections.Generic;
@@ -6,57 +8,58 @@ using UnityEngine;
 
 public class FirebaseDatabaseManager : MonoBehaviour
 {
-    public static FirebaseDatabaseManager Instance;
-    private FirebaseFirestore _db;
-    private CollectionReference _MatchHistoryCollection;
-    private Task<QuerySnapshot> _MatchHistorySnapShot;
-    public MatchHistoryModel _MatchHistoryModel;
+  public static FirebaseDatabaseManager Instance;
+  private FirebaseFirestore _db;
+  private CollectionReference _MatchHistoryCollection;
+  private Task<QuerySnapshot> _MatchHistorySnapShot;
+  public MatchHistoryModel _MatchHistoryModel;
 
 
 
-    private void Awake()
+
+  private void Awake()
+  {
+    // Singleton
+    if (Instance == null)
+      Instance = this;
+    else
+      Destroy(this);
+
+    // Init
+    _db = FirebaseFirestore.DefaultInstance;
+    _MatchHistorySnapShot = FirebaseFirestore.DefaultInstance.Collection("MatchHistory").GetSnapshotAsync();
+    _MatchHistoryCollection = _db.Collection("MatchHistory");
+
+    _MatchHistoryModel = new MatchHistoryModel
     {
-        // Singleton
-        if (Instance == null)
-            Instance = this;
-        else
-            Destroy(this);
+      Username = "Prab",
+      RoundNumberReached = 4,
+      SessionLength = "4:20",
+      DamageTaken = 690,
+      TotalScore = 696969,
+      GoldEarned = 420,
+      MobsDefeatedCount = 42,
+      BossesDefeatedCount = 5,
+      MysticDungeonsEnteredCount = 3,
+      BloodLine = "Period Blood",
+      SkillUsed = "Azurite Infusion",
+      Attack = 20,
+      Ability = 30,
+      Health = "100/100",
+      EffectsObtained = "Reapers Kill"
+    };
 
-        // Init
-        _db = FirebaseFirestore.DefaultInstance;
-        _MatchHistorySnapShot = FirebaseFirestore.DefaultInstance.Collection("MatchHistory").GetSnapshotAsync();
-        _MatchHistoryCollection = _db.Collection("MatchHistory");
+    //CreateMatchHistory(_MatchHistoryModel);
+  }
 
-        _MatchHistoryModel = new MatchHistoryModel
-        {
-            Username = "Prab",
-            RoundNumberReached = 4,
-            SessionLength = "4:20",
-            DamageTaken = 690,
-            TotalScore = 696969,
-            GoldEarned = 420,
-            MobsDefeatedCount = 42,
-            BossesDefeatedCount = 5,
-            MysticDungeonsEnteredCount = 3,
-            BloodLine = "Period Blood",
-            SkillUsed = "Azurite Infusion",
-            Attack = 20,
-            Ability = 30,
-            Health = "100/100",
-            EffectsObtained = "Reapers Kill"
-        };
+  private void Update()
+  {
+  }
 
-        //CreateMatchHistory(_MatchHistoryModel);
-    }
-
-    private void Update()
-    {
-    }
-
-    public void CreateMatchHistory(MatchHistoryModel matchHistoryModel)
-    {
-        DocumentReference document = _MatchHistoryCollection.Document(matchHistoryModel.Username);
-        Dictionary<string, object> model = new Dictionary<string, object>
+  public Task CreateMatchHistory(MatchHistoryModel matchHistoryModel)
+  {
+    DocumentReference document = _MatchHistoryCollection.Document(matchHistoryModel.Username);
+    Dictionary<string, object> model = new Dictionary<string, object>
             {
                 { StringData.Username, matchHistoryModel.Username },
                 { StringData.RoundNumberReached, matchHistoryModel.RoundNumberReached },
@@ -74,12 +77,10 @@ public class FirebaseDatabaseManager : MonoBehaviour
                 { StringData.Health, matchHistoryModel.Health },
                 { StringData.EffectsObtained, matchHistoryModel.EffectsObtained },
             };
-        document.SetAsync(model);
-        Debug.Log(String.Format("Added document with ID: {0}.", document.Id));
-    }
+    Debug.Log(String.Format("Added document with ID: {0}.", document.Id));
+    return document.SetAsync(model).ContinueWithOnMainThread(task => { });
+  }
 }
-
-
 
 //public IEnumerator GetUser(MatchHistoryModel user, Action<MatchHistoryModel> callback)
 //{
@@ -139,3 +140,5 @@ public class FirebaseDatabaseManager : MonoBehaviour
 //    Debug.Log("Done getting " + userCount + " users!");
 //    callback(userList);
 //}
+
+#endif

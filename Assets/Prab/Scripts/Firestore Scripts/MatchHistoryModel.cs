@@ -1,38 +1,72 @@
+#if !UNITY_WEBGL || UNITY_EDITOR
 using Firebase.Firestore;
+#endif
 
+#if !UNITY_WEBGL || UNITY_EDITOR
 [FirestoreData]
+#endif
 public class MatchHistoryModel
 {
-    [FirestoreProperty]
+#if !UNITY_WEBGL || UNITY_EDITOR
+  [FirestoreProperty]
+#endif
     public string Username { get; set; }
-    [FirestoreProperty]
-    public int RoundNumberReached { get; set; }
-    [FirestoreProperty]
-    public string SessionLength { get; set; }
-    [FirestoreProperty]
-    public int DamageTaken { get; set; }
-    [FirestoreProperty]
-    public int TotalScore { get; set; }
-    [FirestoreProperty]
-    public int GoldEarned { get; set; }
-    [FirestoreProperty]
-    public int MobsDefeatedCount { get; set; }
-    [FirestoreProperty]
-    public int BossesDefeatedCount { get; set; }
-    [FirestoreProperty]
-    public int MysticDungeonsEnteredCount { get; set; }
-    [FirestoreProperty]
-    public string BloodLine { get; set; }
-    [FirestoreProperty]
-    public string SkillUsed { get; set; }
-    [FirestoreProperty]
-    public int Attack { get; set; }
-    [FirestoreProperty]
-    public int Ability { get; set; }
-    [FirestoreProperty]
-    public string Health { get; set; }
-    [FirestoreProperty]
-    public string EffectsObtained { get; set; }
+#if !UNITY_WEBGL || UNITY_EDITOR
+  [FirestoreProperty]
+#endif
+  public int RoundNumberReached { get; set; }
+#if !UNITY_WEBGL || UNITY_EDITOR
+  [FirestoreProperty]
+#endif
+  public string SessionLength { get; set; }
+#if !UNITY_WEBGL || UNITY_EDITOR
+  [FirestoreProperty]
+#endif
+  public int DamageTaken { get; set; }
+#if !UNITY_WEBGL || UNITY_EDITOR
+  [FirestoreProperty]
+#endif
+  public int TotalScore { get; set; }
+#if !UNITY_WEBGL || UNITY_EDITOR
+  [FirestoreProperty]
+#endif
+  public int GoldEarned { get; set; }
+#if !UNITY_WEBGL || UNITY_EDITOR
+  [FirestoreProperty]
+#endif
+  public int MobsDefeatedCount { get; set; }
+#if !UNITY_WEBGL || UNITY_EDITOR
+  [FirestoreProperty]
+#endif
+  public int BossesDefeatedCount { get; set; }
+#if !UNITY_WEBGL || UNITY_EDITOR
+  [FirestoreProperty]
+#endif
+  public int MysticDungeonsEnteredCount { get; set; }
+#if !UNITY_WEBGL || UNITY_EDITOR
+  [FirestoreProperty]
+#endif
+  public string BloodLine { get; set; }
+#if !UNITY_WEBGL || UNITY_EDITOR
+  [FirestoreProperty]
+#endif
+  public string SkillUsed { get; set; }
+#if !UNITY_WEBGL || UNITY_EDITOR
+  [FirestoreProperty]
+#endif
+  public int Attack { get; set; }
+#if !UNITY_WEBGL || UNITY_EDITOR
+  [FirestoreProperty]
+#endif
+  public int Ability { get; set; }
+#if !UNITY_WEBGL || UNITY_EDITOR
+  [FirestoreProperty]
+#endif
+  public string Health { get; set; }
+#if !UNITY_WEBGL || UNITY_EDITOR
+  [FirestoreProperty]
+#endif
+  public string EffectsObtained { get; set; }
 
     public MatchHistoryModel() { }
 
