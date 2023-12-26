@@ -7,7 +7,10 @@ using UnityEngine;
 
 public class SummaryView : MonoBehaviour
 {
-    [Header("References")]
+    [Header("External References")]
+    public BloodlinesController bloodlinesController;
+
+    [Header("Internal References")]
     public TextMeshProUGUI roundsReachedText;
     public TextMeshProUGUI sessionLengthText;
     public TextMeshProUGUI damageTakenText;
@@ -35,7 +38,7 @@ public class SummaryView : MonoBehaviour
         bossesDefeatedText.text = sessionData.bossesDefeated.ToString();
         mysticDungeonsText.text = sessionData.mysticDungeons.ToString();
 
-        bloodlineText.text = "TBD";
+        bloodlineText.text = bloodlinesController.chosenBloodline.ToString();
         skillUsedText.text = combat.ActiveSkill != null ? combat.ActiveSkill.Name : "N/A";
         attackText.text = stats.AttackDamage.BaseValue.ToString();
         abilityText.text = stats.AbilityPower.BaseValue.ToString();

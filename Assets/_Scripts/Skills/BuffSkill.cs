@@ -5,6 +5,8 @@ using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 using NaughtyAttributes;
+using Paraverse.Mob.Combat;
+using Paraverse.Mob.Stats;
 
 public class BuffSkill : MobSkill, IMobSkill
 {
@@ -52,6 +54,12 @@ public class BuffSkill : MobSkill, IMobSkill
     private GameObject _VFX = null;
     #endregion
 
+    public override void ActivateSkill(PlayerCombat mob, PlayerInputControls input, Animator anim, MobStats stats, Transform target = null)
+    {
+        base.ActivateSkill(mob, input, anim, stats, target);
+        _userWeapon = attackColliderGO.transform.parent;
+    }
+
     public override void DeactivateSkill(PlayerInputControls input)
     {
         base.DeactivateSkill(input);
@@ -81,7 +89,7 @@ public class BuffSkill : MobSkill, IMobSkill
     {
         base.ExecuteSkillLogic();
 
-        _userWeapon = attackColliderGO.transform.parent;
+        
         _buffDurationElapsed = buffDuration;
 
         // Add the buff VFX and stats to the player
@@ -237,7 +245,7 @@ public class BuffSkill : MobSkill, IMobSkill
             _glowMaterial = weaponMaterials[weaponMaterials.Length - 1] = materialForWeapon;
             renderer.materials = weaponMaterials;
         }
-        else
+        else if (_glowMaterial)
         {
             var renderer = _userWeapon.gameObject.GetComponent<MeshRenderer>();
             List<Material> weaponMaterials = new();
