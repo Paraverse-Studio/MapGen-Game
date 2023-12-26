@@ -97,13 +97,11 @@ public class BloodlinesController : MonoBehaviour
 
     public void ScholarEffectAttack(float v)
     {
-        Debug.Log("GIVING PLAYER ability: " + Mathf.CeilToInt((float)v / 2.0f));
         playerStats.AbilityPower.UpdateBaseValue(playerStats.AbilityPower.BaseValue + Mathf.CeilToInt((float)v / 2.0f), invokeEvent: false);
     }
 
     public void ScholarEffectAbility(float v)
     {
-        Debug.Log("GIVING PLAYER attack: " + Mathf.CeilToInt((float)v / 4.0f));
         playerStats.AttackDamage.UpdateBaseValue(playerStats.AttackDamage.BaseValue + Mathf.CeilToInt((float)v / 4.0f), invokeEvent: false);
     }
 
