@@ -1314,30 +1314,30 @@ PrefabInstance:
     - target: {fileID: 7943879448846160662, guid: 1da06a68f8df73d41bc54728cc31463e, type: 3}
       propertyPath: m_OnClick.m_PersistentCalls.m_Calls.Array.data[0].m_Target
       value: 
-      objectReference: {fileID: 392855110}
+      objectReference: {fileID: 125291137}
     - target: {fileID: 7943879448846160662, guid: 1da06a68f8df73d41bc54728cc31463e, type: 3}
       propertyPath: m_OnClick.m_PersistentCalls.m_Calls.Array.data[1].m_Target
       value: 
-      objectReference: {fileID: 125291137}
+      objectReference: {fileID: 392855110}
     - target: {fileID: 7943879448846160662, guid: 1da06a68f8df73d41bc54728cc31463e, type: 3}
       propertyPath: m_OnClick.m_PersistentCalls.m_Calls.Array.data[1].m_CallState
       value: 2
       objectReference: {fileID: 0}
     - target: {fileID: 7943879448846160662, guid: 1da06a68f8df73d41bc54728cc31463e, type: 3}
       propertyPath: m_OnClick.m_PersistentCalls.m_Calls.Array.data[0].m_MethodName
-      value: ApplyBloodline
-      objectReference: {fileID: 0}
-    - target: {fileID: 7943879448846160662, guid: 1da06a68f8df73d41bc54728cc31463e, type: 3}
-      propertyPath: m_OnClick.m_PersistentCalls.m_Calls.Array.data[1].m_MethodName
       value: InitiateSession
       objectReference: {fileID: 0}
     - target: {fileID: 7943879448846160662, guid: 1da06a68f8df73d41bc54728cc31463e, type: 3}
+      propertyPath: m_OnClick.m_PersistentCalls.m_Calls.Array.data[1].m_MethodName
+      value: ApplyBloodline
+      objectReference: {fileID: 0}
+    - target: {fileID: 7943879448846160662, guid: 1da06a68f8df73d41bc54728cc31463e, type: 3}
       propertyPath: m_OnClick.m_PersistentCalls.m_Calls.Array.data[0].m_TargetAssemblyTypeName
-      value: BloodlinesController, Assembly-CSharp
+      value: GameLoopManager, Assembly-CSharp
       objectReference: {fileID: 0}
     - target: {fileID: 7943879448846160662, guid: 1da06a68f8df73d41bc54728cc31463e, type: 3}
       propertyPath: m_OnClick.m_PersistentCalls.m_Calls.Array.data[1].m_TargetAssemblyTypeName
-      value: GameLoopManager, Assembly-CSharp
+      value: BloodlinesController, Assembly-CSharp
       objectReference: {fileID: 0}
     - target: {fileID: 7943879448846160662, guid: 1da06a68f8df73d41bc54728cc31463e, type: 3}
       propertyPath: m_OnClick.m_PersistentCalls.m_Calls.Array.data[1].m_Arguments.m_ObjectArgumentAssemblyTypeName
@@ -7691,6 +7691,18 @@ MonoBehaviour:
             m_StringArgument: 
             m_BoolArgument: 0
           m_CallState: 2
+        - m_Target: {fileID: 392855110}
+          m_TargetAssemblyTypeName: BloodlinesController, Assembly-CSharp
+          m_MethodName: ResetBloodline
+          m_Mode: 1
+          m_Arguments:
+            m_ObjectArgument: {fileID: 0}
+            m_ObjectArgumentAssemblyTypeName: UnityEngine.Object, UnityEngine
+            m_IntArgument: 0
+            m_FloatArgument: 0
+            m_StringArgument: 
+            m_BoolArgument: 0
+          m_CallState: 2
     OnInitiateRound:
       m_PersistentCalls:
         m_Calls:
@@ -12028,7 +12040,7 @@ RectTransform:
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
   m_AnchorMin: {x: 0, y: 0}
   m_AnchorMax: {x: 0.24, y: 1}
-  m_AnchoredPosition: {x: -49.99643, y: 100}
+  m_AnchoredPosition: {x: -49.99649, y: 100}
   m_SizeDelta: {x: -100, y: -420}
   m_Pivot: {x: 1, y: 0}
 --- !u!114 &248483446

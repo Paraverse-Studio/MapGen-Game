@@ -216,7 +216,7 @@ namespace Paraverse.Combat
             mob.IsSkilling = true;
             skillOn = true;
             anim.SetBool(StringData.IsUsingSkill, true);
-            curCooldown = cooldown;
+            curCooldown = cooldown * (1.0f - (stats.CooldownReduction.FinalValue / 100.0f));
             stats.UpdateCurrentEnergy(-cost);
             anim.Play(animName);
         }

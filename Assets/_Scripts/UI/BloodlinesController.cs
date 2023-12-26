@@ -5,6 +5,7 @@ using System.Collections.Generic;
 using TMPro;
 using UnityEngine;
 using UnityEngine.UI;
+using Paraverse.Stats;
 
 public class BloodlinesController : MonoBehaviour
 {
@@ -53,17 +54,36 @@ public class BloodlinesController : MonoBehaviour
         switch (chosenBloodline)
         {
             case BloodlineType.Vagabond:
-                playerStats.AttackDamage.UpdateBaseValue(playerStats.AttackDamage.BaseValue + 5);
-                playerStats.UpdateMaxHealth(Mathf.CeilToInt(playerStats.MaxHealth.FinalValue + 50));
+                playerStats.AttackDamage.AddMod(new StatModifier(5));
+                playerStats.MaxHealth.AddMod(new StatModifier(50));
                 break;
             case BloodlineType.Harrier:
                 playerStats.UpdateMovementSpeed(2);
                 break;
             case BloodlineType.Pioneer:
+                playerStats.CooldownReduction.AddMod(new StatModifier(30));
+                playerStats.MaxEnergy.AddMod(new StatModifier(100));
                 break;
             case BloodlineType.Scholar:
                 playerStats.AttackDamage.OnStatBaseValueUpdatedEvent += ScholarEffectAttack;
                 playerStats.AbilityPower.OnStatBaseValueUpdatedEvent += ScholarEffectAbility;
+                break;
+        }
+    }
+
+    public void ResetBloodline()
+    {
+        switch (chosenBloodline)
+        {
+            case BloodlineType.Vagabond:
+                break;
+            case BloodlineType.Harrier:
+                break;
+            case BloodlineType.Pioneer:
+                break;
+            case BloodlineType.Scholar:
+                playerStats.AttackDamage.OnStatBaseValueUpdatedEvent -= ScholarEffectAttack;
+                playerStats.AbilityPower.OnStatBaseValueUpdatedEvent -= ScholarEffectAbility;
                 break;
         }
     }
