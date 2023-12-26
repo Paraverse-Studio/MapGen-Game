@@ -1271,10 +1271,13 @@ public class MapGeneration : MonoBehaviour
             if (enemyStats)
             {           
                 MobController controller = enemy.GetComponentInChildren<MobController>();
+
+                float biomeBoost = MapCreator.Instance.BiomeIndex * 4;
+
                 if (MapCreator.Instance.mapType == MapType.boss)
                 {
-                    float bossDamageScaleFactor = MapCreator.Instance.bossDamageScalingPerRound * (GameLoopManager.Instance.roundNumber - 1);
-                    float bossHealthScaleFactor = MapCreator.Instance.bossHealthScalingPerRound * (GameLoopManager.Instance.roundNumber - 1);
+                    float bossDamageScaleFactor = MapCreator.Instance.bossDamageScalingPerRound * (GameLoopManager.Instance.roundNumber - 1 + biomeBoost);
+                    float bossHealthScaleFactor = MapCreator.Instance.bossHealthScalingPerRound * (GameLoopManager.Instance.roundNumber - 1 + biomeBoost);
 
                     enemyStats.UpdateAttackDamage(enemyStats.AttackDamage.FinalValue * bossDamageScaleFactor);
                     enemyStats.UpdateAbilityPower(enemyStats.AbilityPower.FinalValue * bossDamageScaleFactor);
@@ -1285,8 +1288,8 @@ public class MapGeneration : MonoBehaviour
                 }
                 else
                 {
-                    float enemyDamageScaleFactor = MapCreator.Instance.enemyDamageScalingPerRound * (GameLoopManager.Instance.roundNumber - 1);
-                    float enemyHealthScaleFactor = MapCreator.Instance.enemyHealthScalingPerRound * (GameLoopManager.Instance.roundNumber - 1);
+                    float enemyDamageScaleFactor = MapCreator.Instance.enemyDamageScalingPerRound * (GameLoopManager.Instance.roundNumber - 1 + biomeBoost);
+                    float enemyHealthScaleFactor = MapCreator.Instance.enemyHealthScalingPerRound * (GameLoopManager.Instance.roundNumber - 1 + biomeBoost);
 
                     enemyStats.UpdateAttackDamage(enemyStats.AttackDamage.FinalValue * enemyDamageScaleFactor);
                     enemyStats.UpdateAbilityPower(enemyStats.AbilityPower.FinalValue * enemyDamageScaleFactor);

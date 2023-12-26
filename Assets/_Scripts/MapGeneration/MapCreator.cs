@@ -80,7 +80,7 @@ public class MapCreator : MonoBehaviour
     private int roundsSinceLastBossMap;
     private int roundsSinceLastRewardMap;
     private int roundsSinceLastOFferMysticMap;
-    private int biomeIndex;
+    private int biomeIndex; public int BiomeIndex => biomeIndex;
     private bool biomeChangePending;
 
     public void ResetMapCreator()
