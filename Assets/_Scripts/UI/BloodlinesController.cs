@@ -56,6 +56,7 @@ public class BloodlinesController : MonoBehaviour
             case BloodlineType.Vagabond:
                 playerStats.AttackDamage.AddMod(new StatModifier(5));
                 playerStats.MaxHealth.AddMod(new StatModifier(50));
+                GameLoopManager.Instance.GameLoopEvents.OnStartRound.AddListener(VagabondRoundHeal);
                 break;
             case BloodlineType.Harrier:
                 playerStats.UpdateMovementSpeed(2);
@@ -76,6 +77,7 @@ public class BloodlinesController : MonoBehaviour
         switch (chosenBloodline)
         {
             case BloodlineType.Vagabond:
+                GameLoopManager.Instance.GameLoopEvents.OnStartRound.RemoveListener(VagabondRoundHeal);
                 break;
             case BloodlineType.Harrier:
                 break;
@@ -86,6 +88,11 @@ public class BloodlinesController : MonoBehaviour
                 playerStats.AbilityPower.OnStatBaseValueUpdatedEvent -= ScholarEffectAbility;
                 break;
         }
+    }
+
+    public void VagabondRoundHeal()
+    {
+        playerStats.UpdateCurrentHealth((int)(playerStats.MaxHealth.FinalValue * 0.05f));
     }
 
     public void ScholarEffectAttack(float v)
