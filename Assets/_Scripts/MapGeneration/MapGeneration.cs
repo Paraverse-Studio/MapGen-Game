@@ -1269,19 +1269,28 @@ public class MapGeneration : MonoBehaviour
 
             MobStats enemyStats = enemy.GetComponentInChildren<MobStats>();
             if (enemyStats)
-            {
-                float damageScaleFactor = MapCreator.Instance.enemyDamageScalingPerRound * (GameLoopManager.Instance.roundNumber - 1);
-                float healthScaleFactor = MapCreator.Instance.enemyHealthScalingPerRound * (GameLoopManager.Instance.roundNumber - 1);
-
-                enemyStats.UpdateAttackDamage(enemyStats.AttackDamage.FinalValue * damageScaleFactor);
-                enemyStats.UpdateAbilityPower(enemyStats.AbilityPower.FinalValue * damageScaleFactor);
-                enemyStats.UpdateMaxHealth(Mathf.CeilToInt(enemyStats.MaxHealth.FinalValue * healthScaleFactor));
-
+            {           
                 MobController controller = enemy.GetComponentInChildren<MobController>();
                 if (MapCreator.Instance.mapType == MapType.boss)
                 {
+                    float bossDamageScaleFactor = MapCreator.Instance.bossDamageScalingPerRound * (GameLoopManager.Instance.roundNumber - 1);
+                    float bossHealthScaleFactor = MapCreator.Instance.bossHealthScalingPerRound * (GameLoopManager.Instance.roundNumber - 1);
+
+                    enemyStats.UpdateAttackDamage(enemyStats.AttackDamage.FinalValue * bossDamageScaleFactor);
+                    enemyStats.UpdateAbilityPower(enemyStats.AbilityPower.FinalValue * bossDamageScaleFactor);
+                    enemyStats.UpdateMaxHealth(Mathf.CeilToInt(enemyStats.MaxHealth.FinalValue * bossHealthScaleFactor));
+
                     controller.OnDeathEvent += AddLegendaryChest;
                     controller.OnDeathEvent += (Transform t) => GameLoopManager.Instance.EndRound(successfulRound: true);
+                }
+                else
+                {
+                    float enemyDamageScaleFactor = MapCreator.Instance.enemyDamageScalingPerRound * (GameLoopManager.Instance.roundNumber - 1);
+                    float enemyHealthScaleFactor = MapCreator.Instance.enemyHealthScalingPerRound * (GameLoopManager.Instance.roundNumber - 1);
+
+                    enemyStats.UpdateAttackDamage(enemyStats.AttackDamage.FinalValue * enemyDamageScaleFactor);
+                    enemyStats.UpdateAbilityPower(enemyStats.AbilityPower.FinalValue * enemyDamageScaleFactor);
+                    enemyStats.UpdateMaxHealth(Mathf.CeilToInt(enemyStats.MaxHealth.FinalValue * enemyHealthScaleFactor));
                 }
 
                 // PRABS UGLY FORCED METHOD THAT NEEDS TO BE OPTIMIZED

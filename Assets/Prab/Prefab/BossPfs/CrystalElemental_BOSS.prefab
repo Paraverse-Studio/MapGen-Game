@@ -1095,16 +1095,18 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   targetTag: Player
+  knockBackEffect: {fileID: 11400000, guid: 748f4316b61c09e4eb46f5136b6b2a06, type: 2}
   dot: 0
   dontApplyDamageOnEnter: 0
-  knockBackEffect: {fileID: 11400000, guid: 748f4316b61c09e4eb46f5136b6b2a06, type: 2}
+  dotIntervalTimer: 1
+  applyHitAnim: 1
   hitFX: {fileID: 0}
-  isBasicAttackCollider: 0
   scalingStatData:
     flatPower: 0
     attackScaling: 1
     abilityScaling: 0
     healthScaling: 0
+  isBasicAttackCollider: 0
 --- !u!1 &3787384781715577073
 GameObject:
   m_ObjectHideFlags: 0
@@ -1173,16 +1175,18 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   targetTag: Player
+  knockBackEffect: {fileID: 11400000, guid: 748f4316b61c09e4eb46f5136b6b2a06, type: 2}
   dot: 0
   dontApplyDamageOnEnter: 0
-  knockBackEffect: {fileID: 11400000, guid: 748f4316b61c09e4eb46f5136b6b2a06, type: 2}
+  dotIntervalTimer: 1
+  applyHitAnim: 1
   hitFX: {fileID: 0}
-  isBasicAttackCollider: 0
   scalingStatData:
     flatPower: 0
     attackScaling: 1
     abilityScaling: 0
     healthScaling: 0
+  isBasicAttackCollider: 0
 --- !u!1 &3820186339593213479
 GameObject:
   m_ObjectHideFlags: 0
@@ -2119,14 +2123,16 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: b04cd1b06f0908d4c81a8bc7bcea9d24, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  maxHealth: 420
-  _curHealth: 420
+  maxHealth: 450
+  _curHealth: 450
   attackDamage: 9
   abilityPower: 9
   attackSpeed: 0.35
   moveSpeed: 2
   maxEnergy: 100
   _curEnergy: 100
+  cooldownReduction: 0
+  healthRegen: 0
   energyRegen: 25
   _gold: 100
   OnHealthChange:

@@ -52,9 +52,11 @@ public class MapCreator : MonoBehaviour
     [MinMaxSlider(0f, 10f)]
     public Vector2 mysticMapGapLimit;
 
-    [Header("Enemies")]
+    [Header("Enemies Scaling")]
     public float enemyDamageScalingPerRound;
     public float enemyHealthScalingPerRound;
+    public float bossDamageScalingPerRound;
+    public float bossHealthScalingPerRound;
 
     [Header("UI References")]
     public TextMeshProUGUI objectiveTitle;

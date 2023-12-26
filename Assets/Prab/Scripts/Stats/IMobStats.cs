@@ -16,6 +16,8 @@ namespace Paraverse.Mob.Stats
         public Stat MaxEnergy { get; }
         public float CurEnergy { get; }
         public Stat EnergyRegen { get; }
+
+        public Stat CooldownReduction { get; }
         public int Gold { get; }
         public IMobBoosts MobBoosts { get; }
         #endregion
