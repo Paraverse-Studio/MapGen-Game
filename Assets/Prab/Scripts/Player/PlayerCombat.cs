@@ -1,5 +1,6 @@
 using Paraverse.Combat;
 using Paraverse.Helper;
+using Paraverse.Mob.Combat;
 using Paraverse.Mob.Stats;
 using TMPro;
 using UnityEngine;
@@ -7,7 +8,7 @@ using UnityEngine.UI;
 
 namespace Paraverse.Player
 {
-    public class PlayerCombat : EnhancedMobCombat
+    public class PlayerCombat : MobCombat
     {
         #region Variables
         private new PlayerController controller;
