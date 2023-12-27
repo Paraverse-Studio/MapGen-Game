@@ -1272,7 +1272,7 @@ public class MapGeneration : MonoBehaviour
             {           
                 MobController controller = enemy.GetComponentInChildren<MobController>();
 
-                float biomeBoost = MapCreator.Instance.BiomeIndex * 4;
+                float biomeBoost = MapCreator.Instance.BiomeIndex * 5;
 
                 if (MapCreator.Instance.mapType == MapType.boss)
                 {
