@@ -14,7 +14,4 @@ public class ProjectileData
     public Transform projRotation;
     [Tooltip("The projectile's speed.")]
     public float projSpeed = 10f;
-
-    // Updated via Mob Skill
-    //public ScalingStatData scalingStatData;
 }

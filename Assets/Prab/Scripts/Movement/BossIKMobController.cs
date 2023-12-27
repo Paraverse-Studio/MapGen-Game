@@ -4,24 +4,26 @@ using Paraverse.Mob.Controller;
 
 public class BossIKMobController : MobController, IMobController
 {
-    private HeadIK headIK;
+  private HeadIK headIK;
 
-    protected override void Start()
-    {
-        base.Start();
-        headIK = GetComponent<HeadIK>();
-    }
+  protected override void Start()
+  {
+    base.Start();
+    headIK = GetComponent<HeadIK>();
+  }
 
-    protected override void StateHandler()
+  protected override void StateHandler()
+  {
+    base.StateHandler();
+
+    if (headIK == null) return;
+    if (CurMobState.Equals(MobState.Pursue) || CurMobState.Equals(MobState.Combat))
     {
-        base.StateHandler();
-        if (CurMobState.Equals(MobState.Pursue) || CurMobState.Equals(MobState.Combat))
-        {
-            headIK.SetLookAtObj(pursueTarget);
-        }
-        else
-        {
-            headIK.SetLookAtObj(null);
-        }
+      headIK.SetLookAtObj(pursueTarget);
     }
+    else
+    {
+      headIK.SetLookAtObj(null);
+    }
+  }
 }

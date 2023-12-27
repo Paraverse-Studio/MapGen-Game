@@ -76,6 +76,10 @@ namespace Paraverse.Mob.Combat
 
     public delegate void OnExecuteSkillDel();
     public event OnExecuteSkillDel OnExecuteSkillEvent;
+
+
+    public ComboAttack[] combatAttacks;
+
     #endregion
 
     #region Inheritable 
@@ -186,7 +190,6 @@ namespace Paraverse.Mob.Combat
     public void RefundCooldown(float refund)
     {
       curCooldown -= refund;
-      Debug.Log("cur CD: " + curCooldown);
     }
 
     protected virtual void RotateToTarget()
@@ -200,7 +203,6 @@ namespace Paraverse.Mob.Combat
       }
       else if (usesTargetLock && mob.Target)
       {
-        //mob.transform.rotation = ParaverseHelper.FaceTarget(mob.transform, target.transform, 100f);
         Vector3 lookDir = (target.transform.position - mob.transform.position).normalized;
         Quaternion lookRot = Quaternion.LookRotation(lookDir);
         mob.transform.rotation = Quaternion.Slerp(mob.transform.rotation, lookRot, rotSpeed * Time.deltaTime);

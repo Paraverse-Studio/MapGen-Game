@@ -25,6 +25,7 @@ namespace Paraverse.Mob.Combat
     [Header("Projectile Values")]
     [SerializeField, Tooltip("Set as true if mob is a projectile user.")]
     protected bool projUser = false;
+    // Ideally should be hidden and set within Start()
     [SerializeField]
     protected BasicAttackSkill basicAttackSkill;
     public BasicAttackSkill BasicAttackSkill { get { return basicAttackSkill; } }
@@ -45,7 +46,8 @@ namespace Paraverse.Mob.Combat
     public bool IsUsingSkilling { get; set; }
     public bool IsInCombat { get { return IsUsingSkilling || IsBasicAttacking; } }
 
-    [SerializeField, Tooltip("Mob skills.")]
+    // Should store both the mob basic attack and skills
+    [SerializeField, Tooltip("Mob skills and basic attack.")]
     protected List<MobSkill> skills = new List<MobSkill>();
     public List<MobSkill> Skills { get { return skills; } }
     [SerializeField, Tooltip("Mob effects.")]
