@@ -11,8 +11,13 @@ public class FirebaseDatabaseManager : MonoBehaviour
   public static FirebaseDatabaseManager Instance;
   private FirebaseFirestore _db;
   private CollectionReference _MatchHistoryCollection;
+  private CollectionReference _LeaderboardsCollection;
+  private Query _MatchHistoryQuery;
+  private Query _LeaderboardsQuery;
   private Task<QuerySnapshot> _MatchHistorySnapShot;
+  private Task<QuerySnapshot> _LeaderboardsSnapShot;
   public MatchHistoryModel _MatchHistoryModel;
+  public LeaderboardsModel _LeaderboardsModel;
 
 
 
@@ -27,29 +32,35 @@ public class FirebaseDatabaseManager : MonoBehaviour
 
     // Init
     _db = FirebaseFirestore.DefaultInstance;
-    _MatchHistorySnapShot = FirebaseFirestore.DefaultInstance.Collection("MatchHistory").GetSnapshotAsync();
+    _MatchHistoryQuery = _db.Collection("MatchHistory");
+    _LeaderboardsQuery = _db.Collection("Leaderboards");
+    _MatchHistorySnapShot = _db.Collection("MatchHistory").GetSnapshotAsync();
+    _LeaderboardsSnapShot = _db.Collection("Leaderboards").GetSnapshotAsync();
     _MatchHistoryCollection = _db.Collection("MatchHistory");
+    _LeaderboardsCollection = _db.Collection("Leaderboards");
 
-    _MatchHistoryModel = new MatchHistoryModel
-    {
-      Username = "Prab",
-      RoundNumberReached = 4,
-      SessionLength = "4:20",
-      DamageTaken = 690,
-      TotalScore = 696969,
-      GoldEarned = 420,
-      MobsDefeatedCount = 42,
-      BossesDefeatedCount = 5,
-      MysticDungeonsEnteredCount = 3,
-      BloodLine = "Period Blood",
-      SkillUsed = "Azurite Infusion",
-      Attack = 20,
-      Ability = 30,
-      Health = "100/100",
-      EffectsObtained = "Reapers Kill"
-    };
+    //_MatchHistoryModel = new MatchHistoryModel
+    //{
+    //  Username = "Prab",
+    //  RoundNumberReached = 4,
+    //  SessionLength = "4:20",
+    //  DamageTaken = 690,
+    //  TotalScore = 696969,
+    //  GoldEarned = 420,
+    //  MobsDefeatedCount = 42,
+    //  BossesDefeatedCount = 5,
+    //  MysticDungeonsEnteredCount = 3,
+    //  BloodLine = "Period Blood",
+    //  SkillUsed = "Azurite Infusion",
+    //  Attack = 20,
+    //  Ability = 30,
+    //  Health = "100/100",
+    //  EffectsObtained = "Reapers Kill"
+    //};
 
     //CreateMatchHistory(_MatchHistoryModel);
+    //CreateLeaderboards(_MatchHistoryModel);
+    //UpdateLeaderboards(_MatchHistoryModel);
   }
 
   private void Update()
@@ -79,6 +90,91 @@ public class FirebaseDatabaseManager : MonoBehaviour
             };
     Debug.Log(String.Format("Added document with ID: {0}.", document.Id));
     return document.SetAsync(model).ContinueWithOnMainThread(task => { });
+  }
+
+  public void GetLeaderboardsList()
+  {
+    foreach (DocumentSnapshot documentSnapshot in _LeaderboardsSnapShot.Result)
+    {
+      Console.WriteLine("Document data for {0} document:", documentSnapshot.Id);
+      Dictionary<string, object> city = documentSnapshot.ToDictionary();
+      foreach (KeyValuePair<string, object> pair in city)
+      {
+        Console.WriteLine("{0}: {1}", pair.Key, pair.Value);
+      }
+      Console.WriteLine("");
+    }
+  }
+
+  public async Task<DocumentSnapshot> GetLeaderboards(string docId)
+  {
+    DocumentReference docRef = _LeaderboardsCollection.Document(docId);
+    DocumentSnapshot snapshot = await docRef.GetSnapshotAsync();
+    if (snapshot.Exists)
+    {
+      Console.WriteLine("Document data for {0} document:", snapshot.Id);
+      Dictionary<string, object> leaderboards = snapshot.ToDictionary();
+      foreach (KeyValuePair<string, object> pair in leaderboards)
+      {
+        Console.WriteLine("{0}: {1}", pair.Key, pair.Value);
+      }
+      return snapshot;
+    }
+    else
+    {
+      Console.WriteLine("Document {0} does not exist!", snapshot.Id);
+      return null;
+    }
+  }
+
+  public Task CreateLeaderboards(LeaderboardsModel leaderboardsModel)
+  {
+    DocumentReference document = _LeaderboardsCollection.Document(leaderboardsModel.Username);
+    Dictionary<string, object> model = new Dictionary<string, object>
+            {
+                { StringData.Username, leaderboardsModel.Username },
+                { StringData.RoundNumberReached, leaderboardsModel.HighestRoundNumberReached },
+                { StringData.SessionLength, leaderboardsModel.HighestSessionLength },
+                { StringData.DamageTaken, leaderboardsModel.HighestDamageTaken },
+                { StringData.TotalScore, leaderboardsModel.HighestTotalScore },
+                { StringData.GoldEarned, leaderboardsModel.HighestGoldEarned },
+                { StringData.MobsDefeatedCount, leaderboardsModel.HighestMobsDefeatedCount },
+                { StringData.BossesDefeatedCount, leaderboardsModel.HighestBossesDefeatedCount },
+                { StringData.MysticDungeonsEnteredCount, leaderboardsModel.HighestMysticDungeonsEnteredCount },
+                { StringData.BloodLine, leaderboardsModel.BloodLine },
+                { StringData.SkillUsed, leaderboardsModel.SkillUsed },
+                { StringData.Attack, leaderboardsModel.HighestAttack },
+                { StringData.Ability, leaderboardsModel.HighestAbility },
+                { StringData.Health, leaderboardsModel.HighestHealth },
+                { StringData.EffectsObtained, leaderboardsModel.EffectsObtained },
+            };
+    Debug.Log(String.Format("Created document with ID: {0}.", document.Id));
+    return document.SetAsync(model).ContinueWithOnMainThread(task => { });
+  }
+
+  public Task UpdateLeaderboards(LeaderboardsModel leaderboardsModel)
+  {
+    DocumentReference document = _LeaderboardsCollection.Document(leaderboardsModel.Username);
+    Dictionary<string, object> model = new Dictionary<string, object>
+            {
+                { StringData.Username, leaderboardsModel.Username },
+                { StringData.RoundNumberReached, leaderboardsModel.HighestRoundNumberReached },
+                { StringData.SessionLength, leaderboardsModel.HighestSessionLength },
+                { StringData.DamageTaken, leaderboardsModel.HighestDamageTaken },
+                { StringData.TotalScore, leaderboardsModel.HighestTotalScore },
+                { StringData.GoldEarned, leaderboardsModel.HighestGoldEarned },
+                { StringData.MobsDefeatedCount, leaderboardsModel.HighestMobsDefeatedCount },
+                { StringData.BossesDefeatedCount, leaderboardsModel.HighestBossesDefeatedCount },
+                { StringData.MysticDungeonsEnteredCount, leaderboardsModel.HighestMysticDungeonsEnteredCount },
+                { StringData.BloodLine, leaderboardsModel.BloodLine },
+                { StringData.SkillUsed, leaderboardsModel.SkillUsed },
+                { StringData.Attack, leaderboardsModel.HighestAttack },
+                { StringData.Ability, leaderboardsModel.HighestAbility },
+                { StringData.Health, leaderboardsModel.HighestHealth },
+                { StringData.EffectsObtained, leaderboardsModel.EffectsObtained },
+            };
+    Debug.Log(String.Format("Updated document with ID: {0}.", document.Id));
+    return document.UpdateAsync(model).ContinueWithOnMainThread(task => { });
   }
 }
 
