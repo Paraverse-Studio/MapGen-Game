@@ -74,7 +74,7 @@ public class LaserSkill : MobSkill, IMobSkill
 
     protected override void ExecuteSkillLogic()
     {
-        mob.IsSkilling = true;
+        mob.IsUsingSkilling = true;
         skillOn = true;
         anim.SetBool(StringData.IsUsingSkill, true);
         skillCurTimer = skillStartTimer;

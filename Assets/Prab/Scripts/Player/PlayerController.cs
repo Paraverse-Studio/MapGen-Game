@@ -383,7 +383,7 @@ namespace Paraverse.Player
         /// </summary>
         private void Dive()
         {
-            if (_isStaggered || _isDiving || combat.IsAttackLunging || combat.IsSkilling) return;
+            if (_isStaggered || _isDiving || combat.IsAttackLunging || combat.IsUsingSkilling) return;
 
             if (_isGrounded && curDiveCd >= diveCd)
             {

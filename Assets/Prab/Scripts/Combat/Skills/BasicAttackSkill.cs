@@ -1,30 +1,46 @@
-using Paraverse.Combat;
+using Paraverse.Mob.Combat;
 
 public class BasicAttackSkill : MobSkill, IMobSkill
 {
-    public override void SkillUpdate()
-    {
-        RotateToTarget();
-        CooldownHandler();
-    }
+  public delegate void OnExecuteBasicAttackDel();
+  public event OnExecuteBasicAttackDel OnExecuteBasicAttackEvent;
 
-    public void ExecuteBasicAttack()
-    {
-        Execute();
-    }
+  //public override void SkillUpdate()
+  //{
+  //  RotateToTarget();
+  //  CooldownHandler();
+  //}
 
-    protected override void ExecuteSkillLogic()
-    {
-        curCooldown = cooldown;
-        anim.Play(animName);
-        anim.SetBool(StringData.IsBasicAttacking, true);
-    }
+  public void ExecuteBasicAttack()
+  {
+    Execute();
+  }
 
-    protected override bool CanUseSkill()
-    {
-        if (IsOffCooldown && TargetWithinRange && mob.IsAttackLunging == false && mob.IsSkilling == false)
-            return true;
+  protected override void ExecuteSkillLogic()
+  {
+    curCooldown = cooldown;
+    anim.Play(animName);
+    anim.SetBool(StringData.IsBasicAttacking, true);
+  }
 
-        return false;
+  protected override bool CanUseSkill()
+  {
+    if (IsOffCooldown && TargetWithinRange && mob.IsAttackLunging == false && mob.IsUsingSkilling == false)
+      return true;
+
+    return false;
+  }
+
+  /// <summary>
+  /// Responsible for executing skill on button press.
+  /// </summary>
+  protected override void Execute()
+  {
+    if (CanUseSkill())
+    {
+      OnExecuteBasicAttackEvent?.Invoke();
+      SubscribeAnimationEventListeners();
+      ExecuteSkillLogic();
     }
+  }
 }

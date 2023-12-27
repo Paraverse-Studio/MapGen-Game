@@ -1,4 +1,3 @@
-using Paraverse.Combat;
 using Paraverse.Helper;
 using Paraverse.Mob.Stats;
 using System.Collections.Generic;
@@ -26,8 +25,6 @@ namespace Paraverse.Mob.Combat
     [Header("Projectile Values")]
     [SerializeField, Tooltip("Set as true if mob is a projectile user.")]
     protected bool projUser = false;
-    //[SerializeField]
-    //protected ProjectileData projData;
     [SerializeField]
     protected BasicAttackSkill basicAttackSkill;
     public BasicAttackSkill BasicAttackSkill { get { return basicAttackSkill; } }
@@ -45,8 +42,8 @@ namespace Paraverse.Mob.Combat
     // Sets to true when character is doing an action (Attack, Stun).
     public bool IsAttackLunging { get { return _isAttackLunging; } }
     protected bool _isAttackLunging = false;
-    public bool IsSkilling { get; set; }
-    public bool IsInCombat { get { return IsSkilling || IsBasicAttacking; } }
+    public bool IsUsingSkilling { get; set; }
+    public bool IsInCombat { get { return IsUsingSkilling || IsBasicAttacking; } }
 
     [SerializeField, Tooltip("Mob skills.")]
     protected List<MobSkill> skills = new List<MobSkill>();
@@ -117,7 +114,19 @@ namespace Paraverse.Mob.Combat
       if (player != null) _target = player;
       if (stats == null) stats = GetComponent<MobStats>();
       if (controller == null) controller = GetComponent<IMobController>();
-      if (basicAttackSkill == null) Debug.LogError(transform.name + " has no basic attack skill! Please add a basic attack skill...");
+      if (basicAttackSkill == null)
+      {
+        foreach (MobSkill skill in skills)
+        {
+          if (skill.IsBasicAttack)
+          {
+            basicAttackSkill = GetComponent<BasicAttackSkill>();
+            Debug.LogWarning(transform.name + " has no basic attack skill! Please add a basic attack skill...");
+            if (basicAttackSkill == null)
+              Debug.LogError(transform.name + " has no basic attack skill! Please add a basic attack skill...");
+          }
+        }
+      }
 
       Initialize();
     }
@@ -127,12 +136,10 @@ namespace Paraverse.Mob.Combat
       if (controller.IsDead) return;
 
       distanceFromTarget = ParaverseHelper.GetDistance(transform.position, player.position);
-      _isBasicAttacking = anim.GetBool(StringData.IsBasicAttacking);
 
-      if (anim.GetBool(StringData.IsUsingSkill))
-        IsSkilling = true;
-      else
-        IsSkilling = false;
+      // Determine if mob is basic attacking or using skill
+      _isBasicAttacking = anim.GetBool(StringData.IsBasicAttacking);
+      IsUsingSkilling = anim.GetBool(StringData.IsUsingSkill);
 
       // Gets active skill to run update method for each skill 
       for (int i = 0; i < skills.Count; i++)
@@ -143,7 +150,7 @@ namespace Paraverse.Mob.Combat
           usingSkillIdx = i;
         }
       }
-      basicAttackSkill.SkillUpdate();
+      //basicAttackSkill.SkillUpdate();
     }
     #endregion
 
@@ -156,8 +163,8 @@ namespace Paraverse.Mob.Combat
       // Gets distance from target on start
       distanceFromTarget = ParaverseHelper.GetDistance(transform.position, player.position);
 
-      IsSkilling = false;
-      if (null != basicAttackSkill)
+      IsUsingSkilling = false;
+      if (null != basicAttackSkill && gameObject.tag.Equals(StringData.PlayerTag))
       {
         basicAttackSkill.ActivateSkill(this, anim, stats, player);
       }
@@ -166,20 +173,9 @@ namespace Paraverse.Mob.Combat
         skills[i].ActivateSkill(this, anim, stats, player);
         if (skills[i].skillOn)
         {
-          IsSkilling = true;
+          IsUsingSkilling = true;
         }
       }
-    }
-    #endregion
-
-    #region Basic Attack Logic
-    /// <summary>
-    /// Returns the basic attack cooldown based on attack speed value in stats.
-    /// </summary>
-    /// <returns></returns>
-    protected float GetBasicAttackCooldown()
-    {
-      return 1f / stats.AttackSpeed.FinalValue;
     }
     #endregion
 
@@ -190,7 +186,7 @@ namespace Paraverse.Mob.Combat
     {
       _isAttackLunging = false;
       DisableBasicAttackCollider();
-      IsSkilling = false;
+      IsUsingSkilling = false;
       OnAttackInterrupted?.Invoke();
     }
 
@@ -238,13 +234,7 @@ namespace Paraverse.Mob.Combat
     /// </summary>
     public virtual void FireProjectile()
     {
-      MobSkill skill;
-      if (IsSkilling)
-      {
-        skill = skills[usingSkillIdx];
-      }
-      else
-        skill = basicAttackSkill;
+      MobSkill skill = skills[usingSkillIdx];
 
       // Archers may hold an arrow which needs to be set to off/on when firing
       if (skill.projData.projHeld != null)
@@ -262,7 +252,7 @@ namespace Paraverse.Mob.Combat
       // Instantiate and initialize projectile
       GameObject go = Instantiate(skill.projData.projPf, skill.projData.projOrigin.position, lookRot);
       Projectile proj = go.GetComponent<Projectile>();
-      proj.Init(this, targetDir, skill.projData.basicAtkProjSpeed, skill.scalingStatData);
+      proj.Init(this, targetDir, skill.projData.projSpeed, skill.scalingStatData);
     }
 
     /// <summary>
@@ -270,11 +260,7 @@ namespace Paraverse.Mob.Combat
     /// </summary>
     public void EnableHeldProjectile()
     {
-      MobSkill skill;
-      if (IsSkilling)
-        skill = skills[usingSkillIdx];
-      else
-        skill = basicAttackSkill;
+      MobSkill skill = skills[usingSkillIdx];
 
       if (skill.projData.projHeld == null)
       {

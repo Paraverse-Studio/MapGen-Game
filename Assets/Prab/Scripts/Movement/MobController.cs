@@ -561,14 +561,14 @@ namespace Paraverse.Mob.Controller
             nav.isStopped = true;
             transform.rotation = ParaverseHelper.FaceTarget(transform, pursueTarget, rotSpeed);
 
-            // Ensures mob is looking at the target before attacking
-            Vector3 dir = (pursueTarget.position - transform.position).normalized;
-            dir = ParaverseHelper.GetPositionXZ(dir);
-            Quaternion lookRot = Quaternion.LookRotation(dir);
-            float angle = Quaternion.Angle(transform.rotation, lookRot);
+            //// Ensures mob is looking at the target before attacking
+            //Vector3 dir = (pursueTarget.position - transform.position).normalized;
+            //dir = ParaverseHelper.GetPositionXZ(dir);
+            //Quaternion lookRot = Quaternion.LookRotation(dir);
+            //float angle = Quaternion.Angle(transform.rotation, lookRot);
 
-            if (angle <= 0)
-                combat.BasicAttackSkill.ExecuteBasicAttack();
+            //if (angle <= 0)
+            //    combat.BasicAttackSkill.ExecuteBasicAttack();
         }
 
         public void ApplyHitAnimation()

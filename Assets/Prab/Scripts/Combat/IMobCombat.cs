@@ -7,7 +7,7 @@ namespace Paraverse.Mob
         public BasicAttackSkill BasicAttackSkill { get; }
         public float BasicAtkRange { get; }
         public bool CanBasicAtk { get; }
-        public bool IsSkilling { get; set; }
+        public bool IsUsingSkilling { get; set; }
         public bool IsInCombat { get; }
         public abstract void OnAttackInterrupt();
     }

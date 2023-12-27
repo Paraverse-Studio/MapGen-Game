@@ -44,7 +44,7 @@ public class SwordSpinSkill : MobSkill, IMobSkill
     {
         base.SkillUpdate();
 
-        if (false == mob.IsSkilling)
+        if (false == mob.IsUsingSkilling)
         {
             DisableSkill();
             return;

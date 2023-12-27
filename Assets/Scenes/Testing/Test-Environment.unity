@@ -38,7 +38,7 @@ RenderSettings:
   m_ReflectionIntensity: 1
   m_CustomReflection: {fileID: 0}
   m_Sun: {fileID: 0}
-  m_IndirectSpecularColor: {r: 0.15900815, g: 0.51751715, b: 1.0386043, a: 1}
+  m_IndirectSpecularColor: {r: 0.16007265, g: 0.5168968, b: 1.04459, a: 1}
   m_UseRadianceAmbientProbe: 0
 --- !u!157 &3
 LightmapSettings:
@@ -1617,16 +1617,18 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   targetTag: Enemy
+  knockBackEffect: {fileID: 0}
   dot: 0
   dontApplyDamageOnEnter: 1
-  knockBackEffect: {fileID: 0}
+  dotIntervalTimer: 1
+  applyHitAnim: 1
   hitFX: {fileID: 0}
-  isBasicAttackCollider: 0
   scalingStatData:
     flatPower: 1
     attackScaling: 0
     abilityScaling: 0
     healthScaling: 0
+  isBasicAttackCollider: 0
 --- !u!65 &166201824
 BoxCollider:
   m_ObjectHideFlags: 0
@@ -10405,7 +10407,7 @@ PrefabInstance:
       objectReference: {fileID: 0}
     - target: {fileID: 834749840821475308, guid: 504274220e31b014bb1f9da275f2fca1, type: 3}
       propertyPath: m_IsActive
-      value: 0
+      value: 1
       objectReference: {fileID: 0}
     - target: {fileID: 834749840821475311, guid: 504274220e31b014bb1f9da275f2fca1, type: 3}
       propertyPath: m_RootOrder
@@ -10451,6 +10453,14 @@ PrefabInstance:
       propertyPath: m_LocalEulerAnglesHint.z
       value: 0
       objectReference: {fileID: 0}
+    - target: {fileID: 3394032382423534312, guid: 504274220e31b014bb1f9da275f2fca1, type: 3}
+      propertyPath: skills.Array.size
+      value: 1
+      objectReference: {fileID: 0}
+    - target: {fileID: 3394032382423534312, guid: 504274220e31b014bb1f9da275f2fca1, type: 3}
+      propertyPath: skills.Array.data[0]
+      value: 
+      objectReference: {fileID: 988235238}
     m_RemovedComponents: []
   m_SourcePrefab: {fileID: 100100000, guid: 504274220e31b014bb1f9da275f2fca1, type: 3}
 --- !u!114 &988235236 stripped
@@ -10469,6 +10479,17 @@ GameObject:
   m_CorrespondingSourceObject: {fileID: 5827702022029265610, guid: 504274220e31b014bb1f9da275f2fca1, type: 3}
   m_PrefabInstance: {fileID: 988235235}
   m_PrefabAsset: {fileID: 0}
+--- !u!114 &988235238 stripped
+MonoBehaviour:
+  m_CorrespondingSourceObject: {fileID: 274115229, guid: 504274220e31b014bb1f9da275f2fca1, type: 3}
+  m_PrefabInstance: {fileID: 988235235}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 5ff88d084135b4240baee58ee284d528, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
 --- !u!223 &1091452951 stripped
 Canvas:
   m_CorrespondingSourceObject: {fileID: 7311448671420047950, guid: b0089e7a57060c94592e590afc510844, type: 3}
@@ -14162,7 +14183,7 @@ MonoBehaviour:
   EffectName: Sunfire
   targetTag: Enemy
   _ID: -1
-  _scaling:
+  scalingStatData:
     flatPower: 0
     attackScaling: 1
     abilityScaling: 0
@@ -14225,8 +14246,8 @@ MonoBehaviour:
   EffectName: Reaper
   targetTag: Enemy
   _ID: -1
-  _scaling:
-    flatPower: 2
+  scalingStatData:
+    flatPower: 0
     attackScaling: 1
     abilityScaling: 0
     healthScaling: 0
@@ -14248,7 +14269,7 @@ MonoBehaviour:
   EffectName: Empowered Attack
   targetTag: Enemy
   _ID: -1
-  _scaling:
+  scalingStatData:
     flatPower: 0
     attackScaling: 1
     abilityScaling: 0
@@ -14271,7 +14292,7 @@ MonoBehaviour:
   EffectName: Dash Attack
   targetTag: Enemy
   _ID: -1
-  _scaling:
+  scalingStatData:
     flatPower: 0
     attackScaling: 1
     abilityScaling: 0
@@ -16320,6 +16341,7 @@ MonoBehaviour:
   moveSpeed: 2
   maxEnergy: 100
   _curEnergy: 100
+  healthRegen: 0
   energyRegen: 25
   _gold: 100
   OnHealthChange:
@@ -16499,6 +16521,7 @@ MonoBehaviour:
   moveSpeed: 0
   maxEnergy: 0
   _curEnergy: 0
+  healthRegen: 0
   energyRegen: 0
   _gold: 0
   OnHealthChange:
@@ -19427,6 +19450,7 @@ MonoBehaviour:
   moveSpeed: 2
   maxEnergy: 100
   _curEnergy: 100
+  healthRegen: 0
   energyRegen: 25
   _gold: 100
   OnHealthChange:
@@ -23282,7 +23306,7 @@ PrefabInstance:
       objectReference: {fileID: 0}
     - target: {fileID: 381769008500357370, guid: b5bb5caa027eab745a624ea74bd7373d, type: 3}
       propertyPath: m_IsActive
-      value: 1
+      value: 0
       objectReference: {fileID: 0}
     - target: {fileID: 5699475108057975578, guid: b5bb5caa027eab745a624ea74bd7373d, type: 3}
       propertyPath: _maxRange
