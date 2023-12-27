@@ -41,7 +41,7 @@ public class Debugging : MonoBehaviour
 
                 ChestObject c = Instantiate(chest, GlobalSettings.Instance.player.transform.position + transform.forward * 2,
                     GlobalSettings.Instance.player.transform.rotation).GetComponent<ChestObject>();
-                c.Initialize(ChestObject.ChestTierType.Common);
+                c.Initialize(ChestObject.ChestTierType.Mystic);
             }
         }
     }
