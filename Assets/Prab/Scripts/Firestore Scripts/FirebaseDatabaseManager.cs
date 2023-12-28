@@ -76,24 +76,22 @@ public class FirebaseDatabaseManager : MonoBehaviour
     string id = matchHistoryModel.Username + "-" + randomNum;
 
     DocumentReference docRef = _MatchHistoryCollection.Document(id);
-    Dictionary<string, object> model = new Dictionary<string, object>
-            {
-                { StringData.Username, matchHistoryModel.Username },
-                { StringData.RoundNumberReached, matchHistoryModel.RoundNumberReached },
-                { StringData.SessionLength, matchHistoryModel.SessionLength },
-                { StringData.DamageTaken, matchHistoryModel.DamageTaken },
-                { StringData.TotalScore, matchHistoryModel.TotalScore },
-                { StringData.GoldEarned, matchHistoryModel.GoldEarned },
-                { StringData.MobsDefeatedCount, matchHistoryModel.MobsDefeatedCount },
-                { StringData.BossesDefeatedCount, matchHistoryModel.BossesDefeatedCount },
-                { StringData.MysticDungeonsEnteredCount, matchHistoryModel.MysticDungeonsEnteredCount },
-                { StringData.BloodLine, matchHistoryModel.BloodLine },
-                { StringData.SkillUsed, matchHistoryModel.SkillUsed },
-                { StringData.Attack, matchHistoryModel.Attack },
-                { StringData.Ability, matchHistoryModel.Ability },
-                { StringData.Health, matchHistoryModel.Health },
-                { StringData.EffectsObtained, matchHistoryModel.EffectsObtained },
-            };
+    MatchHistoryModel model = new MatchHistoryModel(
+                matchHistoryModel.Username,
+                matchHistoryModel.RoundNumberReached,
+                matchHistoryModel.SessionLength,
+                matchHistoryModel.DamageTaken,
+                matchHistoryModel.TotalScore,
+                matchHistoryModel.GoldEarned,
+                matchHistoryModel.MobsDefeatedCount,
+                matchHistoryModel.BossesDefeatedCount,
+                matchHistoryModel.MysticDungeonsEnteredCount,
+                matchHistoryModel.BloodLine,
+                matchHistoryModel.SkillUsed,
+                matchHistoryModel.Attack,
+                matchHistoryModel.Ability,
+                matchHistoryModel.Health,
+                matchHistoryModel.EffectsObtained);
     Debug.Log(String.Format("Added document with ID: {0}.", docRef.Id));
     return docRef.SetAsync(model).ContinueWithOnMainThread(task => { });
   }

@@ -1,5 +1,7 @@
 #if !UNITY_WEBGL || UNITY_EDITOR
 using Firebase.Firestore;
+using Newtonsoft.Json;
+using System;
 #endif
 
 #if !UNITY_WEBGL || UNITY_EDITOR
@@ -67,8 +69,12 @@ public class MatchHistoryModel
   [FirestoreProperty]
 #endif
   public string EffectsObtained { get; set; }
+#if !UNITY_WEBGL || UNITY_EDITOR
+  [FirestoreProperty]
+#endif
+  public string Timestamp { get; set; }
 
-    public MatchHistoryModel() { }
+  public MatchHistoryModel() { }
 
     public MatchHistoryModel(
         string username,
@@ -103,5 +109,6 @@ public class MatchHistoryModel
         Ability = ability;
         Health = health;
         EffectsObtained = effectsObtained;
+        Timestamp = DateTime.Now.ToString();
     }
 }

@@ -46,7 +46,7 @@ public class SummaryView : MonoBehaviour
 
     MatchHistoryModel matchHistoryModel = new MatchHistoryModel
     {
-      Username = "prab",
+      Username = "reiynu",
       RoundNumberReached = sessionData.roundReached,
       SessionLength = UtilityFunctions.GetFormattedTime(sessionData.sessionLength),
       DamageTaken = sessionData.damageTaken,
@@ -92,7 +92,7 @@ public class SummaryView : MonoBehaviour
     // update the values accordingly
     LeaderboardsModel leaderboardsModel = new LeaderboardsModel
     {
-      Username = "prab",
+      Username = "reiynu",
       HighestRoundNumberReached = highestRoundNumberReached,
       HighestSessionLength = UtilityFunctions.GetFormattedTime(sessionData.sessionLength),
       HighestDamageTaken = highestDamageTaken,
