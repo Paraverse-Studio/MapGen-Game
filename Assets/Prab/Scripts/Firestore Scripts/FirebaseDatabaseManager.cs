@@ -1,6 +1,7 @@
 //#if !UNITY_WEBGL
 using Firebase.Extensions;
 using Firebase.Firestore;
+using ParaverseWebsite.Models;
 using System;
 using System.Collections.Generic;
 using System.Threading.Tasks;
@@ -40,29 +41,6 @@ public class FirebaseDatabaseManager : MonoBehaviour
     _LeaderboardsSnapShot = _db.Collection("Leaderboards").GetSnapshotAsync();
     _MatchHistoryCollection = _db.Collection("MatchHistory");
     _LeaderboardsCollection = _db.Collection("Leaderboards");
-
-    //_MatchHistoryModel = new MatchHistoryModel
-    //{
-    //  Username = "Prab",
-    //  RoundNumberReached = 4,
-    //  SessionLength = "4:20",
-    //  DamageTaken = 690,
-    //  TotalScore = 696969,
-    //  GoldEarned = 420,
-    //  MobsDefeatedCount = 42,
-    //  BossesDefeatedCount = 5,
-    //  MysticDungeonsEnteredCount = 3,
-    //  BloodLine = "Period Blood",
-    //  SkillUsed = "Azurite Infusion",
-    //  Attack = 20,
-    //  Ability = 30,
-    //  Health = "100/100",
-    //  EffectsObtained = "Reapers Kill"
-    //};
-
-    //CreateMatchHistory(_MatchHistoryModel);
-    //CreateLeaderboards(_MatchHistoryModel);
-    //UpdateLeaderboards(_MatchHistoryModel);
   }
 
   private void Update()
@@ -76,25 +54,22 @@ public class FirebaseDatabaseManager : MonoBehaviour
     string id = matchHistoryModel.Username + "-" + randomNum;
 
     DocumentReference docRef = _MatchHistoryCollection.Document(id);
-    Dictionary<string, object> model = new Dictionary<string, object>
-            {
-                { StringData.Username, matchHistoryModel.Username },
-                { StringData.RoundNumberReached, matchHistoryModel.RoundNumberReached },
-                { StringData.SessionLength, matchHistoryModel.SessionLength },
-                { StringData.DamageTaken, matchHistoryModel.DamageTaken },
-                { StringData.TotalScore, matchHistoryModel.TotalScore },
-                { StringData.GoldEarned, matchHistoryModel.GoldEarned },
-                { StringData.MobsDefeatedCount, matchHistoryModel.MobsDefeatedCount },
-                { StringData.BossesDefeatedCount, matchHistoryModel.BossesDefeatedCount },
-                { StringData.MysticDungeonsEnteredCount, matchHistoryModel.MysticDungeonsEnteredCount },
-                { StringData.BloodLine, matchHistoryModel.BloodLine },
-                { StringData.SkillUsed, matchHistoryModel.SkillUsed },
-                { StringData.Attack, matchHistoryModel.Attack },
-                { StringData.Ability, matchHistoryModel.Ability },
-                { StringData.Health, matchHistoryModel.Health },
-                { StringData.EffectsObtained, matchHistoryModel.EffectsObtained },
-            };
-    Debug.Log(String.Format("Added document with ID: {0}.", docRef.Id));
+    MatchHistoryModel model = new MatchHistoryModel(
+                matchHistoryModel.Username,
+                matchHistoryModel.RoundNumberReached,
+                matchHistoryModel.SessionLength,
+                matchHistoryModel.DamageTaken,
+                matchHistoryModel.TotalScore,
+                matchHistoryModel.GoldEarned,
+                matchHistoryModel.MobsDefeatedCount,
+                matchHistoryModel.BossesDefeatedCount,
+                matchHistoryModel.MysticDungeonsEnteredCount,
+                matchHistoryModel.BloodLine,
+                matchHistoryModel.SkillUsed,
+                matchHistoryModel.Attack,
+                matchHistoryModel.Ability,
+                matchHistoryModel.Health,
+                matchHistoryModel.EffectsObtained);
     return docRef.SetAsync(model).ContinueWithOnMainThread(task => { });
   }
 
@@ -125,13 +100,6 @@ public class FirebaseDatabaseManager : MonoBehaviour
     DocumentSnapshot snapshot = await docRef.GetSnapshotAsync();
     if (snapshot.Exists)
     {
-      //Console.WriteLine("Document data for {0} document:", snapshot.Id);
-      //Dictionary<string, object> leaderboards = snapshot.ToDictionary();
-      //foreach (KeyValuePair<string, object> pair in leaderboards)
-      //{
-      //  Console.WriteLine("{0}: {1}", pair.Key, pair.Value);
-      //}
-
       LeaderboardsModel leaderboardsModel = snapshot.ConvertTo<LeaderboardsModel>();
       return leaderboardsModel;
     }
@@ -141,115 +109,37 @@ public class FirebaseDatabaseManager : MonoBehaviour
       return null;
     }
   }
+  public async Task<UserModel> GetUser(string userId)
+  {
+    DocumentReference docRef = _LeaderboardsCollection.Document(userId);
+    DocumentSnapshot snapshot = await docRef.GetSnapshotAsync();
+    if (snapshot.Exists)
+    {
+      UserModel userModel = snapshot.ConvertTo<UserModel>();
+      return userModel;
+    }
+    return null;
+  }
 
   public Task CreateLeaderboards(LeaderboardsModel leaderboardsModel)
   {
     DocumentReference document = _LeaderboardsCollection.Document(leaderboardsModel.Username);
-    Dictionary<string, object> model = new Dictionary<string, object>
-            {
-                { StringData.Username, leaderboardsModel.Username },
-                { StringData.RoundNumberReached, leaderboardsModel.HighestRoundNumberReached },
-                { StringData.SessionLength, leaderboardsModel.HighestSessionLength },
-                { StringData.DamageTaken, leaderboardsModel.HighestDamageTaken },
-                { StringData.TotalScore, leaderboardsModel.HighestTotalScore },
-                { StringData.GoldEarned, leaderboardsModel.HighestGoldEarned },
-                { StringData.MobsDefeatedCount, leaderboardsModel.HighestMobsDefeatedCount },
-                { StringData.BossesDefeatedCount, leaderboardsModel.HighestBossesDefeatedCount },
-                { StringData.MysticDungeonsEnteredCount, leaderboardsModel.HighestMysticDungeonsEnteredCount },
-                { StringData.BloodLine, leaderboardsModel.BloodLine },
-                { StringData.SkillUsed, leaderboardsModel.SkillUsed },
-                { StringData.Attack, leaderboardsModel.HighestAttack },
-                { StringData.Ability, leaderboardsModel.HighestAbility },
-                { StringData.Health, leaderboardsModel.HighestHealth },
-                { StringData.EffectsObtained, leaderboardsModel.EffectsObtained },
-            };
-    Debug.Log(String.Format("Created document with ID: {0}.", document.Id));
+    LeaderboardsModel model = new LeaderboardsModel(
+                leaderboardsModel.Username,
+                leaderboardsModel.HighestRoundNumberReached,
+                leaderboardsModel.HighestSessionLength,
+                leaderboardsModel.HighestDamageTaken,
+                leaderboardsModel.HighestTotalScore,
+                leaderboardsModel.HighestGoldEarned,
+                leaderboardsModel.HighestMobsDefeatedCount,
+                leaderboardsModel.HighestBossesDefeatedCount,
+                leaderboardsModel.HighestMysticDungeonsEnteredCount,
+                leaderboardsModel.BloodLine,
+                leaderboardsModel.SkillUsed,
+                leaderboardsModel.HighestAttack,
+                leaderboardsModel.HighestAbility,
+                leaderboardsModel.HighestHealth,
+                leaderboardsModel.EffectsObtained);
     return document.SetAsync(model).ContinueWithOnMainThread(task => { });
   }
-
-  public Task UpdateLeaderboards(LeaderboardsModel leaderboardsModel)
-  {
-    DocumentReference document = _LeaderboardsCollection.Document(leaderboardsModel.Username);
-    Dictionary<string, object> model = new Dictionary<string, object>
-            {
-                { StringData.Username, leaderboardsModel.Username },
-                { StringData.RoundNumberReached, leaderboardsModel.HighestRoundNumberReached },
-                { StringData.SessionLength, leaderboardsModel.HighestSessionLength },
-                { StringData.DamageTaken, leaderboardsModel.HighestDamageTaken },
-                { StringData.TotalScore, leaderboardsModel.HighestTotalScore },
-                { StringData.GoldEarned, leaderboardsModel.HighestGoldEarned },
-                { StringData.MobsDefeatedCount, leaderboardsModel.HighestMobsDefeatedCount },
-                { StringData.BossesDefeatedCount, leaderboardsModel.HighestBossesDefeatedCount },
-                { StringData.MysticDungeonsEnteredCount, leaderboardsModel.HighestMysticDungeonsEnteredCount },
-                { StringData.BloodLine, leaderboardsModel.BloodLine },
-                { StringData.SkillUsed, leaderboardsModel.SkillUsed },
-                { StringData.Attack, leaderboardsModel.HighestAttack },
-                { StringData.Ability, leaderboardsModel.HighestAbility },
-                { StringData.Health, leaderboardsModel.HighestHealth },
-                { StringData.EffectsObtained, leaderboardsModel.EffectsObtained },
-            };
-    Debug.Log(String.Format("Updated document with ID: {0}.", document.Id));
-    return document.UpdateAsync(model).ContinueWithOnMainThread(task => { });
-  }
 }
-
-//public IEnumerator GetUser(MatchHistoryModel user, Action<MatchHistoryModel> callback)
-//{
-//    IList<MatchHistoryModel> userList = new List<MatchHistoryModel>();
-//    int userCount = 0;
-//    _MatchHistorySnapShot.ContinueWithOnMainThread(task =>
-//    {
-//        var collection = task.Result;
-//        if (collection.Count == 0)
-//            Debug.LogError("There are no users available in the collection 'Users'.");
-
-//        userCount = collection.Count;
-//        foreach (var userData in collection.Documents)
-//        {
-//            var userName = userData.ToDictionary()["Username"] as string;
-
-//            if (userName == user.Username)
-//            {
-//                var id = userData.ToDictionary()["Id"] as string;
-//                var score = userData.ToDictionary()["Score"];
-//                Debug.Log("User: " + id + ", Username: " + userName + " has a score of " + score);
-
-//                user = new MatchHistoryModel(userName, Convert.ToInt32(score));
-//                break;
-//            }
-//        }
-
-//    });
-//    yield return new WaitUntil(() => userList.Count == userCount && userList.Count != 0);
-//    Debug.Log("Done Getting User: " + user.Id + ", Username: " + user.Username + " has a score of " + user.Score);
-//    callback(user);
-//}
-
-//public IEnumerator GetUsersList(Action<IList<MatchHistoryModel>> callback)
-//{
-//    IList<MatchHistoryModel> userList = new List<MatchHistoryModel>();
-//    int userCount = 0;
-//    _MatchHistorySnapShot.ContinueWithOnMainThread(task =>
-//    {
-//        var collection = task.Result;
-//        if (collection.Count == 0)
-//            Debug.LogError("There are no users available in the collection 'Users'.");
-
-//        userCount = collection.Count;
-//        Debug.Log("Found " + userCount + " users!");
-
-//        foreach (var userData in collection.Documents)
-//        {
-//            var id = userData.ToDictionary()["Id"] as string;
-//            var userName = userData.ToDictionary()["Username"] as string;
-//            var score = userData.ToDictionary()["Score"];
-//            Debug.Log("User: " + id + ", Username: " + userName + " has a score of " + score);
-//        }
-
-//    });
-//    yield return new WaitUntil(() => userList.Count == userCount && userList.Count != 0);
-//    Debug.Log("Done getting " + userCount + " users!");
-//    callback(userList);
-//}
-
-//#endif
