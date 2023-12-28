@@ -1,4 +1,4 @@
-#if !UNITY_WEBGL
+//#if !UNITY_WEBGL
 using Firebase.Extensions;
 using Firebase.Firestore;
 using System;
@@ -18,6 +18,8 @@ public class FirebaseDatabaseManager : MonoBehaviour
   private Task<QuerySnapshot> _LeaderboardsSnapShot;
   public MatchHistoryModel _MatchHistoryModel;
   public LeaderboardsModel _LeaderboardsModel;
+
+  public List<LeaderboardsModel> _LeaderboardsModels = new List<LeaderboardsModel>();
 
 
 
@@ -69,7 +71,11 @@ public class FirebaseDatabaseManager : MonoBehaviour
 
   public Task CreateMatchHistory(MatchHistoryModel matchHistoryModel)
   {
-    DocumentReference document = _MatchHistoryCollection.Document(matchHistoryModel.Username);
+    System.Random rnd = new System.Random();
+    int randomNum = rnd.Next();
+    string id = matchHistoryModel.Username + "-" + randomNum;
+
+    DocumentReference docRef = _MatchHistoryCollection.Document(id);
     Dictionary<string, object> model = new Dictionary<string, object>
             {
                 { StringData.Username, matchHistoryModel.Username },
@@ -88,37 +94,46 @@ public class FirebaseDatabaseManager : MonoBehaviour
                 { StringData.Health, matchHistoryModel.Health },
                 { StringData.EffectsObtained, matchHistoryModel.EffectsObtained },
             };
-    Debug.Log(String.Format("Added document with ID: {0}.", document.Id));
-    return document.SetAsync(model).ContinueWithOnMainThread(task => { });
+    Debug.Log(String.Format("Added document with ID: {0}.", docRef.Id));
+    return docRef.SetAsync(model).ContinueWithOnMainThread(task => { });
   }
 
-  public void GetLeaderboardsList()
+  public async Task<bool> LeaderboardsExists(string id)
   {
-    foreach (DocumentSnapshot documentSnapshot in _LeaderboardsSnapShot.Result)
-    {
-      Console.WriteLine("Document data for {0} document:", documentSnapshot.Id);
-      Dictionary<string, object> city = documentSnapshot.ToDictionary();
-      foreach (KeyValuePair<string, object> pair in city)
-      {
-        Console.WriteLine("{0}: {1}", pair.Key, pair.Value);
-      }
-      Console.WriteLine("");
-    }
+    DocumentReference docRef = _LeaderboardsCollection.Document(id);
+    DocumentSnapshot docSnap = await docRef.GetSnapshotAsync();
+
+    if (docSnap.Exists) return true;
+    return false;
   }
 
-  public async Task<DocumentSnapshot> GetLeaderboards(string docId)
+  public List<LeaderboardsModel> GetLeaderboardsList()
+  {
+    _LeaderboardsModels.Clear();
+    foreach (DocumentSnapshot docSnapshot in _LeaderboardsSnapShot.Result)
+    {
+      Console.WriteLine("Document data for {0} document:", docSnapshot.Id);
+      LeaderboardsModel leaderboardsModel = docSnapshot.ConvertTo<LeaderboardsModel>();
+      _LeaderboardsModels.Add(leaderboardsModel);
+    }
+    return _LeaderboardsModels;
+  }
+
+  public async Task<LeaderboardsModel> GetLeaderboards(string docId)
   {
     DocumentReference docRef = _LeaderboardsCollection.Document(docId);
     DocumentSnapshot snapshot = await docRef.GetSnapshotAsync();
     if (snapshot.Exists)
     {
-      Console.WriteLine("Document data for {0} document:", snapshot.Id);
-      Dictionary<string, object> leaderboards = snapshot.ToDictionary();
-      foreach (KeyValuePair<string, object> pair in leaderboards)
-      {
-        Console.WriteLine("{0}: {1}", pair.Key, pair.Value);
-      }
-      return snapshot;
+      //Console.WriteLine("Document data for {0} document:", snapshot.Id);
+      //Dictionary<string, object> leaderboards = snapshot.ToDictionary();
+      //foreach (KeyValuePair<string, object> pair in leaderboards)
+      //{
+      //  Console.WriteLine("{0}: {1}", pair.Key, pair.Value);
+      //}
+
+      LeaderboardsModel leaderboardsModel = snapshot.ConvertTo<LeaderboardsModel>();
+      return leaderboardsModel;
     }
     else
     {
@@ -237,4 +252,4 @@ public class FirebaseDatabaseManager : MonoBehaviour
 //    callback(userList);
 //}
 
-#endif
+//#endif
