@@ -10,6 +10,8 @@ public class MainMenuController : MonoBehaviour
     public TMP_InputField passwordInput;
     public Button submitButton;
 
+    private string _username; public string Username => _username;
+
     private void Awake()
     {
     }
@@ -32,7 +34,6 @@ public class MainMenuController : MonoBehaviour
             return;
         }
 
-        submitButton.interactable = true;
         submitButton.gameObject.SetActive(true);
 
     }
@@ -40,6 +41,8 @@ public class MainMenuController : MonoBehaviour
     public void OnSubmitUsernameAndPassword()
     {
         // TODO
+        // username: _username
+        // password: passwordInput.text
     }
 
 }
