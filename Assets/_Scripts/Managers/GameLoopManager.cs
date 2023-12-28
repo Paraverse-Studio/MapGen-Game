@@ -122,7 +122,7 @@ public class GameLoopManager : MonoBehaviour
     private int playerMaxHealth;
     private int goldToReward = 0;
 
-    private bool _roundIsActive = false;
+    private bool _roundIsActive = false; public bool RoundIsActive => _roundIsActive;
 
     private bool _isPaused = false;
     public bool IsPaused => _isPaused;
@@ -191,7 +191,7 @@ public class GameLoopManager : MonoBehaviour
             //AnnouncementManager.Instance.QueueAnnouncement(new Announcement().AddType(0).AddTitle("hii").AddText("portal is open now LMAO :p"));
             //AnnouncementManager.Instance.QueueAnnouncement(new Announcement().AddType(1).AddTitle("hii").AddText("portal is open now LMAO :p"));
         }
-        if (Input.GetKeyDown(KeyCode.I))
+        if (Input.GetKeyDown(KeyCode.I) && RoundIsActive)
         {
             List<MobController> m = EnemiesManager.Instance.Enemies;
             foreach (MobController _m in m)
@@ -200,7 +200,7 @@ public class GameLoopManager : MonoBehaviour
             }
             EndRound(true);
         }
-        if (Input.GetKeyDown(KeyCode.T))
+        if (Input.GetKeyDown(KeyCode.T) && RoundIsActive)
         {
             playerStats.UpdateGold(500);
             ShopManager.Instance.ShopWindow.SetActive(!ShopManager.Instance.ShopWindow.activeSelf);
