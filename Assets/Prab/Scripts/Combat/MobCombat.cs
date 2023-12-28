@@ -186,7 +186,7 @@ namespace Paraverse.Mob.Combat
         /// <summary>
         /// Resets booelans when mob is interrupted during attack. 
         /// </summary>
-        public void OnAttackInterrupt()
+        public virtual void OnAttackInterrupt()
         {
             _isAttackLunging = false;
             DisableBasicAttackCollider();

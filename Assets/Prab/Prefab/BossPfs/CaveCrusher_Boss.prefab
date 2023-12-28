@@ -29,7 +29,7 @@ Transform:
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_ConstrainProportionsScale: 0
   m_Children: []
-  m_Father: {fileID: 6004798039919409755}
+  m_Father: {fileID: 1689942125792059684}
   m_RootOrder: 0
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
 --- !u!137 &6504708484999834996
@@ -588,6 +588,279 @@ Transform:
   m_Father: {fileID: 8791645197448880790}
   m_RootOrder: 1
   m_LocalEulerAnglesHint: {x: -5.024947, y: 1.4195327, z: -19.731586}
+--- !u!1 &2033429951662635934
+GameObject:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  serializedVersion: 6
+  m_Component:
+  - component: {fileID: 1689942125792059684}
+  - component: {fileID: 2033429951662636007}
+  - component: {fileID: 2033429951662636006}
+  - component: {fileID: 2033429951662636005}
+  - component: {fileID: 2033429951662635935}
+  - component: {fileID: 2033429951662635931}
+  - component: {fileID: 2033429951662636004}
+  - component: {fileID: 2033429951662635930}
+  - component: {fileID: 2033429951662635929}
+  - component: {fileID: 2033429951662635928}
+  - component: {fileID: 2033429951662636000}
+  m_Layer: 15
+  m_Name: Cavecrasher_Bl
+  m_TagString: Enemy
+  m_Icon: {fileID: 0}
+  m_NavMeshLayer: 0
+  m_StaticEditorFlags: 0
+  m_IsActive: 1
+--- !u!4 &1689942125792059684
+Transform:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 2033429951662635934}
+  m_LocalRotation: {x: -0, y: -0, z: -0, w: 1}
+  m_LocalPosition: {x: 0, y: 0, z: 0}
+  m_LocalScale: {x: 1.5, y: 1.5, z: 1.5}
+  m_ConstrainProportionsScale: 0
+  m_Children:
+  - {fileID: 7086732267604180429}
+  - {fileID: 7587824591895605711}
+  - {fileID: 8556946796748881098}
+  m_Father: {fileID: 8556946796239890637}
+  m_RootOrder: 0
+  m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
+--- !u!95 &2033429951662636007
+Animator:
+  serializedVersion: 4
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 2033429951662635934}
+  m_Enabled: 1
+  m_Avatar: {fileID: 9000000, guid: 802f7643ef7bdbe4380b56d5d5d42415, type: 3}
+  m_Controller: {fileID: 9100000, guid: 12132a1dcb41c21479d6385d26e2379d, type: 2}
+  m_CullingMode: 0
+  m_UpdateMode: 0
+  m_ApplyRootMotion: 0
+  m_LinearVelocityBlending: 0
+  m_StabilizeFeet: 0
+  m_WarningMessage: 
+  m_HasTransformHierarchy: 1
+  m_AllowConstantClipSamplingOptimization: 1
+  m_KeepAnimatorControllerStateOnDisable: 0
+--- !u!195 &2033429951662636006
+NavMeshAgent:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 2033429951662635934}
+  m_Enabled: 1
+  m_AgentTypeID: 0
+  m_Radius: 0.5
+  m_Speed: 3.5
+  m_Acceleration: 8
+  avoidancePriority: 50
+  m_AngularSpeed: 120
+  m_StoppingDistance: 0
+  m_AutoTraverseOffMeshLink: 1
+  m_AutoBraking: 1
+  m_AutoRepath: 1
+  m_Height: 2
+  m_BaseOffset: 0
+  m_WalkableMask: 4294967295
+  m_ObstacleAvoidanceType: 4
+--- !u!143 &2033429951662636005
+CharacterController:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 2033429951662635934}
+  m_Material: {fileID: 0}
+  m_IsTrigger: 0
+  m_Enabled: 1
+  serializedVersion: 2
+  m_Height: 2
+  m_Radius: 0.5
+  m_SlopeLimit: 45
+  m_StepOffset: 0.3
+  m_SkinWidth: 0.08
+  m_MinMoveDistance: 0.001
+  m_Center: {x: 0, y: 1, z: 0}
+--- !u!114 &2033429951662635935
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 2033429951662635934}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 4ea11ba05f442094380f5deea08da259, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  walkSpeedRatio: 1
+  sprintSpeedRatio: 2.5
+  rotSpeed: 100
+  wps: []
+  minWaitDur: 2
+  maxWaitDur: 5
+  accurayWP: 2
+  stoppingDistance: 2
+  detectionRadius: 100
+  pursueRadius: 50
+  customPursueRange: 1
+  pursueRange: 10
+  _isStrafer: 0
+  strafePoint: {fileID: 0}
+  strafeAccuracy: 1
+  atkDashForce: 10
+  jumpLateralForce: 17
+  jumpHeightForce: 6
+  isGroundedCheckRange: 0.3
+  groundLayer:
+    serializedVersion: 2
+    m_Bits: 2147483647
+  flyUpForce: 5
+  flyDownForce: 8
+  isFlyingUp: 0
+  isFlyingDown: 0
+  checkFallRange: 2
+  maxDeathTimerUponFall: 2
+  fallForce: 0.5
+  deathEffect: {fileID: 8073467667769803130, guid: 898d55a940dccf54bad15d1c1cca8aad, type: 3}
+  _curMobState: 0
+  _isGrounded: 1
+  _isUnstaggerable: 1
+--- !u!114 &2033429951662635931
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 2033429951662635934}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: b04cd1b06f0908d4c81a8bc7bcea9d24, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  maxHealth: 100
+  _curHealth: 100
+  attackDamage: 5
+  abilityPower: 0
+  attackSpeed: 0.2
+  moveSpeed: 2
+  maxEnergy: 100
+  _curEnergy: 100
+  healthRegen: 0
+  energyRegen: 25
+  _gold: 100
+  OnHealthChange:
+    m_PersistentCalls:
+      m_Calls: []
+  OnEnergyChange:
+    m_PersistentCalls:
+      m_Calls: []
+  diveEnergyCost: 30
+  unkillable: 0
+--- !u!114 &2033429951662636004
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 2033429951662635934}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 5b3fe259459faf844a89438f0f42bc88, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  anim: {fileID: 2033429951662636007}
+  stats: {fileID: 0}
+  projUser: 0
+  basicAttackSkill: {fileID: 8556946795445516750}
+  skills:
+  - {fileID: 8556946795485020428}
+  - {fileID: 3417620095694632768}
+  - {fileID: 3417620096248076364}
+  effects: []
+  animBool: isUsingSkill
+--- !u!114 &2033429951662635930
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 2033429951662635934}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 91379af3fa21cc34e8ea9ea8189ce047, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  damageOverTimeEffects: []
+--- !u!114 &2033429951662635929
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 2033429951662635934}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: f1360b5e821afee43bb7656851bcc9d0, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  bodyToFollow: {fileID: 0}
+  settings:
+    showWhenSelected: 0
+    hideName: 0
+    hideHealthBar: 0
+    showSelectionAllTimes: 0
+    showEnergyBar: 0
+    heightAdjustment: 0
+    isBoss: 0
+  overrideProperties:
+    healthBar: {fileID: 0}
+    damageBar: {fileID: 0}
+    healthValueDisplay: {fileID: 0}
+    nameLabel: {fileID: 0}
+    energyBar: {fileID: 0}
+    energyLerpBar: {fileID: 0}
+--- !u!114 &2033429951662635928
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 2033429951662635934}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: a58f370ae118bf64abcd4c2cc6d84fc2, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  priority: 0
+  type: 0
+  rangeOverride: -1
+  outline: {fileID: 0}
+  Range: 0
+--- !u!114 &2033429951662636000
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 2033429951662635934}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 4826847c54a11f046974f3cd6d61e25a, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  _lookAtObj: {fileID: 0}
 --- !u!1 &2148323565849966669
 GameObject:
   m_ObjectHideFlags: 0
@@ -2080,280 +2353,6 @@ Transform:
   m_Father: {fileID: 5414944513749355537}
   m_RootOrder: 0
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
---- !u!1 &6349658399980642529
-GameObject:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  serializedVersion: 6
-  m_Component:
-  - component: {fileID: 6004798039919409755}
-  - component: {fileID: 6349658399980642456}
-  - component: {fileID: 6349658399980642457}
-  - component: {fileID: 6349658399980642458}
-  - component: {fileID: 6349658399980642528}
-  - component: {fileID: 6349658399980642532}
-  - component: {fileID: 6349658399980642459}
-  - component: {fileID: 6349658399980642533}
-  - component: {fileID: 6349658399980642534}
-  - component: {fileID: 6349658399980642535}
-  - component: {fileID: 6349658399980642463}
-  m_Layer: 15
-  m_Name: Cave Crusher
-  m_TagString: Enemy
-  m_Icon: {fileID: 0}
-  m_NavMeshLayer: 0
-  m_StaticEditorFlags: 0
-  m_IsActive: 1
---- !u!4 &6004798039919409755
-Transform:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 6349658399980642529}
-  m_LocalRotation: {x: -0, y: -0, z: -0, w: 1}
-  m_LocalPosition: {x: 0, y: 0, z: 0}
-  m_LocalScale: {x: 1.75, y: 1.75, z: 1.75}
-  m_ConstrainProportionsScale: 0
-  m_Children:
-  - {fileID: 7086732267604180429}
-  - {fileID: 7587824591895605711}
-  - {fileID: 8556946796748881098}
-  m_Father: {fileID: 8556946796239890637}
-  m_RootOrder: 0
-  m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
---- !u!95 &6349658399980642456
-Animator:
-  serializedVersion: 4
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 6349658399980642529}
-  m_Enabled: 1
-  m_Avatar: {fileID: 9000000, guid: 802f7643ef7bdbe4380b56d5d5d42415, type: 3}
-  m_Controller: {fileID: 9100000, guid: 12132a1dcb41c21479d6385d26e2379d, type: 2}
-  m_CullingMode: 0
-  m_UpdateMode: 0
-  m_ApplyRootMotion: 0
-  m_LinearVelocityBlending: 0
-  m_StabilizeFeet: 0
-  m_WarningMessage: 
-  m_HasTransformHierarchy: 1
-  m_AllowConstantClipSamplingOptimization: 1
-  m_KeepAnimatorControllerStateOnDisable: 0
---- !u!195 &6349658399980642457
-NavMeshAgent:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 6349658399980642529}
-  m_Enabled: 1
-  m_AgentTypeID: 0
-  m_Radius: 0.5
-  m_Speed: 3.5
-  m_Acceleration: 8
-  avoidancePriority: 50
-  m_AngularSpeed: 120
-  m_StoppingDistance: 0
-  m_AutoTraverseOffMeshLink: 1
-  m_AutoBraking: 1
-  m_AutoRepath: 1
-  m_Height: 2
-  m_BaseOffset: 0
-  m_WalkableMask: 4294967295
-  m_ObstacleAvoidanceType: 4
---- !u!143 &6349658399980642458
-CharacterController:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 6349658399980642529}
-  m_Material: {fileID: 0}
-  m_IsTrigger: 0
-  m_Enabled: 1
-  serializedVersion: 2
-  m_Height: 2
-  m_Radius: 0.5
-  m_SlopeLimit: 45
-  m_StepOffset: 0.3
-  m_SkinWidth: 0.08
-  m_MinMoveDistance: 0.001
-  m_Center: {x: 0, y: 1, z: 0}
---- !u!114 &6349658399980642528
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 6349658399980642529}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 4ea11ba05f442094380f5deea08da259, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: 
-  walkSpeedRatio: 1
-  sprintSpeedRatio: 2.5
-  rotSpeed: 100
-  wps: []
-  minWaitDur: 2
-  maxWaitDur: 5
-  accurayWP: 2
-  stoppingDistance: 2
-  detectionRadius: 100
-  pursueRadius: 50
-  customPursueRange: 1
-  pursueRange: 10
-  _isStrafer: 0
-  strafePoint: {fileID: 0}
-  strafeAccuracy: 1
-  atkDashForce: 10
-  jumpLateralForce: 17
-  jumpHeightForce: 6
-  isGroundedCheckRange: 0.3
-  groundLayer:
-    serializedVersion: 2
-    m_Bits: 2147483647
-  flyUpForce: 5
-  flyDownForce: 8
-  isFlyingUp: 0
-  isFlyingDown: 0
-  checkFallRange: 2
-  maxDeathTimerUponFall: 2
-  fallForce: 0.5
-  deathEffect: {fileID: 8073467667769803130, guid: 898d55a940dccf54bad15d1c1cca8aad, type: 3}
-  _curMobState: 0
-  _isGrounded: 1
-  _isUnstaggerable: 1
---- !u!114 &6349658399980642532
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 6349658399980642529}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: b04cd1b06f0908d4c81a8bc7bcea9d24, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: 
-  maxHealth: 440
-  _curHealth: 440
-  attackDamage: 11
-  abilityPower: 11
-  attackSpeed: 0.5
-  moveSpeed: 2
-  maxEnergy: 100
-  _curEnergy: 100
-  cooldownReduction: 0
-  healthRegen: 0
-  energyRegen: 25
-  _gold: 100
-  OnHealthChange:
-    m_PersistentCalls:
-      m_Calls: []
-  OnEnergyChange:
-    m_PersistentCalls:
-      m_Calls: []
-  diveEnergyCost: 30
-  unkillable: 0
---- !u!114 &6349658399980642459
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 6349658399980642529}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 5b3fe259459faf844a89438f0f42bc88, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: 
-  anim: {fileID: 6349658399980642456}
-  stats: {fileID: 0}
-  projUser: 0
-  basicAttackSkill: {fileID: 8556946795445516750}
-  skills:
-  - {fileID: 8556946795485020428}
-  - {fileID: 3417620095694632768}
-  - {fileID: 3417620096248076364}
-  effects: []
-  animBool: isUsingSkill
---- !u!114 &6349658399980642533
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 6349658399980642529}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 91379af3fa21cc34e8ea9ea8189ce047, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: 
-  damageOverTimeEffects: []
---- !u!114 &6349658399980642534
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 6349658399980642529}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: f1360b5e821afee43bb7656851bcc9d0, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: 
-  bodyToFollow: {fileID: 0}
-  settings:
-    showWhenSelected: 0
-    hideName: 0
-    hideHealthBar: 0
-    showSelectionAllTimes: 0
-    showEnergyBar: 0
-    heightAdjustment: 0
-    isBoss: 1
-  overrideProperties:
-    healthBar: {fileID: 0}
-    damageBar: {fileID: 0}
-    healthValueDisplay: {fileID: 0}
-    nameLabel: {fileID: 0}
-    energyBar: {fileID: 0}
-    energyLerpBar: {fileID: 0}
---- !u!114 &6349658399980642535
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 6349658399980642529}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: a58f370ae118bf64abcd4c2cc6d84fc2, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: 
-  priority: 0
-  type: 0
-  rangeOverride: -1
-  outline: {fileID: 0}
-  Range: 0
---- !u!114 &6349658399980642463
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 6349658399980642529}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 4826847c54a11f046974f3cd6d61e25a, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: 
-  _lookAtObj: {fileID: 0}
 --- !u!1 &6365823502905661480
 GameObject:
   m_ObjectHideFlags: 0
@@ -2643,7 +2642,7 @@ Transform:
   - {fileID: 1458478461990343266}
   - {fileID: 7820870768599690976}
   - {fileID: 5388630014695112962}
-  m_Father: {fileID: 6004798039919409755}
+  m_Father: {fileID: 1689942125792059684}
   m_RootOrder: 1
   m_LocalEulerAnglesHint: {x: -89.98021, y: 0, z: 0}
 --- !u!1 &8069908378160857443
@@ -3136,7 +3135,7 @@ MonoBehaviour:
   _description: 
   _minRange: 0
   _maxRange: 7
-  cooldown: 5
+  cooldown: 3.5
   cost: 0
   animName: DualAttack
   isBasicAttack: 0
@@ -3207,7 +3206,7 @@ MonoBehaviour:
   _description: 
   _minRange: 0
   _maxRange: 5
-  cooldown: 5
+  cooldown: 2
   cost: 0
   animName: BasicAttack
   isBasicAttack: 1
@@ -3277,7 +3276,7 @@ MonoBehaviour:
   _description: 
   _minRange: 5
   _maxRange: 20
-  cooldown: 5
+  cooldown: 7.5
   cost: 0
   animName: RockThrow
   isBasicAttack: 0
@@ -3325,7 +3324,7 @@ Transform:
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_ConstrainProportionsScale: 0
   m_Children:
-  - {fileID: 6004798039919409755}
+  - {fileID: 1689942125792059684}
   m_Father: {fileID: 0}
   m_RootOrder: 0
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
@@ -3484,7 +3483,7 @@ Transform:
   - {fileID: 8556946795352347778}
   - {fileID: 8556946795485020429}
   - {fileID: 8556946796946127758}
-  m_Father: {fileID: 6004798039919409755}
+  m_Father: {fileID: 1689942125792059684}
   m_RootOrder: 2
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
 --- !u!1 &8556946796946127759
@@ -3537,7 +3536,7 @@ MonoBehaviour:
   _description: 
   _minRange: 8
   _maxRange: 15
-  cooldown: 5
+  cooldown: 3
   cost: 0
   animName: Jump_Start
   isBasicAttack: 0

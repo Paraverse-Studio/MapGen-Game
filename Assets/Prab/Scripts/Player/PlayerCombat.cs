@@ -192,6 +192,12 @@ namespace Paraverse.Player
             }
         }
 
+        public override void OnAttackInterrupt()
+        {
+            base.OnAttackInterrupt();
+            anim.SetBool(StringData.IsUsingSkill, false);
+        }
+
         private void TEST_METHOD()
         {
             if (Input.GetKeyDown(KeyCode.P))

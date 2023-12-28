@@ -268,6 +268,7 @@ AnimatorState:
   m_StateMachineBehaviours:
   - {fileID: -7699714843748306477}
   - {fileID: -6712416570600214552}
+  - {fileID: 5458219876172795404}
   m_Position: {x: 50, y: 50, z: 0}
   m_IKOnFeet: 0
   m_WriteDefaultValues: 1
@@ -351,11 +352,11 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   parameter: isInteracting
   disableUponEnter: 0
-  enableUponExit: 0
-  disableAttackEndState: 1
-  useEnableDelay: 1
+  enableUponExit: 1
+  disableAttackEndState: 0
+  useEnableDelay: 0
   enableAfterAnimPercentage: 0.4
-  useDisableDelay: 1
+  useDisableDelay: 0
   disableBeforeAnimPercentage: 0.7
 --- !u!1101 &-5656464728994777966
 AnimatorStateTransition:
@@ -567,11 +568,11 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   parameter: isInteracting
   disableUponEnter: 0
-  enableUponExit: 0
-  disableAttackEndState: 1
-  useEnableDelay: 1
+  enableUponExit: 1
+  disableAttackEndState: 0
+  useEnableDelay: 0
   enableAfterAnimPercentage: 0.4
-  useDisableDelay: 1
+  useDisableDelay: 0
   disableBeforeAnimPercentage: 0.7
 --- !u!1101 &-2218491837561302612
 AnimatorStateTransition:
@@ -638,7 +639,7 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   parameter: isInteracting
   disableUponEnter: 0
-  enableUponExit: 0
+  enableUponExit: 1
   disableAttackEndState: 0
   useEnableDelay: 0
   enableAfterAnimPercentage: 0
@@ -943,7 +944,7 @@ AnimatorStateMachine:
     m_Position: {x: -10, y: 470, z: 0}
   - serializedVersion: 1
     m_State: {fileID: 8620104148347774631}
-    m_Position: {x: 480, y: 370, z: 0}
+    m_Position: {x: 490, y: 370, z: 0}
   - serializedVersion: 1
     m_State: {fileID: -112754412373273734}
     m_Position: {x: 720, y: 270, z: 0}
@@ -1155,6 +1156,26 @@ AnimatorStateTransition:
   m_InterruptionSource: 0
   m_OrderedInterruption: 1
   m_CanTransitionToSelf: 1
+--- !u!114 &5458219876172795404
+MonoBehaviour:
+  m_ObjectHideFlags: 1
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 42945beeedb30a04584257d5ef725971, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  parameter: isUsingSkill
+  disableUponEnter: 1
+  enableUponExit: 0
+  disableAttackEndState: 0
+  useEnableDelay: 0
+  enableAfterAnimPercentage: 0
+  useDisableDelay: 0
+  disableBeforeAnimPercentage: 0
 --- !u!1101 &5895909731814588343
 AnimatorStateTransition:
   m_ObjectHideFlags: 1
@@ -1269,10 +1290,10 @@ MonoBehaviour:
   parameter: isInteracting
   disableUponEnter: 0
   enableUponExit: 0
-  disableAttackEndState: 1
-  useEnableDelay: 1
+  disableAttackEndState: 0
+  useEnableDelay: 0
   enableAfterAnimPercentage: 0.4
-  useDisableDelay: 1
+  useDisableDelay: 0
   disableBeforeAnimPercentage: 0.7
 --- !u!1102 &8472498562227046254
 AnimatorState:
