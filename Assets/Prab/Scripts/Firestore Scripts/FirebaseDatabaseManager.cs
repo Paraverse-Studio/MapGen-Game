@@ -40,10 +40,6 @@ public class FirebaseDatabaseManager : MonoBehaviour
     _UserCollection = _db.Collection(StringData.Users);
   }
 
-  private void Update()
-  {
-  }
-
   public Task CreateMatchHistory(MatchHistoryModel matchHistoryModel)
   {
     System.Random rnd = new System.Random();
