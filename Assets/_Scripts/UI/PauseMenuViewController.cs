@@ -36,6 +36,7 @@ public class PauseMenuViewController : MonoBehaviour
         statText.text += $"{stats.MoveSpeed.FinalValue} m/s\n\n";
         statText.text += $"+{(Mathf.RoundToInt((stats.MobBoosts.GetAttackDamageBoost() - 1f) * 100f))}%\n";
         statText.text += $"+{(Mathf.RoundToInt((stats.MobBoosts.GetAbilityPowerBoost() - 1f) * 100f))}%\n";
+        statText.text += "0%\n"; // $"+{(Mathf.RoundToInt((stats.MobBoosts.GetHealthBoost() - 1f) * 100f))}%\n"; // TODO
         statText.text += $"+{(Mathf.RoundToInt((stats.MobBoosts.GetOverallDamageOutputBoost() - 1f) * 100f))}%\n";
     }
 

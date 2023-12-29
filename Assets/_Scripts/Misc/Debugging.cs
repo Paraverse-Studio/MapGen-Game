@@ -19,7 +19,7 @@ public class Debugging : MonoBehaviour
     void Update()
     {
         // Heal All
-        if (Input.GetKeyDown(KeyCode.Y))
+        if (Input.GetKeyDown(KeyCode.Y) && GameLoopManager.Instance.RoundIsActive)
         {
             MobStats[] stats = FindObjectsOfType<MobStats>();
 
@@ -29,7 +29,7 @@ public class Debugging : MonoBehaviour
             } 
         }
 
-        if (Input.GetKeyDown(KeyCode.U))
+        if (Input.GetKeyDown(KeyCode.U) && GameLoopManager.Instance.RoundIsActive)
         {
             if (GlobalSettings.Instance.testGameObject)
             {
@@ -41,7 +41,7 @@ public class Debugging : MonoBehaviour
 
                 ChestObject c = Instantiate(chest, GlobalSettings.Instance.player.transform.position + transform.forward * 2,
                     GlobalSettings.Instance.player.transform.rotation).GetComponent<ChestObject>();
-                c.Initialize(ChestObject.ChestTierType.Common);
+                c.Initialize(ChestObject.ChestTierType.Mystic);
             }
         }
     }

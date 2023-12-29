@@ -385,7 +385,7 @@ namespace Paraverse.Player
         {
             if (_isStaggered || _isDiving || combat.IsAttackLunging || combat.IsSkilling) return;
 
-            if (_isGrounded && curDiveCd >= diveCd)
+            if (_isGrounded && curDiveCd >= diveCd * (1.0f - (stats.CooldownReduction.FinalValue / 100.0f)))
             {
                 stats.ConsumeDiveEnergy();
                 _isDiving = true;

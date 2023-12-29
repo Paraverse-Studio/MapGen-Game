@@ -47,6 +47,11 @@ namespace Paraverse.Mob.Stats
         public float CurEnergy { get { return _curEnergy; } }
 
         [SerializeField]
+        protected float cooldownReduction = 0;
+        public Stat CooldownReduction { get { return _cooldownReduction; } }
+        private Stat _cooldownReduction;
+
+        [SerializeField]
         protected float healthRegen = 0f;
         public Stat HealthRegen { get { return _healthRegen; } }
         private Stat _healthRegen;
@@ -97,7 +102,7 @@ namespace Paraverse.Mob.Stats
             {
                 UpdateCurrentHealth((int)HealthRegen.FinalValue);
             }
-            UpdateCurrentEnergy(EnergyRegen.FinalValue * Time.deltaTime);
+            UpdateCurrentEnergy((MaxEnergy.FinalValue * (EnergyRegen.FinalValue/100.0f)) * Time.deltaTime);
         }
         #endregion
 
@@ -118,7 +123,12 @@ namespace Paraverse.Mob.Stats
         public void UpdateCurrentHealth(int amount)
         {
             if (unkillable && amount < 0) return;
-            _curHealth = Mathf.Clamp(_curHealth + amount, 0, (int)MaxHealth.FinalValue);
+            SetCurrentHealth(_curHealth + amount);
+        }
+
+        public void SetCurrentHealth(int amount)
+        {
+            _curHealth = Mathf.Clamp(amount, 0, (int)MaxHealth.FinalValue);
             OnHealthChange?.Invoke(CurHealth, (int)MaxHealth.FinalValue);
         }
 
@@ -180,6 +190,8 @@ namespace Paraverse.Mob.Stats
             _healthRegen.FactoryResetMods();
             _energyRegen = new Stat(energyRegen);
             _energyRegen.FactoryResetMods();
+            _cooldownReduction = new Stat(cooldownReduction);
+            _cooldownReduction.FactoryResetMods();
 
             _curHealth = (int)MaxHealth.FinalValue;
             _curEnergy = (int)MaxEnergy.FinalValue;

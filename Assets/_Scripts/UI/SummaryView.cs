@@ -6,7 +6,10 @@ using UnityEngine;
 
 public class SummaryView : MonoBehaviour
 {
-  [Header("References")]
+  [Header("External References")]
+  public BloodlinesController bloodlinesController;
+
+  [Header("Internal References")]
   public TextMeshProUGUI roundsReachedText;
   public TextMeshProUGUI sessionLengthText;
   public TextMeshProUGUI damageTakenText;
@@ -33,15 +36,13 @@ public class SummaryView : MonoBehaviour
     mobsDefeatedText.text = sessionData.mobsDefeated.ToString();
     bossesDefeatedText.text = sessionData.bossesDefeated.ToString();
     mysticDungeonsText.text = sessionData.mysticDungeons.ToString();
-
-    bloodlineText.text = "TBD";
+    bloodlineText.text = bloodlinesController.chosenBloodline.ToString();
     skillUsedText.text = combat.ActiveSkill != null ? combat.ActiveSkill.Name : "N/A";
     attackText.text = stats.AttackDamage.BaseValue.ToString();
     abilityText.text = stats.AbilityPower.BaseValue.ToString();
     healthText.text = stats.CurHealth + "/" + stats.MaxHealth.BaseValue;
     mobsObtainedText.text = ModsManager.Instance.PurchasedMods.Count.ToString();
 
-    //#if !UNITY_WEBGL
     // Pass match history to db
 
     MatchHistoryModel matchHistoryModel = new MatchHistoryModel
@@ -112,6 +113,5 @@ public class SummaryView : MonoBehaviour
     await FirebaseDatabaseManager.Instance.CreateMatchHistory(matchHistoryModel);
     // if exists then update else create
     await FirebaseDatabaseManager.Instance.CreateLeaderboards(leaderboardsModel);
-    //#endif
   }
 }
