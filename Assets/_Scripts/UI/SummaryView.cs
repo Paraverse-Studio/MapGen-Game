@@ -26,6 +26,8 @@ public class SummaryView : MonoBehaviour
   public TextMeshProUGUI healthText;
   public TextMeshProUGUI mobsObtainedText;
 
+  public string username;
+
   public async Task Populate(GameLoopManager.PlayerSessionData sessionData, MobStats stats, PlayerCombat combat)
   {
     roundsReachedText.text = sessionData.roundReached.ToString();
@@ -43,11 +45,23 @@ public class SummaryView : MonoBehaviour
     healthText.text = stats.CurHealth + "/" + stats.MaxHealth.BaseValue;
     mobsObtainedText.text = ModsManager.Instance.PurchasedMods.Count.ToString();
 
-    // Pass match history to db
+    // Gets the logged in user
+    username = MainMenuController.Instance.Username;
 
+    // if user exists, update database
+    if (await FirebaseDatabaseManager.Instance.UserExists(username))
+    {
+      await UpdateDatabase(sessionData, stats, combat);
+    }
+
+  }
+
+  private async Task UpdateDatabase(GameLoopManager.PlayerSessionData sessionData, MobStats stats, PlayerCombat combat)
+  {
+    // Pass match history to db
     MatchHistoryModel matchHistoryModel = new MatchHistoryModel
     {
-      Username = "prab",
+      Username = MainMenuController.Instance.Username,
       RoundNumberReached = sessionData.roundReached,
       SessionLength = UtilityFunctions.GetFormattedTime(sessionData.sessionLength),
       DamageTaken = sessionData.damageTaken,
@@ -78,7 +92,6 @@ public class SummaryView : MonoBehaviour
     string highestHealth = (stats.CurHealth + "/" + stats.MaxHealth.BaseValue).ToString();
 
     // get user id and use it to get leaderboards of that user
-    //var leaderboardsDoc = FirebaseDatabaseManager.Instance.GetLeaderboards("Prab");
     LeaderboardsModel model;
     if (await FirebaseDatabaseManager.Instance.LeaderboardsExists(matchHistoryModel.Username))
     {
@@ -90,10 +103,10 @@ public class SummaryView : MonoBehaviour
       highestMobsDefeatedCount = Mathf.Max(model.HighestDamageTaken, highestMobsDefeatedCount);
     }
 
-    // update the values accordingly
+    // update the leaderboards with new high scores
     LeaderboardsModel leaderboardsModel = new LeaderboardsModel
     {
-      Username = "prab",
+      Username = MainMenuController.Instance.Username,
       HighestRoundNumberReached = highestRoundNumberReached,
       HighestSessionLength = UtilityFunctions.GetFormattedTime(sessionData.sessionLength),
       HighestDamageTaken = highestDamageTaken,
@@ -110,8 +123,8 @@ public class SummaryView : MonoBehaviour
       EffectsObtained = ModsManager.Instance.PurchasedMods.Count.ToString(),
     };
 
+    // Creates entries into database
     await FirebaseDatabaseManager.Instance.CreateMatchHistory(matchHistoryModel);
-    // if exists then update else create
     await FirebaseDatabaseManager.Instance.CreateLeaderboards(leaderboardsModel);
   }
 }
