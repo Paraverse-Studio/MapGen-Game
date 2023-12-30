@@ -22,42 +22,36 @@ namespace Paraverse.Mob.Combat
     [Tooltip("Target tag (Player by default).")]
     protected string targetTag = "Player";
     protected Transform player;
-
-    [Header("Projectile Values")]
-    [SerializeField, Tooltip("Set as true if mob is a projectile user.")]
-    protected bool projUser = false;
-    //[SerializeField]
-    //protected ProjectileData projData;
-    [SerializeField]
-    protected BasicAttackSkill basicAttackSkill;
-    public BasicAttackSkill BasicAttackSkill { get { return basicAttackSkill; } }
-
-    // Constantly updates the distance from player
-    protected float distanceFromTarget;
-    public Transform Target { get { return _target; } set { _target = value; } }
+    public Transform Target { get => _target; set => _target = value; }
     private Transform _target;
 
-    public float BasicAtkRange { get { return basicAttackSkill.MaxRange; } }
-    public bool IsBasicAttacking { get { return _isBasicAttacking; } }
+    [SerializeField, Tooltip("Set as true if mob is a projectile user.")]
+    protected bool projUser = false;
+    // Constantly updates the distance from player
+    protected float distanceFromTarget;
+
+    // Basic Attacks
+    [SerializeField]
+    protected BasicAttackSkill basicAttackSkill;
+    public BasicAttackSkill BasicAttackSkill => basicAttackSkill;
+    public float BasicAtkRange => basicAttackSkill.MaxRange; 
+    public bool IsBasicAttacking => _isBasicAttacking; 
     protected bool _isBasicAttacking = false;
     // Returns true when character is within basic attack range and cooldown is 0.
-    public bool CanBasicAtk { get { return distanceFromTarget <= basicAttackSkill.MaxRange && distanceFromTarget >= basicAttackSkill.MinRange && basicAttackSkill.CurCooldown <= 0; } }
+    public bool CanBasicAtk => distanceFromTarget <= basicAttackSkill.MaxRange && distanceFromTarget >= basicAttackSkill.MinRange && basicAttackSkill.CurCooldown <= 0; 
     // Sets to true when character is doing an action (Attack, Stun).
-    public bool IsAttackLunging { get { return _isAttackLunging; } }
+    public bool IsAttackLunging => _isAttackLunging;
     protected bool _isAttackLunging = false;
     public bool IsSkilling { get; set; }
-    public bool IsInCombat { get { return IsSkilling || IsBasicAttacking; } }
-
-    [SerializeField, Tooltip("Mob skills.")]
-    protected List<MobSkill> skills = new List<MobSkill>();
-    public List<MobSkill> Skills { get { return skills; } }
-    [SerializeField, Tooltip("Mob effects.")]
-    protected List<MobEffect> effects = new List<MobEffect>();
-    public List<MobEffect> Effects { get { return effects; } }
-
+    public bool IsInCombat => IsSkilling || IsBasicAttacking;
     protected int usingSkillIdx;
-    [SerializeField]
-    protected string animBool = "isUsingSkill";
+
+    public List<MobSkill> Skills => _skills; 
+    [SerializeField, Tooltip("Mob skills.")]
+    protected List<MobSkill> _skills = new List<MobSkill>();
+    public List<MobEffect> Effects => _effects;
+    [SerializeField, Tooltip("Mob effects.")]
+    protected List<MobEffect> _effects = new List<MobEffect>();
 
 
     #region Skill One Delegates and Events
@@ -134,10 +128,10 @@ namespace Paraverse.Mob.Combat
         IsSkilling = false;
 
       // Gets active skill to run update method for each skill 
-      for (int i = 0; i < skills.Count; i++)
+      for (int i = 0; i < _skills.Count; i++)
       {
-        skills[i].SkillUpdate();
-        if (skills[i].skillOn)
+        _skills[i].SkillUpdate();
+        if (_skills[i].skillOn)
         {
           usingSkillIdx = i;
         }
@@ -160,10 +154,10 @@ namespace Paraverse.Mob.Combat
       {
         basicAttackSkill.ActivateSkill(this, anim, stats, player);
       }
-      for (int i = 0; i < skills.Count; i++)
+      for (int i = 0; i < _skills.Count; i++)
       {
-        skills[i].ActivateSkill(this, anim, stats, player);
-        if (skills[i].skillOn)
+        _skills[i].ActivateSkill(this, anim, stats, player);
+        if (_skills[i].skillOn)
         {
           IsSkilling = true;
         }
@@ -240,7 +234,7 @@ namespace Paraverse.Mob.Combat
       MobSkill skill;
 
       if (IsSkilling)
-        skill = skills[usingSkillIdx];
+        skill = _skills[usingSkillIdx];
       else
         skill = basicAttackSkill;
 
@@ -270,7 +264,7 @@ namespace Paraverse.Mob.Combat
     {
       MobSkill skill;
       if (IsSkilling)
-        skill = skills[usingSkillIdx];
+        skill = _skills[usingSkillIdx];
       else
         skill = basicAttackSkill;
 

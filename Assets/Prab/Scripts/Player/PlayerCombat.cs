@@ -70,13 +70,13 @@ namespace Paraverse.Player
       input = GetComponent<PlayerInputControls>();
       input.OnBasicAttackEvent += ApplyBasicAttack;
 
-      for (int i = 0; i < skills.Count; i++)
+      for (int i = 0; i < _skills.Count; i++)
       {
-        skills[i].ActivateSkill(this, input, anim, stats);
+        _skills[i].ActivateSkill(this, input, anim, stats);
       }
-      for (int i = 0; i < effects.Count; i++)
+      for (int i = 0; i < _effects.Count; i++)
       {
-        effects[i].ActivateEffect(stats);
+        _effects[i].ActivateEffect(stats);
       }
     }
 
@@ -86,7 +86,7 @@ namespace Paraverse.Player
 
       if (null != _activeSkill) _activeSkill.DeactivateSkill(input);
 
-      foreach (MobSkill sk in skills)
+      foreach (MobSkill sk in _skills)
       {
         if (sk.ID == skill.ID)
         {
@@ -95,7 +95,7 @@ namespace Paraverse.Player
         }
       }
       MobSkill skillInstance = Instantiate(obj, SkillHolder).GetComponent<MobSkill>();
-      skills.Add(skillInstance);
+      _skills.Add(skillInstance);
       ActivateSkillWithUI(skillInstance);
     }
 
@@ -106,10 +106,10 @@ namespace Paraverse.Player
         _activeSkill.DeactivateSkill(input);
       }
 
-      for (int i = 0; i < skills.Count; i++)
+      for (int i = 0; i < _skills.Count; i++)
       {
-        DeactivateSkillWithUI(skills[i]);
-        skills.Remove(skills[i]);
+        DeactivateSkillWithUI(_skills[i]);
+        _skills.Remove(_skills[i]);
       }
     }
 
@@ -147,7 +147,7 @@ namespace Paraverse.Player
       if (null == effect) return;
 
       // If effect already exists, then just activate
-      foreach (MobEffect eff in effects)
+      foreach (MobEffect eff in _effects)
       {
         if (eff.ID == effect.ID)
         {
@@ -158,18 +158,18 @@ namespace Paraverse.Player
 
       // add effect to EffectsHolder if it doesn't exist
       MobEffect effectObj = Instantiate(obj, EffectsHolder).GetComponent<MobEffect>();
-      effects.Add(effectObj);
+      _effects.Add(effectObj);
       effectObj.ActivateEffect(stats);
     }
 
     public void DeactivateEffects()
     {
-      foreach (MobEffect eff in effects)
+      foreach (MobEffect eff in _effects)
       {
         eff.DeactivateEffect();
         Destroy(eff.gameObject);
       }
-      effects.Clear();
+      _effects.Clear();
     }
 
     protected override void Update()
@@ -189,9 +189,9 @@ namespace Paraverse.Player
         IsSkilling = false;
 
       // Gets active skill to run update method for each skill 
-      for (int i = 0; i < skills.Count; i++)
+      for (int i = 0; i < _skills.Count; i++)
       {
-        skills[i].SkillUpdate();
+        _skills[i].SkillUpdate();
         SkillUIHandler();
       }
     }
