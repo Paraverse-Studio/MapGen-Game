@@ -52,9 +52,11 @@ public class MapCreator : MonoBehaviour
     [MinMaxSlider(0f, 10f)]
     public Vector2 mysticMapGapLimit;
 
-    [Header("Enemies")]
+    [Header("Enemies Scaling")]
     public float enemyDamageScalingPerRound;
     public float enemyHealthScalingPerRound;
+    public float bossDamageScalingPerRound;
+    public float bossHealthScalingPerRound;
 
     [Header("UI References")]
     public TextMeshProUGUI objectiveTitle;
@@ -78,7 +80,7 @@ public class MapCreator : MonoBehaviour
     private int roundsSinceLastBossMap;
     private int roundsSinceLastRewardMap;
     private int roundsSinceLastOFferMysticMap;
-    private int biomeIndex;
+    private int biomeIndex; public int BiomeIndex => biomeIndex;
     private bool biomeChangePending;
 
     public void ResetMapCreator()

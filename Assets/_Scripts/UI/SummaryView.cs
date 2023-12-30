@@ -6,7 +6,10 @@ using UnityEngine;
 
 public class SummaryView : MonoBehaviour
 {
-  [Header("References")]
+  [Header("External References")]
+  public BloodlinesController bloodlinesController;
+
+  [Header("Internal References")]
   public TextMeshProUGUI roundsReachedText;
   public TextMeshProUGUI sessionLengthText;
   public TextMeshProUGUI damageTakenText;
@@ -23,6 +26,8 @@ public class SummaryView : MonoBehaviour
   public TextMeshProUGUI healthText;
   public TextMeshProUGUI mobsObtainedText;
 
+  public string username;
+
   public async Task Populate(GameLoopManager.PlayerSessionData sessionData, MobStats stats, PlayerCombat combat)
   {
     roundsReachedText.text = sessionData.roundReached.ToString();
@@ -33,20 +38,30 @@ public class SummaryView : MonoBehaviour
     mobsDefeatedText.text = sessionData.mobsDefeated.ToString();
     bossesDefeatedText.text = sessionData.bossesDefeated.ToString();
     mysticDungeonsText.text = sessionData.mysticDungeons.ToString();
-
-    bloodlineText.text = "TBD";
+    bloodlineText.text = bloodlinesController.chosenBloodline.ToString();
     skillUsedText.text = combat.ActiveSkill != null ? combat.ActiveSkill.Name : "N/A";
     attackText.text = stats.AttackDamage.BaseValue.ToString();
     abilityText.text = stats.AbilityPower.BaseValue.ToString();
     healthText.text = stats.CurHealth + "/" + stats.MaxHealth.BaseValue;
     mobsObtainedText.text = ModsManager.Instance.PurchasedMods.Count.ToString();
 
-    //#if !UNITY_WEBGL
-    // Pass match history to db
+    // Gets the logged in user
+    username = MainMenuController.Instance.Username;
 
+    // if user exists, update database
+    if (await FirebaseDatabaseManager.Instance.UserExists(username))
+    {
+      await UpdateDatabase(sessionData, stats, combat);
+    }
+
+  }
+
+  private async Task UpdateDatabase(GameLoopManager.PlayerSessionData sessionData, MobStats stats, PlayerCombat combat)
+  {
+    // Pass match history to db
     MatchHistoryModel matchHistoryModel = new MatchHistoryModel
     {
-      Username = "prab",
+      Username = MainMenuController.Instance.Username,
       RoundNumberReached = sessionData.roundReached,
       SessionLength = UtilityFunctions.GetFormattedTime(sessionData.sessionLength),
       DamageTaken = sessionData.damageTaken,
@@ -55,7 +70,7 @@ public class SummaryView : MonoBehaviour
       MobsDefeatedCount = sessionData.mobsDefeated,
       BossesDefeatedCount = sessionData.bossesDefeated,
       MysticDungeonsEnteredCount = sessionData.mysticDungeons,
-      BloodLine = "TBD",
+      BloodLine = bloodlinesController.chosenBloodline.ToString(),
       SkillUsed = combat.ActiveSkill != null ? combat.ActiveSkill.Name : "N/A",
       Attack = (int)stats.AttackDamage.BaseValue,
       Ability = (int)stats.AbilityPower.BaseValue,
@@ -77,7 +92,6 @@ public class SummaryView : MonoBehaviour
     string highestHealth = (stats.CurHealth + "/" + stats.MaxHealth.BaseValue).ToString();
 
     // get user id and use it to get leaderboards of that user
-    //var leaderboardsDoc = FirebaseDatabaseManager.Instance.GetLeaderboards("Prab");
     LeaderboardsModel model;
     if (await FirebaseDatabaseManager.Instance.LeaderboardsExists(matchHistoryModel.Username))
     {
@@ -89,19 +103,19 @@ public class SummaryView : MonoBehaviour
       highestMobsDefeatedCount = Mathf.Max(model.HighestDamageTaken, highestMobsDefeatedCount);
     }
 
-    // update the values accordingly
+    // update the leaderboards with new high scores
     LeaderboardsModel leaderboardsModel = new LeaderboardsModel
     {
-      Username = "prab",
+      Username = MainMenuController.Instance.Username,
       HighestRoundNumberReached = highestRoundNumberReached,
-      HighestSessionLength = UtilityFunctions.GetFormattedTime(sessionData.sessionLength),
+      HighestSessionLength = highestSessionLength,
       HighestDamageTaken = highestDamageTaken,
       HighestTotalScore = highestTotalScore,
       HighestGoldEarned = highestGoldEarned,
       HighestMobsDefeatedCount = highestMobsDefeatedCount,
       HighestBossesDefeatedCount = highestBossesDefeatedCount,
       HighestMysticDungeonsEnteredCount = highestMysticDungeonsEnteredCount,
-      BloodLine = "TBD",
+      BloodLine = bloodlinesController.chosenBloodline.ToString(),
       SkillUsed = combat.ActiveSkill != null ? combat.ActiveSkill.Name : "N/A",
       HighestAttack = highestAttack,
       HighestAbility = highestAbility,
@@ -109,9 +123,8 @@ public class SummaryView : MonoBehaviour
       EffectsObtained = ModsManager.Instance.PurchasedMods.Count.ToString(),
     };
 
+    // Creates entries into database
     await FirebaseDatabaseManager.Instance.CreateMatchHistory(matchHistoryModel);
-    // if exists then update else create
     await FirebaseDatabaseManager.Instance.CreateLeaderboards(leaderboardsModel);
-    //#endif
   }
 }

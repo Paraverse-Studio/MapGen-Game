@@ -1014,21 +1014,13 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   rotSpeed: 16
-  jumpForce: 5
   disToGroundCheck: 0.6
-  jumpCd: 0.5
   groundedLayers:
     serializedVersion: 2
     m_Bits: 98295
   jumpGravity: -40
-  disToEnemyCheck: 1
-  avoidLayers:
-    serializedVersion: 2
-    m_Bits: 32768
-  avoidanceForce: 10
-  downwardAvoidanceForceRatio: 2
   diveForce: 10
-  maxDiveRange: 2.4
+  maxDiveRange: 3
   maxDiveDuration: 0.15
   diveCd: 0.4
   atkDashForce: 12
@@ -1054,6 +1046,8 @@ MonoBehaviour:
   moveSpeed: 5
   maxEnergy: 100
   _curEnergy: 100
+  cooldownReduction: 0
+  healthRegen: 0
   energyRegen: 10
   _gold: 0
   OnHealthChange:

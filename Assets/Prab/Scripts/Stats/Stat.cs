@@ -16,6 +16,9 @@ namespace Paraverse.Stats
         private List<StatModifier> _modifiers = new List<StatModifier>();
         private List<TempStatModifier> _tempStatModifier = new List<TempStatModifier>();
 
+        public delegate void OnStatBaseValueUpdatedDel(float newValue);
+        public event OnStatBaseValueUpdatedDel OnStatBaseValueUpdatedEvent;
+
         public Stat(float value)
         {
             _baseValue = value;
@@ -53,8 +56,12 @@ namespace Paraverse.Stats
             return value;
         }
 
-        public void UpdateBaseValue(float value)
+        public void UpdateBaseValue(float value, bool invokeEvent = true)
         {
+            if (invokeEvent)
+            {
+                OnStatBaseValueUpdatedEvent?.Invoke(value - _baseValue);
+            }
             _baseValue = value;
         }
 

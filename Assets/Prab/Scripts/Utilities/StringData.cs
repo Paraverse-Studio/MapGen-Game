@@ -49,5 +49,10 @@ public static class StringData
     public static string Attack = "Attack"; 
     public static string Ability = "Ability"; 
     public static string Health = "Health";
-    public static string EffectsObtained = "EffectsObtained"; 
+    public static string EffectsObtained = "EffectsObtained";
+
+  // Database Collections/Documents
+  public static string MatchHistory = "MatchHistory";
+  public static string Leaderboards = "Leaderboards";
+  public static string Users = "Users";
 }

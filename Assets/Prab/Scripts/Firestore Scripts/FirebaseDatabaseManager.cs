@@ -1,4 +1,3 @@
-//#if !UNITY_WEBGL
 using Firebase.Extensions;
 using Firebase.Firestore;
 using ParaverseWebsite.Models;
@@ -13,6 +12,7 @@ public class FirebaseDatabaseManager : MonoBehaviour
   private FirebaseFirestore _db;
   private CollectionReference _MatchHistoryCollection;
   private CollectionReference _LeaderboardsCollection;
+  private CollectionReference _UserCollection;
   private Query _MatchHistoryQuery;
   private Query _LeaderboardsQuery;
   private Task<QuerySnapshot> _MatchHistorySnapShot;
@@ -23,28 +23,21 @@ public class FirebaseDatabaseManager : MonoBehaviour
   public List<LeaderboardsModel> _LeaderboardsModels = new List<LeaderboardsModel>();
 
 
-
-
   private void Awake()
   {
     // Singleton
-    if (Instance == null)
-      Instance = this;
-    else
-      Destroy(this);
+    if (Instance == null) Instance = this;
+    else Destroy(this);
 
     // Init
     _db = FirebaseFirestore.DefaultInstance;
-    _MatchHistoryQuery = _db.Collection("MatchHistory");
-    _LeaderboardsQuery = _db.Collection("Leaderboards");
-    _MatchHistorySnapShot = _db.Collection("MatchHistory").GetSnapshotAsync();
-    _LeaderboardsSnapShot = _db.Collection("Leaderboards").GetSnapshotAsync();
-    _MatchHistoryCollection = _db.Collection("MatchHistory");
-    _LeaderboardsCollection = _db.Collection("Leaderboards");
-  }
-
-  private void Update()
-  {
+    _MatchHistoryQuery = _db.Collection(StringData.MatchHistory);
+    _LeaderboardsQuery = _db.Collection(StringData.Leaderboards);
+    _MatchHistorySnapShot = _db.Collection(StringData.MatchHistory).GetSnapshotAsync();
+    _LeaderboardsSnapShot = _db.Collection(StringData.Leaderboards).GetSnapshotAsync();
+    _MatchHistoryCollection = _db.Collection(StringData.MatchHistory);
+    _LeaderboardsCollection = _db.Collection(StringData.Leaderboards);
+    _UserCollection = _db.Collection(StringData.Users);
   }
 
   public Task CreateMatchHistory(MatchHistoryModel matchHistoryModel)
@@ -82,12 +75,20 @@ public class FirebaseDatabaseManager : MonoBehaviour
     return false;
   }
 
+  public async Task<bool> UserExists(string username)
+  {
+    DocumentReference docRef = _UserCollection.Document(username);
+    DocumentSnapshot docSnap = await docRef.GetSnapshotAsync();
+
+    if (docSnap.Exists) return true;
+    return false;
+  }
+
   public List<LeaderboardsModel> GetLeaderboardsList()
   {
     _LeaderboardsModels.Clear();
     foreach (DocumentSnapshot docSnapshot in _LeaderboardsSnapShot.Result)
     {
-      Console.WriteLine("Document data for {0} document:", docSnapshot.Id);
       LeaderboardsModel leaderboardsModel = docSnapshot.ConvertTo<LeaderboardsModel>();
       _LeaderboardsModels.Add(leaderboardsModel);
     }
@@ -105,10 +106,10 @@ public class FirebaseDatabaseManager : MonoBehaviour
     }
     else
     {
-      Console.WriteLine("Document {0} does not exist!", snapshot.Id);
       return null;
     }
   }
+
   public async Task<UserModel> GetUser(string userId)
   {
     DocumentReference docRef = _LeaderboardsCollection.Document(userId);
