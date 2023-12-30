@@ -5,34 +5,40 @@ using UnityEngine;
 
 
 //After killing a unit with a skill, refund 50% of the skill's cooldown (40/60/80)
-public class CooldownRefundEffect: MobEffect
+public class CooldownRefundEffect : MobEffect
 {
-    [SerializeField, Range(0,1)]
-    protected float cooldownRefundAmount = 0.4f;
+  [SerializeField, Range(0, 1)]
+  protected float cooldownRefundAmount = 0.4f;
 
-    public List<MobController> mobs;
+  public List<MobController> mobs;
 
-    public override void ActivateEffect(MobStats stats)
+  public override void ActivateEffect(MobStats stats)
+  {
+    base.ActivateEffect(stats);
+    foreach (MobController enemy in EnemiesManager.Instance.Enemies)
     {
-        base.ActivateEffect(stats);
-        foreach (MobController enemy in EnemiesManager.Instance.Enemies)
-        {
-            enemy.OnDeathEvent += RefundCooldown;
-        }
+      enemy.OnDeathEvent += RefundCooldown;
     }
+  }
 
-    public override void DeactivateEffect()
+  public override void DeactivateEffect()
+  {
+    base.DeactivateEffect();
+    foreach (MobController enemy in EnemiesManager.Instance.Enemies)
     {
-        base.DeactivateEffect();
-        foreach (MobController enemy in EnemiesManager.Instance.Enemies)
-        {
-            enemy.OnDeathEvent -= RefundCooldown;
-        }
+      enemy.OnDeathEvent -= RefundCooldown;
     }
+  }
 
-    private void RefundCooldown(Transform t = null)
-    {
-        float refund = _combat.ActiveSkill.Cooldown * cooldownRefundAmount;
-        _combat.ActiveSkill.RefundCooldown(refund);
-    }
+  public override void OnEnemyDeathApplyEffect(MobController enemy)
+  {
+    base.OnEnemyDeathApplyEffect(enemy);
+    enemy.OnDeathEvent += RefundCooldown;
+  }
+
+  private void RefundCooldown(Transform t = null)
+  {
+    float refund = _combat.ActiveSkill.Cooldown * cooldownRefundAmount;
+    _combat.ActiveSkill.RefundCooldown(refund);
+  }
 }
