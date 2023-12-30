@@ -1,82 +1,80 @@
-using Paraverse.Mob.Stats;
 using Paraverse.Player;
-using System.Collections;
-using System.Collections.Generic;
 using UnityEngine;
 
 [CreateAssetMenu(fileName = "ModName", menuName = "SOs/Mods/Effect Mod")]
 public class SO_EffectMod : SO_Mod
 {
-    [Header("Obtained Effects")]
-    public GameObject Effect;
+  [Header("Obtained Effects")]
+  public GameObject Effect;
 
-    private PlayerCombat _player;
-    private MobEffect _effect;
+  private PlayerCombat _player;
+  private MobEffect _effect;
 
-    public override string GetDescription()
+  public override string GetDescription()
+  {
+    if (!_effect) _effect = Effect.GetComponent<MobEffect>();
+    return Description.Replace("[DMG]", GetScalingText());
+  }
+
+  // Activates upon chest looting
+  public override void Activate(GameObject go)
+  {
+    base.Activate();
+
+    // if the provided object can't be parsed into a player, something is wrong
+    // activate() should be called from shop, and supplied with the player to act upon
+    if (!go.TryGetComponent(out _player))
     {
-        if (!_effect) _effect = Effect.GetComponent<MobEffect>();
-        return Description.Replace("[DMG]", GetScalingText());
+      Debug.LogError("Effect Mod: Activate() called with a non-player parameter.");
+      return;
     }
 
-    public override void Activate(GameObject go)
+    // Set some info from mod card to skill 
+    // ---> stat, info, logistics and lore of the skill is provided from mod card to skill
+    // ---> skill CD, range, damage and these things are to be put right on skill prefab
+    //Effect.Name = Title;
+
+    if (!_effect) _effect = Effect.GetComponent<MobEffect>();
+    _effect.ID = ID;
+    //Skill.Description = Description;
+    //Skill.Image = Image;
+
+
+    // Add this skill to the player's list of skills, and also activate this one
+    _player.ActivateEffect(Effect);
+
+    Debug.Log($"Effect Mod: Mod \"{Title}\" (ID {ID}) activated for {_player.gameObject.name}!");
+  }
+
+  private string GetScalingText()
+  {
+    string msg = "";
+    if (_effect.scalingStatData.flatPower != 0)
     {
-        base.Activate();
-
-        // if the provided object can't be parsed into a player, something is wrong
-        // activate() should be called from shop, and supplied with the player to act upon
-        if (!go.TryGetComponent(out _player))
-        {
-            Debug.LogError("Effect Mod: Activate() called with a non-player parameter.");
-            return;
-        }
-
-        // Set some info from mod card to skill 
-        // ---> stat, info, logistics and lore of the skill is provided from mod card to skill
-        // ---> skill CD, range, damage and these things are to be put right on skill prefab
-        //Effect.Name = Title;
-
-        if (!_effect) _effect = Effect.GetComponent<MobEffect>();
-        _effect.ID = ID;
-        //Skill.Description = Description;
-        //Skill.Image = Image;
-
-
-        // Add this skill to the player's list of skills, and also activate this one
-        _player.ActivateEffect(Effect); 
-
-        Debug.Log($"Effect Mod: Mod \"{Title}\" (ID {ID}) activated for {_player.gameObject.name}!");
+      msg += $"{_effect.scalingStatData.flatPower}";
     }
-
-    private string GetScalingText()
+    if (_effect.scalingStatData.attackScaling != 0)
     {
-        string msg = "";
-        if (_effect.scalingStatData.flatPower != 0)
-        {
-            msg += $"{_effect.scalingStatData.flatPower}";
-        }
-        if (_effect.scalingStatData.attackScaling != 0)
-        {
-            if (!string.IsNullOrWhiteSpace(msg)) msg += " + ";
-            msg += $"<color=#FF977B>({_effect.scalingStatData.attackScaling * 100f}% of Attack)</color>";
-        }
-        if (_effect.scalingStatData.abilityScaling != 0)
-        {
-            if (!string.IsNullOrWhiteSpace(msg)) msg += " + ";
-            msg += $"<color=#83C5FF>({_effect.scalingStatData.abilityScaling * 100f}% of Ability)</color>";
-        }
-        if (_effect.scalingStatData.healthScaling != 0)
-        {
-            if (!string.IsNullOrWhiteSpace(msg)) msg += " + ";
-            msg += $"<color=#86F383>({_effect.scalingStatData.healthScaling * 100f}% of Health)</color>";
-        }
-        msg = "<b>" + msg + "</b>";
-        return msg;
+      if (!string.IsNullOrWhiteSpace(msg)) msg += " + ";
+      msg += $"<color=#FF977B>({_effect.scalingStatData.attackScaling * 100f}% of Attack)</color>";
     }
-
-    public override void Reset()
+    if (_effect.scalingStatData.abilityScaling != 0)
     {
-        base.Reset();        
+      if (!string.IsNullOrWhiteSpace(msg)) msg += " + ";
+      msg += $"<color=#83C5FF>({_effect.scalingStatData.abilityScaling * 100f}% of Ability)</color>";
     }
+    if (_effect.scalingStatData.healthScaling != 0)
+    {
+      if (!string.IsNullOrWhiteSpace(msg)) msg += " + ";
+      msg += $"<color=#86F383>({_effect.scalingStatData.healthScaling * 100f}% of Health)</color>";
+    }
+    msg = "<b>" + msg + "</b>";
+    return msg;
+  }
+
+  public override void Reset()
+  {
+    base.Reset();
+  }
 
 }

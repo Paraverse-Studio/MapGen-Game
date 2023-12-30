@@ -17,7 +17,6 @@ public class CooldownRefundEffect: MobEffect
         base.ActivateEffect(stats);
         foreach (MobController enemy in EnemiesManager.Instance.Enemies)
         {
-            Debug.Log("enemy: " + enemy.name);
             enemy.OnDeathEvent += RefundCooldown;
         }
     }
@@ -34,7 +33,6 @@ public class CooldownRefundEffect: MobEffect
     private void RefundCooldown(Transform t = null)
     {
         float refund = _combat.ActiveSkill.Cooldown * cooldownRefundAmount;
-        Debug.Log("Refund CD: " + refund);
         _combat.ActiveSkill.RefundCooldown(refund);
     }
 }
