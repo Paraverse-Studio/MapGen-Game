@@ -146,6 +146,7 @@ namespace Paraverse.Player
       MobEffect effect = obj.GetComponent<MobEffect>();
       if (null == effect) return;
 
+      // If effect already exists, then just activate
       foreach (MobEffect eff in effects)
       {
         if (eff.ID == effect.ID)
@@ -154,6 +155,8 @@ namespace Paraverse.Player
           return;
         }
       }
+
+      // add effect to EffectsHolder if it doesn't exist
       MobEffect effectObj = Instantiate(obj, EffectsHolder).GetComponent<MobEffect>();
       effects.Add(effectObj);
       effectObj.ActivateEffect(stats);
