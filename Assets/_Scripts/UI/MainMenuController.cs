@@ -1,48 +1,43 @@
-using System.Collections;
-using System.Collections.Generic;
 using TMPro;
 using UnityEngine;
 using UnityEngine.UI;
 
 public class MainMenuController : MonoBehaviour
 {
-    public TMP_InputField usernameInput;
-    public TMP_InputField passwordInput;
-    public Button submitButton;
+  public static MainMenuController Instance;
+  public string Username => _username;
+  private string _username;
+  public string Password => _password;
+  private string _password;
 
-    private string _username; public string Username => _username;
+  public TMP_InputField usernameInput;
+  public TMP_InputField passwordInput;
+  public Button submitButton;
 
-    private void Awake()
+
+  private void Awake()
+  {
+    if (Instance == null)
+      Instance = this;
+    else
+      Destroy(Instance);
+  }
+
+  public void OnChangeInputText(string s = null)
+  {
+    if (string.IsNullOrWhiteSpace(usernameInput.text) || string.IsNullOrWhiteSpace(passwordInput.text))
     {
+      return;
     }
 
-    // Start is called before the first frame update
-    void Start()
-    {
-    }
+    submitButton.gameObject.SetActive(true);
+  }
 
-    // Update is called once per frame
-    void Update()
-    {
-        
-    }
-
-    public void OnChangeInputText(string s = null)
-    {
-        if (string.IsNullOrWhiteSpace(usernameInput.text) || string.IsNullOrWhiteSpace(passwordInput.text))
-        {
-            return;
-        }
-
-        submitButton.gameObject.SetActive(true);
-
-    }
-
-    public void OnSubmitUsernameAndPassword()
-    {
-        // TODO
-        // username: _username
-        // password: passwordInput.text
-    }
+  public void OnSubmitUsernameAndPassword()
+  {
+    _username = usernameInput.text;
+    _password = passwordInput.text;
+    Debug.Log("Password entry doesn't matter right now you dummy: " + _password);
+  }
 
 }

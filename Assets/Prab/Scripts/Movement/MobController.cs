@@ -859,7 +859,6 @@ namespace Paraverse.Mob.Controller
                 _isDead = true;
                 Death();
                 OnDeathEvent?.Invoke(transform);
-                Debug.Log("OnDeathEvent Invoked");
             }
         }
 
