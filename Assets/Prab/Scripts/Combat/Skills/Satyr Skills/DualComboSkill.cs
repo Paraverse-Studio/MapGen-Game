@@ -1,6 +1,5 @@
 using Paraverse;
 using Paraverse.Combat;
-using Paraverse.Helper;
 using Paraverse.Mob.Combat;
 using Paraverse.Mob.Stats;
 using Paraverse.Player;
@@ -8,108 +7,108 @@ using UnityEngine;
 
 public class DualComboSkill : MobSkill, IMobSkill
 {
-    #region Variables
-    [SerializeField]
-    protected GameObject offHandAttackColliderGO;
-    protected AttackCollider offHandAttackCollider;
-    #endregion
+  #region Variables
+  [SerializeField]
+  protected GameObject offHandAttackColliderGO;
+  protected AttackCollider offHandAttackCollider;
+  #endregion
 
 
-    #region Inherited Methods
-    public override void ActivateSkill(MobCombat mob, Animator anim, MobStats stats, Transform target = null)
+  #region Inherited Methods
+  public override void ActivateSkill(MobCombat mob, Animator anim, MobStats stats, Transform target = null)
+  {
+    base.ActivateSkill(mob, anim, stats, target);
+
+    // Checks if melee users have basic attack collider script on weapon
+    if (offHandAttackColliderGO == null)
     {
-        base.ActivateSkill(mob, anim, stats, target);
-
-        // Checks if melee users have basic attack collider script on weapon
-        if (offHandAttackColliderGO == null)
-        {
-            Debug.LogWarning(gameObject.name + " doesn't have an attack collider.");
-            return;
-        }
-        offHandAttackColliderGO.SetActive(true);
-        offHandAttackCollider = offHandAttackColliderGO.GetComponent<AttackCollider>();
-        offHandAttackCollider.Init(mob, scalingStatData);
-        offHandAttackColliderGO.SetActive(false);
-
-        mob.OnEnableMainHandColliderSOneEvent += EnableMainHandAttackCollider;
-        mob.OnDisableMainHandColliderSOneEvent += DisableMainHandAttackCollider;
-        mob.OnEnableOffHandColliderSOneEvent += EnableOffHandAttackCollider;
-        mob.OnDisableOffHandColliderSOneEvent += DisableOffHandAttackCollider;
-        mob.OnDisableSkillOneEvent += DisableSkillAndCollider;
+      Debug.LogWarning(gameObject.name + " doesn't have an attack collider.");
+      return;
     }
+    offHandAttackColliderGO.SetActive(true);
+    offHandAttackCollider = offHandAttackColliderGO.GetComponent<AttackCollider>();
+    offHandAttackCollider.Init(mob, scalingStatData);
+    offHandAttackColliderGO.SetActive(false);
 
-    public override void DeactivateSkill(PlayerInputControls input)
-    {
-        base.DeactivateSkill(input);
+    mob.OnEnableMainHandColliderSOneEvent += EnableMainHandAttackCollider;
+    mob.OnDisableMainHandColliderSOneEvent += DisableMainHandAttackCollider;
+    mob.OnEnableOffHandColliderSOneEvent += EnableOffHandAttackCollider;
+    mob.OnDisableOffHandColliderSOneEvent += DisableOffHandAttackCollider;
+    mob.OnDisableSkillOneEvent += DisableSkillAndCollider;
+  }
 
-        mob.OnEnableMainHandColliderSOneEvent -= EnableMainHandAttackCollider;
-        mob.OnDisableMainHandColliderSOneEvent -= DisableMainHandAttackCollider;
-        mob.OnEnableOffHandColliderSOneEvent -= EnableOffHandAttackCollider;
-        mob.OnDisableOffHandColliderSOneEvent -= DisableOffHandAttackCollider;
-        mob.OnDisableSkillOneEvent -= DisableSkillAndCollider;
-    }
+  public override void DeactivateSkill(PlayerInputControls input)
+  {
+    base.DeactivateSkill(input);
 
-    /// <summary>
-    /// Contains all methods required to run in Update within MobCombat script.
-    /// </summary>
-    public override void SkillUpdate()
-    {
-        base.SkillUpdate();
-    }
+    mob.OnEnableMainHandColliderSOneEvent -= EnableMainHandAttackCollider;
+    mob.OnDisableMainHandColliderSOneEvent -= DisableMainHandAttackCollider;
+    mob.OnEnableOffHandColliderSOneEvent -= EnableOffHandAttackCollider;
+    mob.OnDisableOffHandColliderSOneEvent -= DisableOffHandAttackCollider;
+    mob.OnDisableSkillOneEvent -= DisableSkillAndCollider;
+  }
 
-    protected override void ExecuteSkillLogic()
-    {
-        mob.IsSkilling = true;
-        skillOn = true;
-        anim.SetBool(StringData.IsUsingSkill, true);
-        curCooldown = cooldown;
-        stats.UpdateCurrentEnergy(-cost);
-        anim.Play(animName);
-    }
-    #endregion
+  /// <summary>
+  /// Contains all methods required to run in Update within MobCombat script.
+  /// </summary>
+  public override void SkillUpdate()
+  {
+    base.SkillUpdate();
+  }
 
-    #region Animation Events
-    public void EnableMainHandAttackCollider()
-    {
-        if (attackColliderGO != null)
-            attackColliderGO.SetActive(true);
+  protected override void ExecuteSkillLogic()
+  {
+    mob.IsSkilling = true;
+    skillOn = true;
+    anim.SetBool(StringData.IsUsingSkill, true);
+    curCooldown = cooldown;
+    stats.UpdateCurrentEnergy(-cost);
+    anim.Play(animName);
+  }
+  #endregion
 
-        skillOn = true;
-    }
+  #region Animation Events
+  public void EnableMainHandAttackCollider()
+  {
+    if (attackColliderGO != null)
+      attackColliderGO.SetActive(true);
 
-    public void DisableMainHandAttackCollider()
-    {
-        if (attackColliderGO != null)
-            attackColliderGO.SetActive(false);
+    skillOn = true;
+  }
 
-        skillOn = false;
-    }
+  public void DisableMainHandAttackCollider()
+  {
+    if (attackColliderGO != null)
+      attackColliderGO.SetActive(false);
 
-    public void EnableOffHandAttackCollider()
-    {
-        if (offHandAttackCollider != null)
-            offHandAttackColliderGO.SetActive(true);
+    skillOn = false;
+  }
 
-        skillOn = true;
-    }
+  public void EnableOffHandAttackCollider()
+  {
+    if (offHandAttackCollider != null)
+      offHandAttackColliderGO.SetActive(true);
 
-    public void DisableOffHandAttackCollider()
-    {
-        if (offHandAttackCollider != null)
-            offHandAttackColliderGO.SetActive(false);
+    skillOn = true;
+  }
 
-        skillOn = false;
-    }
+  public void DisableOffHandAttackCollider()
+  {
+    if (offHandAttackCollider != null)
+      offHandAttackColliderGO.SetActive(false);
 
-    public void DisableSkillAndCollider()
-    {
-        if (attackColliderGO != null)
-            attackColliderGO.SetActive(false);
-        if (offHandAttackCollider != null)
-            offHandAttackColliderGO.SetActive(false);
+    skillOn = false;
+  }
 
-        skillOn = false;
-        UnsubscribeAnimationEventListeners();
-    }
-    #endregion
+  public void DisableSkillAndCollider()
+  {
+    if (attackColliderGO != null)
+      attackColliderGO.SetActive(false);
+    if (offHandAttackCollider != null)
+      offHandAttackColliderGO.SetActive(false);
+
+    skillOn = false;
+    UnsubscribeAnimationEventListeners();
+  }
+  #endregion
 }
