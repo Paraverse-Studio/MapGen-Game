@@ -256,7 +256,8 @@ namespace Paraverse.Combat
 
     protected virtual void RotateToTarget()
     {
-      if (skillOn == false) return;
+      //if (skillOn == false) return;
+      if (SkillState.Equals(SkillState.InActive)) return;
 
       if (usesTargetLock && input && mob.Target)
       {
