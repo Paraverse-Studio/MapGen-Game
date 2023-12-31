@@ -3,6 +3,7 @@ using Paraverse.Helper;
 using Paraverse.Mob.Stats;
 using System.Collections.Generic;
 using UnityEngine;
+using Paraverse.Stats;
 
 namespace Paraverse.Mob.Combat
 {
@@ -174,7 +175,22 @@ namespace Paraverse.Mob.Combat
     {
       return 1f / stats.AttackSpeed.FinalValue;
     }
+#endregion
+
+    #region Combat Enhancement Methods
+    public void EnrageStats()
+    {
+        if (TryGetComponent(out stats))
+        {
+            stats.AttackDamage.AddMod(new StatModifier((int)(stats.AttackDamage.FinalValue * 0.5f)));
+            stats.MaxHealth.AddMod(new StatModifier(stats.MaxHealth.FinalValue * 0.5f));
+            stats.SetFullHealth();
+            if (basicAttackSkill) basicAttackSkill.Cooldown *= 0.25f;
+        }
+    }
+
     #endregion
+
 
     /// <summary>
     /// Resets booelans when mob is interrupted during attack. 

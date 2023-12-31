@@ -14,6 +14,7 @@ using Paraverse.Mob.Stats;
 using Paraverse.Mob.Controller;
 using Paraverse.Player;
 using UnityEngine.InputSystem.XR;
+using Paraverse.Mob.Combat;
 
 [System.Serializable]
 public class PropItem
@@ -1238,6 +1239,7 @@ public class MapGeneration : MonoBehaviour
         // safety code, if the gap is bigger than the actual spawned path, then reduce that initial gap to just below it
         if (pathObjects.Count <= gapOfTilesBeforeFirstEnemy) gapOfTilesBeforeFirstEnemy = pathObjects.Count - 2;
 
+        GameObject lastMobToEnrage = null;
         for (int i = gapOfTilesBeforeFirstEnemy; i < pathObjects.Count; ++i)
         {
             if (i % enemyFrequency != 0) continue;
@@ -1294,6 +1296,8 @@ public class MapGeneration : MonoBehaviour
                     enemyStats.UpdateAttackDamage(enemyStats.AttackDamage.FinalValue * enemyDamageScaleFactor);
                     enemyStats.UpdateAbilityPower(enemyStats.AbilityPower.FinalValue * enemyDamageScaleFactor);
                     enemyStats.UpdateMaxHealth(Mathf.CeilToInt(enemyStats.MaxHealth.FinalValue * enemyHealthScaleFactor));
+
+                    lastMobToEnrage = enemy.gameObject;
                 }
 
                 // PRABS UGLY FORCED METHOD THAT NEEDS TO BE OPTIMIZED
@@ -1304,6 +1308,9 @@ public class MapGeneration : MonoBehaviour
                 }
             }
         }
+
+        MobCombat mobCombat = lastMobToEnrage.GetComponentInChildren<MobCombat>();
+        StartCoroutine(UtilityFunctions.IDelayedAction(0.05f, () => mobCombat.EnrageStats()));
     }
 
     private void AddFoliage()
