@@ -52,7 +52,7 @@ public class EnergyDrainSkill : MobSkill, IMobSkill
     public void DisableCollider()
     {
         attackColliderGO.SetActive(false);
-        DisableSkill();
+        OnSkillExecuted();
     }
     #endregion
 }

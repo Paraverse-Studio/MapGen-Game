@@ -36,14 +36,14 @@ public class JumpSmashAttack : MobSkill, IMobSkill
     {
         controller.OnLandEvent += OnLand;
         mob.OnEnableSkillColliderSOneEvent += EnableSmashAttackCollider;
-        mob.OnDisableSkillOneEvent += DisableSkill;
+        mob.OnDisableSkillOneEvent += OnSkillExecuted;
     }
 
     public override void UnsubscribeAnimationEventListeners()
     {
         controller.OnLandEvent -= OnLand;
         mob.OnDisableSkillColliderSOneEvent += DisableSmashAttackCollider;
-        mob.OnDisableSkillOneEvent -= DisableSkill;
+        mob.OnDisableSkillOneEvent -= OnSkillExecuted;
     }
 
     protected override void ExecuteSkillLogic()
@@ -57,9 +57,9 @@ public class JumpSmashAttack : MobSkill, IMobSkill
         controller.ApplyJump(target.transform.position);
     }
 
-    protected override void DisableSkill()
+    protected override void OnSkillExecuted()
     {
-        base.DisableSkill();
+        base.OnSkillExecuted();
     }
     #endregion
 

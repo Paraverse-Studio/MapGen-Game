@@ -79,6 +79,21 @@ namespace Paraverse.Combat
     public event OnExecuteSkillDel OnExecuteSkillEvent;
     #endregion
 
+    #region Private Methods
+
+    /// <summary>
+    /// Responsible for executing skill on button press.
+    /// </summary>
+    protected void Execute()
+    {
+      if (CanUseSkill())
+      {
+        OnExecuteSkillEvent?.Invoke();
+        SubscribeAnimationEventListeners();
+        ExecuteSkillLogic();
+      }
+    }
+    #endregion
 
     #region Inheritable 
     /// <summary>
@@ -121,7 +136,7 @@ namespace Paraverse.Combat
     }
 
     /// <summary>
-    /// Activates mobs skill ONLY
+    /// Required inorder to activate skill to be used. 
     /// </summary>
     /// <param name="mob"></param>
     /// <param name="anim"></param>
@@ -144,6 +159,10 @@ namespace Paraverse.Combat
       attackCollider.Init(mob, scalingStatData);
     }
 
+    /// <summary>
+    /// Required inorder to deactivate skill when player dies or skill is no longer required. 
+    /// </summary>
+    /// <param name="input"></param>
     public virtual void DeactivateSkill(PlayerInputControls input)
     {
       if (mob.tag.Equals(StringData.PlayerTag))
@@ -158,7 +177,7 @@ namespace Paraverse.Combat
     /// </summary>
     public virtual void SubscribeAnimationEventListeners()
     {
-      mob.OnDisableSkillOneEvent += DisableSkill;
+      mob.OnDisableSkillOneEvent += OnSkillExecuted;
     }
 
     /// <summary>
@@ -166,7 +185,7 @@ namespace Paraverse.Combat
     /// </summary>
     public virtual void UnsubscribeAnimationEventListeners()
     {
-      mob.OnDisableSkillOneEvent -= DisableSkill;
+      mob.OnDisableSkillOneEvent -= OnSkillExecuted;
     }
 
     /// <summary>
@@ -188,7 +207,6 @@ namespace Paraverse.Combat
     public void RefundCooldown(float refund)
     {
       _curCooldown -= refund;
-      Debug.Log("cur CD: " + _curCooldown);
     }
 
     protected virtual void RotateToTarget()
@@ -210,7 +228,7 @@ namespace Paraverse.Combat
     }
 
     /// <summary>
-    /// Run this method everytime a skill is activated
+    /// This method is to be run everytime a skill is executed.
     /// </summary>
     protected virtual void ExecuteSkillLogic()
     {
@@ -222,7 +240,7 @@ namespace Paraverse.Combat
       anim.Play(animName);
     }
 
-    protected virtual void DisableSkill()
+    protected virtual void OnSkillExecuted()
     {
       skillOn = false;
       anim.SetBool(StringData.IsUsingSkill, false);
@@ -254,6 +272,10 @@ namespace Paraverse.Combat
       return false;
     }
 
+    /// <summary>
+    /// Returns total damage applied by skill using mob stats along with the skills scaling data. 
+    /// </summary>
+    /// <returns></returns>
     protected virtual float GetPowerAmount()
     {
       return scalingStatData.flatPower + (stats.AttackDamage.FinalValue * scalingStatData.attackScaling) + (stats.AbilityPower.FinalValue * scalingStatData.abilityScaling);
@@ -266,22 +288,6 @@ namespace Paraverse.Combat
       float disFromTarget = ParaverseHelper.GetDistance(mob.transform.position, target.position);
 
       return disFromTarget >= _minRange && disFromTarget <= _maxRange;
-    }
-    #endregion
-
-    #region Private Methods
-
-    /// <summary>
-    /// Responsible for executing skill on button press.
-    /// </summary>
-    protected void Execute()
-    {
-      if (CanUseSkill())
-      {
-        OnExecuteSkillEvent?.Invoke();
-        SubscribeAnimationEventListeners();
-        ExecuteSkillLogic();
-      }
     }
     #endregion
   }

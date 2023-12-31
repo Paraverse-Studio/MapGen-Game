@@ -33,7 +33,7 @@ public class SkyBarrageSkill : MobSkill, IMobSkill
             }
             else
             {
-                DisableSkill();
+                OnSkillExecuted();
             }
         }
     }
@@ -49,9 +49,9 @@ public class SkyBarrageSkill : MobSkill, IMobSkill
         projData.projOrigin.position = target.transform.position + new Vector3(0f, 10f, 0f);
     }
 
-    protected override void DisableSkill()
+    protected override void OnSkillExecuted()
     {
-        base.DisableSkill();
+        base.OnSkillExecuted();
         _curCooldown = _cooldown;
     }
     #endregion

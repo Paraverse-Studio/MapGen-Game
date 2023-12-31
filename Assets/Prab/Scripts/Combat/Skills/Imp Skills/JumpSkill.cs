@@ -17,13 +17,13 @@ public class JumpSkill : MobSkill, IMobSkill
     {
         base.ActivateSkill(mob, anim, stats, target);
         if (mobController == null) mobController = mob.GetComponent<MobController>();
-        mobController.OnLandEvent += DisableSkill;
+        mobController.OnLandEvent += OnSkillExecuted;
     }
 
     public override void DeactivateSkill(PlayerInputControls input)
     {
         base.DeactivateSkill(input);
-        mobController.OnLandEvent -= DisableSkill;
+        mobController.OnLandEvent -= OnSkillExecuted;
     }
 
     protected override void ExecuteSkillLogic()
@@ -37,9 +37,9 @@ public class JumpSkill : MobSkill, IMobSkill
         mobController.ApplyJump(target.transform.position);
     }
 
-    protected override void DisableSkill()
+    protected override void OnSkillExecuted()
     {
-        base.DisableSkill();
+        base.OnSkillExecuted();
         anim.SetBool(StringData.IsGrounded, true);
     }
     #endregion
