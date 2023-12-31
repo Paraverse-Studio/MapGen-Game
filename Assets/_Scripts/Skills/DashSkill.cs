@@ -35,7 +35,7 @@ public class DashSkill : MobSkill, IMobSkill
 
         if (false == mob.IsSkilling)
         {
-            DisableSkill();
+            OnSkillExecuted();
             return;
         }
 
@@ -78,9 +78,9 @@ public class DashSkill : MobSkill, IMobSkill
         Physics.IgnoreLayerCollision(14, 15, true);
     }
 
-    protected override void DisableSkill()
+    protected override void OnSkillExecuted()
     {
-        base.DisableSkill();
+        base.OnSkillExecuted();
 
         if (_VFX)
         {

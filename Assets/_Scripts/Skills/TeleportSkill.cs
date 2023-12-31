@@ -71,7 +71,7 @@ public class TeleportSkill : MobSkill, IMobSkill
             Instantiate(FX, block.transform.position, Quaternion.identity);
         }
 
-        DisableSkill();
+        OnSkillExecuted();
 
         StartCoroutine(UtilityFunctions.IDelayedAction(0.2f, () =>
         {
@@ -95,9 +95,9 @@ public class TeleportSkill : MobSkill, IMobSkill
         }));
     }
 
-    protected override void DisableSkill()
+    protected override void OnSkillExecuted()
     {
-        base.DisableSkill();
+        base.OnSkillExecuted();
     }
 
 }

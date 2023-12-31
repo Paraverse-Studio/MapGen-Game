@@ -35,7 +35,7 @@ public class SwordSpinSkill : MobSkill, IMobSkill
     public override void DeactivateSkill(PlayerInputControls input)
     {
         base.DeactivateSkill(input);
-        DisableSkill();
+        OnSkillExecuted();
         Destroy(_VFX);
         Destroy(_VFX2);
     }
@@ -46,7 +46,7 @@ public class SwordSpinSkill : MobSkill, IMobSkill
 
         if (false == mob.IsSkilling)
         {
-            DisableSkill();
+            OnSkillExecuted();
             return;
         }
 
@@ -70,9 +70,9 @@ public class SwordSpinSkill : MobSkill, IMobSkill
         _spinStarted = false;
     }
 
-    protected override void DisableSkill()
+    protected override void OnSkillExecuted()
     {
-        base.DisableSkill();
+        base.OnSkillExecuted();
 
         if (_VFX)
         {
@@ -97,7 +97,7 @@ public class SwordSpinSkill : MobSkill, IMobSkill
         base.SubscribeAnimationEventListeners();
         mob.OnChargeSkillOneEvent += ResetCollider;
         mob.OnEnableChargeReleaseSkillOneEvent += AddSpin;
-        mob.OnAttackInterrupted += DisableSkill;
+        mob.OnAttackInterrupted += OnSkillExecuted;
     }
 
     public override void UnsubscribeAnimationEventListeners()
@@ -105,7 +105,7 @@ public class SwordSpinSkill : MobSkill, IMobSkill
         base.UnsubscribeAnimationEventListeners();
         mob.OnChargeSkillOneEvent -= ResetCollider;
         mob.OnEnableChargeReleaseSkillOneEvent -= AddSpin;
-        mob.OnAttackInterrupted -= DisableSkill;
+        mob.OnAttackInterrupted -= OnSkillExecuted;
     }
 
     private void ResetCollider()
