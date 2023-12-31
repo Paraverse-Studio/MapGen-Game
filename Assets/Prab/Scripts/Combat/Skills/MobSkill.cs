@@ -77,8 +77,6 @@ namespace Paraverse.Combat
     public bool skillOn { get; set; }
     public SkillState SkillState { get; set; }
     [SerializeField, Tooltip("")]
-    protected bool useDelayInSkillStateToComplete = false;
-    [SerializeField, Tooltip("")]
     protected float skillStateToCompleteTimer = 1f;
     protected float curSkillStateToCompleteTimer = 0f;
 
@@ -222,23 +220,15 @@ namespace Paraverse.Combat
       if (SkillState.Equals(SkillState.Used))
       {
         // change skill state to complete after a set period of delay
-        if (useDelayInSkillStateToComplete )
-        {
-          RotateToTarget();
-          if (curSkillStateToCompleteTimer <= 0)
-          {
-            SetSkillState(SkillState.InActive);
-            curSkillStateToCompleteTimer = skillStateToCompleteTimer;
-          }
-          else
-          {
-            curSkillStateToCompleteTimer -= Time.deltaTime;
-          }
-        }
-        else
+        RotateToTarget();
+        if (curSkillStateToCompleteTimer <= 0)
         {
           SetSkillState(SkillState.InActive);
           curSkillStateToCompleteTimer = skillStateToCompleteTimer;
+        }
+        else
+        {
+          curSkillStateToCompleteTimer -= Time.deltaTime;
         }
       }
     }
