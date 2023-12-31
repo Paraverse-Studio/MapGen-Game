@@ -31,7 +31,7 @@ public class JumpSkill : MobSkill, IMobSkill
         mob.IsSkilling = true;
         skillOn = true;
         anim.SetBool(StringData.IsUsingSkill, true);
-        curCooldown = cooldown;
+        _curCooldown = _cooldown;
         stats.UpdateCurrentEnergy(-cost);
         anim.Play(animName);
         mobController.ApplyJump(target.transform.position);

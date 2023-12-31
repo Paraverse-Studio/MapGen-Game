@@ -15,64 +15,64 @@ namespace Paraverse.Combat
     protected Animator anim;
     protected MobStats stats;
 
-    public string Name { get { return _skillName; } set { _skillName = value; } }
+    // General Skill Info
+    public string Name { get => _skillName; set => _skillName = value; }
     [SerializeField, Tooltip("Skill name.")]
     protected string _skillName = "";
-
-    public int ID { get { return _ID; } set { _ID = value; } }
+    public int ID { get => _ID; set => _ID = value; }
     [SerializeField, Tooltip("Skill ID.")]
     protected int _ID = -1;
-
-    public Sprite Image { get { return _image; } set { _image = value; } }
+    public Sprite Image { get => _image; set => _image = value; }
     [SerializeField]
     protected Sprite _image = null;
-
-    public string Description { get { return _description; } set { _description = value; } }
+    public string Description { get => _description; set => _description = value; }
     [SerializeField, TextArea(2, 3), Tooltip("Skill description.")]
     protected string _description = "";
-
-    public bool TargetWithinRange { get { return IsInRange(); } }
-    [SerializeField, Tooltip("Min skill range value.")]
-    protected float _minRange = 0f;
-    [SerializeField, Tooltip("Max skill range value.")]
-    protected float _maxRange = 5f;
-    public float MinRange => _minRange;
-    public float MaxRange => _maxRange;
-    public bool IsOffCooldown => curCooldown <= 0; 
-    [SerializeField, Tooltip("Skill cooldown value.")]
-    protected float cooldown = 5f;
-    protected float curCooldown;
-    public float CurCooldown => curCooldown;
-    public float Cooldown => cooldown; 
-
-    public bool HasEnergy => cost <= stats.CurEnergy;
+    [SerializeField, Tooltip("Name of skill animation to play.")]
+    protected string animName = "";
     [SerializeField, Tooltip("Required energy cost to execute skill.")]
     protected float cost = 0f;
-
-    [Tooltip("Name of skill animation to play.")]
-    public string animName = "";
-
+    public bool IsBasicAttack => _isBasicAttack;
     [SerializeField, Tooltip("Will subscribe skill to skill execute listener. [if isBasicAttack = false]")]
-    protected bool isBasicAttack = false;
-    public bool IsBasicAttack => isBasicAttack; 
-
+    protected bool _isBasicAttack = false;
     [Tooltip("Will fetch attack collider GO. [if isMelee = true]")]
     public bool IsMelee => _isMelee;
-    [SerializeField] protected bool _isMelee;
-
-    public GameObject attackColliderGO;
-    public AttackCollider attackCollider;
-
-    [Header("Projectile Values")]
-    public ProjectileData projData;
-
+    [SerializeField, Tooltip("Will get and initialize the attack collider script from the given attack collider object")] 
+    protected bool _isMelee;
     [Header("Uses Target Lock"), Tooltip("If this skill should force mob to face its target")]
     public bool usesTargetLock;
     [SerializeField, Tooltip("Speed of rotation during skill.")]
     protected float rotSpeed = 110f;
 
+    // Skill Attributes
+    public float MinRange => _minRange;
+    [SerializeField, Tooltip("Min skill range value.")]
+    protected float _minRange = 0f;
+    public float MaxRange => _maxRange;
+    [SerializeField, Tooltip("Max skill range value.")]
+    protected float _maxRange = 5f;
+    public float Cooldown => _cooldown; 
+    [SerializeField, Tooltip("Skill cooldown value.")]
+    protected float _cooldown = 5f;
+    public float CurCooldown => _curCooldown;
+    protected float _curCooldown;
+    public bool IsOffCooldown => _curCooldown <= 0;
+
+    // Skill Additional Values
+    [Header("Attack Collider Values")]
+    public GameObject attackColliderGO;
+    public AttackCollider attackCollider;
+    [Header("Projectile Values")]
+    public ProjectileData projData;
+    [Header("Scaling Values")]
     public ScalingStatData scalingStatData;
 
+    // Skill Condition Checks
+    public bool TargetWithinRange { get { return IsInRange(); } }
+    public bool HasEnergy => cost <= stats.CurEnergy;
+    
+    // Used to determine if skill is active/inactive
+    // Only one skill can be active at a point in time
     public bool skillOn { get; set; }
 
     public delegate void OnExecuteSkillDel();
@@ -96,8 +96,8 @@ namespace Paraverse.Combat
       this.input = input;
       this.anim = anim;
       this.stats = stats;
-      curCooldown = 0f;
-      if (mob.gameObject.CompareTag(StringData.PlayerTag) && isBasicAttack == false)
+      _curCooldown = 0f;
+      if (mob.gameObject.CompareTag(StringData.PlayerTag) && _isBasicAttack == false)
         input.OnSkillOneEvent += Execute;
 
       if (null == attackColliderGO)
@@ -133,7 +133,7 @@ namespace Paraverse.Combat
       this.target = target;
       this.anim = anim;
       this.stats = stats;
-      curCooldown = cooldown;
+      _curCooldown = _cooldown;
 
       if (null == attackColliderGO)
       {
@@ -187,8 +187,8 @@ namespace Paraverse.Combat
 
     public void RefundCooldown(float refund)
     {
-      curCooldown -= refund;
-      Debug.Log("cur CD: " + curCooldown);
+      _curCooldown -= refund;
+      Debug.Log("cur CD: " + _curCooldown);
     }
 
     protected virtual void RotateToTarget()
@@ -217,7 +217,7 @@ namespace Paraverse.Combat
       mob.IsSkilling = true;
       skillOn = true;
       anim.SetBool(StringData.IsUsingSkill, true);
-      curCooldown = cooldown * (1.0f - (stats.CooldownReduction.FinalValue / 100.0f));
+      _curCooldown = _cooldown * (1.0f - (stats.CooldownReduction.FinalValue / 100.0f));
       stats.UpdateCurrentEnergy(-cost);
       anim.Play(animName);
     }
@@ -235,11 +235,11 @@ namespace Paraverse.Combat
     /// </summary>
     protected virtual void CooldownHandler()
     {
-      if (curCooldown > 0)
+      if (_curCooldown > 0)
       {
-        curCooldown -= Time.deltaTime;
+        _curCooldown -= Time.deltaTime;
       }
-      curCooldown = Mathf.Clamp(curCooldown, 0f, cooldown);
+      _curCooldown = Mathf.Clamp(_curCooldown, 0f, _cooldown);
     }
 
     /// <summary>
