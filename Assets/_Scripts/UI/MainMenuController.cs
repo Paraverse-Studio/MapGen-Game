@@ -25,7 +25,7 @@ public class MainMenuController : MonoBehaviour
 
   public void OnChangeInputText(string s = null)
   {
-    if (string.IsNullOrWhiteSpace(usernameInput.text) || string.IsNullOrWhiteSpace(passwordInput.text))
+    if (string.IsNullOrWhiteSpace(usernameInput.text))
     {
       return;
     }
