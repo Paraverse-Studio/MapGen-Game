@@ -757,6 +757,7 @@ MonoBehaviour:
   moveSpeed: 2
   maxEnergy: 100
   _curEnergy: 100
+  cooldownReduction: 0
   healthRegen: 0
   energyRegen: 25
   _gold: 100
@@ -784,12 +785,11 @@ MonoBehaviour:
   stats: {fileID: 0}
   projUser: 0
   basicAttackSkill: {fileID: 8556946795445516750}
-  skills:
-  - {fileID: 8556946795485020428}
+  _skills:
   - {fileID: 3417620095694632768}
+  - {fileID: 8556946795485020428}
   - {fileID: 3417620096248076364}
-  effects: []
-  animBool: isUsingSkill
+  _effects: []
 --- !u!114 &2033429951662635930
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -3133,13 +3133,15 @@ MonoBehaviour:
   _ID: -1
   _image: {fileID: 0}
   _description: 
+  animName: DualAttack
+  cost: 0
+  _isBasicAttack: 0
+  _isMelee: 1
+  usesTargetLock: 0
+  rotSpeed: 110
   _minRange: 0
   _maxRange: 7
-  cooldown: 3.5
-  cost: 0
-  animName: DualAttack
-  isBasicAttack: 0
-  _isMelee: 1
+  _cooldown: 5
   attackColliderGO: {fileID: 3417620097120043462}
   attackCollider: {fileID: 3417620097120043460}
   projData:
@@ -3148,8 +3150,6 @@ MonoBehaviour:
     projOrigin: {fileID: 0}
     projRotation: {fileID: 0}
     basicAtkProjSpeed: 10
-  usesTargetLock: 0
-  rotSpeed: 110
   scalingStatData:
     flatPower: 5
     attackScaling: 1
@@ -3204,13 +3204,15 @@ MonoBehaviour:
   _ID: -1
   _image: {fileID: 0}
   _description: 
+  animName: BasicAttack
+  cost: 0
+  _isBasicAttack: 0
+  _isMelee: 1
+  usesTargetLock: 0
+  rotSpeed: 110
   _minRange: 0
   _maxRange: 5
-  cooldown: 2
-  cost: 0
-  animName: BasicAttack
-  isBasicAttack: 1
-  _isMelee: 1
+  _cooldown: 5
   attackColliderGO: {fileID: 8556946796524974950}
   attackCollider: {fileID: 8556946796524974873}
   projData:
@@ -3219,8 +3221,6 @@ MonoBehaviour:
     projOrigin: {fileID: 0}
     projRotation: {fileID: 0}
     basicAtkProjSpeed: 10
-  usesTargetLock: 0
-  rotSpeed: 110
   scalingStatData:
     flatPower: 0
     attackScaling: 1
@@ -3274,13 +3274,15 @@ MonoBehaviour:
   _ID: -1
   _image: {fileID: 0}
   _description: 
+  animName: RockThrow
+  cost: 0
+  _isBasicAttack: 0
+  _isMelee: 0
+  usesTargetLock: 1
+  rotSpeed: 110
   _minRange: 5
   _maxRange: 20
-  cooldown: 7.5
-  cost: 0
-  animName: RockThrow
-  isBasicAttack: 0
-  _isMelee: 0
+  _cooldown: 5
   attackColliderGO: {fileID: 0}
   attackCollider: {fileID: 0}
   projData:
@@ -3289,8 +3291,6 @@ MonoBehaviour:
     projOrigin: {fileID: 3417620096406160854}
     projRotation: {fileID: 3417620096406160854}
     basicAtkProjSpeed: 10
-  usesTargetLock: 1
-  rotSpeed: 110
   scalingStatData:
     flatPower: 25
     attackScaling: 1
@@ -3534,13 +3534,15 @@ MonoBehaviour:
   _ID: -1
   _image: {fileID: 0}
   _description: 
+  animName: Jump_Start
+  cost: 0
+  _isBasicAttack: 0
+  _isMelee: 1
+  usesTargetLock: 0
+  rotSpeed: 110
   _minRange: 8
   _maxRange: 15
-  cooldown: 3
-  cost: 0
-  animName: Jump_Start
-  isBasicAttack: 0
-  _isMelee: 1
+  _cooldown: 5
   attackColliderGO: {fileID: 3417620096380804774}
   attackCollider: {fileID: 3417620096380804827}
   projData:
@@ -3549,8 +3551,6 @@ MonoBehaviour:
     projOrigin: {fileID: 0}
     projRotation: {fileID: 0}
     basicAtkProjSpeed: 10
-  usesTargetLock: 0
-  rotSpeed: 110
   scalingStatData:
     flatPower: 0
     attackScaling: 1

@@ -48,13 +48,15 @@ MonoBehaviour:
   _ID: -1
   _image: {fileID: 0}
   _description: 
+  animName: BasicAttack
+  cost: 0
+  _isBasicAttack: 0
+  _isMelee: 0
+  usesTargetLock: 0
+  rotSpeed: 100
   _minRange: 0
   _maxRange: 10
-  cooldown: 2.5
-  cost: 0
-  animName: BasicAttack
-  isBasicAttack: 1
-  _isMelee: 0
+  _cooldown: 5
   attackColliderGO: {fileID: 0}
   attackCollider: {fileID: 0}
   projData:
@@ -63,8 +65,6 @@ MonoBehaviour:
     projOrigin: {fileID: 2657095164103751762}
     projRotation: {fileID: 0}
     basicAtkProjSpeed: 20
-  usesTargetLock: 0
-  rotSpeed: 100
   scalingStatData:
     flatPower: 0
     attackScaling: 0
@@ -153,13 +153,15 @@ MonoBehaviour:
   _ID: -1
   _image: {fileID: 0}
   _description: 
+  animName: SkyBarrageSkill
+  cost: 0
+  _isBasicAttack: 0
+  _isMelee: 0
+  usesTargetLock: 0
+  rotSpeed: 100
   _minRange: 7
   _maxRange: 100
-  cooldown: 7
-  cost: 0
-  animName: SkyBarrageSkill
-  isBasicAttack: 0
-  _isMelee: 0
+  _cooldown: 5
   attackColliderGO: {fileID: 0}
   attackCollider: {fileID: 0}
   projData:
@@ -168,8 +170,6 @@ MonoBehaviour:
     projOrigin: {fileID: 2657095163666507577}
     projRotation: {fileID: 2657095163666507577}
     basicAtkProjSpeed: 0
-  usesTargetLock: 0
-  rotSpeed: 100
   scalingStatData:
     flatPower: 0
     attackScaling: 0
@@ -224,13 +224,15 @@ MonoBehaviour:
   _ID: -1
   _image: {fileID: 0}
   _description: 
+  animName: JumpStart
+  cost: 0
+  _isBasicAttack: 0
+  _isMelee: 0
+  usesTargetLock: 0
+  rotSpeed: 0
   _minRange: 3
   _maxRange: 30
-  cooldown: 6
-  cost: 0
-  animName: JumpStart
-  isBasicAttack: 0
-  _isMelee: 0
+  _cooldown: 5
   attackColliderGO: {fileID: 0}
   attackCollider: {fileID: 0}
   projData:
@@ -239,8 +241,6 @@ MonoBehaviour:
     projOrigin: {fileID: 0}
     projRotation: {fileID: 0}
     basicAtkProjSpeed: 10
-  usesTargetLock: 0
-  rotSpeed: 0
   scalingStatData:
     flatPower: 0
     attackScaling: 1
@@ -294,13 +294,15 @@ MonoBehaviour:
   _ID: -1
   _image: {fileID: 0}
   _description: 
+  animName: AttackCombo
+  cost: 0
+  _isBasicAttack: 0
+  _isMelee: 1
+  usesTargetLock: 0
+  rotSpeed: 5
   _minRange: 0
   _maxRange: 7
-  cooldown: 5
-  cost: 0
-  animName: AttackCombo
-  isBasicAttack: 0
-  _isMelee: 1
+  _cooldown: 5
   attackColliderGO: {fileID: 2657095164191216732}
   attackCollider: {fileID: 0}
   projData:
@@ -309,8 +311,6 @@ MonoBehaviour:
     projOrigin: {fileID: 0}
     projRotation: {fileID: 0}
     basicAtkProjSpeed: 10
-  usesTargetLock: 0
-  rotSpeed: 5
   scalingStatData:
     flatPower: 0
     attackScaling: 1
@@ -2207,7 +2207,7 @@ GameObject:
   - component: {fileID: 2657095164308100582}
   - component: {fileID: 2657095164308100576}
   - component: {fileID: 2657095164308100604}
-  - component: {fileID: 2657095164308100581}
+  - component: {fileID: 8106076468319964808}
   - component: {fileID: 2657095164308100577}
   - component: {fileID: 8124308719308895491}
   - component: {fileID: 2657095164308100579}
@@ -2373,7 +2373,7 @@ MonoBehaviour:
   _curMobState: 0
   _isGrounded: 1
   _isUnstaggerable: 1
---- !u!114 &2657095164308100581
+--- !u!114 &8106076468319964808
 MonoBehaviour:
   m_ObjectHideFlags: 0
   m_CorrespondingSourceObject: {fileID: 0}
@@ -2382,19 +2382,18 @@ MonoBehaviour:
   m_GameObject: {fileID: 1926738171508432141}
   m_Enabled: 1
   m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 029b1c361271a924ebf4eba87b028e19, type: 3}
+  m_Script: {fileID: 11500000, guid: 5b3fe259459faf844a89438f0f42bc88, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
   anim: {fileID: 1926738171499081581}
   stats: {fileID: 0}
   projUser: 1
   basicAttackSkill: {fileID: 80345161}
-  skills:
+  _skills:
   - {fileID: 1908622638}
-  - {fileID: 1849899259}
   - {fileID: 1719642824}
-  effects: []
-  animBool: isUsingSkill
+  - {fileID: 1849899259}
+  _effects: []
 --- !u!114 &2657095164308100577
 MonoBehaviour:
   m_ObjectHideFlags: 0

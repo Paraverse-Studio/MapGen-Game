@@ -48,13 +48,15 @@ MonoBehaviour:
   _ID: -1
   _image: {fileID: 0}
   _description: 
+  animName: BarragePrepare
+  cost: 0
+  _isBasicAttack: 0
+  _isMelee: 0
+  usesTargetLock: 1
+  rotSpeed: 1
   _minRange: 0
   _maxRange: 25
-  cooldown: 10
-  cost: 0
-  animName: BarragePrepare
-  isBasicAttack: 0
-  _isMelee: 0
+  _cooldown: 5
   attackColliderGO: {fileID: 0}
   attackCollider: {fileID: 0}
   projData:
@@ -63,8 +65,6 @@ MonoBehaviour:
     projOrigin: {fileID: 2100688855}
     projRotation: {fileID: 2100688855}
     basicAtkProjSpeed: 10
-  usesTargetLock: 1
-  rotSpeed: 1
   scalingStatData:
     flatPower: 10
     attackScaling: 0
@@ -193,13 +193,15 @@ MonoBehaviour:
   _ID: -1
   _image: {fileID: 0}
   _description: 
+  animName: BasicAttack
+  cost: 10
+  _isBasicAttack: 0
+  _isMelee: 1
+  usesTargetLock: 0
+  rotSpeed: 110
   _minRange: 0
   _maxRange: 5
-  cooldown: 2
-  cost: 10
-  animName: BasicAttack
-  isBasicAttack: 1
-  _isMelee: 1
+  _cooldown: 5
   attackColliderGO: {fileID: 3787384781304995315}
   attackCollider: {fileID: 3787384781304995309}
   projData:
@@ -208,8 +210,6 @@ MonoBehaviour:
     projOrigin: {fileID: 0}
     projRotation: {fileID: 0}
     basicAtkProjSpeed: 10
-  usesTargetLock: 0
-  rotSpeed: 110
   scalingStatData:
     flatPower: 0
     attackScaling: 1
@@ -231,13 +231,15 @@ MonoBehaviour:
   _ID: -1
   _image: {fileID: 0}
   _description: 
+  animName: BasicAttack
+  cost: 10
+  _isBasicAttack: 0
+  _isMelee: 1
+  usesTargetLock: 0
+  rotSpeed: 110
   _minRange: 0
   _maxRange: 5
-  cooldown: 5
-  cost: 10
-  animName: BasicAttack
-  isBasicAttack: 1
-  _isMelee: 1
+  _cooldown: 5
   attackColliderGO: {fileID: 3787384781304995315}
   attackCollider: {fileID: 3787384781304995309}
   projData:
@@ -246,8 +248,6 @@ MonoBehaviour:
     projOrigin: {fileID: 0}
     projRotation: {fileID: 0}
     basicAtkProjSpeed: 10
-  usesTargetLock: 0
-  rotSpeed: 110
   scalingStatData:
     flatPower: 0
     attackScaling: 1
@@ -921,13 +921,15 @@ MonoBehaviour:
   _ID: -1
   _image: {fileID: 0}
   _description: 
+  animName: Attack01
+  cost: 0
+  _isBasicAttack: 0
+  _isMelee: 0
+  usesTargetLock: 0
+  rotSpeed: 100
   _minRange: 0
   _maxRange: 11
-  cooldown: 5
-  cost: 0
-  animName: Attack01
-  isBasicAttack: 0
-  _isMelee: 0
+  _cooldown: 5
   attackColliderGO: {fileID: 3787384781715577073}
   attackCollider: {fileID: 3787384781715577075}
   projData:
@@ -936,8 +938,6 @@ MonoBehaviour:
     projOrigin: {fileID: 0}
     projRotation: {fileID: 0}
     basicAtkProjSpeed: 10
-  usesTargetLock: 0
-  rotSpeed: 100
   scalingStatData:
     flatPower: 0
     attackScaling: 1.5
@@ -993,13 +993,15 @@ MonoBehaviour:
   _ID: -1
   _image: {fileID: 0}
   _description: 
+  animName: BeamPrepare
+  cost: 0
+  _isBasicAttack: 0
+  _isMelee: 0
+  usesTargetLock: 1
+  rotSpeed: 1
   _minRange: 0
   _maxRange: 25
-  cooldown: 7
-  cost: 0
-  animName: BeamPrepare
-  isBasicAttack: 0
-  _isMelee: 0
+  _cooldown: 5
   attackColliderGO: {fileID: 0}
   attackCollider: {fileID: 0}
   projData:
@@ -1008,8 +1010,6 @@ MonoBehaviour:
     projOrigin: {fileID: 8375894351906716979}
     projRotation: {fileID: 8375894351906716979}
     basicAtkProjSpeed: 10
-  usesTargetLock: 1
-  rotSpeed: 1
   scalingStatData:
     flatPower: 10
     attackScaling: 0
@@ -1891,7 +1891,7 @@ GameObject:
   - component: {fileID: 1429477864462990764}
   - component: {fileID: 3787384781022177460}
   - component: {fileID: 3787384781022177463}
-  - component: {fileID: 3787384781022177470}
+  - component: {fileID: 7626529710724885066}
   - component: {fileID: 3787384781022177465}
   - component: {fileID: 3787384781022177464}
   - component: {fileID: 3787384781022177467}
@@ -1986,7 +1986,7 @@ NavMeshAgent:
   m_BaseOffset: 0
   m_WalkableMask: 4294967295
   m_ObstacleAvoidanceType: 4
---- !u!114 &3787384781022177470
+--- !u!114 &7626529710724885066
 MonoBehaviour:
   m_ObjectHideFlags: 0
   m_CorrespondingSourceObject: {fileID: 0}
@@ -1995,19 +1995,18 @@ MonoBehaviour:
   m_GameObject: {fileID: 5655811892658322796}
   m_Enabled: 1
   m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 029b1c361271a924ebf4eba87b028e19, type: 3}
+  m_Script: {fileID: 11500000, guid: 5b3fe259459faf844a89438f0f42bc88, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
   anim: {fileID: 1429477864462990764}
   stats: {fileID: 0}
   projUser: 0
-  basicAttackSkill: {fileID: 7649695298288978804}
-  skills:
+  basicAttackSkill: {fileID: 133382402}
+  _skills:
   - {fileID: 3787384780881279730}
   - {fileID: 632686499}
   - {fileID: 3787384780079605952}
-  effects: []
-  animBool: isUsingSkill
+  _effects: []
 --- !u!114 &3787384781022177465
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -2131,6 +2130,7 @@ MonoBehaviour:
   moveSpeed: 2
   maxEnergy: 100
   _curEnergy: 100
+  cooldownReduction: 0
   healthRegen: 0
   energyRegen: 25
   _gold: 100
