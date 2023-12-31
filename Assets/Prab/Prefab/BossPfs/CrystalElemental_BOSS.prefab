@@ -70,6 +70,7 @@ MonoBehaviour:
     attackScaling: 0
     abilityScaling: 1
     healthScaling: 0
+  skillStateToCompleteTimer: 1
   laserRadius: 1.5
   laserLength: 100
   laserWidth: 1.5
@@ -154,7 +155,6 @@ GameObject:
   m_Component:
   - component: {fileID: 1986200945}
   - component: {fileID: 133382402}
-  - component: {fileID: 7649695298288978804}
   m_Layer: 0
   m_Name: BasicAttack
   m_TagString: Untagged
@@ -215,44 +215,7 @@ MonoBehaviour:
     attackScaling: 1
     abilityScaling: 0
     healthScaling: 0
---- !u!114 &7649695298288978804
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 1986200944}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 5ff88d084135b4240baee58ee284d528, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: 
-  _skillName: 
-  _ID: -1
-  _image: {fileID: 0}
-  _description: 
-  animName: BasicAttack
-  cost: 10
-  _isBasicAttack: 0
-  _isMelee: 1
-  usesTargetLock: 0
-  rotSpeed: 110
-  _minRange: 0
-  _maxRange: 5
-  _cooldown: 5
-  attackColliderGO: {fileID: 3787384781304995315}
-  attackCollider: {fileID: 3787384781304995309}
-  projData:
-    projPf: {fileID: 0}
-    projHeld: {fileID: 0}
-    projOrigin: {fileID: 0}
-    projRotation: {fileID: 0}
-    basicAtkProjSpeed: 10
-  scalingStatData:
-    flatPower: 0
-    attackScaling: 1
-    abilityScaling: 0
-    healthScaling: 0
+  skillStateToCompleteTimer: 1
 --- !u!1 &2100688854
 GameObject:
   m_ObjectHideFlags: 0
@@ -943,6 +906,7 @@ MonoBehaviour:
     attackScaling: 1.5
     abilityScaling: 0
     healthScaling: 0
+  skillStateToCompleteTimer: 1
   impactFX: {fileID: 1874963620615116, guid: 0089b119efc37ec458262770bc0ece23, type: 3}
   impactOrigin: {fileID: 1441577464}
 --- !u!1 &3787384781248146703
@@ -1015,6 +979,7 @@ MonoBehaviour:
     attackScaling: 0
     abilityScaling: 1
     healthScaling: 0
+  skillStateToCompleteTimer: 1
   laserRadius: 1
   laserLength: 100
   laserWidth: 1
@@ -2007,6 +1972,8 @@ MonoBehaviour:
   - {fileID: 632686499}
   - {fileID: 3787384780079605952}
   _effects: []
+  useSetSkillToCompleteSafetyFeature: 1
+  setSkillToCompleteTimer: 10
 --- !u!114 &3787384781022177465
 MonoBehaviour:
   m_ObjectHideFlags: 0
