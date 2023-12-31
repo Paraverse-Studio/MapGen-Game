@@ -15,7 +15,7 @@ public class BasicAttackSkill : MobSkill, IMobSkill
 
     protected override void ExecuteSkillLogic()
     {
-        curCooldown = cooldown;
+        _curCooldown = _cooldown;
         anim.Play(animName);
         anim.SetBool(StringData.IsBasicAttacking, true);
     }

@@ -35,7 +35,7 @@ public class SpinSkill : MobSkill, IMobSkill
 
     protected override void ExecuteSkillLogic()
     {
-        curCooldown = cooldown;
+        _curCooldown = _cooldown;
         stats.UpdateCurrentEnergy(-cost);
         anim.Play(animName);
         EnableColldier();

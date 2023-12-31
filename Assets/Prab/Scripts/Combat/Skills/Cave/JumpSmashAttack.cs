@@ -51,7 +51,7 @@ public class JumpSmashAttack : MobSkill, IMobSkill
         mob.IsSkilling = true;
         skillOn = true;
         anim.SetBool(StringData.IsUsingSkill, true);
-        curCooldown = cooldown;
+        _curCooldown = _cooldown;
         stats.UpdateCurrentEnergy(-cost);
         anim.Play(animName);
         controller.ApplyJump(target.transform.position);

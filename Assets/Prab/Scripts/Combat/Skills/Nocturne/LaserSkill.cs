@@ -85,7 +85,7 @@ public class LaserSkill : MobSkill, IMobSkill
     protected override void DisableSkill()
     {
         base.DisableSkill();
-        curCooldown = cooldown;
+        _curCooldown = _cooldown;
         UnsubscribeAnimationEventListeners();
     }
 
