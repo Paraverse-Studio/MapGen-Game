@@ -1647,7 +1647,7 @@ GameObject:
   - component: {fileID: 6864850351671179471}
   - component: {fileID: 6864850351671179470}
   - component: {fileID: 5935239317561939344}
-  - component: {fileID: 8255129907231077089}
+  - component: {fileID: 8169095289350646562}
   - component: {fileID: 6864850351671179467}
   - component: {fileID: 8255129907231077088}
   - component: {fileID: 6864850351671179466}
@@ -1783,7 +1783,7 @@ MonoBehaviour:
   _curMobState: 0
   _isGrounded: 1
   _isUnstaggerable: 1
---- !u!114 &8255129907231077089
+--- !u!114 &8169095289350646562
 MonoBehaviour:
   m_ObjectHideFlags: 0
   m_CorrespondingSourceObject: {fileID: 0}
@@ -1792,19 +1792,18 @@ MonoBehaviour:
   m_GameObject: {fileID: 8255129907238486235}
   m_Enabled: 1
   m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 029b1c361271a924ebf4eba87b028e19, type: 3}
+  m_Script: {fileID: 11500000, guid: 5b3fe259459faf844a89438f0f42bc88, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
   anim: {fileID: 8255129907231077119}
   stats: {fileID: 0}
   projUser: 0
   basicAttackSkill: {fileID: 8305639317666090422}
-  skills:
-  - {fileID: 8305639318240610835}
+  _skills:
   - {fileID: 8305639318263375680}
   - {fileID: 8305639317601381804}
-  effects: []
-  animBool: isUsingSkill
+  - {fileID: 8305639318240610835}
+  _effects: []
 --- !u!114 &6864850351671179467
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -3859,13 +3858,15 @@ MonoBehaviour:
   _ID: -1
   _image: {fileID: 0}
   _description: 
+  animName: SummonSkill
+  cost: 0
+  _isBasicAttack: 0
+  _isMelee: 0
+  usesTargetLock: 0
+  rotSpeed: 100
   _minRange: 0
   _maxRange: 100
-  cooldown: 14
-  cost: 0
-  animName: SummonSkill
-  isBasicAttack: 0
-  _isMelee: 0
+  _cooldown: 5
   attackColliderGO: {fileID: 0}
   attackCollider: {fileID: 0}
   projData:
@@ -3874,8 +3875,6 @@ MonoBehaviour:
     projOrigin: {fileID: 0}
     projRotation: {fileID: 0}
     basicAtkProjSpeed: 10
-  usesTargetLock: 0
-  rotSpeed: 100
   scalingStatData:
     flatPower: 0
     attackScaling: 0
@@ -3934,13 +3933,15 @@ MonoBehaviour:
   _ID: -1
   _image: {fileID: 0}
   _description: 
+  animName: BasicAttack
+  cost: 0
+  _isBasicAttack: 0
+  _isMelee: 0
+  usesTargetLock: 0
+  rotSpeed: 100
   _minRange: 0
   _maxRange: 5
-  cooldown: 3
-  cost: 0
-  animName: BasicAttack
-  isBasicAttack: 1
-  _isMelee: 0
+  _cooldown: 5
   attackColliderGO: {fileID: 6864850349921596223}
   attackCollider: {fileID: 6864850349921596193}
   projData:
@@ -3949,8 +3950,6 @@ MonoBehaviour:
     projOrigin: {fileID: 0}
     projRotation: {fileID: 0}
     basicAtkProjSpeed: 10
-  usesTargetLock: 0
-  rotSpeed: 100
   scalingStatData:
     flatPower: 0
     attackScaling: 1
@@ -4144,13 +4143,15 @@ MonoBehaviour:
   _ID: -1
   _image: {fileID: 0}
   _description: 
+  animName: LifeStealAttack
+  cost: 0
+  _isBasicAttack: 0
+  _isMelee: 0
+  usesTargetLock: 0
+  rotSpeed: 10
   _minRange: 0
   _maxRange: 5
-  cooldown: 8
-  cost: 0
-  animName: LifeStealAttack
-  isBasicAttack: 0
-  _isMelee: 0
+  _cooldown: 5
   attackColliderGO: {fileID: 8305639317033948403}
   attackCollider: {fileID: 0}
   projData:
@@ -4159,8 +4160,6 @@ MonoBehaviour:
     projOrigin: {fileID: 0}
     projRotation: {fileID: 0}
     basicAtkProjSpeed: 10
-  usesTargetLock: 0
-  rotSpeed: 10
   scalingStatData:
     flatPower: 0
     attackScaling: 1
@@ -4216,13 +4215,15 @@ MonoBehaviour:
   _image: {fileID: 0}
   _description: 'He reaches for the ground, and spawns vines that move toward player,
     and root player for 2 seconds. '
+  animName: RootSkill
+  cost: 0
+  _isBasicAttack: 0
+  _isMelee: 0
+  usesTargetLock: 0
+  rotSpeed: 100
   _minRange: 0
   _maxRange: 100
-  cooldown: 7
-  cost: 0
-  animName: RootSkill
-  isBasicAttack: 0
-  _isMelee: 0
+  _cooldown: 5
   attackColliderGO: {fileID: 0}
   attackCollider: {fileID: 0}
   projData:
@@ -4231,8 +4232,6 @@ MonoBehaviour:
     projOrigin: {fileID: 8255129907238067387}
     projRotation: {fileID: 8255129907238067387}
     basicAtkProjSpeed: 10
-  usesTargetLock: 0
-  rotSpeed: 100
   scalingStatData:
     flatPower: 0
     attackScaling: 0
