@@ -2,84 +2,71 @@ using Paraverse.Combat;
 using Paraverse.Mob.Combat;
 using Paraverse.Mob.Controller;
 using Paraverse.Mob.Stats;
-using Paraverse.Player;
 using UnityEngine;
 
 public class JumpSmashAttack : MobSkill, IMobSkill
 {
-    #region Variables
-    protected MobController controller;
-    [SerializeField]
-    protected string landAnimName = "LandAnim";
-    [SerializeField]
-    protected int layerIdx = 1;
-    [SerializeField]
-    protected float layerWeight = 1;
-    #endregion
+  #region Variables
+  protected MobController controller;
+  [SerializeField]
+  protected string landAnimName = "LandAnim";
+  [SerializeField]
+  protected int layerIdx = 1;
+  [SerializeField]
+  protected float layerWeight = 1;
+  #endregion
 
 
-    #region Inherited Methods
-    public override void ActivateSkill(MobCombat mob, Animator anim, MobStats stats, Transform target = null)
-    {
-        base.ActivateSkill(mob, anim, stats, target);
-        if (controller == null) controller = mob.GetComponent<MobController>();
-        SubscribeAnimationEventListeners();
-    }
+  #region Inherited Methods
+  public override void ActivateSkill(MobCombat mob, Animator anim, MobStats stats, Transform target = null)
+  {
+    base.ActivateSkill(mob, anim, stats, target);
+    if (controller == null) controller = mob.GetComponent<MobController>();
+    SubscribeAnimationEventListeners();
+  }
 
-    public override void DeactivateSkill(PlayerInputControls input)
-    {
-        base.DeactivateSkill(input);
-        UnsubscribeAnimationEventListeners();
-    }
+  public override void SubscribeAnimationEventListeners()
+  {
+    base.SubscribeAnimationEventListeners();
+    controller.OnLandEvent += OnLand;
+    mob.OnEnableSkillColliderSOneEvent += EnableSmashAttackCollider;
+  }
 
-    public override void SubscribeAnimationEventListeners()
-    {
-        controller.OnLandEvent += OnLand;
-        mob.OnEnableSkillColliderSOneEvent += EnableSmashAttackCollider;
-        mob.OnDisableSkillOneEvent += OnSkillExecuted;
-    }
+  public override void UnsubscribeAnimationEventListeners()
+  {
+    base.UnsubscribeAnimationEventListeners();
+    controller.OnLandEvent -= OnLand;
+    mob.OnDisableSkillColliderSOneEvent += DisableSmashAttackCollider;
+  }
 
-    public override void UnsubscribeAnimationEventListeners()
-    {
-        controller.OnLandEvent -= OnLand;
-        mob.OnDisableSkillColliderSOneEvent += DisableSmashAttackCollider;
-        mob.OnDisableSkillOneEvent -= OnSkillExecuted;
-    }
+  protected override void ExecuteSkillLogic()
+  {
+    base.ExecuteSkillLogic();
+    controller.ApplyJump(target.transform.position);
+  }
 
-    protected override void ExecuteSkillLogic()
-    {
-        mob.IsSkilling = true;
-        skillOn = true;
-        anim.SetBool(StringData.IsUsingSkill, true);
-        _curCooldown = _cooldown;
-        stats.UpdateCurrentEnergy(-cost);
-        anim.Play(animName);
-        controller.ApplyJump(target.transform.position);
-    }
+  protected override void OnSkillComplete()
+  {
+    base.OnSkillComplete();
+  }
+  #endregion
 
-    protected override void OnSkillExecuted()
-    {
-        base.OnSkillExecuted();
-    }
-    #endregion
+  #region Private Methods
+  private void OnLand()
+  {
+    anim.Play(landAnimName);
+    anim.SetLayerWeight(layerIdx, layerWeight);
+    anim.SetBool(StringData.IsGrounded, true);
+  }
 
-    #region Private Methods
-    private void OnLand()
-    {
-        anim.Play(landAnimName);
-        anim.SetLayerWeight(layerIdx, layerWeight);
-        anim.SetBool(StringData.IsGrounded, true);
-        
-    }
+  private void EnableSmashAttackCollider()
+  {
+    attackColliderGO.SetActive(true);
+  }
 
-    private void EnableSmashAttackCollider()
-    {
-        attackColliderGO.SetActive(true);
-    }
-
-    private void DisableSmashAttackCollider()
-    {
-        attackColliderGO.SetActive(false);  
-    }
-    #endregion
+  private void DisableSmashAttackCollider()
+  {
+    attackColliderGO.SetActive(false);
+  }
+  #endregion
 }

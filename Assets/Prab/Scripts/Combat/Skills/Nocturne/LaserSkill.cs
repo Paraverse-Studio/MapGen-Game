@@ -67,7 +67,7 @@ public class LaserSkill : MobSkill, IMobSkill
             }
             else
             {
-                OnSkillExecuted();
+                OnSkillComplete();
             }
         }
     }
@@ -82,9 +82,9 @@ public class LaserSkill : MobSkill, IMobSkill
         anim.Play(animName);
     }
 
-    protected override void OnSkillExecuted()
+    protected override void OnSkillComplete()
     {
-        base.OnSkillExecuted();
+        base.OnSkillComplete();
         _curCooldown = _cooldown;
         UnsubscribeAnimationEventListeners();
     }

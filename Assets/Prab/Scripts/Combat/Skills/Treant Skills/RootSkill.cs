@@ -48,7 +48,7 @@ public class RootSkill : MobSkill, IMobSkill
 
         if (curRootDuration <= 0)
         {
-            OnSkillExecuted();
+            OnSkillComplete();
             _curCooldown = _cooldown;
         }
         else

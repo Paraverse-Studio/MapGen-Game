@@ -54,7 +54,7 @@ public class LightningBoltSkill : MobSkill, IMobSkill
             proj.Init(mob, mob.Target.transform.position, scalingStatData);
         }
 
-        OnSkillExecuted();
+        OnSkillComplete();
 
         StartCoroutine(UtilityFunctions.IDelayedAction(0.2f, () =>
         {

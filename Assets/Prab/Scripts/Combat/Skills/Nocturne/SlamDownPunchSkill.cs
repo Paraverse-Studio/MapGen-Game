@@ -26,11 +26,6 @@ public class SlamDownPunchSkill : MobSkill, IMobSkill
         controller.OnLandEvent += OnLand;
     }
 
-    public override void DeactivateSkill(PlayerInputControls input)
-    {
-        base.DeactivateSkill(input);
-    }
-
     public override void SubscribeAnimationEventListeners()
     {
         base.SubscribeAnimationEventListeners();

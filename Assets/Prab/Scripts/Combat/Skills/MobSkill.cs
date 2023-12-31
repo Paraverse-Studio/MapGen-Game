@@ -37,7 +37,7 @@ namespace Paraverse.Combat
     protected bool _isBasicAttack = false;
     [Tooltip("Will fetch attack collider GO. [if isMelee = true]")]
     public bool IsMelee => _isMelee;
-    [SerializeField, Tooltip("Will get and initialize the attack collider script from the given attack collider object")] 
+    [SerializeField, Tooltip("Will get and initialize the attack collider script from the given attack collider object")]
     protected bool _isMelee;
     [Header("Uses Target Lock"), Tooltip("If this skill should force mob to face its target")]
     public bool usesTargetLock;
@@ -51,12 +51,13 @@ namespace Paraverse.Combat
     public float MaxRange => _maxRange;
     [SerializeField, Tooltip("Max skill range value.")]
     protected float _maxRange = 5f;
-    public float Cooldown => _cooldown; 
+    public float Cooldown => _cooldown;
     [SerializeField, Tooltip("Skill cooldown value.")]
     protected float _cooldown = 5f;
     public float CurCooldown => _curCooldown;
     protected float _curCooldown;
     public bool IsOffCooldown => _curCooldown <= 0;
+
 
     // Skill Additional Values
     [Header("Attack Collider Values")]
@@ -70,14 +71,25 @@ namespace Paraverse.Combat
     // Skill Condition Checks
     public bool TargetWithinRange { get { return IsInRange(); } }
     public bool HasEnergy => cost <= stats.CurEnergy;
-    
+
     // Used to determine if skill is active/inactive
     // Only one skill can be active at a point in time
     public bool skillOn { get; set; }
+    public SkillState SkillState { get; set; }
+    [SerializeField, Tooltip("")]
+    protected bool useDelayInSkillStateToComplete = false;
+    [SerializeField, Tooltip("")]
+    protected float skillStateToCompleteTimer = 1f;
+    protected float curSkillStateToCompleteTimer = 0f;
 
     public delegate void OnExecuteSkillDel();
     public event OnExecuteSkillDel OnExecuteSkillEvent;
     #endregion
+
+    public void SetSkillState(SkillState state)
+    {
+      SkillState = state;
+    }
 
     #region Private Methods
 
@@ -88,6 +100,7 @@ namespace Paraverse.Combat
     {
       if (CanUseSkill())
       {
+        SetSkillState(SkillState.InUse);
         OnExecuteSkillEvent?.Invoke();
         SubscribeAnimationEventListeners();
         ExecuteSkillLogic();
@@ -126,13 +139,7 @@ namespace Paraverse.Combat
         attackCollider = attackColliderGO.GetComponent<AttackCollider>();
         attackCollider.Init(mob, scalingStatData);
       }
-
       mob.OnAttackInterrupted += InterruptSkill;
-    }
-
-    protected virtual void InterruptSkill()
-    {
-      skillOn = false;
     }
 
     /// <summary>
@@ -149,6 +156,7 @@ namespace Paraverse.Combat
       this.anim = anim;
       this.stats = stats;
       _curCooldown = _cooldown;
+      SetSkillState(SkillState.InActive);
 
       if (null == attackColliderGO)
       {
@@ -160,7 +168,7 @@ namespace Paraverse.Combat
     }
 
     /// <summary>
-    /// Required inorder to deactivate skill when player dies or skill is no longer required. 
+    /// Required inorder to deactivate skill when player dies or skill is no longer required.[REQUIRED FOR PLAYER SKILLS ONLY]
     /// </summary>
     /// <param name="input"></param>
     public virtual void DeactivateSkill(PlayerInputControls input)
@@ -177,7 +185,7 @@ namespace Paraverse.Combat
     /// </summary>
     public virtual void SubscribeAnimationEventListeners()
     {
-      mob.OnDisableSkillOneEvent += OnSkillExecuted;
+      mob.OnDisableSkillOneEvent += OnSkillComplete;
     }
 
     /// <summary>
@@ -185,7 +193,7 @@ namespace Paraverse.Combat
     /// </summary>
     public virtual void UnsubscribeAnimationEventListeners()
     {
-      mob.OnDisableSkillOneEvent -= OnSkillExecuted;
+      mob.OnDisableSkillOneEvent -= OnSkillComplete;
     }
 
     /// <summary>
@@ -198,10 +206,47 @@ namespace Paraverse.Combat
         Execute();
       }
 
-      if (skillOn)
-        RotateToTarget();
+      //if (skillOn)
+      //RotateToTarget();
+
+      SkillStateManager();
 
       CooldownHandler();
+    }
+
+    protected void SkillStateManager()
+    {
+      if (SkillState.Equals(SkillState.InUse))
+        RotateToTarget();
+
+      if (SkillState.Equals(SkillState.Used))
+      {
+        // change skill state to complete after a set period of delay
+        if (useDelayInSkillStateToComplete )
+        {
+          RotateToTarget();
+          if (curSkillStateToCompleteTimer <= 0)
+          {
+            SetSkillState(SkillState.InActive);
+            curSkillStateToCompleteTimer = skillStateToCompleteTimer;
+          }
+          else
+          {
+            curSkillStateToCompleteTimer -= Time.deltaTime;
+          }
+        }
+        else
+        {
+          SetSkillState(SkillState.InActive);
+          curSkillStateToCompleteTimer = skillStateToCompleteTimer;
+        }
+      }
+    }
+
+    protected virtual void InterruptSkill()
+    {
+      skillOn = false;
+      SetSkillState(SkillState.InActive);
     }
 
     public void RefundCooldown(float refund)
@@ -234,16 +279,22 @@ namespace Paraverse.Combat
     {
       mob.IsSkilling = true;
       skillOn = true;
+      SetSkillState(SkillState.InUse);
       anim.SetBool(StringData.IsUsingSkill, true);
       _curCooldown = _cooldown * (1.0f - (stats.CooldownReduction.FinalValue / 100.0f));
       stats.UpdateCurrentEnergy(-cost);
       anim.Play(animName);
+      curSkillStateToCompleteTimer = skillStateToCompleteTimer;
     }
 
-    protected virtual void OnSkillExecuted()
+    /// <summary>
+    /// Required to run this method to manually set the mobs skill off. 
+    /// </summary>
+    protected virtual void OnSkillComplete()
     {
       skillOn = false;
       anim.SetBool(StringData.IsUsingSkill, false);
+      SetSkillState(SkillState.Used);
 
       UnsubscribeAnimationEventListeners();
     }
@@ -266,7 +317,7 @@ namespace Paraverse.Combat
     /// <returns></returns>
     protected virtual bool CanUseSkill()
     {
-      if (IsOffCooldown && HasEnergy && TargetWithinRange && mob.IsAttackLunging == false && anim.GetBool(StringData.IsBasicAttacking) == false)
+      if (IsOffCooldown && HasEnergy && TargetWithinRange && mob.IsAttackLunging == false && anim.GetBool(StringData.IsBasicAttacking) == false && mob.IsSkilling == false)
         return true;
 
       return false;
@@ -291,4 +342,11 @@ namespace Paraverse.Combat
     }
     #endregion
   }
+
+  public enum SkillState
+  {
+    InActive,  // skill is fully completed, can move on to next skill
+    InUse, // skill is in use
+    Used, // skill is used, but still need to stay on skill
+  };
 }

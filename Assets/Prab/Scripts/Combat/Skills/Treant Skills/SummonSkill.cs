@@ -32,12 +32,6 @@ public class SummonSkill : MobSkill, IMobSkill
         mob.OnSummonSkillOneEvent += SummonSapling;
     }
 
-    public override void DeactivateSkill(PlayerInputControls input)
-    {
-        base.DeactivateSkill(input);
-        mob.OnSummonSkillOneEvent -= SummonSapling;
-    }
-
     protected override bool CanUseSkill()
     {
         if (IsOffCooldown && HasEnergy && TargetWithinRange && CanSpawn())

@@ -63,7 +63,7 @@ public class BuffSkill : MobSkill, IMobSkill
     public override void DeactivateSkill(PlayerInputControls input)
     {
         base.DeactivateSkill(input);
-        OnSkillExecuted();
+        OnSkillComplete();
         Destroy(_VFX);
     }
 
@@ -112,7 +112,7 @@ public class BuffSkill : MobSkill, IMobSkill
     {
         if (_buffDurationElapsed <= 0 && null != Buffs[0].buff)
         {
-            OnSkillExecuted();
+            OnSkillComplete();
         }
         else
         {            
@@ -120,9 +120,9 @@ public class BuffSkill : MobSkill, IMobSkill
         }
     }
 
-    protected override void OnSkillExecuted()
+    protected override void OnSkillComplete()
     {
-        base.OnSkillExecuted();
+        base.OnSkillComplete();
 
         if (_VFX) 
         {

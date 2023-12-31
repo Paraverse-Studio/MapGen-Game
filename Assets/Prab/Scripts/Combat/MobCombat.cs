@@ -49,6 +49,8 @@ namespace Paraverse.Mob.Combat
     public List<MobSkill> Skills => _skills; 
     [SerializeField, Tooltip("Mob skills.")]
     protected List<MobSkill> _skills = new List<MobSkill>();
+    protected MobSkill ActiveSkill => _activeSkill;
+    protected MobSkill _activeSkill;
     public List<MobEffect> Effects => _effects;
     [SerializeField, Tooltip("Mob effects.")]
     protected List<MobEffect> _effects = new List<MobEffect>();
@@ -99,6 +101,14 @@ namespace Paraverse.Mob.Combat
     public event OnEnableBasicAttackColliderDel OnEnableBasicAttackCollider;
     public delegate void OnDisableBasicAttackColliderDel();
     public event OnDisableBasicAttackColliderDel OnDisableBasicAttackCollider;
+
+
+    // safety feature to disable skill if active too long
+    [SerializeField, Tooltip("")]
+    protected bool useSetSkillToCompleteSafetyFeature = true;
+    [SerializeField, Tooltip("")]
+    protected float setSkillToCompleteTimer = 10f;
+    protected float curSetSkillToCompleteTimer = 0;
     #endregion
     #endregion
 
@@ -122,20 +132,61 @@ namespace Paraverse.Mob.Combat
       distanceFromTarget = ParaverseHelper.GetDistance(transform.position, player.position);
       _isBasicAttacking = anim.GetBool(StringData.IsBasicAttacking);
 
-      if (anim.GetBool(StringData.IsUsingSkill))
+      //if (anim.GetBool(StringData.IsUsingSkill))
+      //IsSkilling = true;
+      //else
+      //IsSkilling = false;
+
+      // If active skill, then mob is skilling
+      if (ActiveSkill != null)
         IsSkilling = true;
       else
         IsSkilling = false;
 
+
+      MobSkill prevSkill = null;
+      MobSkill curSkill = null;
       // Gets active skill to run update method for each skill 
       for (int i = 0; i < _skills.Count; i++)
       {
         _skills[i].SkillUpdate();
-        if (_skills[i].skillOn)
+        //if (_skills[i].skillOn)
+        //{
+        //  usingSkillIdx = i;
+        //}
+
+        if (_activeSkill != null) prevSkill = _activeSkill;
+
+        if (_skills[i].SkillState.Equals(SkillState.InUse))
         {
-          usingSkillIdx = i;
+          curSkill = _skills[i];
+          // Set active skill
+          _activeSkill = curSkill;
+        }
+        if (_skills[i].SkillState.Equals(SkillState.InActive))
+        {
+          if (_activeSkill == _skills[i])
+          {
+            _activeSkill = null;
+          }
         }
       }
+      if (prevSkill != curSkill || prevSkill == null || curSkill == null)
+      {
+        curSetSkillToCompleteTimer = setSkillToCompleteTimer;
+      }
+      // Automatically set active skill to false due to potential bug
+      else if (curSetSkillToCompleteTimer <= 0)
+      {
+        Debug.LogWarning("Potential bug with set skill: " + _activeSkill + " off! Please ensure the skill is appropriately set off in OnSkillExecuted() method!");
+        _activeSkill.SetSkillState(SkillState.InActive);
+        _activeSkill = null;
+      }
+      else if (prevSkill.ID == curSkill.ID)
+      {
+        curSetSkillToCompleteTimer -= Time.deltaTime;
+      }
+      
       basicAttackSkill.SkillUpdate();
     }
     #endregion
@@ -148,6 +199,7 @@ namespace Paraverse.Mob.Combat
     {
       // Gets distance from target on start
       distanceFromTarget = ParaverseHelper.GetDistance(transform.position, player.position);
+      curSetSkillToCompleteTimer = setSkillToCompleteTimer;
 
       IsSkilling = false;
       if (null != basicAttackSkill)
@@ -233,8 +285,10 @@ namespace Paraverse.Mob.Combat
     {
       MobSkill skill;
 
-      if (IsSkilling)
-        skill = _skills[usingSkillIdx];
+      //if (IsSkilling)
+      //  skill = _skills[usingSkillIdx];
+      if (ActiveSkill)
+        skill = ActiveSkill;
       else
         skill = basicAttackSkill;
 
@@ -263,8 +317,8 @@ namespace Paraverse.Mob.Combat
     public void EnableHeldProjectile()
     {
       MobSkill skill;
-      if (IsSkilling)
-        skill = _skills[usingSkillIdx];
+      if (ActiveSkill)
+        skill = ActiveSkill;
       else
         skill = basicAttackSkill;
 

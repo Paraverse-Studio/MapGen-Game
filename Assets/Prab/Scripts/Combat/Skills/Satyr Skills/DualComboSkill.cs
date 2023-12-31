@@ -2,7 +2,6 @@ using Paraverse;
 using Paraverse.Combat;
 using Paraverse.Mob.Combat;
 using Paraverse.Mob.Stats;
-using Paraverse.Player;
 using UnityEngine;
 
 public class DualComboSkill : MobSkill, IMobSkill
@@ -30,6 +29,12 @@ public class DualComboSkill : MobSkill, IMobSkill
     offHandAttackCollider.Init(mob, scalingStatData);
     offHandAttackColliderGO.SetActive(false);
 
+    SubscribeAnimationEventListeners();
+  }
+
+  public override void SubscribeAnimationEventListeners()
+  {
+    base.SubscribeAnimationEventListeners();
     mob.OnEnableMainHandColliderSOneEvent += EnableMainHandAttackCollider;
     mob.OnDisableMainHandColliderSOneEvent += DisableMainHandAttackCollider;
     mob.OnEnableOffHandColliderSOneEvent += EnableOffHandAttackCollider;
@@ -37,10 +42,9 @@ public class DualComboSkill : MobSkill, IMobSkill
     mob.OnDisableSkillOneEvent += DisableSkillAndCollider;
   }
 
-  public override void DeactivateSkill(PlayerInputControls input)
+  public override void UnsubscribeAnimationEventListeners()
   {
-    base.DeactivateSkill(input);
-
+    base.UnsubscribeAnimationEventListeners();
     mob.OnEnableMainHandColliderSOneEvent -= EnableMainHandAttackCollider;
     mob.OnDisableMainHandColliderSOneEvent -= DisableMainHandAttackCollider;
     mob.OnEnableOffHandColliderSOneEvent -= EnableOffHandAttackCollider;
@@ -58,12 +62,7 @@ public class DualComboSkill : MobSkill, IMobSkill
 
   protected override void ExecuteSkillLogic()
   {
-    mob.IsSkilling = true;
-    skillOn = true;
-    anim.SetBool(StringData.IsUsingSkill, true);
-    _curCooldown = _cooldown;
-    stats.UpdateCurrentEnergy(-cost);
-    anim.Play(animName);
+    base.ExecuteSkillLogic();
   }
   #endregion
 
@@ -107,8 +106,7 @@ public class DualComboSkill : MobSkill, IMobSkill
     if (offHandAttackCollider != null)
       offHandAttackColliderGO.SetActive(false);
 
-    skillOn = false;
-    UnsubscribeAnimationEventListeners();
+    OnSkillComplete();
   }
   #endregion
 }
