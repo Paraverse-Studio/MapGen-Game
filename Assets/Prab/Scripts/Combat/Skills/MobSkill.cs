@@ -54,7 +54,7 @@ namespace Paraverse.Combat
     public float Cooldown => _cooldown;
     [SerializeField, Tooltip("Skill cooldown value.")]
     protected float _cooldown = 5f;
-    public float CurCooldown => _curCooldown;
+    public float CurCooldown { get => _curCooldown; set => _curCooldown = value; }
     protected float _curCooldown;
     public bool IsOffCooldown => _curCooldown <= 0;
 
