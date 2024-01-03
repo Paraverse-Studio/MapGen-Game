@@ -36,11 +36,6 @@ namespace Paraverse.Player
     [SerializeField]
     private GameObject _attackColliderGO;
 
-    // Skills 
-    [SerializeField]
-    private MobSkill _activeSkill;
-    public MobSkill ActiveSkill { get { return _activeSkill; } }
-
     [Header("SKill U.I.")]
     [SerializeField] private TextMeshProUGUI _skillLabel;
     [SerializeField] private TextMeshProUGUI _skillCDTime;
