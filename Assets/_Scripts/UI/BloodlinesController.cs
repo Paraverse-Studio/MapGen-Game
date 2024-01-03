@@ -18,6 +18,7 @@ public class BloodlinesController : MonoBehaviour
     public MobStats playerStats;
     public PlayerController playerController;
     public PlayerCombat playerCombat;
+    public Animator playerAnimator;
 
     [Header("Internal References")]
     public BloodlineType chosenBloodline;
@@ -68,6 +69,7 @@ public class BloodlinesController : MonoBehaviour
                 _playerDiveDuration = playerController.maxDiveDuration;
                 playerController.maxDiveDuration *= 1.5f;
                 playerController.diveForce += 5;
+                playerAnimator.speed = 1.2f;
                 break;
             case BloodlineType.Pioneer:
                 playerStats.CooldownReduction.AddMod(new StatModifier(30));
@@ -90,6 +92,7 @@ public class BloodlinesController : MonoBehaviour
             case BloodlineType.Harrier:
                 if (_playerDiveForce != -1) playerController.diveForce = _playerDiveForce;
                 if (_playerDiveDuration != -1) playerController.maxDiveDuration = _playerDiveDuration;
+                playerAnimator.speed = 1f;
                 break;
             case BloodlineType.Pioneer:
                 break;

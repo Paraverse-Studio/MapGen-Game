@@ -40,4 +40,9 @@ public class MainMenuController : MonoBehaviour
     Debug.Log("Password entry doesn't matter right now you dummy: " + _password);
   }
 
+    public void OnClickWebsiteLink()
+    {
+        Application.OpenURL("https://paraverse-studio-dev.herokuapp.com/");
+    }
+
 }
