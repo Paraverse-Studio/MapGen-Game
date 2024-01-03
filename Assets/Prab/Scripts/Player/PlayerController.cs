@@ -58,11 +58,11 @@ namespace Paraverse.Player
 
         [Header("Dive Values")]
         [SerializeField, Tooltip("The dive force of the mob.")]
-        private float diveForce = 10f;
+        public float diveForce = 10f;
         [SerializeField, Range(0, 10), Tooltip("The max distance of dive.")]
-        private float maxDiveRange = 3f;
+        public float maxDiveRange = 3f; 
         [SerializeField, Range(0, 3), Tooltip("The max duration of dive.")]
-        private float maxDiveDuration = 1f;
+        public float maxDiveDuration = 1f;
         private float curDiveDuration;
         [SerializeField, Range(0, 2), Tooltip("Time required to wait in between each dive.")]
         private float diveCd = 0.5f;

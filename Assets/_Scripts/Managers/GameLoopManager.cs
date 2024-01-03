@@ -256,7 +256,7 @@ public class GameLoopManager : MonoBehaviour
     {
         damageTaken = 0;
         totalEnemiesSpawned = 0;
-        lastHealthSaved = -1;
+        lastHealthSaved = 0;
         playerMaxHealth = 0;
         goldToReward = 0;
         _roundIsActive = false;
@@ -442,6 +442,8 @@ public class GameLoopManager : MonoBehaviour
     {
         if (attachOrRemove)
         {
+            playerMaxHealth = (int)playerStats.MaxHealth.FinalValue;
+            lastHealthSaved = (int)playerStats.CurHealth;
             playerStats.OnHealthChange.AddListener(AccrueDamageTaken);
             playerController.OnDeathEvent += EndRoundPremature;
             EnemiesManager.Instance.OnEnemiesListUpdated.AddListener(MapCreator.Instance.UpdateObjectiveText);
@@ -457,15 +459,8 @@ public class GameLoopManager : MonoBehaviour
     public void AccrueDamageTaken(int playerCurrentHealth, int _playerMaxHealth)
     {
         playerMaxHealth = _playerMaxHealth;
-
-        if (lastHealthSaved != -1)
-        {
-            damageTaken += Mathf.Max(lastHealthSaved - playerCurrentHealth, 0);
-        }
-        else
-        {
-            damageTaken += Mathf.Max(_playerMaxHealth - playerCurrentHealth, 0);
-        }
+        
+        damageTaken += Mathf.Max(lastHealthSaved - playerCurrentHealth, 0);        
 
         lastHealthSaved = playerCurrentHealth;
     }

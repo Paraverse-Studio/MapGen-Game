@@ -25,7 +25,7 @@ public class MainMenuController : MonoBehaviour
 
   public void OnChangeInputText(string s = null)
   {
-    if (string.IsNullOrWhiteSpace(usernameInput.text) || string.IsNullOrWhiteSpace(passwordInput.text))
+    if (string.IsNullOrWhiteSpace(usernameInput.text))
     {
       return;
     }
@@ -39,5 +39,10 @@ public class MainMenuController : MonoBehaviour
     _password = passwordInput.text;
     Debug.Log("Password entry doesn't matter right now you dummy: " + _password);
   }
+
+    public void OnClickWebsiteLink()
+    {
+        Application.OpenURL("https://paraverse-studio-dev.herokuapp.com/");
+    }
 
 }
