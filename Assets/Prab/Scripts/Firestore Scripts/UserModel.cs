@@ -1,8 +1,13 @@
+
+#if !UNITY_WEBGL || UNITY_EDITOR
 using Firebase.Firestore;
+#endif
 
 namespace ParaverseWebsite.Models
 {
+#if !UNITY_WEBGL || UNITY_EDITOR
   [FirestoreData]
+#endif
   public class UserModel
   {
 #if !UNITY_WEBGL || UNITY_EDITOR

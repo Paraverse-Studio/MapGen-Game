@@ -45,6 +45,7 @@ public class SummaryView : MonoBehaviour
     healthText.text = stats.CurHealth + "/" + stats.MaxHealth.BaseValue;
     mobsObtainedText.text = ModsManager.Instance.PurchasedMods.Count.ToString();
 
+#if !UNITY_WEBGL || UNITY_EDITOR
     // Gets the logged in user
     username = MainMenuController.Instance.Username;
 
@@ -53,9 +54,11 @@ public class SummaryView : MonoBehaviour
     {
       await UpdateDatabase(sessionData, stats, combat);
     }
+#endif
 
   }
 
+#if !UNITY_WEBGL || UNITY_EDITOR
   private async Task UpdateDatabase(GameLoopManager.PlayerSessionData sessionData, MobStats stats, PlayerCombat combat)
   {
     // Pass match history to db
@@ -127,4 +130,5 @@ public class SummaryView : MonoBehaviour
     await FirebaseDatabaseManager.Instance.CreateMatchHistory(matchHistoryModel);
     await FirebaseDatabaseManager.Instance.CreateLeaderboards(leaderboardsModel);
   }
+#endif
 }

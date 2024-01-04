@@ -1,7 +1,7 @@
+#if !UNITY_WEBGL || UNITY_EDITOR
 using Firebase.Extensions;
 using Firebase.Firestore;
 using ParaverseWebsite.Models;
-using System;
 using System.Collections.Generic;
 using System.Threading.Tasks;
 using UnityEngine;
@@ -144,3 +144,4 @@ public class FirebaseDatabaseManager : MonoBehaviour
     return document.SetAsync(model).ContinueWithOnMainThread(task => { });
   }
 }
+#endif

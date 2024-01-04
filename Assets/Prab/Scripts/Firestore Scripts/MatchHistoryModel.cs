@@ -114,7 +114,7 @@ public class MatchHistoryModel
     Ability = ability;
     Health = health;
     EffectsObtained = effectsObtained;
-    Timestamp = DateTime.Now.ToString();
+    Timestamp = "TBD";//DateTime.Now.ToString();
 #if UNITY_WEBGL 
     Device = DeviceType.WebGL.ToString();
 #endif
