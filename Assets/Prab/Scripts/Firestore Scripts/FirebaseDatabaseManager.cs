@@ -1,4 +1,3 @@
-#if !UNITY_WEBGL || UNITY_EDITOR
 using Firebase.Extensions;
 using Firebase.Firestore;
 using ParaverseWebsite.Models;
