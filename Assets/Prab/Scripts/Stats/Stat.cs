@@ -33,7 +33,19 @@ namespace Paraverse.Stats
             {
                 _tempStatModifier[i].Duration -= Time.deltaTime;
             }
-            _tempStatModifier.RemoveAll(temp => temp.Duration <= 0f);
+            _tempStatModifier.RemoveAll(mod => mod.Duration <= 0f);
+        }
+
+        /// <summary>
+        /// Run this method in Combat, whenever a round changes
+        /// </summary>
+        public void TempStatModifierRoundsHandler()
+        {
+            for (int i = 0; i < _tempStatModifier.Count; i++)
+            {
+                _tempStatModifier[i].DurationRounds -= 1;
+            }
+            _tempStatModifier.RemoveAll(mod => mod.DurationRounds <= 0f);
         }
 
         public float StatModifierSumValue()
