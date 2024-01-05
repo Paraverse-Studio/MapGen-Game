@@ -10,7 +10,6 @@ public class JumpSkill : MobSkill, IMobSkill
   protected MobController mobController;
   #endregion
 
-
   #region Inherited Methods
   public override void ActivateSkill(MobCombat mob, Animator anim, MobStats stats, Transform target = null)
   {
@@ -21,12 +20,7 @@ public class JumpSkill : MobSkill, IMobSkill
 
   protected override void ExecuteSkillLogic()
   {
-    mob.IsSkilling = true;
-    skillOn = true;
-    anim.SetBool(StringData.IsUsingSkill, true);
-    _curCooldown = _cooldown;
-    stats.UpdateCurrentEnergy(-cost);
-    anim.Play(animName);
+    base.ExecuteSkillLogic();
     mobController.ApplyJump(target.transform.position);
   }
 

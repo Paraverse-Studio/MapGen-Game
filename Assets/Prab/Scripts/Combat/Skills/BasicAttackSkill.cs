@@ -4,7 +4,7 @@ public class BasicAttackSkill : MobSkill, IMobSkill
 {
     public override void SkillUpdate()
     {
-        RotateToTarget();
+        TargetLockDuringSkill();
         CooldownHandler();
     }
 

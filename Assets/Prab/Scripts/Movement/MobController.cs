@@ -672,7 +672,7 @@ namespace Paraverse.Mob.Controller
 
             curAirCheckTimer = jumpCheckTimer;
             nav.enabled = false;
-            Debug.Log("Nav enabled on Apply Jump: " + nav.enabled);
+            //Debug.Log("Nav enabled on Apply Jump: " + nav.enabled);
             _isJumping = true;
             combat.OnAttackInterrupt();
             Vector3 targetDir = (mobPos - transform.position).normalized;
@@ -685,7 +685,7 @@ namespace Paraverse.Mob.Controller
         {
             if (_isJumping)
             {
-                Debug.Log("Nav enabled on Jump Handler: " + nav.enabled);
+                //Debug.Log("Nav enabled on Jump Handler: " + nav.enabled);
                 Vector3 landDir = new Vector3(jumpDir.x * jumpLateralForce, jumpDir.y, jumpDir.z * jumpLateralForce);
                 controller.Move(landDir * Time.deltaTime);
                 //nav.updateRotation = false;

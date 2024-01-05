@@ -37,17 +37,23 @@ namespace Paraverse.Player
     private GameObject _attackColliderGO;
 
     [Header("SKill U.I.")]
-    [SerializeField] private TextMeshProUGUI _skillLabel;
-    [SerializeField] private TextMeshProUGUI _skillCDTime;
-    [SerializeField] private Image _skillCDFill;
-    [SerializeField] private Image _skillIcon;
-    [SerializeField] private Animation _skillCDGlow;
-    [SerializeField] private ContentFitterRefresher _refresher;
-
+    [SerializeField] 
+    private TextMeshProUGUI _skillLabel;
+    [SerializeField] 
+    private TextMeshProUGUI _skillCDTime;
+    [SerializeField] 
+    private Image _skillCDFill;
+    [SerializeField] 
+    private Image _skillIcon;
+    [SerializeField] 
+    private Animation _skillCDGlow;
+    [SerializeField] 
+    private ContentFitterRefresher _refresher;
 
     // Reset to Default Skill UI upon player death
-    [SerializeField]
+    [SerializeField] 
     private Sprite noSkillSprite;
+
     #endregion
 
 
@@ -324,12 +330,11 @@ namespace Paraverse.Player
 
     public override void FireProjectile()
     {
-      MobSkill skill = null;
+      MobSkill skill;
 
+      // Need to fix this for player as ActiveSkill is always active
       if (IsSkilling)
-      {
-        skill = _activeSkill;
-      }
+        skill = ActiveSkill;
       else
       {
         skill = basicAttackSkill;
@@ -337,8 +342,8 @@ namespace Paraverse.Player
       }
 
       // Archers may hold an arrow which needs to be set to off/on when firing
-      if (basicAttackSkill.projData.projHeld != null)
-        basicAttackSkill.projData.projHeld.SetActive(false);
+      if (skill.projData.projHeld != null)
+        skill.projData.projHeld.SetActive(false);
 
       // Added to assist in auto aiming to enemy when targetted 
       Vector3 targetDir = transform.forward;
@@ -347,9 +352,9 @@ namespace Paraverse.Player
       //// Instantiate and initialize projectile
       if (null != skill.projData.projPf)
       {
-        GameObject go = Instantiate(skill.projData.projPf, transform.position, transform.rotation);
+        GameObject go = Instantiate(skill.projData.projPf, transform.position, skill.transform.rotation);
         Projectile proj = go.GetComponent<Projectile>();
-        proj.Init(this, targetDir, skill.scalingStatData);
+        proj.Init(this, targetDir, skill.projData.projSpeed, skill.scalingStatData);
 
         // Adds effect listeners to newly instantiated projectiles (OnAttackApplyDamage, OnAttackPostDamage, etc)
         foreach (MobEffect effect in Effects)
@@ -359,8 +364,9 @@ namespace Paraverse.Player
       }
       else Debug.LogError("A skill invoked PlayerCombat's FireProjectile without providing proper projectile data, and no default data.");
 
-      _activeSkill.skillOn = false;
-      anim.SetBool(StringData.IsUsingSkill, false);
+
+      // Sets SkillStaet to InActive and reset skill cooldown
+      AEventDisableSkill();
     }
     #endregion
   }

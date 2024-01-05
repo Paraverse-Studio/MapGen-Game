@@ -13,7 +13,7 @@ public class ProjectileData
     [Tooltip("The projectile's rotation. [if null, will get the look rotation from mob to target.]")]
     public Transform projRotation;
     [Tooltip("The projectile's speed.")]
-    public float basicAtkProjSpeed = 10f;
+    public float projSpeed = 10f;
 
     // Updated via Mob Skill
     //public ScalingStatData scalingStatData;

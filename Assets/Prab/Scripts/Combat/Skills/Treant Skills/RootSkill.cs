@@ -22,7 +22,8 @@ public class RootSkill : MobSkill, IMobSkill
   protected override void ExecuteSkillLogic()
   {
     mob.IsSkilling = true;
-    skillOn = true;
+    //skillOn = true;
+    SetSkillState(SkillState.InUse);
     anim.SetBool(StringData.IsUsingSkill, true);
     curRootDuration = rootDuration;
     stats.UpdateCurrentEnergy(-cost);
@@ -44,16 +45,17 @@ public class RootSkill : MobSkill, IMobSkill
   #region Private Methods
   private void RootHandler()
   {
-    if (skillOn == false) return;
-
-    if (curRootDuration <= 0)
+    if (SkillState.Equals(SkillState.InUse))
     {
-      OnSkillComplete();
-      _curCooldown = _cooldown;
-    }
-    else
-    {
-      curRootDuration -= Time.deltaTime;
+      if (curRootDuration <= 0)
+      {
+        OnSkillComplete();
+        _curCooldown = _cooldown;
+      }
+      else
+      {
+        curRootDuration -= Time.deltaTime;
+      }
     }
   }
   #endregion

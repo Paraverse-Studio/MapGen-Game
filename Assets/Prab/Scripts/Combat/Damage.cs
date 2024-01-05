@@ -181,12 +181,12 @@ public class Damage : MonoBehaviour, IDamage
         if (isBasicAttackCollider)
         {
             OnBasicAttackPreHitEvent?.Invoke();
-            Debug.Log("Invoked OnBasicAttackPreEvent");
+            //Debug.Log("Invoked OnBasicAttackPreEvent");
         }
         else
         {
             OnAttackPreHitEvent?.Invoke();
-            Debug.Log("Invoked OnAttackPreEvent");
+            //Debug.Log("Invoked OnAttackPreEvent");
         }
     }
 
@@ -196,12 +196,12 @@ public class Damage : MonoBehaviour, IDamage
         if (isBasicAttackCollider)
         {
             OnBasicAttackApplyDamageEvent?.Invoke(dmg);
-            Debug.Log("Invoked OnBasicAttackApplyDamageEvent");
+            //Debug.Log("Invoked OnBasicAttackApplyDamageEvent");
         }
         else
         {
             OnAttackApplyDamageEvent?.Invoke(dmg);
-            Debug.Log("Invoked OnAttackApplyDamageEvent");
+            //Debug.Log("Invoked OnAttackApplyDamageEvent");
         }
     }
 
@@ -211,13 +211,12 @@ public class Damage : MonoBehaviour, IDamage
         if (isBasicAttackCollider)
         {
             OnBasicAttackPostHitEvent?.Invoke();
-            Debug.Log("Invoked OnBasicAttackPostHitEvent");
+            //Debug.Log("Invoked OnBasicAttackPostHitEvent");
         }
         else
         {
             OnAttackPostHitEvent?.Invoke();
-            Debug.Log("Invoked OnAttackPostHitEvent");
-
+            //Debug.Log("Invoked OnAttackPostHitEvent");
         }
     }
 }

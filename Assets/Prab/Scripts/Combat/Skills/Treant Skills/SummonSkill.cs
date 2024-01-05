@@ -82,7 +82,8 @@ public class SummonSkill : MobSkill, IMobSkill
       GameObject sapling = Instantiate(summonPf, spawnPos, transform.rotation);
       _summonedMob = sapling.GetComponentInChildren<MobController>();
       _summonedMob.OnDeathEvent += DecrementSummonCount;
-      skillOn = false;
+      //skillOn = false;
+      SetSkillState(SkillState.InActive);
     },
     delaySpawnActivation));
 

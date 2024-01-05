@@ -211,7 +211,7 @@ namespace Paraverse.Mob.Combat
       for (int i = 0; i < _skills.Count; i++)
       {
         _skills[i].ActivateSkill(this, anim, stats, player);
-        if (_skills[i].skillOn)
+        if (_skills[i].SkillState.Equals(SkillState.InUse))
         {
           IsSkilling = true;
         }
@@ -306,8 +306,7 @@ namespace Paraverse.Mob.Combat
     {
       MobSkill skill;
 
-      //if (IsSkilling)
-      //  skill = _skills[usingSkillIdx];
+      // Need to fix this for player as ActiveSkill is always active
       if (ActiveSkill)
         skill = ActiveSkill;
       else
@@ -329,7 +328,8 @@ namespace Paraverse.Mob.Combat
       // Instantiate and initialize projectile
       GameObject go = Instantiate(skill.projData.projPf, skill.projData.projOrigin.position, lookRot);
       Projectile proj = go.GetComponent<Projectile>();
-      proj.Init(this, targetDir, skill.projData.basicAtkProjSpeed, skill.scalingStatData);
+      proj.Init(this, targetDir, skill.projData.projSpeed, skill.scalingStatData);
+      OnDisableSkillOneEvent();
     }
 
     /// <summary>

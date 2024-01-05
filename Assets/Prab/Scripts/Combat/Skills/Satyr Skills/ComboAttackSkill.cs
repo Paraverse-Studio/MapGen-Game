@@ -4,12 +4,18 @@ using Paraverse.Mob.Combat;
 using Paraverse.Mob.Stats;
 using UnityEngine;
 
-public class DualComboSkill : MobSkill, IMobSkill
+public class ComboAttackSkill : MobSkill, IMobSkill
 {
   #region Variables
   [SerializeField]
   protected GameObject offHandAttackColliderGO;
   protected AttackCollider offHandAttackCollider;
+
+  [SerializeField]
+  private ComboAttack[] comboDetails;
+
+  private int comboIdx = 0;
+  private int maxComboIdx;
   #endregion
 
 
@@ -29,6 +35,10 @@ public class DualComboSkill : MobSkill, IMobSkill
     offHandAttackCollider.Init(mob, scalingStatData);
     offHandAttackColliderGO.SetActive(false);
 
+    foreach (ComboAttack details in comboDetails)
+    {
+      details.Init(anim);
+    }
     SubscribeAnimationEventListeners();
   }
 
@@ -58,11 +68,56 @@ public class DualComboSkill : MobSkill, IMobSkill
   public override void SkillUpdate()
   {
     base.SkillUpdate();
+    ComboAttack combo = comboDetails[comboIdx];
+    if (combo.State.Equals(ComboState.Complete))
+      ProceedToNextCombo();
+
+    combo.ComboUpdate();
+    if (combo.AnimFinished && comboDetails[comboIdx].State.Equals(ComboState.Attack))
+      RotateToTarget();
   }
 
   protected override void ExecuteSkillLogic()
   {
     base.ExecuteSkillLogic();
+
+    ComboInit();
+    comboDetails[comboIdx].StartAttack();
+  }
+  #endregion
+
+  #region Private Methods
+  private void ComboInit()
+  {
+    comboIdx = 0;
+    maxComboIdx = comboDetails.Length - 1;
+    comboDetails[comboIdx].Init(anim);
+
+    foreach (ComboAttack details in comboDetails)
+    {
+      details.Init(anim);
+    }
+  }
+
+  private void ProceedToNextCombo()
+  {
+    comboIdx++;
+    ComboAttack combo = comboDetails[comboIdx];
+
+    if (comboIdx > maxComboIdx)
+      CompleteCombo();
+
+    // Updates state instantly to attack 
+    // Can specify conditions like rotation in between if required
+    if (combo.State.Equals(ComboState.Idle))
+      combo.StartAttack();
+  }
+
+  private void CompleteCombo()
+  {
+    comboDetails[comboIdx].OnAttackComplete();
+    comboIdx = 0; 
+    OnSkillComplete();
   }
   #endregion
 
@@ -72,7 +127,8 @@ public class DualComboSkill : MobSkill, IMobSkill
     if (attackColliderGO != null)
       attackColliderGO.SetActive(true);
 
-    skillOn = true;
+    //skillOn = true;
+    SetSkillState(SkillState.InUse);
   }
 
   public void DisableMainHandAttackCollider()
@@ -80,7 +136,7 @@ public class DualComboSkill : MobSkill, IMobSkill
     if (attackColliderGO != null)
       attackColliderGO.SetActive(false);
 
-    skillOn = false;
+    //skillOn = false;
   }
 
   public void EnableOffHandAttackCollider()
@@ -88,7 +144,8 @@ public class DualComboSkill : MobSkill, IMobSkill
     if (offHandAttackCollider != null)
       offHandAttackColliderGO.SetActive(true);
 
-    skillOn = true;
+    //skillOn = true;
+    SetSkillState(SkillState.InUse);
   }
 
   public void DisableOffHandAttackCollider()
@@ -96,7 +153,7 @@ public class DualComboSkill : MobSkill, IMobSkill
     if (offHandAttackCollider != null)
       offHandAttackColliderGO.SetActive(false);
 
-    skillOn = false;
+    //skillOn = false;
   }
 
   public void DisableSkillAndCollider()

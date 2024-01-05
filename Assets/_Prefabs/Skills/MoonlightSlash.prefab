@@ -49,13 +49,15 @@ MonoBehaviour:
   _image: {fileID: 21300000, guid: 384463519ad41f34f9fde5eceea2b11a, type: 3}
   _description: 'Active Skill: Fire off a vertical slash of moonlight at fast speed
     that deals [DMG] damage.'
+  animName: VerticalSlash
+  cost: 30
+  _isBasicAttack: 0
+  _isMelee: 0
+  usesTargetLock: 1
+  rotSpeed: 100
   _minRange: 0
   _maxRange: 5
-  cooldown: 3.5
-  cost: 30
-  animName: VerticalSlash
-  isBasicAttack: 0
-  _isMelee: 0
+  _cooldown: 5
   attackColliderGO: {fileID: 0}
   attackCollider: {fileID: 0}
   projData:
@@ -63,11 +65,10 @@ MonoBehaviour:
     projHeld: {fileID: 0}
     projOrigin: {fileID: 0}
     projRotation: {fileID: 0}
-    basicAtkProjSpeed: 25
-  usesTargetLock: 1
-  rotSpeed: 100
+    projSpeed: 40
   scalingStatData:
     flatPower: 15
     attackScaling: 0
     abilityScaling: 1.2
     healthScaling: 0
+  skillStateToCompleteTimer: 1
