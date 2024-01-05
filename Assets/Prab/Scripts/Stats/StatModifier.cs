@@ -2,7 +2,7 @@ namespace Paraverse.Stats
 {
     public class StatModifier
     {
-        public string Name { get; set; }
+        public string Name { get; set; } = "Stat Modifier";
         public float Value { get; set; }
 
         public StatModifier(string name, float value)

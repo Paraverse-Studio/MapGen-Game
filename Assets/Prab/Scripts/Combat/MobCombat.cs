@@ -235,10 +235,14 @@ namespace Paraverse.Mob.Combat
     {
         if (TryGetComponent(out stats))
         {
-            stats.AttackDamage.AddMod(new StatModifier((int)(stats.AttackDamage.FinalValue * 0.5f)));
-            stats.MaxHealth.AddMod(new StatModifier(stats.MaxHealth.FinalValue * 0.5f));
+            stats.AttackDamage.AddMod(new ((int)(stats.AttackDamage.FinalValue * 0.5f)));
+            stats.MaxHealth.AddMod(new (stats.MaxHealth.FinalValue));
             stats.SetFullHealth();
-            if (basicAttackSkill) basicAttackSkill.CurCooldown *= 0.25f;
+            if (basicAttackSkill)
+            {
+                basicAttackSkill.Cooldown *= 0.25f;
+            }
+            stats.MoveSpeed.AddMod(new (2));
         }
     }
 

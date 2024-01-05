@@ -80,13 +80,15 @@ MonoBehaviour:
   _ID: -1
   _image: {fileID: 0}
   _description: 
+  animName: BasicAttack
+  cost: 10
+  _isBasicAttack: 0
+  _isMelee: 0
+  usesTargetLock: 0
+  rotSpeed: 100
   _minRange: 3
   _maxRange: 9
-  cooldown: 2
-  cost: 10
-  animName: BasicAttack
-  isBasicAttack: 1
-  _isMelee: 0
+  _cooldown: 5
   attackColliderGO: {fileID: 0}
   attackCollider: {fileID: 0}
   projData:
@@ -95,8 +97,6 @@ MonoBehaviour:
     projOrigin: {fileID: 1374451527}
     projRotation: {fileID: 0}
     basicAtkProjSpeed: 10
-  usesTargetLock: 0
-  rotSpeed: 100
   scalingStatData:
     flatPower: 0
     attackScaling: 1
@@ -3721,7 +3721,7 @@ MonoBehaviour:
   maxWaitDur: 10
   accurayWP: 2
   stoppingDistance: 9
-  detectionRadius: 11
+  detectionRadius: 10
   pursueRadius: 17
   customPursueRange: 0
   pursueRange: 10
@@ -3762,9 +3762,8 @@ MonoBehaviour:
   stats: {fileID: 0}
   projUser: 1
   basicAttackSkill: {fileID: 1061767023}
-  skills: []
-  effects: []
-  animBool: isUsingSkill
+  _skills: []
+  _effects: []
 --- !u!114 &1376336924
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -3785,6 +3784,8 @@ MonoBehaviour:
   moveSpeed: 3
   maxEnergy: 100
   _curEnergy: 100
+  cooldownReduction: 0
+  healthRegen: 0
   energyRegen: 25
   _gold: 100
   OnHealthChange:

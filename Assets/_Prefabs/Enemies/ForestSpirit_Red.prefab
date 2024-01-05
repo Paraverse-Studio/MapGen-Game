@@ -48,13 +48,15 @@ MonoBehaviour:
   _ID: -1
   _image: {fileID: 0}
   _description: 
+  animName: BasicAttack
+  cost: 0
+  _isBasicAttack: 0
+  _isMelee: 0
+  usesTargetLock: 0
+  rotSpeed: 100
   _minRange: 0
   _maxRange: 3.25
-  cooldown: 2.2
-  cost: 0
-  animName: BasicAttack
-  isBasicAttack: 1
-  _isMelee: 0
+  _cooldown: 5
   attackColliderGO: {fileID: 2739856676951319334}
   attackCollider: {fileID: 2739856676951319332}
   projData:
@@ -63,8 +65,6 @@ MonoBehaviour:
     projOrigin: {fileID: 0}
     projRotation: {fileID: 0}
     basicAtkProjSpeed: 10
-  usesTargetLock: 0
-  rotSpeed: 100
   scalingStatData:
     flatPower: 0
     attackScaling: 1
@@ -1447,16 +1447,18 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   targetTag: Player
+  knockBackEffect: {fileID: 0}
   dot: 0
   dontApplyDamageOnEnter: 1
-  knockBackEffect: {fileID: 0}
+  dotIntervalTimer: 1
+  applyHitAnim: 1
   hitFX: {fileID: 0}
-  isBasicAttackCollider: 0
   scalingStatData:
     flatPower: 0
     attackScaling: 1
     abilityScaling: 0
     healthScaling: 0
+  isBasicAttackCollider: 0
 --- !u!1 &2739856676951319334
 GameObject:
   m_ObjectHideFlags: 0
@@ -1569,16 +1571,18 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   targetTag: Player
+  knockBackEffect: {fileID: 11400000, guid: 598974d11fcf1634694fbcf7947f6e76, type: 2}
   dot: 0
   dontApplyDamageOnEnter: 0
-  knockBackEffect: {fileID: 11400000, guid: 598974d11fcf1634694fbcf7947f6e76, type: 2}
+  dotIntervalTimer: 1
+  applyHitAnim: 1
   hitFX: {fileID: 0}
-  isBasicAttackCollider: 0
   scalingStatData:
     flatPower: 0
     attackScaling: 1
     abilityScaling: 0
     healthScaling: 0
+  isBasicAttackCollider: 0
 --- !u!1 &3236425430432729743
 GameObject:
   m_ObjectHideFlags: 0
@@ -3261,8 +3265,8 @@ MonoBehaviour:
   maxWaitDur: 10
   accurayWP: 2
   stoppingDistance: 3
-  detectionRadius: 8
-  pursueRadius: 12
+  detectionRadius: 7
+  pursueRadius: 11
   customPursueRange: 0
   pursueRange: 10
   _isStrafer: 0
@@ -3302,9 +3306,8 @@ MonoBehaviour:
   stats: {fileID: 0}
   projUser: 0
   basicAttackSkill: {fileID: 2229417013032440403}
-  skills: []
-  effects: []
-  animBool: isUsingSkill
+  _skills: []
+  _effects: []
 --- !u!114 &1810881194
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -3325,6 +3328,8 @@ MonoBehaviour:
   moveSpeed: 2.5
   maxEnergy: 100
   _curEnergy: 100
+  cooldownReduction: 0
+  healthRegen: 0
   energyRegen: 25
   _gold: 100
   OnHealthChange:
