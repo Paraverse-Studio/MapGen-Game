@@ -1,50 +1,30 @@
-/*
-using Firebase.Firestore;
 using System;
 
-[FirestoreData]
-public class MatchHistoryModel
+[Serializable]
+public class MatchHistoryModelWebGL
 {
-  [FirestoreProperty]
-  public string Username { get; set; }
-  [FirestoreProperty]
-  public int RoundNumberReached { get; set; }
-  [FirestoreProperty]
-  public string SessionLength { get; set; }
-  [FirestoreProperty]
-  public int DamageTaken { get; set; }
-  [FirestoreProperty]
-  public int TotalScore { get; set; }
-  [FirestoreProperty]
-  public int GoldEarned { get; set; }
-  [FirestoreProperty]
-  public int MobsDefeatedCount { get; set; }
-  [FirestoreProperty]
-  public int BossesDefeatedCount { get; set; }
-  [FirestoreProperty]
-  public int MysticDungeonsEnteredCount { get; set; }
-  [FirestoreProperty]
-  public string BloodLine { get; set; }
-  [FirestoreProperty]
-  public string SkillUsed { get; set; }
-  [FirestoreProperty]
-  public int Attack { get; set; }
-  [FirestoreProperty]
-  public int Ability { get; set; }
-  [FirestoreProperty]
-  public string Health { get; set; }
-  [FirestoreProperty]
-  public string EffectsObtained { get; set; }
-  [FirestoreProperty]
-  public string Device { get; set; }
-  [FirestoreProperty]
-  public string Timestamp { get; set; }
+  public string Username;
+  public int RoundNumberReached;
+  public string SessionLength;
+  public int DamageTaken;
+  public int TotalScore;
+  public int GoldEarned;
+  public int MobsDefeatedCount;
+  public int BossesDefeatedCount;
+  public int MysticDungeonsEnteredCount;
+  public string BloodLine;
+  public string SkillUsed;
+  public int Attack;
+  public int Ability;
+  public string Health;
+  public string EffectsObtained;
+  public string Device;
+  public string Timestamp;
 
 
+  public MatchHistoryModelWebGL() { }
 
-  public MatchHistoryModel() { }
-
-  public MatchHistoryModel(
+  public MatchHistoryModelWebGL(
       string username,
       int roundNumberReached,
       string sessionLength,
@@ -89,6 +69,9 @@ public class MatchHistoryModel
 #endif
   }
 }
-
-
-*/
+public enum DeviceType
+{
+  Mobile,
+  WebGL,
+  Desktop
+}

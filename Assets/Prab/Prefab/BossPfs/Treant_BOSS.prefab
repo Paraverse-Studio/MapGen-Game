@@ -1803,7 +1803,10 @@ MonoBehaviour:
   - {fileID: 8305639318263375680}
   - {fileID: 8305639317601381804}
   - {fileID: 8305639318240610835}
+  _activeSkill: {fileID: 0}
   _effects: []
+  useSetSkillToCompleteSafetyFeature: 1
+  setSkillToCompleteTimer: 10
 --- !u!114 &6864850351671179467
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -3874,12 +3877,13 @@ MonoBehaviour:
     projHeld: {fileID: 0}
     projOrigin: {fileID: 0}
     projRotation: {fileID: 0}
-    basicAtkProjSpeed: 10
+    projSpeed: 10
   scalingStatData:
     flatPower: 0
     attackScaling: 0
     abilityScaling: 0
     healthScaling: 0
+  skillStateToCompleteTimer: 1
   summonPf: {fileID: 7898848738789558338, guid: da4c325d14569204bb33863f10b1e815, type: 3}
   maxSummonCount: 3
   curSummonCount: 0
@@ -3949,12 +3953,13 @@ MonoBehaviour:
     projHeld: {fileID: 0}
     projOrigin: {fileID: 0}
     projRotation: {fileID: 0}
-    basicAtkProjSpeed: 10
+    projSpeed: 10
   scalingStatData:
     flatPower: 0
     attackScaling: 1
     abilityScaling: 0
     healthScaling: 0
+  skillStateToCompleteTimer: 1
 --- !u!1 &8305639317755612592
 GameObject:
   m_ObjectHideFlags: 0
@@ -4159,12 +4164,13 @@ MonoBehaviour:
     projHeld: {fileID: 0}
     projOrigin: {fileID: 0}
     projRotation: {fileID: 0}
-    basicAtkProjSpeed: 10
+    projSpeed: 10
   scalingStatData:
     flatPower: 0
     attackScaling: 1
     abilityScaling: 0.5
     healthScaling: 0
+  skillStateToCompleteTimer: 1
   lifeStealRatio: 0.8
 --- !u!1 &8305639318263375686
 GameObject:
@@ -4231,12 +4237,13 @@ MonoBehaviour:
     projHeld: {fileID: 0}
     projOrigin: {fileID: 8255129907238067387}
     projRotation: {fileID: 8255129907238067387}
-    basicAtkProjSpeed: 10
+    projSpeed: 10
   scalingStatData:
     flatPower: 0
     attackScaling: 0
     abilityScaling: 0.5
     healthScaling: 0
+  skillStateToCompleteTimer: 1
   rootDuration: 1.5
 --- !u!1001 &8914295948623182555
 PrefabInstance:

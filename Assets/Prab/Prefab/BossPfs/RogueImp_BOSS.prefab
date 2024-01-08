@@ -64,12 +64,201 @@ MonoBehaviour:
     projHeld: {fileID: 0}
     projOrigin: {fileID: 2657095164103751762}
     projRotation: {fileID: 0}
-    basicAtkProjSpeed: 20
+    projSpeed: 15
   scalingStatData:
     flatPower: 0
     attackScaling: 0
     abilityScaling: 1
     healthScaling: 0
+  skillStateToCompleteTimer: 1
+--- !u!1 &493694803
+GameObject:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  serializedVersion: 6
+  m_Component:
+  - component: {fileID: 493694804}
+  - component: {fileID: 493694805}
+  m_Layer: 15
+  m_Name: ComboDetailsAttack03
+  m_TagString: Untagged
+  m_Icon: {fileID: 0}
+  m_NavMeshLayer: 0
+  m_StaticEditorFlags: 0
+  m_IsActive: 1
+--- !u!4 &493694804
+Transform:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 493694803}
+  m_LocalRotation: {x: -0, y: -0, z: -0, w: 1}
+  m_LocalPosition: {x: 0, y: 0, z: 0}
+  m_LocalScale: {x: 1, y: 1, z: 1}
+  m_ConstrainProportionsScale: 0
+  m_Children: []
+  m_Father: {fileID: 1908622637}
+  m_RootOrder: 3
+  m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
+--- !u!114 &493694805
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 493694803}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 9d8dac3ba70922a4aaa5e4a51bd2c14f, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  State: 0
+  animName: Attack03
+  delayAfterAttackTime: 0
+--- !u!1 &1052735119
+GameObject:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  serializedVersion: 6
+  m_Component:
+  - component: {fileID: 1052735120}
+  - component: {fileID: 1052735121}
+  m_Layer: 15
+  m_Name: ComboDetailsAttackCombo
+  m_TagString: Untagged
+  m_Icon: {fileID: 0}
+  m_NavMeshLayer: 0
+  m_StaticEditorFlags: 0
+  m_IsActive: 1
+--- !u!4 &1052735120
+Transform:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1052735119}
+  m_LocalRotation: {x: -0, y: -0, z: -0, w: 1}
+  m_LocalPosition: {x: 0, y: 0, z: 0}
+  m_LocalScale: {x: 1, y: 1, z: 1}
+  m_ConstrainProportionsScale: 0
+  m_Children: []
+  m_Father: {fileID: 1908622637}
+  m_RootOrder: 0
+  m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
+--- !u!114 &1052735121
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1052735119}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 9d8dac3ba70922a4aaa5e4a51bd2c14f, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  State: 0
+  animName: Roar
+  delayAfterAttackTime: 0.5
+--- !u!1 &1058177741
+GameObject:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  serializedVersion: 6
+  m_Component:
+  - component: {fileID: 1058177742}
+  - component: {fileID: 1058177743}
+  m_Layer: 15
+  m_Name: ComboDetailsAttack02
+  m_TagString: Untagged
+  m_Icon: {fileID: 0}
+  m_NavMeshLayer: 0
+  m_StaticEditorFlags: 0
+  m_IsActive: 1
+--- !u!4 &1058177742
+Transform:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1058177741}
+  m_LocalRotation: {x: -0, y: -0, z: -0, w: 1}
+  m_LocalPosition: {x: 0, y: 0, z: 0}
+  m_LocalScale: {x: 1, y: 1, z: 1}
+  m_ConstrainProportionsScale: 0
+  m_Children: []
+  m_Father: {fileID: 1908622637}
+  m_RootOrder: 2
+  m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
+--- !u!114 &1058177743
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1058177741}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 9d8dac3ba70922a4aaa5e4a51bd2c14f, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  State: 0
+  animName: Attack02
+  delayAfterAttackTime: 0.5
+--- !u!1 &1587884300
+GameObject:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  serializedVersion: 6
+  m_Component:
+  - component: {fileID: 1587884301}
+  - component: {fileID: 1587884302}
+  m_Layer: 15
+  m_Name: ComboDetailsAttack01
+  m_TagString: Untagged
+  m_Icon: {fileID: 0}
+  m_NavMeshLayer: 0
+  m_StaticEditorFlags: 0
+  m_IsActive: 1
+--- !u!4 &1587884301
+Transform:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1587884300}
+  m_LocalRotation: {x: -0, y: -0, z: -0, w: 1}
+  m_LocalPosition: {x: 0, y: 0, z: 0}
+  m_LocalScale: {x: 1, y: 1, z: 1}
+  m_ConstrainProportionsScale: 0
+  m_Children: []
+  m_Father: {fileID: 1908622637}
+  m_RootOrder: 1
+  m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
+--- !u!114 &1587884302
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1587884300}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 9d8dac3ba70922a4aaa5e4a51bd2c14f, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  State: 0
+  animName: Attack01
+  delayAfterAttackTime: 0.5
 --- !u!1 &1678626640
 GameObject:
   m_ObjectHideFlags: 0
@@ -169,12 +358,13 @@ MonoBehaviour:
     projHeld: {fileID: 0}
     projOrigin: {fileID: 2657095163666507577}
     projRotation: {fileID: 2657095163666507577}
-    basicAtkProjSpeed: 0
+    projSpeed: 10
   scalingStatData:
     flatPower: 0
     attackScaling: 0
     abilityScaling: 0.2
     healthScaling: 0
+  skillStateToCompleteTimer: 1
   skillStartTimer: 3
 --- !u!1 &1849899257
 GameObject:
@@ -240,12 +430,13 @@ MonoBehaviour:
     projHeld: {fileID: 0}
     projOrigin: {fileID: 0}
     projRotation: {fileID: 0}
-    basicAtkProjSpeed: 10
+    projSpeed: 10
   scalingStatData:
     flatPower: 0
     attackScaling: 1
     abilityScaling: 0
     healthScaling: 0
+  skillStateToCompleteTimer: 1
 --- !u!1 &1908622636
 GameObject:
   m_ObjectHideFlags: 0
@@ -257,7 +448,7 @@ GameObject:
   - component: {fileID: 1908622637}
   - component: {fileID: 1908622638}
   m_Layer: 15
-  m_Name: DualComboAttack
+  m_Name: ComboAttackSkill
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
@@ -274,7 +465,11 @@ Transform:
   m_LocalPosition: {x: 0, y: 0, z: 0}
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_ConstrainProportionsScale: 0
-  m_Children: []
+  m_Children:
+  - {fileID: 1052735120}
+  - {fileID: 1587884301}
+  - {fileID: 1058177742}
+  - {fileID: 493694804}
   m_Father: {fileID: 1678626641}
   m_RootOrder: 0
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
@@ -290,7 +485,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 43081201aa9258742b6c2a34ca9248ed, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  _skillName: Attack01
+  _skillName: Combo Attack Skill
   _ID: -1
   _image: {fileID: 0}
   _description: 
@@ -310,13 +505,19 @@ MonoBehaviour:
     projHeld: {fileID: 0}
     projOrigin: {fileID: 0}
     projRotation: {fileID: 0}
-    basicAtkProjSpeed: 10
+    projSpeed: 10
   scalingStatData:
     flatPower: 0
     attackScaling: 1
     abilityScaling: 0
     healthScaling: 0
+  skillStateToCompleteTimer: 1
   offHandAttackColliderGO: {fileID: 2657095164408987043}
+  comboDetails:
+  - {fileID: 1052735121}
+  - {fileID: 1587884302}
+  - {fileID: 1058177743}
+  - {fileID: 493694805}
 --- !u!1 &1926738171508432033
 GameObject:
   m_ObjectHideFlags: 0
@@ -2246,7 +2447,7 @@ Animator:
   m_GameObject: {fileID: 1926738171508432141}
   m_Enabled: 1
   m_Avatar: {fileID: 9000000, guid: a5bbafac9a7f92c4490b89f02ba58d2c, type: 3}
-  m_Controller: {fileID: 9100000, guid: 343c3913839069e4f9412829d3e89265, type: 2}
+  m_Controller: {fileID: 9100000, guid: b02b9268831599140afb8e736d859dd4, type: 2}
   m_CullingMode: 1
   m_UpdateMode: 0
   m_ApplyRootMotion: 0
@@ -2342,7 +2543,7 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   walkSpeedRatio: 1
   sprintSpeedRatio: 2.5
-  rotSpeed: 100
+  rotSpeed: 1000
   wps: []
   minWaitDur: 2
   maxWaitDur: 5
@@ -2355,7 +2556,7 @@ MonoBehaviour:
   _isStrafer: 0
   strafePoint: {fileID: 0}
   strafeAccuracy: 1
-  atkDashForce: 25
+  atkDashForce: 20
   jumpLateralForce: 12
   jumpHeightForce: 7
   isGroundedCheckRange: 0.5
@@ -2391,9 +2592,12 @@ MonoBehaviour:
   basicAttackSkill: {fileID: 80345161}
   _skills:
   - {fileID: 1908622638}
-  - {fileID: 1719642824}
   - {fileID: 1849899259}
+  - {fileID: 1719642824}
+  _activeSkill: {fileID: 0}
   _effects: []
+  useSetSkillToCompleteSafetyFeature: 1
+  setSkillToCompleteTimer: 10
 --- !u!114 &2657095164308100577
 MonoBehaviour:
   m_ObjectHideFlags: 0

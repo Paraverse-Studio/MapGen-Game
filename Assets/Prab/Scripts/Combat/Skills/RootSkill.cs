@@ -21,11 +21,8 @@ public class RootSkill : MobSkill, IMobSkill
 
   protected override void ExecuteSkillLogic()
   {
-    SetSkillState(SkillState.InUse);
-    anim.SetBool(StringData.IsUsingSkill, true);
+    base.ExecuteSkillLogic();
     curRootDuration = rootDuration;
-    stats.UpdateCurrentEnergy(-cost);
-    anim.Play(animName);
   }
   #endregion
 

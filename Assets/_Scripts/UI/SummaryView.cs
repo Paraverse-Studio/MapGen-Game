@@ -45,90 +45,174 @@ public class SummaryView : MonoBehaviour
     healthText.text = stats.CurHealth + "/" + stats.MaxHealth.BaseValue;
     mobsObtainedText.text = ModsManager.Instance.PurchasedMods.Count.ToString();
 
-#if !UNITY_WEBGL || UNITY_EDITOR
     // Gets the logged in user
     username = MainMenuController.Instance.Username;
 
-    // if user exists, update database
-    if (await FirebaseDatabaseManager.Instance.UserExists(username))
-    {
-      await UpdateDatabase(sessionData, stats, combat);
-    }
-#endif
-
+//#if !UNITY_WEBGL 
+//    // if user exists, update database
+//    if (await FirebaseDatabaseManager.Instance.UserExists(username))
+//    {
+//      await UpdateDatabase(sessionData, stats, combat);
+//    }
+//#endif
+    WebGL_UpdateDatabase(sessionData, stats, combat);
   }
 
-#if !UNITY_WEBGL || UNITY_EDITOR
-  private async Task UpdateDatabase(GameLoopManager.PlayerSessionData sessionData, MobStats stats, PlayerCombat combat)
+  //#if !UNITY_WEBGL 
+  //  private async Task UpdateDatabase(GameLoopManager.PlayerSessionData sessionData, MobStats stats, PlayerCombat combat)
+  //  {
+  //    // Pass match history to db
+  //    MatchHistoryModel matchHistoryModel = new MatchHistoryModel
+  //    {
+  //      Username = MainMenuController.Instance.Username,
+  //      RoundNumberReached = sessionData.roundReached,
+  //      SessionLength = UtilityFunctions.GetFormattedTime(sessionData.sessionLength),
+  //      DamageTaken = sessionData.damageTaken,
+  //      TotalScore = sessionData.totalScore,
+  //      GoldEarned = sessionData.goldEarned,
+  //      MobsDefeatedCount = sessionData.mobsDefeated,
+  //      BossesDefeatedCount = sessionData.bossesDefeated,
+  //      MysticDungeonsEnteredCount = sessionData.mysticDungeons,
+  //      BloodLine = bloodlinesController.chosenBloodline.ToString(),
+  //      SkillUsed = combat.ActiveSkill != null ? combat.ActiveSkill.Name : "N/A",
+  //      Attack = (int)stats.AttackDamage.BaseValue,
+  //      Ability = (int)stats.AbilityPower.BaseValue,
+  //      Health = (stats.CurHealth + "/" + stats.MaxHealth.BaseValue).ToString(),
+  //      EffectsObtained = ModsManager.Instance.PurchasedMods.Count.ToString(),
+  //    };
+
+  //    // compare values of users current match history values with the leaderboards value 
+  //    int highestRoundNumberReached = sessionData.roundReached;
+  //    var highestSessionLength = UtilityFunctions.GetFormattedTime(sessionData.sessionLength);
+  //    int highestDamageTaken = sessionData.damageTaken;
+  //    int highestTotalScore = sessionData.totalScore;
+  //    int highestGoldEarned = sessionData.goldEarned;
+  //    int highestMobsDefeatedCount = sessionData.mobsDefeated;
+  //    int highestBossesDefeatedCount = sessionData.bossesDefeated;
+  //    int highestMysticDungeonsEnteredCount = sessionData.mysticDungeons;
+  //    int highestAttack = (int)stats.AttackDamage.BaseValue;
+  //    int highestAbility = (int)stats.AbilityPower.BaseValue;
+  //    string highestHealth = (stats.CurHealth + "/" + stats.MaxHealth.BaseValue).ToString();
+
+  //    // get user id and use it to get leaderboards of that user
+  //    LeaderboardsModel model;
+  //    if (await FirebaseDatabaseManager.Instance.LeaderboardsExists(matchHistoryModel.Username))
+  //    {
+  //      model = await FirebaseDatabaseManager.Instance.GetLeaderboards(matchHistoryModel.Username);
+
+  //      highestRoundNumberReached = Mathf.Max(model.HighestDamageTaken, highestRoundNumberReached);
+  //      highestAttack = Mathf.Max(model.HighestDamageTaken, highestAttack);
+  //      highestAbility = Mathf.Max(model.HighestDamageTaken, highestAbility);
+  //      highestMobsDefeatedCount = Mathf.Max(model.HighestDamageTaken, highestMobsDefeatedCount);
+  //    }
+
+  //    // update the leaderboards with new high scores
+  //    LeaderboardsModel leaderboardsModel = new LeaderboardsModel
+  //    {
+  //      Username = MainMenuController.Instance.Username,
+  //      HighestRoundNumberReached = highestRoundNumberReached,
+  //      HighestSessionLength = highestSessionLength,
+  //      HighestDamageTaken = highestDamageTaken,
+  //      HighestTotalScore = highestTotalScore,
+  //      HighestGoldEarned = highestGoldEarned,
+  //      HighestMobsDefeatedCount = highestMobsDefeatedCount,
+  //      HighestBossesDefeatedCount = highestBossesDefeatedCount,
+  //      HighestMysticDungeonsEnteredCount = highestMysticDungeonsEnteredCount,
+  //      BloodLine = bloodlinesController.chosenBloodline.ToString(),
+  //      SkillUsed = combat.ActiveSkill != null ? combat.ActiveSkill.Name : "N/A",
+  //      HighestAttack = highestAttack,
+  //      HighestAbility = highestAbility,
+  //      HighestHealth = highestHealth,
+  //      EffectsObtained = ModsManager.Instance.PurchasedMods.Count.ToString(),
+  //    };
+
+  //    // Creates entries into database
+  //    await FirebaseDatabaseManager.Instance.CreateMatchHistory(matchHistoryModel);
+  //    await FirebaseDatabaseManager.Instance.CreateLeaderboards(leaderboardsModel);
+  //  }
+  //#endif
+
+  public void WebGL_UpdateDatabase(GameLoopManager.PlayerSessionData sessionData, MobStats stats, PlayerCombat combat)
   {
+    string Username = MainMenuController.Instance.Username;
+    int RoundNumberReached = sessionData.roundReached;
+    string SessionLength = UtilityFunctions.GetFormattedTime(sessionData.sessionLength);
+    int DamageTaken = sessionData.damageTaken;
+    int TotalScore = sessionData.totalScore;
+    int GoldEarned = sessionData.goldEarned;
+    int MobsDefeatedCount = sessionData.mobsDefeated;
+    int BossesDefeatedCount = sessionData.bossesDefeated;
+    int MysticDungeonsEnteredCount = sessionData.mysticDungeons;
+    string BloodLine = bloodlinesController.chosenBloodline.ToString();
+    string SkillUsed = combat.ActiveSkill != null ? combat.ActiveSkill.Name : "N/A";
+    int Attack = (int)stats.AttackDamage.BaseValue;
+    int Ability = (int)stats.AbilityPower.BaseValue;
+    string Health = (stats.CurHealth + "/" + stats.MaxHealth.BaseValue).ToString();
+    string EffectsObtained = ModsManager.Instance.PurchasedMods.Count.ToString();
+
     // Pass match history to db
-    MatchHistoryModel matchHistoryModel = new MatchHistoryModel
-    {
-      Username = MainMenuController.Instance.Username,
-      RoundNumberReached = sessionData.roundReached,
-      SessionLength = UtilityFunctions.GetFormattedTime(sessionData.sessionLength),
-      DamageTaken = sessionData.damageTaken,
-      TotalScore = sessionData.totalScore,
-      GoldEarned = sessionData.goldEarned,
-      MobsDefeatedCount = sessionData.mobsDefeated,
-      BossesDefeatedCount = sessionData.bossesDefeated,
-      MysticDungeonsEnteredCount = sessionData.mysticDungeons,
-      BloodLine = bloodlinesController.chosenBloodline.ToString(),
-      SkillUsed = combat.ActiveSkill != null ? combat.ActiveSkill.Name : "N/A",
-      Attack = (int)stats.AttackDamage.BaseValue,
-      Ability = (int)stats.AbilityPower.BaseValue,
-      Health = (stats.CurHealth + "/" + stats.MaxHealth.BaseValue).ToString(),
-      EffectsObtained = ModsManager.Instance.PurchasedMods.Count.ToString(),
-    };
+    MatchHistoryModelWebGL matchHistoryModel = new MatchHistoryModelWebGL(
+      Username,
+      RoundNumberReached,
+      SessionLength,
+      DamageTaken,
+      TotalScore,
+      GoldEarned,
+      MobsDefeatedCount,
+      BossesDefeatedCount,
+      MysticDungeonsEnteredCount,
+      BloodLine,
+      SkillUsed,
+      Attack,
+      Ability,
+      Health,
+      EffectsObtained);
 
     // compare values of users current match history values with the leaderboards value 
-    int highestRoundNumberReached = sessionData.roundReached;
-    var highestSessionLength = UtilityFunctions.GetFormattedTime(sessionData.sessionLength);
-    int highestDamageTaken = sessionData.damageTaken;
-    int highestTotalScore = sessionData.totalScore;
-    int highestGoldEarned = sessionData.goldEarned;
-    int highestMobsDefeatedCount = sessionData.mobsDefeated;
-    int highestBossesDefeatedCount = sessionData.bossesDefeated;
-    int highestMysticDungeonsEnteredCount = sessionData.mysticDungeons;
-    int highestAttack = (int)stats.AttackDamage.BaseValue;
-    int highestAbility = (int)stats.AbilityPower.BaseValue;
-    string highestHealth = (stats.CurHealth + "/" + stats.MaxHealth.BaseValue).ToString();
+    //int highestRoundNumberReached = sessionData.roundReached;
+    //var highestSessionLength = UtilityFunctions.GetFormattedTime(sessionData.sessionLength);
+    //int highestDamageTaken = sessionData.damageTaken;
+    //int highestTotalScore = sessionData.totalScore;
+    //int highestGoldEarned = sessionData.goldEarned;
+    //int highestMobsDefeatedCount = sessionData.mobsDefeated;
+    //int highestBossesDefeatedCount = sessionData.bossesDefeated;
+    //int highestMysticDungeonsEnteredCount = sessionData.mysticDungeons;
+    //int highestAttack = (int)stats.AttackDamage.BaseValue;
+    //int highestAbility = (int)stats.AbilityPower.BaseValue;
+    //string highestHealth = (stats.CurHealth + "/" + stats.MaxHealth.BaseValue).ToString();
 
     // get user id and use it to get leaderboards of that user
-    LeaderboardsModel model;
-    if (await FirebaseDatabaseManager.Instance.LeaderboardsExists(matchHistoryModel.Username))
-    {
-      model = await FirebaseDatabaseManager.Instance.GetLeaderboards(matchHistoryModel.Username);
+    //LeaderboardsModel model;
+    //if (await FirebaseDatabaseManager.Instance.LeaderboardsExists(matchHistoryModel.Username))
+    //{
+    //  model = await FirebaseDatabaseManager.Instance.GetLeaderboards(matchHistoryModel.Username);
 
-      highestRoundNumberReached = Mathf.Max(model.HighestDamageTaken, highestRoundNumberReached);
-      highestAttack = Mathf.Max(model.HighestDamageTaken, highestAttack);
-      highestAbility = Mathf.Max(model.HighestDamageTaken, highestAbility);
-      highestMobsDefeatedCount = Mathf.Max(model.HighestDamageTaken, highestMobsDefeatedCount);
-    }
-
+    //  highestRoundNumberReached = Mathf.Max(model.HighestDamageTaken, highestRoundNumberReached);
+    //  highestAttack = Mathf.Max(model.HighestDamageTaken, highestAttack);
+    //  highestAbility = Mathf.Max(model.HighestDamageTaken, highestAbility);
+    //  highestMobsDefeatedCount = Mathf.Max(model.HighestDamageTaken, highestMobsDefeatedCount);
+    //}
     // update the leaderboards with new high scores
-    LeaderboardsModel leaderboardsModel = new LeaderboardsModel
-    {
-      Username = MainMenuController.Instance.Username,
-      HighestRoundNumberReached = highestRoundNumberReached,
-      HighestSessionLength = highestSessionLength,
-      HighestDamageTaken = highestDamageTaken,
-      HighestTotalScore = highestTotalScore,
-      HighestGoldEarned = highestGoldEarned,
-      HighestMobsDefeatedCount = highestMobsDefeatedCount,
-      HighestBossesDefeatedCount = highestBossesDefeatedCount,
-      HighestMysticDungeonsEnteredCount = highestMysticDungeonsEnteredCount,
-      BloodLine = bloodlinesController.chosenBloodline.ToString(),
-      SkillUsed = combat.ActiveSkill != null ? combat.ActiveSkill.Name : "N/A",
-      HighestAttack = highestAttack,
-      HighestAbility = highestAbility,
-      HighestHealth = highestHealth,
-      EffectsObtained = ModsManager.Instance.PurchasedMods.Count.ToString(),
-    };
+    //LeaderboardsModel leaderboardsModel = new LeaderboardsModel
+    //{
+    //  Username = MainMenuController.Instance.Username,
+    //  HighestRoundNumberReached = highestRoundNumberReached,
+    //  HighestSessionLength = highestSessionLength,
+    //  HighestDamageTaken = highestDamageTaken,
+    //  HighestTotalScore = highestTotalScore,
+    //  HighestGoldEarned = highestGoldEarned,
+    //  HighestMobsDefeatedCount = highestMobsDefeatedCount,
+    //  HighestBossesDefeatedCount = highestBossesDefeatedCount,
+    //  HighestMysticDungeonsEnteredCount = highestMysticDungeonsEnteredCount,
+    //  BloodLine = bloodlinesController.chosenBloodline.ToString(),
+    //  SkillUsed = combat.ActiveSkill != null ? combat.ActiveSkill.Name : "N/A",
+    //  HighestAttack = highestAttack,
+    //  HighestAbility = highestAbility,
+    //  HighestHealth = highestHealth,
+    //  EffectsObtained = ModsManager.Instance.PurchasedMods.Count.ToString(),
+    //};
 
     // Creates entries into database
-    await FirebaseDatabaseManager.Instance.CreateMatchHistory(matchHistoryModel);
-    await FirebaseDatabaseManager.Instance.CreateLeaderboards(leaderboardsModel);
+    FirebaseDatabaseManager.Instance.PostMatchHistory(matchHistoryModel);
   }
-#endif
 }
