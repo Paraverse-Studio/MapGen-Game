@@ -46,6 +46,9 @@ namespace Paraverse.Combat
     public bool usesTargetLock;
     [SerializeField, Tooltip("Speed of rotation during skill.")]
     protected float rotSpeed = 110f;
+    public bool DisableSkillUponProjectileFiring => enableForDurationBasedProjectileSkills;
+    [SerializeField, Tooltip("Use for skills that fire a projectile but required the mob to stay in an animation for a set duration.")]
+    protected bool enableForDurationBasedProjectileSkills = false;
 
     // Skill Attributes
     public float MinRange => _minRange;

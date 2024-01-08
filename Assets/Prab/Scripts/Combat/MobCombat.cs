@@ -329,7 +329,9 @@ namespace Paraverse.Mob.Combat
       GameObject go = Instantiate(skill.projData.projPf, skill.projData.projOrigin.position, lookRot);
       Projectile proj = go.GetComponent<Projectile>();
       proj.Init(this, targetDir, skill.projData.projSpeed, skill.scalingStatData);
-      OnDisableSkillOneEvent();
+
+      if (skill.DisableSkillUponProjectileFiring)
+        OnDisableSkillOneEvent();
     }
 
     /// <summary>

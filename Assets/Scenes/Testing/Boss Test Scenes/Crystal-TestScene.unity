@@ -38,7 +38,7 @@ RenderSettings:
   m_ReflectionIntensity: 1
   m_CustomReflection: {fileID: 0}
   m_Sun: {fileID: 0}
-  m_IndirectSpecularColor: {r: 0.16007265, g: 0.5168968, b: 1.04459, a: 1}
+  m_IndirectSpecularColor: {r: 0.1605202, g: 0.5180438, b: 1.0452659, a: 1}
   m_UseRadianceAmbientProbe: 0
 --- !u!157 &3
 LightmapSettings:
@@ -1093,6 +1093,10 @@ PrefabInstance:
   m_Modification:
     m_TransformParent: {fileID: 0}
     m_Modifications:
+    - target: {fileID: 632686499, guid: bce914ceab1ad1448bd8902a7ed79416, type: 3}
+      propertyPath: enableForDurationBasedProjectileSkills
+      value: 1
+      objectReference: {fileID: 0}
     - target: {fileID: 155161098355824647, guid: bce914ceab1ad1448bd8902a7ed79416, type: 3}
       propertyPath: m_LocalEulerAnglesHint.x
       value: -10.11445
@@ -1272,6 +1276,10 @@ PrefabInstance:
     - target: {fileID: 3699931612095010467, guid: bce914ceab1ad1448bd8902a7ed79416, type: 3}
       propertyPath: m_LocalEulerAnglesHint.z
       value: -90.69092
+      objectReference: {fileID: 0}
+    - target: {fileID: 3787384780079605952, guid: bce914ceab1ad1448bd8902a7ed79416, type: 3}
+      propertyPath: enableForDurationBasedProjectileSkills
+      value: 1
       objectReference: {fileID: 0}
     - target: {fileID: 3787384780742576496, guid: bce914ceab1ad1448bd8902a7ed79416, type: 3}
       propertyPath: m_RootOrder
@@ -2766,6 +2774,7 @@ MonoBehaviour:
   _isMelee: 0
   usesTargetLock: 0
   rotSpeed: 100
+  enableForDurationBasedProjectileSkills: 0
   _minRange: 0
   _maxRange: 5
   _cooldown: 5
