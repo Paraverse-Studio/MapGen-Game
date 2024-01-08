@@ -666,7 +666,7 @@ namespace Paraverse.Mob.Controller
         #endregion
 
         #region Jump Methods
-        public void ApplyJump(Vector3 mobPos)
+        public void ApplyJump(Vector3 mobPos, Vector3 offset)
         {
             if (_isJumping) return;
 
@@ -676,7 +676,7 @@ namespace Paraverse.Mob.Controller
             _isJumping = true;
             combat.OnAttackInterrupt();
             Vector3 targetDir = (mobPos - transform.position).normalized;
-            landPos = mobPos;
+            landPos = mobPos + offset;
             jumpDir = new Vector3(targetDir.x, targetDir.y, targetDir.z);
             jumpDir.y += Mathf.Sqrt(jumpHeightForce * -GlobalValues.GravityModifier * GlobalValues.GravityForce);
         }

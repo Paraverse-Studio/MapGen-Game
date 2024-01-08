@@ -21,7 +21,7 @@ public class JumpSkill : MobSkill, IMobSkill
   protected override void ExecuteSkillLogic()
   {
     base.ExecuteSkillLogic();
-    mobController.ApplyJump(target.transform.position);
+    mobController.ApplyJump(target.transform.position, Vector3.zero);
   }
 
   protected override void OnSkillComplete()

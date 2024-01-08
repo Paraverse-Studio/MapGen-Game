@@ -34,10 +34,8 @@ public class SummonSkill : MobSkill, IMobSkill
 
   protected override bool CanUseSkill()
   {
-    if (IsOffCooldown && HasEnergy && TargetWithinRange && CanSpawn() && mob.IsSkilling == false)
-    {
+    if (IsOffCooldown && HasEnergy && TargetWithinRange && mob.IsAttackLunging == false && anim.GetBool(StringData.IsBasicAttacking) == false && mob.ActiveSkill == null && CanSpawn())
       return true;
-    }
     return false;
   }
 
@@ -88,6 +86,8 @@ public class SummonSkill : MobSkill, IMobSkill
     delaySpawnActivation));
 
     if (launchFX) Instantiate(launchFX, spawnPos, Quaternion.identity);
+
+    OnSkillComplete();
   }
 
   private IEnumerator IDelayedSpawn(System.Action a, float f)

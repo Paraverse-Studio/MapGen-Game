@@ -14,6 +14,8 @@ public class JumpSmashAttack : MobSkill, IMobSkill
   protected int layerIdx = 1;
   [SerializeField]
   protected float layerWeight = 1;
+  [SerializeField]
+  private Vector3 jumpOffset;
   #endregion
 
 
@@ -42,7 +44,7 @@ public class JumpSmashAttack : MobSkill, IMobSkill
   protected override void ExecuteSkillLogic()
   {
     base.ExecuteSkillLogic();
-    controller.ApplyJump(target.transform.position);
+    controller.ApplyJump(target.transform.position, jumpOffset);
   }
 
   protected override void OnSkillComplete()

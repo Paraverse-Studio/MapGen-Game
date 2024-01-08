@@ -21,24 +21,11 @@ public class RootSkill : MobSkill, IMobSkill
 
   protected override void ExecuteSkillLogic()
   {
-    mob.IsSkilling = true;
-    //skillOn = true;
     SetSkillState(SkillState.InUse);
     anim.SetBool(StringData.IsUsingSkill, true);
     curRootDuration = rootDuration;
     stats.UpdateCurrentEnergy(-cost);
     anim.Play(animName);
-  }
-
-  protected override bool CanUseSkill()
-  {
-    if (IsOffCooldown && HasEnergy && TargetWithinRange && mob.IsSkilling == false)
-    {
-      return true;
-    }
-
-    // Debug.Log(_skillName + " is on cooldown or don't have enough energy!");
-    return false;
   }
   #endregion
 
