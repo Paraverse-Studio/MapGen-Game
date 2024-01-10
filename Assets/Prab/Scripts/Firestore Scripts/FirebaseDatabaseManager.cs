@@ -2,27 +2,25 @@
 //using Firebase.Extensions;
 //using Firebase.Firestore;
 //#endif
+using FullSerializer;
+using ParaverseWebsite.Models;
 using Proyecto26;
+using System.Collections.Generic;
+using System.Threading.Tasks;
 using UnityEngine;
 
 public class FirebaseDatabaseManager : MonoBehaviour
 {
   public static FirebaseDatabaseManager Instance;
-//#if !UNITY_WEBGL 
-//  private FirebaseFirestore _db;
-//  private CollectionReference _MatchHistoryCollection;
-//  private CollectionReference _LeaderboardsCollection;
-//  private CollectionReference _UserCollection;
-//  private Query _MatchHistoryQuery;
-//  private Query _LeaderboardsQuery;
-//  private Task<QuerySnapshot> _MatchHistorySnapShot;
-//  private Task<QuerySnapshot> _LeaderboardsSnapShot;
-//  public MatchHistoryModel _MatchHistoryModel;
-//  public LeaderboardsModel _LeaderboardsModel;
-
-//  public List<LeaderboardsModel> _LeaderboardsModels = new List<LeaderboardsModel>();
-//#endif
   private readonly string databasePath = "https://paraverse-games-default-rtdb.firebaseio.com/";
+  private readonly string matchHistoriesPath = "MatchHistories";
+  private readonly string leaderboardsPath = "Leaderboards";
+
+  private static fsSerializer serializer = new fsSerializer();
+  public delegate void PostMatchHistoryCallback(MatchHistoryModel matchHistory);
+  public delegate void PostLeaderboardsCallback(LeaderboardsModel leaderboard);
+  public delegate void GetLeaderboardCallback(LeaderboardsModel model);
+  public delegate void GetLeaderboardsCallback(Dictionary<string, LeaderboardsModel> model);
 
 
   private void Awake()
@@ -30,139 +28,81 @@ public class FirebaseDatabaseManager : MonoBehaviour
     // Singleton
     if (Instance == null) Instance = this;
     else Destroy(this);
-    //#if !UNITY_WEBGL 
-    //    // Init
-    //    _db = FirebaseFirestore.DefaultInstance;
-    //    _MatchHistoryQuery = _db.Collection(StringData.MatchHistory);
-    //    _LeaderboardsQuery = _db.Collection(StringData.Leaderboards);
-    //    _MatchHistorySnapShot = _db.Collection(StringData.MatchHistory).GetSnapshotAsync();
-    //    _LeaderboardsSnapShot = _db.Collection(StringData.Leaderboards).GetSnapshotAsync();
-    //    _MatchHistoryCollection = _db.Collection(StringData.MatchHistory);
-    //    _LeaderboardsCollection = _db.Collection(StringData.Leaderboards);
-    //    _UserCollection = _db.Collection(StringData.Users);
-    //#endif
   }
 
-  //#if !UNITY_WEBGL
-  //  public Task CreateMatchHistory(MatchHistoryModel matchHistoryModel)
-  //  {
-  //    System.Random rnd = new System.Random();
-  //    int randomNum = rnd.Next();
-  //    string id = matchHistoryModel.Username + "-" + randomNum;
+  #region MATCH HISTORY CRUD OPERATIONS
 
-  //    DocumentReference docRef = _MatchHistoryCollection.Document(id);
-  //    MatchHistoryModel model = new MatchHistoryModel(
-  //                matchHistoryModel.Username,
-  //                matchHistoryModel.RoundNumberReached,
-  //                matchHistoryModel.SessionLength,
-  //                matchHistoryModel.DamageTaken,
-  //                matchHistoryModel.TotalScore,
-  //                matchHistoryModel.GoldEarned,
-  //                matchHistoryModel.MobsDefeatedCount,
-  //                matchHistoryModel.BossesDefeatedCount,
-  //                matchHistoryModel.MysticDungeonsEnteredCount,
-  //                matchHistoryModel.BloodLine,
-  //                matchHistoryModel.SkillUsed,
-  //                matchHistoryModel.Attack,
-  //                matchHistoryModel.Ability,
-  //                matchHistoryModel.Health,
-  //                matchHistoryModel.EffectsObtained);
-  //    return docRef.SetAsync(model).ContinueWithOnMainThread(task => { });
-  //  }
-
-  //  public async Task<bool> LeaderboardsExists(string id)
-  //  {
-  //    DocumentReference docRef = _LeaderboardsCollection.Document(id);
-  //    DocumentSnapshot docSnap = await docRef.GetSnapshotAsync();
-
-  //    if (docSnap.Exists) return true;
-  //    return false;
-  //  }
-
-  //  public async Task<bool> UserExists(string username)
-  //  {
-  //    DocumentReference docRef = _UserCollection.Document(username);
-  //    DocumentSnapshot docSnap = await docRef.GetSnapshotAsync();
-
-  //    if (docSnap.Exists) return true;
-  //    return false;
-  //  }
-
-  //  public List<LeaderboardsModel> GetLeaderboardsList()
-  //  {
-  //    _LeaderboardsModels.Clear();
-  //    foreach (DocumentSnapshot docSnapshot in _LeaderboardsSnapShot.Result)
-  //    {
-  //      LeaderboardsModel leaderboardsModel = docSnapshot.ConvertTo<LeaderboardsModel>();
-  //      _LeaderboardsModels.Add(leaderboardsModel);
-  //    }
-  //    return _LeaderboardsModels;
-  //  }
-
-  //  public async Task<LeaderboardsModel> GetLeaderboards(string docId)
-  //  {
-  //    DocumentReference docRef = _LeaderboardsCollection.Document(docId);
-  //    DocumentSnapshot snapshot = await docRef.GetSnapshotAsync();
-  //    if (snapshot.Exists)
-  //    {
-  //      LeaderboardsModel leaderboardsModel = snapshot.ConvertTo<LeaderboardsModel>();
-  //      return leaderboardsModel;
-  //    }
-  //    else
-  //    {
-  //      return null;
-  //    }
-  //  }
-
-  //  public async Task<UserModel> GetUser(string userId)
-  //  {
-  //    DocumentReference docRef = _LeaderboardsCollection.Document(userId);
-  //    DocumentSnapshot snapshot = await docRef.GetSnapshotAsync();
-  //    if (snapshot.Exists)
-  //    {
-  //      UserModel userModel = snapshot.ConvertTo<UserModel>();
-  //      return userModel;
-  //    }
-  //    return null;
-  //  }
-
-  //  public Task CreateLeaderboards(LeaderboardsModel leaderboardsModel)
-  //  {
-  //    DocumentReference document = _LeaderboardsCollection.Document(leaderboardsModel.Username);
-  //    LeaderboardsModel model = new LeaderboardsModel(
-  //                leaderboardsModel.Username,
-  //                leaderboardsModel.HighestRoundNumberReached,
-  //                leaderboardsModel.HighestSessionLength,
-  //                leaderboardsModel.HighestDamageTaken,
-  //                leaderboardsModel.HighestTotalScore,
-  //                leaderboardsModel.HighestGoldEarned,
-  //                leaderboardsModel.HighestMobsDefeatedCount,
-  //                leaderboardsModel.HighestBossesDefeatedCount,
-  //                leaderboardsModel.HighestMysticDungeonsEnteredCount,
-  //                leaderboardsModel.BloodLine,
-  //                leaderboardsModel.SkillUsed,
-  //                leaderboardsModel.HighestAttack,
-  //                leaderboardsModel.HighestAbility,
-  //                leaderboardsModel.HighestHealth,
-  //                leaderboardsModel.EffectsObtained);
-  //    return document.SetAsync(model).ContinueWithOnMainThread(task => { });
-  //  }
-  //#endif
-
-  public void PostMatchHistory(MatchHistoryModelWebGL model)
+  public void PostMatchHistory(MatchHistoryModel model, PostMatchHistoryCallback callback)
   {
     System.Random rnd = new System.Random();
     int randomNum = rnd.Next();
     string id = model.Username + "-" + randomNum;
 
-    RestClient.Put<MatchHistoryModelWebGL>($"{databasePath}MatchHistories/{id}.json", model)
+    RestClient.Put<MatchHistoryModel>($"{databasePath}{matchHistoriesPath}/{id}.json", model)
       .Then(response =>
       {
-        Debug.Log("Match history added to db successfully" + response);
+        callback?.Invoke(response);
       })
       .Catch(error =>
       {
         Debug.Log("Error: " + error);
       });
   }
+
+  #endregion
+
+  #region LEADERBOARDS CRUD OPERATIONS
+
+  public void PostLeaderboards(LeaderboardsModel model, PostLeaderboardsCallback callback)
+  {
+    string username = model.Username;
+
+    RestClient.Put<LeaderboardsModel>($"{databasePath}{leaderboardsPath}/{username}.json", model)
+      .Then(response =>
+      {
+        callback?.Invoke(response);
+      })
+      .Catch(error =>
+      {
+        Debug.Log("Error: " + error);
+      });
+  }
+
+  public void GetLeaderboard(string username, GetLeaderboardCallback callback)
+  {
+    RestClient.Get<LeaderboardsModel>($"{databasePath}{leaderboardsPath}/{username}.json")
+      .Then(response =>
+      {
+        Debug.Log("Rsponse: " + response);
+        callback?.Invoke(response);
+      })
+      .Catch(error =>
+      {
+        Debug.Log("Error: " + error);
+      });
+  }
+
+  public void GetLeaderboards(GetLeaderboardsCallback callback)
+  {
+    RestClient.Get($"{databasePath}{leaderboardsPath}.json")
+      .Then(response =>
+      {
+        var responseJson = response.Text;
+
+        // Using the FullSerializer library: https://github.com/jacobdufault/fullserializer
+        // to serialize more complex types (a Dictionary, in this case)
+        var data = fsJsonParser.Parse(responseJson);
+        object deserialized = null;
+        serializer.TryDeserialize(data, typeof(Dictionary<string, LeaderboardsModel>), ref deserialized);
+
+        var leaderboardsDictionary = deserialized as Dictionary<string, LeaderboardsModel>;
+
+        callback?.Invoke(leaderboardsDictionary);
+      })
+      .Catch(error =>
+      {
+        Debug.Log("Error: " + error);
+      });
+  }
+  #endregion
 }

@@ -1,54 +1,21 @@
-
-#if !UNITY_WEBGL || UNITY_EDITOR
-using Firebase.Firestore;
-#endif
+using System;
 
 namespace ParaverseWebsite.Models
 {
-#if !UNITY_WEBGL || UNITY_EDITOR
-  [FirestoreData]
-#endif
+  [Serializable]
   public class UserModel
   {
-#if !UNITY_WEBGL || UNITY_EDITOR
-    [FirestoreProperty]
-#endif
-    public string? I_Username { get; set; }
-#if !UNITY_WEBGL || UNITY_EDITOR
-    [FirestoreProperty]
-#endif
-    public string? I_Password { get; set; }
-#if !UNITY_WEBGL || UNITY_EDITOR
-    [FirestoreProperty]
-#endif
-    public string? I_Email { get; set; }
-#if !UNITY_WEBGL || UNITY_EDITOR
-    [FirestoreProperty]
-#endif
-    public string? I_StartDate { get; set; }
-#if !UNITY_WEBGL || UNITY_EDITOR
-    [FirestoreProperty]
-#endif
-    public int? S_ParaverseScore { get; set; }
-#if !UNITY_WEBGL || UNITY_EDITOR
-    [FirestoreProperty]
-#endif
-    public int? S_InteractionScore { get; set; }
-#if !UNITY_WEBGL || UNITY_EDITOR
-    [FirestoreProperty]
-#endif
-    public string? S_LengthOfAccount { get; set; }
-#if !UNITY_WEBGL || UNITY_EDITOR
-    [FirestoreProperty]
-#endif
-    public string? P_LogoColor { get; set; }
-#if !UNITY_WEBGL || UNITY_EDITOR
-    [FirestoreProperty]
-#endif
-    public string? P_Caption { get; set; }
-#if !UNITY_WEBGL || UNITY_EDITOR
-    [FirestoreProperty]
-#endif
-    public string? P_CaptionColor { get; set; }
+    public string I_Username;
+    public string I_Password;
+    public string I_Email;
+    public string I_StartDate;
+    public int S_ParaverseScore;
+    public int S_InteractionScore;
+    public string S_LengthOfAccount;
+    public string P_LogoColor;
+    public string P_Caption;
+    public string P_CaptionColor;
+
+    public UserModel() { }
   }
 }

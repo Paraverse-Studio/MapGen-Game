@@ -76,27 +76,32 @@ namespace Proyecto26
             DefaultRequestHeaders.Clear();
         }
 
-        #endregion
+    #endregion
 
-        #region Callbacks
+    #region Callbacks
 
-        /// <summary>
-        /// Create an HTTP request with the specified options and callback.
-        /// </summary>
-        /// <param name="options">The options of the request.</param>
-        /// <param name="callback">A callback function that is executed when the request is finished.</param>
-        public static void Request(RequestHelper options, Action<RequestException, ResponseHelper> callback)
-        {
-            StaticCoroutine.StartCoroutine(HttpBase.DefaultUnityWebRequest(options, callback));
-        }
+    /// <summary>
+    /// Create an HTTP request with the specified options and callback.
+    /// </summary>
+    /// <param name="options">The options of the request.</param>
+    /// <param name="callback">A callback function that is executed when the request is finished.</param>
+    public static void Request(RequestHelper options, Action<RequestException, ResponseHelper> callback)
+    {
+      StaticCoroutine.StartCoroutine(HttpBase.DefaultUnityWebRequest(options, callback));
+    }
 
-        /// <summary>
-        /// Create an HTTP request with the specified options and callback.
-        /// </summary>
-        /// <param name="options">The options of the request.</param>
-        /// <param name="callback">A callback function that is executed when the request is finished.</param>
-        /// <typeparam name="T">The element type of the response.</typeparam>
-        public static void Request<T>(RequestHelper options, Action<RequestException, ResponseHelper, T> callback)
+    public static async void RequestAsync(RequestHelper options, Action<RequestException, ResponseHelper> callback)
+    {
+      StaticCoroutine.StartCoroutine(HttpBase.DefaultUnityWebRequest(options, callback));
+    }
+
+    /// <summary>
+    /// Create an HTTP request with the specified options and callback.
+    /// </summary>
+    /// <param name="options">The options of the request.</param>
+    /// <param name="callback">A callback function that is executed when the request is finished.</param>
+    /// <typeparam name="T">The element type of the response.</typeparam>
+    public static void Request<T>(RequestHelper options, Action<RequestException, ResponseHelper, T> callback)
         {
             StaticCoroutine.StartCoroutine(HttpBase.DefaultUnityWebRequest<T>(options, callback));
         }
@@ -111,24 +116,30 @@ namespace Proyecto26
             Get(new RequestHelper { Uri = url }, callback);
         }
 
-        /// <summary>
-        /// Load data from the server using a HTTP GET request.
-        /// </summary>
-        /// <param name="options">The options of the request.</param>
-        /// <param name="callback">A callback function that is executed when the request is finished.</param>
-        public static void Get(RequestHelper options, Action<RequestException, ResponseHelper> callback)
-        {
-            options.Method = UnityWebRequest.kHttpVerbGET;
-            Request(options, callback);
-        }
+    /// <summary>
+    /// Load data from the server using a HTTP GET request.
+    /// </summary>
+    /// <param name="options">The options of the request.</param>
+    /// <param name="callback">A callback function that is executed when the request is finished.</param>
+    public static void Get(RequestHelper options, Action<RequestException, ResponseHelper> callback)
+    {
+      options.Method = UnityWebRequest.kHttpVerbGET;
+      Request(options, callback);
+    }
 
-        /// <summary>
-        /// Load data from the server using a HTTP GET request.
-        /// </summary>
-        /// <param name="url">A string containing the URL to which the request is sent.</param>
-        /// <param name="callback">A callback function that is executed when the request is finished.</param>
-        /// <typeparam name="T">The element type of the response.</typeparam>
-        public static void Get<T>(string url, Action<RequestException, ResponseHelper, T> callback)
+    public static void GetAsync(RequestHelper options, Action<RequestException, ResponseHelper> callback)
+    {
+      options.Method = UnityWebRequest.kHttpVerbGET;
+      RequestAsync(options, callback);
+    }
+
+    /// <summary>
+    /// Load data from the server using a HTTP GET request.
+    /// </summary>
+    /// <param name="url">A string containing the URL to which the request is sent.</param>
+    /// <param name="callback">A callback function that is executed when the request is finished.</param>
+    /// <typeparam name="T">The element type of the response.</typeparam>
+    public static void Get<T>(string url, Action<RequestException, ResponseHelper, T> callback)
         {
             Get<T>(new RequestHelper { Uri = url }, callback);
         }

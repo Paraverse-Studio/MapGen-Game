@@ -1,5 +1,9 @@
 using Paraverse.Mob.Stats;
 using Paraverse.Player;
+using ParaverseWebsite.Models;
+using System;
+using System.Collections;
+using System.Collections.Generic;
 using System.Threading.Tasks;
 using TMPro;
 using UnityEngine;
@@ -28,7 +32,7 @@ public class SummaryView : MonoBehaviour
 
   public string username;
 
-  public async Task Populate(GameLoopManager.PlayerSessionData sessionData, MobStats stats, PlayerCombat combat)
+  public void Populate(GameLoopManager.PlayerSessionData sessionData, MobStats stats, PlayerCombat combat)
   {
     roundsReachedText.text = sessionData.roundReached.ToString();
     sessionLengthText.text = UtilityFunctions.GetFormattedTime(sessionData.sessionLength);
@@ -48,95 +52,14 @@ public class SummaryView : MonoBehaviour
     // Gets the logged in user
     username = MainMenuController.Instance.Username;
 
-//#if !UNITY_WEBGL 
-//    // if user exists, update database
-//    if (await FirebaseDatabaseManager.Instance.UserExists(username))
-//    {
-//      await UpdateDatabase(sessionData, stats, combat);
-//    }
-//#endif
-    WebGL_UpdateDatabase(sessionData, stats, combat);
+    UpdateDatabase(sessionData, stats, combat);
   }
 
-  //#if !UNITY_WEBGL 
-  //  private async Task UpdateDatabase(GameLoopManager.PlayerSessionData sessionData, MobStats stats, PlayerCombat combat)
-  //  {
-  //    // Pass match history to db
-  //    MatchHistoryModel matchHistoryModel = new MatchHistoryModel
-  //    {
-  //      Username = MainMenuController.Instance.Username,
-  //      RoundNumberReached = sessionData.roundReached,
-  //      SessionLength = UtilityFunctions.GetFormattedTime(sessionData.sessionLength),
-  //      DamageTaken = sessionData.damageTaken,
-  //      TotalScore = sessionData.totalScore,
-  //      GoldEarned = sessionData.goldEarned,
-  //      MobsDefeatedCount = sessionData.mobsDefeated,
-  //      BossesDefeatedCount = sessionData.bossesDefeated,
-  //      MysticDungeonsEnteredCount = sessionData.mysticDungeons,
-  //      BloodLine = bloodlinesController.chosenBloodline.ToString(),
-  //      SkillUsed = combat.ActiveSkill != null ? combat.ActiveSkill.Name : "N/A",
-  //      Attack = (int)stats.AttackDamage.BaseValue,
-  //      Ability = (int)stats.AbilityPower.BaseValue,
-  //      Health = (stats.CurHealth + "/" + stats.MaxHealth.BaseValue).ToString(),
-  //      EffectsObtained = ModsManager.Instance.PurchasedMods.Count.ToString(),
-  //    };
-
-  //    // compare values of users current match history values with the leaderboards value 
-  //    int highestRoundNumberReached = sessionData.roundReached;
-  //    var highestSessionLength = UtilityFunctions.GetFormattedTime(sessionData.sessionLength);
-  //    int highestDamageTaken = sessionData.damageTaken;
-  //    int highestTotalScore = sessionData.totalScore;
-  //    int highestGoldEarned = sessionData.goldEarned;
-  //    int highestMobsDefeatedCount = sessionData.mobsDefeated;
-  //    int highestBossesDefeatedCount = sessionData.bossesDefeated;
-  //    int highestMysticDungeonsEnteredCount = sessionData.mysticDungeons;
-  //    int highestAttack = (int)stats.AttackDamage.BaseValue;
-  //    int highestAbility = (int)stats.AbilityPower.BaseValue;
-  //    string highestHealth = (stats.CurHealth + "/" + stats.MaxHealth.BaseValue).ToString();
-
-  //    // get user id and use it to get leaderboards of that user
-  //    LeaderboardsModel model;
-  //    if (await FirebaseDatabaseManager.Instance.LeaderboardsExists(matchHistoryModel.Username))
-  //    {
-  //      model = await FirebaseDatabaseManager.Instance.GetLeaderboards(matchHistoryModel.Username);
-
-  //      highestRoundNumberReached = Mathf.Max(model.HighestDamageTaken, highestRoundNumberReached);
-  //      highestAttack = Mathf.Max(model.HighestDamageTaken, highestAttack);
-  //      highestAbility = Mathf.Max(model.HighestDamageTaken, highestAbility);
-  //      highestMobsDefeatedCount = Mathf.Max(model.HighestDamageTaken, highestMobsDefeatedCount);
-  //    }
-
-  //    // update the leaderboards with new high scores
-  //    LeaderboardsModel leaderboardsModel = new LeaderboardsModel
-  //    {
-  //      Username = MainMenuController.Instance.Username,
-  //      HighestRoundNumberReached = highestRoundNumberReached,
-  //      HighestSessionLength = highestSessionLength,
-  //      HighestDamageTaken = highestDamageTaken,
-  //      HighestTotalScore = highestTotalScore,
-  //      HighestGoldEarned = highestGoldEarned,
-  //      HighestMobsDefeatedCount = highestMobsDefeatedCount,
-  //      HighestBossesDefeatedCount = highestBossesDefeatedCount,
-  //      HighestMysticDungeonsEnteredCount = highestMysticDungeonsEnteredCount,
-  //      BloodLine = bloodlinesController.chosenBloodline.ToString(),
-  //      SkillUsed = combat.ActiveSkill != null ? combat.ActiveSkill.Name : "N/A",
-  //      HighestAttack = highestAttack,
-  //      HighestAbility = highestAbility,
-  //      HighestHealth = highestHealth,
-  //      EffectsObtained = ModsManager.Instance.PurchasedMods.Count.ToString(),
-  //    };
-
-  //    // Creates entries into database
-  //    await FirebaseDatabaseManager.Instance.CreateMatchHistory(matchHistoryModel);
-  //    await FirebaseDatabaseManager.Instance.CreateLeaderboards(leaderboardsModel);
-  //  }
-  //#endif
-
-  public void WebGL_UpdateDatabase(GameLoopManager.PlayerSessionData sessionData, MobStats stats, PlayerCombat combat)
+  public void UpdateDatabase(GameLoopManager.PlayerSessionData sessionData, MobStats stats, PlayerCombat combat)
   {
     string Username = MainMenuController.Instance.Username;
     int RoundNumberReached = sessionData.roundReached;
-    string SessionLength = UtilityFunctions.GetFormattedTime(sessionData.sessionLength);
+    int SessionLength = (int)sessionData.sessionLength;
     int DamageTaken = sessionData.damageTaken;
     int TotalScore = sessionData.totalScore;
     int GoldEarned = sessionData.goldEarned;
@@ -151,7 +74,7 @@ public class SummaryView : MonoBehaviour
     string EffectsObtained = ModsManager.Instance.PurchasedMods.Count.ToString();
 
     // Pass match history to db
-    MatchHistoryModelWebGL matchHistoryModel = new MatchHistoryModelWebGL(
+    MatchHistoryModel matchHistoryModel = new MatchHistoryModel(
       Username,
       RoundNumberReached,
       SessionLength,
@@ -168,51 +91,63 @@ public class SummaryView : MonoBehaviour
       Health,
       EffectsObtained);
 
-    // compare values of users current match history values with the leaderboards value 
-    //int highestRoundNumberReached = sessionData.roundReached;
-    //var highestSessionLength = UtilityFunctions.GetFormattedTime(sessionData.sessionLength);
-    //int highestDamageTaken = sessionData.damageTaken;
-    //int highestTotalScore = sessionData.totalScore;
-    //int highestGoldEarned = sessionData.goldEarned;
-    //int highestMobsDefeatedCount = sessionData.mobsDefeated;
-    //int highestBossesDefeatedCount = sessionData.bossesDefeated;
-    //int highestMysticDungeonsEnteredCount = sessionData.mysticDungeons;
-    //int highestAttack = (int)stats.AttackDamage.BaseValue;
-    //int highestAbility = (int)stats.AbilityPower.BaseValue;
-    //string highestHealth = (stats.CurHealth + "/" + stats.MaxHealth.BaseValue).ToString();
+
+    //LeaderboardsModel updatedLeaderboardsModel = new LeaderboardsModel(
+    //  Username,
+    //  RoundNumberReached,
+    //  SessionLength,
+    //  TotalScore,
+    //  TotalScore,
+    //  MobsDefeatedCount,
+    //  BossesDefeatedCount,
+    //  MysticDungeonsEnteredCount,
+    //  BloodLine,
+    //  SkillUsed,
+    //  EffectsObtained);
+
+    //FirebaseDatabaseManager.Instance.PostLeaderboards(updatedLeaderboardsModel, (updatedLeaderboardsModel) => { Debug.Log("Success!"); });
 
     // get user id and use it to get leaderboards of that user
-    //LeaderboardsModel model;
-    //if (await FirebaseDatabaseManager.Instance.LeaderboardsExists(matchHistoryModel.Username))
+    LeaderboardsModel oldLeaderboardsModel = new LeaderboardsModel();
+    LeaderboardsModel updatedLeaderboardsModel = new LeaderboardsModel();
+    //if (FirebaseDatabaseManager.Instance.LeaderboardsExists(matchHistoryModel.Username))
     //{
-    //  model = await FirebaseDatabaseManager.Instance.GetLeaderboards(matchHistoryModel.Username);
+    RoundNumberReached = oldLeaderboardsModel.CumulativeSessionLength;
+    SessionLength = oldLeaderboardsModel.CumulativeSessionLength;
+    TotalScore = oldLeaderboardsModel.CumulativeTotalScore;
+    MobsDefeatedCount = oldLeaderboardsModel.CumulativeMobsDefeatedCount;
+    BossesDefeatedCount = oldLeaderboardsModel.CumulativeBossesDefeatedCount;
+    MysticDungeonsEnteredCount = oldLeaderboardsModel.CumulativeMysticDungeonsEnteredCount;
 
-    //  highestRoundNumberReached = Mathf.Max(model.HighestDamageTaken, highestRoundNumberReached);
-    //  highestAttack = Mathf.Max(model.HighestDamageTaken, highestAttack);
-    //  highestAbility = Mathf.Max(model.HighestDamageTaken, highestAbility);
-    //  highestMobsDefeatedCount = Mathf.Max(model.HighestDamageTaken, highestMobsDefeatedCount);
-    //}
-    // update the leaderboards with new high scores
-    //LeaderboardsModel leaderboardsModel = new LeaderboardsModel
-    //{
-    //  Username = MainMenuController.Instance.Username,
-    //  HighestRoundNumberReached = highestRoundNumberReached,
-    //  HighestSessionLength = highestSessionLength,
-    //  HighestDamageTaken = highestDamageTaken,
-    //  HighestTotalScore = highestTotalScore,
-    //  HighestGoldEarned = highestGoldEarned,
-    //  HighestMobsDefeatedCount = highestMobsDefeatedCount,
-    //  HighestBossesDefeatedCount = highestBossesDefeatedCount,
-    //  HighestMysticDungeonsEnteredCount = highestMysticDungeonsEnteredCount,
-    //  BloodLine = bloodlinesController.chosenBloodline.ToString(),
-    //  SkillUsed = combat.ActiveSkill != null ? combat.ActiveSkill.Name : "N/A",
-    //  HighestAttack = highestAttack,
-    //  HighestAbility = highestAbility,
-    //  HighestHealth = highestHealth,
-    //  EffectsObtained = ModsManager.Instance.PurchasedMods.Count.ToString(),
-    //};
+    FirebaseDatabaseManager.Instance.GetLeaderboard(matchHistoryModel.Username, (oldLeaderboardsModel) =>
+    {
+      RoundNumberReached = Mathf.Max(oldLeaderboardsModel.HighestRoundNumberReached, matchHistoryModel.RoundNumberReached);
+      SessionLength += matchHistoryModel.SessionLength;
+      TotalScore += matchHistoryModel.TotalScore;
+      MobsDefeatedCount += matchHistoryModel.MobsDefeatedCount;
+      BossesDefeatedCount += matchHistoryModel.BossesDefeatedCount;
+      MysticDungeonsEnteredCount += matchHistoryModel.MysticDungeonsEnteredCount;
 
-    // Creates entries into database
-    FirebaseDatabaseManager.Instance.PostMatchHistory(matchHistoryModel);
+      // update the leaderboards with new high scores
+      updatedLeaderboardsModel = new LeaderboardsModel
+      {
+        Username = MainMenuController.Instance.Username,
+        HighestRoundNumberReached = RoundNumberReached,
+        CumulativeSessionLength = SessionLength,
+        CumulativeTotalScore = TotalScore,
+        CumulativeParaverseScore = TotalScore,
+        CumulativeMobsDefeatedCount = MobsDefeatedCount,
+        CumulativeBossesDefeatedCount= BossesDefeatedCount,
+        CumulativeMysticDungeonsEnteredCount = MysticDungeonsEnteredCount,
+        BloodLine = BloodLine,
+        SkillUsed = SkillUsed,
+        EffectsObtained = EffectsObtained,
+      };
+
+      // Creates entries into database
+      FirebaseDatabaseManager.Instance.PostMatchHistory(matchHistoryModel, (matchHistoryModel) => { Debug.Log("Success!"); });
+      FirebaseDatabaseManager.Instance.PostLeaderboards(updatedLeaderboardsModel, (updatedLeaderboardsModel) => { Debug.Log("Success!"); });
+      //});
+    });
   }
 }
