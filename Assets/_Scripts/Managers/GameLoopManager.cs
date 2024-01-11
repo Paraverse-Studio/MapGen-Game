@@ -405,11 +405,11 @@ public class GameLoopManager : MonoBehaviour
 
         sessionData.goldEarned += goldToReward;
 
-        if (MapCreator.Instance.mapType == MapType.normal)
-        {
-            sessionData.mobsDefeated += 14; // TODO , do properly after we add OnKilledUnitEvent (pass in mobController so we can check if boss or not)
-        }
-        else if (MapCreator.Instance.mapType == MapType.boss)
+        //if (MapCreator.Instance.mapType == MapType.normal)
+        //{
+        //    sessionData.mobsDefeated += 14; // TODO , do properly after we add OnKilledUnitEvent (pass in mobController so we can check if boss or not)
+        //}
+        if (MapCreator.Instance.mapType == MapType.boss)
         {
             sessionData.bossesDefeated += 1;
         }
