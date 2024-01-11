@@ -176,7 +176,7 @@ namespace Paraverse.Mob.Controller
     #endregion
 
     #region Start & Update Methods
-    protected virtual void Start()
+    private void OnValidate()
     {
       if (nav == null) nav = GetComponent<NavMeshAgent>();
       if (anim == null) anim = GetComponent<Animator>();
@@ -184,6 +184,11 @@ namespace Paraverse.Mob.Controller
       if (combat == null) combat = GetComponent<IMobCombat>();
       if (stats == null) stats = GetComponent<IMobStats>();
       if (statusEffectManager == null) statusEffectManager = GetComponent<StatusEffectManager>();
+    }
+
+    protected virtual void Start()
+    {
+      OnValidate();
       if (strafePoint == null && _isStrafer)
       {
         GameObject objToSpawn = new GameObject(StringData.StrafePoint);
@@ -735,6 +740,8 @@ namespace Paraverse.Mob.Controller
     /// <returns></returns>
     private bool CheckFall()
     {
+      int raycastOnNavMeshCount = 0;
+      int requiredRaycastOnNavMesh = 2;
       Vector3 origin = transform.position;
       Vector3 dir = -transform.up;
 
@@ -742,16 +749,22 @@ namespace Paraverse.Mob.Controller
       Vector3 leftOrigin = origin + new Vector3(-nav.radius, 0f, 0f);
       Vector3 rightOrigin = origin + new Vector3(nav.radius, 0f, 0f);
 
-      if (Physics.Raycast(topOrigin, dir * checkFallRange, checkFallRange) &&
-      (Physics.Raycast(leftOrigin, dir * checkFallRange, checkFallRange) &&
-      (Physics.Raycast(rightOrigin, dir * checkFallRange, checkFallRange))))
-      {
+      //Debug.DrawRay(topOrigin, dir * checkFallRange, Color.red);
+      //Debug.DrawRay(leftOrigin, dir * checkFallRange, Color.blue);
+      //Debug.DrawRay(rightOrigin, dir * checkFallRange, Color.green);
+
+      if (Physics.Raycast(topOrigin, dir * checkFallRange, checkFallRange))
+        raycastOnNavMeshCount++;
+      if (Physics.Raycast(leftOrigin, dir * checkFallRange, checkFallRange))
+        raycastOnNavMeshCount++;
+      if (Physics.Raycast(leftOrigin, dir * checkFallRange, checkFallRange))
+        raycastOnNavMeshCount++;
+
+      if (raycastOnNavMeshCount >= requiredRaycastOnNavMesh)
         _isFalling = false;
-      }
       else
-      {
         return true;
-      }
+
       return false;
     }
     #endregion

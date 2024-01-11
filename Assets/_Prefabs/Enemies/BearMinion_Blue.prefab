@@ -54,6 +54,7 @@ MonoBehaviour:
   _isMelee: 0
   usesTargetLock: 0
   rotSpeed: 100
+  enableForDurationBasedProjectileSkills: 0
   _minRange: 0
   _maxRange: 3.5
   _cooldown: 5
@@ -64,12 +65,13 @@ MonoBehaviour:
     projHeld: {fileID: 0}
     projOrigin: {fileID: 0}
     projRotation: {fileID: 0}
-    basicAtkProjSpeed: 10
+    projSpeed: 10
   scalingStatData:
     flatPower: 0
     attackScaling: 1
     abilityScaling: 0
     healthScaling: 0
+  skillStateToCompleteTimer: 1
 --- !u!1 &1627162889
 GameObject:
   m_ObjectHideFlags: 0
@@ -1313,6 +1315,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: d7247787b83f8b143b61f62b88ba1f58, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  model: {fileID: 5978596697479825362}
   walkSpeedRatio: 1
   sprintSpeedRatio: 1.5
   rotSpeed: 80
@@ -1350,6 +1353,7 @@ MonoBehaviour:
   _curMobState: 0
   _isGrounded: 1
   _isUnstaggerable: 0
+  _mobType: 0
 --- !u!114 &3394032382423534312
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -1367,7 +1371,10 @@ MonoBehaviour:
   projUser: 0
   basicAttackSkill: {fileID: 274115229}
   _skills: []
+  _activeSkill: {fileID: 0}
   _effects: []
+  useSetSkillToCompleteSafetyFeature: 1
+  setSkillToCompleteTimer: 10
 --- !u!114 &1729720464
 MonoBehaviour:
   m_ObjectHideFlags: 0
