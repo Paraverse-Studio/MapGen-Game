@@ -639,6 +639,7 @@ namespace Paraverse.Mob.Controller
 
     private void KnockbackHandler()
     {
+      bool partiallyOnGround = false;
       if (null != activeKnockBackEffect || _isStaggered)
       {
         _isStaggered = true;
@@ -647,7 +648,7 @@ namespace Paraverse.Mob.Controller
         disFromStartPos = ParaverseHelper.GetDistance(activeKnockBackEffect.startPos, transform.position);
 
         // Ensures mob falls when off platform
-        if (CheckFall())
+        if (CheckFall(out partiallyOnGround))
         {
           nav.enabled = false;
           _isFalling = true;
@@ -657,8 +658,10 @@ namespace Paraverse.Mob.Controller
 
           // Kills enemy within death timer upon fall
           deathTimerUponFall += Time.deltaTime;
-          if (deathTimerUponFall >= maxDeathTimerUponFall)
+          if (deathTimerUponFall >= maxDeathTimerUponFall && partiallyOnGround == false)
             stats.UpdateCurrentHealth(-stats.CurHealth);
+          else
+            _isFalling = false;
 
           return;
         }
@@ -711,9 +714,7 @@ namespace Paraverse.Mob.Controller
           }
         }
         else
-        {
           curAirCheckTimer -= Time.deltaTime;
-        }
 
         jumpDir.y += GlobalValues.GravityForce * GlobalValues.GravityModifier * Time.deltaTime;
       }
@@ -738,10 +739,10 @@ namespace Paraverse.Mob.Controller
     /// Allows mob to fall off the map
     /// </summary>
     /// <returns></returns>
-    private bool CheckFall()
+    private bool CheckFall(out bool partiallyOnGround)
     {
       int raycastOnNavMeshCount = 0;
-      int requiredRaycastOnNavMesh = 2;   // keeps mob on nav mesh if 2 raycasts are hitting the nav mesh
+      int requiredRaycastOnNavMesh = 3;   // keeps mob on nav mesh if 2 raycasts are hitting the nav mesh
       Vector3 origin = transform.position;
       Vector3 dir = -transform.up;
 
@@ -760,6 +761,8 @@ namespace Paraverse.Mob.Controller
       if (Physics.Raycast(rightOrigin, dir * checkFallRange, checkFallRange))
         raycastOnNavMeshCount++;
 
+      partiallyOnGround = raycastOnNavMeshCount > 0 ? true : false;
+      //Debug.Log("raycastOnNavMeshCount: " + raycastOnNavMeshCount + "requiredRaycastOnNavMesh: " + requiredRaycastOnNavMesh + " is falling: " + (raycastOnNavMeshCount < requiredRaycastOnNavMesh));
       if (raycastOnNavMeshCount >= requiredRaycastOnNavMesh)
         _isFalling = false;
       else
@@ -863,7 +866,8 @@ namespace Paraverse.Mob.Controller
     #region Status Effect Methods
     private void CleanseStagger()
     {
-      if (CheckFall()) return;
+      bool partiallyOnGround = false;
+      if (CheckFall(out partiallyOnGround)) return;
       _isStaggered = false;
       activeKnockBackEffect = null;
     }
