@@ -5,6 +5,7 @@
 using FullSerializer;
 using ParaverseWebsite.Models;
 using Proyecto26;
+using System;
 using System.Collections.Generic;
 using System.Threading.Tasks;
 using UnityEngine;
@@ -15,12 +16,19 @@ public class FirebaseDatabaseManager : MonoBehaviour
   private readonly string databasePath = "https://paraverse-games-default-rtdb.firebaseio.com/";
   private readonly string matchHistoriesPath = "MatchHistories";
   private readonly string leaderboardsPath = "Leaderboards";
+  private readonly string usersPath = "Users";
 
   private static fsSerializer serializer = new fsSerializer();
   public delegate void PostMatchHistoryCallback(MatchHistoryModel matchHistory);
-  public delegate void PostLeaderboardsCallback(LeaderboardsModel leaderboard);
+
+  public delegate void UpdateLeaderboardCallback(LeaderboardsModel leaderboard);
+  public delegate void PostLeaderboardFailureCallback();
   public delegate void GetLeaderboardCallback(LeaderboardsModel model);
+
   public delegate void GetLeaderboardsCallback(Dictionary<string, LeaderboardsModel> model);
+  
+  public delegate void GetUserCallback(UserModel model);
+  public delegate void GetUserFailureCallback();
 
 
   private void Awake()
@@ -53,7 +61,7 @@ public class FirebaseDatabaseManager : MonoBehaviour
 
   #region LEADERBOARDS CRUD OPERATIONS
 
-  public void PostLeaderboards(LeaderboardsModel model, PostLeaderboardsCallback callback)
+  public void PostLeaderboards(LeaderboardsModel model, UpdateLeaderboardCallback callback)
   {
     string username = model.Username;
 
@@ -68,41 +76,82 @@ public class FirebaseDatabaseManager : MonoBehaviour
       });
   }
 
-  public void GetLeaderboard(string username, GetLeaderboardCallback callback)
+  public void GetLeaderboard(string username, GetLeaderboardCallback onSuccessCallback, PostLeaderboardFailureCallback onFailureCallback)
   {
-    RestClient.Get<LeaderboardsModel>($"{databasePath}{leaderboardsPath}/{username}.json")
-      .Then(response =>
-      {
-        Debug.Log("Rsponse: " + response);
-        callback?.Invoke(response);
-      })
-      .Catch(error =>
-      {
-        Debug.Log("Error: " + error);
-      });
+    try
+    {
+      RestClient.Get<LeaderboardsModel>($"{databasePath}{leaderboardsPath}/{username}.json")
+        .Then(response =>
+        {
+          onSuccessCallback?.Invoke(response);
+        })
+        .Catch(error =>
+        {
+          Debug.Log("Error: " + error);
+          onFailureCallback?.Invoke();
+        });
+    }
+    catch (Exception ex)
+    {
+      Debug.LogException(ex);
+      onFailureCallback?.Invoke();
+    }
   }
 
   public void GetLeaderboards(GetLeaderboardsCallback callback)
   {
-    RestClient.Get($"{databasePath}{leaderboardsPath}.json")
-      .Then(response =>
-      {
-        var responseJson = response.Text;
+    try
+    {
+      RestClient.Get($"{databasePath}{leaderboardsPath}.json")
+        .Then(response =>
+        {
+          var responseJson = response.Text;
 
-        // Using the FullSerializer library: https://github.com/jacobdufault/fullserializer
-        // to serialize more complex types (a Dictionary, in this case)
-        var data = fsJsonParser.Parse(responseJson);
-        object deserialized = null;
-        serializer.TryDeserialize(data, typeof(Dictionary<string, LeaderboardsModel>), ref deserialized);
+          // Using the FullSerializer library: https://github.com/jacobdufault/fullserializer
+          // to serialize more complex types (a Dictionary, in this case)
+          var data = fsJsonParser.Parse(responseJson);
+          object deserialized = null;
+          serializer.TryDeserialize(data, typeof(Dictionary<string, LeaderboardsModel>), ref deserialized);
 
-        var leaderboardsDictionary = deserialized as Dictionary<string, LeaderboardsModel>;
+          var leaderboardsDictionary = deserialized as Dictionary<string, LeaderboardsModel>;
 
-        callback?.Invoke(leaderboardsDictionary);
-      })
-      .Catch(error =>
-      {
-        Debug.Log("Error: " + error);
-      });
+          callback?.Invoke(leaderboardsDictionary);
+        })
+        .Catch(error =>
+        {
+          Debug.Log("Error: " + error);
+        });
+    }
+    catch (Exception ex)
+    {
+      Debug.LogException(ex);
+    }
+  }
+  #endregion
+
+
+  #region USERS CRUD OPERATIONS
+  
+  public void GetUser(string username, GetUserCallback onSuccessCallback, GetUserFailureCallback onFailureCallback)
+  {
+    try
+    {
+      RestClient.Get<UserModel>($"{databasePath}{usersPath}/{username}.json")
+        .Then(response =>
+        {
+          onSuccessCallback?.Invoke(response);
+        })
+        .Catch(error =>
+        {
+          Debug.Log("Error: " + error);
+          onFailureCallback?.Invoke();
+        });
+    }
+    catch (Exception ex)
+    {
+      Debug.LogException(ex);
+      onFailureCallback?.Invoke();
+    }
   }
   #endregion
 }
