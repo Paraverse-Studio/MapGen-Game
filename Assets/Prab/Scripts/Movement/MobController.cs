@@ -741,7 +741,7 @@ namespace Paraverse.Mob.Controller
     private bool CheckFall()
     {
       int raycastOnNavMeshCount = 0;
-      int requiredRaycastOnNavMesh = 2;
+      int requiredRaycastOnNavMesh = 2;   // keeps mob on nav mesh if 2 raycasts are hitting the nav mesh
       Vector3 origin = transform.position;
       Vector3 dir = -transform.up;
 
@@ -757,7 +757,7 @@ namespace Paraverse.Mob.Controller
         raycastOnNavMeshCount++;
       if (Physics.Raycast(leftOrigin, dir * checkFallRange, checkFallRange))
         raycastOnNavMeshCount++;
-      if (Physics.Raycast(leftOrigin, dir * checkFallRange, checkFallRange))
+      if (Physics.Raycast(rightOrigin, dir * checkFallRange, checkFallRange))
         raycastOnNavMeshCount++;
 
       if (raycastOnNavMeshCount >= requiredRaycastOnNavMesh)
