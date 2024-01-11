@@ -373,6 +373,7 @@ MonoBehaviour:
   _curMobState: 0
   _isGrounded: 1
   _isUnstaggerable: 0
+  _mobType: 2
 --- !u!114 &5125661759958323761
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -393,6 +394,8 @@ MonoBehaviour:
   moveSpeed: 2
   maxEnergy: 100
   _curEnergy: 100
+  cooldownReduction: 0
+  healthRegen: 0
   energyRegen: 25
   _gold: 100
   OnHealthChange:
@@ -419,9 +422,11 @@ MonoBehaviour:
   stats: {fileID: 0}
   projUser: 0
   basicAttackSkill: {fileID: 6813802553972170479}
-  skills: []
-  effects: []
-  animBool: isUsingSkill
+  _skills: []
+  _activeSkill: {fileID: 0}
+  _effects: []
+  useSetSkillToCompleteSafetyFeature: 1
+  setSkillToCompleteTimer: 10
   explosionEffect: {fileID: 3357188187496195378, guid: c4687f54de839e54f979bd3771bf99d5, type: 3}
   explosionRadius: 1.5
   scalingStatData:
@@ -1183,13 +1188,16 @@ MonoBehaviour:
   _ID: -1
   _image: {fileID: 0}
   _description: 
+  animName: BasicAttack
+  cost: 0
+  _isBasicAttack: 0
+  _isMelee: 0
+  usesTargetLock: 0
+  rotSpeed: 100
+  enableForDurationBasedProjectileSkills: 0
   _minRange: 0
   _maxRange: 5
-  cooldown: 5
-  cost: 0
-  animName: BasicAttack
-  isBasicAttack: 1
-  _isMelee: 0
+  _cooldown: 5
   attackColliderGO: {fileID: 0}
   attackCollider: {fileID: 0}
   projData:
@@ -1197,11 +1205,10 @@ MonoBehaviour:
     projHeld: {fileID: 0}
     projOrigin: {fileID: 0}
     projRotation: {fileID: 0}
-    basicAtkProjSpeed: 10
-  usesTargetLock: 0
-  rotSpeed: 100
+    projSpeed: 10
   scalingStatData:
     flatPower: 10
     attackScaling: 0
     abilityScaling: 0
     healthScaling: 0
+  skillStateToCompleteTimer: 1

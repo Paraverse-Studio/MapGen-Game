@@ -167,9 +167,9 @@ namespace Paraverse.Mob.Controller
     protected bool _isUnstaggerable = false;
     public bool IsDead => _isDead;
     protected bool _isDead = false;
-    public bool IsBoss => _isBoss;
+    public MobType MobType => _mobType;
     [SerializeField]
-    protected bool _isBoss = false;
+    protected MobType _mobType = MobType.Normal;
 
     public IMobController Target => _target;
     protected IMobController _target;
@@ -865,7 +865,11 @@ namespace Paraverse.Mob.Controller
         Death();
         OnDeathEvent?.Invoke(transform);
 
-        GameLoopManager.Instance.sessionData.mobsDefeated += 1;
+        if (MobType.Equals(MobType.Boss))
+          GameLoopManager.Instance.sessionData.bossesDefeated += 1;
+        else if (MobType.Equals(MobType.Normal))
+          GameLoopManager.Instance.sessionData.mobsDefeated += 1;
+        // Summonling mobs don't count towards kills 
       }
     }
 
@@ -876,4 +880,11 @@ namespace Paraverse.Mob.Controller
     }
     #endregion
   }
+}
+
+public enum MobType 
+{
+  Normal,
+  Boss,
+  Summonling
 }
