@@ -70,8 +70,8 @@ public class SummaryView : MonoBehaviour
     }
     else
     {
-      SkillUsed = ParaverseHelper.GetSkillName(playerCombat.ActiveSkill.SkillName);
-      SkillUsedEnum = playerCombat.ActiveSkill.SkillName;
+      SkillUsed = ParaverseHelper.GetSkillName(playerCombat.ActiveSkill._skillNameDB);
+      SkillUsedEnum = playerCombat.ActiveSkill._skillNameDB;
     }
 
     foreach (MobEffect effect in playerCombat.Effects)

@@ -19,6 +19,7 @@ public class AoeDamageEffect : MobEffect
     public override void ActivateEffect(MobStats stats)
     {
         base.ActivateEffect(stats);
+        _effectNameDB = ParaverseWebsite.Models.EffectName.Sunfire;
         if (null == _col)
         {
             _col = gameObject.AddComponent<CapsuleCollider>();

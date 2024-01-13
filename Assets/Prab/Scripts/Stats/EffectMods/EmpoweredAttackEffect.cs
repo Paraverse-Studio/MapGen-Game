@@ -15,6 +15,7 @@ public class EmpoweredAttackEffect : MobEffect
     public override void ActivateEffect(MobStats stats)
     {
         base.ActivateEffect(stats);
+        _effectNameDB = ParaverseWebsite.Models.EffectName.EmpoweredAttack;
         _mod = new StatModifier(scalingStatData.FinalValue(_stats));
         _hitCounter = 0;
         _combat.BasicAttackSkill.attackCollider.OnBasicAttackPreHitEvent += IncrementBasicAttackCounter;

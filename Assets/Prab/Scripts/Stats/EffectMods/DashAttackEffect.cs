@@ -12,6 +12,7 @@ public class DashAttackEffect : MobEffect
 
     public override void ActivateEffect(MobStats stats)
     {
+        _effectNameDB = ParaverseWebsite.Models.EffectName.SweepingDash;
         _stats = stats;
         controller = _stats.GetComponent<PlayerController>();
         _combat = _stats.GetComponent<PlayerCombat>();

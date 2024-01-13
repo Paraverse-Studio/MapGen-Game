@@ -1,6 +1,8 @@
 using Paraverse;
 using Paraverse.Combat;
 using Paraverse.Helper;
+using Paraverse.Mob.Combat;
+using Paraverse.Mob.Stats;
 using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
@@ -15,11 +17,15 @@ public class LightningBoltSkill : MobSkill, IMobSkill
     private GameObject FX;
 
     private bool performing = false;
-    #endregion
+  #endregion
 
+  public override void ActivateSkill(MobCombat mob, Animator anim, MobStats stats, Transform target = null)
+  {
+    base.ActivateSkill(mob, anim, stats, target);
+  }
 
-    // Check if target exists
-    protected override bool CanUseSkill()
+  // Check if target exists
+  protected override bool CanUseSkill()
     {
         if (IsOffCooldown && HasEnergy && TargetWithinRange && mob.IsAttackLunging == false && IsBasicAttack == false)
         {

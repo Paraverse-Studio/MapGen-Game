@@ -11,7 +11,9 @@ public abstract class MobEffect : MonoBehaviour
 {
   [SerializeField]
   protected string EffectName = "Mob Effect";
-  public EffectName EffectNameDB;
+  // required to identify effect in database
+  public EffectName EffectNameDB => _effectNameDB;
+  protected EffectName _effectNameDB;
   protected MobStats _stats;
   protected PlayerCombat _combat;
 

@@ -11,6 +11,7 @@ public class ReaperKillEffect : MobEffect
   public override void ActivateEffect(MobStats stats)
   {
     base.ActivateEffect(stats);
+    _effectNameDB = ParaverseWebsite.Models.EffectName.RepearKill;
     foreach (MobController enemy in EnemiesManager.Instance.Enemies)
     {
       enemy.OnDeathEvent += GainHealth;

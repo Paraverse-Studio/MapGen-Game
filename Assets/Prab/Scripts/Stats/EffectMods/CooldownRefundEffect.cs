@@ -15,6 +15,7 @@ public class CooldownRefundEffect : MobEffect
   public override void ActivateEffect(MobStats stats)
   {
     base.ActivateEffect(stats);
+    _effectNameDB = ParaverseWebsite.Models.EffectName.CooldownRefund;
     foreach (MobController enemy in EnemiesManager.Instance.Enemies)
     {
       enemy.OnDeathEvent += RefundCooldown;
