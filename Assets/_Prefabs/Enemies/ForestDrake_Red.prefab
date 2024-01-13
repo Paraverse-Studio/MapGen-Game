@@ -1646,6 +1646,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   _skillName: Drake Basic Attack
+  _skillNameDB: 0
   _ID: -1
   _image: {fileID: 0}
   _description: 
@@ -1655,9 +1656,10 @@ MonoBehaviour:
   _isMelee: 0
   usesTargetLock: 0
   rotSpeed: 100
+  enableForDurationBasedProjectileSkills: 0
   _minRange: 3
   _maxRange: 7
-  _cooldown: 5
+  _cooldown: 2.2
   attackColliderGO: {fileID: 0}
   attackCollider: {fileID: 0}
   projData:
@@ -1665,12 +1667,13 @@ MonoBehaviour:
     projHeld: {fileID: 0}
     projOrigin: {fileID: 5234615526279622886}
     projRotation: {fileID: 0}
-    basicAtkProjSpeed: 5
+    projSpeed: 5
   scalingStatData:
     flatPower: 0
     attackScaling: 1
     abilityScaling: 0
     healthScaling: 0
+  skillStateToCompleteTimer: 1
 --- !u!1 &5234615526157830000
 GameObject:
   m_ObjectHideFlags: 0
@@ -2431,6 +2434,7 @@ MonoBehaviour:
   _curMobState: 0
   _isGrounded: 1
   _isUnstaggerable: 0
+  _mobType: 0
 --- !u!114 &5234615525359875067
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -2448,7 +2452,10 @@ MonoBehaviour:
   projUser: 1
   basicAttackSkill: {fileID: 5234615525961117923}
   _skills: []
+  _activeSkill: {fileID: 0}
   _effects: []
+  useSetSkillToCompleteSafetyFeature: 1
+  setSkillToCompleteTimer: 10
 --- !u!114 &5234615525359875046
 MonoBehaviour:
   m_ObjectHideFlags: 0

@@ -77,6 +77,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   _skillName: Mushroom Minon Basic Attack
+  _skillNameDB: 0
   _ID: -1
   _image: {fileID: 0}
   _description: 
@@ -86,9 +87,10 @@ MonoBehaviour:
   _isMelee: 0
   usesTargetLock: 0
   rotSpeed: 100
+  enableForDurationBasedProjectileSkills: 0
   _minRange: 3
   _maxRange: 9
-  _cooldown: 5
+  _cooldown: 2
   attackColliderGO: {fileID: 0}
   attackCollider: {fileID: 0}
   projData:
@@ -96,12 +98,13 @@ MonoBehaviour:
     projHeld: {fileID: 8962721783346320102}
     projOrigin: {fileID: 1374451527}
     projRotation: {fileID: 0}
-    basicAtkProjSpeed: 10
+    projSpeed: 10
   scalingStatData:
     flatPower: 0
     attackScaling: 1
     abilityScaling: 0
     healthScaling: 0
+  skillStateToCompleteTimer: 1
 --- !u!1 &1374451526
 GameObject:
   m_ObjectHideFlags: 0
@@ -3746,6 +3749,7 @@ MonoBehaviour:
   _curMobState: 0
   _isGrounded: 1
   _isUnstaggerable: 0
+  _mobType: 0
 --- !u!114 &8586723283797941117
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -3763,7 +3767,10 @@ MonoBehaviour:
   projUser: 1
   basicAttackSkill: {fileID: 1061767023}
   _skills: []
+  _activeSkill: {fileID: 0}
   _effects: []
+  useSetSkillToCompleteSafetyFeature: 1
+  setSkillToCompleteTimer: 10
 --- !u!114 &1376336924
 MonoBehaviour:
   m_ObjectHideFlags: 0

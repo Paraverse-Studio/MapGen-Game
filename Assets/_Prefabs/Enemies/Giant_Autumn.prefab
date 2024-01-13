@@ -119,7 +119,10 @@ MonoBehaviour:
   projUser: 0
   basicAttackSkill: {fileID: 6016866020147675529}
   _skills: []
+  _activeSkill: {fileID: 0}
   _effects: []
+  useSetSkillToCompleteSafetyFeature: 1
+  setSkillToCompleteTimer: 10
 --- !u!114 &4679040763913807151
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -259,6 +262,7 @@ MonoBehaviour:
   _curMobState: 0
   _isGrounded: 1
   _isUnstaggerable: 0
+  _mobType: 0
 --- !u!1 &4679040763913807138
 GameObject:
   m_ObjectHideFlags: 0
@@ -1239,6 +1243,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   _skillName: Giant Basic Attack
+  _skillNameDB: 0
   _ID: -1
   _image: {fileID: 0}
   _description: 
@@ -1248,9 +1253,10 @@ MonoBehaviour:
   _isMelee: 1
   usesTargetLock: 0
   rotSpeed: 100
+  enableForDurationBasedProjectileSkills: 0
   _minRange: 0
   _maxRange: 4
-  _cooldown: 5
+  _cooldown: 2.5
   attackColliderGO: {fileID: 6016866020269154546}
   attackCollider: {fileID: 6016866020269154545}
   projData:
@@ -1258,12 +1264,13 @@ MonoBehaviour:
     projHeld: {fileID: 0}
     projOrigin: {fileID: 0}
     projRotation: {fileID: 0}
-    basicAtkProjSpeed: 10
+    projSpeed: 10
   scalingStatData:
     flatPower: 0
     attackScaling: 1
     abilityScaling: 0
     healthScaling: 0
+  skillStateToCompleteTimer: 1
 --- !u!1 &6016866020263779297
 GameObject:
   m_ObjectHideFlags: 0
