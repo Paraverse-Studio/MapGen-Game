@@ -71,13 +71,17 @@ namespace ParaverseWebsite.Models
       BloodLineEnum = bloodLineEnum;
       SkillUsedEnum = skillUsedEnum;
       Timestamp = DateTime.Now.ToString("yyyy-MM-dd hh:mm:ss tt");
-#if UNITY_WEBGL
+
+#if UNITY_EDITOR
+      Device = DeviceType.Test.ToString();
+#endif
+#if UNITY_WEBGL && !UNITY_EDITOR
       Device = DeviceType.WebGL.ToString();
 #endif
-#if UNITY_STANDALONE_OSX || UNITY_STANDALONE_WIN || UNITY_STANDALONE_LINUX
+#if UNITY_STANDALONE_OSX && !UNITY_EDITOR|| UNITY_STANDALONE_WIN && !UNITY_EDITOR|| UNITY_STANDALONE_LINUX && !UNITY_EDITOR
     Device = DeviceType.Desktop.ToString();
 #endif
-#if UNITY_IOS || UNITY_ANDROID
+#if UNITY_IOS && !UNITY_EDITOR || UNITY_ANDROID && !UNITY_EDITOR
     Device = DeviceType.Mobile.ToString();
 #endif
     }

@@ -75,6 +75,7 @@ namespace ParaverseWebsite.Models
 }
 public enum DeviceType
 {
+  Test,
   Mobile,
   WebGL,
   Desktop
