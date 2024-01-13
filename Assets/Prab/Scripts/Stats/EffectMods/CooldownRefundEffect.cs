@@ -39,6 +39,9 @@ public class CooldownRefundEffect : MobEffect
 
   private void RefundCooldown(Transform t = null)
   {
+    // dont apply effect if no active skill
+    if (_combat.ActiveSkill == null) return;
+
     float refund = _combat.ActiveSkill.Cooldown * cooldownRefundAmount;
     _combat.ActiveSkill.RefundCooldown(refund);
   }

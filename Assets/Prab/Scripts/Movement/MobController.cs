@@ -639,7 +639,6 @@ namespace Paraverse.Mob.Controller
 
     private void KnockbackHandler()
     {
-      bool partiallyOnGround = false;
       if (null != activeKnockBackEffect || _isStaggered)
       {
         _isStaggered = true;
@@ -648,7 +647,7 @@ namespace Paraverse.Mob.Controller
         disFromStartPos = ParaverseHelper.GetDistance(activeKnockBackEffect.startPos, transform.position);
 
         // Ensures mob falls when off platform
-        if (CheckFall(out partiallyOnGround))
+        if (CheckFall(out bool partiallyOnGround))
         {
           nav.enabled = false;
           _isFalling = true;
@@ -742,19 +741,23 @@ namespace Paraverse.Mob.Controller
     private bool CheckFall(out bool partiallyOnGround)
     {
       int raycastOnNavMeshCount = 0;
-      int requiredRaycastOnNavMesh = 3;   // keeps mob on nav mesh if 2 raycasts are hitting the nav mesh
+      int requiredRaycastOnNavMesh = 4;   // keeps mob on nav mesh if 2 raycasts are hitting the nav mesh
       Vector3 origin = transform.position;
       Vector3 dir = -transform.up;
 
-      Vector3 topOrigin = origin + new Vector3(0f, 0f, nav.radius);
+      Vector3 topOrigin = origin + new Vector3(0f, 0f, -nav.radius);
+      Vector3 bottomOrigin = origin + new Vector3(0f, 0f, nav.radius);
       Vector3 leftOrigin = origin + new Vector3(-nav.radius, 0f, 0f);
       Vector3 rightOrigin = origin + new Vector3(nav.radius, 0f, 0f);
 
-      //Debug.DrawRay(topOrigin, dir * checkFallRange, Color.red);
-      //Debug.DrawRay(leftOrigin, dir * checkFallRange, Color.blue);
-      //Debug.DrawRay(rightOrigin, dir * checkFallRange, Color.green);
+      Debug.DrawRay(topOrigin, dir * checkFallRange, Color.red);
+      Debug.DrawRay(bottomOrigin, dir * checkFallRange, Color.green);
+      Debug.DrawRay(leftOrigin, dir * checkFallRange, Color.blue);
+      Debug.DrawRay(rightOrigin, dir * checkFallRange, Color.green);
 
       if (Physics.Raycast(topOrigin, dir * checkFallRange, checkFallRange))
+        raycastOnNavMeshCount++;
+      if (Physics.Raycast(bottomOrigin, dir * checkFallRange, checkFallRange))
         raycastOnNavMeshCount++;
       if (Physics.Raycast(leftOrigin, dir * checkFallRange, checkFallRange))
         raycastOnNavMeshCount++;
