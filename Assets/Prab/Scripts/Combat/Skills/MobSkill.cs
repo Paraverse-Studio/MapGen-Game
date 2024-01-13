@@ -22,6 +22,7 @@ namespace Paraverse.Combat
     public string Name { get => _skillName; set => _skillName = value; }
     [SerializeField, Tooltip("Skill name.")]
     protected string _skillName = "";
+    public SkillName SkillName;  // Required for identifying for database
     public int ID { get => _ID; set => _ID = value; }
     [SerializeField, Tooltip("Skill ID.")]
     protected int _ID = -1;

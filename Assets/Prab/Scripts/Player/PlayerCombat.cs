@@ -15,7 +15,7 @@ namespace Paraverse.Player
     private PlayerInputControls input;
 
     // Basic attack combo variables
-    public int BasicAttackComboIdx { get { return basicAtkComboIdx; } }
+    public int BasicAttackComboIdx { get => basicAtkComboIdx; }
     private int basicAtkComboIdx = 0;
     private int basicAtkComboIdxLimit = 2;
     [SerializeField, Tooltip("Max cooldown to allow next combo attack.")]
@@ -27,9 +27,9 @@ namespace Paraverse.Player
     [SerializeField]
     private Transform _effectsHolder;
     public Transform EffectsHolder => _effectsHolder;
-    public bool CanComboAttackTwo { get { return _canComboAttackTwo; } }
+    public bool CanComboAttackTwo { get => _canComboAttackTwo; }
     private bool _canComboAttackTwo = false;
-    public bool CanComboAttackThree { get { return _canComboAttackThree; } }
+    public bool CanComboAttackThree { get => _canComboAttackThree; }
     private bool _canComboAttackThree = false;
 
     public GameObject AttackColliderGO => _attackColliderGO;

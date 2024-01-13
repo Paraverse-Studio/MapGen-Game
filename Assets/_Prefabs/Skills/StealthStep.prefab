@@ -45,17 +45,21 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   _skillName: Stealth Step
+  SkillName: 5
   _ID: 105
   _image: {fileID: 21300000, guid: e758dbf52f470144681afb48cd93b11c, type: 3}
   _description: 'Active Skill: Move at instantaneous speed behind the closest enemy,
     and attack them.'
+  animName: QuickSlash
+  cost: 10
+  _isBasicAttack: 0
+  _isMelee: 0
+  usesTargetLock: 1
+  rotSpeed: 1400
+  enableForDurationBasedProjectileSkills: 0
   _minRange: 0
   _maxRange: 5
-  cooldown: 2
-  cost: 10
-  animName: QuickSlash
-  isBasicAttack: 0
-  _isMelee: 0
+  _cooldown: 5
   attackColliderGO: {fileID: 0}
   attackCollider: {fileID: 0}
   projData:
@@ -63,13 +67,12 @@ MonoBehaviour:
     projHeld: {fileID: 0}
     projOrigin: {fileID: 0}
     projRotation: {fileID: 0}
-    basicAtkProjSpeed: 10
-  usesTargetLock: 1
-  rotSpeed: 1400
+    projSpeed: 10
   scalingStatData:
     flatPower: 0
     attackScaling: 1
     abilityScaling: 0
     healthScaling: 0
+  skillStateToCompleteTimer: 1
   rangeLimit: 5
   FX: {fileID: 8073467667769803130, guid: 3f5440ea9372ecc45baf169f20a35cdd, type: 3}

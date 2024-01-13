@@ -11,13 +11,14 @@ public abstract class MobEffect : MonoBehaviour
 {
   [SerializeField]
   protected string EffectName = "Mob Effect";
+  public EffectName EffectNameDB;
   protected MobStats _stats;
   protected PlayerCombat _combat;
 
   [SerializeField]
   protected string targetTag = StringData.EnemyTag;
   public int ID { get { return _ID; } set { _ID = value; } }
-  [SerializeField, Tooltip("Effect ID")]
+  [Tooltip("Effect ID")]
   protected int _ID = -1;
 
   protected List<GameObject> hitTargets = new List<GameObject>();

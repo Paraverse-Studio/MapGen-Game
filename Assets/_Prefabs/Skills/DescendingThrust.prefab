@@ -45,17 +45,21 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   _skillName: Descending Thrust
+  SkillName: 3
   _ID: 103
   _image: {fileID: 21300000, guid: a7b94fdf922f5974fa6f749255fcb862, type: 3}
   _description: 'Active Skill: Wind up briefly, then thrust forward, dealing [DMG]
     damage.'
+  animName: ChargeThrust
+  cost: 30
+  _isBasicAttack: 0
+  _isMelee: 0
+  usesTargetLock: 1
+  rotSpeed: 1400
+  enableForDurationBasedProjectileSkills: 0
   _minRange: 0
   _maxRange: 5
-  cooldown: 7
-  cost: 30
-  animName: ChargeThrust
-  isBasicAttack: 0
-  _isMelee: 0
+  _cooldown: 5
   attackColliderGO: {fileID: 0}
   attackCollider: {fileID: 0}
   projData:
@@ -63,14 +67,13 @@ MonoBehaviour:
     projHeld: {fileID: 0}
     projOrigin: {fileID: 0}
     projRotation: {fileID: 0}
-    basicAtkProjSpeed: 10
-  usesTargetLock: 1
-  rotSpeed: 1400
+    projSpeed: 10
   scalingStatData:
     flatPower: 20
     attackScaling: 0.5
     abilityScaling: 0
     healthScaling: 0
+  skillStateToCompleteTimer: 1
   VFX: {fileID: 1609566447169014133, guid: 72f2321606f5fcb48a8d7e71be9cb560, type: 3}
   VFXObjects: []
   thrustForce: {x: 25, y: 0, z: 25}

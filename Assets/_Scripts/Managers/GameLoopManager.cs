@@ -1,6 +1,3 @@
-using Paraverse;
-using Paraverse.Mob;
-using Paraverse.Mob.Combat;
 using Paraverse.Mob.Controller;
 using Paraverse.Mob.Stats;
 using Paraverse.Player;
@@ -381,6 +378,8 @@ public class GameLoopManager : MonoBehaviour
       if (roundCompletionType == RoundCompletionType.Failed || !MapCreator.Instance.NextMapCreatable())
       {
         summaryView.gameObject.SetActive(true);
+        Debug.Log("PlayerStats Attack Damage: " + playerStats.AttackDamage.BaseValue);
+        Debug.Log("PlayerStats Attack Damage: " + playerStats.AttackDamage.FinalValue);
         summaryView.Populate(sessionData, playerStats, playerCombat);
         GameLoopEvents.OnEndSession?.Invoke();
       }

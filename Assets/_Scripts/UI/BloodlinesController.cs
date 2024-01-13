@@ -9,11 +9,6 @@ using Paraverse.Stats;
 
 public class BloodlinesController : MonoBehaviour
 {
-    public enum BloodlineType
-    {
-        Vagabond = 0, Harrier = 1, Pioneer = 2, Scholar
-    }
-
     [Header("Exteral References")]
     public MobStats playerStats;
     public PlayerController playerController;
@@ -118,4 +113,8 @@ public class BloodlinesController : MonoBehaviour
         playerStats.AttackDamage.UpdateBaseValue(playerStats.AttackDamage.BaseValue + Mathf.CeilToInt((float)v / 4.0f), invokeEvent: false);
     }
 
+}
+public enum BloodlineType
+{
+  Vagabond = 0, Harrier = 1, Pioneer = 2, Scholar
 }

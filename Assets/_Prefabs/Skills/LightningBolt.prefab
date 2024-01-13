@@ -45,17 +45,21 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   _skillName: Lightning Bolt
+  SkillName: 6
   _ID: 107
   _image: {fileID: 21300000, guid: 44efb8e42b35e3a40b380aaec03a9be1, type: 3}
   _description: 'Active Skill: Summong a searing bolt of lightning at your target
     dealing [DMG] damage.'
+  animName: 
+  cost: 30
+  _isBasicAttack: 0
+  _isMelee: 0
+  usesTargetLock: 0
+  rotSpeed: 0
+  enableForDurationBasedProjectileSkills: 0
   _minRange: 0
   _maxRange: 5
-  cooldown: 5
-  cost: 30
-  animName: 
-  isBasicAttack: 0
-  _isMelee: 0
+  _cooldown: 5
   attackColliderGO: {fileID: 0}
   attackCollider: {fileID: 0}
   projData:
@@ -63,13 +67,12 @@ MonoBehaviour:
     projHeld: {fileID: 0}
     projOrigin: {fileID: 0}
     projRotation: {fileID: 0}
-    basicAtkProjSpeed: 10
-  usesTargetLock: 0
-  rotSpeed: 0
+    projSpeed: 10
   scalingStatData:
     flatPower: 15
     attackScaling: 0
     abilityScaling: 0.6
     healthScaling: 0
+  skillStateToCompleteTimer: 1
   rangeLimit: 8
   FX: {fileID: 2864641409730000537, guid: fde43e1169c65214bb16045216130958, type: 3}

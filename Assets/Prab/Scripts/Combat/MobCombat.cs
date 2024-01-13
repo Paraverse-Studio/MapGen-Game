@@ -3,7 +3,6 @@ using Paraverse.Helper;
 using Paraverse.Mob.Stats;
 using System.Collections.Generic;
 using UnityEngine;
-using Paraverse.Stats;
 
 namespace Paraverse.Mob.Combat
 {
@@ -35,11 +34,11 @@ namespace Paraverse.Mob.Combat
     [SerializeField]
     protected BasicAttackSkill basicAttackSkill;
     public BasicAttackSkill BasicAttackSkill => basicAttackSkill;
-    public float BasicAtkRange => basicAttackSkill.MaxRange; 
-    public bool IsBasicAttacking => _isBasicAttacking; 
+    public float BasicAtkRange => basicAttackSkill.MaxRange;
+    public bool IsBasicAttacking => _isBasicAttacking;
     protected bool _isBasicAttacking = false;
     // Returns true when character is within basic attack range and cooldown is 0.
-    public bool CanBasicAtk => distanceFromTarget <= basicAttackSkill.MaxRange && distanceFromTarget >= basicAttackSkill.MinRange && basicAttackSkill.CurCooldown <= 0; 
+    public bool CanBasicAtk => distanceFromTarget <= basicAttackSkill.MaxRange && distanceFromTarget >= basicAttackSkill.MinRange && basicAttackSkill.CurCooldown <= 0;
     // Sets to true when character is doing an action (Attack, Stun).
     public bool IsAttackLunging => _isAttackLunging;
     protected bool _isAttackLunging = false;
@@ -47,7 +46,7 @@ namespace Paraverse.Mob.Combat
     public bool IsInCombat => IsSkilling || IsBasicAttacking;
     protected int usingSkillIdx;
 
-    public List<MobSkill> Skills => _skills; 
+    public List<MobSkill> Skills => _skills;
     [SerializeField, Tooltip("Mob skills.")]
     protected List<MobSkill> _skills = new List<MobSkill>();
     public MobSkill ActiveSkill => _activeSkill;
@@ -188,7 +187,7 @@ namespace Paraverse.Mob.Combat
       {
         curSetSkillToCompleteTimer -= Time.deltaTime;
       }
-      
+
       basicAttackSkill.SkillUpdate();
     }
     #endregion
@@ -228,22 +227,22 @@ namespace Paraverse.Mob.Combat
     {
       return 1f / stats.AttackSpeed.FinalValue;
     }
-#endregion
+    #endregion
 
     #region Combat Enhancement Methods
     public void EnrageStats()
     {
-        if (TryGetComponent(out stats))
+      if (TryGetComponent(out stats))
+      {
+        stats.AttackDamage.AddMod(new((int)(stats.AttackDamage.FinalValue * 0.5f)));
+        stats.MaxHealth.AddMod(new(stats.MaxHealth.FinalValue));
+        stats.SetFullHealth();
+        if (basicAttackSkill)
         {
-            stats.AttackDamage.AddMod(new ((int)(stats.AttackDamage.FinalValue * 0.5f)));
-            stats.MaxHealth.AddMod(new (stats.MaxHealth.FinalValue));
-            stats.SetFullHealth();
-            if (basicAttackSkill)
-            {
-                basicAttackSkill.Cooldown *= 0.25f;
-            }
-            stats.MoveSpeed.AddMod(new (2));
+          basicAttackSkill.Cooldown *= 0.25f;
         }
+        stats.MoveSpeed.AddMod(new(2));
+      }
     }
 
     #endregion
