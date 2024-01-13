@@ -46,7 +46,7 @@ public class SummaryView : MonoBehaviour
     string Username = MainMenuController.Instance.Username;
     int RoundNumberReached = sessionData.roundReached;
     int SessionLength = (int)sessionData.sessionLength;
-    int GamesPlayed = 0;
+    int GamesPlayed = 1;
     int DamageTaken = sessionData.damageTaken;
     int TotalScore = sessionData.totalScore;
     int GoldEarned = sessionData.goldEarned;
@@ -57,20 +57,26 @@ public class SummaryView : MonoBehaviour
     int Attack = (int)stats.AttackDamage.FinalValue;
     int Ability = (int)stats.AbilityPower.FinalValue;
     string BloodLine = bloodlinesController.chosenBloodline.ToString();
-    string SkillUsed = ParaverseHelper.GetSkillName(playerCombat.ActiveSkill.SkillName);
+    string SkillUsed;
+    BloodlineType BloodLineEnum = bloodlinesController.chosenBloodline;
+    SkillName SkillUsedEnum;
     List<EffectName> EffectsObtained = new List<EffectName>();
-
     StringBuilder effectsSB = new StringBuilder();
 
-    // For Leaderboards
-    BloodlineType BloodLineEnum = bloodlinesController.chosenBloodline;
-    SkillName SkillUsedEnum = playerCombat.ActiveSkill.SkillName;
-    List<EffectName> EffectsObtainedEnums = new List<EffectName>();
+    if (playerCombat.ActiveSkill == null)
+    {
+      SkillUsed = "No Skill Obtained";
+      SkillUsedEnum = SkillName.None;
+    }
+    else
+    {
+      SkillUsed = ParaverseHelper.GetSkillName(playerCombat.ActiveSkill.SkillName);
+      SkillUsedEnum = playerCombat.ActiveSkill.SkillName;
+    }
 
     foreach (MobEffect effect in playerCombat.Effects)
     {
       string name = ParaverseHelper.GetEffectName(effect.EffectNameDB);
-      EffectsObtainedEnums.Add(effect.EffectNameDB);
       EffectsObtained.Add(effect.EffectNameDB);
       effectsSB.Append(name + " | ");
     }
@@ -97,8 +103,8 @@ public class SummaryView : MonoBehaviour
     SessionDataModel sessionDataModel = new SessionDataModel(
       Username,
       RoundNumberReached,
-      SessionLength,
       GamesPlayed,
+      SessionLength,
       DamageTaken,
       TotalScore,
       GoldEarned,
@@ -132,31 +138,31 @@ public class SummaryView : MonoBehaviour
      );
   }
 
-  private void UpdateDatabase(SessionDataModel sessionData)
+  private void UpdateDatabase(SessionDataModel sessionDataModel)
   {
     // Create match history model
     MatchHistoryModel matchHistoryModel = new MatchHistoryModel(
-      sessionData.Username,
-      sessionData.RoundNumberReached,
-      sessionData.SessionLength,
-      sessionData.DamageTaken,
-      sessionData.TotalScore,
-      sessionData.GoldEarned,
-      sessionData.MobsDefeatedCount,
-      sessionData.BossesDefeatedCount,
-      sessionData.MysticDungeonsEnteredCount,
-      sessionData.Health,
-      sessionData.Attack,
-      sessionData.Ability,
-      sessionData.BloodLine,
-      sessionData.SkillUsed,
-      sessionData.EffectsObtained
+      sessionDataModel.Username,
+      sessionDataModel.RoundNumberReached,
+      sessionDataModel.SessionLength,
+      sessionDataModel.DamageTaken,
+      sessionDataModel.TotalScore,
+      sessionDataModel.GoldEarned,
+      sessionDataModel.MobsDefeatedCount,
+      sessionDataModel.BossesDefeatedCount,
+      sessionDataModel.MysticDungeonsEnteredCount,
+      sessionDataModel.Health,
+      sessionDataModel.Attack,
+      sessionDataModel.Ability,
+      sessionDataModel.BloodLine,
+      sessionDataModel.SkillUsed,
+      sessionDataModel.EffectsObtained
       );
 
     // Post match history to database 
     FirebaseDatabaseManager.Instance.PostMatchHistory(matchHistoryModel, (matchHistoryModel) => Debug.Log("Match History Created Successfully!"));
 
-    LeaderboardsDatabaseHandler(sessionData);
+    LeaderboardsDatabaseHandler(sessionDataModel);
   }
 
   /// <summary>

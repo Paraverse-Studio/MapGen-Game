@@ -23,22 +23,36 @@ namespace ParaverseWebsite.Models
     /// <param name="skill"></param>
     public SkillsUsedOccurancesModel(SkillName skill)
     {
-      if (skill.Equals(SkillName.AzuriteInfusion))
-        AzuriteInfusion++;
-      else if (skill.Equals(SkillName.BladeWhirl))
-        BladeWhirl++;
-      else if (skill.Equals(SkillName.DescendingThrust))
-        DescendingThrust++;
-      else if (skill.Equals(SkillName.AvatarState))
-        AvatarState++;
-      else if (skill.Equals(SkillName.LightningBolt))
-        LightningBolt++;
-      else if (skill.Equals(SkillName.MoonlightSlash))
-        MoonlightSlash++;
-      else if (skill.Equals(SkillName.RegalCrescent))
-        RegalCrescent++;
-      else if (skill.Equals(SkillName.StealthStep))
-        StealthStep++;
+      switch (skill)
+      {
+        case SkillName.AvatarState:
+          AvatarState++;
+          break;
+        case SkillName.LightningBolt:
+          LightningBolt++;
+          break;
+        case SkillName.MoonlightSlash:
+          MoonlightSlash++;
+          break;
+        case SkillName.AzuriteInfusion:
+          AzuriteInfusion++;
+          break;
+        case SkillName.BladeWhirl:
+          BladeWhirl++;
+          break;
+        case SkillName.DescendingThrust:
+          DescendingThrust++;
+          break;
+        case SkillName.StealthStep:
+          StealthStep++;
+          break;
+        case SkillName.RegalCrescent:
+          RegalCrescent++;
+          break;
+        default:
+          Debug.Log(skill.ToString() + " doesn't exists in SkillName enum!");
+          break;
+      }
     }
 
     /// <summary>
@@ -57,36 +71,42 @@ namespace ParaverseWebsite.Models
       RegalCrescent = oldLeaderboards.SkillUsed.RegalCrescent;
       StealthStep = oldLeaderboards.SkillUsed.StealthStep;
 
-      Debug.Log(AzuriteInfusion);
-      Debug.Log(BladeWhirl);
-      Debug.Log(DescendingThrust);
-      Debug.Log(AvatarState);
-      Debug.Log(LightningBolt);
-      Debug.Log(MoonlightSlash);
-      Debug.Log(RegalCrescent);
-      Debug.Log(StealthStep);
-
-      if (sessionDataModel.SkillUsedEnum.Equals(SkillName.AzuriteInfusion))
-        AzuriteInfusion++;
-      else if (sessionDataModel.SkillUsedEnum.Equals(SkillName.BladeWhirl))
-        BladeWhirl++;
-      else if (sessionDataModel.SkillUsedEnum.Equals(SkillName.DescendingThrust))
-        DescendingThrust++;
-      else if (sessionDataModel.SkillUsedEnum.Equals(SkillName.AvatarState))
-        AvatarState++;
-      else if (sessionDataModel.SkillUsedEnum.Equals(SkillName.LightningBolt))
-        LightningBolt++;
-      else if (sessionDataModel.SkillUsedEnum.Equals(SkillName.MoonlightSlash))
-        MoonlightSlash++;
-      else if (sessionDataModel.SkillUsedEnum.Equals(SkillName.RegalCrescent))
-        RegalCrescent++;
-      else if (sessionDataModel.SkillUsedEnum.Equals(SkillName.StealthStep))
-        StealthStep++;
+      switch (sessionDataModel.SkillUsedEnum) 
+      {
+        case SkillName.AvatarState:
+          AvatarState++;
+          break;
+        case SkillName.LightningBolt:
+          LightningBolt++;
+          break;
+        case SkillName.MoonlightSlash:
+          MoonlightSlash++;
+          break;
+        case SkillName.AzuriteInfusion:
+          AzuriteInfusion++;
+          break;
+        case SkillName.BladeWhirl:
+          BladeWhirl++;
+          break;
+        case SkillName.DescendingThrust:
+          DescendingThrust++;
+          break;
+        case SkillName.StealthStep:
+          StealthStep++;
+          break;
+        case SkillName.RegalCrescent:
+          RegalCrescent++;
+          break;
+        default:
+          Debug.Log(sessionDataModel.SkillUsedEnum.ToString() + " doesn't exists in SkillName enum!");
+          break;
+      }
     }
   }
 
   public enum SkillName
   {
+    None,
     RegalCrescent,      // ID 100
     MoonlightSlash,     // ID 101
     AzuriteInfusion,    // ID 102

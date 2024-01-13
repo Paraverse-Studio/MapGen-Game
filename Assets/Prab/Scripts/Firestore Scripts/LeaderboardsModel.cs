@@ -35,6 +35,7 @@ namespace ParaverseWebsite.Models
         EffectsObtainedOccurancesModel effectsObtained
         )
     {
+      Debug.Log($"games played: {gamesPlayed}");
       Username = username;
       HighestRoundNumberReached = roundNumberReached;
       CumulativeGamesPlayed = gamesPlayed;
@@ -47,12 +48,12 @@ namespace ParaverseWebsite.Models
       BloodLine = bloodLine;
       SkillUsed = skillUsed;
       EffectsObtained = effectsObtained;
-
-      CumulativeGamesPlayed++;
+      Debug.Log($"Cumulative Games Played: {CumulativeGamesPlayed}");
     }
 
     public LeaderboardsModel(LeaderboardsModel oldLeaderboards, SessionDataModel sessionDataModel)
     {
+      Debug.Log($"Previous Cumulative Games Played: {oldLeaderboards.CumulativeGamesPlayed}");
       Username = sessionDataModel.Username;
       HighestRoundNumberReached = Mathf.Max(oldLeaderboards.HighestRoundNumberReached, sessionDataModel.RoundNumberReached);
       CumulativeGamesPlayed = oldLeaderboards.CumulativeGamesPlayed + 1;
@@ -65,6 +66,7 @@ namespace ParaverseWebsite.Models
       BloodLine = new BloodlineOccurancesModel(oldLeaderboards, sessionDataModel);
       SkillUsed = new SkillsUsedOccurancesModel(oldLeaderboards, sessionDataModel);
       EffectsObtained = new EffectsObtainedOccurancesModel(oldLeaderboards, sessionDataModel);
+      Debug.Log($"Current Cumulative Games Played: {CumulativeGamesPlayed}");
     }
   }
 

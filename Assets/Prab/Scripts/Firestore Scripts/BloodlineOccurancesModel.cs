@@ -1,3 +1,4 @@
+using UnityEngine;
 using System;
 
 namespace ParaverseWebsite.Models
@@ -18,14 +19,24 @@ namespace ParaverseWebsite.Models
     /// <param name="bloodLine"></param>
     public BloodlineOccurancesModel(BloodlineType bloodLine)
     {
-      if (bloodLine.Equals(BloodlineType.Vagabond))
-        Vagabond++;
-      else if (bloodLine.Equals(BloodlineType.Harrier))
-        Harrier++;
-      else if (bloodLine == BloodlineType.Pioneer)
-        Pioneer++;
-      else if (bloodLine == BloodlineType.Scholar)
-        Scholar++;
+      switch (bloodLine)
+      {
+        case BloodlineType.Vagabond:
+          Vagabond++;
+          break;
+        case BloodlineType.Harrier:
+          Harrier++; 
+          break;
+        case BloodlineType.Pioneer: 
+          Pioneer++;
+          break;
+        case BloodlineType.Scholar:
+          Scholar++; 
+          break;
+        default:
+          Debug.Log(bloodLine + " doesn't exist in BloodlineType enum");
+          break;
+      }
     }
 
     /// <summary>
@@ -40,14 +51,24 @@ namespace ParaverseWebsite.Models
       Pioneer = oldLeaderboards.BloodLine.Pioneer;
       Scholar = oldLeaderboards.BloodLine.Scholar;
 
-      if (sessionDataModel.BloodLineEnum.Equals(BloodlineType.Vagabond))
-        Vagabond++;
-      else if (sessionDataModel.BloodLineEnum.Equals(BloodlineType.Harrier))
-        Harrier++;
-      else if (sessionDataModel.BloodLineEnum.Equals(BloodlineType.Pioneer))
-        Pioneer++;
-      else if (sessionDataModel.BloodLineEnum.Equals(BloodlineType.Scholar))
-        Scholar++;
+      switch (sessionDataModel.BloodLineEnum)
+      {
+        case BloodlineType.Vagabond:
+          Vagabond++;
+          break;
+        case BloodlineType.Harrier:
+          Harrier++;
+          break;
+        case BloodlineType.Pioneer:
+          Pioneer++;
+          break;
+        case BloodlineType.Scholar:
+          Scholar++;
+          break;
+        default:
+          Debug.Log(sessionDataModel.BloodLineEnum + " doesn't exist in BloodlineType enum");
+          break;
+      }
     }
   }
 }

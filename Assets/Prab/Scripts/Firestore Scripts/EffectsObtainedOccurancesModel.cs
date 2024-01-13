@@ -24,18 +24,30 @@ namespace ParaverseWebsite.Models
     {
       foreach (EffectName eff in effects)
       {
-        if (eff.Equals(EffectName.EmpoweredAttack))
-          EmpoweredAttack++;
-        else if (eff.Equals(EffectName.Sunfire))
-          Sunfire++;
-        else if (eff == EffectName.CooldownRefund)
-          CooldownRefund++;
-        else if (eff == EffectName.Lichbane)
-          Lichbane++;
-        else if (eff == EffectName.RepearKill)
-          RepearKill++;
-        else if (eff == EffectName.SweepingDash)
-          SweepingDash++;
+        switch (eff)
+        {
+          case EffectName.EmpoweredAttack:
+            EmpoweredAttack++;
+            break;
+          case EffectName.Sunfire:
+            Sunfire++;
+            break;
+          case EffectName.CooldownRefund:
+            CooldownRefund++;
+            break;
+          case EffectName.Lichbane:
+            Lichbane++;
+            break;
+          case EffectName.RepearKill:
+            RepearKill++;
+            break;
+          case EffectName.SweepingDash:
+            SweepingDash++;
+            break;
+          default:
+            Debug.Log($"{eff} does not exists in EffectName enum!");
+            break;
+        }
       }
     }
 
@@ -53,28 +65,39 @@ namespace ParaverseWebsite.Models
       RepearKill = oldLeaderboards.EffectsObtained.RepearKill;
       SweepingDash = oldLeaderboards.EffectsObtained.SweepingDash;
 
-      Debug.Log("session Effect Count: " + sessionDataModel.EffectsObtained.Count);
-
       foreach (EffectName eff in sessionDataModel.EffectsObtained)
       {
-        if (eff.Equals(EffectName.EmpoweredAttack))
-          EmpoweredAttack++;
-        else if (eff.Equals(EffectName.Sunfire))
-          Sunfire++;
-        else if (eff.Equals(EffectName.CooldownRefund))
-          CooldownRefund++;
-        else if (eff.Equals(EffectName.Lichbane))
-          Lichbane++;
-        else if (eff.Equals(EffectName.RepearKill))
-          RepearKill++;
-        else if (eff.Equals(EffectName.SweepingDash))
-          SweepingDash++;
+        switch (eff)
+        {
+          case EffectName.EmpoweredAttack:
+            EmpoweredAttack++;
+            break;
+          case EffectName.Sunfire:
+            Sunfire++;
+            break;
+          case EffectName.CooldownRefund:
+            CooldownRefund++;
+            break;
+          case EffectName.Lichbane:
+            Lichbane++;
+            break;
+          case EffectName.RepearKill:
+            RepearKill++;
+            break;
+          case EffectName.SweepingDash:
+            SweepingDash++;
+            break;
+          default:
+            Debug.Log($"{eff} does not exists in EffectName enum!");
+            break;
+        }
       }
     }
   }
 
   public enum EffectName
   {
+    None,
     EmpoweredAttack,  // ID 200
     Sunfire,          // ID 201
     CooldownRefund,   // ID 202
