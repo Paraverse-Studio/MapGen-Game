@@ -1,4 +1,4 @@
-using System;
+using ParaverseWebsite.Models;
 using UnityEngine;
 
 namespace Paraverse.Helper
@@ -43,12 +43,12 @@ namespace Paraverse.Helper
 
     public static string GetSkillName(SkillName skill)
     {
-      Debug.Log("INPUT skill: " + skill + " SkillName: " + SkillName.MoonlightSlash);
-      Debug.Log("INPUT skill: " + skill + " SkillName: " + SkillName.BladeWhirl);
-      Debug.Log("INPUT skill: " + skill + " SkillName: " + SkillName.AzuriteInfusion);
-      Debug.Log("INPUT skill: " + skill + " SkillName: " + SkillName.RegalCrescent);
-      Debug.Log("INPUT skill: " + skill + " SkillName: " + SkillName.DescendingThrust);
-      Debug.Log("INPUT skill: " + skill + " SkillName: " + SkillName.LightningBolt);
+      Debug.Log("INPUT skill: " + skill.ToString() + " SkillName: " + SkillName.MoonlightSlash);
+      Debug.Log("INPUT skill: " + skill.ToString() + " SkillName: " + SkillName.BladeWhirl);
+      Debug.Log("INPUT skill: " + skill.ToString() + " SkillName: " + SkillName.AzuriteInfusion);
+      Debug.Log("INPUT skill: " + skill.ToString() + " SkillName: " + SkillName.RegalCrescent);
+      Debug.Log("INPUT skill: " + skill.ToString() + " SkillName: " + SkillName.DescendingThrust);
+      Debug.Log("INPUT skill: " + skill.ToString() + " SkillName: " + SkillName.LightningBolt);
 
       switch (skill)
       {
@@ -75,12 +75,14 @@ namespace Paraverse.Helper
 
     public static string GetEffectName(EffectName effect)
     {
-      Debug.Log("INPUT skill: " + effect + " EffectName: " + EffectName.Sunfire);
-      Debug.Log("INPUT skill: " + effect + " EffectName: " + EffectName.CooldownRefund);
-      Debug.Log("INPUT skill: " + effect + " EffectName: " + EffectName.Lichbane);
-      Debug.Log("INPUT skill: " + effect + " EffectName: " + EffectName.RepearKill);
-      Debug.Log("INPUT skill: " + effect + " EffectName: " + EffectName.SweepingDash);
-      Debug.Log("INPUT skill: " + effect + " EffectName: " + EffectName.EmpoweredAttack);
+      Debug.Log("INPUT skill: " + effect.ToString() + " EffectName: " + EffectName.Sunfire);
+      Debug.Log("INPUT skill: " + effect.ToString() + " EffectName: " + EffectName.CooldownRefund);
+      Debug.Log("INPUT skill: " + effect.ToString() + " EffectName: " + EffectName.Lichbane);
+      Debug.Log("INPUT skill: " + effect.ToString() + " EffectName: " + EffectName.RepearKill);
+      Debug.Log("INPUT skill: " + effect.ToString() + " EffectName: " + EffectName.SweepingDash);
+      Debug.Log("INPUT skill: " + effect.ToString() + " EffectName: " + EffectName.EmpoweredAttack);
+
+      Debug.Log(effect);
       switch (effect)
       {
         case EffectName.Sunfire:

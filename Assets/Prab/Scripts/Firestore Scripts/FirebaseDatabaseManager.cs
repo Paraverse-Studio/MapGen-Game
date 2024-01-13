@@ -19,7 +19,7 @@ public class FirebaseDatabaseManager : MonoBehaviour
   private readonly string usersPath = "Users";
 
   private static fsSerializer serializer = new fsSerializer();
-  public delegate void PostMatchHistoryCallback(MatchHistoryModel matchHistory);
+  public delegate void PostMatchHistoryCallback(ParaverseWebsite.Models.SessionDataModel matchHistory);
 
   public delegate void UpdateLeaderboardCallback(LeaderboardsModel leaderboard);
   public delegate void PostLeaderboardFailureCallback();
@@ -46,7 +46,7 @@ public class FirebaseDatabaseManager : MonoBehaviour
     int randomNum = rnd.Next();
     string id = model.Username + "-" + randomNum;
 
-    RestClient.Put<MatchHistoryModel>($"{databasePath}{matchHistoriesPath}/{id}.json", model)
+    RestClient.Put<ParaverseWebsite.Models.SessionDataModel>($"{databasePath}{matchHistoriesPath}/{id}.json", model)
       .Then(response =>
       {
         callback?.Invoke(response);

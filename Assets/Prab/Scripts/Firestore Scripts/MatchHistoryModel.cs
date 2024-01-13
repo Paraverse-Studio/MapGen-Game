@@ -20,7 +20,7 @@ namespace ParaverseWebsite.Models
     public int MysticDungeonsEnteredCount;
     public string BloodLine;
     public string SkillUsed;
-    public List<EffectName> EffectsObtained = new List<EffectName>();
+    public EffectsObtainedOccurancesModel EffectsObtained = new EffectsObtainedOccurancesModel();
     public string Device;
     public string Timestamp;
 
@@ -59,7 +59,7 @@ namespace ParaverseWebsite.Models
       Ability = ability;
       BloodLine = bloodLine;
       SkillUsed = skillUsed;
-      EffectsObtained = effectsObtained;
+      EffectsObtained = new EffectsObtainedOccurancesModel(effectsObtained);
       Timestamp = DateTime.Now.ToString("yyyy-MM-dd hh:mm:ss tt");
 #if UNITY_WEBGL
     Device = DeviceType.WebGL.ToString();

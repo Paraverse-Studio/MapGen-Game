@@ -3,7 +3,6 @@ using Paraverse.Mob.Combat;
 using Paraverse.Mob.Stats;
 using Paraverse.Player;
 using ParaverseWebsite.Models;
-using System.Collections;
 using System.Collections.Generic;
 using System.Text;
 using TMPro;
@@ -11,7 +10,7 @@ using UnityEngine;
 
 public class SummaryView : MonoBehaviour
 {
-  private MobCombat playerCombat; 
+  private MobCombat playerCombat;
 
   [Header("External References")]
   public BloodlinesController bloodlinesController;
@@ -47,6 +46,7 @@ public class SummaryView : MonoBehaviour
     string Username = MainMenuController.Instance.Username;
     int RoundNumberReached = sessionData.roundReached;
     int SessionLength = (int)sessionData.sessionLength;
+    int GamesPlayed = 0;
     int DamageTaken = sessionData.damageTaken;
     int TotalScore = sessionData.totalScore;
     int GoldEarned = sessionData.goldEarned;
@@ -57,9 +57,8 @@ public class SummaryView : MonoBehaviour
     int Attack = (int)stats.AttackDamage.FinalValue;
     int Ability = (int)stats.AbilityPower.FinalValue;
     string BloodLine = bloodlinesController.chosenBloodline.ToString();
-    Debug.Log("players skill!! " + playerCombat.ActiveSkill.SkillName);
     string SkillUsed = ParaverseHelper.GetSkillName(playerCombat.ActiveSkill.SkillName);
-    List<string> EffectsObtained = new List<string>();
+    List<EffectName> EffectsObtained = new List<EffectName>();
 
     StringBuilder effectsSB = new StringBuilder();
 
@@ -72,8 +71,7 @@ public class SummaryView : MonoBehaviour
     {
       string name = ParaverseHelper.GetEffectName(effect.EffectNameDB);
       EffectsObtainedEnums.Add(effect.EffectNameDB);
-      EffectsObtained.Add(name);
-      Debug.Log("Effect: " + name);
+      EffectsObtained.Add(effect.EffectNameDB);
       effectsSB.Append(name + " | ");
     }
 
@@ -81,7 +79,7 @@ public class SummaryView : MonoBehaviour
     roundsReachedText.text = RoundNumberReached.ToString();
     sessionLengthText.text = UtilityFunctions.GetFormattedTime(SessionLength);
     damageTakenText.text = DamageTaken.ToString();
-    averageScoreText.text = TotalScore.ToString(); 
+    averageScoreText.text = TotalScore.ToString();
     goldEarnedText.text = GoldEarned.ToString();
     mobsDefeatedText.text = MobsDefeatedCount.ToString();
     bossesDefeatedText.text = BossesDefeatedCount.ToString();
@@ -100,6 +98,7 @@ public class SummaryView : MonoBehaviour
       Username,
       RoundNumberReached,
       SessionLength,
+      GamesPlayed,
       DamageTaken,
       TotalScore,
       GoldEarned,
@@ -113,8 +112,7 @@ public class SummaryView : MonoBehaviour
       SkillUsed,
       EffectsObtained,
       BloodLineEnum,
-      SkillUsedEnum,
-      EffectsObtainedEnums
+      SkillUsedEnum
       );
 
     // Only update database if user exists!
@@ -152,7 +150,7 @@ public class SummaryView : MonoBehaviour
       sessionData.Ability,
       sessionData.BloodLine,
       sessionData.SkillUsed,
-      sessionData.EffectsObtainedEnums
+      sessionData.EffectsObtained
       );
 
     // Post match history to database 
@@ -203,15 +201,15 @@ public class SummaryView : MonoBehaviour
     (
       MainMenuController.Instance.Username,
       sessionData.RoundNumberReached,
+      sessionData.GamesPlayed,
       sessionData.SessionLength,
-      sessionData.TotalScore,
       sessionData.TotalScore,
       sessionData.MobsDefeatedCount,
       sessionData.BossesDefeatedCount,
       sessionData.MysticDungeonsEnteredCount,
       new BloodlineOccurancesModel(sessionData.BloodLineEnum),
       new SkillsUsedOccurancesModel(sessionData.SkillUsedEnum),
-      new EffectsObtainedOccurancesModel(sessionData.EffectsObtainedEnums)
+      new EffectsObtainedOccurancesModel(sessionData.EffectsObtained)
     );
 
     // Create a new leaderboards entry for the user

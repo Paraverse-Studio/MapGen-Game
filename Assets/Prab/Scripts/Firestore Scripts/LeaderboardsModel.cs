@@ -51,20 +51,20 @@ namespace ParaverseWebsite.Models
       CumulativeGamesPlayed++;
     }
 
-    public LeaderboardsModel(LeaderboardsModel oldLeaderboards, SessionDataModel sessionData)
+    public LeaderboardsModel(LeaderboardsModel oldLeaderboards, SessionDataModel sessionDataModel)
     {
-      Username = sessionData.Username;
-      HighestRoundNumberReached = Mathf.Max(oldLeaderboards.HighestRoundNumberReached, sessionData.RoundNumberReached);
+      Username = sessionDataModel.Username;
+      HighestRoundNumberReached = Mathf.Max(oldLeaderboards.HighestRoundNumberReached, sessionDataModel.RoundNumberReached);
       CumulativeGamesPlayed = oldLeaderboards.CumulativeGamesPlayed + 1;
-      CumulativeSessionLength = oldLeaderboards.CumulativeSessionLength + sessionData.SessionLength;
-      CumulativeTotalScore = oldLeaderboards.CumulativeTotalScore + sessionData.TotalScore;
-      CumulativeParaverseScore = oldLeaderboards.CumulativeTotalScore + sessionData.TotalScore; 
-      CumulativeMobsDefeatedCount = oldLeaderboards.CumulativeMobsDefeatedCount + sessionData.MobsDefeatedCount;
-      CumulativeBossesDefeatedCount = oldLeaderboards.CumulativeBossesDefeatedCount + sessionData.BossesDefeatedCount;
-      CumulativeMysticDungeonsEnteredCount = oldLeaderboards.CumulativeMysticDungeonsEnteredCount + sessionData.MysticDungeonsEnteredCount;
-      BloodLine = new BloodlineOccurancesModel(sessionData.BloodLineEnum);
-      SkillUsed = new SkillsUsedOccurancesModel(sessionData.SkillUsedEnum);
-      EffectsObtained = new EffectsObtainedOccurancesModel(sessionData.EffectsObtainedEnums);
+      CumulativeSessionLength = oldLeaderboards.CumulativeSessionLength + sessionDataModel.SessionLength;
+      CumulativeTotalScore = oldLeaderboards.CumulativeTotalScore + sessionDataModel.TotalScore;
+      CumulativeParaverseScore = oldLeaderboards.CumulativeTotalScore + sessionDataModel.TotalScore; 
+      CumulativeMobsDefeatedCount = oldLeaderboards.CumulativeMobsDefeatedCount + sessionDataModel.MobsDefeatedCount;
+      CumulativeBossesDefeatedCount = oldLeaderboards.CumulativeBossesDefeatedCount + sessionDataModel.BossesDefeatedCount;
+      CumulativeMysticDungeonsEnteredCount = oldLeaderboards.CumulativeMysticDungeonsEnteredCount + sessionDataModel.MysticDungeonsEnteredCount;
+      BloodLine = new BloodlineOccurancesModel(oldLeaderboards, sessionDataModel);
+      SkillUsed = new SkillsUsedOccurancesModel(oldLeaderboards, sessionDataModel);
+      EffectsObtained = new EffectsObtainedOccurancesModel(oldLeaderboards, sessionDataModel);
     }
   }
 
