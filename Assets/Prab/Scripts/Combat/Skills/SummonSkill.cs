@@ -10,17 +10,18 @@ public class SummonSkill : MobSkill, IMobSkill
   #region Variables
   [Header("Summon Skill")]
   [SerializeField]
-  private GameObject summonPf;
+  protected float minSpawnPosX, maxSpawnPosX, minSpawnPosZ, maxSpawnPosZ;
   [SerializeField]
-  private int maxSummonCount = 3;
+  protected GameObject summonPf;
   [SerializeField]
-  private int curSummonCount;
+  protected int maxSummonCount = 3;
+  protected int curSummonCount;
   [SerializeField]
-  private float delaySpawnActivation;
+  protected float delaySpawnActivation;
   [Header("VFX")]
   public GameObject launchFX;
 
-  private MobController _summonedMob;
+  protected MobController _summonedMob;
   #endregion
 
 
@@ -70,8 +71,8 @@ public class SummonSkill : MobSkill, IMobSkill
       Debug.LogError("Please add a summon prefab to the skill: " + _skillName);
 
     // Get random position around mob
-    float posX = Random.Range(-3, 3);
-    float posZ = Random.Range(-3, 3);
+    float posX = Random.Range(minSpawnPosX, maxSpawnPosX);
+    float posZ = Random.Range(minSpawnPosZ, maxSpawnPosZ);
     Vector3 spawnPos = mob.transform.position + new Vector3(posX, 0.25f, posZ);
     ++curSummonCount;
 
@@ -80,20 +81,19 @@ public class SummonSkill : MobSkill, IMobSkill
       GameObject sapling = Instantiate(summonPf, spawnPos, transform.rotation);
       _summonedMob = sapling.GetComponentInChildren<MobController>();
       _summonedMob.OnDeathEvent += DecrementSummonCount;
-      //skillOn = false;
       SetSkillState(SkillState.InActive);
     },
     delaySpawnActivation));
 
     if (launchFX) Instantiate(launchFX, spawnPos, Quaternion.identity);
 
-    OnSkillComplete();
   }
 
   private IEnumerator IDelayedSpawn(System.Action a, float f)
   {
     yield return new WaitForSeconds(f);
     a?.Invoke();
+    OnSkillComplete();
   }
   #endregion
 }

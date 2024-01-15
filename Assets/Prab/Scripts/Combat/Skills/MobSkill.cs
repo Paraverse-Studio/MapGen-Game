@@ -222,7 +222,7 @@ namespace Paraverse.Combat
       if (SkillState.Equals(SkillState.InUse))
         TargetLockDuringSkill();
 
-      if (SkillState.Equals(SkillState.Used))
+      if (SkillState.Equals(SkillState.Used) && false == mob.IsSkilling)
       {
         // change skill state to complete after a set period of delay
         if (target != null)

@@ -1758,9 +1758,9 @@ MonoBehaviour:
   maxWaitDur: 5
   accurayWP: 2
   stoppingDistance: 2
-  detectionRadius: 20
-  pursueRadius: 25
-  customPursueRange: 0
+  detectionRadius: 100
+  pursueRadius: 100
+  customPursueRange: 1
   pursueRange: 10
   _isStrafer: 0
   strafePoint: {fileID: 0}
@@ -3859,6 +3859,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   _skillName: Summon Sapling
+  _skillNameDB: 0
   _ID: -1
   _image: {fileID: 0}
   _description: 
@@ -3868,7 +3869,7 @@ MonoBehaviour:
   _isMelee: 0
   usesTargetLock: 0
   rotSpeed: 100
-  enableForDurationBasedProjectileSkills: 0
+  enableForDurationBasedProjectileSkills: 1
   _minRange: 0
   _maxRange: 100
   _cooldown: 5
@@ -3885,10 +3886,13 @@ MonoBehaviour:
     attackScaling: 0
     abilityScaling: 0
     healthScaling: 0
-  skillStateToCompleteTimer: 1
+  skillStateToCompleteTimer: 2
+  minSpawnPosX: -5
+  maxSpawnPosX: 5
+  minSpawnPosZ: -5
+  maxSpawnPosZ: 5
   summonPf: {fileID: 7898848738789558338, guid: da4c325d14569204bb33863f10b1e815, type: 3}
   maxSummonCount: 3
-  curSummonCount: 0
   delaySpawnActivation: 0.9
   launchFX: {fileID: 5729987738087164323, guid: 2e322e9c94458614696c0eaabde4d8da, type: 3}
 --- !u!1 &8305639317666090411
@@ -3936,6 +3940,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   _skillName: Treant Basic Attack
+  _skillNameDB: 0
   _ID: -1
   _image: {fileID: 0}
   _description: 
@@ -3962,7 +3967,7 @@ MonoBehaviour:
     attackScaling: 1
     abilityScaling: 0
     healthScaling: 0
-  skillStateToCompleteTimer: 1
+  skillStateToCompleteTimer: 2
 --- !u!1 &8305639317755612592
 GameObject:
   m_ObjectHideFlags: 0
@@ -4148,6 +4153,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   _skillName: Energy Drain
+  _skillNameDB: 0
   _ID: -1
   _image: {fileID: 0}
   _description: 
@@ -4174,7 +4180,7 @@ MonoBehaviour:
     attackScaling: 1
     abilityScaling: 0.5
     healthScaling: 0
-  skillStateToCompleteTimer: 1
+  skillStateToCompleteTimer: 2
   lifeStealRatio: 0.8
 --- !u!1 &8305639318263375686
 GameObject:
@@ -4221,6 +4227,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   _skillName: 'Root '
+  _skillNameDB: 0
   _ID: -1
   _image: {fileID: 0}
   _description: 'He reaches for the ground, and spawns vines that move toward player,
@@ -4248,7 +4255,7 @@ MonoBehaviour:
     attackScaling: 0
     abilityScaling: 0.5
     healthScaling: 0
-  skillStateToCompleteTimer: 1
+  skillStateToCompleteTimer: 2
   rootDuration: 1.5
 --- !u!1001 &8914295948623182555
 PrefabInstance:

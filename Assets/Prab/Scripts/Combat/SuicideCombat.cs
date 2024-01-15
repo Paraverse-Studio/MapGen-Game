@@ -5,34 +5,43 @@ using UnityEngine;
 
 public class SuicideCombat : MobCombat
 {
-    [SerializeField]
-    private GameObject explosionEffect;
-    [SerializeField]
-    private float explosionRadius = 3f;
-    [SerializeField]
-    private ScalingStatData scalingStatData;
+  [SerializeField]
+  private GameObject explosionEffect;
+  [SerializeField]
+  private float explosionRadius = 3f;
+  [SerializeField]
+  private ScalingStatData scalingStatData;
 
 
-    protected override void Update()
+  protected override void Update()
+  {
+    if (controller.IsDead) return;
+
+    distanceFromTarget = ParaverseHelper.GetDistance(ParaverseHelper.GetPositionXZ(transform.position), ParaverseHelper.GetPositionXZ(player.position));
+    _isBasicAttacking = anim.GetBool(StringData.IsBasicAttacking);
+    if (IsBasicAttacking && distanceFromTarget <= explosionRadius)
     {
-        if (controller.IsDead) return;
-
-        distanceFromTarget = ParaverseHelper.GetDistance(ParaverseHelper.GetPositionXZ(transform.position), ParaverseHelper.GetPositionXZ(player.position));
-        _isBasicAttacking = anim.GetBool(StringData.IsBasicAttacking);
-        //AttackCooldownHandler();
-        if (IsBasicAttacking && distanceFromTarget <= explosionRadius)
-        {
-            Explode();
-        }
-        basicAttackSkill.SkillUpdate();
+      Explode();
     }
+    basicAttackSkill.SkillUpdate();
+  }
 
-    private void Explode()
-    {
-        GameObject go = Instantiate(explosionEffect, transform.position, transform.rotation);
-        AttackCollider col = go.GetComponentInChildren<AttackCollider>();
-        col.Init(this, scalingStatData);
-        col.gameObject.SetActive(true);
-        stats.UpdateCurrentHealth(-10000000);
-    }
+  //private void OnTriggerEnter(Collider other)
+  //{
+  //  if (false == IsBasicAttacking) return;
+  //  Debug.Log($"other: {other}");
+  //  if (other.CompareTag(StringData.PlayerTag))
+  //  {
+  //    Explode();
+  //  }
+  //}
+
+  private void Explode()
+  {
+    GameObject go = Instantiate(explosionEffect, transform.position, transform.rotation);
+    AttackCollider col = go.GetComponentInChildren<AttackCollider>();
+    col.Init(this, scalingStatData);
+    col.gameObject.SetActive(true);
+    stats.UpdateCurrentHealth(-stats.CurHealth);
+  }
 }

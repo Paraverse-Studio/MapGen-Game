@@ -133,17 +133,7 @@ namespace Paraverse.Mob.Combat
       distanceFromTarget = ParaverseHelper.GetDistance(transform.position, player.position);
       _isBasicAttacking = anim.GetBool(StringData.IsBasicAttacking);
 
-      //if (anim.GetBool(StringData.IsUsingSkill))
-      //IsSkilling = true;
-      //else
-      //IsSkilling = false;
-
-      // If active skill, then mob is skilling
-      if (ActiveSkill != null)
-        IsSkilling = true;
-      else
-        IsSkilling = false;
-
+      IsSkilling = anim.GetBool(StringData.IsUsingSkill);
 
       MobSkill prevSkill = null;
       MobSkill curSkill = null;

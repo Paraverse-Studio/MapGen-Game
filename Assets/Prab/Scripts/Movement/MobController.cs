@@ -76,6 +76,7 @@ namespace Paraverse.Mob.Controller
     protected bool customPursueRange = false;
     [SerializeField, Tooltip("Define the range at which the mob begins to pursue target.")]
     protected float pursueRange = 10f;
+    protected bool initiatedPursue = false;
 
     [Header("Strafe Values")]
     [SerializeField, Tooltip("Allow mob strafing.")]
@@ -458,8 +459,11 @@ namespace Paraverse.Mob.Controller
         if (distanceFromTarget <= combat.BasicAttackSkill.MinRange && customPursueRange == false)
           canPursue = true;
         else if (distanceFromTarget <= pursueRange && customPursueRange)
+        {
           canPursue = true;
-        else
+          initiatedPursue = true;
+        }
+        else if (false == initiatedPursue)
           canPursue = false;
 
         if (canPursue)
@@ -475,6 +479,7 @@ namespace Paraverse.Mob.Controller
 
             if (Physics.Raycast(origin, strafePos, out RaycastHit hit, strafeDistance))
             {
+              initiatedPursue = false;
               nav.isStopped = true;
               curMoveSpeed = 0f;
               nav.ResetPath();
@@ -492,8 +497,9 @@ namespace Paraverse.Mob.Controller
               }
             }
           }
-          else
+          else if (_isStrafer)
           {
+            Debug.Log("else is Strafing: " + isStrafing);
             if (isStrafingToPoint) return;
             nav.isStopped = true;
             curMoveSpeed = 0f;
@@ -503,6 +509,7 @@ namespace Paraverse.Mob.Controller
         }
         else if (distanceFromTarget <= combat.BasicAttackSkill.MaxRange && distanceFromTarget > combat.BasicAttackSkill.MinRange && isStrafingToPoint == false)
         {
+          initiatedPursue = false;
           nav.isStopped = true;
           curMoveSpeed = 0f;
           transform.rotation = ParaverseHelper.FaceTarget(transform, pursueTarget, rotSpeed);
@@ -578,7 +585,10 @@ namespace Paraverse.Mob.Controller
       float angle = Quaternion.Angle(transform.rotation, lookRot);
 
       if (angle <= 0)
+      {
+        initiatedPursue = false;
         combat.BasicAttackSkill.ExecuteBasicAttack();
+      }
     }
 
     public void ApplyHitAnimation()
@@ -627,8 +637,8 @@ namespace Paraverse.Mob.Controller
     public void ApplyKnockBack(Vector3 mobPos, KnockBackEffect effect)
     {
       if (combat.IsAttackLunging || IsUnstaggerable) return;
-
       combat.OnAttackInterrupt();
+      initiatedPursue = false;
       isStrafingToPoint = false;
       Vector3 impactDir = (transform.position - mobPos).normalized;
       knockbackDir = new Vector3(impactDir.x, 0f, impactDir.z);
