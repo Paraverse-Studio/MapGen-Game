@@ -4,8 +4,6 @@ using Paraverse.Mob.Combat;
 using Paraverse.Mob.Stats;
 using Paraverse.Player;
 using Paraverse.Stats;
-using System.Collections;
-using System.Collections.Generic;
 using UnityEngine;
 
 public class DashSkill : MobSkill, IMobSkill
@@ -39,12 +37,6 @@ public class DashSkill : MobSkill, IMobSkill
   public override void SkillUpdate()
   {
     base.SkillUpdate();
-
-    if (false == mob.IsSkilling)
-    {
-      OnSkillComplete();
-      return;
-    }
 
     if (_controller)
     {
@@ -111,6 +103,7 @@ public class DashSkill : MobSkill, IMobSkill
   {
     base.SubscribeAnimationEventListeners();
     mob.OnChargeSkillOneEvent += AddThrust;
+    mob.OnDisableBasicAttackCollider += OnSkillComplete;
   }
 
   public override void UnsubscribeAnimationEventListeners()
