@@ -1,4 +1,5 @@
 using Paraverse;
+using Paraverse.Combat;
 using Paraverse.Helper;
 using Paraverse.Mob.Combat;
 using UnityEngine;
@@ -15,15 +16,15 @@ public class SuicideCombat : MobCombat
 
   protected override void Update()
   {
-    if (controller.IsDead) return;
+    base.Update();
 
-    distanceFromTarget = ParaverseHelper.GetDistance(ParaverseHelper.GetPositionXZ(transform.position), ParaverseHelper.GetPositionXZ(player.position));
-    _isBasicAttacking = anim.GetBool(StringData.IsBasicAttacking);
     if (IsBasicAttacking && distanceFromTarget <= explosionRadius)
     {
       Explode();
     }
-    basicAttackSkill.SkillUpdate();
+
+    if (IsAttacking == false && Skills[0].SkillState.Equals(SkillState.InUse))
+      Skills[0].SetSkillState(SkillState.Used);
   }
 
   //private void OnTriggerEnter(Collider other)

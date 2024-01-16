@@ -466,7 +466,7 @@ namespace Paraverse.Mob.Controller
         else if (false == initiatedPursue)
           canPursue = false;
 
-        if (canPursue)
+        if (canPursue && _isStrafer)
         {
           if (isStrafing && isStrafingToPoint == false)
           {
@@ -497,7 +497,7 @@ namespace Paraverse.Mob.Controller
               }
             }
           }
-          else if (_isStrafer)
+          else
           {
             Debug.Log("else is Strafing: " + isStrafing);
             if (isStrafingToPoint) return;
@@ -507,7 +507,8 @@ namespace Paraverse.Mob.Controller
             nav.SetDestination(pursueTarget.position);
           }
         }
-        else if (distanceFromTarget <= combat.BasicAttackSkill.MaxRange && distanceFromTarget > combat.BasicAttackSkill.MinRange && isStrafingToPoint == false)
+        else if (distanceFromTarget <= combat.BasicAttackSkill.MaxRange && distanceFromTarget > combat.BasicAttackSkill.MinRange && isStrafingToPoint == false
+          || distanceFromTarget <= 3f)
         {
           initiatedPursue = false;
           nav.isStopped = true;
@@ -545,7 +546,7 @@ namespace Paraverse.Mob.Controller
     {
       if (null == pursueTarget)
       {
-        Debug.LogError("Pursue target cannot be null.");
+        Debug.LogWarning("Pursue target cannot be null... unless summonling");
         return false;
       }
 

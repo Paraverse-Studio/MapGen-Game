@@ -597,16 +597,20 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   _skillName: 
+  _skillNameDB: 0
   _ID: -1
   _image: {fileID: 0}
   _description: 
+  animName: BasicAttack
+  cost: 10
+  _isBasicAttack: 0
+  _isMelee: 1
+  usesTargetLock: 0
+  rotSpeed: 110
+  enableForDurationBasedProjectileSkills: 0
   _minRange: 0
   _maxRange: 5
-  cooldown: 5
-  cost: 10
-  animName: BasicAttack
-  isBasicAttack: 1
-  _isMelee: 1
+  _cooldown: 5
   attackColliderGO: {fileID: 6080363539117558812}
   attackCollider: {fileID: 6080363539117558813}
   projData:
@@ -614,14 +618,13 @@ MonoBehaviour:
     projHeld: {fileID: 0}
     projOrigin: {fileID: 0}
     projRotation: {fileID: 0}
-    basicAtkProjSpeed: 10
-  usesTargetLock: 0
-  rotSpeed: 110
+    projSpeed: 10
   scalingStatData:
     flatPower: 0
     attackScaling: 1
     abilityScaling: 0
     healthScaling: 0
+  skillStateToCompleteTimer: 1
 --- !u!1 &1606775507151456573
 GameObject:
   m_ObjectHideFlags: 0
@@ -1085,18 +1088,15 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 375c10a061ff4ff42855707e570453e8, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  anim: {fileID: 2956618024134931115}
-  stats: {fileID: 0}
   projUser: 0
-  basicAttackSkill: {fileID: 1269613722003654902}
-  skills: []
-  effects: []
-  animBool: isUsingSkill
-  maxComboResetTimer: 0.5
-  _skillHolder: {fileID: 4241460780824340472}
-  _effectsHolder: {fileID: 3781554212329764893}
-  _attackColliderGO: {fileID: 6080363539117558812}
+  _basicAttackSkill: {fileID: 1269613722003654902}
+  _skills: []
   _activeSkill: {fileID: 0}
+  _effects: []
+  useSetSkillToCompleteSafetyFeature: 1
+  setSkillToCompleteTimer: 10
+  maxComboResetTimer: 0.5
+  _attackColliderGO: {fileID: 6080363539117558812}
   _skillLabel: {fileID: 0}
   _skillCDTime: {fileID: 0}
   _skillCDFill: {fileID: 0}

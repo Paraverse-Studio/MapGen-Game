@@ -45,6 +45,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   _skillName: Sky Laser
+  _skillNameDB: 0
   _ID: -1
   _image: {fileID: 0}
   _description: 
@@ -57,7 +58,7 @@ MonoBehaviour:
   enableForDurationBasedProjectileSkills: 1
   _minRange: 0
   _maxRange: 25
-  _cooldown: 5
+  _cooldown: 10
   attackColliderGO: {fileID: 0}
   attackCollider: {fileID: 0}
   projData:
@@ -71,7 +72,7 @@ MonoBehaviour:
     attackScaling: 0
     abilityScaling: 1
     healthScaling: 0
-  skillStateToCompleteTimer: 1
+  skillStateToCompleteTimer: 2
   laserRadius: 1.5
   laserLength: 100
   laserWidth: 1.5
@@ -191,6 +192,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   _skillName: 
+  _skillNameDB: 0
   _ID: -1
   _image: {fileID: 0}
   _description: 
@@ -883,6 +885,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   _skillName: Slam Punch
+  _skillNameDB: 0
   _ID: -1
   _image: {fileID: 0}
   _description: 
@@ -957,6 +960,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   _skillName: Laser
+  _skillNameDB: 0
   _ID: -1
   _image: {fileID: 0}
   _description: 
@@ -969,7 +973,7 @@ MonoBehaviour:
   enableForDurationBasedProjectileSkills: 1
   _minRange: 0
   _maxRange: 25
-  _cooldown: 5
+  _cooldown: 8
   attackColliderGO: {fileID: 0}
   attackCollider: {fileID: 0}
   projData:
@@ -983,7 +987,7 @@ MonoBehaviour:
     attackScaling: 0
     abilityScaling: 1
     healthScaling: 0
-  skillStateToCompleteTimer: 1
+  skillStateToCompleteTimer: 2
   laserRadius: 1
   laserLength: 100
   laserWidth: 1
@@ -1967,10 +1971,8 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 5b3fe259459faf844a89438f0f42bc88, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  anim: {fileID: 1429477864462990764}
-  stats: {fileID: 0}
   projUser: 0
-  basicAttackSkill: {fileID: 133382402}
+  _basicAttackSkill: {fileID: 133382402}
   _skills:
   - {fileID: 3787384780881279730}
   - {fileID: 632686499}

@@ -38,7 +38,7 @@ RenderSettings:
   m_ReflectionIntensity: 1
   m_CustomReflection: {fileID: 0}
   m_Sun: {fileID: 0}
-  m_IndirectSpecularColor: {r: 0.15900815, g: 0.51751715, b: 1.0386043, a: 1}
+  m_IndirectSpecularColor: {r: 0.1605202, g: 0.5180438, b: 1.0452659, a: 1}
   m_UseRadianceAmbientProbe: 0
 --- !u!157 &3
 LightmapSettings:
@@ -1386,16 +1386,20 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   _skillName: Imp Basic Attack
+  _skillNameDB: 0
   _ID: -1
   _image: {fileID: 0}
   _description: 
+  animName: BasicAttack
+  cost: 0
+  _isBasicAttack: 0
+  _isMelee: 0
+  usesTargetLock: 0
+  rotSpeed: 100
+  enableForDurationBasedProjectileSkills: 0
   _minRange: 0
   _maxRange: 5
-  cooldown: 5
-  cost: 0
-  animName: BasicAttack
-  isBasicAttack: 1
-  _isMelee: 0
+  _cooldown: 5
   attackColliderGO: {fileID: 0}
   attackCollider: {fileID: 0}
   projData:
@@ -1403,14 +1407,13 @@ MonoBehaviour:
     projHeld: {fileID: 0}
     projOrigin: {fileID: 454388704}
     projRotation: {fileID: 0}
-    basicAtkProjSpeed: 20
-  usesTargetLock: 0
-  rotSpeed: 100
+    projSpeed: 10
   scalingStatData:
     flatPower: 0
     attackScaling: 0
     abilityScaling: 1
     healthScaling: 0
+  skillStateToCompleteTimer: 1
 --- !u!1 &84880962
 GameObject:
   m_ObjectHideFlags: 0
@@ -1617,16 +1620,18 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   targetTag: Enemy
+  knockBackEffect: {fileID: 0}
   dot: 0
   dontApplyDamageOnEnter: 1
-  knockBackEffect: {fileID: 0}
+  dotIntervalTimer: 1
+  applyHitAnim: 1
   hitFX: {fileID: 0}
-  isBasicAttackCollider: 0
   scalingStatData:
     flatPower: 1
     attackScaling: 0
     abilityScaling: 0
     healthScaling: 0
+  isBasicAttackCollider: 0
 --- !u!65 &166201824
 BoxCollider:
   m_ObjectHideFlags: 0
@@ -14051,42 +14056,6 @@ PrefabInstance:
       propertyPath: m_IsActive
       value: 1
       objectReference: {fileID: 0}
-    - target: {fileID: 2956618024134931030, guid: aa4e16a1786ed124fa06618210886566, type: 3}
-      propertyPath: jumpGravity
-      value: -60
-      objectReference: {fileID: 0}
-    - target: {fileID: 2956618024134931112, guid: aa4e16a1786ed124fa06618210886566, type: 3}
-      propertyPath: basicAttackSkill
-      value: 
-      objectReference: {fileID: 1366090563}
-    - target: {fileID: 2956618024134931112, guid: aa4e16a1786ed124fa06618210886566, type: 3}
-      propertyPath: effects.Array.size
-      value: 4
-      objectReference: {fileID: 0}
-    - target: {fileID: 2956618024134931112, guid: aa4e16a1786ed124fa06618210886566, type: 3}
-      propertyPath: effects.Array.data[0]
-      value: 
-      objectReference: {fileID: 1366090584}
-    - target: {fileID: 2956618024134931112, guid: aa4e16a1786ed124fa06618210886566, type: 3}
-      propertyPath: effects.Array.data[1]
-      value: 
-      objectReference: {fileID: 1366090585}
-    - target: {fileID: 2956618024134931112, guid: aa4e16a1786ed124fa06618210886566, type: 3}
-      propertyPath: effects.Array.data[2]
-      value: 
-      objectReference: {fileID: 1366090554}
-    - target: {fileID: 2956618024134931112, guid: aa4e16a1786ed124fa06618210886566, type: 3}
-      propertyPath: effects.Array.data[3]
-      value: 
-      objectReference: {fileID: 1366090573}
-    - target: {fileID: 2956618024134931112, guid: aa4e16a1786ed124fa06618210886566, type: 3}
-      propertyPath: projData.scalingStatData.flatPower
-      value: 0
-      objectReference: {fileID: 0}
-    - target: {fileID: 2956618024134931112, guid: aa4e16a1786ed124fa06618210886566, type: 3}
-      propertyPath: projData.scalingStatData.attackScaling
-      value: 1
-      objectReference: {fileID: 0}
     - target: {fileID: 2956618024134931113, guid: aa4e16a1786ed124fa06618210886566, type: 3}
       propertyPath: unkillable
       value: 1
@@ -14161,8 +14130,7 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   EffectName: Sunfire
   targetTag: Enemy
-  _ID: -1
-  _scaling:
+  scalingStatData:
     flatPower: 0
     attackScaling: 1
     abilityScaling: 0
@@ -14185,16 +14153,20 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   _skillName: Basic Attack
+  _skillNameDB: 0
   _ID: -1
   _image: {fileID: 0}
   _description: 
+  animName: 
+  cost: 0
+  _isBasicAttack: 0
+  _isMelee: 0
+  usesTargetLock: 0
+  rotSpeed: 100
+  enableForDurationBasedProjectileSkills: 0
   _minRange: 0
   _maxRange: 5
-  cooldown: 5
-  cost: 0
-  animName: 
-  isBasicAttack: 1
-  _isMelee: 0
+  _cooldown: 5
   attackColliderGO: {fileID: 77710889}
   attackCollider: {fileID: 77710890}
   projData:
@@ -14202,14 +14174,13 @@ MonoBehaviour:
     projHeld: {fileID: 0}
     projOrigin: {fileID: 0}
     projRotation: {fileID: 0}
-    basicAtkProjSpeed: 10
-  usesTargetLock: 0
-  rotSpeed: 100
+    projSpeed: 10
   scalingStatData:
     flatPower: 0
     attackScaling: 1
     abilityScaling: 0
     healthScaling: 0
+  skillStateToCompleteTimer: 1
 --- !u!114 &1366090573
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -14224,9 +14195,8 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   EffectName: Reaper
   targetTag: Enemy
-  _ID: -1
-  _scaling:
-    flatPower: 2
+  scalingStatData:
+    flatPower: 0
     attackScaling: 1
     abilityScaling: 0
     healthScaling: 0
@@ -14247,8 +14217,7 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   EffectName: Empowered Attack
   targetTag: Enemy
-  _ID: -1
-  _scaling:
+  scalingStatData:
     flatPower: 0
     attackScaling: 1
     abilityScaling: 0
@@ -14270,8 +14239,7 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   EffectName: Dash Attack
   targetTag: Enemy
-  _ID: -1
-  _scaling:
+  scalingStatData:
     flatPower: 0
     attackScaling: 1
     abilityScaling: 0
@@ -16320,6 +16288,8 @@ MonoBehaviour:
   moveSpeed: 2
   maxEnergy: 100
   _curEnergy: 100
+  cooldownReduction: 0
+  healthRegen: 0
   energyRegen: 25
   _gold: 100
   OnHealthChange:
@@ -16342,13 +16312,13 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 5b3fe259459faf844a89438f0f42bc88, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  anim: {fileID: 0}
-  stats: {fileID: 0}
   projUser: 0
-  basicAttackSkill: {fileID: 0}
-  skills: []
-  effects: []
-  animBool: isUsingSkill
+  _basicAttackSkill: {fileID: 0}
+  _skills: []
+  _activeSkill: {fileID: 0}
+  _effects: []
+  useSetSkillToCompleteSafetyFeature: 1
+  setSkillToCompleteTimer: 10
 --- !u!114 &1702892492
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -16394,6 +16364,7 @@ MonoBehaviour:
   _curMobState: 0
   _isGrounded: 1
   _isUnstaggerable: 0
+  _mobType: 0
 --- !u!143 &1702892493
 CharacterController:
   m_ObjectHideFlags: 0
@@ -16499,6 +16470,8 @@ MonoBehaviour:
   moveSpeed: 0
   maxEnergy: 0
   _curEnergy: 0
+  cooldownReduction: 0
+  healthRegen: 0
   energyRegen: 0
   _gold: 0
   OnHealthChange:
@@ -16521,13 +16494,13 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 5b3fe259459faf844a89438f0f42bc88, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  anim: {fileID: 0}
-  stats: {fileID: 0}
   projUser: 0
-  basicAttackSkill: {fileID: 0}
-  skills: []
-  effects: []
-  animBool: isUsingSkill
+  _basicAttackSkill: {fileID: 0}
+  _skills: []
+  _activeSkill: {fileID: 0}
+  _effects: []
+  useSetSkillToCompleteSafetyFeature: 1
+  setSkillToCompleteTimer: 10
 --- !u!114 &1851129754
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -16573,6 +16546,7 @@ MonoBehaviour:
   _curMobState: 0
   _isGrounded: 1
   _isUnstaggerable: 0
+  _mobType: 0
 --- !u!143 &1851129755
 CharacterController:
   m_ObjectHideFlags: 0
@@ -19427,6 +19401,8 @@ MonoBehaviour:
   moveSpeed: 2
   maxEnergy: 100
   _curEnergy: 100
+  cooldownReduction: 0
+  healthRegen: 0
   energyRegen: 25
   _gold: 100
   OnHealthChange:
@@ -19464,13 +19440,13 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 5b3fe259459faf844a89438f0f42bc88, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  anim: {fileID: 0}
-  stats: {fileID: 0}
   projUser: 0
-  basicAttackSkill: {fileID: 0}
-  skills: []
-  effects: []
-  animBool: isUsingSkill
+  _basicAttackSkill: {fileID: 0}
+  _skills: []
+  _activeSkill: {fileID: 0}
+  _effects: []
+  useSetSkillToCompleteSafetyFeature: 1
+  setSkillToCompleteTimer: 10
 --- !u!4 &411949311067432046
 Transform:
   m_ObjectHideFlags: 0
@@ -19532,6 +19508,7 @@ MonoBehaviour:
   _curMobState: 0
   _isGrounded: 1
   _isUnstaggerable: 0
+  _mobType: 0
 --- !u!4 &411949311067432048
 Transform:
   m_ObjectHideFlags: 0
@@ -23282,7 +23259,7 @@ PrefabInstance:
       objectReference: {fileID: 0}
     - target: {fileID: 381769008500357370, guid: b5bb5caa027eab745a624ea74bd7373d, type: 3}
       propertyPath: m_IsActive
-      value: 1
+      value: 0
       objectReference: {fileID: 0}
     - target: {fileID: 5699475108057975578, guid: b5bb5caa027eab745a624ea74bd7373d, type: 3}
       propertyPath: _maxRange

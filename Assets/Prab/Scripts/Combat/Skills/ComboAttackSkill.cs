@@ -8,6 +8,9 @@ public class ComboAttackSkill : MobSkill, IMobSkill
 {
   #region Variables
   [SerializeField]
+  protected GameObject mainHandAttackColliderGO;
+  protected AttackCollider mainHandAttackCollider;
+  [SerializeField]
   protected GameObject offHandAttackColliderGO;
   protected AttackCollider offHandAttackCollider;
 
@@ -23,11 +26,12 @@ public class ComboAttackSkill : MobSkill, IMobSkill
   public override void ActivateSkill(MobCombat mob, Animator anim, MobStats stats, Transform target = null)
   {
     base.ActivateSkill(mob, anim, stats, target);
+    Debug.Log($"ACTIVATESKILL() - Activating skill {Name}");
 
     // Checks if melee users have basic attack collider script on weapon
-    if (offHandAttackColliderGO == null)
+    if (null == offHandAttackColliderGO || null == mainHandAttackColliderGO)
     {
-      Debug.LogWarning(gameObject.name + " doesn't have an attack collider.");
+      Debug.LogError(gameObject.name + " doesn't have an attack collider.");
       return;
     }
     offHandAttackColliderGO.SetActive(true);
@@ -35,9 +39,15 @@ public class ComboAttackSkill : MobSkill, IMobSkill
     offHandAttackCollider.Init(mob, scalingStatData);
     offHandAttackColliderGO.SetActive(false);
 
+    mainHandAttackColliderGO.SetActive(true);
+    mainHandAttackCollider = offHandAttackColliderGO.GetComponent<AttackCollider>();
+    mainHandAttackCollider.Init(mob, scalingStatData);
+    mainHandAttackColliderGO.SetActive(false);
+
     foreach (ComboAttack details in comboDetails)
     {
       details.Init(anim);
+      Debug.Log($"Inited combo: {details.animName}");
     }
     SubscribeAnimationEventListeners();
   }
@@ -124,8 +134,8 @@ public class ComboAttackSkill : MobSkill, IMobSkill
   #region Animation Events
   public void EnableMainHandAttackCollider()
   {
-    if (attackColliderGO != null)
-      attackColliderGO.SetActive(true);
+    if (mainHandAttackCollider != null)
+      mainHandAttackColliderGO.SetActive(true);
 
     //skillOn = true;
     SetSkillState(SkillState.InUse);
@@ -133,8 +143,8 @@ public class ComboAttackSkill : MobSkill, IMobSkill
 
   public void DisableMainHandAttackCollider()
   {
-    if (attackColliderGO != null)
-      attackColliderGO.SetActive(false);
+    if (mainHandAttackCollider != null)
+      mainHandAttackColliderGO.SetActive(false);
 
     //skillOn = false;
   }
@@ -158,8 +168,8 @@ public class ComboAttackSkill : MobSkill, IMobSkill
 
   public void DisableSkillAndCollider()
   {
-    if (attackColliderGO != null)
-      attackColliderGO.SetActive(false);
+    if (mainHandAttackCollider != null)
+      mainHandAttackColliderGO.SetActive(false);
     if (offHandAttackCollider != null)
       offHandAttackColliderGO.SetActive(false);
 

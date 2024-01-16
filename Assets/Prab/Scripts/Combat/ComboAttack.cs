@@ -2,8 +2,7 @@ using System;
 using UnityEngine;
 
 [Serializable]
-public class ComboAttack
-  : MonoBehaviour
+public class ComboAttack : MonoBehaviour
 {
   private Animator anim;
   public ComboState State = ComboState.Idle;
@@ -19,6 +18,7 @@ public class ComboAttack
   public void Init(Animator anim)
   {
     this.anim = anim;
+    Debug.Log($"anim: {anim}");
     SetState(ComboState.Idle);
     _animFinished = false;
     ResetTimer();

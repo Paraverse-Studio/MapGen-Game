@@ -123,8 +123,8 @@ namespace PolygonArsenal
         /// </summary>
         public float ApplyCustomDamage(IMobController controller)
         {
-            controller.Stats.UpdateCurrentHealth(-Mathf.CeilToInt(scalingStatData.FinalValue(mob.stats)));
-            return Mathf.CeilToInt(scalingStatData.FinalValue(targetMob.stats));
+            controller.Stats.UpdateCurrentHealth(-Mathf.CeilToInt(scalingStatData.FinalValue(mob.Stats)));
+            return Mathf.CeilToInt(scalingStatData.FinalValue(targetMob.Stats));
         }
 
         private void DamageLogic(Collider other)

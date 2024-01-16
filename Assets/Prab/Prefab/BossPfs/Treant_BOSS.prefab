@@ -1796,10 +1796,8 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 5b3fe259459faf844a89438f0f42bc88, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  anim: {fileID: 8255129907231077119}
-  stats: {fileID: 0}
   projUser: 0
-  basicAttackSkill: {fileID: 8305639317666090422}
+  _basicAttackSkill: {fileID: 8305639317666090422}
   _skills:
   - {fileID: 8305639318263375680}
   - {fileID: 8305639317601381804}
@@ -3813,7 +3811,7 @@ MonoBehaviour:
     attackScaling: 1
     abilityScaling: 0
     healthScaling: 0
-  isBasicAttackCollider: 1
+  isBasicAttackCollider: 0
 --- !u!1 &8305639317601381794
 GameObject:
   m_ObjectHideFlags: 0
@@ -3872,7 +3870,7 @@ MonoBehaviour:
   enableForDurationBasedProjectileSkills: 1
   _minRange: 0
   _maxRange: 100
-  _cooldown: 5
+  _cooldown: 7
   attackColliderGO: {fileID: 0}
   attackCollider: {fileID: 0}
   projData:
@@ -3886,7 +3884,7 @@ MonoBehaviour:
     attackScaling: 0
     abilityScaling: 0
     healthScaling: 0
-  skillStateToCompleteTimer: 2
+  skillStateToCompleteTimer: 1
   minSpawnPosX: -5
   maxSpawnPosX: 5
   minSpawnPosZ: -5
@@ -3946,8 +3944,8 @@ MonoBehaviour:
   _description: 
   animName: BasicAttack
   cost: 0
-  _isBasicAttack: 0
-  _isMelee: 0
+  _isBasicAttack: 1
+  _isMelee: 1
   usesTargetLock: 0
   rotSpeed: 100
   enableForDurationBasedProjectileSkills: 0
@@ -3967,7 +3965,7 @@ MonoBehaviour:
     attackScaling: 1
     abilityScaling: 0
     healthScaling: 0
-  skillStateToCompleteTimer: 2
+  skillStateToCompleteTimer: 1
 --- !u!1 &8305639317755612592
 GameObject:
   m_ObjectHideFlags: 0
@@ -4168,7 +4166,7 @@ MonoBehaviour:
   _maxRange: 5
   _cooldown: 5
   attackColliderGO: {fileID: 8305639317033948403}
-  attackCollider: {fileID: 0}
+  attackCollider: {fileID: 8305639317033948413}
   projData:
     projPf: {fileID: 0}
     projHeld: {fileID: 0}
@@ -4180,7 +4178,7 @@ MonoBehaviour:
     attackScaling: 1
     abilityScaling: 0.5
     healthScaling: 0
-  skillStateToCompleteTimer: 2
+  skillStateToCompleteTimer: 1
   lifeStealRatio: 0.8
 --- !u!1 &8305639318263375686
 GameObject:
@@ -4241,7 +4239,7 @@ MonoBehaviour:
   enableForDurationBasedProjectileSkills: 1
   _minRange: 0
   _maxRange: 100
-  _cooldown: 5
+  _cooldown: 9
   attackColliderGO: {fileID: 0}
   attackCollider: {fileID: 0}
   projData:

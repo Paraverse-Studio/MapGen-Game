@@ -1,30 +1,44 @@
 using Paraverse.Combat;
+using UnityEngine;
 
 public class BasicAttackSkill : MobSkill, IMobSkill
 {
-    public override void SkillUpdate()
-    {
-        TargetLockDuringSkill();
-        CooldownHandler();
-    }
+  protected virtual void Start()
+  {
+    _isBasicAttack = true;
+  }
+  
+  public override void SkillUpdate()
+  {
+    if (null != target && mob.IsAttacking == false && Input == null)
+      Execute();
 
-    public void ExecuteBasicAttack()
-    {
-        Execute();
-    }
+    TargetLockDuringSkill();
+    SkillStateManager();
+    CooldownHandler();
+  }
 
-    protected override void ExecuteSkillLogic()
-    {
-        _curCooldown = _cooldown;
-        anim.Play(animName);
-        anim.SetBool(StringData.IsBasicAttacking, true);
-    }
+  public void ExecuteBasicAttack()
+  {
+    Execute();
+  }
 
-    protected override bool CanUseSkill()
-    {
-        if (IsOffCooldown && TargetWithinRange && mob.IsAttackLunging == false && mob.IsSkilling == false)
-            return true;
+  protected override void ExecuteSkillLogic()
+  {
+    mob.IsAttacking = true;
+    SetSkillState(SkillState.InUse);
+    anim.SetBool(StringData.IsBasicAttacking, true);
+    _curCooldown = _cooldown;
+    anim.Play(animName);
+    curSkillStateToCompleteTimer = skillStateToCompleteTimer;
+  }
 
-        return false;
-    }
+  protected override bool CanUseSkill()
+  {
+    if (IsOffCooldown && TargetWithinRange && mob.IsAttackLunging == false && mob.IsAttacking == false && mob.ActiveSkill == null || 
+      IsOffCooldown && TargetWithinRange && mob.IsAttackLunging == false && mob.IsAttacking == false && input != null)
+      return true;
+
+    return false;
+  }
 }

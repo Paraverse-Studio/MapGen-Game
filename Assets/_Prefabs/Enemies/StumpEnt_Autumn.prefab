@@ -418,11 +418,10 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 31b2fe413c995db46ab92bb45b7ca9ee, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  anim: {fileID: 5125661759958323917}
-  stats: {fileID: 0}
   projUser: 0
-  basicAttackSkill: {fileID: 6813802553972170479}
-  _skills: []
+  _basicAttackSkill: {fileID: 6813802553972170479}
+  _skills:
+  - {fileID: 6813802553972170479}
   _activeSkill: {fileID: 0}
   _effects: []
   useSetSkillToCompleteSafetyFeature: 1
@@ -1191,8 +1190,8 @@ MonoBehaviour:
   _description: 
   animName: BasicAttack
   cost: 0
-  _isBasicAttack: 0
-  _isMelee: 0
+  _isBasicAttack: 1
+  _isMelee: 1
   usesTargetLock: 0
   rotSpeed: 100
   enableForDurationBasedProjectileSkills: 0

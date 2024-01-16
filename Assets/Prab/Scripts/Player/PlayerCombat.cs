@@ -1,5 +1,6 @@
 using Paraverse.Combat;
 using Paraverse.Helper;
+using Paraverse.Mob;
 using Paraverse.Mob.Combat;
 using Paraverse.Mob.Stats;
 using TMPro;
@@ -8,7 +9,7 @@ using UnityEngine.UI;
 
 namespace Paraverse.Player
 {
-  public class PlayerCombat : MobCombat
+  public class PlayerCombat : MobCombat, IMobCombat
   {
     #region Variables
     private new PlayerController controller;
@@ -22,11 +23,11 @@ namespace Paraverse.Player
     private float maxComboResetTimer = 1f;
     private float curCombatResetTimer;
     [SerializeField]
-    private Transform _skillHolder;
     public Transform SkillHolder => _skillHolder;
+    private Transform _skillHolder;
     [SerializeField]
-    private Transform _effectsHolder;
     public Transform EffectsHolder => _effectsHolder;
+    private Transform _effectsHolder;
     public bool CanComboAttackTwo { get => _canComboAttackTwo; }
     private bool _canComboAttackTwo = false;
     public bool CanComboAttackThree { get => _canComboAttackThree; }
@@ -37,37 +38,31 @@ namespace Paraverse.Player
     private GameObject _attackColliderGO;
 
     [Header("SKill U.I.")]
-    [SerializeField] 
+    [SerializeField]
     private TextMeshProUGUI _skillLabel;
-    [SerializeField] 
+    [SerializeField]
     private TextMeshProUGUI _skillCDTime;
-    [SerializeField] 
+    [SerializeField]
     private Image _skillCDFill;
-    [SerializeField] 
+    [SerializeField]
     private Image _skillIcon;
-    [SerializeField] 
+    [SerializeField]
     private Animation _skillCDGlow;
-    [SerializeField] 
+    [SerializeField]
     private ContentFitterRefresher _refresher;
 
     // Reset to Default Skill UI upon player death
-    [SerializeField] 
+    [SerializeField]
     private Sprite noSkillSprite;
-
     #endregion
 
-
-    #region Start & Update Methods
+    #region Initializing Methods
     protected override void Start()
     {
       if (anim == null) anim = GetComponent<Animator>();
       if (player == null) player = GameObject.FindGameObjectWithTag(targetTag).GetComponent<Transform>();
       if (stats == null) stats = GetComponent<MobStats>();
       if (controller == null) controller = GetComponent<PlayerController>();
-
-      Initialize();
-
-      controller = gameObject.GetComponent<PlayerController>();
       input = GetComponent<PlayerInputControls>();
       input.OnBasicAttackEvent += ApplyBasicAttack;
 
@@ -79,6 +74,9 @@ namespace Paraverse.Player
       {
         _effects[i].ActivateEffect(stats);
       }
+      _attackColliderGO.GetComponent<AttackCollider>().Init(this);
+
+      Initialize();
     }
 
     public void ActivateSkill(GameObject obj)
@@ -172,10 +170,10 @@ namespace Paraverse.Player
       }
       _effects.Clear();
     }
+    #endregion
 
     protected override void Update()
     {
-      //TEST_METHOD();
       if (controller.IsDead) return;
 
       distanceFromTarget = ParaverseHelper.GetDistance(transform.position, player.position);
@@ -189,6 +187,11 @@ namespace Paraverse.Player
       else
         IsSkilling = false;
 
+      if (IsSkilling || IsBasicAttacking)
+        IsAttacking = true;
+      else
+        IsAttacking = false;
+
       // Gets active skill to run update method for each skill 
       for (int i = 0; i < _skills.Count; i++)
       {
@@ -197,18 +200,11 @@ namespace Paraverse.Player
       }
     }
 
+    #region Inherited Methods From MobCombat
     public override void OnAttackInterrupt()
     {
       base.OnAttackInterrupt();
       anim.SetBool(StringData.IsUsingSkill, false);
-    }
-
-    private void TEST_METHOD()
-    {
-      if (Input.GetKeyDown(KeyCode.P))
-      {
-        DeactivateEffects();
-      }
     }
     #endregion
 
@@ -337,7 +333,7 @@ namespace Paraverse.Player
         skill = ActiveSkill;
       else
       {
-        skill = basicAttackSkill;
+        skill = _basicAttackSkill;
         Debug.LogError("Invoked PlayerCombat's FireProjectile without providing proper projectile data.");
       }
 

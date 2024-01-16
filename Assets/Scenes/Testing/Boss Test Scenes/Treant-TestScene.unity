@@ -644,6 +644,17 @@ Transform:
   m_Father: {fileID: 1104816973}
   m_RootOrder: 2
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
+--- !u!114 &440486971 stripped
+MonoBehaviour:
+  m_CorrespondingSourceObject: {fileID: 1269613722003654902, guid: aa4e16a1786ed124fa06618210886566, type: 3}
+  m_PrefabInstance: {fileID: 1366090532}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 5ff88d084135b4240baee58ee284d528, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
 --- !u!1 &511818343
 GameObject:
   m_ObjectHideFlags: 0
@@ -1413,7 +1424,7 @@ PrefabInstance:
       objectReference: {fileID: 0}
     - target: {fileID: 7311448671115723015, guid: b0089e7a57060c94592e590afc510844, type: 3}
       propertyPath: m_AnchoredPosition.y
-      value: -20.000244
+      value: -20.000305
       objectReference: {fileID: 0}
     - target: {fileID: 7311448671347971881, guid: b0089e7a57060c94592e590afc510844, type: 3}
       propertyPath: m_AnchorMax.y
@@ -1849,7 +1860,7 @@ PrefabInstance:
       objectReference: {fileID: 0}
     - target: {fileID: 7311448672384992556, guid: b0089e7a57060c94592e590afc510844, type: 3}
       propertyPath: m_AnchoredPosition.x
-      value: -35
+      value: -35.000122
       objectReference: {fileID: 0}
     - target: {fileID: 7311448672392100026, guid: b0089e7a57060c94592e590afc510844, type: 3}
       propertyPath: m_AnchorMax.y
@@ -1941,7 +1952,7 @@ PrefabInstance:
       objectReference: {fileID: 0}
     - target: {fileID: 7311448672604579429, guid: b0089e7a57060c94592e590afc510844, type: 3}
       propertyPath: m_AnchoredPosition.x
-      value: -50.00122
+      value: -50.001343
       objectReference: {fileID: 0}
     m_RemovedComponents: []
   m_SourcePrefab: {fileID: 100100000, guid: b0089e7a57060c94592e590afc510844, type: 3}
@@ -2174,6 +2185,10 @@ PrefabInstance:
       propertyPath: basicAttackSkill
       value: 
       objectReference: {fileID: 1366090563}
+    - target: {fileID: 2956618024134931112, guid: aa4e16a1786ed124fa06618210886566, type: 3}
+      propertyPath: _basicAttackSkill
+      value: 
+      objectReference: {fileID: 440486971}
     - target: {fileID: 2956618024134931112, guid: aa4e16a1786ed124fa06618210886566, type: 3}
       propertyPath: effects.Array.size
       value: 1
@@ -2679,22 +2694,6 @@ PrefabInstance:
   m_Modification:
     m_TransformParent: {fileID: 0}
     m_Modifications:
-    - target: {fileID: 5935239317561939344, guid: 5f6734928f28a434bbbee71cbf959565, type: 3}
-      propertyPath: pursueRange
-      value: 10
-      objectReference: {fileID: 0}
-    - target: {fileID: 5935239317561939344, guid: 5f6734928f28a434bbbee71cbf959565, type: 3}
-      propertyPath: pursueRadius
-      value: 100
-      objectReference: {fileID: 0}
-    - target: {fileID: 5935239317561939344, guid: 5f6734928f28a434bbbee71cbf959565, type: 3}
-      propertyPath: detectionRadius
-      value: 100
-      objectReference: {fileID: 0}
-    - target: {fileID: 5935239317561939344, guid: 5f6734928f28a434bbbee71cbf959565, type: 3}
-      propertyPath: customPursueRange
-      value: 1
-      objectReference: {fileID: 0}
     - target: {fileID: 6864850351737904892, guid: 5f6734928f28a434bbbee71cbf959565, type: 3}
       propertyPath: m_Name
       value: Treant_Autumn
@@ -2742,46 +2741,6 @@ PrefabInstance:
     - target: {fileID: 6864850351737904893, guid: 5f6734928f28a434bbbee71cbf959565, type: 3}
       propertyPath: m_LocalEulerAnglesHint.z
       value: 0
-      objectReference: {fileID: 0}
-    - target: {fileID: 8305639317601381804, guid: 5f6734928f28a434bbbee71cbf959565, type: 3}
-      propertyPath: maxSpawnPosX
-      value: 5
-      objectReference: {fileID: 0}
-    - target: {fileID: 8305639317601381804, guid: 5f6734928f28a434bbbee71cbf959565, type: 3}
-      propertyPath: maxSpawnPosZ
-      value: 5
-      objectReference: {fileID: 0}
-    - target: {fileID: 8305639317601381804, guid: 5f6734928f28a434bbbee71cbf959565, type: 3}
-      propertyPath: minSpawnPosX
-      value: -5
-      objectReference: {fileID: 0}
-    - target: {fileID: 8305639317601381804, guid: 5f6734928f28a434bbbee71cbf959565, type: 3}
-      propertyPath: minSpawnPosZ
-      value: -5
-      objectReference: {fileID: 0}
-    - target: {fileID: 8305639317601381804, guid: 5f6734928f28a434bbbee71cbf959565, type: 3}
-      propertyPath: skillStateToCompleteTimer
-      value: 2
-      objectReference: {fileID: 0}
-    - target: {fileID: 8305639317601381804, guid: 5f6734928f28a434bbbee71cbf959565, type: 3}
-      propertyPath: enableForDurationBasedProjectileSkills
-      value: 1
-      objectReference: {fileID: 0}
-    - target: {fileID: 8305639317666090422, guid: 5f6734928f28a434bbbee71cbf959565, type: 3}
-      propertyPath: skillStateToCompleteTimer
-      value: 2
-      objectReference: {fileID: 0}
-    - target: {fileID: 8305639318240610835, guid: 5f6734928f28a434bbbee71cbf959565, type: 3}
-      propertyPath: skillStateToCompleteTimer
-      value: 2
-      objectReference: {fileID: 0}
-    - target: {fileID: 8305639318240610835, guid: 5f6734928f28a434bbbee71cbf959565, type: 3}
-      propertyPath: preventMobRotationDuringSkillUsed
-      value: 1
-      objectReference: {fileID: 0}
-    - target: {fileID: 8305639318263375680, guid: 5f6734928f28a434bbbee71cbf959565, type: 3}
-      propertyPath: skillStateToCompleteTimer
-      value: 2
       objectReference: {fileID: 0}
     m_RemovedComponents: []
   m_SourcePrefab: {fileID: 100100000, guid: 5f6734928f28a434bbbee71cbf959565, type: 3}

@@ -12,6 +12,7 @@ namespace Paraverse.Combat
     #region Variables
     protected MobCombat mob;
     protected Transform target;
+    public PlayerInputControls Input => input;
     protected PlayerInputControls input;
     protected Animator anim;
     protected MobStats stats;
@@ -68,7 +69,6 @@ namespace Paraverse.Combat
     protected float _curCooldown;
     public bool IsOffCooldown => _curCooldown <= 0;
 
-
     // Skill Additional Values
     [Header("Attack Collider Values")]
     public GameObject attackColliderGO;
@@ -99,7 +99,30 @@ namespace Paraverse.Combat
       SkillState = state;
     }
 
-    #region Private Methods
+    /// <summary>
+    /// Returns true if skill conditions are met. 
+    /// </summary>
+    /// <returns></returns>
+    protected virtual bool CanUseSkillForPlayer()
+    {
+      if (IsOffCooldown && HasEnergy && TargetWithinRange && mob.IsAttackLunging == false && anim.GetBool(StringData.IsBasicAttacking) == false)
+        return true;
+
+      return false;
+    }
+
+    /// <summary>
+    /// Returns true if skill conditions are met. 
+    /// </summary>
+    /// <returns></returns>
+    protected virtual bool CanUseSkill()
+    {
+      if (IsOffCooldown && HasEnergy && TargetWithinRange && mob.IsAttackLunging == false && mob.IsAttacking == false && mob.ActiveSkill == null ||
+        IsOffCooldown && HasEnergy && TargetWithinRange && mob.IsAttackLunging == false && anim.GetBool(StringData.IsBasicAttacking) == false && input != null) // For player Active skill is always active
+        return true;
+
+      return false;
+    }
 
     /// <summary>
     /// Responsible for executing skill on button press.
@@ -113,10 +136,54 @@ namespace Paraverse.Combat
         SubscribeAnimationEventListeners();
         ExecuteSkillLogic();
       }
-    }
-    #endregion
+    }/// <summary>
+     /// Contains all methods required to run in Update within MobCombat script.
+     /// </summary>
+    public virtual void SkillUpdate()
+    {
+      if (null != target && mob.IsAttacking == false)
+        Execute();
 
-    #region Inheritable 
+      SkillStateManager();
+      CooldownHandler();
+    }
+
+    protected virtual void SkillStateManager()
+    {
+      if (SkillState.Equals(SkillState.InUse))
+        TargetLockDuringSkill();
+
+      if (SkillState.Equals(SkillState.Used) && false == mob.IsAttacking)
+      {
+        // change skill state to complete after a set period of delay
+        if (target != null)
+          RotateToTarget();
+        if (curSkillStateToCompleteTimer <= 0)
+        {
+          SetSkillState(SkillState.InActive);
+          curSkillStateToCompleteTimer = skillStateToCompleteTimer;
+        }
+        else
+        {
+          curSkillStateToCompleteTimer -= Time.deltaTime;
+        }
+      }
+    }
+
+    /// <summary>
+    /// This method is to be run everytime a skill is executed.
+    /// </summary>
+    protected virtual void ExecuteSkillLogic()
+    {
+      mob.IsSkilling = true;
+      SetSkillState(SkillState.InUse);
+      anim.SetBool(StringData.IsUsingSkill, true);
+      stats.UpdateCurrentEnergy(-cost);
+      anim.Play(animName);
+      curSkillStateToCompleteTimer = skillStateToCompleteTimer;
+    }
+
+    #region Initializing Methods 
     /// <summary>
     /// Activates players skill ONLY. Needs to be used for EVERY skill inorder to activate skill when obtained.
     /// </summary>
@@ -204,40 +271,7 @@ namespace Paraverse.Combat
     {
       mob.OnDisableSkillOneEvent -= OnSkillComplete;
     }
-
-    /// <summary>
-    /// Contains all methods required to run in Update within MobCombat script.
-    /// </summary>
-    public virtual void SkillUpdate()
-    {
-      if (null != target && mob.IsBasicAttacking == false && mob.IsSkilling == false)
-        Execute();
-
-      SkillStateManager();
-      CooldownHandler();
-    }
-
-    protected virtual void SkillStateManager()
-    {
-      if (SkillState.Equals(SkillState.InUse))
-        TargetLockDuringSkill();
-
-      if (SkillState.Equals(SkillState.Used) && false == mob.IsSkilling)
-      {
-        // change skill state to complete after a set period of delay
-        if (target != null)
-          RotateToTarget();
-        if (curSkillStateToCompleteTimer <= 0)
-        {
-          SetSkillState(SkillState.InActive);
-          curSkillStateToCompleteTimer = skillStateToCompleteTimer;
-        }
-        else
-        {
-          curSkillStateToCompleteTimer -= Time.deltaTime;
-        }
-      }
-    }
+    #endregion
 
     protected virtual void InterruptSkill()
     {
@@ -279,19 +313,6 @@ namespace Paraverse.Combat
     }
 
     /// <summary>
-    /// This method is to be run everytime a skill is executed.
-    /// </summary>
-    protected virtual void ExecuteSkillLogic()
-    {
-      mob.IsSkilling = true;
-      SetSkillState(SkillState.InUse);
-      anim.SetBool(StringData.IsUsingSkill, true);
-      stats.UpdateCurrentEnergy(-cost);
-      anim.Play(animName);
-      curSkillStateToCompleteTimer = skillStateToCompleteTimer;
-    }
-
-    /// <summary>
     /// Required to run this method to manually set the mobs skill off. 
     /// </summary>
     protected virtual void OnSkillComplete()
@@ -324,31 +345,6 @@ namespace Paraverse.Combat
     }
 
     /// <summary>
-    /// Returns true if skill conditions are met. 
-    /// </summary>
-    /// <returns></returns>
-    protected virtual bool CanUseSkillForPlayer()
-    {
-      if (IsOffCooldown && HasEnergy && TargetWithinRange && mob.IsAttackLunging == false && anim.GetBool(StringData.IsBasicAttacking) == false)
-        return true;
-
-      return false;
-    }
-
-    /// <summary>
-    /// Returns true if skill conditions are met. 
-    /// </summary>
-    /// <returns></returns>
-    protected virtual bool CanUseSkill()
-    {
-      if (IsOffCooldown && HasEnergy && TargetWithinRange && mob.IsAttackLunging == false && anim.GetBool(StringData.IsBasicAttacking) == false && mob.ActiveSkill == null ||
-        IsOffCooldown && HasEnergy && TargetWithinRange && mob.IsAttackLunging == false && anim.GetBool(StringData.IsBasicAttacking) == false && input != null) // For player Active skill is always active
-        return true;
-
-      return false;
-    }
-
-    /// <summary>
     /// Returns total damage applied by skill using mob stats along with the skills scaling data. 
     /// </summary>
     /// <returns></returns>
@@ -365,7 +361,6 @@ namespace Paraverse.Combat
 
       return disFromTarget >= _minRange && disFromTarget <= _maxRange;
     }
-    #endregion
   }
 
   public enum SkillState

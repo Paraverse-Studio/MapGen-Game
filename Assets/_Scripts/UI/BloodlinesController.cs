@@ -56,6 +56,7 @@ public class BloodlinesController : MonoBehaviour
             case BloodlineType.Vagabond:
                 playerStats.AttackDamage.AddMod(new StatModifier(5));
                 playerStats.MaxHealth.AddMod(new StatModifier(50));
+                playerStats.SetCurrentHealth((int)playerStats.MaxHealth.FinalValue);
                 GameLoopManager.Instance.GameLoopEvents.OnStartRound.AddListener(VagabondRoundHeal);
                 break;
             case BloodlineType.Harrier:

@@ -19689,19 +19689,25 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   targetTag: Player
-  speed: 20
-  range: 10
-  deathTimer: 5
-  stationary: 0
+  knockBackEffect: {fileID: 0}
   dot: 0
   dontApplyDamageOnEnter: 0
   dotIntervalTimer: 1
-  knockBackEffect: {fileID: 0}
-  pierce: 1
   applyHitAnim: 1
-  launchFX: {fileID: 0}
   hitFX: {fileID: 0}
+  scalingStatData:
+    flatPower: 0
+    attackScaling: 1
+    abilityScaling: 0
+    healthScaling: 0
+  isBasicAttackCollider: 0
+  speed: 20
+  range: 10
+  deathTimer: 5
+  stationary: 1
+  pierce: 1
   decreaseByLerp: -1
+  launchFX: {fileID: 0}
 --- !u!1 &5932505144238678716
 GameObject:
   m_ObjectHideFlags: 0

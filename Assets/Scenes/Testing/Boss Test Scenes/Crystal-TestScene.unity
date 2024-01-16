@@ -2232,6 +2232,10 @@ PrefabInstance:
       value: 
       objectReference: {fileID: 1366090563}
     - target: {fileID: 2956618024134931112, guid: aa4e16a1786ed124fa06618210886566, type: 3}
+      propertyPath: _basicAttackSkill
+      value: 
+      objectReference: {fileID: 2041488761}
+    - target: {fileID: 2956618024134931112, guid: aa4e16a1786ed124fa06618210886566, type: 3}
       propertyPath: effects.Array.size
       value: 1
       objectReference: {fileID: 0}
@@ -2325,7 +2329,6 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   EffectName: Mob Effect
   targetTag: Enemy
-  _ID: -1
   scalingStatData:
     flatPower: 0
     attackScaling: 1
@@ -2349,6 +2352,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   _skillName: Basic Attack
+  _skillNameDB: 0
   _ID: -1
   _image: {fileID: 0}
   _description: 
@@ -2390,7 +2394,6 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   EffectName: Mob Effect
   targetTag: Enemy
-  _ID: -1
   scalingStatData:
     flatPower: 0
     attackScaling: 1
@@ -2413,7 +2416,6 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   EffectName: Mob Effect
   targetTag: Enemy
-  _ID: -1
   scalingStatData:
     flatPower: 0
     attackScaling: 1
@@ -2731,3 +2733,14 @@ Transform:
   m_Father: {fileID: 1104816973}
   m_RootOrder: 8
   m_LocalEulerAnglesHint: {x: 0, y: 180, z: 0}
+--- !u!114 &2041488761 stripped
+MonoBehaviour:
+  m_CorrespondingSourceObject: {fileID: 1269613722003654902, guid: aa4e16a1786ed124fa06618210886566, type: 3}
+  m_PrefabInstance: {fileID: 1366090532}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 5ff88d084135b4240baee58ee284d528, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
