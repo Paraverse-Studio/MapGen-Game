@@ -7,22 +7,24 @@ public class DashAttackEffect : MobEffect
   private PlayerController controller;
   private SphereCollider _col;
   [SerializeField]
-  private float hitRadius = 2f;
+  private float effectRadius = 2f;
 
 
   public override void ActivateEffect(MobStats stats)
   {
-    _effectNameDB = ParaverseWebsite.Models.EffectName.SweepingDash;
-    _stats = stats;
+    base.ActivateEffect(stats);
     controller = _stats.GetComponent<PlayerController>();
-    _combat = _stats.GetComponent<PlayerCombat>();
-    isActive = true;
+    
+    _effectNameDB = ParaverseWebsite.Models.EffectName.SweepingDash;
 
     if (null == _col) _col = gameObject.AddComponent<SphereCollider>();
+    _col.gameObject.SetActive(true);
     _col.center += Vector3.up;
-    _col.radius = hitRadius;
+    _col.radius = effectRadius;
     _col.isTrigger = true;
     _col.enabled = false;
+    gameObject.transform.SetParent(_stats.transform);
+    gameObject.transform.localPosition = Vector3.zero;
 
     controller.OnStartDiveEvent += EnableCollider;
     controller.OnEndDiveEvent += DisableCollider;

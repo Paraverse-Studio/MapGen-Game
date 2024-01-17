@@ -11,23 +11,22 @@ public class AoeDamageEffect : MobEffect
   protected bool applyHit = false;
 
   [Header("Effect Properties")]
-  [SerializeField]
-  protected CapsuleCollider _col = null;
+  protected CapsuleCollider _col;
   [SerializeField]
   protected float _effectRadius = 3f;
 
   public override void ActivateEffect(MobStats stats)
   {
     base.ActivateEffect(stats);
+    
     _effectNameDB = ParaverseWebsite.Models.EffectName.Sunfire;
-    if (null == _col)
-    {
-      _col = gameObject.AddComponent<CapsuleCollider>();
-    }
+    
+    if (null == _col) _col = gameObject.AddComponent<CapsuleCollider>();
     _col.gameObject.SetActive(true);
     _col.radius = _effectRadius;
     _col.isTrigger = true;
     gameObject.transform.SetParent(_stats.transform);
+    gameObject.transform.localPosition = Vector3.zero;
 
     if (effectFX) _FX = Instantiate(effectFX, stats.transform);
   }
