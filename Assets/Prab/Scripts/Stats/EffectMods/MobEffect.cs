@@ -36,6 +36,7 @@ public abstract class MobEffect : MonoBehaviour
   protected bool isActive = false;
   protected GameObject _FX;
 
+
   public virtual void ActivateEffect(MobStats stats)
   {
     _stats = stats;

@@ -10,21 +10,22 @@ MonoBehaviour:
   m_Enabled: 1
   m_EditorHideFlags: 0
   m_Script: {fileID: 11500000, guid: 17047bfc263bd3d4bba0fe7dd433d2bc, type: 3}
-  m_Name: E_AoeDamage
+  m_Name: E_AoeDamage_LV2
   m_EditorClassIdentifier: 
-  Title: Sunfire Cape
-  ID: 201
+  Title: Sunfire Cape LV2
+  ID: 206
   Image: {fileID: 21300000, guid: 2094a29d6fd9db2478b7d69d8cf9c532, type: 3}
   Quantity: 1
-  Cost: 200
+  Cost: 300
   Lore: 
   Description: 'Passive: Enemies in close proximity continuously take damage equal
     to [DMG] per second.'
-  PrerequisiteMods: []
+  PrerequisiteMods:
+  - {fileID: 11400000, guid: 71deb7d3dced6a14193dc163edd73f60, type: 2}
   BlockedByMods: []
   Type: 2
   evolve:
     canStack: 0
     valueGrowthFactor: 0
     costGrowthFactor: 0
-  Effect: {fileID: 4417408742464151146, guid: 823347e787eb8974faceffe70334fe26, type: 3}
+  Effect: {fileID: 4417408742464151146, guid: 908b61bf3cc879944aa762875a796e66, type: 3}
