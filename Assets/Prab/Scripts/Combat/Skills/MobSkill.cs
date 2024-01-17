@@ -79,7 +79,7 @@ namespace Paraverse.Combat
     public ScalingStatData scalingStatData;
 
     // Skill Condition Checks
-    public bool TargetWithinRange { get { return IsInRange(); } }
+    public bool TargetWithinRange => IsInRange(); 
     public bool HasEnergy => cost <= stats.CurEnergy;
 
     // Used to determine if skill is active/inactive
@@ -117,7 +117,7 @@ namespace Paraverse.Combat
     /// <returns></returns>
     protected virtual bool CanUseSkill()
     {
-      if (IsOffCooldown && HasEnergy && TargetWithinRange && mob.IsAttackLunging == false && mob.IsAttacking == false && mob.ActiveSkill == null ||
+      if (IsOffCooldown && HasEnergy && TargetWithinRange && mob.IsAttackLunging == false && mob.IsAttacking == false && mob.ActiveSkill == null && mob.Controller.ActiveKnockBackEffect == null ||
         IsOffCooldown && HasEnergy && TargetWithinRange && mob.IsAttackLunging == false && anim.GetBool(StringData.IsBasicAttacking) == false && input != null) // For player Active skill is always active
         return true;
 

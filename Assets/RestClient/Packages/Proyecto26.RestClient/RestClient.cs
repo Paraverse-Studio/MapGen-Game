@@ -90,11 +90,6 @@ namespace Proyecto26
       StaticCoroutine.StartCoroutine(HttpBase.DefaultUnityWebRequest(options, callback));
     }
 
-    public static async void RequestAsync(RequestHelper options, Action<RequestException, ResponseHelper> callback)
-    {
-      StaticCoroutine.StartCoroutine(HttpBase.DefaultUnityWebRequest(options, callback));
-    }
-
     /// <summary>
     /// Create an HTTP request with the specified options and callback.
     /// </summary>
@@ -125,12 +120,6 @@ namespace Proyecto26
     {
       options.Method = UnityWebRequest.kHttpVerbGET;
       Request(options, callback);
-    }
-
-    public static void GetAsync(RequestHelper options, Action<RequestException, ResponseHelper> callback)
-    {
-      options.Method = UnityWebRequest.kHttpVerbGET;
-      RequestAsync(options, callback);
     }
 
     /// <summary>

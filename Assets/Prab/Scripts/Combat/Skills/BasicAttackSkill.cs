@@ -1,5 +1,4 @@
 using Paraverse.Combat;
-using UnityEngine;
 
 public class BasicAttackSkill : MobSkill, IMobSkill
 {
@@ -7,7 +6,7 @@ public class BasicAttackSkill : MobSkill, IMobSkill
   {
     _isBasicAttack = true;
   }
-  
+
   public override void SkillUpdate()
   {
     if (null != target && mob.IsAttacking == false && Input == null)
@@ -35,7 +34,7 @@ public class BasicAttackSkill : MobSkill, IMobSkill
 
   protected override bool CanUseSkill()
   {
-    if (IsOffCooldown && TargetWithinRange && mob.IsAttackLunging == false && mob.IsAttacking == false && mob.ActiveSkill == null || 
+    if (IsOffCooldown && TargetWithinRange && mob.IsAttackLunging == false && mob.IsAttacking == false && mob.ActiveSkill == null && mob.Controller.ActiveKnockBackEffect == null ||
       IsOffCooldown && TargetWithinRange && mob.IsAttackLunging == false && mob.IsAttacking == false && input != null)
       return true;
 

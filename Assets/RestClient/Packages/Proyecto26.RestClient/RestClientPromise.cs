@@ -55,13 +55,6 @@ namespace Proyecto26
       return promise;
     }
 
-    public static async Task<IPromise<ResponseHelper>> GetAsync(RequestHelper options)
-    {
-      var promise = new Promise<ResponseHelper>();
-      Get(options, promise.Promisify);
-      return promise;
-    }
-
     /// <summary>
     /// Load data from the server using a HTTP GET request.
     /// </summary>

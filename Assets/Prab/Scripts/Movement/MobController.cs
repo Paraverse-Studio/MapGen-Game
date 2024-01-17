@@ -213,7 +213,7 @@ namespace Paraverse.Mob.Controller
       }
 
       // Checks if waypoint gameobjects have been referenced 
-      if (wps.Length <= 0)
+      if (wps.Length <= 0 && false == MobType.Equals(MobType.Boss))
       {
         Debug.LogWarning("Mob has no waypoint references!");
       }
