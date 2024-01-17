@@ -179,7 +179,7 @@ namespace Paraverse.Player
 
       distanceFromTarget = ParaverseHelper.GetDistance(transform.position, player.position);
 
-      _isBasicAttacking = anim.GetBool(StringData.IsBasicAttacking);
+      IsBasicAttacking = anim.GetBool(StringData.IsBasicAttacking);
       BasicAttackComboHandler();
       AnimationHandler();
 
@@ -189,9 +189,9 @@ namespace Paraverse.Player
         IsSkilling = false;
 
       if (IsSkilling || IsBasicAttacking)
-        IsAttacking = true;
+        _isAttacking = true;
       else
-        IsAttacking = false;
+        _isAttacking = false;
 
       // Gets active skill to run update method for each skill 
       for (int i = 0; i < _skills.Count; i++)

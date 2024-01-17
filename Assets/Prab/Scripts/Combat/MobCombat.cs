@@ -36,9 +36,9 @@ namespace Paraverse.Mob.Combat
     [SerializeField]
     protected BasicAttackSkill _basicAttackSkill;
     public float BasicAtkRange => _basicAttackSkill.MaxRange;
-    public bool IsAttacking { get; set; }
-    public bool IsBasicAttacking => _isBasicAttacking;
-    protected bool _isBasicAttacking = false;
+    public bool IsAttacking => _isAttacking;
+    protected bool _isAttacking = false;
+    public bool IsBasicAttacking { get; set; }
     // Returns true when character is within basic attack range and cooldown is 0.
     public bool CanBasicAtk => distanceFromTarget <= _basicAttackSkill.MaxRange && distanceFromTarget >= _basicAttackSkill.MinRange && _basicAttackSkill.CurCooldown <= 0;
     // Sets to true when character is doing an action (Attack, Stun).
@@ -165,22 +165,25 @@ namespace Paraverse.Mob.Combat
       if (controller.IsDead) return;
 
       distanceFromTarget = ParaverseHelper.GetDistance(transform.position, player.position);
-      _isBasicAttacking = anim.GetBool(StringData.IsBasicAttacking);
+      IsBasicAttacking = anim.GetBool(StringData.IsBasicAttacking);
 
+      // Only applies to mobs that are NOT the player 
       if (anim.GetBool(StringData.IsUsingSkill) && false == transform.tag.Equals(StringData.PlayerTag))
         IsSkilling = true;
       else
         IsSkilling = false;
 
+      // Checks if mob is using any skill (including basic attack)
       if (IsSkilling || IsBasicAttacking)
-        IsAttacking = true;
+        _isAttacking = true;
       else
-        IsAttacking = false;
+        _isAttacking = false;
 
 
       MobSkill prevSkill = null;
       MobSkill curSkill = null;
       // Gets active skill to run update method for each skill 
+      // Starts a safe timer to reset skill in case skill gets stuck in a state other than InActive
       for (int i = 0; i < _skills.Count; i++)
       {
         _skills[i].SkillUpdate();
@@ -190,14 +193,13 @@ namespace Paraverse.Mob.Combat
         if (_skills[i].SkillState.Equals(SkillState.InUse))
         {
           curSkill = _skills[i];
-          // Set active skill
-          _activeSkill = curSkill;
+          _activeSkill = curSkill; // Sets Active skill
         }
         if (_skills[i].SkillState.Equals(SkillState.InActive))
         {
           if (_activeSkill == _skills[i])
           {
-            _activeSkill = null;
+            _activeSkill = null; // Sets Active skill to null
           }
         }
       }
@@ -208,7 +210,7 @@ namespace Paraverse.Mob.Combat
       // Automatically set active skill to false due to potential bug
       else if (curSetSkillToCompleteTimer <= 0)
       {
-        Debug.LogWarning("Potential bug with set skill: " + _activeSkill + " off! Please ensure the skill is appropriately set off in OnSkillExecuted() method!");
+        Debug.LogError("Potential bug with set skill: " + _activeSkill + " off! Please ensure the skill is appropriately set off in OnSkillComplete() method!");
         _activeSkill.SetSkillState(SkillState.InActive);
         _activeSkill = null;
       }
@@ -300,33 +302,26 @@ namespace Paraverse.Mob.Combat
     /// </summary>
     public virtual void FireProjectile()
     {
-      MobSkill skill;
-
       // Need to fix this for player as ActiveSkill is always active
-      if (ActiveSkill)
-        skill = ActiveSkill;
-      else
-        skill = _basicAttackSkill;
-
       // Archers may hold an arrow which needs to be set to off/on when firing
-      if (skill.projData.projHeld != null)
-        skill.projData.projHeld.SetActive(false);
+      if (ActiveSkill.projData.projHeld != null)
+        ActiveSkill.projData.projHeld.SetActive(false);
 
       Vector3 playerPos = new Vector3(player.position.x, player.position.y + 0.5f, player.position.z);
       Vector3 targetDir = (playerPos - transform.position).normalized;
 
       Quaternion lookRot;
-      if (skill.projData.projRotation == null)
+      if (ActiveSkill.projData.projRotation == null)
         lookRot = Quaternion.LookRotation(targetDir);
       else
-        lookRot = skill.projData.projRotation.rotation;
+        lookRot = ActiveSkill.projData.projRotation.rotation;
 
       // Instantiate and initialize projectile
-      GameObject go = Instantiate(skill.projData.projPf, skill.projData.projOrigin.position, lookRot);
+      GameObject go = Instantiate(ActiveSkill.projData.projPf, ActiveSkill.projData.projOrigin.position, lookRot);
       Projectile proj = go.GetComponent<Projectile>();
-      proj.Init(this, targetDir, skill.projData.projSpeed, skill.scalingStatData);
+      proj.Init(this, targetDir, ActiveSkill.projData.projSpeed, ActiveSkill.scalingStatData);
 
-      if (false == skill.DisableSkillUponProjectileFiring)
+      if (false == ActiveSkill.DisableSkillUponProjectileFiring)
         OnDisableSkillOneEvent();
     }
 
@@ -349,7 +344,6 @@ namespace Paraverse.Mob.Combat
 
       ActiveSkill.projData.projHeld.SetActive(true);
     }
-    #endregion
 
     public virtual void AEventInstantiateFXOne()
     {
@@ -415,5 +409,6 @@ namespace Paraverse.Mob.Combat
     {
       OnSummonSkillOneEvent?.Invoke();
     }
+    #endregion
   }
 }

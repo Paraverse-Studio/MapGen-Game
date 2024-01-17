@@ -46,16 +46,6 @@ namespace Paraverse.Player
     [SerializeField]
     private float jumpGravity = -40f;
 
-    //[Header("Landing Avoidance")]
-    //[SerializeField, Tooltip("Raycast distance to check for enemies below for land avoidance.")]
-    //private float disToEnemyCheck = 0.5f;
-    //[SerializeField, Tooltip("Avoid landing on these layers.")]
-    //private LayerMask avoidLayers;
-    //[SerializeField, Tooltip("Force applied to player movement to avoid the avoidLayers.")]
-    //private float avoidanceForce = 10f;
-    //[SerializeField, Tooltip("Downward force applied on the mob when landing off an avoidance object.")]
-    //private float downwardAvoidanceForceRatio = 2f;
-
     [Header("Dive Values")]
     [SerializeField, Tooltip("The dive force of the mob.")]
     public float diveForce = 10f;
@@ -72,7 +62,8 @@ namespace Paraverse.Player
     public delegate void OnEndDiveDel();
     public event OnEndDiveDel OnEndDiveEvent;
 
-    [Header("Knockback Values")]
+    // Knock back effect
+    public KnockBackEffect ActiveKnockBackEffect => activeKnockBackEffect;
     private KnockBackEffect activeKnockBackEffect;
     private float disFromStartPos;
 
@@ -91,32 +82,32 @@ namespace Paraverse.Player
 
     // State Booleans
     public float JumpGravity { get { return jumpGravity; } set { jumpGravity = value; } }
-    public Transform Transform { get { return transform; } }
-    public bool IsInteracting { get { return _isInteracting; } }
+    public Transform Transform => transform; 
+    public bool IsInteracting => _isInteracting; 
     private bool _isInteracting = false;
-    public bool IsBasicAttacking { get { return _isBasicAttacking; } }
+    public bool IsBasicAttacking => _isBasicAttacking; 
     private bool _isBasicAttacking = false;
-    public bool IsSkilling { get { return _isUsingSkill; } }
+    public bool IsSkilling => _isUsingSkill; 
     private bool _isUsingSkill = false;
-    public bool IsMoving { get { return _isMoving; } }
+    public bool IsMoving => _isMoving; 
     private bool _isMoving = false;
-    public bool IsGrounded { get { return _isGrounded; } }
+    public bool IsGrounded => _isGrounded; 
     private bool _isGrounded = false;
-    public bool IsAvoidingObjUponLanding { get { return _isAvoidingObjUponLanding; } }
+    public bool IsAvoidingObjUponLanding => _isAvoidingObjUponLanding; 
     private bool _isAvoidingObjUponLanding = false;
-    public bool IsDiving { get { return _isDiving; } }
+    public bool IsDiving => _isDiving; 
     private bool _isDiving = false;
-    public bool IsStaggered { get { return _isStaggered; } }
+    public bool IsStaggered => _isStaggered; 
     private bool _isStaggered = false;
-    public bool IsHardCCed { get { return _isHardCced; } }
+    public bool IsHardCCed => _isHardCced;
     private bool _isHardCced = false;
-    public bool IsSoftCCed { get { return _isSoftCced; } }
+    public bool IsSoftCCed => _isSoftCced;
     private bool _isSoftCced = false;
     public bool IsUnstaggerable { get; }
     private bool _isInvulnerable = false;
-    public bool IsDead { get { return _isDead; } }
+    public bool IsDead => _isDead;
     private bool _isDead = false;
-    public Transform Target { get { return _target; } }
+    public Transform Target => _target; 
     private Transform _target;
 
     // Movement, Jump & Dive inputs and velocities
@@ -175,7 +166,6 @@ namespace Paraverse.Player
       MovementHandler();
       RotationHandler();
       JumpHandler();
-      //AvoidObjUponLand();
       DiveHandler();
       KnockbackHandling();
       AttackMovementHandler();
@@ -276,21 +266,6 @@ namespace Paraverse.Player
 
     #region Jump Handler Methods
     /// <summary>
-    /// Invokes jump action
-    /// </summary>
-    //private void Jump()
-    //{
-    //    if (_isStaggered || _isInteracting || _isAvoidingObjUponLanding) return;
-
-    //    if (_isGrounded && curJumpCd >= jumpCd)
-    //    {
-    //        curJumpCd = 0f;
-    //        jumpDir.y += Mathf.Sqrt(jumpForce * -GlobalValues.GravityModifier * GlobalValues.GravityForce);
-    //        anim.Play(StringData.Jump);
-    //    }
-    //}
-
-    /// <summary>
     /// Handles jump movement and variables in Updat().
     /// </summary>
     private void JumpHandler()
@@ -335,46 +310,6 @@ namespace Paraverse.Player
 
       return false;
     }
-
-    /// <summary>
-    /// Checks if mob is landing on an avoidance layer object, if so, sets avoidLandingOn as true. 
-    /// </summary>
-    //private void AvoidObjUponLand()
-    //{
-    //    RaycastHit hit;
-    //    Vector3 origin = transform.position;
-    //    Vector3 dir = -transform.up;
-
-    //    if (Physics.SphereCast(origin, controller.radius, dir * disToEnemyCheck, out hit, disToEnemyCheck, avoidLayers))
-    //    {
-    //        _isAvoidingObjUponLanding = true;
-    //    }
-    //    LandingAvoidanceHandler();
-    //}
-
-    ///// <summary>
-    ///// Handles avoiding landing
-    ///// </summary>
-    //private void LandingAvoidanceHandler()
-    //{
-    //    Vector3 offDis = new Vector3(transform.forward.x, -downwardAvoidanceForceRatio, transform.forward.z);
-    //    if (_isAvoidingObjUponLanding)
-    //    {
-    //        controller.Move(offDis * avoidanceForce * Time.deltaTime);
-    //    }
-
-    //    // Apply avoidance force if mob is not grounded within isNotGroundedMaxDur
-    //    //if (_isGrounded == false)
-    //    //{
-    //    //    isNotGroundedDur += Time.deltaTime;
-    //    //    if (isNotGroundedDur >= isNotGroundedMaxDur)
-    //    //        _isAvoidingObjUponLanding = true;
-    //    //}
-    //    //else
-    //    //{
-    //    //    isNotGroundedDur = 0f;
-    //    //}
-    //}
     #endregion
 
     #region Dive Methods
@@ -440,8 +375,6 @@ namespace Paraverse.Player
     {
       _target = SelectableSystem.Instance.ToggleSelect();
       combat.Target = _target;
-
-      //headIK.SetLookAtObj(_target);
     }
 
     #endregion
@@ -559,7 +492,6 @@ namespace Paraverse.Player
       _isDead = false;
       // also reset all _isInteracting, _knockedBack, etc. Basically all types of CC  ( @ PRAB )
       ResetAllCC();
-      //stats.ResetStats(); March 7, not needed, player shouldn't get a free heal between rounds
       anim.Play(StringData.Idle);
     }
 

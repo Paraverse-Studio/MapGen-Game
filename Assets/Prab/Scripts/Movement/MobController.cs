@@ -26,7 +26,7 @@ namespace Paraverse.Mob.Controller
     protected IMobCombat combat;
     protected StatusEffectManager statusEffectManager;
     // Reference to the stats script
-    IMobStats IMobController.Stats { get { return stats; } }
+    IMobStats IMobController.Stats => stats; 
     protected IMobStats stats;
 
     [Header("Movement Values"), Tooltip("The current speed of the mob")]
@@ -94,6 +94,7 @@ namespace Paraverse.Mob.Controller
 
     [Header("Knockback Values")]
     protected Vector3 knockbackDir;
+    public KnockBackEffect ActiveKnockBackEffect => activeKnockBackEffect;
     [Tooltip("Active knock back applied to mob.")]
     protected KnockBackEffect activeKnockBackEffect;
     float disFromStartPos;
@@ -141,9 +142,9 @@ namespace Paraverse.Mob.Controller
     public event IMobController.OnDeathDel OnDeathEvent;
 
     // Reference to mob state
+    public MobState CurMobState => _curMobState;
     [SerializeField, Tooltip("The current general state of the mob.")]
     protected MobState _curMobState;
-    public MobState CurMobState => _curMobState;
 
     // State Booleans 
     public Transform Transform => transform;

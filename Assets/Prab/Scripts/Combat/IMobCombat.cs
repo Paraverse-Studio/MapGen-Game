@@ -12,8 +12,8 @@ namespace Paraverse.Mob
     public IMobController Controller { get; }
     public BasicAttackSkill BasicAttackSkill { get; }
     public float BasicAtkRange { get; }
-    public bool IsAttacking { get; set; }
-    public bool IsBasicAttacking { get; }
+    public bool IsAttacking { get; }
+    public bool IsBasicAttacking { get; set; }
     public bool CanBasicAtk { get; }
     public bool IsSkilling { get; set; }
     public bool IsAttackLunging { get; }

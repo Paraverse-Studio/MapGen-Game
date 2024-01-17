@@ -19,12 +19,11 @@ public class DashAttackEffect : MobEffect
 
     if (null == _col) _col = gameObject.AddComponent<SphereCollider>();
     _col.gameObject.SetActive(true);
-    _col.center += Vector3.up;
     _col.radius = effectRadius;
     _col.isTrigger = true;
-    _col.enabled = false;
     gameObject.transform.SetParent(_stats.transform);
     gameObject.transform.localPosition = Vector3.zero;
+    _col.enabled = false;
 
     controller.OnStartDiveEvent += EnableCollider;
     controller.OnEndDiveEvent += DisableCollider;
