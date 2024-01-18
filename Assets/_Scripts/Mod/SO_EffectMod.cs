@@ -49,24 +49,24 @@ public class SO_EffectMod : SO_Mod
   private string GetScalingText()
   {
     string msg = "";
-    if (_effect.scalingStatData.flatPower != 0)
+    if (_effect.GetScalingStatData().flatPower != 0)
     {
-      msg += $"{_effect.scalingStatData.flatPower}";
+      msg += $"{_effect.GetScalingStatData().flatPower}";
     }
-    if (_effect.scalingStatData.attackScaling != 0)
+    if (_effect.GetScalingStatData().attackScaling != 0)
     {
       if (!string.IsNullOrWhiteSpace(msg)) msg += " + ";
-      msg += $"<color=#FF977B>({_effect.scalingStatData.attackScaling * 100f}% of Attack)</color>";
+      msg += $"<color=#FF977B>({_effect.GetScalingStatData().attackScaling * 100f}% of Attack)</color>";
     }
-    if (_effect.scalingStatData.abilityScaling != 0)
+    if (_effect.GetScalingStatData().abilityScaling != 0)
     {
       if (!string.IsNullOrWhiteSpace(msg)) msg += " + ";
-      msg += $"<color=#83C5FF>({_effect.scalingStatData.abilityScaling * 100f}% of Ability)</color>";
+      msg += $"<color=#83C5FF>({_effect.GetScalingStatData().abilityScaling * 100f}% of Ability)</color>";
     }
-    if (_effect.scalingStatData.healthScaling != 0)
+    if (_effect.GetScalingStatData().healthScaling != 0)
     {
       if (!string.IsNullOrWhiteSpace(msg)) msg += " + ";
-      msg += $"<color=#86F383>({_effect.scalingStatData.healthScaling * 100f}% of Health)</color>";
+      msg += $"<color=#86F383>({_effect.GetScalingStatData().healthScaling * 100f}% of Health)</color>";
     }
     msg = "<b>" + msg + "</b>";
     return msg;

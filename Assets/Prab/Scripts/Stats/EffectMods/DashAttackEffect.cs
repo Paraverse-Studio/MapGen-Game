@@ -6,8 +6,9 @@ public class DashAttackEffect : MobEffect
 {
   private PlayerController controller;
   private SphereCollider _col;
+
   [SerializeField]
-  private float effectRadius = 2f;
+  private float[] effectRadius;
 
 
   public override void ActivateEffect(MobStats stats)
@@ -19,7 +20,7 @@ public class DashAttackEffect : MobEffect
 
     if (null == _col) _col = gameObject.AddComponent<SphereCollider>();
     _col.gameObject.SetActive(true);
-    _col.radius = effectRadius;
+    _col.radius = effectRadius[effectLevel-1];
     _col.isTrigger = true;
     gameObject.transform.SetParent(_stats.transform);
     gameObject.transform.localPosition = Vector3.zero;

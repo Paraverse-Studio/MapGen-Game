@@ -1,6 +1,5 @@
 using Paraverse.Mob.Controller;
 using Paraverse.Mob.Stats;
-using System.Collections.Generic;
 using UnityEngine;
 
 
@@ -8,9 +7,8 @@ using UnityEngine;
 public class CooldownRefundEffect : MobEffect
 {
   [SerializeField, Range(0, 1)]
-  protected float cooldownRefundAmount = 0.4f;
+  protected float[] cooldownRefundAmount;
 
-  public List<MobController> mobs;
 
   public override void ActivateEffect(MobStats stats)
   {
@@ -42,7 +40,7 @@ public class CooldownRefundEffect : MobEffect
     // dont apply effect if no active skill
     if (_combat.ActiveSkill == null) return;
 
-    float refund = _combat.ActiveSkill.Cooldown * cooldownRefundAmount;
+    float refund = _combat.ActiveSkill.Cooldown * cooldownRefundAmount[effectLevel - 1];
     _combat.ActiveSkill.RefundCooldown(refund);
   }
 }

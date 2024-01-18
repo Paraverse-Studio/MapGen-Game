@@ -70,7 +70,7 @@ public class SO_Item : ScriptableObject
             {
                 if (!userCurrentMods.Contains(_modRequired))
                 {
-                    return true;
+                    return false;
                 }
             }
         }

@@ -6,7 +6,7 @@ using UnityEngine;
 public class ReaperKillEffect : MobEffect
 {
   [SerializeField]
-  protected int healAmount = 3;
+  protected int[] healAmount;
 
   public override void ActivateEffect(MobStats stats)
   {
@@ -35,6 +35,6 @@ public class ReaperKillEffect : MobEffect
 
   private void GainHealth(Transform t = null)
   {
-    _stats.UpdateCurrentHealth(healAmount);
+    _stats.UpdateCurrentHealth(healAmount[effectLevel-1]);
   }
 }

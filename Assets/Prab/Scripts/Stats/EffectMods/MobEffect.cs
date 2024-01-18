@@ -17,6 +17,8 @@ public abstract class MobEffect : MonoBehaviour
   protected MobStats _stats;
   protected PlayerCombat _combat;
 
+  public int effectLevel = 1;
+
   [SerializeField]
   protected string targetTag = StringData.EnemyTag;
   public int ID { get { return _ID; } set { _ID = value; } }
@@ -24,8 +26,6 @@ public abstract class MobEffect : MonoBehaviour
   protected int _ID = -1;
 
   protected List<GameObject> hitTargets = new List<GameObject>();
-
-  public ScalingStatData scalingStatData;
 
   [SerializeField]
   protected GameObject effectFX;
@@ -35,7 +35,14 @@ public abstract class MobEffect : MonoBehaviour
   public bool IsActive { get { return isActive; } }
   protected bool isActive = false;
   protected GameObject _FX;
+  
+  public ScalingStatData[] scalingStatData;
 
+
+  public ScalingStatData GetScalingStatData()
+  {
+    return scalingStatData[effectLevel - 1];
+  }
 
   public virtual void ActivateEffect(MobStats stats)
   {
@@ -78,7 +85,7 @@ public abstract class MobEffect : MonoBehaviour
   /// </summary>
   public virtual float ApplyCustomDamage(IMobController controller)
   {
-    float totalDmg = scalingStatData.FinalValueWithBoosts(_stats);
+    float totalDmg = scalingStatData[effectLevel-1].FinalValueWithBoosts(_stats);
 
     controller.Stats.UpdateCurrentHealth(-Mathf.CeilToInt(totalDmg));
     return totalDmg;

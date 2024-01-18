@@ -45,14 +45,34 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   EffectName: Cooldown Refund
-  EffectNameDB: 2
+  effectLevel: 1
   targetTag: Enemy
+  effectFX: {fileID: 0}
+  hitFX: {fileID: 0}
   scalingStatData:
-    flatPower: 0
+  - flatPower: 0
     attackScaling: 1
     abilityScaling: 0
     healthScaling: 0
-  effectFX: {fileID: 0}
-  hitFX: {fileID: 0}
-  cooldownRefundAmount: 0.5
-  mobs: []
+  - flatPower: 0
+    attackScaling: 1
+    abilityScaling: 0
+    healthScaling: 0
+  - flatPower: 0
+    attackScaling: 1
+    abilityScaling: 0
+    healthScaling: 0
+  - flatPower: 0
+    attackScaling: 1
+    abilityScaling: 0
+    healthScaling: 0
+  - flatPower: 0
+    attackScaling: 1
+    abilityScaling: 0
+    healthScaling: 0
+  cooldownRefundAmount:
+  - 0.2
+  - 0.3
+  - 0.4
+  - 0.5
+  - 0.6
