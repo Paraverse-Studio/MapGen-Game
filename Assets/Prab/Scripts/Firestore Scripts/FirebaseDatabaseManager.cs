@@ -19,7 +19,9 @@ public class FirebaseDatabaseManager : MonoBehaviour
   private readonly string usersPath = "Users";
 
   private static fsSerializer serializer = new fsSerializer();
-  public delegate void PostMatchHistoryCallback(ParaverseWebsite.Models.SessionDataModel matchHistory);
+
+  public delegate void PostUserCallback(UserModel user);
+  public delegate void PostMatchHistoryCallback(SessionDataModel matchHistory);
 
   public delegate void UpdateLeaderboardCallback(LeaderboardsModel leaderboard);
   public delegate void PostLeaderboardFailureCallback();
@@ -131,7 +133,21 @@ public class FirebaseDatabaseManager : MonoBehaviour
 
 
   #region USERS CRUD OPERATIONS
-  
+
+  public void PostUser(UserModel model, PostUserCallback callback)
+  {
+    RestClient.Put<UserModel>($"{databasePath}{usersPath}/{model.Username}.json", model)
+      .Then(response =>
+      {
+        callback?.Invoke(response);
+        MainMenuController.Instance.Username = response.Username;
+      })
+      .Catch(error =>
+      {
+        Debug.Log("Error: " + error);
+      });
+  }
+
   public void GetUser(string username, GetUserCallback onSuccessCallback, GetUserFailureCallback onFailureCallback)
   {
     try

@@ -30,7 +30,7 @@ public class MenuScreen : MonoBehaviour
 
     public void OnEnable()
     {
-        UIManager.Instance.SelectMenu(this);
+        //UIManager.Instance.SelectMenu(this);
     }
 
     public void SelectDefaultButton()

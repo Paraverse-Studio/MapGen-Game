@@ -126,7 +126,7 @@ public class SummaryView : MonoBehaviour
       // SUCCESSFULLY RETRIEVED USER
       (response) =>
       {
-        Debug.Log($"User Exists!    username: {response.I_Username}, password: {response.I_Password}, email: {response.I_Email}, start date: {response.I_StartDate}, caption: {response.P_Caption}");
+        Debug.Log($"User Exists!    username: {response.Username}, password: {response.Password}, email: {response.Email}, start date: {response.StartDate}, caption: {response.Caption}");
 
         UpdateDatabase(sessionDataModel);
       },
