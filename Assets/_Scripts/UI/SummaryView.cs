@@ -99,6 +99,7 @@ public class SummaryView : MonoBehaviour
 
     // Gets the logged in user
     username = MainMenuController.Instance.Username;
+    Debug.Log(username);
 
     SessionDataModel sessionDataModel = new SessionDataModel(
       Username,
@@ -121,14 +122,13 @@ public class SummaryView : MonoBehaviour
       SkillUsedEnum
       );
 
-    // Only update database if user exists!
     FirebaseDatabaseManager.Instance.GetUser(username,
       // SUCCESSFULLY RETRIEVED USER
       (response) =>
       {
         Debug.Log($"User Exists!    username: {response.Username}, password: {response.Password}, email: {response.Email}, start date: {response.StartDate}, caption: {response.Caption}");
 
-        UpdateDatabase(sessionDataModel);
+        UpdateDatabase(response.Username, sessionDataModel);
       },
       // FAILED TO RETRIEVE USER
       () =>
@@ -138,11 +138,11 @@ public class SummaryView : MonoBehaviour
      );
   }
 
-  private void UpdateDatabase(SessionDataModel sessionDataModel)
+  private void UpdateDatabase(string username, SessionDataModel sessionDataModel)
   {
     // Create match history model
     MatchHistoryModel matchHistoryModel = new MatchHistoryModel(
-      sessionDataModel.Username,
+      username,
       sessionDataModel.RoundNumberReached,
       sessionDataModel.SessionLength,
       sessionDataModel.DamageTaken,

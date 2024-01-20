@@ -48,7 +48,7 @@ public class FirebaseDatabaseManager : MonoBehaviour
     int randomNum = rnd.Next();
     string id = model.Username + "-" + randomNum;
 
-    RestClient.Put<ParaverseWebsite.Models.SessionDataModel>($"{databasePath}{matchHistoriesPath}/{id}.json", model)
+    RestClient.Put<SessionDataModel>($"{databasePath}{matchHistoriesPath}/{id}.json", model)
       .Then(response =>
       {
         callback?.Invoke(response);
