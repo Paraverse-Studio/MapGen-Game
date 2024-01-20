@@ -347,13 +347,9 @@ public class MainMenuController : MonoBehaviour
 
   public void OpenLoginLayout()
   {
-    Debug.Log("Open Login 0");
     CloseAll();
-    Debug.Log("Open Login 1");
     LoginLayout.SetActive(true);
-    Debug.Log("Open Login 2");
     ClearLoginInputFieldText();
-    Debug.Log("Open Login 3");
   }
 
   public void OpenRegistrationLayout()
@@ -367,22 +363,14 @@ public class MainMenuController : MonoBehaviour
   {
     CloseAll();
     HomeLayout.SetActive(true);
-    Debug.Log("Open Home");
-    Debug.Log("Open Homdeedee");
   }
 
   public void CloseAll()
   {
-    Debug.Log("Close All 1");
     LoginLayout.SetActive(false);
-    Debug.Log("Close All 2");
     RegistrationLayout.SetActive(false);
-    Debug.Log("Close All 3");
     HomeLayout.SetActive(false);
-    Debug.Log("Close All 5");
     LoginFeedback.text = "";
-    Debug.Log("Close All 6");
     RegisterFeedback.text = "";
-    Debug.Log("Close All 7");
   }
 }
