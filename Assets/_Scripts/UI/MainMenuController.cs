@@ -1,11 +1,14 @@
 using Firebase;
 using Firebase.Auth;
 using ParaverseWebsite.Models;
-using System;
 using System.Collections;
+using System.Linq;
+using System.Text.RegularExpressions;
+using System.Threading.Tasks;
 using TMPro;
 using UnityEngine;
 using UnityEngine.UI;
+
 
 public class MainMenuController : MonoBehaviour
 {
@@ -16,6 +19,7 @@ public class MainMenuController : MonoBehaviour
   public TextMeshProUGUI LoginFeedback;
   public GameObject RegistrationLayout;
   public TextMeshProUGUI RegisterFeedback;
+  public GameObject BloodLinesMenu;
 
   // Firebase variables
   [Header("Firebase")]
@@ -26,8 +30,8 @@ public class MainMenuController : MonoBehaviour
   // Login variables
   [Space]
   [Header("Login")]
-  public TMP_InputField usernameInput;
-  public TMP_InputField passwordInput;
+  public TMP_InputField emailLoginField;
+  public TMP_InputField passwordLoginField;
 
   // Registration variables
   [Space]
@@ -50,6 +54,10 @@ public class MainMenuController : MonoBehaviour
     else
       Destroy(Instance);
 
+    passwordLoginField.contentType = TMP_InputField.ContentType.Password;
+    passwordRegisterField.contentType = TMP_InputField.ContentType.Password;
+    confirmPasswordRegisterField.contentType = TMP_InputField.ContentType.Password;
+
     // Check that all the necessary dependencies for firebase are present on the system 
     FirebaseApp.CheckAndFixDependenciesAsync().ContinueWith(task =>
     {
@@ -68,6 +76,7 @@ public class MainMenuController : MonoBehaviour
 
   private void Start()
   {
+    OpenLoginLayout();
     CheckAndFixDependenciesAsync();
   }
 
@@ -97,7 +106,6 @@ public class MainMenuController : MonoBehaviour
     auth = FirebaseAuth.DefaultInstance;
 
     auth.StateChanged += AuthStateChanged;
-    //AuthStateChanged(this, null);
   }
 
   private void AuthStateChanged(object sender, System.EventArgs eventArgs)
@@ -108,7 +116,6 @@ public class MainMenuController : MonoBehaviour
 
       if (!signedIn && user != null)
       {
-        Debug.Log("Signed out " + user.UserId);
         OpenLoginLayout();
       }
 
@@ -116,9 +123,7 @@ public class MainMenuController : MonoBehaviour
 
       if (signedIn)
       {
-        Debug.Log("Signed in 0" + user.UserId);
         OpenHomeLayout();
-        Debug.Log("Signed in 1" + user.UserId);
       }
     }
   }
@@ -153,45 +158,104 @@ public class MainMenuController : MonoBehaviour
 
   private void ClearLoginInputFieldText()
   {
-    usernameInput.text = "";
-    passwordInput.text = "";
+    emailLoginField.text = "";
+    passwordLoginField.text = "";
+  }
+
+  private void ClearRegistrationInputFieldText()
+  {
+    usernameRegisterField.text = "";
+    emailRegisterField.text = "";
+    passwordRegisterField.text = "";
+    confirmPasswordRegisterField.text = "";
   }
 
   public void Login()
   {
-    StartCoroutine(LoginAsync(usernameInput.text, passwordInput.text));
+    LoginValidationModel model = new LoginValidationModel(null, emailLoginField.text, passwordLoginField.text);
+
+    StartCoroutine(LoginAsync(model));
   }
 
   public void Register()
   {
-    StartCoroutine(RegisterAsync(usernameRegisterField.text, emailRegisterField.text, passwordRegisterField.text, confirmPasswordRegisterField.text));
+    RegistrationValidationModel model = new RegistrationValidationModel(usernameRegisterField.text, emailRegisterField.text, passwordRegisterField.text, confirmPasswordRegisterField.text);
+
+    StartCoroutine(RegisterAsync(model));
   }
 
   public void Logout()
   {
-    if (auth  != null && user != null)
+    if (auth != null && user != null)
     {
       auth.SignOut();
     }
   }
 
-  private IEnumerator RegisterAsync(string name, string email, string password, string confirmPassword)
+  private bool RegistrationValidationCheck(RegistrationValidationModel model, string failedMessage, out string outputMessage)
   {
-    if (name == "")
+    outputMessage = failedMessage;
+    var pattern = @"^[a-zA-Z0-9.!#$%&'*+-/=?^_`{|}~]+@[a-zA-Z0-9-]+(?:\.[a-zA-Z0-9-]+)*$";
+    var regex = new Regex(pattern);
+
+    if (model.Username == "")
     {
-      Debug.LogError("User Name is empty");
+      outputMessage += "Username field is empty";
+      return false;
     }
-    else if (email == "")
+    else if (model.Username.Length < 3 || model.Username.Length > 14)
     {
-      Debug.LogError("Email field is empty");
+      outputMessage += "Username must be between 3 to 14 characters long";
+      return false;
     }
-    else if (passwordRegisterField.text != confirmPasswordRegisterField.text)
+    else if (model.Username.Any(c => !char.IsLetterOrDigit(c)))
     {
-      Debug.LogError("Password does not match");
+      outputMessage += "Username cannot contain special characters";
+      return false;
     }
-    else
+    else if (model.Email == "")
     {
-      var registerTask = auth.CreateUserWithEmailAndPasswordAsync(email, password);
+      outputMessage += "Email field is empty";
+      return false;
+    }
+    else if (false == regex.IsMatch(model.Email))
+    {
+      outputMessage += "Email is invalid";
+      return false;
+    }
+    else if (model.Password == "")
+    {
+      outputMessage += "Password field is empty";
+      return false;
+    }
+    else if (model.ConfirmPassword == "")
+    {
+      outputMessage += "Confirm Password field is empty";
+      return false;
+    }
+    else if (model.Password != model.ConfirmPassword)
+    {
+      outputMessage += "Password does not match";
+      return false;
+    }
+    else if (model.Password.Length < 6)
+    {
+      outputMessage += "Password must be at least 6 characters long";
+      return false;
+    }
+    return true;
+  }
+
+  private IEnumerator RegisterAsync(RegistrationValidationModel model)
+  {
+    string failedMessage = "";
+
+    if (RegistrationValidationCheck(model, failedMessage, out failedMessage))
+    {
+      if (auth == null)
+        InitializeFirebase();
+
+      var registerTask = auth.CreateUserWithEmailAndPasswordAsync(model.Email, model.Password);
 
       yield return new WaitUntil(() => registerTask.IsCompleted);
 
@@ -202,7 +266,7 @@ public class MainMenuController : MonoBehaviour
         FirebaseException firebaseException = registerTask.Exception.GetBaseException() as FirebaseException;
         AuthError authError = (AuthError)firebaseException.ErrorCode;
 
-        string failedMessage = "Registration Failed! Because ";
+        failedMessage = "Registration Failed! ";
         switch (authError)
         {
           case AuthError.InvalidEmail:
@@ -222,7 +286,6 @@ public class MainMenuController : MonoBehaviour
             break;
         }
 
-        Debug.Log(failedMessage);
         RegisterFeedback.text = failedMessage;
       }
       else
@@ -246,7 +309,7 @@ public class MainMenuController : MonoBehaviour
           FirebaseException firebaseException = updateProfileTask.Exception.GetBaseException() as FirebaseException;
           AuthError authError = (AuthError)firebaseException.ErrorCode;
 
-          string failedMessage = "Profile update Failed! Because ";
+          failedMessage = "Profile update Failed! ";
           switch (authError)
           {
             case AuthError.InvalidEmail:
@@ -265,9 +328,6 @@ public class MainMenuController : MonoBehaviour
               failedMessage += "Registration Failed";
               break;
           }
-
-          Debug.Log(failedMessage);
-          RegisterFeedback.text = failedMessage;
         }
         else
         {
@@ -280,59 +340,108 @@ public class MainMenuController : MonoBehaviour
           FirebaseDatabaseManager.Instance.PostUser(userModel, (response) => Debug.Log($"User model added to database! {response.Username}"));
         }
       }
+
+      RegisterFeedback.text = failedMessage;
     }
+
+    RegisterFeedback.text = failedMessage;
   }
 
-  private IEnumerator LoginAsync(string username, string password)
+  private bool LoginValidationCheck(LoginValidationModel model, string failedMessage, out string outputMessage)
   {
-    var loginTask = auth.SignInWithEmailAndPasswordAsync(username, password);
+    outputMessage = failedMessage;
+    var pattern = @"^[a-zA-Z0-9.!#$%&'*+-/=?^_`{|}~]+@[a-zA-Z0-9-]+(?:\.[a-zA-Z0-9-]+)*$";
+    var regex = new Regex(pattern);
 
-    yield return new WaitUntil(() => loginTask.IsCompleted);
-
-    if (loginTask.Exception != null)
+    if (model.Email == "")
     {
-      Debug.LogError(loginTask.Exception);
+      outputMessage += "Email field is empty";
+      return false;
+    }
+    else if (false == regex.IsMatch(model.Email))
+    {
+      outputMessage += "Email is invalid";
+      return false;
+    }
+    else if (model.Password == "")
+    {
+      outputMessage += "Password field is empty";
+      return false;
+    }
+    else if (model.Password.Length < 6)
+    {
+      outputMessage += "Password must be at least 6 characters long";
+      return false;
+    }
+    return true;
+  }
 
-      FirebaseException firebaseException = loginTask.Exception.GetBaseException() as FirebaseException;
-      AuthError authError = (AuthError)firebaseException.ErrorCode;
+  private IEnumerator LoginAsync(LoginValidationModel model)
+  {
+    string failedMessage = "";
+    Task<AuthResult> loginTask;
 
-      string failedMessage = "Login Failed! Because ";
+    if (LoginValidationCheck(model, failedMessage, out failedMessage))
+    {
+      if (auth == null)
+        InitializeFirebase();
 
-      switch (authError)
+      loginTask = auth.SignInWithEmailAndPasswordAsync(model.Email, model.Password);
+
+      yield return new WaitUntil(() => loginTask.IsCompleted);
+
+      if (loginTask.Exception != null)
       {
-        case AuthError.InvalidEmail:
-          failedMessage += "Email is Invalid";
-          break;
-        case AuthError.WrongPassword:
-          failedMessage += "Wrong Password";
-          break;
-        case AuthError.MissingEmail:
-          failedMessage += "Email is missing";
-          break;
-        case AuthError.MissingPassword:
-          failedMessage += "Password is missing";
-          break;
-        default:
-          failedMessage = "Login Failed";
-          break;
+        FirebaseException firebaseException = loginTask.Exception.GetBaseException() as FirebaseException;
+        AuthError authError = (AuthError)firebaseException.ErrorCode;
+
+        failedMessage = "Login Failed! ";
+
+        switch (authError)
+        {
+          case AuthError.InvalidEmail:
+            failedMessage += "Email is invalid";
+            break;
+          case AuthError.WrongPassword:
+            failedMessage += "Password is incorrect";
+            break;
+          case AuthError.MissingEmail:
+            failedMessage += "Email is missing";
+            break;
+          case AuthError.MissingPassword:
+            failedMessage += "Password is missing";
+            break;
+          case AuthError.UserNotFound:
+            failedMessage += "User not found";
+            break;
+          case AuthError.AccountExistsWithDifferentCredentials:
+            failedMessage += "Account exists with different credentials";
+            break;
+          case AuthError.TooManyRequests:
+            failedMessage += "Too many requests. Please try again later";
+            break;
+          default:
+            failedMessage = authError.ToString();
+            break;
+        }
+      }
+      else
+      {
+        user = loginTask.Result.User;
+
+        OpenHomeLayout();
+        LoginFeedback.text = $"You are successfully logged in";
       }
 
-      Debug.Log(failedMessage);
       LoginFeedback.text = failedMessage;
     }
-    else
-    {
-      user = loginTask.Result.User;
 
-      Debug.LogFormat("{0} You are successfully logged in", user.DisplayName);
-      OpenHomeLayout();
-      LoginFeedback.text = $"{user.DisplayName} You are successfully logged in";
-    }
+    LoginFeedback.text = failedMessage;
   }
 
   public void OnChangeInputText(string s = null)
   {
-    if (string.IsNullOrWhiteSpace(usernameInput.text))
+    if (string.IsNullOrWhiteSpace(emailLoginField.text))
     {
       return;
     }
@@ -348,15 +457,15 @@ public class MainMenuController : MonoBehaviour
   public void OpenLoginLayout()
   {
     CloseAll();
-    LoginLayout.SetActive(true);
     ClearLoginInputFieldText();
+    LoginLayout.SetActive(true);
   }
 
   public void OpenRegistrationLayout()
   {
     CloseAll();
+    ClearRegistrationInputFieldText();
     RegistrationLayout.SetActive(true);
-    Debug.Log("Open Registration");
   }
 
   public void OpenHomeLayout()
@@ -372,5 +481,6 @@ public class MainMenuController : MonoBehaviour
     HomeLayout.SetActive(false);
     LoginFeedback.text = "";
     RegisterFeedback.text = "";
+    BloodLinesMenu.SetActive(false);
   }
 }
