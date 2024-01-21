@@ -2,6 +2,7 @@ using Firebase;
 using Firebase.Auth;
 using ParaverseWebsite.Models;
 using System.Collections;
+using System.Collections.Generic;
 using System.Linq;
 using System.Text.RegularExpressions;
 using System.Threading.Tasks;
@@ -216,8 +217,28 @@ public class MainMenuController : MonoBehaviour
           () =>
           {
             model.Email = usernameLoginField.text;
-            Debug.Log("Failed to retrieve user via username. Trying with email...");
-            StartCoroutine(LoginAsync(model));
+
+            FirebaseDatabaseManager.Instance.GetUsers(
+              // SUCCESSFULLY RETREIVED USERS LIST
+              (users) =>
+              {
+                Debug.Log("Failed to retrieve user via username. Trying with email...");
+                StartCoroutine(LoginAsync(model));
+                foreach (KeyValuePair<string, UserModel> entry in users)
+                {
+                  if (entry.Value.Email  == model.Email)
+                  {
+                    _username = entry.Value.Username;
+                    break;
+                  }
+                }
+              },
+              // FAILURE TO RETREIVE USERS LIST
+              () =>
+              {
+                Debug.Log($"Failed to retrieve user via username and not trying with email since users list does not exist!");
+                LoginFeedback.text = "Login Failed! User does not exist!";
+              });
           }
         );
   }
@@ -251,16 +272,16 @@ public class MainMenuController : MonoBehaviour
         switch (authError)
         {
           case AuthError.InvalidEmail:
-            failedMessage += "Username is invalid";
+            failedMessage += "Username does not exists in database";
             break;
           case AuthError.WrongPassword:
             failedMessage += "Password is incorrect";
             break;
           case AuthError.MissingEmail:
-            failedMessage += "Username is missing";
+            failedMessage += "Username field is empty";
             break;
           case AuthError.MissingPassword:
-            failedMessage += "Password is missing";
+            failedMessage += "Password field is empty";
             break;
           case AuthError.UserNotFound:
             failedMessage += "User not found";

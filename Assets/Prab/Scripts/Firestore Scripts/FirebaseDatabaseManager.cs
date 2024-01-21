@@ -32,6 +32,8 @@ public class FirebaseDatabaseManager : MonoBehaviour
   public delegate void GetUserCallback(UserModel model);
   public delegate void GetUserFailureCallback();
 
+  public delegate void GetUsersCallback(Dictionary<string, UserModel> models);
+
 
   private void Awake()
   {
@@ -154,6 +156,35 @@ public class FirebaseDatabaseManager : MonoBehaviour
         .Then(user =>
         {
           onSuccessCallback?.Invoke(user);
+        })
+        .Catch(error =>
+        {
+          Debug.Log("Error: " + error);
+          onFailureCallback?.Invoke();
+        });
+    }
+    catch (Exception ex)
+    {
+      Debug.LogException(ex);
+      onFailureCallback?.Invoke();
+    }
+  }
+
+  public void GetUsers(GetUsersCallback onSuccessCallback, GetUserFailureCallback onFailureCallback)
+  {
+    try
+    {
+      RestClient.Get($"{databasePath}{usersPath}.json")
+        .Then(response =>
+        {
+          var responseJson = response.Text;
+
+          var data = fsJsonParser.Parse(responseJson);
+          object deserialized = null;
+          serializer.TryDeserialize(data, typeof(Dictionary<string, UserModel>), ref deserialized);
+
+          var users = deserialized as Dictionary<string, UserModel>;
+          onSuccessCallback?.Invoke(users);
         })
         .Catch(error =>
         {
