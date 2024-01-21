@@ -30,7 +30,7 @@ public class MainMenuController : MonoBehaviour
   // Login variables
   [Space]
   [Header("Login")]
-  public TMP_InputField emailLoginField;
+  public TMP_InputField usernameLoginField;
   public TMP_InputField passwordLoginField;
 
   // Registration variables
@@ -41,7 +41,9 @@ public class MainMenuController : MonoBehaviour
   public TMP_InputField passwordRegisterField;
   public TMP_InputField confirmPasswordRegisterField;
 
-  public string Username { get; set; }
+  public string Username => _username;
+  private string _username;
+
 
   public Button submitButton;
 
@@ -181,24 +183,14 @@ public class MainMenuController : MonoBehaviour
     var pattern = @"^[a-zA-Z0-9.!#$%&'*+-/=?^_`{|}~]+@[a-zA-Z0-9-]+(?:\.[a-zA-Z0-9-]+)*$";
     var regex = new Regex(pattern);
 
-    if (model.Email == "")
+    if (model.Username == "")
     {
-      outputMessage += "Email field is empty";
-      return false;
-    }
-    else if (false == regex.IsMatch(model.Email))
-    {
-      outputMessage += "Email is invalid";
+      outputMessage += "Username field is empty";
       return false;
     }
     else if (model.Password == "")
     {
       outputMessage += "Password field is empty";
-      return false;
-    }
-    else if (model.Password.Length < 6)
-    {
-      outputMessage += "Password must be at least 6 characters long";
       return false;
     }
     return true;
@@ -209,9 +201,25 @@ public class MainMenuController : MonoBehaviour
   /// </summary>
   public void Login()
   {
-    LoginValidationModel model = new LoginValidationModel(null, emailLoginField.text, passwordLoginField.text);
+    LoginValidationModel model = new LoginValidationModel(usernameLoginField.text, null, passwordLoginField.text);
 
-    StartCoroutine(LoginAsync(model));
+    FirebaseDatabaseManager.Instance.GetUser(usernameLoginField.text,
+          // SUCCESSFULLY RETRIEVED USER
+          (user) => {
+            _username = user.Username;
+            model.Email = user.Email;
+            Debug.Log($"User exists in database! {user.Username}");
+
+            StartCoroutine(LoginAsync(model));
+          },
+          // FAILED TO RETRIEVE USER
+          () =>
+          {
+            model.Email = usernameLoginField.text;
+            Debug.Log("Failed to retrieve user via username. Trying with email...");
+            StartCoroutine(LoginAsync(model));
+          }
+        );
   }
 
   /// <summary>
@@ -243,13 +251,13 @@ public class MainMenuController : MonoBehaviour
         switch (authError)
         {
           case AuthError.InvalidEmail:
-            failedMessage += "Email is invalid";
+            failedMessage += "Username is invalid";
             break;
           case AuthError.WrongPassword:
             failedMessage += "Password is incorrect";
             break;
           case AuthError.MissingEmail:
-            failedMessage += "Email is missing";
+            failedMessage += "Username is missing";
             break;
           case AuthError.MissingPassword:
             failedMessage += "Password is missing";
@@ -271,12 +279,9 @@ public class MainMenuController : MonoBehaviour
       else
       {
         user = loginTask.Result.User;
-
         OpenHomeLayout();
-        LoginFeedback.text = $"You are successfully logged in";
+        LoginFeedback.text = $"You are successfully logged in!";
       }
-
-      LoginFeedback.text = failedMessage;
     }
 
     LoginFeedback.text = failedMessage;
@@ -287,7 +292,7 @@ public class MainMenuController : MonoBehaviour
   /// </summary>
   private void ClearLoginInputFieldText()
   {
-    emailLoginField.text = "";
+    usernameLoginField.text = "";
     passwordLoginField.text = "";
   }
   #endregion
@@ -361,7 +366,21 @@ public class MainMenuController : MonoBehaviour
   {
     RegistrationValidationModel model = new RegistrationValidationModel(usernameRegisterField.text, emailRegisterField.text, passwordRegisterField.text, confirmPasswordRegisterField.text);
 
-    StartCoroutine(RegisterAsync(model));
+    FirebaseDatabaseManager.Instance.GetUser(usernameRegisterField.text,
+          // USER EXISTS IN DATABASE, PREVENT REGISTRATION
+          (user) => {
+            Debug.Log($"An account with Username: {model.Username} already exists in the database");
+            RegisterFeedback.text = $"An account with Username: {model.Username} already exists in the database";
+          },
+          // USER DOES NOT EXIST IN DATABASE, CONTINUE WITH REGISTRATION
+          () =>
+          {
+            Debug.Log($"An account with Username: {model.Username} does not exist in the database. Continue with Registration!");
+            Debug.Log($"An account with Email: {model.Email} does not exist in the database. Continue with Registration!");
+            _username = model.Username;
+            StartCoroutine(RegisterAsync(model));
+          }
+        );
   }
 
   /// <summary>
@@ -384,8 +403,6 @@ public class MainMenuController : MonoBehaviour
 
       if (registerTask.Exception != null)
       {
-        Debug.LogError(registerTask.Exception);
-
         FirebaseException firebaseException = registerTask.Exception.GetBaseException() as FirebaseException;
         AuthError authError = (AuthError)firebaseException.ErrorCode;
 
@@ -404,8 +421,11 @@ public class MainMenuController : MonoBehaviour
           case AuthError.MissingPassword:
             failedMessage += "Password is missing";
             break;
+          case AuthError.EmailAlreadyInUse:
+            failedMessage += "Email already exists";
+            break;
           default:
-            failedMessage += "Registration Failed";
+            failedMessage += authError.ToString();
             break;
         }
 
@@ -458,9 +478,14 @@ public class MainMenuController : MonoBehaviour
           RegisterFeedback.text = $"Registration Successful Welcome {user.DisplayName}";
           OpenLoginLayout();
 
-          UserModel userModel = new UserModel(usernameRegisterField.text, emailRegisterField.text, passwordRegisterField.text);
+          UserModel userModel = new UserModel(user.UserId ,usernameRegisterField.text, emailRegisterField.text);
 
-          FirebaseDatabaseManager.Instance.PostUser(userModel, (response) => Debug.Log($"User model added to database! {response.Username}"));
+          FirebaseDatabaseManager.Instance.PostUser(userModel, (user) => {
+            _username = user.Username;
+            Debug.Log($"User model added to database! {user.Username}");
+            Debug.Log($"User model added to database! {_username}");
+            }
+          );
         }
       }
 
@@ -527,7 +552,7 @@ public class MainMenuController : MonoBehaviour
 
   public void OnChangeInputText(string s = null)
   {
-    if (string.IsNullOrWhiteSpace(emailLoginField.text))
+    if (string.IsNullOrWhiteSpace(usernameLoginField.text))
     {
       return;
     }

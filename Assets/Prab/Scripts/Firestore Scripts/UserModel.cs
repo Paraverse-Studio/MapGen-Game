@@ -5,8 +5,8 @@ namespace ParaverseWebsite.Models
   [Serializable]
   public class UserModel
   {
+    public string Id;
     public string Username;
-    public string Password;
     public string Email;
     public string StartDate;
     public int InteractionScore;
@@ -20,14 +20,14 @@ namespace ParaverseWebsite.Models
 
 
     public UserModel(
+      string userId,
       string username,
-      string email,
-      string password
+      string email
       )
     {
+      Id = userId;
       Username = username;
       Email = email;
-      Password = password;
       StartDate = DateTime.Today.ToString("MMMM dd, yy");
       InteractionScore = 0;
       Likes = new LikesModel();

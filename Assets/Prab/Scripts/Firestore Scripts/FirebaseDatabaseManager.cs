@@ -44,9 +44,8 @@ public class FirebaseDatabaseManager : MonoBehaviour
 
   public void PostMatchHistory(MatchHistoryModel model, PostMatchHistoryCallback callback)
   {
-    System.Random rnd = new System.Random();
-    int randomNum = rnd.Next();
-    string id = model.Username + "-" + randomNum;
+    string todaysDate = DateTime.Now.ToString("yy-MM-dd-HH:mm:ss:ffffff");
+    string id = model.Username + "_" + todaysDate;
 
     RestClient.Put<SessionDataModel>($"{databasePath}{matchHistoriesPath}/{id}.json", model)
       .Then(response =>
@@ -137,10 +136,9 @@ public class FirebaseDatabaseManager : MonoBehaviour
   public void PostUser(UserModel model, PostUserCallback callback)
   {
     RestClient.Put<UserModel>($"{databasePath}{usersPath}/{model.Username}.json", model)
-      .Then(response =>
+      .Then(user =>
       {
-        callback?.Invoke(response);
-        MainMenuController.Instance.Username = response.Username;
+        callback?.Invoke(user);
       })
       .Catch(error =>
       {
@@ -153,9 +151,9 @@ public class FirebaseDatabaseManager : MonoBehaviour
     try
     {
       RestClient.Get<UserModel>($"{databasePath}{usersPath}/{username}.json")
-        .Then(response =>
+        .Then(user =>
         {
-          onSuccessCallback?.Invoke(response);
+          onSuccessCallback?.Invoke(user);
         })
         .Catch(error =>
         {

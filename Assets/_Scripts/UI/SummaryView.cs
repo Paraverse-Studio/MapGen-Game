@@ -32,8 +32,6 @@ public class SummaryView : MonoBehaviour
   public TextMeshProUGUI healthText;
   public TextMeshProUGUI mobsObtainedText;
 
-  public string username;
-
   private void Start()
   {
     playerCombat = PlayerController.Instance.GetComponent<MobCombat>();
@@ -97,6 +95,8 @@ public class SummaryView : MonoBehaviour
     skillUsedText.text = SkillUsed;
     mobsObtainedText.text = effectsSB.ToString();
 
+    Debug.Log($"{Username} has died");
+
     SessionDataModel sessionDataModel = new SessionDataModel(
       Username,
       RoundNumberReached,
@@ -116,15 +116,15 @@ public class SummaryView : MonoBehaviour
       EffectsObtained,
       BloodLineEnum,
       SkillUsedEnum
-      );
+    );
 
-    FirebaseDatabaseManager.Instance.GetUser(username,
+    FirebaseDatabaseManager.Instance.GetUser(Username,
       // SUCCESSFULLY RETRIEVED USER
-      (response) =>
+      (user) =>
       {
-        Debug.Log($"User Exists!    username: {response.Username}, password: {response.Password}, email: {response.Email}, start date: {response.StartDate}, caption: {response.Caption}");
+        Debug.Log($"User Exists!    username: {user.Username}, email: {user.Email}, start date: {user.StartDate}, caption: {user.Caption}");
 
-        UpdateDatabase(response.Username, sessionDataModel);
+        UpdateDatabase(sessionDataModel);
       },
       // FAILED TO RETRIEVE USER
       () =>
@@ -134,11 +134,11 @@ public class SummaryView : MonoBehaviour
      );
   }
 
-  private void UpdateDatabase(string username, SessionDataModel sessionDataModel)
+  private void UpdateDatabase(SessionDataModel sessionDataModel)
   {
     // Create match history model
     MatchHistoryModel matchHistoryModel = new MatchHistoryModel(
-      username,
+      sessionDataModel.Username,
       sessionDataModel.RoundNumberReached,
       sessionDataModel.SessionLength,
       sessionDataModel.DamageTaken,
