@@ -97,10 +97,6 @@ public class SummaryView : MonoBehaviour
     skillUsedText.text = SkillUsed;
     mobsObtainedText.text = effectsSB.ToString();
 
-    // Gets the logged in user
-    username = MainMenuController.Instance.Username;
-    Debug.Log(username);
-
     SessionDataModel sessionDataModel = new SessionDataModel(
       Username,
       RoundNumberReached,
