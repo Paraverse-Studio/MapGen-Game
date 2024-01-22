@@ -32,8 +32,6 @@ public class SummaryView : MonoBehaviour
   public TextMeshProUGUI healthText;
   public TextMeshProUGUI mobsObtainedText;
 
-  public string username;
-
   private void Start()
   {
     playerCombat = PlayerController.Instance.GetComponent<MobCombat>();
@@ -97,36 +95,41 @@ public class SummaryView : MonoBehaviour
     skillUsedText.text = SkillUsed;
     mobsObtainedText.text = effectsSB.ToString();
 
-    // Gets the logged in user
-    username = MainMenuController.Instance.Username;
+
+
+    // Don't proceed if username is empty, otherwise it will corrupt database Leaderboards
+    if (Username == null || Username == "")
+    {
+      Debug.LogError($"{Username} is null or empty!! Need to get username before gameplay!!!");
+      return;
+    }
 
     SessionDataModel sessionDataModel = new SessionDataModel(
-      Username,
-      RoundNumberReached,
-      GamesPlayed,
-      SessionLength,
-      DamageTaken,
-      TotalScore,
-      GoldEarned,
-      MobsDefeatedCount,
-      BossesDefeatedCount,
-      MysticDungeonsEnteredCount,
-      MaxHealth,
-      Attack,
-      Ability,
-      BloodLine,
-      SkillUsed,
-      EffectsObtained,
-      BloodLineEnum,
-      SkillUsedEnum
-      );
+    Username,
+    RoundNumberReached,
+    GamesPlayed,
+    SessionLength,
+    DamageTaken,
+    TotalScore,
+    GoldEarned,
+    MobsDefeatedCount,
+    BossesDefeatedCount,
+    MysticDungeonsEnteredCount,
+    MaxHealth,
+    Attack,
+    Ability,
+    BloodLine,
+    SkillUsed,
+    EffectsObtained,
+    BloodLineEnum,
+    SkillUsedEnum
+  );
 
-    // Only update database if user exists!
-    FirebaseDatabaseManager.Instance.GetUser(username,
+    FirebaseDatabaseManager.Instance.GetUser(Username,
       // SUCCESSFULLY RETRIEVED USER
-      (response) =>
+      (user) =>
       {
-        Debug.Log($"User Exists!    username: {response.I_Username}, password: {response.I_Password}, email: {response.I_Email}, start date: {response.I_StartDate}, caption: {response.P_Caption}");
+        Debug.Log($"User Exists!    username: {user.Username}, email: {user.Email}, start date: {user.StartDate}, caption: {user.Caption}");
 
         UpdateDatabase(sessionDataModel);
       },

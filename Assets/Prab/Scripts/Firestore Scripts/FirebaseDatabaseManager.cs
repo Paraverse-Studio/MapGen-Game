@@ -19,7 +19,9 @@ public class FirebaseDatabaseManager : MonoBehaviour
   private readonly string usersPath = "Users";
 
   private static fsSerializer serializer = new fsSerializer();
-  public delegate void PostMatchHistoryCallback(ParaverseWebsite.Models.SessionDataModel matchHistory);
+
+  public delegate void PostUserCallback(UserModel user);
+  public delegate void PostMatchHistoryCallback(SessionDataModel matchHistory);
 
   public delegate void UpdateLeaderboardCallback(LeaderboardsModel leaderboard);
   public delegate void PostLeaderboardFailureCallback();
@@ -29,6 +31,8 @@ public class FirebaseDatabaseManager : MonoBehaviour
   
   public delegate void GetUserCallback(UserModel model);
   public delegate void GetUserFailureCallback();
+
+  public delegate void GetUsersCallback(Dictionary<string, UserModel> models);
 
 
   private void Awake()
@@ -42,11 +46,10 @@ public class FirebaseDatabaseManager : MonoBehaviour
 
   public void PostMatchHistory(MatchHistoryModel model, PostMatchHistoryCallback callback)
   {
-    System.Random rnd = new System.Random();
-    int randomNum = rnd.Next();
-    string id = model.Username + "-" + randomNum;
+    string todaysDate = DateTime.Now.ToString("yy-MM-dd-HH:mm:ss:ffffff");
+    string id = model.Username + "_" + todaysDate;
 
-    RestClient.Put<ParaverseWebsite.Models.SessionDataModel>($"{databasePath}{matchHistoriesPath}/{id}.json", model)
+    RestClient.Put<SessionDataModel>($"{databasePath}{matchHistoriesPath}/{id}.json", model)
       .Then(response =>
       {
         callback?.Invoke(response);
@@ -131,15 +134,57 @@ public class FirebaseDatabaseManager : MonoBehaviour
 
 
   #region USERS CRUD OPERATIONS
-  
+
+  public void PostUser(UserModel model, PostUserCallback callback)
+  {
+    RestClient.Put<UserModel>($"{databasePath}{usersPath}/{model.Username}.json", model)
+      .Then(user =>
+      {
+        callback?.Invoke(user);
+      })
+      .Catch(error =>
+      {
+        Debug.Log("Error: " + error);
+      });
+  }
+
   public void GetUser(string username, GetUserCallback onSuccessCallback, GetUserFailureCallback onFailureCallback)
   {
     try
     {
       RestClient.Get<UserModel>($"{databasePath}{usersPath}/{username}.json")
+        .Then(user =>
+        {
+          onSuccessCallback?.Invoke(user);
+        })
+        .Catch(error =>
+        {
+          Debug.Log("Error: " + error);
+          onFailureCallback?.Invoke();
+        });
+    }
+    catch (Exception ex)
+    {
+      Debug.LogException(ex);
+      onFailureCallback?.Invoke();
+    }
+  }
+
+  public void GetUsers(GetUsersCallback onSuccessCallback, GetUserFailureCallback onFailureCallback)
+  {
+    try
+    {
+      RestClient.Get($"{databasePath}{usersPath}.json")
         .Then(response =>
         {
-          onSuccessCallback?.Invoke(response);
+          var responseJson = response.Text;
+
+          var data = fsJsonParser.Parse(responseJson);
+          object deserialized = null;
+          serializer.TryDeserialize(data, typeof(Dictionary<string, UserModel>), ref deserialized);
+
+          var users = deserialized as Dictionary<string, UserModel>;
+          onSuccessCallback?.Invoke(users);
         })
         .Catch(error =>
         {

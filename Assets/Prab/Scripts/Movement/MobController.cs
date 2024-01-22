@@ -672,7 +672,10 @@ namespace Paraverse.Mob.Controller
           if (deathTimerUponFall >= maxDeathTimerUponFall && partiallyOnGround == false)
             stats.UpdateCurrentHealth(-stats.CurHealth);
           else
+          {
+            _isStaggered = false;
             _isFalling = false;
+          }
 
           return;
         }
@@ -746,6 +749,9 @@ namespace Paraverse.Mob.Controller
         return false;
     }
 
+    public float offsetx;
+    public float offsety;
+    public float offsetz;
     /// <summary>
     /// Allows mob to fall off the map
     /// </summary>
@@ -756,16 +762,36 @@ namespace Paraverse.Mob.Controller
       int requiredRaycastOnNavMesh = 4;   // keeps mob on nav mesh if 2 raycasts are hitting the nav mesh
       Vector3 origin = transform.position;
       Vector3 dir = -transform.up;
+      Vector3 behindDir = -transform.forward;
 
       Vector3 topOrigin = origin + new Vector3(0f, 0f, -nav.radius);
       Vector3 bottomOrigin = origin + new Vector3(0f, 0f, nav.radius);
       Vector3 leftOrigin = origin + new Vector3(-nav.radius, 0f, 0f);
       Vector3 rightOrigin = origin + new Vector3(nav.radius, 0f, 0f);
+      //Vector3 midSectionOrigin = origin + new Vector3(0, 0.5f, 0);
+      //Vector3 behindMidSectionOrigin; 
+      //if (ActiveKnockBackEffect != null)
+      //{
+      //  behindMidSectionOrigin = midSectionOrigin - transform.forward * ActiveKnockBackEffect.maxKnockbackRange;
+      //  Debug.DrawRay(midSectionOrigin, behindDir * ActiveKnockBackEffect.maxKnockbackRange, Color.red);
+      //  Debug.DrawRay(behindMidSectionOrigin, dir * 2f, Color.blue);
+
+      //  if (Physics.Raycast(midSectionOrigin, behindDir * ActiveKnockBackEffect.maxKnockbackRange, 1f))
+      //    Debug.Log("Hitting something behind");
+      //  else
+      //    Debug.Log("MOB SHOULD FALL OFF!! NO WALL!!");
+
+      //  if (Physics.Raycast(behindMidSectionOrigin, dir * 2f, 2f))
+      //    Debug.Log("Hitting Ground");
+      //  else
+      //    Debug.Log("MOB SHOULD FALL OFF!! NO GROUND!!");
+      //}
 
       Debug.DrawRay(topOrigin, dir * checkFallRange, Color.red);
       Debug.DrawRay(bottomOrigin, dir * checkFallRange, Color.green);
       Debug.DrawRay(leftOrigin, dir * checkFallRange, Color.blue);
       Debug.DrawRay(rightOrigin, dir * checkFallRange, Color.green);
+        
 
       if (Physics.Raycast(topOrigin, dir * checkFallRange, checkFallRange))
         raycastOnNavMeshCount++;
@@ -785,6 +811,7 @@ namespace Paraverse.Mob.Controller
 
       return false;
     }
+
     #endregion
 
     #region Fly Methods

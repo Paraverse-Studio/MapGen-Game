@@ -298,16 +298,13 @@ namespace Paraverse.Combat
       }
       else if (usesTargetLock && mob.Target)
       {
-        //mob.transform.rotation = ParaverseHelper.FaceTarget(mob.transform, target.transform, 100f);
-        Vector3 lookDir = (target.transform.position - mob.transform.position).normalized;
-        Quaternion lookRot = Quaternion.LookRotation(lookDir);
-        mob.transform.rotation = Quaternion.Slerp(mob.transform.rotation, lookRot, rotSpeed * Time.deltaTime);
+        RotateToTarget();
       }
     }
 
     protected void RotateToTarget()
     {
-      Vector3 lookDir = (target.transform.position - mob.transform.position).normalized;
+      Vector3 lookDir = ParaverseHelper.GetPositionXZ(target.transform.position - mob.transform.position).normalized;
       Quaternion lookRot = Quaternion.LookRotation(lookDir);
       mob.transform.rotation = Quaternion.Slerp(mob.transform.rotation, lookRot, rotSpeed * Time.deltaTime);
     }
