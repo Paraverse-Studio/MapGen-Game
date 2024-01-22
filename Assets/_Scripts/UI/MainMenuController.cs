@@ -128,7 +128,8 @@ public class MainMenuController : MonoBehaviour
 
       if (signedIn)
       {
-        OpenHomeLayout();
+        Debug.Log($"Signed In: {user.Email}");
+        AutoLogin();
       }
     }
   }
@@ -161,7 +162,30 @@ public class MainMenuController : MonoBehaviour
   {
     if (user != null)
     {
-      OpenHomeLayout();
+      FirebaseDatabaseManager.Instance.GetUsers(
+              // SUCCESSFULLY RETREIVED USERS LIST
+              (users) =>
+              {
+                Debug.Log($"Auto logged in as {user}... getting username...");
+                foreach (KeyValuePair<string, UserModel> entry in users)
+                {
+                  if (entry.Value.Email == user.Email)
+                  {
+                    _username = entry.Value.Username;
+                    Debug.Log($"Auto logged in as {user}. Username is {_username}");
+                    break;
+                  }
+                }
+                OpenHomeLayout();
+              },
+              // FAILURE TO RETREIVE USERS LIST
+              () =>
+              {
+                Debug.Log($"Failed to auto login as {user}");
+                Debug.Log($"Failed to auto login as {user.Email}");
+                LoginFeedback.text = "Auto Login Failed! User does not exist!";
+                OpenLoginLayout();
+              });
     }
     else
     {
