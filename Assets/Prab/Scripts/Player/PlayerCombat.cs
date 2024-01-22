@@ -24,9 +24,10 @@ namespace Paraverse.Player
     private float curCombatResetTimer;
     [SerializeField]
     public Transform SkillHolder => _skillHolder;
-    private Transform _skillHolder;
     [SerializeField]
+    private Transform _skillHolder;
     public Transform EffectsHolder => _effectsHolder;
+    [SerializeField]
     private Transform _effectsHolder;
     public bool CanComboAttackTwo { get => _canComboAttackTwo; }
     private bool _canComboAttackTwo = false;
