@@ -103,7 +103,7 @@ public class DashSkill : MobSkill, IMobSkill
   {
     base.SubscribeAnimationEventListeners();
     mob.OnChargeSkillOneEvent += AddThrust;
-    mob.OnDisableBasicAttackCollider += OnSkillComplete;
+    mob.OnDisableSkillOneEvent += OnSkillComplete;
   }
 
   public override void UnsubscribeAnimationEventListeners()
