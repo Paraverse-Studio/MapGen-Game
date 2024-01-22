@@ -95,28 +95,35 @@ public class SummaryView : MonoBehaviour
     skillUsedText.text = SkillUsed;
     mobsObtainedText.text = effectsSB.ToString();
 
-    Debug.Log($"{Username} has died");
+
+
+    // Don't proceed if username is empty, otherwise it will corrupt database Leaderboards
+    if (Username == null || Username == "")
+    {
+      Debug.LogError($"{Username} is null or empty!! Need to get username before gameplay!!!");
+      return;
+    }
 
     SessionDataModel sessionDataModel = new SessionDataModel(
-      Username,
-      RoundNumberReached,
-      GamesPlayed,
-      SessionLength,
-      DamageTaken,
-      TotalScore,
-      GoldEarned,
-      MobsDefeatedCount,
-      BossesDefeatedCount,
-      MysticDungeonsEnteredCount,
-      MaxHealth,
-      Attack,
-      Ability,
-      BloodLine,
-      SkillUsed,
-      EffectsObtained,
-      BloodLineEnum,
-      SkillUsedEnum
-    );
+    Username,
+    RoundNumberReached,
+    GamesPlayed,
+    SessionLength,
+    DamageTaken,
+    TotalScore,
+    GoldEarned,
+    MobsDefeatedCount,
+    BossesDefeatedCount,
+    MysticDungeonsEnteredCount,
+    MaxHealth,
+    Attack,
+    Ability,
+    BloodLine,
+    SkillUsed,
+    EffectsObtained,
+    BloodLineEnum,
+    SkillUsedEnum
+  );
 
     FirebaseDatabaseManager.Instance.GetUser(Username,
       // SUCCESSFULLY RETRIEVED USER
