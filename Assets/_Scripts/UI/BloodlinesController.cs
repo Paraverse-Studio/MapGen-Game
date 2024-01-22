@@ -7,6 +7,11 @@ using UnityEngine;
 using UnityEngine.UI;
 using Paraverse.Stats;
 
+public enum BloodlineType
+{
+    Vagabond = 0, Harrier = 1, Pioneer = 2, Scholar
+}
+
 public class BloodlinesController : MonoBehaviour
 {
     [Header("Exteral References")]
@@ -115,7 +120,4 @@ public class BloodlinesController : MonoBehaviour
     }
 
 }
-public enum BloodlineType
-{
-  Vagabond = 0, Harrier = 1, Pioneer = 2, Scholar
-}
+

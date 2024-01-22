@@ -85,12 +85,16 @@ public class ModsManager : MonoBehaviour
         int indexOfMod = AvailableMods.IndexOf(item);
 
         if (!PurchasedMods.Contains(item) && item is not SO_StatMod) // stat mods get re-added
+        { 
             PurchasedMods.Add(item);
+        }
 
         // if a mod (stat mod), then keep it in that in the spot,
         // otherwise, remove this entry in available mods
-        if (((SO_Mod)item).Type != ModType.Stat)
+        if (((SO_Mod)item).Type != ModType.Stat && ((SO_EffectMod)item).Type != ModType.Effect)
+        {
             AvailableMods.RemoveAt(indexOfMod);
+        }
     }
 
 }
