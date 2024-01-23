@@ -118,7 +118,7 @@ namespace Paraverse.Combat
     protected virtual bool CanUseSkill()
     {
       if (IsOffCooldown && HasEnergy && TargetWithinRange && mob.IsAttackLunging == false && mob.IsAttacking == false && mob.ActiveSkill == null && mob.Controller.ActiveKnockBackEffect == null ||
-        IsOffCooldown && HasEnergy && TargetWithinRange && mob.IsAttackLunging == false && anim.GetBool(StringData.IsBasicAttacking) == false && input != null) // For player Active skill is always active
+        IsOffCooldown && HasEnergy && TargetWithinRange && mob.IsAttackLunging == false && mob.IsAttacking == false && input != null) // For player Active skill is always active
         return true;
 
       return false;
