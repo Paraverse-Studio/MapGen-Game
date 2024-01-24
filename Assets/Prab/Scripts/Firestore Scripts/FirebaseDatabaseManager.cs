@@ -132,7 +132,6 @@ public class FirebaseDatabaseManager : MonoBehaviour
   }
   #endregion
 
-
   #region USERS CRUD OPERATIONS
 
   public void PostUser(UserModel model, PostUserCallback callback)

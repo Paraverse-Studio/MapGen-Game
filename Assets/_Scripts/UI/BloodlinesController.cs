@@ -117,5 +117,5 @@ public class BloodlinesController : MonoBehaviour
 }
 public enum BloodlineType
 {
-  Vagabond = 0, Harrier = 1, Pioneer = 2, Scholar
+  Vagabond = 0, Harrier = 1, Pioneer = 2, Scholar = 3
 }

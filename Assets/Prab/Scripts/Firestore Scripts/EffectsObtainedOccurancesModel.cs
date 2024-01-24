@@ -1,3 +1,4 @@
+using JetBrains.Annotations;
 using System;
 using System.Collections.Generic;
 using UnityEngine;
@@ -92,6 +93,33 @@ namespace ParaverseWebsite.Models
             break;
         }
       }
+    }
+
+    public EffectName GetMostUsedEffects()
+    {
+      int occurances = 0;
+      EffectName mostUsedEffect = EffectName.None;
+      Dictionary<EffectName, int> result = new Dictionary<EffectName, int>
+      {
+        { EffectName.EmpoweredAttack, EmpoweredAttack },
+        { EffectName.Sunfire, Sunfire },
+        { EffectName.CooldownRefund, CooldownRefund},
+        { EffectName.Lichbane, Lichbane },
+        { EffectName.RepearKill, RepearKill },
+        { EffectName.SweepingDash, SweepingDash },
+      };
+
+      foreach (KeyValuePair<EffectName, int> effect in result)
+      {
+        if (effect.Value >= occurances)
+        {
+          Debug.Log($"Most Used Effect is {effect.Key} with {effect.Value} occurances!");
+          occurances = effect.Value;
+          mostUsedEffect = effect.Key;
+        }
+      }
+
+      return mostUsedEffect;
     }
   }
 

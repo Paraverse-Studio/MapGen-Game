@@ -1,5 +1,6 @@
 using UnityEngine;
 using System;
+using System.Collections.Generic;
 
 namespace ParaverseWebsite.Models
 {
@@ -69,6 +70,30 @@ namespace ParaverseWebsite.Models
           Debug.Log(sessionDataModel.BloodLineEnum + " doesn't exist in BloodlineType enum");
           break;
       }
+    }
+
+    public BloodlineType GetMostUsedBloodLine()
+    {
+      int occurances = 0;
+      BloodlineType mostUsedBloodline = BloodlineType.Harrier;
+      Dictionary<BloodlineType, int> result = new Dictionary<BloodlineType, int>
+      {
+        { BloodlineType.Vagabond, Vagabond },
+        { BloodlineType.Harrier, Harrier },
+        { BloodlineType.Pioneer, Pioneer },
+        { BloodlineType.Scholar, Scholar }
+      };
+
+      foreach (KeyValuePair<BloodlineType, int> bloodline in result)
+      {
+        if (bloodline.Value >= occurances)
+        {
+          occurances = bloodline.Value;
+          mostUsedBloodline = bloodline.Key;
+        }
+      }
+
+      return mostUsedBloodline;
     }
   }
 }

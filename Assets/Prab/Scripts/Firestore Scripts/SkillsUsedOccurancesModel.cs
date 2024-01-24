@@ -1,19 +1,21 @@
-using UnityEngine;
+using Paraverse.Stats;
 using System;
+using System.Collections.Generic;
+using UnityEngine;
 
 namespace ParaverseWebsite.Models
 {
   [Serializable]
   public class SkillsUsedOccurancesModel
   {
+    public int RegalCrescent = 0;
+    public int MoonlightSlash = 0;
     public int AzuriteInfusion = 0;
     public int BladeWhirl = 0;
     public int DescendingThrust = 0;
-    public int AvatarState = 0;
-    public int LightningBolt = 0;
-    public int MoonlightSlash = 0;
-    public int RegalCrescent = 0;
     public int StealthStep = 0;
+    public int LightningBolt = 0;
+    public int AvatarState = 0;
 
     public SkillsUsedOccurancesModel() { }
 
@@ -71,7 +73,7 @@ namespace ParaverseWebsite.Models
       RegalCrescent = oldLeaderboards.SkillUsed.RegalCrescent;
       StealthStep = oldLeaderboards.SkillUsed.StealthStep;
 
-      switch (sessionDataModel.SkillUsedEnum) 
+      switch (sessionDataModel.SkillUsedEnum)
       {
         case SkillName.AvatarState:
           AvatarState++;
@@ -101,6 +103,35 @@ namespace ParaverseWebsite.Models
           Debug.Log(sessionDataModel.SkillUsedEnum.ToString() + " doesn't exists in SkillName enum!");
           break;
       }
+    }
+
+    public SkillName GetMostUsedSkill()
+    {
+      int occurances = 0;
+      SkillName mostUsedSkill = SkillName.None;
+      Dictionary<SkillName, int> result = new Dictionary<SkillName, int>
+    {
+        { SkillName.RegalCrescent, RegalCrescent },
+        { SkillName.MoonlightSlash, MoonlightSlash },
+        { SkillName.AzuriteInfusion, AzuriteInfusion },
+        { SkillName.DescendingThrust, DescendingThrust},
+        { SkillName.BladeWhirl, BladeWhirl },
+        { SkillName.StealthStep, AzuriteInfusion },
+        { SkillName.LightningBolt, LightningBolt },
+        { SkillName.AvatarState, AvatarState }
+      };
+
+      foreach (KeyValuePair<SkillName, int> skill in result)
+      {
+        if (skill.Value >= occurances)
+        {
+          Debug.Log($"Most Used Skill is {skill.Key} with {skill.Value} occurances!");
+          occurances = skill.Value;
+          mostUsedSkill = skill.Key;
+        }
+      }
+
+      return mostUsedSkill;
     }
   }
 

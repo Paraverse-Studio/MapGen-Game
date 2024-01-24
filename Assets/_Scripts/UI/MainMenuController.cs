@@ -115,6 +115,7 @@ public class MainMenuController : MonoBehaviour
 
   private void AuthStateChanged(object sender, System.EventArgs eventArgs)
   {
+    Debug.Log($"AuthStateChanged - auth: {auth}, CurrentUser: {auth.CurrentUser}, user: {user}");
     if (auth.CurrentUser != user)
     {
       bool signedIn = user != auth.CurrentUser && auth.CurrentUser != null;
