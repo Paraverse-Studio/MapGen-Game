@@ -1,5 +1,6 @@
 using ParaverseWebsite.Models;
 using System.Collections.Generic;
+using System.Linq;
 using UnityEngine;
 
 public class LeaderboardsController : MonoBehaviour
@@ -69,8 +70,10 @@ public class LeaderboardsController : MonoBehaviour
 
   private void GetLeaderboardsStatsFromDatabase(Dictionary<string, LeaderboardsModel> model)
   {
+    
+
     int idx = 0;
-    foreach (KeyValuePair<string, LeaderboardsModel> stat in model)
+    foreach (KeyValuePair<string, LeaderboardsModel> stat in model.OrderByDescending(key => key.Value.CumulativeTotalScore))
     {
       CreateLeaderboardStatContainer(idx, stat.Value);
       idx++;

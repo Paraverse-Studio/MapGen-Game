@@ -14,7 +14,10 @@ public class LeaderboardsStatsContainer : MonoBehaviour
   public TextMeshProUGUI averageLengthText;
   public Image mostUsedBloodlineImage;
   public Image mostUsedSkillImage;
-  public Image mostUsedEffectsImage;
+  public Image mostUsedEffectsImageOne;
+  public Image mostUsedEffectsImageTwo;
+  public Image mostUsedEffectsImageThree;
+
 
   public void Init(int idx, LeaderboardsModel model, Dictionary<BloodlineType, Sprite> bloodlineMapper, Dictionary<SkillName, Sprite> skillMapper, Dictionary<EffectName, Sprite> effectMapper)
   {
@@ -26,9 +29,21 @@ public class LeaderboardsStatsContainer : MonoBehaviour
     averageLengthText.text = model.CumulativeSessionLength.ToString();
     Debug.Log($"bloodline for {model.Username}");
     mostUsedBloodlineImage.sprite = GetMostUsedBloodline(model.BloodLine, bloodlineMapper);
-    //mostUsedBloodlineImage.type = Image.Type.Sliced;
     mostUsedSkillImage.sprite = GetMostUsedSkill(model.SkillUsed, skillMapper);
-    mostUsedEffectsImage.sprite = GetMostUsedEffects(model.EffectsObtained, effectMapper);
+
+    for (int i = 0; i < GetMostUsedEffects(model.EffectsObtained, effectMapper).Count; i++)
+    {
+      if (i == 0) mostUsedEffectsImageOne.sprite = GetMostUsedEffects(model.EffectsObtained, effectMapper)[i];
+      if (i == 1) mostUsedEffectsImageTwo.sprite = GetMostUsedEffects(model.EffectsObtained, effectMapper)[i];
+      if (i == 2) mostUsedEffectsImageThree.sprite = GetMostUsedEffects(model.EffectsObtained, effectMapper)[i];
+    }
+
+
+    mostUsedBloodlineImage.type = Image.Type.Sliced;
+    mostUsedSkillImage.type = Image.Type.Sliced;
+    mostUsedEffectsImageOne.type = Image.Type.Sliced;
+    mostUsedEffectsImageTwo.type = Image.Type.Sliced;
+    mostUsedEffectsImageThree.type = Image.Type.Sliced;
   }
 
   private Sprite GetMostUsedBloodline(BloodlineOccurancesModel model, Dictionary<BloodlineType, Sprite> bloodlineMapper)
@@ -42,9 +57,14 @@ public class LeaderboardsStatsContainer : MonoBehaviour
     return skillMapper[model.GetMostUsedSkill()];
   }
 
-  public Sprite GetMostUsedEffects(EffectsObtainedOccurancesModel model, Dictionary<EffectName, Sprite> effectMapper)
+  public List<Sprite> GetMostUsedEffects(EffectsObtainedOccurancesModel model, Dictionary<EffectName, Sprite> effectMapper)
   {
-    Debug.Log($"Most Used Effect is {effectMapper[model.GetMostUsedEffects()]}");
-    return effectMapper[model.GetMostUsedEffects()];
+    List<Sprite> sprites = new List<Sprite>();
+
+    foreach (EffectName effect in model.GetMostUsedEffects())
+    {
+      sprites.Add(effectMapper[effect]);
+    }
+    return sprites;
   }
 }

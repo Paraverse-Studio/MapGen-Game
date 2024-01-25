@@ -1,6 +1,7 @@
 using JetBrains.Annotations;
 using System;
 using System.Collections.Generic;
+using System.Linq;
 using UnityEngine;
 
 namespace ParaverseWebsite.Models
@@ -95,10 +96,10 @@ namespace ParaverseWebsite.Models
       }
     }
 
-    public EffectName GetMostUsedEffects()
+    public List<EffectName> GetMostUsedEffects()
     {
-      int occurances = 0;
-      EffectName mostUsedEffect = EffectName.None;
+      int idx = 0;
+      List<EffectName> mostUsedEffect = new List<EffectName>();
       Dictionary<EffectName, int> result = new Dictionary<EffectName, int>
       {
         { EffectName.EmpoweredAttack, EmpoweredAttack },
@@ -109,14 +110,12 @@ namespace ParaverseWebsite.Models
         { EffectName.SweepingDash, SweepingDash },
       };
 
-      foreach (KeyValuePair<EffectName, int> effect in result)
+      foreach (KeyValuePair<EffectName, int> effect in result.OrderByDescending(key => key.Value))
       {
-        if (effect.Value >= occurances)
-        {
-          Debug.Log($"Most Used Effect is {effect.Key} with {effect.Value} occurances!");
-          occurances = effect.Value;
-          mostUsedEffect = effect.Key;
-        }
+        if (idx >= 3) break;
+        Debug.Log($"Most Used Effect is {effect.Key} with {effect.Value} occurances!");
+        mostUsedEffect.Add(effect.Key);
+        idx++;
       }
 
       return mostUsedEffect;
