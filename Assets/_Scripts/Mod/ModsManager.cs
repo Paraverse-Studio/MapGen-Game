@@ -89,8 +89,14 @@ public class ModsManager : MonoBehaviour
             PurchasedMods.Add(item);
         }
 
-        // if a mod (stat mod), then keep it in that in the spot,
-        // otherwise, remove this entry in available mods
+    // if a mod (stat mod), then keep it in that in the spot,
+    // otherwise, remove this entry in available mods
+    Debug.Log($"{item}");
+    Debug.Log($"{item.GetType()}");
+    Debug.Log($"{(SO_Mod)item}");
+    Debug.Log($"{((SO_Mod)item).Type}");
+    Debug.Log($"{(SO_EffectMod)item}");
+    Debug.Log($"{((SO_EffectMod)item).Type}");
         if (((SO_Mod)item).Type != ModType.Stat && ((SO_EffectMod)item).Type != ModType.Effect)
         {
             AvailableMods.RemoveAt(indexOfMod);

@@ -206,8 +206,6 @@ public class MainMenuController : MonoBehaviour
   private bool LoginValidationCheck(LoginValidationModel model, string failedMessage, out string outputMessage)
   {
     outputMessage = failedMessage;
-    var pattern = @"^[a-zA-Z0-9.!#$%&'*+-/=?^_`{|}~]+@[a-zA-Z0-9-]+(?:\.[a-zA-Z0-9-]+)*$";
-    var regex = new Regex(pattern);
 
     if (model.Username == "")
     {

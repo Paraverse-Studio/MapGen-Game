@@ -102,6 +102,7 @@ namespace ParaverseWebsite.Models
       List<EffectName> mostUsedEffect = new List<EffectName>();
       Dictionary<EffectName, int> result = new Dictionary<EffectName, int>
       {
+        { EffectName.None, 0 },
         { EffectName.EmpoweredAttack, EmpoweredAttack },
         { EffectName.Sunfire, Sunfire },
         { EffectName.CooldownRefund, CooldownRefund},
@@ -113,7 +114,12 @@ namespace ParaverseWebsite.Models
       foreach (KeyValuePair<EffectName, int> effect in result.OrderByDescending(key => key.Value))
       {
         if (idx >= 3) break;
-        Debug.Log($"Most Used Effect is {effect.Key} with {effect.Value} occurances!");
+        if (idx == 0 && effect.Value <= 0)
+        {
+          mostUsedEffect.Add(effect.Key);
+          Debug.Log($"Most Used Effect is {effect.Key} with {effect.Value} occurances!");
+          break;
+        }
         mostUsedEffect.Add(effect.Key);
         idx++;
       }

@@ -107,10 +107,11 @@ namespace ParaverseWebsite.Models
 
     public SkillName GetMostUsedSkill()
     {
-      int occurances = 0;
+      int occurances = 1;
       SkillName mostUsedSkill = SkillName.None;
       Dictionary<SkillName, int> result = new Dictionary<SkillName, int>
     {
+        { SkillName.None, 0 },
         { SkillName.RegalCrescent, RegalCrescent },
         { SkillName.MoonlightSlash, MoonlightSlash },
         { SkillName.AzuriteInfusion, AzuriteInfusion },
