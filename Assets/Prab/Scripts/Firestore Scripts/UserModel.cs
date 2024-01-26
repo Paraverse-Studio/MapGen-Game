@@ -15,6 +15,7 @@ namespace ParaverseWebsite.Models
     public string CaptionColor;
     public string ChatEmbed;
     public LikesModel Likes;
+    public string Avatar;
 
     public UserModel() { }
 
@@ -35,6 +36,7 @@ namespace ParaverseWebsite.Models
       Caption = "";
       CaptionColor = "#ffffff";
       ChatEmbed = "true";
+      Avatar = "avatarm0";
     }
   }
 

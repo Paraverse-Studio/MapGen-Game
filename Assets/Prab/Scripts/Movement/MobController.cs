@@ -500,7 +500,6 @@ namespace Paraverse.Mob.Controller
           }
           else
           {
-            Debug.Log("else is Strafing: " + isStrafing);
             if (isStrafingToPoint) return;
             nav.isStopped = true;
             curMoveSpeed = 0f;
