@@ -100,7 +100,8 @@ public class SummaryView : MonoBehaviour
     // Don't proceed if username is empty, otherwise it will corrupt database Leaderboards
     if (Username == null || Username == "")
     {
-      Debug.LogError($"{Username} is null or empty!! Need to get username before gameplay!!!");
+      Debug.LogError($"{Username} is null or empty!! Need to get username before gameplay!!! Signing user out...");
+      MainMenuController.Instance.auth.SignOut();
       return;
     }
 
