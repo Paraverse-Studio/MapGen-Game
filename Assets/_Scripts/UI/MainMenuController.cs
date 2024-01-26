@@ -16,6 +16,7 @@ public class MainMenuController : MonoBehaviour
   public static MainMenuController Instance;
 
   public GameObject HomeLayout;
+  public TextMeshProUGUI welcomeText;
   public GameObject LoginLayout;
   public TextMeshProUGUI LoginFeedback;
   public GameObject RegistrationLayout;
@@ -581,14 +582,17 @@ public class MainMenuController : MonoBehaviour
   {
     CloseAll();
     HomeLayout.SetActive(true);
+    welcomeText.text = $"Welcome: {_username}!";
+    welcomeText.gameObject.SetActive(true);
   }
 
   public void CloseAll()
   {
-    LoginLayout.SetActive(false);
-    RegistrationLayout.SetActive(false);
     HomeLayout.SetActive(false);
+    welcomeText.gameObject.SetActive(false);
+    LoginLayout.SetActive(false);
     LoginFeedback.text = "";
+    RegistrationLayout.SetActive(false);
     RegisterFeedback.text = "";
     BloodLinesMenu.SetActive(false);
   }
