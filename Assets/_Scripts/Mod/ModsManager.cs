@@ -91,7 +91,7 @@ public class ModsManager : MonoBehaviour
 
         // if a mod (stat mod), then keep it in that in the spot,
         // otherwise, remove this entry in available mods
-        if (((SO_Mod)item).Type != ModType.Stat && ((SO_EffectMod)item).Type != ModType.Effect)
+        if (item is not SO_StatMod && item is not SO_EffectMod)
         {
             AvailableMods.RemoveAt(indexOfMod);
         }
