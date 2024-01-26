@@ -168,7 +168,7 @@ public class MainMenuController : MonoBehaviour
               // SUCCESSFULLY RETREIVED USERS LIST
               (users) =>
               {
-                Debug.Log($"Auto logged in as {user}... getting username...");
+                Debug.Log($"Trying to auto logged in as {user}... getting username...");
                 foreach (KeyValuePair<string, UserModel> entry in users)
                 {
                   if (entry.Value.Email == user.Email)
@@ -178,7 +178,13 @@ public class MainMenuController : MonoBehaviour
                     break;
                   }
                 }
-                OpenHomeLayout();
+                if (_username == null || _username == "")
+                {
+                  auth.SignOut();
+                  Debug.Log("Auto login failed since user no longer exists");
+                }
+                else
+                  OpenHomeLayout();
               },
               // FAILURE TO RETREIVE USERS LIST
               () =>
