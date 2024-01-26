@@ -1,3 +1,5 @@
+using UnityEngine;
+
 public class RegistrationValidationModel
 {
   public string Username { get; set; }
@@ -7,7 +9,10 @@ public class RegistrationValidationModel
 
   public RegistrationValidationModel(string username, string email, string password, string confirmPassword)
   {
-    Username = username;
+    Debug.Log($"username {username}");
+    Debug.Log($"username {username.ToLower()}");
+    Username = username.ToLower();
+    Debug.Log($"username {Username}");
     Email = email;
     Password = password;
     ConfirmPassword = confirmPassword;

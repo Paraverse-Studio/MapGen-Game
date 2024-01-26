@@ -227,8 +227,8 @@ public class MainMenuController : MonoBehaviour
   public void Login()
   {
     LoginValidationModel model = new LoginValidationModel(usernameLoginField.text, null, passwordLoginField.text);
-
-    FirebaseDatabaseManager.Instance.GetUser(usernameLoginField.text,
+    Debug.Log("user: " + model.Username);
+    FirebaseDatabaseManager.Instance.GetUser(model.Username,
           // SUCCESSFULLY RETRIEVED USER
           (user) => {
             _username = user.Username;
@@ -240,7 +240,7 @@ public class MainMenuController : MonoBehaviour
           // FAILED TO RETRIEVE USER
           () =>
           {
-            model.Email = usernameLoginField.text;
+            model.Email = model.Username;
 
             FirebaseDatabaseManager.Instance.GetUsers(
               // SUCCESSFULLY RETREIVED USERS LIST
@@ -411,7 +411,7 @@ public class MainMenuController : MonoBehaviour
   {
     RegistrationValidationModel model = new RegistrationValidationModel(usernameRegisterField.text, emailRegisterField.text, passwordRegisterField.text, confirmPasswordRegisterField.text);
 
-    FirebaseDatabaseManager.Instance.GetUser(usernameRegisterField.text,
+    FirebaseDatabaseManager.Instance.GetUser(model.Username,
           // USER EXISTS IN DATABASE, PREVENT REGISTRATION
           (user) => {
             Debug.Log($"An account with Username: {model.Username} already exists in the database");

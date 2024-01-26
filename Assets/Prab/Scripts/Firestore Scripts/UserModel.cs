@@ -27,8 +27,8 @@ namespace ParaverseWebsite.Models
       )
     {
       Id = userId;
-      Username = username;
-      Email = email;
+      Username = username.ToLower();
+      Email = email.ToLower();
       StartDate = DateTime.Today.ToString("MMMM dd, yy");
       InteractionScore = 0;
       Likes = new LikesModel();
