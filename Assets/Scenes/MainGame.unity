@@ -38,7 +38,7 @@ RenderSettings:
   m_ReflectionIntensity: 1
   m_CustomReflection: {fileID: 0}
   m_Sun: {fileID: 0}
-  m_IndirectSpecularColor: {r: 0.116983876, g: 0.4218359, b: 0.7282007, a: 1}
+  m_IndirectSpecularColor: {r: 0.11613611, g: 0.42406112, b: 0.73004746, a: 1}
   m_UseRadianceAmbientProbe: 0
 --- !u!157 &3
 LightmapSettings:
@@ -8793,6 +8793,7 @@ MonoBehaviour:
   _customItemCardPrefab: {fileID: 0}
   _goldText: {fileID: 0}
   _contextText: {fileID: 0}
+  _advertising: 1
 --- !u!1 &140788754
 GameObject:
   m_ObjectHideFlags: 0
@@ -22691,6 +22692,7 @@ MonoBehaviour:
   _customItemCardPrefab: {fileID: 8225186734693155774, guid: 02d24b1ae1e82054cab968c51f6ac754, type: 3}
   _goldText: {fileID: 1381395887}
   _contextText: {fileID: 1202840936}
+  _advertising: 1
 --- !u!1 &475048509
 GameObject:
   m_ObjectHideFlags: 0
@@ -22807,7 +22809,7 @@ RectTransform:
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
   m_AnchorMin: {x: 0, y: 0}
   m_AnchorMax: {x: 0, y: 0}
-  m_AnchoredPosition: {x: 0, y: 0}
+  m_AnchoredPosition: {x: 100, y: 0}
   m_SizeDelta: {x: 0, y: 62}
   m_Pivot: {x: 1, y: 1}
 --- !u!114 &480979922
@@ -36560,6 +36562,7 @@ MonoBehaviour:
   _customItemCardPrefab: {fileID: 0}
   _goldText: {fileID: 233310355}
   _contextText: {fileID: 1640884458}
+  _advertising: 1
 --- !u!1 &766216805
 GameObject:
   m_ObjectHideFlags: 0
@@ -37126,50 +37129,6 @@ CanvasRenderer:
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 781043624}
   m_CullTransparentMesh: 1
---- !u!1 &782332369
-GameObject:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  serializedVersion: 6
-  m_Component:
-  - component: {fileID: 782332371}
-  - component: {fileID: 782332370}
-  m_Layer: 0
-  m_Name: Static Coroutine RestClient
-  m_TagString: Untagged
-  m_Icon: {fileID: 0}
-  m_NavMeshLayer: 0
-  m_StaticEditorFlags: 0
-  m_IsActive: 1
---- !u!114 &782332370
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 782332369}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 1544571021}
-  m_Name: 
-  m_EditorClassIdentifier: 
---- !u!4 &782332371
-Transform:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 782332369}
-  m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
-  m_LocalPosition: {x: 0, y: 0, z: 0}
-  m_LocalScale: {x: 1, y: 1, z: 1}
-  m_ConstrainProportionsScale: 0
-  m_Children: []
-  m_Father: {fileID: 0}
-  m_RootOrder: 4
-  m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
 --- !u!1 &782938187
 GameObject:
   m_ObjectHideFlags: 0
@@ -56273,6 +56232,7 @@ MonoBehaviour:
   _customItemCardPrefab: {fileID: 0}
   _goldText: {fileID: 0}
   _contextText: {fileID: 1018037073}
+  _advertising: 1
 --- !u!1 &1183197027
 GameObject:
   m_ObjectHideFlags: 0
@@ -62489,7 +62449,7 @@ RectTransform:
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
   m_AnchorMin: {x: 0, y: 0}
   m_AnchorMax: {x: 0, y: 0}
-  m_AnchoredPosition: {x: 0, y: 0}
+  m_AnchoredPosition: {x: 160.595, y: 0}
   m_SizeDelta: {x: 0, y: 0}
   m_Pivot: {x: 0.5, y: 0.5}
 --- !u!114 &1292337618
@@ -71553,6 +71513,7 @@ MonoBehaviour:
   _customItemCardPrefab: {fileID: 0}
   _goldText: {fileID: 1065738756}
   _contextText: {fileID: 46882442}
+  _advertising: 1
 --- !u!114 &1520086056
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -72581,20 +72542,6 @@ MonoBehaviour:
           m_StringArgument: 
           m_BoolArgument: 0
         m_CallState: 2
---- !u!115 &1544571021
-MonoScript:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_Name: 
-  serializedVersion: 5
-  m_Script: 
-  m_DefaultReferences: {}
-  m_Icon: {fileID: 0}
-  m_ExecutionOrder: 0
-  m_ClassName: StaticCoroutine/CoroutineHolder
-  m_Namespace: Proyecto26
 --- !u!1 &1544721300
 GameObject:
   m_ObjectHideFlags: 0
@@ -82437,6 +82384,7 @@ MonoBehaviour:
   _customItemCardPrefab: {fileID: 0}
   _goldText: {fileID: 0}
   _contextText: {fileID: 1743120613}
+  _advertising: 0
 --- !u!114 &1728357022
 MonoBehaviour:
   m_ObjectHideFlags: 0
