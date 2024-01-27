@@ -52,6 +52,7 @@ public class BuffSkill : MobSkill, IMobSkill
   private float _buffDurationElapsed = 0f;
   private Transform _userWeapon = null;
   private GameObject _VFX = null;
+  private bool skillActive = false;
   #endregion
 
   public override void ActivateSkill(PlayerCombat mob, PlayerInputControls input, Animator anim, MobStats stats, Transform target = null)
@@ -88,7 +89,7 @@ public class BuffSkill : MobSkill, IMobSkill
   protected override void ExecuteSkillLogic()
   {
     base.ExecuteSkillLogic();
-
+    skillActive = true;
 
     _buffDurationElapsed = buffDuration;
 
@@ -108,6 +109,15 @@ public class BuffSkill : MobSkill, IMobSkill
     attackColliderGO.transform.localScale = new Vector3(scale.x, scale.y + attackRangeLengthen, scale.z);
   }
 
+  protected override bool CanUseSkill()
+  {
+    if (IsOffCooldown && HasEnergy && TargetWithinRange && mob.IsAttackLunging == false && mob.IsAttacking == false && mob.ActiveSkill == null && mob.Controller.ActiveKnockBackEffect == null ||
+      IsOffCooldown && HasEnergy && TargetWithinRange && mob.IsAttackLunging == false && mob.IsAttacking == false && skillActive == false && input != null) // For player Active skill is always active
+      return true;
+
+    return false;
+  }
+
   private void BuffDurationHandler()
   {
     if (_buffDurationElapsed <= 0 && null != Buffs[0].buff)
@@ -123,6 +133,7 @@ public class BuffSkill : MobSkill, IMobSkill
   protected override void OnSkillComplete()
   {
     base.OnSkillComplete();
+    skillActive = false;
 
     if (_VFX)
     {

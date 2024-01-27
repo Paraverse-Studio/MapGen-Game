@@ -30,13 +30,13 @@ public class SummaryView : MonoBehaviour
   public TextMeshProUGUI attackText;
   public TextMeshProUGUI abilityText;
   public TextMeshProUGUI healthText;
-  public TextMeshProUGUI mobsObtainedText;
+  public Transform effectsModsGO;
+  public GameObject effectModImagePf;
 
   private void Start()
   {
     playerCombat = PlayerController.Instance.GetComponent<MobCombat>();
   }
-
 
   public void Populate(GameLoopManager.PlayerSessionData sessionData, MobStats stats, PlayerCombat playerCombat)
   {
@@ -59,7 +59,6 @@ public class SummaryView : MonoBehaviour
     BloodlineType BloodLineEnum = bloodlinesController.chosenBloodline;
     SkillName SkillUsedEnum;
     List<EffectName> EffectsObtained = new List<EffectName>();
-    StringBuilder effectsSB = new StringBuilder();
 
     if (playerCombat.ActiveSkill == null)
     {
@@ -74,9 +73,10 @@ public class SummaryView : MonoBehaviour
 
     foreach (MobEffect effect in playerCombat.Effects)
     {
-      string name = ParaverseHelper.GetEffectName(effect.EffectNameDB);
-      EffectsObtained.Add(effect.EffectNameDB);
-      effectsSB.Append(name + " | ");
+      Debug.Log($"effectNAMEDB {effect.EffectNameDB} with effect name db {effect.EffectNameDB}");
+      Debug.Log($"effect {effect.name} with sprite {ParaverseHelper.GetEffectName(effect.EffectNameDB)}");
+      GameObject effectMod = Instantiate(effectModImagePf, effectsModsGO.transform);
+      effectMod.GetComponent<EffectModUI>().Init(DataMapper.EffectSpriteMapper[effect.EffectNameDB], ParaverseHelper.GetEffectName(effect.EffectNameDB));
     }
 
     // Populate summary view 
@@ -93,14 +93,14 @@ public class SummaryView : MonoBehaviour
     abilityText.text = Ability.ToString();
     bloodlineText.text = BloodLine;
     skillUsedText.text = SkillUsed;
-    mobsObtainedText.text = effectsSB.ToString();
 
 
 
     // Don't proceed if username is empty, otherwise it will corrupt database Leaderboards
     if (Username == null || Username == "")
     {
-      Debug.LogError($"{Username} is null or empty!! Need to get username before gameplay!!!");
+      Debug.LogError($"{Username} is null or empty!! Need to get username before gameplay!!! Signing user out...");
+      MainMenuController.Instance.auth.SignOut();
       return;
     }
 

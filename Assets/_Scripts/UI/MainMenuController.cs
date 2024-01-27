@@ -16,6 +16,7 @@ public class MainMenuController : MonoBehaviour
   public static MainMenuController Instance;
 
   public GameObject HomeLayout;
+  public TextMeshProUGUI welcomeText;
   public GameObject LoginLayout;
   public TextMeshProUGUI LoginFeedback;
   public GameObject RegistrationLayout;
@@ -115,6 +116,7 @@ public class MainMenuController : MonoBehaviour
 
   private void AuthStateChanged(object sender, System.EventArgs eventArgs)
   {
+    Debug.Log($"AuthStateChanged - auth: {auth}, CurrentUser: {auth.CurrentUser}, user: {user}");
     if (auth.CurrentUser != user)
     {
       bool signedIn = user != auth.CurrentUser && auth.CurrentUser != null;
@@ -166,7 +168,7 @@ public class MainMenuController : MonoBehaviour
               // SUCCESSFULLY RETREIVED USERS LIST
               (users) =>
               {
-                Debug.Log($"Auto logged in as {user}... getting username...");
+                Debug.Log($"Trying to auto logged in as {user}... getting username...");
                 foreach (KeyValuePair<string, UserModel> entry in users)
                 {
                   if (entry.Value.Email == user.Email)
@@ -176,7 +178,13 @@ public class MainMenuController : MonoBehaviour
                     break;
                   }
                 }
-                OpenHomeLayout();
+                if (_username == null || _username == "")
+                {
+                  auth.SignOut();
+                  Debug.Log("Auto login failed since user no longer exists");
+                }
+                else
+                  OpenHomeLayout();
               },
               // FAILURE TO RETREIVE USERS LIST
               () =>
@@ -205,8 +213,6 @@ public class MainMenuController : MonoBehaviour
   private bool LoginValidationCheck(LoginValidationModel model, string failedMessage, out string outputMessage)
   {
     outputMessage = failedMessage;
-    var pattern = @"^[a-zA-Z0-9.!#$%&'*+-/=?^_`{|}~]+@[a-zA-Z0-9-]+(?:\.[a-zA-Z0-9-]+)*$";
-    var regex = new Regex(pattern);
 
     if (model.Username == "")
     {
@@ -227,8 +233,8 @@ public class MainMenuController : MonoBehaviour
   public void Login()
   {
     LoginValidationModel model = new LoginValidationModel(usernameLoginField.text, null, passwordLoginField.text);
-
-    FirebaseDatabaseManager.Instance.GetUser(usernameLoginField.text,
+    Debug.Log("user: " + model.Username);
+    FirebaseDatabaseManager.Instance.GetUser(model.Username,
           // SUCCESSFULLY RETRIEVED USER
           (user) => {
             _username = user.Username;
@@ -240,7 +246,7 @@ public class MainMenuController : MonoBehaviour
           // FAILED TO RETRIEVE USER
           () =>
           {
-            model.Email = usernameLoginField.text;
+            model.Email = model.Username;
 
             FirebaseDatabaseManager.Instance.GetUsers(
               // SUCCESSFULLY RETREIVED USERS LIST
@@ -411,7 +417,7 @@ public class MainMenuController : MonoBehaviour
   {
     RegistrationValidationModel model = new RegistrationValidationModel(usernameRegisterField.text, emailRegisterField.text, passwordRegisterField.text, confirmPasswordRegisterField.text);
 
-    FirebaseDatabaseManager.Instance.GetUser(usernameRegisterField.text,
+    FirebaseDatabaseManager.Instance.GetUser(model.Username,
           // USER EXISTS IN DATABASE, PREVENT REGISTRATION
           (user) => {
             Debug.Log($"An account with Username: {model.Username} already exists in the database");
@@ -582,14 +588,17 @@ public class MainMenuController : MonoBehaviour
   {
     CloseAll();
     HomeLayout.SetActive(true);
+    welcomeText.text = $"Welcome: {_username}!";
+    welcomeText.gameObject.SetActive(true);
   }
 
   public void CloseAll()
   {
-    LoginLayout.SetActive(false);
-    RegistrationLayout.SetActive(false);
     HomeLayout.SetActive(false);
+    welcomeText.gameObject.SetActive(false);
+    LoginLayout.SetActive(false);
     LoginFeedback.text = "";
+    RegistrationLayout.SetActive(false);
     RegisterFeedback.text = "";
     BloodLinesMenu.SetActive(false);
   }

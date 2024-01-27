@@ -1,3 +1,5 @@
+using UnityEngine;
+
 public class LoginValidationModel
 {
   public string Username { get; set; }
@@ -6,7 +8,7 @@ public class LoginValidationModel
 
   public LoginValidationModel(string username, string email, string password)
   {
-    Username = username;
+    Username = username.ToLower();
     Email = email;
     Password = password;
   }

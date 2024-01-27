@@ -15,6 +15,7 @@ namespace ParaverseWebsite.Models
     public string CaptionColor;
     public string ChatEmbed;
     public LikesModel Likes;
+    public string Avatar;
 
     public UserModel() { }
 
@@ -26,8 +27,8 @@ namespace ParaverseWebsite.Models
       )
     {
       Id = userId;
-      Username = username;
-      Email = email;
+      Username = username.ToLower();
+      Email = email.ToLower();
       StartDate = DateTime.Today.ToString("MMMM dd, yy");
       InteractionScore = 0;
       Likes = new LikesModel();
@@ -35,6 +36,7 @@ namespace ParaverseWebsite.Models
       Caption = "";
       CaptionColor = "#ffffff";
       ChatEmbed = "true";
+      Avatar = "Male/avatarm0";
     }
   }
 
