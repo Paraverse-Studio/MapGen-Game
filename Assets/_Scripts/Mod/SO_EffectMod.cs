@@ -12,9 +12,8 @@ public class SO_EffectMod : SO_Mod
 
     public override string GetTitle(int modLevel = -1)
     {
-        Debug.Log("DOES THIS GET CALLED? " + modLevel + " so title: " + (Title + " " + UtilityFunctions.ToRoman(modLevel)));
         if (modLevel == -1) modLevel = ModLevel;
-        return Title + (evolve.canStack ? " " + UtilityFunctions.ToRoman(modLevel) : string.Empty);
+        return Title + (evolve.canStack ? " [LV." + modLevel + "]" : string.Empty);
     }
 
     public override string GetDescription(int modLevel)
@@ -27,7 +26,6 @@ public class SO_EffectMod : SO_Mod
     // Activates upon chest looting
     public override void Activate(GameObject go, int modLevel = -1)
     {
-        Debug.Log("WHAT CALELD THis... actiate? ");
         if (modLevel == -1)
         {
             modLevel = ModLevel;
