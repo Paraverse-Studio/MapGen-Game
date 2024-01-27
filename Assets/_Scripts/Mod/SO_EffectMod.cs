@@ -28,7 +28,15 @@ public class SO_EffectMod : SO_Mod
     public override void Activate(GameObject go, int modLevel = -1)
     {
         Debug.Log("WHAT CALELD THis... actiate? ");
-        if (modLevel == -1) modLevel = ModLevel;
+        if (modLevel == -1)
+        {
+            modLevel = ModLevel;
+        }
+        else
+        {
+            ModLevel = modLevel;
+        }
+
         base.Activate();
 
         // if the provided object can't be parsed into a player, something is wrong
