@@ -34,12 +34,59 @@ public class FirebaseDatabaseManager : MonoBehaviour
 
   public delegate void GetUsersCallback(Dictionary<string, UserModel> models);
 
+  #region Skill/Effect Sprites Data
+  public Sprite VagabondSprite;
+  public Sprite HarrierSprite;
+  public Sprite PioneerSprite;
+  public Sprite ScholarSprite;
+
+  public Sprite NoSkillSprite;
+  public Sprite RegalCrescentSprite;
+  public Sprite MoonlightSlashSprite;
+  public Sprite DescendingThrustSprite;
+  public Sprite AzuriteInfusionSprite;
+  public Sprite BladeWhirlSprite;
+  public Sprite StealthStepSprite;
+  public Sprite LightningBoltSprite;
+  public Sprite AvatarStateSprite;
+
+  public Sprite EmpoweredAttackSprite;
+  public Sprite SunfireSprite;
+  public Sprite CooldownRefundSprite;
+  public Sprite LichbaneSprite;
+  public Sprite RepearKillSprite;
+  public Sprite SweepingDashSprite;
+  #endregion
+
 
   private void Awake()
   {
     // Singleton
     if (Instance == null) Instance = this;
     else Destroy(this);
+    
+    DataMapper.BloodlineSpriteMapper.Add(BloodlineType.Vagabond, VagabondSprite);
+    DataMapper.BloodlineSpriteMapper.Add(BloodlineType.Harrier, HarrierSprite);
+    DataMapper.BloodlineSpriteMapper.Add(BloodlineType.Pioneer, PioneerSprite);
+    DataMapper.BloodlineSpriteMapper.Add(BloodlineType.Scholar, ScholarSprite);
+
+    DataMapper.SkillSpriteMapper.Add(SkillName.None, NoSkillSprite);
+    DataMapper.SkillSpriteMapper.Add(SkillName.RegalCrescent, RegalCrescentSprite);
+    DataMapper.SkillSpriteMapper.Add(SkillName.MoonlightSlash, MoonlightSlashSprite);
+    DataMapper.SkillSpriteMapper.Add(SkillName.DescendingThrust, DescendingThrustSprite);
+    DataMapper.SkillSpriteMapper.Add(SkillName.AzuriteInfusion, AzuriteInfusionSprite);
+    DataMapper.SkillSpriteMapper.Add(SkillName.BladeWhirl, BladeWhirlSprite);
+    DataMapper.SkillSpriteMapper.Add(SkillName.StealthStep, StealthStepSprite);
+    DataMapper.SkillSpriteMapper.Add(SkillName.LightningBolt, LightningBoltSprite);
+    DataMapper.SkillSpriteMapper.Add(SkillName.AvatarState, AvatarStateSprite);
+
+    DataMapper.EffectSpriteMapper.Add(EffectName.None, NoSkillSprite);
+    DataMapper.EffectSpriteMapper.Add(EffectName.EmpoweredAttack, EmpoweredAttackSprite);
+    DataMapper.EffectSpriteMapper.Add(EffectName.Sunfire, SunfireSprite);
+    DataMapper.EffectSpriteMapper.Add(EffectName.CooldownRefund, CooldownRefundSprite);
+    DataMapper.EffectSpriteMapper.Add(EffectName.Lichbane, LichbaneSprite);
+    DataMapper.EffectSpriteMapper.Add(EffectName.RepearKill, RepearKillSprite);
+    DataMapper.EffectSpriteMapper.Add(EffectName.SweepingDash, SweepingDashSprite);
   }
 
   #region MATCH HISTORY CRUD OPERATIONS

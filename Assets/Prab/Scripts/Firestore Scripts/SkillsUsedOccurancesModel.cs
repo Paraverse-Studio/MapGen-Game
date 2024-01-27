@@ -126,7 +126,6 @@ namespace ParaverseWebsite.Models
       {
         if (skill.Value >= occurances)
         {
-          Debug.Log($"Most Used Skill is {skill.Key} with {skill.Value} occurances!");
           occurances = skill.Value;
           mostUsedSkill = skill.Key;
         }
