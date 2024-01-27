@@ -46,10 +46,9 @@ public class FirebaseDatabaseManager : MonoBehaviour
 
   public void PostMatchHistory(MatchHistoryModel model, PostMatchHistoryCallback callback)
   {
-    string todaysDate = DateTime.Now.ToString("yy-MM-dd-HH:mm:ss:ffffff");
-    string id = model.Username + "_" + todaysDate;
+    string id = DateTime.Now.ToString("yy-MM-dd-HH:mm:ss:ffffff");
 
-    RestClient.Put<SessionDataModel>($"{databasePath}{matchHistoriesPath}/{id}.json", model)
+    RestClient.Put<SessionDataModel>($"{databasePath}{matchHistoriesPath}/{model.Username}/{id}.json", model)
       .Then(response =>
       {
         callback?.Invoke(response);
