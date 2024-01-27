@@ -36,7 +36,7 @@ namespace ParaverseWebsite.Models
       Caption = "";
       CaptionColor = "#ffffff";
       ChatEmbed = "true";
-      Avatar = "avatarm0";
+      Avatar = "Male/avatarm0";
     }
   }
 

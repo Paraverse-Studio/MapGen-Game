@@ -72,7 +72,7 @@ public class LeaderboardsController : MonoBehaviour
   {
     
 
-    int idx = 0;
+    int idx = 1;
     foreach (KeyValuePair<string, LeaderboardsModel> stat in model.OrderByDescending(key => key.Value.CumulativeTotalScore))
     {
       CreateLeaderboardStatContainer(idx, stat.Value);
