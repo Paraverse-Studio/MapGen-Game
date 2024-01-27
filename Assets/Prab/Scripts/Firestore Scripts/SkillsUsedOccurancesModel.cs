@@ -105,7 +105,7 @@ namespace ParaverseWebsite.Models
       }
     }
 
-    public SkillName GetMostUsedSkill()
+    public SkillName GetMostUsedSkillEnumName()
     {
       int occurances = 1;
       SkillName mostUsedSkill = SkillName.None;

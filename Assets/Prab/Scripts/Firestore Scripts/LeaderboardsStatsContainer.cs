@@ -1,3 +1,4 @@
+using Paraverse.Helper;
 using ParaverseWebsite.Models;
 using System.Collections.Generic;
 using TMPro;
@@ -28,16 +29,35 @@ public class LeaderboardsStatsContainer : MonoBehaviour
     gamesPlayedText.text = model.CumulativeGamesPlayed.ToString();
     averageLengthText.text = model.CumulativeSessionLength.ToString();
     Debug.Log($"bloodline for {model.Username}");
-    mostUsedBloodlineImage.sprite = GetMostUsedBloodline(model.BloodLine, bloodlineMapper);
-    mostUsedSkillImage.sprite = GetMostUsedSkill(model.SkillUsed, skillMapper);
+    mostUsedBloodlineImage.sprite = GetMostUsedBloodlineSprite(model.BloodLine, bloodlineMapper);
+    mostUsedBloodlineImage.name = ParaverseHelper.GetBloodlineName(model.BloodLine.GetMostUsedBloodLine());
+    Debug.Log($"Most Used Bloodline: {mostUsedBloodlineImage}");
 
-    for (int i = 0; i < GetMostUsedEffects(model.EffectsObtained, effectMapper).Count; i++)
+    mostUsedSkillImage.sprite = GetMostUsedSkillSprite(model.SkillUsed, skillMapper);
+    mostUsedSkillImage.name = ParaverseHelper.GetSkillName(model.SkillUsed.GetMostUsedSkillEnumName());
+    Debug.Log($"Most Used Skill: {mostUsedSkillImage}");
+
+    for (int i = 0; i < GetMostUsedEffectsSprite(model.EffectsObtained, effectMapper).Count; i++)
     {
-      if (i == 0) mostUsedEffectsImageOne.sprite = GetMostUsedEffects(model.EffectsObtained, effectMapper)[i];
-      if (i == 1) mostUsedEffectsImageTwo.sprite = GetMostUsedEffects(model.EffectsObtained, effectMapper)[i];
-      if (i == 2) mostUsedEffectsImageThree.sprite = GetMostUsedEffects(model.EffectsObtained, effectMapper)[i];
+      if (i == 0)
+      {
+        mostUsedEffectsImageOne.sprite = GetMostUsedEffectsSprite(model.EffectsObtained, effectMapper)[i];
+        mostUsedEffectsImageOne.name = ParaverseHelper.GetEffectName(model.EffectsObtained.GetMostUsedEffects()[i]);
+        Debug.Log($"Most Used Effects: {mostUsedEffectsImageOne}");
+      }
+      if (i == 1)
+      {
+        mostUsedEffectsImageTwo.sprite = GetMostUsedEffectsSprite(model.EffectsObtained, effectMapper)[i];
+        mostUsedEffectsImageTwo.name = ParaverseHelper.GetEffectName(model.EffectsObtained.GetMostUsedEffects()[i]);
+        Debug.Log($"Most Used Effects: {mostUsedEffectsImageTwo}");
+      }
+      if (i == 2)
+      {
+        mostUsedEffectsImageThree.sprite = GetMostUsedEffectsSprite(model.EffectsObtained, effectMapper)[i];
+        mostUsedEffectsImageThree.name = ParaverseHelper.GetEffectName(model.EffectsObtained.GetMostUsedEffects()[i]);
+        Debug.Log($"Most Used Effects: {mostUsedEffectsImageThree}");
+      }
     }
-
 
     mostUsedBloodlineImage.type = Image.Type.Sliced;
     mostUsedSkillImage.type = Image.Type.Sliced;
@@ -46,18 +66,18 @@ public class LeaderboardsStatsContainer : MonoBehaviour
     mostUsedEffectsImageThree.type = Image.Type.Sliced;
   }
 
-  private Sprite GetMostUsedBloodline(BloodlineOccurancesModel model, Dictionary<BloodlineType, Sprite> bloodlineMapper)
+  private Sprite GetMostUsedBloodlineSprite(BloodlineOccurancesModel model, Dictionary<BloodlineType, Sprite> bloodlineMapper)
   {
     return bloodlineMapper[model.GetMostUsedBloodLine()];
   }
 
-  public Sprite GetMostUsedSkill(SkillsUsedOccurancesModel model, Dictionary<SkillName, Sprite> skillMapper)
+  public Sprite GetMostUsedSkillSprite(SkillsUsedOccurancesModel model, Dictionary<SkillName, Sprite> skillMapper)
   {
-    Debug.Log($"Most Used Skill is {skillMapper[model.GetMostUsedSkill()]}");
-    return skillMapper[model.GetMostUsedSkill()];
+    Debug.Log($"Most Used Skill is {skillMapper[model.GetMostUsedSkillEnumName()]}");
+    return skillMapper[model.GetMostUsedSkillEnumName()];
   }
 
-  public List<Sprite> GetMostUsedEffects(EffectsObtainedOccurancesModel model, Dictionary<EffectName, Sprite> effectMapper)
+  public List<Sprite> GetMostUsedEffectsSprite(EffectsObtainedOccurancesModel model, Dictionary<EffectName, Sprite> effectMapper)
   {
     List<Sprite> sprites = new List<Sprite>();
 

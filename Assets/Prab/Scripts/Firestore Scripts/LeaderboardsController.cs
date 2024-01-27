@@ -10,29 +10,6 @@ public class LeaderboardsController : MonoBehaviour
 
   public List<GameObject> leaderboardStats = new List<GameObject>();
 
-  public Sprite VagabondSprite;
-  public Sprite HarrierSprite;
-  public Sprite PioneerSprite;
-  public Sprite ScholarSprite;
-
-  public Sprite NoSkillSprite;
-  public Sprite RegalCrescentSprite;
-  public Sprite MoonlightSlashSprite;
-  public Sprite DescendingThrustSprite;
-  public Sprite AzuriteInfusionSprite;
-  public Sprite BladeWhirlSprite;
-  public Sprite StealthStepSprite;
-  public Sprite LightningBoltSprite;
-  public Sprite AvatarStateSprite;
-
-  public Sprite EmpoweredAttackSprite;
-  public Sprite SunfireSprite;
-  public Sprite CooldownRefundSprite;
-  public Sprite LichbaneSprite;
-  public Sprite RepearKillSprite;
-  public Sprite SweepingDashSprite;
-
-
   private void OnEnable()
   {
     ClearAll();

@@ -73,11 +73,10 @@ public class SummaryView : MonoBehaviour
 
     foreach (MobEffect effect in playerCombat.Effects)
     {
-      Debug.Log($"effect ");
-      Debug.Log($"effect {effect.name} with effect name db {effect.EffectNameDB}");
-      Debug.Log($"effect {effect.name} with sprite {DataMapper.EffectSpriteMapper[effect.EffectNameDB]}");
+      Debug.Log($"effectNAMEDB {effect.EffectNameDB} with effect name db {effect.EffectNameDB}");
+      Debug.Log($"effect {effect.name} with sprite {ParaverseHelper.GetEffectName(effect.EffectNameDB)}");
       GameObject effectMod = Instantiate(effectModImagePf, effectsModsGO.transform);
-      effectMod.GetComponent<EffectModUI>().Init(DataMapper.EffectSpriteMapper[effect.EffectNameDB]);
+      effectMod.GetComponent<EffectModUI>().Init(DataMapper.EffectSpriteMapper[effect.EffectNameDB], ParaverseHelper.GetEffectName(effect.EffectNameDB));
     }
 
     // Populate summary view 

@@ -45,6 +45,8 @@ namespace Paraverse.Helper
     {
       switch (skill)
       {
+        case SkillName.None:
+          return "None";
         case SkillName.MoonlightSlash:
           return "Moonlight Slash";
         case SkillName.BladeWhirl:
@@ -70,6 +72,8 @@ namespace Paraverse.Helper
     {
       switch (effect)
       {
+        case EffectName.None:
+          return "None";
         case EffectName.Sunfire:
           return "Sunfire";
         case EffectName.CooldownRefund:
@@ -84,6 +88,23 @@ namespace Paraverse.Helper
           return "Empowered Attack";
         default:
           return "Error with " + effect.ToString();
+      }
+    }
+
+    public static string GetBloodlineName(BloodlineType bloodline)
+    {
+      switch (bloodline)
+      {
+        case BloodlineType.Vagabond:
+          return "Vagabond";
+        case BloodlineType.Harrier:
+          return "Harrier";
+        case BloodlineType.Pioneer:
+          return "Pioneer";
+        case BloodlineType.Scholar:
+          return "Scholar";
+        default:
+          return "Error with " + bloodline.ToString();
       }
     }
   }

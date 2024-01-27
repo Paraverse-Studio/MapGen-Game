@@ -7,8 +7,9 @@ public class EffectModUI : MonoBehaviour
 {
   public Image image;
 
-  public void Init(Sprite sprite)
+  public void Init(Sprite sprite, string hoverMessage)
   {
+    gameObject.name = hoverMessage;
     image.sprite = sprite;
   }
 }
