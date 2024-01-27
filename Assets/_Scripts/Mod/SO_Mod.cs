@@ -20,9 +20,23 @@ public class SO_Mod : SO_Item
         public float costGrowthFactor;
     }
 
+    protected int _modLevel = 1;
+    public int ModLevel
+    {
+        get { return _modLevel; }
+        set { _modLevel = value; }
+    }
+
     // This is here because items themselves won't be evolvable, just specific mods
     [Header("——————  SPECIAL  —————")]
     public ModType Type;
     public Evolving evolve;
+
+    public override void Reset()
+    {      
+        base.Reset();
+        _modLevel = 1;
+        _activated = false;
+    }
 
 }

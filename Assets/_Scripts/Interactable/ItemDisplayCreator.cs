@@ -27,6 +27,9 @@ public class ItemDisplayCreator : TimeChanger
     [SerializeField, Header("Context message")]
     private TextMeshProUGUI _contextText;
 
+    [SerializeField, Header("Advertising?")]
+    private bool _advertising = true;
+
     private List<SO_Item> _items;
     private System.Action _closeEvent;
     private List<ItemCard> _createdObjects = new();
@@ -64,7 +67,16 @@ public class ItemDisplayCreator : TimeChanger
                 ItemCard card = Instantiate(_itemCardPrefab, _container);
                 card.Item = _items[i];
                 card.descriptionLabel = _contextText;
-                card.UpdateDisplay();
+                // if it's a mod type, show its higher level cause we're advertising here, not showing current
+                Debug.Log("AYOOO name: " + _items[i].name + ",  adv:" + _advertising + ",   SO_Mod? " + (_items[i] is SO_Mod mod2));
+                if (_advertising && _items[i] is SO_Mod mod && mod.Activated)
+                {
+                    card.UpdateDisplay(null, mod.ModLevel + 1);
+                }
+                else
+                {
+                    card.UpdateDisplay(null, -1);
+                }
                 card.OnClickCard.AddListener(PurchaseItem);
                 _createdObjects.Add(card);
             }
@@ -125,7 +137,12 @@ public class ItemDisplayCreator : TimeChanger
         _goldText.text = _player.Gold.ToString();
 
         // the mod itself handles what the mod will do for the player when activated
-        item.Item.Activate(_player.gameObject);
+        int modLevelToActivate = -1;
+        if (item.Item is SO_Mod mod && ModsManager.Instance.PurchasedMods.Contains(mod))
+        {
+            modLevelToActivate = mod.ModLevel + 1;
+        }
+        item.Item.Activate(_player.gameObject, modLevelToActivate);
         item.Item.Consume();
 
         ModsManager.Instance.PurchaseMod(item.Item);

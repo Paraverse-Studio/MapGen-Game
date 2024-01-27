@@ -225,7 +225,12 @@ public class ChestObject : MonoBehaviour
     {
         for (int i = 0; i < rewards.Count; ++i)
         {
-            rewards[i].Activate(GlobalSettings.Instance.player);
+            int modLevelToActivate = -1;
+            if (rewards[i] is SO_Mod mod && mod.Activated)
+            {
+                modLevelToActivate = mod.ModLevel + 1;
+            }
+            rewards[i].Activate(GlobalSettings.Instance.player, modLevelToActivate);
             rewards[i].Consume();
         }
 

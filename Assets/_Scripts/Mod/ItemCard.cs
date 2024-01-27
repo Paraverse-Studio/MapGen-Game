@@ -20,7 +20,7 @@ public class ItemCard : MonoBehaviour
 
     public ItemCardEvent OnClickCard = new();
 
-    public virtual void UpdateDisplay(System.Action clickCallBack = null)
+    public virtual void UpdateDisplay(System.Action clickCallBack = null, int modLevel = -1)
     {
     }
 

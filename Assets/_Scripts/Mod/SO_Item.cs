@@ -20,6 +20,13 @@ public class SO_Item : ScriptableObject
     [SerializeField, TextArea(3, 4)]
     protected string Description;
 
+    protected bool _activated = false;
+    public bool Activated
+    {
+        get { return _activated; }
+        set { _activated = value; }
+    }
+
     [Header("——————  SPECIAL  —————")]
     [Tooltip("This mod is only available if all of prereqMods are purchased.")]
     public SO_Mod[] PrerequisiteMods;
@@ -30,7 +37,7 @@ public class SO_Item : ScriptableObject
     /// in rare cases, this function could be needed to change
     /// for sub classes
     /// </summary>
-    public virtual string GetTitle()
+    public virtual string GetTitle(int modLevel = -1)
     {
         return Title;
     }
@@ -39,7 +46,7 @@ public class SO_Item : ScriptableObject
     /// in rare cases, this function could be needed to change
     /// for sub classes
     /// </summary>
-    public virtual string GetDescription()
+    public virtual string GetDescription(int modLevel = -1)
     {
         string desc = Description;
         if (Quantity > 1) desc += " (" + Quantity + ")";
@@ -90,8 +97,9 @@ public class SO_Item : ScriptableObject
     /// <summary>
     /// Logic for activating this mod to the user
     /// </summary>
-    public virtual void Activate(GameObject providedObject = null)
+    public virtual void Activate(GameObject providedObject = null, int level = -1)
     {
+        Activated = true;
         // implement in sub classes
     }
 

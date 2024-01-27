@@ -31,7 +31,7 @@ public class ModCard : ItemCard
 
     private void Start()
     {
-        if (Item) UpdateDisplay();
+        //if (Item) UpdateDisplay();
     }
 
     private Color GetModColor(SO_Mod mod, Image image = null, bool typeTwo = false)
@@ -61,14 +61,18 @@ public class ModCard : ItemCard
         return c;
     }
 
-    public override void UpdateDisplay(System.Action clickCallBack = null)
+    public override void UpdateDisplay(System.Action clickCallBack = null, int modLevel = -1)
     {
         if (null == Item) return;
 
+        if (modLevel == -1 && Item is SO_Mod mod) modLevel = mod.ModLevel;
+
+        if (modLevel > 1) Debug.Log("This is ModCard, displaying modLevel " + modLevel);
+
         // All items can have these elements
-        if (titleLabel) titleLabel.text = Item.GetTitle();
+        if (titleLabel) titleLabel.text = Item.GetTitle(modLevel);
         if (imageHolder) imageHolder.sprite = Item.Image;
-        if (descriptionLabel) descriptionLabel.text = Item.GetDescription();
+        if (descriptionLabel) descriptionLabel.text = Item.GetDescription(modLevel);
         if (loreLabel) loreLabel.text = Item.Lore;
         if (costLabel)
         {

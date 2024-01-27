@@ -39,9 +39,9 @@ public abstract class MobEffect : MonoBehaviour
   public ScalingStatData[] scalingStatData;
 
 
-  public ScalingStatData GetScalingStatData()
+  public ScalingStatData GetScalingStatData(int level = -1)
   {
-    return scalingStatData[effectLevel - 1];
+        return (level != -1 ? scalingStatData[level - 1] : scalingStatData[effectLevel - 1]);
   }
 
   public virtual void ActivateEffect(MobStats stats)

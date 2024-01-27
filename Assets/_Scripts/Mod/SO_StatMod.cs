@@ -41,17 +41,16 @@ public class SO_StatMod : SO_Mod
     private float _CostMutable; // mutable version
 
     private MobStats _player;
-    private int _modLevel = 1;
 
-    public int ModLevel => _modLevel;
 
     private void OnValidate()
     {
         Description = "<Stat Mods are autofilled at run-time>";
     }
 
-    public override string GetTitle()
+    public override string GetTitle(int modLevel = -1)
     {
+        if (modLevel == -1) modLevel = ModLevel;
         if (!evolve.canStack || evolve.valueGrowthFactor <= 1) return Title;
 
         return Title + " " + UtilityFunctions.ToRoman(ModLevel);
@@ -62,7 +61,7 @@ public class SO_StatMod : SO_Mod
         return Mathf.CeilToInt(_CostMutable);
     }
 
-    public override void Activate(GameObject go)
+    public override void Activate(GameObject go, int modLevel = -1)
     {
         base.Activate();
 
@@ -170,7 +169,6 @@ public class SO_StatMod : SO_Mod
         base.Reset();
         _CostMutable = Cost;
         _addStatsMutable = new (addStats);
-        _modLevel = 1;
         AutofillDescription();
     }
 

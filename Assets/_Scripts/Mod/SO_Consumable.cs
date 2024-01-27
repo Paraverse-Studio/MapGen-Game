@@ -17,7 +17,7 @@ public class SO_Consumable : SO_Item
 
     private MobStats _player;
 
-    public override void Activate(GameObject go)
+    public override void Activate(GameObject go, int level = -1)
     {
         base.Activate();
 

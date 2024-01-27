@@ -13,13 +13,14 @@ public class SO_SkillMod : SO_Mod
     private PlayerCombat _player;
     private MobSkill _skill;
 
-    public override string GetDescription()
+    public override string GetDescription(int modLevel = -1)
     {
+        if (modLevel == -1) modLevel = ModLevel;
         if (!_skill) _skill = Skill.GetComponent<MobSkill>();
-        return Description.Replace("[DMG]", GetScalingText()) + $" ({_skill.Cooldown}s cooldown)";
+        return Description.Replace("[DMG]", GetScalingText(modLevel)) + $" ({_skill.Cooldown}s cooldown)";
     }
 
-    public override void Activate(GameObject go)
+    public override void Activate(GameObject go, int modLevel = -1)
     {
         base.Activate();
 
@@ -46,8 +47,13 @@ public class SO_SkillMod : SO_Mod
         Debug.Log($"Skill Mod: Mod \"{Title}\" (ID {ID}) activated for {_player.gameObject.name}!");
     }
 
-    private string GetScalingText()
+    private string GetScalingText(int modLevel = -1)
     {
+        if (modLevel == -1)
+        {
+            modLevel = ModLevel;
+        }
+
         string msg = "";
         if (_skill.scalingStatData.flatPower != 0)
         {
