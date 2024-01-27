@@ -68,7 +68,6 @@ public class ItemDisplayCreator : TimeChanger
                 card.Item = _items[i];
                 card.descriptionLabel = _contextText;
                 // if it's a mod type, show its higher level cause we're advertising here, not showing current
-                Debug.Log("AYOOO name: " + _items[i].name + ",  adv:" + _advertising + ",   SO_Mod? " + (_items[i] is SO_Mod mod2));
                 if (_advertising && _items[i] is SO_Mod mod && mod.Activated)
                 {
                     card.UpdateDisplay(null, mod.ModLevel + 1);
@@ -138,7 +137,7 @@ public class ItemDisplayCreator : TimeChanger
 
         // the mod itself handles what the mod will do for the player when activated
         int modLevelToActivate = -1;
-        if (item.Item is SO_Mod mod && ModsManager.Instance.PurchasedMods.Contains(mod))
+        if (item.Item is SO_Mod mod && mod.Activated)
         {
             modLevelToActivate = mod.ModLevel + 1;
         }
