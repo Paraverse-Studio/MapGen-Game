@@ -77,6 +77,8 @@ public class SummaryView : MonoBehaviour
       Debug.Log($"effect {effect.name} with sprite {ParaverseHelper.GetEffectName(effect.EffectNameDB)}");
       GameObject effectMod = Instantiate(effectModImagePf, effectsModsGO.transform);
       effectMod.GetComponent<EffectModUI>().Init(DataMapper.EffectSpriteMapper[effect.EffectNameDB], ParaverseHelper.GetEffectName(effect.EffectNameDB));
+      EffectsObtained.Add(effect.EffectNameDB);
+      Debug.Log($"Effect added: {effect.EffectNameDB.ToString()}");
     }
 
     // Populate summary view 
