@@ -1,5 +1,7 @@
+#if !UNITY_WEBGL
 using Firebase;
 using Firebase.Auth;
+#endif
 using ParaverseWebsite.Models;
 using System.Collections;
 using System.Collections.Generic;
@@ -23,11 +25,13 @@ public class MainMenuController : MonoBehaviour
   public TextMeshProUGUI RegisterFeedback;
   public GameObject BloodLinesMenu;
 
+#if !UNITY_WEBGL
   // Firebase variables
   [Header("Firebase")]
   public DependencyStatus dependencyStatus;
   public FirebaseAuth auth;
   public FirebaseUser user;
+#endif
 
   // Login variables
   [Space]
@@ -60,7 +64,7 @@ public class MainMenuController : MonoBehaviour
     passwordLoginField.contentType = TMP_InputField.ContentType.Password;
     passwordRegisterField.contentType = TMP_InputField.ContentType.Password;
     confirmPasswordRegisterField.contentType = TMP_InputField.ContentType.Password;
-
+#if !UNITY_WEBGL
     // Check that all the necessary dependencies for firebase are present on the system 
     FirebaseApp.CheckAndFixDependenciesAsync().ContinueWith(task =>
     {
@@ -75,14 +79,20 @@ public class MainMenuController : MonoBehaviour
         Debug.LogError("Could not resolve all firebase dependencies: " + dependencyStatus);
       }
     });
+#endif
   }
 
   private void Start()
   {
+    #if UNITY_WEBGL
+    OpenHomeLayout();
+    #endif
+    #if !UNITY_WEBGL
     OpenLoginLayout();
     CheckAndFixDependenciesAsync();
+    #endif
   }
-
+#if !UNITY_WEBGL
   private IEnumerator CheckAndFixDependenciesAsync()
   {
     var dependencyTask = FirebaseApp.CheckAndFixDependenciesAsync();
@@ -102,7 +112,9 @@ public class MainMenuController : MonoBehaviour
       Debug.LogError("Could not resolve all firebase dependecies: " + dependencyStatus);
     }
   }
+#endif
 
+#if !UNITY_WEBGL
   /// <summary>
   /// Initializes firebase auth connection 
   /// </summary>
@@ -113,7 +125,9 @@ public class MainMenuController : MonoBehaviour
 
     auth.StateChanged += AuthStateChanged;
   }
+#endif
 
+#if !UNITY_WEBGL
   private void AuthStateChanged(object sender, System.EventArgs eventArgs)
   {
     Debug.Log($"AuthStateChanged - auth: {auth}, CurrentUser: {auth.CurrentUser}, user: {user}");
@@ -135,8 +149,10 @@ public class MainMenuController : MonoBehaviour
       }
     }
   }
+#endif
 
   #region Auto Login Methods
+#if !UNITY_WEBGL
   /// <summary>
   /// Checks if user is already logged in
   /// </summary>
@@ -156,7 +172,9 @@ public class MainMenuController : MonoBehaviour
       OpenLoginLayout();
     }
   }
+#endif
 
+#if !UNITY_WEBGL
   /// <summary>
   /// Opens the corresponding (HomeLayout or LoginLayout) depending on if user is already logged in or not
   /// </summary>
@@ -200,6 +218,7 @@ public class MainMenuController : MonoBehaviour
       OpenLoginLayout();
     }
   }
+#endif
   #endregion
 
   #region Login Methods
@@ -237,11 +256,14 @@ public class MainMenuController : MonoBehaviour
     FirebaseDatabaseManager.Instance.GetUser(model.Username,
           // SUCCESSFULLY RETRIEVED USER
           (user) => {
+            if (user.Username == "" || user.Username == null) return;
             _username = user.Username;
             model.Email = user.Email;
             Debug.Log($"User exists in database! {user.Username}");
 
+#if !UNITY_WEBGL
             StartCoroutine(LoginAsync(model));
+#endif
           },
           // FAILED TO RETRIEVE USER
           () =>
@@ -253,7 +275,9 @@ public class MainMenuController : MonoBehaviour
               (users) =>
               {
                 Debug.Log("Failed to retrieve user via username. Trying with email...");
+#if !UNITY_WEBGL
                 StartCoroutine(LoginAsync(model));
+#endif
                 foreach (KeyValuePair<string, UserModel> entry in users)
                 {
                   if (entry.Value.Email  == model.Email)
@@ -273,6 +297,7 @@ public class MainMenuController : MonoBehaviour
         );
   }
 
+#if !UNITY_WEBGL
   /// <summary>
   /// Logs user in by checking Firebase Auth in database
   /// </summary>
@@ -337,6 +362,7 @@ public class MainMenuController : MonoBehaviour
 
     LoginFeedback.text = failedMessage;
   }
+#endif
 
   /// <summary>
   /// Clears login input fields
@@ -346,7 +372,7 @@ public class MainMenuController : MonoBehaviour
     usernameLoginField.text = "";
     passwordLoginField.text = "";
   }
-  #endregion
+#endregion
 
   #region Registration Methods
 
@@ -410,6 +436,8 @@ public class MainMenuController : MonoBehaviour
     }
     return true;
   }
+
+
   /// <summary>
   /// OnClick method for register button
   /// </summary>
@@ -429,11 +457,14 @@ public class MainMenuController : MonoBehaviour
             Debug.Log($"An account with Username: {model.Username} does not exist in the database. Continue with Registration!");
             Debug.Log($"An account with Email: {model.Email} does not exist in the database. Continue with Registration!");
             _username = model.Username;
+#if !UNITY_WEBGL
             StartCoroutine(RegisterAsync(model));
+#endif
           }
         );
   }
 
+#if !UNITY_WEBGL
   /// <summary>
   /// Registers user and updates Firebase Auth in database
   /// </summary>
@@ -545,6 +576,7 @@ public class MainMenuController : MonoBehaviour
 
     RegisterFeedback.text = failedMessage;
   }
+#endif
 
   /// <summary>
   /// Clears registration input fields
@@ -556,8 +588,9 @@ public class MainMenuController : MonoBehaviour
     passwordRegisterField.text = "";
     confirmPasswordRegisterField.text = "";
   }
-  #endregion
+#endregion
 
+#if !UNITY_WEBGL
   /// <summary>
   /// Logs user out
   /// </summary>
@@ -567,7 +600,8 @@ public class MainMenuController : MonoBehaviour
     {
       auth.SignOut();
     }
-  }
+}
+#endif
 
   #region Layout Methods
   public void OpenLoginLayout()

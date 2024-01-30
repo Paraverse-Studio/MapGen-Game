@@ -100,7 +100,10 @@ public class SummaryView : MonoBehaviour
     if (Username == null || Username == "")
     {
       Debug.LogError($"{Username} is null or empty!! Need to get username before gameplay!!! Signing user out...");
+
+      #if !UNITY_WEBGL
       MainMenuController.Instance.auth.SignOut();
+      #endif
       return;
     }
 
