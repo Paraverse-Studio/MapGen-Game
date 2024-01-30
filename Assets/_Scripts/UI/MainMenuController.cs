@@ -84,11 +84,8 @@ public class MainMenuController : MonoBehaviour
 
   private void Start()
   {
-    #if UNITY_WEBGL
-    OpenHomeLayout();
-    #endif
-    #if !UNITY_WEBGL
     OpenLoginLayout();
+    #if !UNITY_WEBGL
     CheckAndFixDependenciesAsync();
     #endif
   }
@@ -251,7 +248,13 @@ public class MainMenuController : MonoBehaviour
   /// </summary>
   public void Login()
   {
-    LoginValidationModel model = new LoginValidationModel(usernameLoginField.text, null, passwordLoginField.text);
+    LoginValidationModel model;
+#if UNITY_WEBGL
+    model = new LoginValidationModel(usernameLoginField.text, null, null);
+#endif
+#if !UNITY_WEBGL
+     model = new LoginValidationModel(usernameLoginField.text, null, passwordLoginField.text);
+#endif
     Debug.Log("user: " + model.Username);
     FirebaseDatabaseManager.Instance.GetUser(model.Username,
           // SUCCESSFULLY RETRIEVED USER
@@ -261,6 +264,10 @@ public class MainMenuController : MonoBehaviour
             model.Email = user.Email;
             Debug.Log($"User exists in database! {user.Username}");
 
+#if UNITY_WEBGL
+            OpenHomeLayout();
+            LoginFeedback.text = $"You are successfully logged in!";
+#endif
 #if !UNITY_WEBGL
             StartCoroutine(LoginAsync(model));
 #endif
@@ -286,6 +293,9 @@ public class MainMenuController : MonoBehaviour
                     break;
                   }
                 }
+#if UNITY_WEBGL
+                LoginFeedback.text = "Login Failed! User does not exist!";
+#endif
               },
               // FAILURE TO RETREIVE USERS LIST
               () =>
@@ -590,21 +600,25 @@ public class MainMenuController : MonoBehaviour
   }
 #endregion
 
-#if !UNITY_WEBGL
   /// <summary>
   /// Logs user out
   /// </summary>
   public void Logout()
   {
+#if !UNITY_WEBGL
     if (auth != null && user != null)
     {
       auth.SignOut();
     }
-}
 #endif
+#if UNITY_WEBGL
+    _username = "";
+    OpenLoginLayout();
+#endif
+}
 
-  #region Layout Methods
-  public void OpenLoginLayout()
+#region Layout Methods
+public void OpenLoginLayout()
   {
     CloseAll();
     ClearLoginInputFieldText();
