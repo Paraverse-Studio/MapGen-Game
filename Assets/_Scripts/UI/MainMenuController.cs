@@ -24,6 +24,7 @@ public class MainMenuController : MonoBehaviour
   public GameObject RegistrationLayout;
   public TextMeshProUGUI RegisterFeedback;
   public GameObject BloodLinesMenu;
+  public GameObject RegisterLink;
 
 #if !UNITY_WEBGL
   // Firebase variables
@@ -62,6 +63,14 @@ public class MainMenuController : MonoBehaviour
       Destroy(Instance);
 
     passwordLoginField.contentType = TMP_InputField.ContentType.Password;
+#if !UNITY_WEBGL
+    passwordLoginField.transform.parent.GetComponent<RectTransform>().gameObject.SetActive(true);
+    RegisterLink.SetActive(true);
+#endif
+#if UNITY_WEBGL
+    passwordLoginField.transform.parent.GetComponent<RectTransform>().gameObject.SetActive(false);
+    RegisterLink.SetActive(false);
+#endif
     passwordRegisterField.contentType = TMP_InputField.ContentType.Password;
     confirmPasswordRegisterField.contentType = TMP_InputField.ContentType.Password;
 #if !UNITY_WEBGL
@@ -85,9 +94,9 @@ public class MainMenuController : MonoBehaviour
   private void Start()
   {
     OpenLoginLayout();
-    #if !UNITY_WEBGL
+#if !UNITY_WEBGL
     CheckAndFixDependenciesAsync();
-    #endif
+#endif
   }
 #if !UNITY_WEBGL
   private IEnumerator CheckAndFixDependenciesAsync()
@@ -216,7 +225,7 @@ public class MainMenuController : MonoBehaviour
     }
   }
 #endif
-  #endregion
+#endregion
 
   #region Login Methods
   /// <summary>
