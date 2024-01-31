@@ -59,6 +59,7 @@ public class SummaryView : MonoBehaviour
     BloodlineType BloodLineEnum = bloodlinesController.chosenBloodline;
     SkillName SkillUsedEnum;
     List<EffectName> EffectsObtained = new List<EffectName>();
+    EffectsObtained.Clear();
 
     if (playerCombat.ActiveSkill == null)
     {
@@ -71,14 +72,17 @@ public class SummaryView : MonoBehaviour
       SkillUsedEnum = playerCombat.ActiveSkill._skillNameDB;
     }
 
+    GameObject effectMod;
     foreach (MobEffect effect in playerCombat.Effects)
     {
-      Debug.Log($"effectNAMEDB {effect.EffectNameDB} with effect name db {effect.EffectNameDB}");
-      Debug.Log($"effect {effect.name} with sprite {ParaverseHelper.GetEffectName(effect.EffectNameDB)}");
-      GameObject effectMod = Instantiate(effectModImagePf, effectsModsGO.transform);
-      effectMod.GetComponent<EffectModUI>().Init(DataMapper.EffectSpriteMapper[effect.EffectNameDB], ParaverseHelper.GetEffectName(effect.EffectNameDB));
+      // Only display a single instance of each effect
+      if (false == EffectsObtained.Contains(effect.EffectNameDB))
+      {
+        effectMod = Instantiate(effectModImagePf, effectsModsGO.transform);
+        effectMod.GetComponent<EffectModUI>().Init(DataMapper.EffectSpriteMapper[effect.EffectNameDB], ParaverseHelper.GetEffectName(effect.EffectNameDB));
+      }
+      // Add all instances of the effects (occurances of effect will mean the level)
       EffectsObtained.Add(effect.EffectNameDB);
-      Debug.Log($"Effect added: {effect.EffectNameDB.ToString()}");
     }
 
     // Populate summary view 

@@ -93,7 +93,7 @@ public class FirebaseDatabaseManager : MonoBehaviour
 
   public void PostMatchHistory(MatchHistoryModel model, PostMatchHistoryCallback callback)
   {
-    string id = DateTime.Now.ToString("yy-MM-dd-HH:mm:ss:ffffff");
+    string id = DateTimeOffset.Now.ToUnixTimeMilliseconds().ToString();
 
     RestClient.Put<SessionDataModel>($"{databasePath}{matchHistoriesPath}/{model.Username}/{id}.json", model)
       .Then(response =>

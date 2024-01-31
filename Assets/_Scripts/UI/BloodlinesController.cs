@@ -34,7 +34,9 @@ public class BloodlinesController : MonoBehaviour
     private void Awake()
     {
         continueButton.interactable = false;
-    }
+        _playerDiveForce = playerController.diveForce;
+        _playerDiveDuration = playerController.maxDiveDuration;
+  }
 
     // UI button callback
     public void ChooseBloodline(int type)
@@ -59,6 +61,7 @@ public class BloodlinesController : MonoBehaviour
         switch (chosenBloodline)
         {
             case BloodlineType.Vagabond:
+                ResetDiveValues();
                 playerStats.AttackDamage.AddMod(new StatModifier(5));
                 playerStats.MaxHealth.AddMod(new StatModifier(50));
                 playerStats.SetCurrentHealth((int)playerStats.MaxHealth.FinalValue);
@@ -66,17 +69,17 @@ public class BloodlinesController : MonoBehaviour
                 break;
             case BloodlineType.Harrier:
                 playerStats.UpdateMovementSpeed(2);
-                _playerDiveForce = playerController.diveForce;
-                _playerDiveDuration = playerController.maxDiveDuration;
                 playerController.maxDiveDuration *= 1.5f;
                 playerController.diveForce += 5;
                 playerAnimator.speed = 1.2f;
                 break;
             case BloodlineType.Pioneer:
+                ResetDiveValues();
                 playerStats.CooldownReduction.AddMod(new StatModifier(30));
                 playerStats.MaxEnergy.AddMod(new StatModifier(100));
                 break;
             case BloodlineType.Scholar:
+                ResetDiveValues();
                 playerStats.AttackDamage.OnStatBaseValueUpdatedEvent += ScholarEffectAttack;
                 playerStats.AbilityPower.OnStatBaseValueUpdatedEvent += ScholarEffectAbility;
                 break;
@@ -102,6 +105,13 @@ public class BloodlinesController : MonoBehaviour
                 playerStats.AbilityPower.OnStatBaseValueUpdatedEvent -= ScholarEffectAbility;
                 break;
         }
+        ResetDiveValues();
+    }
+
+    private void ResetDiveValues()
+    {
+        _playerDiveForce = playerController.diveForce;
+        _playerDiveDuration = playerController.maxDiveDuration;
     }
 
     public void VagabondRoundHeal()
