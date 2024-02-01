@@ -500,9 +500,9 @@ namespace Paraverse.Player
     /// </summary>
     public void FactoryResetPlayerOnDeath()
     {
-      combat.DeactivateEffects();
-      stats.ResetStats();
-      combat.DeactivateSkill();
+      GetComponent<PlayerCombat>().DeactivateEffects();
+      GetComponent<MobStats>().ResetStats();
+      GetComponent<PlayerCombat>().DeactivateSkill();
       GameLoopManager.Instance.FactoryResetSessionStats();
       Debug.Log("Factory Reset");
     }
