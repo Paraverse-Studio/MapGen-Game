@@ -93,7 +93,7 @@ public class InteractableObject : MonoBehaviour
 
                 for (int i = _items.Count - 1; i >= 4; --i) _items.Remove(_items[i]); // display 4 out of the many
             }
-            _display.Display(UniqueMods(_items), null);
+            _display.Display(_items, null);
         }
         else if (thisInteractable == InteractableObjects.trainer)
         {

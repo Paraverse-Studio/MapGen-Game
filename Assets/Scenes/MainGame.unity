@@ -38,7 +38,7 @@ RenderSettings:
   m_ReflectionIntensity: 1
   m_CustomReflection: {fileID: 0}
   m_Sun: {fileID: 0}
-  m_IndirectSpecularColor: {r: 0.11613611, g: 0.42406112, b: 0.73004746, a: 1}
+  m_IndirectSpecularColor: {r: 0.117370084, g: 0.4250454, b: 0.73394984, a: 1}
   m_UseRadianceAmbientProbe: 0
 --- !u!157 &3
 LightmapSettings:
@@ -3519,11 +3519,11 @@ MonoBehaviour:
   text: {fileID: 63173269}
   defaultIndex: -1
   MessageOptions:
-  - 'Vagabond: Start with 15 Attack, and 150 Health. Additionally, heal 5% HP at
-    start of every round.'
-  - 'Harrier: Start with +2 movement speed, and 50% increased Dash length, and 20%
+  - 'Vagabond: Start with 150 Health. Additionally, heal 5% HP at start of every
+    round.'
+  - 'Harrier: Start with +1 movement speed, and 50% increased Dash length, and 20%
     increased attack speed.'
-  - 'Pioneer: Start with 200 energy, and have 30% reduced cooldown.'
+  - 'Pioneer: Start with 200 energy, and have 35% reduced cooldown.'
   - 'Scholar: When you grow an amount in Attack, grow 50% of that in Ability. Inversely,
     get 25% of any Ability growth in Attack.'
 --- !u!114 &63173269
@@ -8023,6 +8023,18 @@ MonoBehaviour:
             m_StringArgument: 
             m_BoolArgument: 0
           m_CallState: 2
+        - m_Target: {fileID: 1752897481}
+          m_TargetAssemblyTypeName: Paraverse.Player.PlayerController, Assembly-CSharp
+          m_MethodName: FactoryResetPlayerOnDeath
+          m_Mode: 1
+          m_Arguments:
+            m_ObjectArgument: {fileID: 0}
+            m_ObjectArgumentAssemblyTypeName: UnityEngine.Object, UnityEngine
+            m_IntArgument: 0
+            m_FloatArgument: 0
+            m_StringArgument: 
+            m_BoolArgument: 0
+          m_CallState: 2
     OnInitiateRound:
       m_PersistentCalls:
         m_Calls:
@@ -8166,19 +8178,7 @@ MonoBehaviour:
           m_CallState: 2
     OnEndSession:
       m_PersistentCalls:
-        m_Calls:
-        - m_Target: {fileID: 1752897481}
-          m_TargetAssemblyTypeName: Paraverse.Player.PlayerController, Assembly-CSharp
-          m_MethodName: FactoryResetPlayerOnDeath
-          m_Mode: 1
-          m_Arguments:
-            m_ObjectArgument: {fileID: 0}
-            m_ObjectArgumentAssemblyTypeName: UnityEngine.Object, UnityEngine
-            m_IntArgument: 0
-            m_FloatArgument: 0
-            m_StringArgument: 
-            m_BoolArgument: 0
-          m_CallState: 2
+        m_Calls: []
     OnUI:
       m_PersistentCalls:
         m_Calls: []
@@ -22809,7 +22809,7 @@ RectTransform:
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
   m_AnchorMin: {x: 0, y: 0}
   m_AnchorMax: {x: 0, y: 0}
-  m_AnchoredPosition: {x: 100, y: 0}
+  m_AnchoredPosition: {x: 0, y: 0}
   m_SizeDelta: {x: 0, y: 62}
   m_Pivot: {x: 1, y: 1}
 --- !u!114 &480979922
@@ -23306,7 +23306,7 @@ RectTransform:
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
   m_AnchorMin: {x: 0, y: 0}
   m_AnchorMax: {x: 0, y: 0}
-  m_AnchoredPosition: {x: 3, y: 0}
+  m_AnchoredPosition: {x: 0, y: 0}
   m_SizeDelta: {x: 0, y: 0}
   m_Pivot: {x: 0, y: 1}
 --- !u!114 &498716843
@@ -38945,7 +38945,7 @@ RectTransform:
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
   m_AnchorMin: {x: 0, y: 0}
   m_AnchorMax: {x: 0, y: 0}
-  m_AnchoredPosition: {x: 300.5, y: 0}
+  m_AnchoredPosition: {x: 0, y: 0}
   m_SizeDelta: {x: 0, y: 0}
   m_Pivot: {x: 0.5, y: 0.5}
 --- !u!114 &818983974
@@ -48643,7 +48643,7 @@ RectTransform:
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
   m_AnchorMin: {x: 0, y: 0}
   m_AnchorMax: {x: 0, y: 0}
-  m_AnchoredPosition: {x: 3, y: 0}
+  m_AnchoredPosition: {x: 0, y: 0}
   m_SizeDelta: {x: 0, y: 0}
   m_Pivot: {x: 0, y: 1}
 --- !u!114 &1031312079
@@ -61044,7 +61044,7 @@ RectTransform:
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
   m_AnchorMin: {x: 0, y: 0}
   m_AnchorMax: {x: 0, y: 0}
-  m_AnchoredPosition: {x: 6, y: 0}
+  m_AnchoredPosition: {x: 0, y: 0}
   m_SizeDelta: {x: 0, y: 0}
   m_Pivot: {x: 0, y: 0}
 --- !u!114 &1271340574
@@ -62449,7 +62449,7 @@ RectTransform:
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
   m_AnchorMin: {x: 0, y: 0}
   m_AnchorMax: {x: 0, y: 0}
-  m_AnchoredPosition: {x: 160.595, y: 0}
+  m_AnchoredPosition: {x: 0, y: 0}
   m_SizeDelta: {x: 0, y: 0}
   m_Pivot: {x: 0.5, y: 0.5}
 --- !u!114 &1292337618
@@ -86364,7 +86364,7 @@ RectTransform:
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
   m_AnchorMin: {x: 0, y: 0}
   m_AnchorMax: {x: 0, y: 0}
-  m_AnchoredPosition: {x: 6, y: 0}
+  m_AnchoredPosition: {x: 0, y: 0}
   m_SizeDelta: {x: 0, y: 0}
   m_Pivot: {x: 0, y: 0}
 --- !u!114 &1838762275
@@ -92574,7 +92574,6 @@ MonoBehaviour:
   RegisterFeedback: {fileID: 1866064140}
   BloodLinesMenu: {fileID: 392855106}
   RegisterLink: {fileID: 1646813496}
-  dependencyStatus: 0
   usernameLoginField: {fileID: 1592171388}
   passwordLoginField: {fileID: 1438519674}
   emailRegisterField: {fileID: 1604912185}

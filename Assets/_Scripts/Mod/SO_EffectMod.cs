@@ -9,11 +9,17 @@ public class SO_EffectMod : SO_Mod
 
     private PlayerCombat _player;
     private MobEffect _effect;
+    private float _CostMutable; // mutable version
 
     public override string GetTitle(int modLevel = -1)
     {
         if (modLevel == -1) modLevel = ModLevel;
         return Title + (evolve.canStack ? " [LV." + modLevel + "]" : string.Empty);
+    }
+
+    public override int GetCost()
+    {
+        return Mathf.CeilToInt(_CostMutable);
     }
 
     public override string GetDescription(int modLevel)
@@ -67,7 +73,8 @@ public class SO_EffectMod : SO_Mod
     {
         if (evolve.canStack)
         {
-            //_modLevel++;
+            _CostMutable = GetCost() * evolve.costGrowthFactor;
+
             AutofillDescription();
             return this;
         }
@@ -111,7 +118,8 @@ public class SO_EffectMod : SO_Mod
 
     public override void Reset()
     {
-        base.Reset();        
+        base.Reset();
+        _CostMutable = Cost;
         AutofillDescription();
     }
 
