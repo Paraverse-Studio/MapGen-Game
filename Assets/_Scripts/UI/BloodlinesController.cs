@@ -61,31 +61,28 @@ public class BloodlinesController : MonoBehaviour
         switch (chosenBloodline)
         {
             case BloodlineType.Vagabond:
-                ResetDiveValues();
-                playerStats.AttackDamage.AddMod(new StatModifier(5));
                 playerStats.MaxHealth.AddMod(new StatModifier(50));
                 playerStats.SetCurrentHealth((int)playerStats.MaxHealth.FinalValue);
                 GameLoopManager.Instance.GameLoopEvents.OnStartRound.AddListener(VagabondRoundHeal);
                 break;
             case BloodlineType.Harrier:
-                playerStats.UpdateMovementSpeed(2);
+                playerStats.UpdateMovementSpeed(1);
                 playerController.maxDiveDuration *= 1.5f;
                 playerController.diveForce += 5;
                 playerAnimator.speed = 1.2f;
                 break;
             case BloodlineType.Pioneer:
-                ResetDiveValues();
-                playerStats.CooldownReduction.AddMod(new StatModifier(30));
+                playerStats.CooldownReduction.AddMod(new StatModifier(35));
                 playerStats.MaxEnergy.AddMod(new StatModifier(100));
                 break;
             case BloodlineType.Scholar:
-                ResetDiveValues();
                 playerStats.AttackDamage.OnStatBaseValueUpdatedEvent += ScholarEffectAttack;
                 playerStats.AbilityPower.OnStatBaseValueUpdatedEvent += ScholarEffectAbility;
                 break;
         }
     }
 
+    // Called right at the start of a new session (GameLoopEvents -> OnInitiateSession)
     public void ResetBloodline()
     {
         switch (chosenBloodline)
