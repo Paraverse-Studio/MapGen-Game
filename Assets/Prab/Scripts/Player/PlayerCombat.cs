@@ -73,7 +73,7 @@ namespace Paraverse.Player
       }
       for (int i = 0; i < _effects.Count; i++)
       {
-        _effects[i].ActivateEffect(stats);
+        _effects[i].ActivateEffect(stats, _effects[i].ID, _effects[i].effectLevel);
       }
       _attackColliderGO.GetComponent<AttackCollider>().Init(this);
 
@@ -142,7 +142,7 @@ namespace Paraverse.Player
       _refresher.RefreshContentFitters();
     }
 
-    public void ActivateEffect(GameObject obj)
+    public void ActivateEffect(GameObject obj, int id, int level)
     {
       MobEffect effect = obj.GetComponent<MobEffect>();
       if (null == effect) return;
@@ -150,17 +150,26 @@ namespace Paraverse.Player
       // If effect already exists, then just activate
       foreach (MobEffect eff in _effects)
       {
+        Debug.Log($"foreach: eff: {eff.name} comparing with effect: {effect.name}");
+        Debug.Log($"Comparing {eff.name} with eff.ID: {eff.ID} == effect.ID: {effect.ID}");
         if (eff.ID == effect.ID)
         {
-          eff.ActivateEffect(stats);
-          return;
+          Debug.Log($"eff.ID: {eff.ID} == effect.ID: {effect.ID}");
+          eff.DeactivateEffect();
+          _effects.Remove(eff);
+          Destroy(eff.gameObject);
+          break;
         }
       }
 
       // add effect to EffectsHolder if it doesn't exist
+      Debug.Log($"Instantiating effect: {effect.name} into EffectHolder since effect doesn't exist");
       MobEffect effectObj = Instantiate(obj, EffectsHolder).GetComponent<MobEffect>();
+      // Initialize the effect objects values here !!!
+      effectObj.ID = id;
+      effectObj.effectLevel = level;
       _effects.Add(effectObj);
-      effectObj.ActivateEffect(stats);
+      effectObj.ActivateEffect(stats, id, level);
     }
 
     public void DeactivateEffects()

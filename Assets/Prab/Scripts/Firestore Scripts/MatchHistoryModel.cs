@@ -23,6 +23,7 @@ namespace ParaverseWebsite.Models
     public EffectsObtainedOccurancesModel EffectsObtained = new EffectsObtainedOccurancesModel();
     public string Device;
     public string Timestamp;
+    public string Date;
 
 
     public MatchHistoryModel() { }
@@ -61,6 +62,7 @@ namespace ParaverseWebsite.Models
       SkillUsed = skillUsed;
       EffectsObtained = new EffectsObtainedOccurancesModel(effectsObtained);
       Timestamp = DateTime.Now.ToString("yyyy-MM-dd hh:mm:ss tt");
+      Date = DateTimeOffset.Now.ToUnixTimeMilliseconds().ToString(); 
 
 #if UNITY_EDITOR
       Device = DeviceType.Test.ToString();

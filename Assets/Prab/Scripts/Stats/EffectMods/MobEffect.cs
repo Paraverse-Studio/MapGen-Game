@@ -32,7 +32,7 @@ public abstract class MobEffect : MonoBehaviour
   [SerializeField]
   protected GameObject hitFX;
 
-  public bool IsActive { get { return isActive; } }
+  public bool IsActive => isActive; 
   protected bool isActive = false;
   protected GameObject _FX;
   
@@ -44,8 +44,10 @@ public abstract class MobEffect : MonoBehaviour
         return (level != -1 ? scalingStatData[level - 1] : scalingStatData[effectLevel - 1]);
   }
 
-  public virtual void ActivateEffect(MobStats stats)
+  public virtual void ActivateEffect(MobStats stats, int id, int level)
   {
+    ID = id;
+    effectLevel = level;
     _stats = stats;
     _combat = _stats.GetComponent<PlayerCombat>();
     isActive = true;

@@ -8,9 +8,9 @@ public class ReaperKillEffect : MobEffect
   [SerializeField]
   protected int[] healAmount;
 
-  public override void ActivateEffect(MobStats stats)
+  public override void ActivateEffect(MobStats stats, int id, int level)
   {
-    base.ActivateEffect(stats);
+    base.ActivateEffect(stats, id, level);
     _effectNameDB = ParaverseWebsite.Models.EffectName.RepearKill;
     foreach (MobController enemy in EnemiesManager.Instance.Enemies)
     {

@@ -58,13 +58,14 @@ public class SO_EffectMod : SO_Mod
 
         if (!_effect) _effect = Effect.GetComponent<MobEffect>();
         _effect.ID = ID;
+        Debug.Log($"effect {_effect.name} has ID value of {_effect.ID}");
         _effect.effectLevel = modLevel;
         //Skill.Description = Description;
         //Skill.Image = Image;
 
 
         // Add this skill to the player's list of skills, and also activate this one
-        _player.ActivateEffect(Effect);
+        _player.ActivateEffect(Effect, ID, modLevel);
 
         Debug.Log($"Effect Mod: Mod \"{Title}\" (ID {ID}) LVL {modLevel} activated for {_player.gameObject.name}!");
     }

@@ -23,9 +23,9 @@ public class FlowEffect : MobEffect
     _stats.UpdateCurrentEnergy(shieldAmount[effectLevel]);
   }
 
-  public override void ActivateEffect(MobStats stats)
+  public override void ActivateEffect(MobStats stats, int id, int level)
   {
-    base.ActivateEffect(stats);
+    base.ActivateEffect(stats, id, level);
   }
 
   public override void AddSubscribersToSkillEvents(Damage col)

@@ -8,9 +8,9 @@ public class LichBaneEffect : MobEffect
 
   private bool _effectApplied = false;
 
-  public override void ActivateEffect(MobStats stats)
+  public override void ActivateEffect(MobStats stats, int id, int level)
   {
-    base.ActivateEffect(stats);
+    base.ActivateEffect(stats, id, level);
     _effectNameDB = ParaverseWebsite.Models.EffectName.Lichbane;
     _mod[effectLevel-1] = new StatModifier(scalingStatData[effectLevel-1].FinalValue(_stats));
     _combat.BasicAttackSkill.attackCollider.OnBasicAttackPostHitEvent += RemoveMod;

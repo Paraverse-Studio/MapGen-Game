@@ -10,9 +10,9 @@ public class CooldownRefundEffect : MobEffect
   protected float[] cooldownRefundAmount;
 
 
-  public override void ActivateEffect(MobStats stats)
+  public override void ActivateEffect(MobStats stats, int id, int level)
   {
-    base.ActivateEffect(stats);
+    base.ActivateEffect(stats, id, level);
     _effectNameDB = ParaverseWebsite.Models.EffectName.CooldownRefund;
     foreach (MobController enemy in EnemiesManager.Instance.Enemies)
     {

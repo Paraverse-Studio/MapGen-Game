@@ -8,13 +8,11 @@ public class EmpoweredAttackEffect : MobEffect
   [SerializeField, Range(1, 10), Header("Empowered attack every X hit:")]
   private int[] _empoweredHitIndex;
   private StatModifier[] _mod = new StatModifier[5];
-
   private int _hitCounter = 0;
 
-
-  public override void ActivateEffect(MobStats stats)
+  public override void ActivateEffect(MobStats stats, int id, int level)
   {
-    base.ActivateEffect(stats);
+    base.ActivateEffect(stats, id, level);
     _effectNameDB = ParaverseWebsite.Models.EffectName.EmpoweredAttack;
     _mod[effectLevel - 1] = new StatModifier(GetScalingStatData().FinalValue(_stats));
     _hitCounter = 0;
