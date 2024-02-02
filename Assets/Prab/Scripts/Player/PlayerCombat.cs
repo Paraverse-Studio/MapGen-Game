@@ -150,11 +150,8 @@ namespace Paraverse.Player
       // If effect already exists, then just activate
       foreach (MobEffect eff in _effects)
       {
-        Debug.Log($"foreach: eff: {eff.name} comparing with effect: {effect.name}");
-        Debug.Log($"Comparing {eff.name} with eff.ID: {eff.ID} == effect.ID: {effect.ID}");
         if (eff.ID == effect.ID)
         {
-          Debug.Log($"eff.ID: {eff.ID} == effect.ID: {effect.ID}");
           eff.DeactivateEffect();
           _effects.Remove(eff);
           Destroy(eff.gameObject);
@@ -163,7 +160,6 @@ namespace Paraverse.Player
       }
 
       // add effect to EffectsHolder if it doesn't exist
-      Debug.Log($"Instantiating effect: {effect.name} into EffectHolder since effect doesn't exist");
       MobEffect effectObj = Instantiate(obj, EffectsHolder).GetComponent<MobEffect>();
       // Initialize the effect objects values here !!!
       effectObj.ID = id;

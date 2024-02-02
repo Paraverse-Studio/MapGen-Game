@@ -14802,7 +14802,7 @@ MonoBehaviour:
   m_PrefabInstance: {fileID: 0}
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 7922565735799238133}
-  m_Enabled: 1
+  m_Enabled: 0
   m_EditorHideFlags: 0
   m_Script: {fileID: 11500000, guid: 5aa5c1e37409a9344a344c0468db383d, type: 3}
   m_Name: 
@@ -14824,19 +14824,25 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   targetTag: Player
+  knockBackEffect: {fileID: 0}
+  dot: 0
+  dontApplyDamageOnEnter: 0
+  dotIntervalTimer: 1
+  applyHitAnim: 1
+  hitFX: {fileID: 0}
+  scalingStatData:
+    flatPower: 0
+    attackScaling: 1
+    abilityScaling: 0
+    healthScaling: 0
+  isBasicAttackCollider: 0
   speed: 40
   range: 40
   deathTimer: 5
   stationary: 0
-  dot: 0
-  dontApplyDamageOnEnter: 0
-  dotIntervalTimer: 1
-  knockBackEffect: {fileID: 0}
   pierce: 0
-  applyHitAnim: 1
-  launchFX: {fileID: 0}
-  hitFX: {fileID: 0}
   decreaseByLerp: -1
+  launchFX: {fileID: 0}
 --- !u!136 &5382880212905612654
 CapsuleCollider:
   m_ObjectHideFlags: 0

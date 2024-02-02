@@ -325,7 +325,6 @@ namespace Paraverse.Combat
       }
       anim.SetBool(StringData.IsUsingSkill, false);
       _curCooldown = _cooldown * (1.0f - (stats.CooldownReduction.FinalValue / 100.0f));
-      Debug.Log($"_curCD {_curCooldown}");
 
       UnsubscribeAnimationEventListeners();
     }

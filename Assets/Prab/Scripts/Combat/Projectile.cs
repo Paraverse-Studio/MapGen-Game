@@ -18,6 +18,7 @@ namespace Paraverse
         protected float range = 10f;
         [SerializeField, Tooltip("Projectile is destroyed after this duration.")]
         protected float deathTimer = 5f;
+        protected float curdeathTimer = 0f;
 
         [Header("Projectile Properties")]
         [SerializeField, Tooltip("Stationary projectile.")]
@@ -31,7 +32,6 @@ namespace Paraverse
         [Header("Motion")]
         public float decreaseByLerp = -1f;
 
-        protected float curdeathTimer = 0f;
         protected Vector3 origin;
 
         public GameObject launchFX;
@@ -41,6 +41,7 @@ namespace Paraverse
         #region Start & Update
         protected override void Start()
         {
+            curdeathTimer = deathTimer;
             origin = transform.position;
 
             if (launchFX) Instantiate(hitFX, origin, Quaternion.identity);
@@ -48,20 +49,17 @@ namespace Paraverse
 
         protected override void Update()
         {
+            base.Update();
             float distanceFromOrigin = ParaverseHelper.GetDistance(transform.position, origin);
-            if (distanceFromOrigin > range && stationary == false || curdeathTimer >= deathTimer)
-            {
+            if (distanceFromOrigin > range && stationary == false || curdeathTimer <= 0)
                 Destroy(gameObject);
-            }
-
-            dotTimer += Time.deltaTime;
-            curdeathTimer += Time.deltaTime;
 
             if (stationary == false)
             {
                 transform.position += ParaverseHelper.GetPositionXZ(target) * speed * Time.deltaTime;
                 if (decreaseByLerp > 0) speed = Mathf.Lerp(speed, 0, decreaseByLerp * Time.deltaTime);
             }
+            curdeathTimer -= Time.deltaTime;
         }
         #endregion
 

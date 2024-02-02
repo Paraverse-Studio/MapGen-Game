@@ -18,7 +18,6 @@ public class ComboAttack : MonoBehaviour
   public void Init(Animator anim)
   {
     this.anim = anim;
-    Debug.Log($"anim: {anim}");
     SetState(ComboState.Idle);
     _animFinished = false;
     ResetTimer();

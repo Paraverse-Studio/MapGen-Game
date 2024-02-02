@@ -26,7 +26,6 @@ public class ComboAttackSkill : MobSkill, IMobSkill
   public override void ActivateSkill(MobCombat mob, Animator anim, MobStats stats, Transform target = null)
   {
     base.ActivateSkill(mob, anim, stats, target);
-    Debug.Log($"ACTIVATESKILL() - Activating skill {Name}");
 
     // Checks if melee users have basic attack collider script on weapon
     if (null == offHandAttackColliderGO || null == mainHandAttackColliderGO)
@@ -47,7 +46,6 @@ public class ComboAttackSkill : MobSkill, IMobSkill
     foreach (ComboAttack details in comboDetails)
     {
       details.Init(anim);
-      Debug.Log($"Inited combo: {details.animName}");
     }
     SubscribeAnimationEventListeners();
   }

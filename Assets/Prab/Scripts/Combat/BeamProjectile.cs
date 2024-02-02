@@ -51,7 +51,7 @@ public class BeamProjectile : Projectile
     {
         if (beam) //Updates the beam
         {
-            dotTimer += Time.deltaTime;
+            dotTimer -= Time.deltaTime;
             line.SetPosition(0, transform.position);
 
             Vector3 end;
@@ -64,9 +64,9 @@ public class BeamProjectile : Projectile
                 else
                     end = transform.position + (transform.forward * beamLength);
 
-                if (hit.transform.CompareTag(targetTag) && dotTimer >= dotIntervalTimer)
+                if (hit.transform.CompareTag(targetTag) && dotTimer <= 0)
                 {
-                    dotTimer = 0f;
+                    dotTimer = dotIntervalTimer;
                     DamageLogic(hit.collider);
                 }
             }
@@ -92,7 +92,16 @@ public class BeamProjectile : Projectile
             line.material.mainTextureScale = new Vector2(distance / textureLengthScale, 1); //This sets the scale of the texture so it doesn't look stretched
             line.material.mainTextureOffset -= new Vector2(Time.deltaTime * textureScrollSpeed, 0); //This scrolls the texture along the beam if not set to 0
         }
-    }
+
+        if (dotTimer <= 0 && false == beam)
+        {
+          applyHit = true;
+          hitTargets.Clear();
+          dotTimer = dotIntervalTimer;
+        }
+        else
+          dotTimer -= Time.deltaTime;
+  }
 
     public void SpawnBeam() //This function spawns the prefab with linerenderer
     {

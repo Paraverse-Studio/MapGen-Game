@@ -10,7 +10,7 @@ public class Damage : MonoBehaviour, IDamage
   protected MobCombat mob;
 
   [SerializeField, Tooltip("Enter the tag of target.")]
-  protected string targetTag = "Player";
+  protected string targetTag = StringData.PlayerTag;
 
   [Header("Knockback Effect")]
   [SerializeField]
@@ -125,8 +125,7 @@ public class Damage : MonoBehaviour, IDamage
   protected virtual void OnTriggerStay(Collider other)
   {
     if (dot == false) return;
-
-    if (other.CompareTag(targetTag) && !hitTargets.Contains(other.gameObject) && applyHit && dotTimer >= dotIntervalTimer && dot)
+    if (other.CompareTag(targetTag) && !hitTargets.Contains(other.gameObject) && applyHit && dotTimer <= 0 && dot)
     {
       DamageLogic(other);
       dotTimer = dotIntervalTimer;

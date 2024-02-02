@@ -10,7 +10,8 @@ public class ParticlesCollider : Projectile
     public void OnParticleCollision(GameObject other)
     {
         Collider c = other.GetComponent<Collider>();
-        if (c) OnTriggerEnter(c);       
+        if (c) OnTriggerEnter(c);
+        if (c) OnTriggerStay(c);
     }
 
 }
