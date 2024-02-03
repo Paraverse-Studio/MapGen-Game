@@ -12,7 +12,7 @@ public class LeaderboardsStatsContainer : MonoBehaviour
   public TextMeshProUGUI totalScoreText;
   public TextMeshProUGUI roundReachedText;
   public TextMeshProUGUI gamesPlayedText;
-  public TextMeshProUGUI averageLengthText;
+  public TextMeshProUGUI bossKilledText;
   public Image mostUsedBloodlineImage;
   public Image mostUsedSkillImage;
   public Image mostUsedEffectsImageOne;
@@ -27,7 +27,7 @@ public class LeaderboardsStatsContainer : MonoBehaviour
     totalScoreText.text = model.CumulativeTotalScore.ToString();
     roundReachedText.text = model.HighestRoundNumberReached.ToString();
     gamesPlayedText.text = model.CumulativeGamesPlayed.ToString();
-    averageLengthText.text = model.CumulativeSessionLength.ToString();
+    bossKilledText.text = model.CumulativeBossesDefeatedCount.ToString();
     Debug.Log($"bloodline for {model.Username}");
     mostUsedBloodlineImage.sprite = GetMostUsedBloodlineSprite(model.BloodLine, bloodlineMapper);
     mostUsedBloodlineImage.name = ParaverseHelper.GetBloodlineName(model.BloodLine.GetMostUsedBloodLine());
