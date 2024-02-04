@@ -10,6 +10,7 @@ using System.Text.RegularExpressions;
 using System.Threading.Tasks;
 using TMPro;
 using UnityEngine;
+using UnityEngine.EventSystems;
 using UnityEngine.UI;
 
 
@@ -23,9 +24,13 @@ public class MainMenuController : MonoBehaviour
   public TextMeshProUGUI LoginFeedback;
   public GameObject RegistrationLayout;
   public TextMeshProUGUI RegisterFeedback;
-  public GameObject BloodLinesMenu;
+  public GameObject BloodlinesLayout;
   public GameObject RegisterLink;
   public GameObject QuitButton;
+
+  [Header("First Selected GameObjects")]
+  public GameObject playButton; // Home
+  public GameObject bloodLineCard; // Bloodline
 
 #if !UNITY_WEBGL
   // Firebase variables
@@ -633,6 +638,8 @@ public class MainMenuController : MonoBehaviour
 public void OpenLoginLayout()
   {
     CloseAll();
+
+    SetCurrentObject(usernameLoginField.gameObject);
     ClearLoginInputFieldText();
     LoginLayout.SetActive(true);
   }
@@ -640,6 +647,7 @@ public void OpenLoginLayout()
   public void OpenRegistrationLayout()
   {
     CloseAll();
+    SetCurrentObject(usernameRegisterField.gameObject);
     ClearRegistrationInputFieldText();
     RegistrationLayout.SetActive(true);
   }
@@ -647,9 +655,17 @@ public void OpenLoginLayout()
   public void OpenHomeLayout()
   {
     CloseAll();
+    SetCurrentObject(playButton);
     HomeLayout.SetActive(true);
     welcomeText.text = $"Welcome: {_username}!";
     welcomeText.gameObject.SetActive(true);
+  }
+
+  public void OpenBloodlineLayout()
+  {
+    CloseAll();
+    SetCurrentObject(bloodLineCard);
+    BloodlinesLayout.SetActive(true);
   }
 
   public void CloseAll()
@@ -660,7 +676,7 @@ public void OpenLoginLayout()
     LoginFeedback.text = "";
     RegistrationLayout.SetActive(false);
     RegisterFeedback.text = "";
-    BloodLinesMenu.SetActive(false);
+    BloodlinesLayout.SetActive(false);
   }
   #endregion
 
@@ -677,5 +693,12 @@ public void OpenLoginLayout()
   public void OnClickWebsiteLink()
   {
     Application.OpenURL("https://paraverse-studio-dev.herokuapp.com/");
+  }
+
+  private void SetCurrentObject(GameObject go)
+  {
+    Debug.Log($"Active current object: {go.name}");
+    EventSystem.current.SetSelectedGameObject(go);
+    EventSystem.current.firstSelectedGameObject = go;
   }
 }
