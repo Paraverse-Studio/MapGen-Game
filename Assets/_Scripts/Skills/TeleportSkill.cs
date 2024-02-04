@@ -25,17 +25,12 @@ public class TeleportSkill : MobSkill, IMobSkill
   // Check if target exists
   protected override bool CanUseSkill()
   {
-    if (IsOffCooldown && HasEnergy && TargetWithinRange && mob.IsAttackLunging == false && IsBasicAttack == false)
+    if (IsOffCooldown && HasEnergy && TargetWithinRange && mob.IsAttackLunging == false && mob.IsAttacking == false && input != null && false == _player.IsDead)
     {
-      if (null == mob.Target)
-      {
-        mob.Target = SelectableSystem.Instance.ToggleSelect();
-      }
+      if (null == mob.Target) mob.Target = SelectableSystem.Instance.ToggleSelect();
 
       if (null != mob.Target && UtilityFunctions.IsDistanceLessThan(mob.transform.position, mob.Target.position, rangeLimit))
-      {
         return true;
-      }
     }
 
     return false;

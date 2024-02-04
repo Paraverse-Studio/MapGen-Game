@@ -252,7 +252,7 @@ namespace Paraverse.Player
     /// </summary>
     private void ApplyBasicAttack()
     {
-      if (controller.IsAvoidingObjUponLanding || IsSkilling) return;
+      if (controller.IsAvoidingObjUponLanding || IsSkilling || controller.IsDead) return;
 
       if (controller.IsInteracting == false || anim.GetBool(StringData.CanBasicAttackTwo) || anim.GetBool(StringData.CanBasicAttackThree) || controller.IsDiving)
       {

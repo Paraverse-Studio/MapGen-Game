@@ -2,6 +2,7 @@ using Paraverse.Helper;
 using Paraverse.Mob.Combat;
 using Paraverse.Mob.Stats;
 using Paraverse.Player;
+using Paraverse.Stats;
 using ParaverseWebsite.Models;
 using System.Collections.Generic;
 using System.Text;
@@ -32,6 +33,7 @@ public class SummaryView : MonoBehaviour
   public TextMeshProUGUI healthText;
   public Transform effectsModsGO;
   public GameObject effectModImagePf;
+  public List<GameObject> effectModImages = new List<GameObject>();
 
   private void Start()
   {
@@ -61,6 +63,11 @@ public class SummaryView : MonoBehaviour
     List<EffectName> EffectsObtained = new List<EffectName>();
     EffectsObtained.Clear();
 
+    foreach (GameObject go in effectModImages)
+    {
+      Destroy(go);
+    }
+
     if (playerCombat.ActiveSkill == null)
     {
       SkillUsed = "No Skill Obtained";
@@ -71,15 +78,18 @@ public class SummaryView : MonoBehaviour
       SkillUsed = ParaverseHelper.GetSkillName(playerCombat.ActiveSkill._skillNameDB);
       SkillUsedEnum = playerCombat.ActiveSkill._skillNameDB;
     }
+    Debug.Log($"playerCombat effect count: {playerCombat.Effects.Count}");
 
     GameObject effectMod;
     foreach (MobEffect effect in playerCombat.Effects)
     {
+      Debug.Log($"effect: {effect.EffectNameDB.ToString()}");
       // Only display a single instance of each effect
       if (false == EffectsObtained.Contains(effect.EffectNameDB))
       {
         effectMod = Instantiate(effectModImagePf, effectsModsGO.transform);
         effectMod.GetComponent<EffectModUI>().Init(DataMapper.EffectSpriteMapper[effect.EffectNameDB], ParaverseHelper.GetEffectName(effect.EffectNameDB));
+        effectModImages.Add(effectMod);
       }
       // Add all instances of the effects (occurances of effect will mean the level)
       EffectsObtained.Add(effect.EffectNameDB);
