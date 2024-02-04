@@ -9,6 +9,8 @@ namespace ParaverseWebsite.Models
     public string Username;
     public string Email;
     public string StartDate;
+    public string LatestMessageReadDate;
+    public string LatestLoggedInDate;
     public int InteractionScore;
     public string LogoColor;
     public string Caption;
@@ -16,6 +18,7 @@ namespace ParaverseWebsite.Models
     public string ChatEmbed;
     public LikesModel Likes;
     public string Avatar;
+    public int ChatMessageSent;
 
     public UserModel() { }
 
@@ -30,6 +33,8 @@ namespace ParaverseWebsite.Models
       Username = username.ToLower();
       Email = email.ToLower();
       StartDate = DateTime.Today.ToString("MMMM dd, yy");
+      LatestLoggedInDate = DateTime.Today.ToString("MMMM dd, yy");
+      LatestMessageReadDate = "0";
       InteractionScore = 0;
       Likes = new LikesModel();
       LogoColor = "#d17213";
@@ -37,6 +42,7 @@ namespace ParaverseWebsite.Models
       CaptionColor = "#ffffff";
       ChatEmbed = "true";
       Avatar = "Male/avatarm0";
+      ChatMessageSent = 0;
     }
   }
 
