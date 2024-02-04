@@ -103,22 +103,10 @@ namespace Paraverse.Combat
     /// Returns true if skill conditions are met. 
     /// </summary>
     /// <returns></returns>
-    protected virtual bool CanUseSkillForPlayer()
-    {
-      if (IsOffCooldown && HasEnergy && TargetWithinRange && mob.IsAttackLunging == false && anim.GetBool(StringData.IsBasicAttacking) == false)
-        return true;
-
-      return false;
-    }
-
-    /// <summary>
-    /// Returns true if skill conditions are met. 
-    /// </summary>
-    /// <returns></returns>
     protected virtual bool CanUseSkill()
     {
       if (IsOffCooldown && HasEnergy && TargetWithinRange && mob.IsAttackLunging == false && mob.IsAttacking == false && mob.ActiveSkill == null && mob.Controller.ActiveKnockBackEffect == null ||
-        IsOffCooldown && HasEnergy && TargetWithinRange && mob.IsAttackLunging == false && mob.IsAttacking == false && input != null && false == _player.IsDead) // For player Active skill is always active
+        IsOffCooldown && HasEnergy && TargetWithinRange && mob.IsAttackLunging == false && mob.IsAttacking == false && input != null) // For player Active skill is always active
         return true;
 
       return false;
@@ -199,6 +187,7 @@ namespace Paraverse.Combat
       this.input = input;
       this.anim = anim;
       this.stats = stats;
+      this._player = mob.GetComponent<PlayerController>();
       _curCooldown = 0f;
       if (mob.gameObject.CompareTag(StringData.PlayerTag) && _isBasicAttack == false)
         input.OnSkillOneEvent += Execute;
