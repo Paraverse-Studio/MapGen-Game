@@ -4,6 +4,7 @@ using Paraverse.Mob.Stats;
 using Paraverse.Stats;
 using UnityEngine;
 using UnityEngine.AI;
+using static UnityEngine.UI.Image;
 
 namespace Paraverse.Mob.Controller
 {
@@ -107,6 +108,7 @@ namespace Paraverse.Mob.Controller
     protected Vector3 landPos;
     [SerializeField]
     protected float isGroundedCheckRange = 0.5f;
+    protected float maxDistanceForGroundCheck = 20f;
     protected Vector3 jumpDir;
     private float curAirCheckTimer = 0.5f;
     private float jumpCheckTimer = 0.5f;
@@ -716,6 +718,15 @@ namespace Paraverse.Mob.Controller
         controller.Move(landDir * Time.deltaTime);
         //nav.updateRotation = false;
 
+        if (LandEarly())
+        {
+          nav.enabled = true;
+          OnLandEvent?.Invoke();
+          _isJumping = false;
+          Debug.Log("LandedEarly()");
+          return;
+        }
+
         if (curAirCheckTimer <= 0)
         {
           if (IsGroundedCheck())
@@ -723,14 +734,27 @@ namespace Paraverse.Mob.Controller
             nav.enabled = true;
             OnLandEvent?.Invoke();
             _isJumping = false;
+            Debug.Log("IsGroundedCheck()");
             return;
           }
         }
         else
           curAirCheckTimer -= Time.deltaTime;
 
+        Debug.Log("JumpHandler()");
         jumpDir.y += GlobalValues.GravityForce * GlobalValues.GravityModifier * Time.deltaTime;
       }
+    }
+
+    private bool LandEarly()
+    {
+      Vector3 origin = transform.position;
+      Vector3 dir = -transform.up;
+
+      if (Physics.Raycast(origin, dir * maxDistanceForGroundCheck, out RaycastHit groundHit, maxDistanceForGroundCheck, groundLayer))
+        return false;
+      else
+        return true;
     }
 
     /// <summary>
