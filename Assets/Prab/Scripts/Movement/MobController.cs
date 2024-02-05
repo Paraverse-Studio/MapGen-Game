@@ -4,7 +4,6 @@ using Paraverse.Mob.Stats;
 using Paraverse.Stats;
 using UnityEngine;
 using UnityEngine.AI;
-using static UnityEngine.UI.Image;
 
 namespace Paraverse.Mob.Controller
 {
@@ -27,7 +26,7 @@ namespace Paraverse.Mob.Controller
     protected IMobCombat combat;
     protected StatusEffectManager statusEffectManager;
     // Reference to the stats script
-    IMobStats IMobController.Stats => stats; 
+    IMobStats IMobController.Stats => stats;
     protected IMobStats stats;
 
     [Header("Movement Values"), Tooltip("The current speed of the mob")]
@@ -797,7 +796,7 @@ namespace Paraverse.Mob.Controller
       Debug.DrawRay(bottomOrigin, dir * checkFallRange, Color.green);
       Debug.DrawRay(leftOrigin, dir * checkFallRange, Color.blue);
       Debug.DrawRay(rightOrigin, dir * checkFallRange, Color.green);
-        
+
 
       if (Physics.Raycast(topOrigin, dir * checkFallRange, checkFallRange))
         raycastOnNavMeshCount++;
@@ -946,7 +945,7 @@ namespace Paraverse.Mob.Controller
   }
 }
 
-public enum MobType 
+public enum MobType
 {
   Normal,
   Boss,
