@@ -723,7 +723,6 @@ namespace Paraverse.Mob.Controller
           nav.enabled = true;
           OnLandEvent?.Invoke();
           _isJumping = false;
-          Debug.Log("LandedEarly()");
           return;
         }
 
@@ -734,7 +733,6 @@ namespace Paraverse.Mob.Controller
             nav.enabled = true;
             OnLandEvent?.Invoke();
             _isJumping = false;
-            Debug.Log("IsGroundedCheck()");
             return;
           }
         }
@@ -746,6 +744,10 @@ namespace Paraverse.Mob.Controller
       }
     }
 
+    /// <summary>
+    /// Lands mob early if no ground exists
+    /// </summary>
+    /// <returns></returns>
     private bool LandEarly()
     {
       Vector3 origin = transform.position;
@@ -785,30 +787,11 @@ namespace Paraverse.Mob.Controller
       int requiredRaycastOnNavMesh = 4;   // keeps mob on nav mesh if 2 raycasts are hitting the nav mesh
       Vector3 origin = transform.position;
       Vector3 dir = -transform.up;
-      Vector3 behindDir = -transform.forward;
 
       Vector3 topOrigin = origin + new Vector3(0f, 0f, -nav.radius);
       Vector3 bottomOrigin = origin + new Vector3(0f, 0f, nav.radius);
       Vector3 leftOrigin = origin + new Vector3(-nav.radius, 0f, 0f);
       Vector3 rightOrigin = origin + new Vector3(nav.radius, 0f, 0f);
-      //Vector3 midSectionOrigin = origin + new Vector3(0, 0.5f, 0);
-      //Vector3 behindMidSectionOrigin; 
-      //if (ActiveKnockBackEffect != null)
-      //{
-      //  behindMidSectionOrigin = midSectionOrigin - transform.forward * ActiveKnockBackEffect.maxKnockbackRange;
-      //  Debug.DrawRay(midSectionOrigin, behindDir * ActiveKnockBackEffect.maxKnockbackRange, Color.red);
-      //  Debug.DrawRay(behindMidSectionOrigin, dir * 2f, Color.blue);
-
-      //  if (Physics.Raycast(midSectionOrigin, behindDir * ActiveKnockBackEffect.maxKnockbackRange, 1f))
-      //    Debug.Log("Hitting something behind");
-      //  else
-      //    Debug.Log("MOB SHOULD FALL OFF!! NO WALL!!");
-
-      //  if (Physics.Raycast(behindMidSectionOrigin, dir * 2f, 2f))
-      //    Debug.Log("Hitting Ground");
-      //  else
-      //    Debug.Log("MOB SHOULD FALL OFF!! NO GROUND!!");
-      //}
 
       Debug.DrawRay(topOrigin, dir * checkFallRange, Color.red);
       Debug.DrawRay(bottomOrigin, dir * checkFallRange, Color.green);
@@ -826,7 +809,6 @@ namespace Paraverse.Mob.Controller
         raycastOnNavMeshCount++;
 
       partiallyOnGround = raycastOnNavMeshCount > 0 ? true : false;
-      //Debug.Log("raycastOnNavMeshCount: " + raycastOnNavMeshCount + "requiredRaycastOnNavMesh: " + requiredRaycastOnNavMesh + " is falling: " + (raycastOnNavMeshCount < requiredRaycastOnNavMesh));
       if (raycastOnNavMeshCount >= requiredRaycastOnNavMesh)
         _isFalling = false;
       else
