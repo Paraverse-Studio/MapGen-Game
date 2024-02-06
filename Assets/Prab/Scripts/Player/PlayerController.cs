@@ -4,7 +4,6 @@ using Paraverse.Mob;
 using Paraverse.Mob.Combat;
 using Paraverse.Mob.Stats;
 using UnityEngine;
-using UnityEngine.UI;
 
 namespace Paraverse.Player
 {
@@ -82,22 +81,22 @@ namespace Paraverse.Player
 
     // State Booleans
     public float JumpGravity { get { return jumpGravity; } set { jumpGravity = value; } }
-    public Transform Transform => transform; 
-    public bool IsInteracting => _isInteracting; 
+    public Transform Transform => transform;
+    public bool IsInteracting => _isInteracting;
     private bool _isInteracting = false;
-    public bool IsBasicAttacking => _isBasicAttacking; 
+    public bool IsBasicAttacking => _isBasicAttacking;
     private bool _isBasicAttacking = false;
-    public bool IsSkilling => _isUsingSkill; 
+    public bool IsSkilling => _isUsingSkill;
     private bool _isUsingSkill = false;
-    public bool IsMoving => _isMoving; 
+    public bool IsMoving => _isMoving;
     private bool _isMoving = false;
-    public bool IsGrounded => _isGrounded; 
+    public bool IsGrounded => _isGrounded;
     private bool _isGrounded = false;
-    public bool IsAvoidingObjUponLanding => _isAvoidingObjUponLanding; 
+    public bool IsAvoidingObjUponLanding => _isAvoidingObjUponLanding;
     private bool _isAvoidingObjUponLanding = false;
-    public bool IsDiving => _isDiving; 
+    public bool IsDiving => _isDiving;
     private bool _isDiving = false;
-    public bool IsStaggered => _isStaggered; 
+    public bool IsStaggered => _isStaggered;
     private bool _isStaggered = false;
     public bool IsHardCCed => _isHardCced;
     private bool _isHardCced = false;
@@ -107,7 +106,7 @@ namespace Paraverse.Player
     private bool _isInvulnerable = false;
     public bool IsDead => _isDead;
     private bool _isDead = false;
-    public Transform Target => _target; 
+    public Transform Target => _target;
     private Transform _target;
 
     // Movement, Jump & Dive inputs and velocities
@@ -163,6 +162,7 @@ namespace Paraverse.Player
       DeathHandler();
       if (_isDead) return;
 
+      EffectHandler();
       MovementHandler();
       RotationHandler();
       JumpHandler();
@@ -440,6 +440,16 @@ namespace Paraverse.Player
       else if (combat.IsAttackLunging)
       {
         controller.Move(transform.forward * atkDashForce * Time.deltaTime);
+      }
+    }
+    #endregion
+
+    #region Effect Handler
+    private void EffectHandler()
+    {
+      foreach (MobEffect eff in combat.Effects)
+      {
+        eff.EffectTick();
       }
     }
     #endregion

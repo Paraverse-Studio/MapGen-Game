@@ -39,6 +39,11 @@ public abstract class MobEffect : MonoBehaviour
   public ScalingStatData[] scalingStatData;
 
 
+  public virtual void EffectTick()
+  {
+
+  }
+
   public ScalingStatData GetScalingStatData(int level = -1)
   {
         return (level != -1 ? scalingStatData[level - 1] : scalingStatData[effectLevel - 1]);

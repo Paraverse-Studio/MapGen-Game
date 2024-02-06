@@ -12121,6 +12121,14 @@ PrefabInstance:
       propertyPath: m_IsActive
       value: 1
       objectReference: {fileID: 0}
+    - target: {fileID: 2956618024134931112, guid: aa4e16a1786ed124fa06618210886566, type: 3}
+      propertyPath: _effects.Array.size
+      value: 1
+      objectReference: {fileID: 0}
+    - target: {fileID: 2956618024134931112, guid: aa4e16a1786ed124fa06618210886566, type: 3}
+      propertyPath: _effects.Array.data[0]
+      value: 
+      objectReference: {fileID: 1366090564}
     - target: {fileID: 2956618024134931113, guid: aa4e16a1786ed124fa06618210886566, type: 3}
       propertyPath: unkillable
       value: 1
@@ -12181,42 +12189,6 @@ Transform:
   m_CorrespondingSourceObject: {fileID: 3351448952234461169, guid: aa4e16a1786ed124fa06618210886566, type: 3}
   m_PrefabInstance: {fileID: 1366090532}
   m_PrefabAsset: {fileID: 0}
---- !u!114 &1366090554
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 1366090533}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 160fb074773bd2b40b3698abfe12f12d, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: 
-  EffectName: Sunfire
-  effectLevel: 1
-  targetTag: Enemy
-  effectFX: {fileID: 0}
-  hitFX: {fileID: 0}
-  scalingStatData:
-  - flatPower: 0
-    attackScaling: 1
-    abilityScaling: 0
-    healthScaling: 0
-  - flatPower: 0
-    attackScaling: 1
-    abilityScaling: 0
-    healthScaling: 0
-  - flatPower: 0
-    attackScaling: 1
-    abilityScaling: 0
-    healthScaling: 0
-  - flatPower: 0
-    attackScaling: 1
-    abilityScaling: 0
-    healthScaling: 0
-  attackPerUnitOfTime: []
-  _effectRadius: []
 --- !u!114 &1366090563
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -12258,7 +12230,7 @@ MonoBehaviour:
     abilityScaling: 0
     healthScaling: 0
   skillStateToCompleteTimer: 1
---- !u!114 &1366090573
+--- !u!114 &1366090564
 MonoBehaviour:
   m_ObjectHideFlags: 0
   m_CorrespondingSourceObject: {fileID: 0}
@@ -12267,102 +12239,50 @@ MonoBehaviour:
   m_GameObject: {fileID: 1366090533}
   m_Enabled: 1
   m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 6679c24e2c1f1ae4ca5d233e87d9ae23, type: 3}
+  m_Script: {fileID: 11500000, guid: 6681226d15811204f862260fb4539148, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  EffectName: Reaper
+  EffectName: Mob Effect
   effectLevel: 1
   targetTag: Enemy
   effectFX: {fileID: 0}
   hitFX: {fileID: 0}
   scalingStatData:
   - flatPower: 0
-    attackScaling: 1
+    attackScaling: 0
     abilityScaling: 0
-    healthScaling: 0
+    healthScaling: 0.2
   - flatPower: 0
-    attackScaling: 1
+    attackScaling: 0
     abilityScaling: 0
-    healthScaling: 0
+    healthScaling: 0.4
   - flatPower: 0
-    attackScaling: 1
+    attackScaling: 0
     abilityScaling: 0
-    healthScaling: 0
+    healthScaling: 0.6
   - flatPower: 0
-    attackScaling: 1
+    attackScaling: 0
     abilityScaling: 0
-    healthScaling: 0
-  healAmount: 
---- !u!114 &1366090584
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 1366090533}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: ddf38f08fd8f57141a0669a6a8db21da, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: 
-  EffectName: Empowered Attack
-  effectLevel: 1
-  targetTag: Enemy
-  effectFX: {fileID: 0}
-  hitFX: {fileID: 0}
-  scalingStatData:
+    healthScaling: 0.8
   - flatPower: 0
-    attackScaling: 1
+    attackScaling: 0
     abilityScaling: 0
-    healthScaling: 0
-  - flatPower: 0
-    attackScaling: 1
-    abilityScaling: 0
-    healthScaling: 0
-  - flatPower: 0
-    attackScaling: 1
-    abilityScaling: 0
-    healthScaling: 0
-  - flatPower: 0
-    attackScaling: 1
-    abilityScaling: 0
-    healthScaling: 0
-  _empoweredHitIndex: 
---- !u!114 &1366090585
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 1366090533}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 7a7d1c6b22016784cb0ce8852705cf8c, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: 
-  EffectName: Dash Attack
-  effectLevel: 1
-  targetTag: Enemy
-  effectFX: {fileID: 0}
-  hitFX: {fileID: 0}
-  scalingStatData:
-  - flatPower: 0
-    attackScaling: 1
-    abilityScaling: 0
-    healthScaling: 0
-  - flatPower: 0
-    attackScaling: 1
-    abilityScaling: 0
-    healthScaling: 0
-  - flatPower: 0
-    attackScaling: 1
-    abilityScaling: 0
-    healthScaling: 0
-  - flatPower: 0
-    attackScaling: 1
-    abilityScaling: 0
-    healthScaling: 0
-  effectRadius: []
+    healthScaling: 1
+  controller: {fileID: 0}
+  maxFlow: 100
+  curFlow: 0
+  increaseFlowRate:
+  - 2
+  - 4
+  - 6
+  - 8
+  - 12
+  shieldDuration:
+  - 3
+  - 6
+  - 9
+  - 12
+  - 20
 --- !u!1 &1375431600
 GameObject:
   m_ObjectHideFlags: 0
