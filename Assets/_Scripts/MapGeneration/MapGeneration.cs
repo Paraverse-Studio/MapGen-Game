@@ -520,8 +520,8 @@ public class MapGeneration : MonoBehaviour
         yield return processDelay;
 
         if (M.ppProfile) globalVolume.profile = M.ppProfile;
-
-        TeleportPlayer(CenterPointWithY + new Vector3(0, 5f, 0));
+        
+        TeleportPlayer(GetClosestValidGroundBlock(CenterPointWithY).transform.position);
 
         if (M.vfx)
         {
