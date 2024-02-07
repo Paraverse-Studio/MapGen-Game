@@ -378,8 +378,8 @@ public class GameLoopManager : MonoBehaviour
       if (roundCompletionType == RoundCompletionType.Failed || !MapCreator.Instance.NextMapCreatable())
       {
         summaryView.gameObject.SetActive(true);
-        Debug.Log("PlayerStats Attack Damage: " + playerStats.AttackDamage.BaseValue);
-        Debug.Log("PlayerStats Attack Damage: " + playerStats.AttackDamage.FinalValue);
+        //Debug.Log("PlayerStats Attack Damage: " + playerStats.AttackDamage.BaseValue);
+        //Debug.Log("PlayerStats Attack Damage: " + playerStats.AttackDamage.FinalValue);
         summaryView.Populate(sessionData, playerStats, playerCombat);
         GameLoopEvents.OnEndSession?.Invoke();
       }
