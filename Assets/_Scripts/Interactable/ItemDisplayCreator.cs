@@ -27,7 +27,7 @@ public class ItemDisplayCreator : TimeChanger
     [SerializeField, Header("Context message")]
     private TextMeshProUGUI _contextText;
 
-    [SerializeField, Header("Advertising?")]
+    [SerializeField, Header("Advertising?"), Tooltip("if advertising, show its higher level cause user might be upgrading, don't show current")]
     private bool _advertising = true;
 
     private List<SO_Item> _items;
