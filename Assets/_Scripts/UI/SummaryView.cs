@@ -78,12 +78,12 @@ public class SummaryView : MonoBehaviour
       SkillUsed = ParaverseHelper.GetSkillName(playerCombat.ActiveSkill._skillNameDB);
       SkillUsedEnum = playerCombat.ActiveSkill._skillNameDB;
     }
-    Debug.Log($"playerCombat effect count: {playerCombat.Effects.Count}");
+    //Debug.Log($"playerCombat effect count: {playerCombat.Effects.Count}");
 
     GameObject effectMod;
     foreach (MobEffect effect in playerCombat.Effects)
     {
-      Debug.Log($"effect: {effect.EffectNameDB.ToString()}");
+      //Debug.Log($"effect: {effect.EffectNameDB.ToString()}");
       // Only display a single instance of each effect
       if (false == EffectsObtained.Contains(effect.EffectNameDB))
       {
