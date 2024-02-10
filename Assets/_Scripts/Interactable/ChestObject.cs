@@ -225,13 +225,44 @@ public class ChestObject : MonoBehaviour
     {
         for (int i = 0; i < rewards.Count; ++i)
         {
-            int modLevelToActivate = -1;
-            if (rewards[i] is SO_Mod mod && mod.Activated)
+            var item = rewards[i];
+
+            // Effect Mods Limiter
+            if (item is SO_EffectMod effectMod && ModsManager.Instance.PurchasedMods.Count(mod => mod is SO_EffectMod) >= (ModsManager.MaxEffectMods + 1))
             {
-                modLevelToActivate = mod.ModLevel + 1;
+                // need to do this cause chestObj already adds the item to purchased list before we even get here
+                ModsManager.Instance.PurchasedMods.RemoveAll(mod => mod.ID == item.ID);
+
+                var effectsReplacer = FindObjectOfType<EffectsReplacer>(true);
+                effectsReplacer.Display(ModsManager.Instance.PurchasedMods.Where(mod => mod is SO_EffectMod).ToList(),
+                    () =>
+                    {
+                        int modLevelToActivate = -1;
+                        if (item is SO_Mod mod && mod.Activated)
+                        {
+                            modLevelToActivate = mod.ModLevel + 1;
+                        }
+                        item.Activate(GlobalSettings.Instance.player, modLevelToActivate);
+                        item.Consume();
+
+                        ModsManager.Instance.PurchaseMod(item);
+                    },
+                    () =>
+                    {
+                        // Do nothing
+                    });
+                effectsReplacer.DisplayCustomCard(item);
             }
-            rewards[i].Activate(GlobalSettings.Instance.player, modLevelToActivate);
-            rewards[i].Consume();
+            else
+            {
+                int modLevelToActivate = -1;
+                if (item is SO_Mod mod && mod.Activated)
+                {
+                    modLevelToActivate = mod.ModLevel + 1;
+                }
+                item.Activate(GlobalSettings.Instance.player, modLevelToActivate);
+                item.Consume();
+            }
         }
 
         Instantiate(deathFX, transform.position, Quaternion.identity);
