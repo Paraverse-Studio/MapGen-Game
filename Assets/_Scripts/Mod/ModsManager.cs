@@ -7,7 +7,7 @@ public class ModsManager : MonoBehaviour
 {
     public static ModsManager Instance;
 
-    public const int MaxEffectMods = 2;
+    public const int MaxEffectMods = 4;
 
     [Header("Non-Mods")]
     public SO_Consumable GoldItem;
