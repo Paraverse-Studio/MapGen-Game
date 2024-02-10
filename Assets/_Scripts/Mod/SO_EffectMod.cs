@@ -70,6 +70,12 @@ public class SO_EffectMod : SO_Mod
         Debug.Log($"Effect Mod: Mod \"{Title}\" (ID {ID}) LVL {modLevel} activated for {_player.gameObject.name}!");
     }
 
+    public void Deactivate()
+    {
+        Debug.Log($"Effect Mod: Mod \"{Title}\" (ID {ID}) LVL {ModLevel} HAS BEEN DEACTIVATED!");
+        _effect.DeactivateEffect();
+    }
+
     public override SO_Mod Consume()
     {
         if (evolve.canStack)

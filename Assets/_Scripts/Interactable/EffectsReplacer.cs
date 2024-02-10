@@ -27,6 +27,9 @@ public class EffectsReplacer : TimeChanger
     [SerializeField, Header("Context message")]
     private TextMeshProUGUI _contextText;
 
+    [SerializeField]
+    private Button _replaceButton;
+
     private List<SO_Item> _items;
     private List<ItemCard> _createdObjects = new();
     private MobStats _player;
@@ -35,7 +38,7 @@ public class EffectsReplacer : TimeChanger
     private System.Action _replaceAction;
     private System.Action _cancelAction;
 
-    private Button replaceButton;
+    
 
     private void OnEnable()
     {
@@ -61,30 +64,19 @@ public class EffectsReplacer : TimeChanger
                 ItemCard card = Instantiate(_itemCardPrefab, _container);
                 card.Item = _items[i];
                 card.descriptionLabel = _contextText;                
-                card.UpdateDisplay(null, -1);
-                
+                card.UpdateDisplay(null, -1);                
                 card.OnClickCard.AddListener(SelectItem);
-
-                List<EventTrigger.Entry> triggerEvents = card.eventTrigger.triggers;
-
-                // Find and remove the pointerExit event (if it exists)
-                for (int j = 0; j < triggerEvents.Count; j++)
-                {
-                    if (triggerEvents[j].eventID == EventTriggerType.PointerExit)
-                    {
-                        triggerEvents.RemoveAt(j);
-                        break;
-                    }
-                }
 
                 _createdObjects.Add(card);
             }
         }
 
         UnselectAll();
+        _replaceAction = onReplace;
+        _cancelAction = onCancel;
 
         gameObject.SetActive(true);
-        replaceButton.interactable = false;
+        _replaceButton.interactable = false;
     }
 
     public void UnselectAll()
@@ -123,7 +115,7 @@ public class EffectsReplacer : TimeChanger
         UnselectAll();
         item.ToggleSelect(true);
         _selectedItem = item.Item;
-        replaceButton.interactable = true;
+        _replaceButton.interactable = true;
     }
 
     public void OnDisable()
@@ -134,7 +126,14 @@ public class EffectsReplacer : TimeChanger
 
     public void Replace()
     {
+        if (_selectedItem is SO_EffectMod effectMod)
+        {
+            effectMod.Deactivate();
+        }
+        ModsManager.Instance.PurchasedMods.RemoveAll(mod => mod.ID == _selectedItem.ID);
+
         _replaceAction?.Invoke();
+        gameObject.SetActive(false);
     }
 
 }

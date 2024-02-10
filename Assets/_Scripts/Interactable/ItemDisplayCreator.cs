@@ -136,11 +136,37 @@ public class ItemDisplayCreator : TimeChanger
         }
 
         // Effect Mods Limiter
-        Debug.Log("HUH... count: " + ModsManager.Instance.PurchasedMods.Count(mod => mod is SO_EffectMod));
         if (item.Item is SO_EffectMod effectMod && ModsManager.Instance.PurchasedMods.Count(mod => mod is SO_EffectMod) >= ModsManager.MaxEffectMods)
         {
-            Debug.Log("WE GOT HERE!");
-            _effectReplacerCreator.Display(ModsManager.Instance.PurchasedMods.Where(mod => mod is SO_EffectMod).ToList());
+            _effectReplacerCreator.Display(ModsManager.Instance.PurchasedMods.Where(mod => mod is SO_EffectMod).ToList(),
+                () =>
+                {
+                    // Logistics
+                    Debug.Log($"Obtained item {item.Item.GetTitle()}!");
+
+                    _player.UpdateGold(-item.Item.GetCost());
+                    _goldText.text = _player.Gold.ToString();
+
+                    // the mod itself handles what the mod will do for the player when activated
+                    int modLevelToActivate = -1;
+                    if (item.Item is SO_Mod mod && mod.Activated)
+                    {
+                        modLevelToActivate = mod.ModLevel + 1;
+                    }
+                    item.Item.Activate(_player.gameObject, modLevelToActivate);
+                    item.Item.Consume();
+
+                    ModsManager.Instance.PurchaseMod(item.Item);
+
+                    Destroy(item.gameObject);
+
+                    RefreshDisplay();
+                    return;
+                },
+                () =>
+                {
+                    return;
+                });
             _effectReplacerCreator.DisplayCustomCard(item.Item);
             return;
         }
