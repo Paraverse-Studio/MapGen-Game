@@ -106,7 +106,6 @@ public class ItemDisplayCreator : TimeChanger
         }
     }
 
-
     public void DisplayCustomCard(SO_Item item)
     {
         foreach (Transform c in _customCardContainer)
