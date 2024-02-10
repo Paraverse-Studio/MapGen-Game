@@ -175,11 +175,11 @@ public class GameLoopManager : MonoBehaviour
       }
     }
 
-    if (Input.GetKeyDown(KeyCode.Alpha1)) QualityManager.Instance.SetQualityLevel(1);
-    if (Input.GetKeyDown(KeyCode.Alpha2)) QualityManager.Instance.SetQualityLevel(2);
-    if (Input.GetKeyDown(KeyCode.Alpha3)) QualityManager.Instance.SetQualityLevel(3);
-    if (Input.GetKeyDown(KeyCode.Alpha4)) QualityManager.Instance.SetQualityLevel(4);
-    if (Input.GetKeyDown(KeyCode.Alpha5)) QualityManager.Instance.SetQualityLevel(5);
+    //if (Input.GetKeyDown(KeyCode.Alpha1)) QualityManager.Instance.SetQualityLevel(1);
+    //if (Input.GetKeyDown(KeyCode.Alpha2)) QualityManager.Instance.SetQualityLevel(2);
+    //if (Input.GetKeyDown(KeyCode.Alpha3)) QualityManager.Instance.SetQualityLevel(3);
+    //if (Input.GetKeyDown(KeyCode.Alpha4)) QualityManager.Instance.SetQualityLevel(4);
+    //if (Input.GetKeyDown(KeyCode.Alpha5)) QualityManager.Instance.SetQualityLevel(5);
 
 #if UNITY_EDITOR
     if (Input.GetKeyDown(KeyCode.U))
