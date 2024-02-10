@@ -2,6 +2,7 @@ using System.Collections;
 using System.Collections.Generic;
 using TMPro;
 using UnityEngine;
+using UnityEngine.EventSystems;
 using UnityEngine.UI;
 
 public class ItemCard : MonoBehaviour
@@ -20,6 +21,9 @@ public class ItemCard : MonoBehaviour
 
     public ItemCardEvent OnClickCard = new();
 
+    public GameObject selectedIcon;
+    public EventTrigger eventTrigger;
+
     public virtual void UpdateDisplay(System.Action clickCallBack = null, int modLevel = -1)
     {
     }
@@ -35,6 +39,16 @@ public class ItemCard : MonoBehaviour
     public void OnClickCardEvent()
     {
         OnClickCard?.Invoke(this);
+    }
+
+    public void ToggleSelect(bool on)
+    {
+        selectedIcon.SetActive(on);
+    }
+
+    public void RemoveEventTrigger()
+    {
+        Destroy(eventTrigger);
     }
 
 }

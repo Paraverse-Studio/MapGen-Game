@@ -32,7 +32,7 @@ public class ItemDisplayCreator : TimeChanger
     private bool _advertising = true;
 
     [SerializeField]
-    private ItemDisplayCreator _effectReplacerCreator;
+    private EffectsReplacer _effectReplacerCreator;
 
     private List<SO_Item> _items;
     private System.Action _closeEvent;
@@ -136,12 +136,11 @@ public class ItemDisplayCreator : TimeChanger
         }
 
         // Effect Mods Limiter
-        Debug.Log("HMM... ? " + (item.Item is SO_EffectMod));
         Debug.Log("HUH... count: " + ModsManager.Instance.PurchasedMods.Count(mod => mod is SO_EffectMod));
-        if (item.Item is SO_EffectMod effectMod && ModsManager.Instance.PurchasedMods.Count(mod => mod is SO_EffectMod) > ModsManager.MaxEffectMods)
+        if (item.Item is SO_EffectMod effectMod && ModsManager.Instance.PurchasedMods.Count(mod => mod is SO_EffectMod) >= ModsManager.MaxEffectMods)
         {
             Debug.Log("WE GOT HERE!");
-            _effectReplacerCreator.Display(ModsManager.Instance.PurchasedMods.Where(mod => mod is SO_EffectMod).ToList(), null);
+            _effectReplacerCreator.Display(ModsManager.Instance.PurchasedMods.Where(mod => mod is SO_EffectMod).ToList());
             _effectReplacerCreator.DisplayCustomCard(item.Item);
             return;
         }

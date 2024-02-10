@@ -24,9 +24,6 @@ public class ModCard : ItemCard
     public Image CardOtherBG;
     public TextMeshProUGUI TypeLabel;
     public Image[] CardHighlights;
-
-    public GameObject selectedIcon;
-
    
 
     private void Start()
@@ -122,11 +119,6 @@ public class ModCard : ItemCard
     public void UpdateDescription()
     {
         if (descriptionLabel) descriptionLabel.text = Item.GetDescription();
-    }
-
-    public void ToggleSelect(bool on)
-    {
-        selectedIcon.SetActive(on);
     }
 
 }

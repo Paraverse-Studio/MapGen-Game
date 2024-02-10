@@ -310,7 +310,19 @@ MonoBehaviour:
   m_TargetGraphic: {fileID: 554693469627374386}
   m_OnClick:
     m_PersistentCalls:
-      m_Calls: []
+      m_Calls:
+      - m_Target: {fileID: 8225186734693155774}
+        m_TargetAssemblyTypeName: ItemCard, Assembly-CSharp
+        m_MethodName: OnClickCardEvent
+        m_Mode: 1
+        m_Arguments:
+          m_ObjectArgument: {fileID: 0}
+          m_ObjectArgumentAssemblyTypeName: UnityEngine.Object, UnityEngine
+          m_IntArgument: 0
+          m_FloatArgument: 0
+          m_StringArgument: 
+          m_BoolArgument: 0
+        m_CallState: 2
 --- !u!114 &554693469627374391
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -328,7 +340,7 @@ MonoBehaviour:
     callback:
       m_PersistentCalls:
         m_Calls:
-        - m_Target: {fileID: 554693469972078100}
+        - m_Target: {fileID: 3938103551787249708}
           m_TargetAssemblyTypeName: UnityEngine.GameObject, UnityEngine
           m_MethodName: SetActive
           m_Mode: 6
@@ -368,7 +380,7 @@ MonoBehaviour:
     callback:
       m_PersistentCalls:
         m_Calls:
-        - m_Target: {fileID: 554693469972078100}
+        - m_Target: {fileID: 3938103551787249708}
           m_TargetAssemblyTypeName: UnityEngine.GameObject, UnityEngine
           m_MethodName: SetActive
           m_Mode: 6
@@ -1452,6 +1464,8 @@ MonoBehaviour:
   OnClickCard:
     m_PersistentCalls:
       m_Calls: []
+  selectedIcon: {fileID: 554693469972078100}
+  eventTrigger: {fileID: 554693469627374391}
   StatModColor: {r: 0.6037736, g: 0.4873225, b: 0.31555712, a: 0.6}
   StatModColorGlow: {r: 1, g: 0.8352941, b: 0.45490196, a: 1}
   UltraStatModColor: {r: 0.7830189, g: 0.68690777, b: 0.35752937, a: 0.6117647}
@@ -1469,7 +1483,6 @@ MonoBehaviour:
   - {fileID: 554693469972078103}
   - {fileID: 3993057463877393508}
   - {fileID: 168015245288101368}
-  selectedIcon: {fileID: 554693469972078100}
 --- !u!114 &7312399382396947300
 MonoBehaviour:
   m_ObjectHideFlags: 0
