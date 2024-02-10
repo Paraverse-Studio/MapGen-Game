@@ -46,6 +46,8 @@ public abstract class MobEffect : MonoBehaviour
 
   public ScalingStatData GetScalingStatData(int level = -1)
   {
+        // so that we don't accidentally request a level that's beyond the highest level allowed
+        level = Mathf.Min(level, scalingStatData.Length - 1); 
         return (level != -1 ? scalingStatData[level - 1] : scalingStatData[effectLevel - 1]);
   }
 
