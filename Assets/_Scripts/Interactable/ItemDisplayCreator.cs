@@ -3,6 +3,7 @@ using System.Collections;
 using System.Collections.Generic;
 using TMPro;
 using UnityEngine;
+using System.Linq;
 
 public class ItemDisplayCreator : TimeChanger
 {
@@ -30,11 +31,16 @@ public class ItemDisplayCreator : TimeChanger
     [SerializeField, Header("Advertising?"), Tooltip("if advertising, show its higher level cause user might be upgrading, don't show current")]
     private bool _advertising = true;
 
+    [SerializeField]
+    private ItemDisplayCreator _effectReplacerCreator;
+
     private List<SO_Item> _items;
     private System.Action _closeEvent;
     private List<ItemCard> _createdObjects = new();
     private MobStats _player;
     private ItemCard _customCard;
+
+    private SO_Item _selectedItem = null;
 
     private void OnEnable()
     {
@@ -126,6 +132,17 @@ public class ItemDisplayCreator : TimeChanger
         {
             // cannot purchase it, notify user of insuffucient gold
             RefreshDisplay();
+            return;
+        }
+
+        // Effect Mods Limiter
+        Debug.Log("HMM... ? " + (item.Item is SO_EffectMod));
+        Debug.Log("HUH... count: " + ModsManager.Instance.PurchasedMods.Count(mod => mod is SO_EffectMod));
+        if (item.Item is SO_EffectMod effectMod && ModsManager.Instance.PurchasedMods.Count(mod => mod is SO_EffectMod) > ModsManager.MaxEffectMods)
+        {
+            Debug.Log("WE GOT HERE!");
+            _effectReplacerCreator.Display(ModsManager.Instance.PurchasedMods.Where(mod => mod is SO_EffectMod).ToList(), null);
+            _effectReplacerCreator.DisplayCustomCard(item.Item);
             return;
         }
 
