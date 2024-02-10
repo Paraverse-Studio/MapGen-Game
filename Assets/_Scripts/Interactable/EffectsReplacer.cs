@@ -5,6 +5,7 @@ using TMPro;
 using UnityEngine;
 using System.Linq;
 using UnityEngine.EventSystems;
+using UnityEngine.UI;
 
 public class EffectsReplacer : TimeChanger
 {
@@ -31,6 +32,10 @@ public class EffectsReplacer : TimeChanger
     private MobStats _player;
     private ItemCard _customCard;
     private SO_Item _selectedItem = null;
+    private System.Action _replaceAction;
+    private System.Action _cancelAction;
+
+    private Button replaceButton;
 
     private void OnEnable()
     {
@@ -38,7 +43,7 @@ public class EffectsReplacer : TimeChanger
         TimeManager.Instance.RequestTimeChange(this, 0f);
     }
 
-    public void Display(List<SO_Item> items, System.Action closeCallback = null)
+    public void Display(List<SO_Item> items, System.Action onReplace = null, System.Action onCancel = null)
     {
         if (null == _player) _player = GlobalSettings.Instance.player.GetComponent<MobStats>();
 
@@ -79,6 +84,7 @@ public class EffectsReplacer : TimeChanger
         UnselectAll();
 
         gameObject.SetActive(true);
+        replaceButton.interactable = false;
     }
 
     public void UnselectAll()
@@ -116,11 +122,19 @@ public class EffectsReplacer : TimeChanger
     {
         UnselectAll();
         item.ToggleSelect(true);
+        _selectedItem = item.Item;
+        replaceButton.interactable = true;
     }
 
     public void OnDisable()
     {
         TimeManager.Instance.RequestTimeChange(this, 1f);
+        _cancelAction?.Invoke();
+    }
+
+    public void Replace()
+    {
+        _replaceAction?.Invoke();
     }
 
 }
