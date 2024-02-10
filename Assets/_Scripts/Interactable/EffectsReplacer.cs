@@ -131,6 +131,11 @@ public class EffectsReplacer : TimeChanger
             effectMod.Deactivate();
         }
         ModsManager.Instance.PurchasedMods.RemoveAll(mod => mod.ID == _selectedItem.ID);
+        
+        if (_selectedItem is SO_Mod mod)
+        {
+            mod.ModLevel = Mathf.Max(1, mod.ModLevel - 1);
+        }
 
         _replaceAction?.Invoke();
         gameObject.SetActive(false);

@@ -135,7 +135,9 @@ public class ItemDisplayCreator : TimeChanger
         }
 
         // Effect Mods Limiter
-        if (item.Item is SO_EffectMod effectMod && ModsManager.Instance.PurchasedMods.Count(mod => mod is SO_EffectMod) >= ModsManager.MaxEffectMods)
+        if (item.Item is SO_EffectMod effectMod 
+            && ModsManager.Instance.PurchasedMods.FindIndex(mod => mod.ID == item.Item.ID) < 0
+            && ModsManager.Instance.PurchasedMods.Count(mod => mod is SO_EffectMod) >= ModsManager.MaxEffectMods)
         {
             _effectReplacerCreator.Display(ModsManager.Instance.PurchasedMods.Where(mod => mod is SO_EffectMod).ToList(),
                 () =>

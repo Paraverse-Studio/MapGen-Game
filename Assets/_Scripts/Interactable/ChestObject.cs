@@ -228,7 +228,7 @@ public class ChestObject : MonoBehaviour
             var item = rewards[i];
 
             // Effect Mods Limiter
-            if (item is SO_EffectMod effectMod && ModsManager.Instance.PurchasedMods.Count(mod => mod is SO_EffectMod) >= (ModsManager.MaxEffectMods + 1))
+            if (item is SO_EffectMod effectMod && ModsManager.Instance.PurchasedMods.Count(mod => mod is SO_EffectMod) > ModsManager.MaxEffectMods)
             {
                 // need to do this cause chestObj already adds the item to purchased list before we even get here
                 ModsManager.Instance.PurchasedMods.RemoveAll(mod => mod.ID == item.ID);
