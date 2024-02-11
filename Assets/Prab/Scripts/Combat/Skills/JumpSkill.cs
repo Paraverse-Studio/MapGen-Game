@@ -22,12 +22,14 @@ public class JumpSkill : MobSkill, IMobSkill
   {
     base.ExecuteSkillLogic();
     mobController.ApplyJump(target.transform.position, Vector3.zero);
+    Physics.IgnoreLayerCollision(14, 15, true);
   }
 
   protected override void OnSkillComplete()
   {
     base.OnSkillComplete();
     anim.SetBool(StringData.IsGrounded, true);
+    Physics.IgnoreLayerCollision(14, 15, false);
   }
   #endregion
 }
