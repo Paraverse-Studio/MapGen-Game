@@ -27,7 +27,7 @@ public class MainMenuController : MonoBehaviour
   public GameObject BloodlinesLayout;
   public GameObject RegisterLink;
   public GameObject QuitButton;
-
+  public TextMeshProUGUI playerNameLabel;
   [Header("First Selected GameObjects")]
   public GameObject playButton; // Home
   public GameObject bloodLineCard; // Bloodline
@@ -658,6 +658,7 @@ public void OpenLoginLayout()
     SetCurrentObject(playButton);
     HomeLayout.SetActive(true);
     welcomeText.text = $"Welcome: {_username}!";
+    playerNameLabel.text = _username;
     welcomeText.gameObject.SetActive(true);
   }
 

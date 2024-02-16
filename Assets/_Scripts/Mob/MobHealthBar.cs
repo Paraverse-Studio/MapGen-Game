@@ -101,7 +101,7 @@ public class MobHealthBar : MonoBehaviour
     {
         if (!_healthBarSetupComplete || !_healthBarShowable) return;
 
-        if (Time.frameCount % 30 == 0) _nameLabel.text = gameObject.name;
+        //if (Time.frameCount % 30 == 0) _nameLabel.text = gameObject.name;
 
         // Health
         if (_healthBar)
@@ -262,8 +262,8 @@ public class MobHealthBar : MonoBehaviour
             _healthValueDisplay = overrideProperties.healthValueDisplay;
             _energyBar = overrideProperties.energyBar;
             _energyLerpBar = overrideProperties.energyLerpBar;
-            _nameLabel = overrideProperties.nameLabel;
-            _nameLabel.text = gameObject.name;
+            //_nameLabel = overrideProperties.nameLabel;
+            //_nameLabel.text = gameObject.name;
         }
 
         // custom for bosses (HUD health bar)
