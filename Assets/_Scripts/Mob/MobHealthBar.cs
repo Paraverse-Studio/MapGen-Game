@@ -55,7 +55,11 @@ public class MobHealthBar : MonoBehaviour
     private TextMeshProUGUI _healthValueDisplay;
     private Image _energyBar;
     private Image _energyLerpBar;
+    private GameObject _enragedMark;
     private GameObject _healthBarContainer;
+
+    // Run-time
+    private HealthBarViewController _healthBarController;
 
     // Start is called before the first frame update
     void Start()
@@ -184,14 +188,14 @@ public class MobHealthBar : MonoBehaviour
     private void CreateHealthBar()
     {
         _healthBarObject = Instantiate(_healthBarPrefab, transform.position, Quaternion.identity);
-        HealthBarViewController controller = _healthBarObject.GetComponent<HealthBarViewController>();
-        _healthBar = controller.healthBar;
-        _healthDamageBar = controller.damageBar;
-        _energyBar = controller.energyBar;
-        _energyLerpBar = controller.energyLerpBar;
-        _targetIcon = controller.targetIcon;
-        _nameLabel = controller.nameLabel;
-        _healthBarContainer = controller.healthBarContainer;
+        _healthBarController = _healthBarObject.GetComponent<HealthBarViewController>();
+        _healthBar = _healthBarController.healthBar;
+        _healthDamageBar = _healthBarController.damageBar;
+        _energyBar = _healthBarController.energyBar;
+        _energyLerpBar = _healthBarController.energyLerpBar;
+        _targetIcon = _healthBarController.targetIcon;
+        _nameLabel = _healthBarController.nameLabel;
+        _healthBarContainer = _healthBarController.healthBarContainer;
 
         // Not needed? They're done in LoadCreateBar instead of CreateHealthBar
         if (false)
@@ -225,7 +229,7 @@ public class MobHealthBar : MonoBehaviour
         _healthBarContainer.gameObject.SetActive(!settings.hideHealthBar);
         _nameLabel.gameObject.SetActive(!settings.hideName);
         _targetIcon.SetActive(settings.showSelectionAllTimes);
-        controller.energyBarContainer.gameObject.SetActive(settings.showEnergyBar);
+        _healthBarController.energyBarContainer.gameObject.SetActive(settings.showEnergyBar);
 
         // Find this object's bounds height, using either a collider or mesh renderer
         Collider collider = GetComponentInChildren<Collider>();
@@ -281,6 +285,15 @@ public class MobHealthBar : MonoBehaviour
         }
 
         _healthBarSetupComplete = true;
+    }
+
+    public void MarkEnragedMob()
+    {
+        if (_nameLabel)
+        {
+            _healthBarController.enragedMark.SetActive(true);
+            _nameLabel.color = GlobalSettings.Instance.enragedNameColour;
+        }
     }
 
     public void ActivateTargetIcon()

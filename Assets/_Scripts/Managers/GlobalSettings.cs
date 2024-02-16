@@ -43,6 +43,7 @@ public class GlobalSettings : MonoBehaviour
     public PopupText popupTextPrefab;
     public Color damageColour;
     public Color healColour;
+    public Color enragedNameColour;
     public Material attackTrailMaterial;
 
     [Header("Interactables")]

@@ -1314,9 +1314,10 @@ public class MapGeneration : MonoBehaviour
         if (null != lastMobToEnrage)
         {
             MobCombat mobCombat = lastMobToEnrage.GetComponentInChildren<MobCombat>();
+            MobHealthBar mobHPBar = lastMobToEnrage.GetComponentInChildren<MobHealthBar> ();
             StartCoroutine(UtilityFunctions.IDelayedAction(0.05f, () => mobCombat.EnrageStats()));
-        }
-        
+            StartCoroutine(UtilityFunctions.IDelayedAction(0.05f, () => mobHPBar.MarkEnragedMob()));
+        }        
     }
 
     private void AddFoliage()
