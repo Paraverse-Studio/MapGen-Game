@@ -57,7 +57,7 @@ public class Selectable : MonoBehaviour
         switch (type)
         {
             case SelectableType.hostile:
-                Range = 9f;
+                Range = 12f;
                 break;
             case SelectableType.interactive:
                 Range = 5f;
