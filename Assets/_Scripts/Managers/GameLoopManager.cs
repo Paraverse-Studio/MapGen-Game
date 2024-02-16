@@ -159,9 +159,9 @@ public class GameLoopManager : MonoBehaviour
             {
                 if (MapCreator.Instance.mapType != MapType.reward)
                 {
-                    AnnouncementManager.Instance.QueueAnnouncement(new Announcement().AddType(1).AddText("Gate is open!"));
+                    AnnouncementManager.Instance.QueueAnnouncementUnique(new Announcement().AddType(1).AddText("Gate is open!"));
                 }
-                EndPortal.Activate(true);
+                if (!EndPortal.AlreadyActivated) EndPortal.Activate(true);
             }
         }
 
@@ -193,9 +193,11 @@ public class GameLoopManager : MonoBehaviour
             List<MobController> m = EnemiesManager.Instance.Enemies;
             foreach (MobController _m in m)
             {
+                _m.gameObject.SetActive(true);
                 _m.GetComponentInChildren<MobStats>().UpdateCurrentHealth(-_m.GetComponentInChildren<MobStats>().CurHealth);
             }
-            EndRound(true);
+            //EndRound(true);
+            UtilityFunctions.TeleportObject(player, EndPortal.gameObject.transform.position);
         }
         if (Input.GetKeyDown(KeyCode.T) && RoundIsActive)
         {
