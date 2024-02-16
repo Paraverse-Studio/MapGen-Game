@@ -202,7 +202,7 @@ public class GameLoopManager : MonoBehaviour
         if (Input.GetKeyDown(KeyCode.T) && RoundIsActive)
         {
             playerStats.UpdateGold(500);
-            playerStats.UpdateMovementSpeed(15);
+            //playerStats.UpdateMovementSpeed(15);
             ShopManager.Instance.ShopWindow.SetActive(!ShopManager.Instance.ShopWindow.activeSelf);
             CalculateShop();
         }

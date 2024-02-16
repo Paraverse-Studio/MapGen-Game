@@ -7,7 +7,8 @@ public class ModsManager : MonoBehaviour
 {
     public static ModsManager Instance;
 
-    public const int MaxEffectMods = 4;
+    public const int MAX_EFFECT_MODS = 4;
+    public const int MAX_EFFECT_LEVEL = 5;
 
     [Header("Non-Mods")]
     public SO_Consumable GoldItem;
@@ -86,7 +87,7 @@ public class ModsManager : MonoBehaviour
 
         int indexOfMod = AvailableMods.IndexOf(item);
 
-        if (!PurchasedMods.Contains(item) && item is not SO_StatMod) // stat mods get re-added
+        if (!PurchasedMods.Contains(item) && item is not SO_StatMod) // stat mods don't get added to Purchased List
         { 
             PurchasedMods.Add(item);
         }
@@ -94,6 +95,13 @@ public class ModsManager : MonoBehaviour
         // if a mod (stat mod), then keep it in that in the spot,
         // otherwise, remove this entry in available mods
         if (item is not SO_StatMod && item is not SO_EffectMod)
+        {
+            AvailableMods.RemoveAt(indexOfMod);
+        }
+
+        // Effect mods also now don't get removed from Available mods (cause they can be re-purchased for higher level
+        // UNLESS they're at cap level, then remove them from available list
+        if (item is SO_EffectMod mod && mod.ModLevel >= MAX_EFFECT_LEVEL)
         {
             AvailableMods.RemoveAt(indexOfMod);
         }

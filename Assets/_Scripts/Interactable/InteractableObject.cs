@@ -93,6 +93,13 @@ public class InteractableObject : MonoBehaviour
 
                 for (int i = _items.Count - 1; i >= 4; --i) _items.Remove(_items[i]); // display 4 out of the many
             }
+
+            // Even tho we've already decided on these items, if one is suddenly technical-wise unavailable, remove it
+            for (int i = 0; i < _items.Count; ++i)
+            {
+                if (_items[i] is SO_EffectMod mod && mod.ModLevel >= ModsManager.MAX_EFFECT_LEVEL) _items.Remove(_items[i]);
+            }
+
             _display.Display(_items, null);
         }
         else if (thisInteractable == InteractableObjects.trainer)
