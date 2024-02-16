@@ -19,6 +19,7 @@ public class BloodlinesController : MonoBehaviour
     public PlayerController playerController;
     public PlayerCombat playerCombat;
     public Animator playerAnimator;
+    public TextMeshProUGUI bloodlineLabel;
 
     [Header("Internal References")]
     public BloodlineType chosenBloodline;
@@ -44,6 +45,7 @@ public class BloodlinesController : MonoBehaviour
         chosenBloodline = (BloodlineType)type;
         playAsText.text = playAsPhrase.Replace("[BLOODLINE]", chosenBloodline.ToString());
         continueButton.interactable = true;
+        bloodlineLabel.text = chosenBloodline.ToString();
     }
 
     // UI button callback
