@@ -61,17 +61,19 @@ public class BloodlinesController : MonoBehaviour
         switch (chosenBloodline)
         {
             case BloodlineType.Vagabond:
+                playerStats.AttackDamage.AddMod(new StatModifier(2));
                 playerStats.MaxHealth.AddMod(new StatModifier(50));
                 playerStats.SetCurrentHealth((int)playerStats.MaxHealth.FinalValue);
                 GameLoopManager.Instance.GameLoopEvents.OnStartRound.AddListener(VagabondRoundHeal);
                 break;
             case BloodlineType.Harrier:
                 playerStats.UpdateMovementSpeed(1);
-                playerController.maxDiveDuration *= 1.5f;
-                playerController.diveForce += 5;
-                playerAnimator.speed = 1.2f;
+                playerController.maxDiveDuration *= 1.25f;
+                playerController.diveForce += 3;
+                playerAnimator.speed = 1.25f;
                 break;
             case BloodlineType.Pioneer:
+                playerStats.UpdateGold(80);
                 playerStats.CooldownReduction.AddMod(new StatModifier(35));
                 playerStats.MaxEnergy.AddMod(new StatModifier(100));
                 break;
