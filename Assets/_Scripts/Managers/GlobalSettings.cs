@@ -54,6 +54,10 @@ public class GlobalSettings : MonoBehaviour
     public Vector3 backupSafePosition;
     public GameObject testGameObject;
 
+    [Header("GLOBAL MODIFIERS")] // all should be default to 1
+    public const float GoldRewardModifier = 1.35f;
+    public const float EnemyHealthModifier = 0.65f;
+    public const float EnemyDamageModifier = 0.65f;
 
     public PlayerInput PlayerInput;
 

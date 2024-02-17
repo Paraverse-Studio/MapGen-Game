@@ -1234,17 +1234,18 @@ public class MapGeneration : MonoBehaviour
         // before encountering something hostile
         int gapOfTilesBeforeFirstEnemy = 14;
 
+        // safety code, if the gap is bigger than the actual spawned path, then reduce that initial gap to just below it
+        gapOfTilesBeforeFirstEnemy = (int)Mathf.Min(gapOfTilesBeforeFirstEnemy, pathObjects.Count * 0.10f);
+
         // how many path blocks until the next enemy should be spawned
         int enemyFrequency = Mathf.Max(1, (pathObjects.Count - gapOfTilesBeforeFirstEnemy) / M.enemySpawnAmount);
-
-        // safety code, if the gap is bigger than the actual spawned path, then reduce that initial gap to just below it
-        if (pathObjects.Count <= gapOfTilesBeforeFirstEnemy) gapOfTilesBeforeFirstEnemy = pathObjects.Count - 2;
 
         GameObject lastMobToEnrage = null;
         for (int i = gapOfTilesBeforeFirstEnemy; i < pathObjects.Count; ++i)
         {
             if (i % enemyFrequency != 0) continue;
             if (MapCreator.Instance.mapType == MapType.boss && enemyObjects.Count >= 1) break; // if we've already spawned a boss, don't run any more loops
+            if (MapCreator.Instance.mapType == MapType.normal && enemyObjects.Count >= M.enemySpawnAmount) break;
 
             int xOffset = Random.Range(-M.enemySpawnOffset, M.enemySpawnOffset + 1);
             int zOffset = Random.Range(-M.enemySpawnOffset, M.enemySpawnOffset + 1);
@@ -1283,9 +1284,9 @@ public class MapGeneration : MonoBehaviour
                     float bossDamageScaleFactor = MapCreator.Instance.bossDamageScalingPerRound * (GameLoopManager.Instance.roundNumber - 1 + biomeBoost);
                     float bossHealthScaleFactor = MapCreator.Instance.bossHealthScalingPerRound * (GameLoopManager.Instance.roundNumber - 1 + biomeBoost);
 
-                    enemyStats.UpdateAttackDamage(enemyStats.AttackDamage.FinalValue * bossDamageScaleFactor);
-                    enemyStats.UpdateAbilityPower(enemyStats.AbilityPower.FinalValue * bossDamageScaleFactor);
-                    enemyStats.UpdateMaxHealth(Mathf.CeilToInt(enemyStats.MaxHealth.FinalValue * bossHealthScaleFactor));
+                    enemyStats.UpdateAttackDamage(enemyStats.AttackDamage.FinalValue * bossDamageScaleFactor * GlobalSettings.EnemyDamageModifier);
+                    enemyStats.UpdateAbilityPower(enemyStats.AbilityPower.FinalValue * bossDamageScaleFactor * GlobalSettings.EnemyDamageModifier);
+                    enemyStats.UpdateMaxHealth(Mathf.CeilToInt(enemyStats.MaxHealth.FinalValue * bossHealthScaleFactor * GlobalSettings.EnemyHealthModifier));
 
                     controller.OnDeathEvent += AddLegendaryChest;
                     controller.OnDeathEvent += (Transform t) => GameLoopManager.Instance.EndRound(successfulRound: true);
@@ -1295,9 +1296,9 @@ public class MapGeneration : MonoBehaviour
                     float enemyDamageScaleFactor = MapCreator.Instance.enemyDamageScalingPerRound * (GameLoopManager.Instance.roundNumber - 1 + biomeBoost);
                     float enemyHealthScaleFactor = MapCreator.Instance.enemyHealthScalingPerRound * (GameLoopManager.Instance.roundNumber - 1 + biomeBoost);
 
-                    enemyStats.UpdateAttackDamage(enemyStats.AttackDamage.FinalValue * enemyDamageScaleFactor);
-                    enemyStats.UpdateAbilityPower(enemyStats.AbilityPower.FinalValue * enemyDamageScaleFactor);
-                    enemyStats.UpdateMaxHealth(Mathf.CeilToInt(enemyStats.MaxHealth.FinalValue * enemyHealthScaleFactor));
+                    enemyStats.UpdateAttackDamage(enemyStats.AttackDamage.FinalValue * enemyDamageScaleFactor * GlobalSettings.EnemyDamageModifier);
+                    enemyStats.UpdateAbilityPower(enemyStats.AbilityPower.FinalValue * enemyDamageScaleFactor * GlobalSettings.EnemyDamageModifier);
+                    enemyStats.UpdateMaxHealth(Mathf.CeilToInt(enemyStats.MaxHealth.FinalValue * enemyHealthScaleFactor * GlobalSettings.EnemyHealthModifier));
 
                     lastMobToEnrage = enemy.gameObject;
                 }

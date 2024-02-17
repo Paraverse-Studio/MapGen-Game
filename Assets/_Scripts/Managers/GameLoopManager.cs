@@ -382,6 +382,9 @@ public class GameLoopManager : MonoBehaviour
         else // a normal or boss round was completed, or failed (aka, anything but a reward map)
         {
             score = ScoreFormula.CalculateScore(totalEnemiesSpawned * (MapCreator.Instance.mapType == MapType.boss ? 50f : 10f), roundTimer.GetTime(), playerMaxHealth, damageTaken, out goldToReward);
+            
+            goldToReward = (int)(goldToReward * GlobalSettings.GoldRewardModifier);
+
             UpdatePlayerSessionData();
 
             if (roundCompletionType == RoundCompletionType.Failed || !MapCreator.Instance.NextMapCreatable())

@@ -8,6 +8,8 @@ namespace Paraverse.Mob.Stats
     public class MobStats : MonoBehaviour, IMobStats
     {
         #region Variables
+        public bool isPlayer = false;
+
         [SerializeField]
         protected int maxHealth = 100;
         public Stat MaxHealth { get { return _maxHealth; } }
@@ -174,6 +176,13 @@ namespace Paraverse.Mob.Stats
 
         public void ResetStats()
         {
+            if (!isPlayer)
+            {
+                maxHealth = (int)(maxHealth * GlobalSettings.EnemyHealthModifier);
+                attackDamage = (int)(attackDamage * GlobalSettings.EnemyDamageModifier);
+                abilityPower = (int)(abilityPower * GlobalSettings.EnemyDamageModifier);
+            }
+
             _maxHealth = new Stat(maxHealth);
             _maxHealth.FactoryResetMods();
             _maxEnergy = new Stat(maxEnergy);
