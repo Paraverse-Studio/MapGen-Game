@@ -38,6 +38,9 @@ namespace ParaverseWebsite.Models
       Email = email.ToLower();
       StartDate = DateTime.Today.ToString("MMMM dd, yy");
       LatestLoggedInDate = DateTime.Today.ToString("MMMM dd, yy");
+      LatestLoggedDevice = "";
+      LatestVisitedGame = "0";
+      GameVisits = 0;
       LatestMessageReadDate = "0";
       InteractionScore = 0;
       Likes = new LikesModel();
@@ -47,6 +50,7 @@ namespace ParaverseWebsite.Models
       ChatEmbed = "true";
       Avatar = "Male/avatarm0";
       ChatMessageSent = 0;
+      Tag = new TagModel();
     }
   }
 
@@ -75,7 +79,10 @@ namespace ParaverseWebsite.Models
 
     public TagModel()
     {
-
+      TagEnabled = "false";
+      TagCaption = "";
+      TagColor = "";
+      TagImage = "";
     }
   }
 }
