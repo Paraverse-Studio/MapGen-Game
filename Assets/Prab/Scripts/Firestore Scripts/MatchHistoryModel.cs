@@ -43,7 +43,7 @@ namespace ParaverseWebsite.Models
         int ability,
         string bloodLine,
         string skillUsed,
-        List<EffectName> effectsObtained
+        Dictionary<EffectName, int> effectsObtained
         )
     {
       Username = username;

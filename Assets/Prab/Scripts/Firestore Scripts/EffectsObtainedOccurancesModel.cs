@@ -22,32 +22,32 @@ namespace ParaverseWebsite.Models
     /// For updating Match History 
     /// </summary>
     /// <param name="effects"></param>
-    public EffectsObtainedOccurancesModel(List<EffectName> effects)
+    public EffectsObtainedOccurancesModel(Dictionary<EffectName, int> effects)
     {
-      foreach (EffectName eff in effects)
+      foreach (KeyValuePair<EffectName, int> eff in effects)
       {
-        switch (eff)
+        switch (eff.Key)
         {
           case EffectName.EmpoweredAttack:
-            EmpoweredAttack++;
+            EmpoweredAttack = eff.Value;
             break;
           case EffectName.Sunfire:
-            Sunfire++;
+            Sunfire = eff.Value;
             break;
           case EffectName.CooldownRefund:
-            CooldownRefund++;
+            CooldownRefund = eff.Value;
             break;
           case EffectName.Lichbane:
-            Lichbane++;
+            Lichbane = eff.Value;
             break;
           case EffectName.RepearKill:
-            RepearKill++;
+            RepearKill = eff.Value;
             break;
           case EffectName.SweepingDash:
-            SweepingDash++;
+            SweepingDash = eff.Value;
             break;
           default:
-            Debug.Log($"{eff} does not exists in EffectName enum!");
+            Debug.Log($"{eff} does not exist in EffectName enum!");
             break;
         }
       }
@@ -67,30 +67,30 @@ namespace ParaverseWebsite.Models
       RepearKill = oldLeaderboards.EffectsObtained.RepearKill;
       SweepingDash = oldLeaderboards.EffectsObtained.SweepingDash;
 
-      foreach (EffectName eff in sessionDataModel.EffectsObtained)
+      foreach (KeyValuePair<EffectName, int> eff in sessionDataModel.EffectsObtained)
       {
-        switch (eff)
+        switch (eff.Key)
         {
           case EffectName.EmpoweredAttack:
-            EmpoweredAttack++;
+            EmpoweredAttack = eff.Value;
             break;
           case EffectName.Sunfire:
-            Sunfire++;
+            Sunfire = eff.Value;
             break;
           case EffectName.CooldownRefund:
-            CooldownRefund++;
+            CooldownRefund = eff.Value;
             break;
           case EffectName.Lichbane:
-            Lichbane++;
+            Lichbane = eff.Value;
             break;
           case EffectName.RepearKill:
-            RepearKill++;
+            RepearKill = eff.Value;
             break;
           case EffectName.SweepingDash:
-            SweepingDash++;
+            SweepingDash = eff.Value;
             break;
           default:
-            Debug.Log($"{eff} does not exists in EffectName enum!");
+            Debug.Log($"{eff} does not exist in EffectName enum!");
             break;
         }
       }
