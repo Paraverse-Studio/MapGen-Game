@@ -38,7 +38,18 @@ namespace ParaverseWebsite.Models
       Email = email.ToLower();
       StartDate = DateTime.Today.ToString("MMMM dd, yy");
       LatestLoggedInDate = DateTime.Today.ToString("MMMM dd, yy");
-      LatestLoggedDevice = "";
+#if UNITY_EDITOR
+      LatestLoggedDevice = DeviceType.Test.ToString();
+#endif
+#if UNITY_WEBGL && !UNITY_EDITOR
+      LatestLoggedDevice = DeviceType.WebGL.ToString();
+#endif
+#if UNITY_STANDALONE_OSX && !UNITY_EDITOR || UNITY_STANDALONE_WIN && !UNITY_EDITOR || UNITY_STANDALONE_LINUX && !UNITY_EDITOR
+      LatestLoggedDevice = DeviceType.Desktop.ToString();
+#endif
+#if UNITY_IOS && !UNITY_EDITOR || UNITY_ANDROID && !UNITY_EDITOR
+      LatestLoggedDevice = DeviceType.Mobile.ToString();
+#endif
       LatestVisitedGame = "0";
       GameVisits = 0;
       LatestMessageReadDate = "0";
