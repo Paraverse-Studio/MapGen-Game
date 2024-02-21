@@ -10,6 +10,9 @@ namespace ParaverseWebsite.Models
     public string Email;
     public string StartDate;
     public string LatestMessageReadDate;
+    public string LatestLoggedDevice;
+    public string LatestVisitedGame;
+    public int GameVisits;
     public string LatestLoggedInDate;
     public int InteractionScore;
     public string LogoColor;
@@ -19,6 +22,7 @@ namespace ParaverseWebsite.Models
     public LikesModel Likes;
     public string Avatar;
     public int ChatMessageSent;
+    public TagModel Tag;
 
     public UserModel() { }
 
@@ -52,11 +56,26 @@ namespace ParaverseWebsite.Models
     public int TotalLiked;
     public int LikedToday;
     public string TodayDate;
-    public LikesModel() 
+    public LikesModel()
     {
       TotalLiked = 0;
       LikedToday = 0;
       TodayDate = DateTime.Today.ToString("MMMM dd, yy");
+    }
+  }
+
+
+  [Serializable]
+  public class TagModel
+  {
+    public string TagEnabled;
+    public string TagColor;
+    public string TagImage;
+    public string TagCaption;
+
+    public TagModel()
+    {
+
     }
   }
 }
