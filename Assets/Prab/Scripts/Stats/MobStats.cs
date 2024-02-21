@@ -1,4 +1,5 @@
 using Paraverse.Mob.Boosts;
+using Paraverse.Player;
 using Paraverse.Stats;
 using System.Collections;
 using UnityEngine;
@@ -95,18 +96,27 @@ namespace Paraverse.Mob.Stats
         {
             yield return null;
             OnHealthChange?.Invoke(CurHealth, (int)MaxHealth.FinalValue);
-            OnEnergyChange?.Invoke((int)CurEnergy, (int)MaxEnergy.FinalValue);            
+            OnEnergyChange?.Invoke((int)CurEnergy, (int)MaxEnergy.FinalValue);   
+            #if !UNITY_EDITOR
+            unkillable = false;
+            #endif         
         }
 
         protected virtual void Update()
         {
+            if (PlayerController.Instance.IsDead && false == isPlayer)
+            {
+              unkillable = true; 
+              return;
+            }
+            
             if (HealthRegen.FinalValue > 0 && Time.frameCount % 240 == 0)
             {
                 UpdateCurrentHealth((int)HealthRegen.FinalValue);
             }
             UpdateCurrentEnergy((MaxEnergy.FinalValue * (EnergyRegen.FinalValue/100.0f)) * Time.deltaTime);
         }
-        #endregion
+#endregion
 
         #region Update Stat Methods
         public void UpdateMaxHealth(int amount)
