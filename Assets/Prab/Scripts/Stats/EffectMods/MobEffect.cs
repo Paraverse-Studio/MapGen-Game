@@ -65,7 +65,9 @@ public abstract class MobEffect : MonoBehaviour
     isActive = false;
 
     // Destroys instantiated FX
+    _combat.Effects.Remove(this);
     if (_FX) Destroy(_FX.gameObject);
+    Destroy(gameObject);
   }
 
   public virtual void AddSubscribersToSkillEvents(Damage col)

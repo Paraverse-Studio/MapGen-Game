@@ -22,10 +22,10 @@ public class EmpoweredAttackEffect : MobEffect
 
   public override void DeactivateEffect()
   {
-    base.DeactivateEffect();
     RemoveMod();
     _combat.BasicAttackSkill.attackCollider.OnBasicAttackPreHitEvent -= IncrementBasicAttackCounter;
     _combat.BasicAttackSkill.attackCollider.OnBasicAttackApplyDamageEvent -= RemoveMod;
+    base.DeactivateEffect();
   }
 
   private void IncrementBasicAttackCounter()

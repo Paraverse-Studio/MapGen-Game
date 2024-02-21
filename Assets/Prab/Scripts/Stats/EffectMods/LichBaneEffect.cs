@@ -19,11 +19,11 @@ public class LichBaneEffect : MobEffect
 
   public override void DeactivateEffect()
   {
-    base.DeactivateEffect();
     RemoveMod();
     _combat.BasicAttackSkill.attackCollider.OnBasicAttackPostHitEvent += RemoveMod;
     if (null != _combat.ActiveSkill)
       _combat.ActiveSkill.OnExecuteSkillEvent -= ApplyEffect;
+    base.DeactivateEffect();
   }
 
   public override void AddSubscribersToSkillEvents(Damage col)

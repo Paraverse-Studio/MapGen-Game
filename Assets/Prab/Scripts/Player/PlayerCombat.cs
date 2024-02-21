@@ -170,10 +170,10 @@ namespace Paraverse.Player
 
     public void DeactivateEffects()
     {
-      foreach (MobEffect eff in _effects)
+      for (int i = 0; i < _effects.Count; i++)
       {
-        eff.DeactivateEffect();
-        Destroy(eff.gameObject);
+        _effects[i].DeactivateEffect();
+        Destroy(_effects[i].gameObject);
       }
       _effects.Clear();
     }

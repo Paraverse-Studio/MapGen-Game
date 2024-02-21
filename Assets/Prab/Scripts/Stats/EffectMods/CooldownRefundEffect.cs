@@ -22,11 +22,11 @@ public class CooldownRefundEffect : MobEffect
 
   public override void DeactivateEffect()
   {
-    base.DeactivateEffect();
     foreach (MobController enemy in EnemiesManager.Instance.Enemies)
     {
       enemy.OnDeathEvent -= RefundCooldown;
     }
+    base.DeactivateEffect();
   }
 
   public override void OnEnemyDeathApplyEffect(MobController enemy)
