@@ -73,7 +73,9 @@ public class SO_EffectMod : SO_Mod
     public void Deactivate()
     {
         Debug.Log($"Effect Mod: Mod \"{Title}\" (ID {ID}) LVL {ModLevel} HAS BEEN DEACTIVATED!");
-        _effect.DeactivateEffect();
+        MobEffect eff = _player.Effects.Find(e => e.ID == ID);
+        if (eff) eff.DeactivateEffect();
+        Reset();
     }
 
     public override SO_Mod Consume()

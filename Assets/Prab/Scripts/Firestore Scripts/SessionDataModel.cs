@@ -22,7 +22,7 @@ namespace ParaverseWebsite.Models
     public int MysticDungeonsEnteredCount;
     public string BloodLine;
     public string SkillUsed;
-    public List<EffectName> EffectsObtained = new List<EffectName>();
+    public Dictionary<EffectName, int> EffectsObtained = new Dictionary<EffectName, int>();
     public string Device;
     public string Timestamp;
 
@@ -47,7 +47,7 @@ namespace ParaverseWebsite.Models
       int ability,
       string bloodLine,
       string skillUsed,
-      List<EffectName> effectsObtained,
+      Dictionary<EffectName, int> effectsObtained,
       BloodlineType bloodLineEnum,
       SkillName skillUsedEnum
       )

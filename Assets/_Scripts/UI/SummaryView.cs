@@ -60,7 +60,7 @@ public class SummaryView : MonoBehaviour
     string SkillUsed;
     BloodlineType BloodLineEnum = bloodlinesController.chosenBloodline;
     SkillName SkillUsedEnum;
-    List<EffectName> EffectsObtained = new List<EffectName>();
+    Dictionary<EffectName,int> EffectsObtained = new Dictionary<EffectName, int>();
     EffectsObtained.Clear();
 
     foreach (GameObject go in effectModImages)
@@ -85,14 +85,14 @@ public class SummaryView : MonoBehaviour
     {
       //Debug.Log($"effect: {effect.EffectNameDB.ToString()}");
       // Only display a single instance of each effect
-      if (false == EffectsObtained.Contains(effect.EffectNameDB))
+      if (false == EffectsObtained.TryGetValue(effect.EffectNameDB, out int occurances))
       {
         effectMod = Instantiate(effectModImagePf, effectsModsGO.transform);
         effectMod.GetComponent<EffectModUI>().Init(DataMapper.EffectSpriteMapper[effect.EffectNameDB], ParaverseHelper.GetEffectName(effect.EffectNameDB));
         effectModImages.Add(effectMod);
       }
       // Add all instances of the effects (occurances of effect will mean the level)
-      EffectsObtained.Add(effect.EffectNameDB);
+      EffectsObtained.Add(effect.EffectNameDB, effect.effectLevel);
     }
 
     // Populate summary view 

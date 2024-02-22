@@ -20,11 +20,11 @@ public class ReaperKillEffect : MobEffect
 
   public override void DeactivateEffect()
   {
-    base.DeactivateEffect();
     foreach (MobController enemy in EnemiesManager.Instance.Enemies)
     {
       enemy.OnDeathEvent -= GainHealth;
     }
+    base.DeactivateEffect();
   }
 
   public override void OnEnemyDeathApplyEffect(MobController enemy)

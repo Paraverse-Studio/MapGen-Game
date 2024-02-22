@@ -32,13 +32,12 @@ public class DashAttackEffect : MobEffect
 
   public override void DeactivateEffect()
   {
-    base.DeactivateEffect();
-
     // Remove all instantiated colliders
     if (_col) Destroy(_col.gameObject);
 
     controller.OnStartDiveEvent -= EnableCollider;
     controller.OnEndDiveEvent -= DisableCollider;
+    base.DeactivateEffect();
   }
 
   private void OnTriggerEnter(Collider other)

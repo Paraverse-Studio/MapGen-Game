@@ -10,6 +10,9 @@ namespace ParaverseWebsite.Models
     public string Email;
     public string StartDate;
     public string LatestMessageReadDate;
+    public string LatestLoggedDevice;
+    public string LatestVisitedGame;
+    public int GameVisits;
     public string LatestLoggedInDate;
     public int InteractionScore;
     public string LogoColor;
@@ -19,6 +22,7 @@ namespace ParaverseWebsite.Models
     public LikesModel Likes;
     public string Avatar;
     public int ChatMessageSent;
+    public TagModel Tag;
 
     public UserModel() { }
 
@@ -34,6 +38,20 @@ namespace ParaverseWebsite.Models
       Email = email.ToLower();
       StartDate = DateTime.Today.ToString("MMMM dd, yy");
       LatestLoggedInDate = DateTime.Today.ToString("MMMM dd, yy");
+#if UNITY_EDITOR
+      LatestLoggedDevice = DeviceType.Test.ToString();
+#endif
+#if UNITY_WEBGL && !UNITY_EDITOR
+      LatestLoggedDevice = DeviceType.WebGL.ToString();
+#endif
+#if UNITY_STANDALONE_OSX && !UNITY_EDITOR || UNITY_STANDALONE_WIN && !UNITY_EDITOR || UNITY_STANDALONE_LINUX && !UNITY_EDITOR
+      LatestLoggedDevice = DeviceType.Desktop.ToString();
+#endif
+#if UNITY_IOS && !UNITY_EDITOR || UNITY_ANDROID && !UNITY_EDITOR
+      LatestLoggedDevice = DeviceType.Mobile.ToString();
+#endif
+      LatestVisitedGame = "0";
+      GameVisits = 0;
       LatestMessageReadDate = "0";
       InteractionScore = 0;
       Likes = new LikesModel();
@@ -43,6 +61,7 @@ namespace ParaverseWebsite.Models
       ChatEmbed = "true";
       Avatar = "Male/avatarm0";
       ChatMessageSent = 0;
+      Tag = new TagModel();
     }
   }
 
@@ -52,11 +71,29 @@ namespace ParaverseWebsite.Models
     public int TotalLiked;
     public int LikedToday;
     public string TodayDate;
-    public LikesModel() 
+    public LikesModel()
     {
       TotalLiked = 0;
       LikedToday = 0;
       TodayDate = DateTime.Today.ToString("MMMM dd, yy");
+    }
+  }
+
+
+  [Serializable]
+  public class TagModel
+  {
+    public string TagEnabled;
+    public string TagColor;
+    public string TagImage;
+    public string TagCaption;
+
+    public TagModel()
+    {
+      TagEnabled = "false";
+      TagCaption = "";
+      TagColor = "";
+      TagImage = "";
     }
   }
 }

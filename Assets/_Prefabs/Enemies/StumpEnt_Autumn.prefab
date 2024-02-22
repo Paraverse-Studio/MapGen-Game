@@ -374,6 +374,9 @@ MonoBehaviour:
   _isGrounded: 1
   _isUnstaggerable: 0
   _mobType: 2
+  offsetx: 0
+  offsety: 0
+  offsetz: 0
 --- !u!114 &5125661759958323761
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -386,6 +389,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: b04cd1b06f0908d4c81a8bc7bcea9d24, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  isPlayer: 0
   maxHealth: 30
   _curHealth: 30
   attackDamage: 15
@@ -1197,7 +1201,7 @@ MonoBehaviour:
   enableForDurationBasedProjectileSkills: 0
   _minRange: 0
   _maxRange: 5
-  _cooldown: 5
+  _cooldown: 3
   attackColliderGO: {fileID: 0}
   attackCollider: {fileID: 0}
   projData:
