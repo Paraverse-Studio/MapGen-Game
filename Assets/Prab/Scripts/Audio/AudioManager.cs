@@ -1,3 +1,4 @@
+using System.Collections.Generic;
 using TMPro;
 using UnityEngine;
 using UnityEngine.UI;
@@ -9,6 +10,11 @@ public class AudioManager : MonoBehaviour
   [Header("Music Settings:")]
   public TextMeshProUGUI musicLabel;
   public Slider musicSlider;
+
+  [Header("Sound Settings:")]
+  public TextMeshProUGUI soundLabel;
+  public Slider soundSlider;
+  public List<AudioSource> soundSources = new List<AudioSource>();
 
   #region Singleton
   public static AudioManager Instance;
@@ -26,6 +32,8 @@ public class AudioManager : MonoBehaviour
   {
     UpdateMusicDisplay();
     UpdateMusicLevel();
+    UpdateSoundDisplay();
+    UpdateSoundLevel();
   }
 
   private void Start()
@@ -34,15 +42,10 @@ public class AudioManager : MonoBehaviour
     audioSource.Play();
   }
 
-  private float GetAudioVolume()
-  {
-    return audioSource.volume * 100;
-  }
-
   public void UpdateMusicDisplay()
   {
-    musicLabel.text = GetAudioVolume() + "%";
-    musicSlider.value = GetAudioVolume();
+    musicLabel.text = musicSlider.value * 100 + "%";
+    musicSlider.value = musicSlider.value * 100;
   }
 
   public void UpdateMusicLevel()
@@ -50,5 +53,21 @@ public class AudioManager : MonoBehaviour
     int val = Mathf.RoundToInt(musicSlider.value * 100);
     musicLabel.text = val + "%";
     audioSource.volume = musicSlider.value;
+  }
+
+  public void UpdateSoundDisplay()
+  {
+    soundLabel.text = soundSlider.value * 100 + "%";
+    soundSlider.value = soundSlider.value * 100;
+  }
+
+  public void UpdateSoundLevel()
+  {
+    int val = Mathf.RoundToInt(soundSlider.value * 100);
+    soundLabel.text = val + "%";
+    for (int i = 0; i < soundSources.Count; i++)
+    {
+      soundSources[i].volume = soundSlider.value;
+    }
   }
 }

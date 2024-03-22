@@ -84,6 +84,8 @@ namespace Paraverse.Player
       }
       _attackColliderGO.GetComponent<AttackCollider>().Init(this);
 
+      AudioManager.Instance.soundSources.Add(weaponAudio);
+
       Initialize();
     }
 
