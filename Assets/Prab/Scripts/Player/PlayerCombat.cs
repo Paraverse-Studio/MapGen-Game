@@ -55,6 +55,13 @@ namespace Paraverse.Player
     // Reset to Default Skill UI upon player death
     [SerializeField]
     private Sprite noSkillSprite;
+
+    [SerializeField]
+    private AudioSource weaponAudio;
+    [SerializeField]
+    private AudioClip swingClip;
+    [SerializeField]
+    private AudioClip stabClip;
     #endregion
 
     #region Initializing Methods
@@ -269,16 +276,19 @@ namespace Paraverse.Player
       {
         anim.SetBool(StringData.IsInteracting, true);
         anim.Play(StringData.BasicAttackThree);
+        PlayAudio(stabClip);
       }
       else if (anim.GetBool(StringData.CanBasicAttackTwo))
       {
         anim.SetBool(StringData.IsInteracting, true);
         anim.Play(StringData.BasicAttackTwo);
+        PlayAudio(swingClip);
       }
       else if (basicAtkComboIdx == 0)
       {
         if (controller.IsDiving) anim.Play(StringData.BasicAttackTwo); // dash-attacking
         else anim.Play(StringData.BasicAttack);
+        PlayAudio(swingClip);
       }
 
       // Increment combo index upon basic attack
@@ -289,6 +299,12 @@ namespace Paraverse.Player
       {
         basicAtkComboIdx = 0;
       }
+    }
+
+    private void PlayAudio(AudioClip clip)
+    {
+      weaponAudio.clip = clip;
+      weaponAudio.Play();
     }
 
     /// <summary>
