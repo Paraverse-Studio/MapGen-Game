@@ -1,8 +1,9 @@
 using ParaverseWebsite.Models;
 using System;
+using UnityEngine;
 
 [Serializable]
-public class MobsKilledAchievement
+public class ScholarRoundsCompletedAchievement
 {
     public int CompletedCount = 0;
     public int Index = 0;   // To fetch the current active achievement
@@ -10,7 +11,11 @@ public class MobsKilledAchievement
     public bool[] CompletionStatuses = new bool[6];
 
 
-    public MobsKilledAchievement(int currValue)
+    public ScholarRoundsCompletedAchievement()
+    {
+    }
+
+    public ScholarRoundsCompletedAchievement(int currValue)
     {
         CompletedCount = currValue;
         Index = 0;
@@ -19,9 +24,12 @@ public class MobsKilledAchievement
         AchievementProgressHandler();
     }
 
-    public MobsKilledAchievement(AchievementsModel oldModel, SessionDataModel sessionData)
+    public ScholarRoundsCompletedAchievement(AchievementsModel oldModel, SessionDataModel sessionData)
     {
-        CompletedCount = oldModel.MobsKilledAchievement.CompletedCount + sessionData.MobsDefeatedCount;
+        int RoundNumberCompleted = sessionData.RoundNumberReached - 1;
+        CompletedCount = oldModel.ScholarRoundsCompletedAchievement.CompletedCount;
+        if (sessionData.BloodLineEnum.Equals(BloodlineType.Scholar))
+            CompletedCount += RoundNumberCompleted;
         Index = 0;
 
         InitAchievementValues();

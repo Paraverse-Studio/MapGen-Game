@@ -2,7 +2,7 @@ using ParaverseWebsite.Models;
 using System;
 
 [Serializable]
-public class MobsKilledAchievement
+public class RoundsReachedAchievement
 {
     public int CompletedCount = 0;
     public int Index = 0;   // To fetch the current active achievement
@@ -10,7 +10,7 @@ public class MobsKilledAchievement
     public bool[] CompletionStatuses = new bool[6];
 
 
-    public MobsKilledAchievement(int currValue)
+    public RoundsReachedAchievement(int currValue)
     {
         CompletedCount = currValue;
         Index = 0;
@@ -19,9 +19,10 @@ public class MobsKilledAchievement
         AchievementProgressHandler();
     }
 
-    public MobsKilledAchievement(AchievementsModel oldModel, SessionDataModel sessionData)
+    public RoundsReachedAchievement(AchievementsModel oldModel, SessionDataModel sessionData)
     {
-        CompletedCount = oldModel.MobsKilledAchievement.CompletedCount + sessionData.MobsDefeatedCount;
+        int RoundNumberCompleted = sessionData.RoundNumberReached - 1;
+        CompletedCount = oldModel.RoundsReachedAchievement.CompletedCount + RoundNumberCompleted;
         Index = 0;
 
         InitAchievementValues();
@@ -52,7 +53,7 @@ public class MobsKilledAchievement
             // Check if achievement is completed!
             if (CompletedCount >= TargetCounts[i] && CompletionStatuses[i] == false)
             {
-                Index = i + 1;
+                Index++;
                 CompletionStatuses[i] = true;
             }
         }

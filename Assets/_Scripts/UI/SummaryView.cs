@@ -268,6 +268,11 @@ public class SummaryView : MonoBehaviour
     /// <param name="sessionDataModel"></param>
     private void UpdateAchievements(AchievementsModel oldAchievementsModel, SessionDataModel sessionDataModel)
     {
+        Debug.Log("VAGABOND" + oldAchievementsModel.VagabondRoundsCompletedAchievement.CompletedCount);
+        Debug.Log("HARRIER" + oldAchievementsModel.HarrierRoundsCompletedAchievement.CompletedCount);
+        Debug.Log("PIONEER" + oldAchievementsModel.PioneerRoundsCompletedAchievement.CompletedCount);
+        Debug.Log("SCHOLAR" + oldAchievementsModel.ScholarRoundsCompletedAchievement.CompletedCount);
+        Debug.Log("UPDATING ACHIEVEMENTS USER FOUND ROUTE!");
         // Create updated leaderboards
         AchievementsModel updatedAchievementsModel = new AchievementsModel(oldAchievementsModel, sessionDataModel);
 
@@ -281,23 +286,17 @@ public class SummaryView : MonoBehaviour
     /// <param name="sessionData"></param>
     private void PostAchievements(SessionDataModel sessionData)
     {
-        int vagabondRoundsCount = 0;
-        int harrierRoundsCount = 0;
-        int pioneerRoundsCount = 0;
-        int scholarRoundsCount = 0;
-        int rndsWithNoDmgCount = 0;
-
-        if (sessionData.BloodLineEnum.Equals(BloodlineType.Vagabond))
-            vagabondRoundsCount += sessionData.RoundNumberReached;
-        else if (sessionData.BloodLineEnum.Equals(BloodlineType.Harrier))
-            harrierRoundsCount += sessionData.RoundNumberReached;
-        else if (sessionData.BloodLineEnum.Equals(BloodlineType.Pioneer))
-            pioneerRoundsCount += sessionData.RoundNumberReached;
-        else if (sessionData.BloodLineEnum.Equals(BloodlineType.Scholar))
-            scholarRoundsCount += sessionData.RoundNumberReached;
-
-        AchievementsModel achievementsModel = new AchievementsModel(MainMenuController.Instance.Username, new MobsKilledAchievement(sessionData.MobsDefeatedCount)
-        );
+        AchievementsModel achievementsModel = new AchievementsModel(
+            MainMenuController.Instance.Username, 
+            new RoundsReachedAchievement(sessionData.RoundNumberReached),
+            new MobsKilledAchievement(sessionData.MobsDefeatedCount),
+            new BossesKilledAchievement(sessionData.BossesDefeatedCount),
+            //new MobsDroppedAchievement(sessionData.MobsDefeatedCount),
+            new VagabondRoundsCompletedAchievement(),
+            new HarrierRoundsCompletedAchievement(),
+            new PioneerRoundsCompletedAchievement(),
+            new ScholarRoundsCompletedAchievement()
+            );
 
         // Create a new leaderboards entry for the user
         FirebaseDatabaseManager.Instance.PostAchievements(achievementsModel, (updatedAchievementsModel) => Debug.Log("Created new achievements entry!"));
