@@ -18,11 +18,11 @@ public class AchievementsContainer : MonoBehaviour
         Image.sprite = sprite;
     }
 
-    public void Init(AchievementData data, AchievementsModel model)
+    public void Init(AchievementData data, int curCount, int nextCount)
     {
         Title.text = data.Title;
         Description.text = data.Description;
-        ProgressCount.text = data.ProgressCount;
+        ProgressCount.text = $"{curCount} / {nextCount}";
         Image.sprite = data.Sprite;
     }
 }
