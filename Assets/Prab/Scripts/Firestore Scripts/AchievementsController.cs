@@ -32,19 +32,19 @@ public class AchievementsController : MonoBehaviour
 
     private void UpdateAchievementContainers(AchievementsModel model)
     {
-        CreateAchievementsContainer(Data[0], model.RoundsReachedAchievement.CompletedCount, model.RoundsReachedAchievement.TargetCounts[model.RoundsReachedAchievement.Index]);
-        CreateAchievementsContainer(Data[1], model.MobsKilledAchievement.CompletedCount, model.MobsKilledAchievement.TargetCounts[model.MobsKilledAchievement.Index]);
-        CreateAchievementsContainer(Data[2], model.BossesKilledAchievement.CompletedCount, model.BossesKilledAchievement.TargetCounts[model.BossesKilledAchievement.Index]);
-        CreateAchievementsContainer(Data[3], model.VagabondRoundsCompletedAchievement.CompletedCount, model.VagabondRoundsCompletedAchievement.TargetCounts[model.VagabondRoundsCompletedAchievement.Index]);
-        CreateAchievementsContainer(Data[4], model.HarrierRoundsCompletedAchievement.CompletedCount, model.HarrierRoundsCompletedAchievement.TargetCounts[model.HarrierRoundsCompletedAchievement.Index]);
-        CreateAchievementsContainer(Data[5], model.PioneerRoundsCompletedAchievement.CompletedCount, model.PioneerRoundsCompletedAchievement.TargetCounts[model.PioneerRoundsCompletedAchievement.Index]);
-        CreateAchievementsContainer(Data[6], model.ScholarRoundsCompletedAchievement.CompletedCount, model.ScholarRoundsCompletedAchievement.TargetCounts[model.ScholarRoundsCompletedAchievement.Index]);
+        CreateAchievementsContainer(Data[0], model.RoundsReachedAchievement.CompletedCount, model.RoundsReachedAchievement.TargetCounts[model.RoundsReachedAchievement.Index], model.RoundsReachedAchievement.Index);
+        CreateAchievementsContainer(Data[1], model.MobsKilledAchievement.CompletedCount, model.MobsKilledAchievement.TargetCounts[model.MobsKilledAchievement.Index], model.MobsKilledAchievement.Index);
+        CreateAchievementsContainer(Data[2], model.BossesKilledAchievement.CompletedCount, model.BossesKilledAchievement.TargetCounts[model.BossesKilledAchievement.Index], model.BossesKilledAchievement.Index);
+        CreateAchievementsContainer(Data[3], model.VagabondRoundsCompletedAchievement.CompletedCount, model.VagabondRoundsCompletedAchievement.TargetCounts[model.VagabondRoundsCompletedAchievement.Index], model.VagabondRoundsCompletedAchievement.Index);
+        CreateAchievementsContainer(Data[4], model.HarrierRoundsCompletedAchievement.CompletedCount, model.HarrierRoundsCompletedAchievement.TargetCounts[model.HarrierRoundsCompletedAchievement.Index], model.HarrierRoundsCompletedAchievement.Index);
+        CreateAchievementsContainer(Data[5], model.PioneerRoundsCompletedAchievement.CompletedCount, model.PioneerRoundsCompletedAchievement.TargetCounts[model.PioneerRoundsCompletedAchievement.Index], model.PioneerRoundsCompletedAchievement.Index);
+        CreateAchievementsContainer(Data[6], model.ScholarRoundsCompletedAchievement.CompletedCount, model.ScholarRoundsCompletedAchievement.TargetCounts[model.ScholarRoundsCompletedAchievement.Index], model.ScholarRoundsCompletedAchievement.Index);
     }
 
-    private void CreateAchievementsContainer(AchievementData data, int curCount, int nextCount)
+    private void CreateAchievementsContainer(AchievementData data, int curCount, int nextCount, int idx)
     {
         GameObject obj = Instantiate(achievementsContainerPrefab, achievementsParentGO);
-        obj.GetComponent<AchievementsContainer>().Init(data, curCount, nextCount);
+        obj.GetComponent<AchievementsContainer>().Init(data, curCount, nextCount, idx);
         achievements.Add(obj);
     }
 

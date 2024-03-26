@@ -268,11 +268,6 @@ public class SummaryView : MonoBehaviour
     /// <param name="sessionDataModel"></param>
     private void UpdateAchievements(AchievementsModel oldAchievementsModel, SessionDataModel sessionDataModel)
     {
-        Debug.Log("VAGABOND" + oldAchievementsModel.VagabondRoundsCompletedAchievement.CompletedCount);
-        Debug.Log("HARRIER" + oldAchievementsModel.HarrierRoundsCompletedAchievement.CompletedCount);
-        Debug.Log("PIONEER" + oldAchievementsModel.PioneerRoundsCompletedAchievement.CompletedCount);
-        Debug.Log("SCHOLAR" + oldAchievementsModel.ScholarRoundsCompletedAchievement.CompletedCount);
-        Debug.Log("UPDATING ACHIEVEMENTS USER FOUND ROUTE!");
         // Create updated leaderboards
         AchievementsModel updatedAchievementsModel = new AchievementsModel(oldAchievementsModel, sessionDataModel);
 

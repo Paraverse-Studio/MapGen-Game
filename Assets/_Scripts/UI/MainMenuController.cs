@@ -663,6 +663,7 @@ public class MainMenuController : MonoBehaviour
         welcomeText.text = $"Welcome: {_username}!";
         playerNameLabel.text = _username;
         welcomeText.gameObject.SetActive(true);
+        AudioManager.Instance.UpdateOptionsSettingFromDatabase();
     }
 
     public void OpenBloodlineLayout()

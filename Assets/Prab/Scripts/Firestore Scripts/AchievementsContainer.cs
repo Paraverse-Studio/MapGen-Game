@@ -18,7 +18,7 @@ public class AchievementsContainer : MonoBehaviour
         Image.sprite = sprite;
     }
 
-    public void Init(AchievementData data, int curCount, int nextCount)
+    public void Init(AchievementData data, int curCount, int nextCount, int idx)
     {
         Title.text = data.Title;
         Description.text = data.Description;
