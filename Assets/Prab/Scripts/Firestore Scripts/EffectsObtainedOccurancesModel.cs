@@ -117,7 +117,7 @@ namespace ParaverseWebsite.Models
         if (idx == 0 && effect.Value <= 0)
         {
           mostUsedEffect.Add(effect.Key);
-          Debug.Log($"Most Used Effect is {effect.Key} with {effect.Value} occurances!");
+          //Debug.Log($"Most Used Effect is {effect.Key} with {effect.Value} occurances!");
           break;
         }
         mostUsedEffect.Add(effect.Key);
