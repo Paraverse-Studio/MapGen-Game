@@ -83,14 +83,14 @@ public class Damage : MonoBehaviour, IDamage
   public virtual void Init(MobCombat mob)
   {
     this.mob = mob;
-    Debug.Log($"mob - {mob}");
+    //Debug.Log($"mob - {mob}");
   }
 
   public virtual void Init(MobCombat mob, ScalingStatData statData)
   {
     this.mob = mob;
     scalingStatData = statData;
-    Debug.Log($"mob - {mob}, statData - {statData}");
+    //Debug.Log($"mob - {mob}, statData - {statData}");
   }
 
   /// <summary>
@@ -100,7 +100,7 @@ public class Damage : MonoBehaviour, IDamage
   {
     float totalDmg = Mathf.CeilToInt(scalingStatData.FinalValueWithBoosts(mob.Stats));
     controller.Stats.UpdateCurrentHealth(-(int)totalDmg);
-    Debug.Log("Applied " + totalDmg + " points of damage to " + controller.Transform.name);
+    //Debug.Log("Applied " + totalDmg + " points of damage to " + controller.Transform.name);
     return totalDmg;
   }
 
@@ -132,7 +132,7 @@ public class Damage : MonoBehaviour, IDamage
       hitTargets.Add(other.gameObject);
       applyHit = false;
 
-      Debug.Log(other.name + " took " + mob.Stats.AttackDamage.FinalValue + " points of DOT damage.");
+      //Debug.Log(other.name + " took " + mob.Stats.AttackDamage.FinalValue + " points of DOT damage.");
     }
   }
 
