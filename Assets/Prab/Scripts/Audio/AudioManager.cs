@@ -41,8 +41,6 @@ public class AudioManager : MonoBehaviour
 
     public void UpdateOptionsSettingFromDatabase()
     {
-        Debug.Log($"MainMenuController.Instance.Username: {MainMenuController.Instance.Username}");
-
         FirebaseDatabaseManager.Instance.GetUser(MainMenuController.Instance.Username,
         //  IF USER IS FOUND!!
           (updatedUserModel) => UpdateOptionsSettings(updatedUserModel),
@@ -52,7 +50,6 @@ public class AudioManager : MonoBehaviour
 
     private void UpdateOptionsSettings(UserModel model)
     {
-
         UpdateMusicDisplayFromDatabase(model.MusicVolume);
         UpdateMusicLevelFromDatabase(model.MusicVolume);
         UpdateSoundDisplayFromDatabase(model.SoundVolume);
